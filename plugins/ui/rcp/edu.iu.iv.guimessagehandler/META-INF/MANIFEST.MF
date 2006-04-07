@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: GUI MessageHandler
+Bundle-SymbolicName: edu.iu.iv.guimessagehandler; singleton:=true
+Bundle-Version: 1.0.4
+Bundle-Activator: edu.iu.iv.messaging.GUIMessageHandlerPlugin
+Bundle-Localization: plugin
+Export-Package: edu.iu.iv.messaging
+Require-Bundle: org.eclipse.core.runtime,
+ edu.iu.iv.core,
+ org.eclipse.ui,
+ edu.iu.iv.gui
+Eclipse-AutoStart: true
+Bundle-Vendor: Team IVC
