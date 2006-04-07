@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: IV Commons Library
+Bundle-SymbolicName: edu.iu.iv.common
+Bundle-Version: 1.0.4
+Bundle-Vendor: Team IVC
+Bundle-Localization: plugin
+Export-Package: edu.iu.iv.common.configuration,
+ edu.iu.iv.common.guibuilder,
+ edu.iu.iv.common.guibuilder.swing,
+ edu.iu.iv.common.guibuilder.swing.guicomponent,
+ edu.iu.iv.common.parameter,
+ edu.iu.iv.common.property,
+ edu.iu.iv.common.util,
+ edu.iu.iv.common.util.binaryexecutable,
+ edu.iu.iv.common.util.perl
