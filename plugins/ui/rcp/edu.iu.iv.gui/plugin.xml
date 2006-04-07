@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+
+     <extension
+      id="IVCApplication"
+      point="org.eclipse.core.runtime.applications">
+      <application>
+          <run
+             class="edu.iu.iv.gui.IVCApplication">
+          </run>
+      </application>        
+   </extension>
+    
+   <extension
+      point="org.eclipse.ui.perspectives">
+      <perspective
+          icon="icons/ivc.gif"
+          class="edu.iu.iv.gui.IVCPerspective"
+          fixed="false"
+          name="%perspectiveName"
+          id="edu.iu.iv.gui.IVCPerspective">
+      </perspective>
+   </extension>
+    
+   <extension point="org.eclipse.core.runtime.products" id="ivc">
+	   <product
+          application="edu.iu.iv.gui.IVCApplication"
+          name="NWB">
+       <property
+             name="appName"
+             value="IVCApplication"/>
+    </product>
+   </extension>
+</plugin>
