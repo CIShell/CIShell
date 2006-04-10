@@ -1,0 +1,219 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<title>Beginning Plug-in Development - IVC Developer Guide</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" 
+			/>
+		<link href="ivcdocstyle.css" rel="stylesheet" type="text/css" />
+	</head>
+	<body>
+		<p class="backtotoc">
+			<a href="main.html#TOC" class="backtotoc">[Back To TOC]</a>
+		</p>
+		<p>
+			<span class="section_heading">Beginning Plug-in Development</span>
+			<br />
+			<span class="metainfo">Author: <a href="mailto:jasellis@NOSPAM.cs.indiana.edu">James Ellis</a><br /> Last Modified: 
+				April 20, 2005 </span>
+		</p>
+		<p class="subsection_heading">Summary</p>
+		<p class="body_text">
+			Developing plug-ins for <a href="glossary.html#ivc" class="glossary_term">IVC</a>
+			using the Eclipse PDE (Plug-in Development 
+			Environment) that can be used in the <a href="glossary.html#rcp" class="glossary_term">RCP</a>
+			(Rich Client Platform) IVC framework 
+			based off of a simple template can greatly simplify the learning curve of a 
+			developer wishing to contribute a new plug-in to IVC. This tutorial will 
+			guide a new developer in setting up their development environment to use
+			the other tutorials provided to aid in IVC plug-in developement.
+		</p>
+		<p class="subsection_heading">Pre-requisites</p>
+		<p class="body_text">
+			Before you read this document, it is useful to 
+			have some working knowlege of <a 
+			href="http://www.eclipse.org">Eclipse</a> and the Eclipse plug-in 
+			framework, but no prior knowledge of this topic is assumed.
+		</p>
+		<p class="section_heading">
+			<span class="subsection_heading">Section Table of Contents</span>
+			<a name="section_toc" id="section_toc"></a>
+		</p>
+		<ol>
+			<li class="body_text">
+				<a href="#getting_eclipse">Getting Eclipse</a>
+				<ol>
+					<li class="body_text">
+						<a href="#downloading">Downloading Eclipse</a>											
+					</li>
+					<li class="body_text">
+						<a href="#installation">Installing Eclipse</a>											
+					</li>					
+				</ol>
+			</li>
+			<li class="body_text">
+				<a href="#template">Getting the IVC Plug-in Development Feature</a>
+			</li>
+		</ol>						
+				
+		<hr align="center" width="50%" />
+		<a name="getting_eclipse" id="getting_eclipse"/>
+		<p class="backtotoc">
+			<a href="#section_toc">[Back to Section TOC]</a>
+		</p>		
+		<p class="subsection_heading">Getting Eclipse</p>				
+		<p class="body_text">The first step in developing your new IVC plug-in 
+			will be to download and install the <strong>Eclipse IDE with 
+			PDE</strong> (Plug-in Development Environment) included. Of course, 
+			if you already have Eclipse installed this section can be skipped. 
+			PDE has been included with Eclipse to some extent since version 
+			2.1, but this tutorial will be based off of the 3.0.1 version.</p>
+
+		<a name="downloading" id="downloading" />
+		<p class="subsubsection_heading">Downloading Eclipse</p>
+		<p class="body_text">The latest releases of Eclipse can always be found 
+			at <a href="http://www.eclipse.org/downloads/index.php"> 
+			http://www.eclipse.org/downloads/index.php</a> This page should 
+			look something like the following:</p>
+		<div align="center">
+			<a href="images/plugindev/eclipse-download.png">
+				<img src="images/plugindev/eclipse-download.png" alt="eclipse download site" class="figure" />
+			</a>
+			<div class="figurecaption">
+				<p>Fig1: The Eclipse.org download site. (Click to Expand) </p>
+			</div>
+		</div>
+		<p class="body_text">From this page you can select one of the mirrors listed, 
+			or simply scroll to the very bottom where it says "<a 
+			href="http://download.eclipse.org/downloads/index.php">Main Eclipse 
+			Download Site</a>" (or just click the previous link) to go to the main 
+			download site if you don't want to bother with a mirror. Now you should be 
+			confronted with the following page where you can select exactly what you 
+			wish to download:</p>
+		<div align="center">
+			<a href="images/plugindev/eclipse-release.png">
+				<img src="images/plugindev/eclipse-release.png" alt="available eclipse releases" class="figure" />
+			</a>
+			<div class="figurecaption">
+				<p>Fig2: The available Eclipse releases for download. (Click to Expand) </p>
+			</div>
+		</div>
+		<p class="body_text">We will select the <strong>Latest Release</strong>, the 
+			first item listed in the top section to download version 
+			<strong>3.0.1</strong>. This will bring you to a page to allow you to 
+			select the platform you wish to download Eclipse for (in the 
+			<strong>Eclipse SDK</strong> section), where you can select whichever 
+			operating system you are using. The download will now either begin, or 
+			possibly involve selecting one of the mirrors listed if you are still 
+			required to select a mirror. This download may take a little time since it 
+			is rather large, but it will be worth it.</p>
+		<p class="tip"> <strong>Trouble?</strong> Eclipse does not include a 
+			<strong>Java runtime environment (JRE)</strong>. You will need a 1.4.1 
+			level or higher <a 
+			href="http://download.eclipse.org/downloads/drops/R-3.0.1-200409161125/java-runtimes.html"> 
+			Java runtime</a> or Java development kit (JDK) installed on your machine 
+			in order to run Eclipse. </p>
+
+		<a name="installation" id="installation" />
+		<p class="subsubsection_heading">Installation</p>
+		<p class="body_text">Once the file has finished downloading, it is a matter of 
+			extracting the files from whatever type of archive is downloaded (.zip 
+			typically) to whatever location is desired (usually <code>C:\eclipse</code> 
+			in Windows). This will result in the new directory structure that looks 
+			something like this:</p>
+		<div align="center">
+			<a href="images/plugindev/eclipse-install-dir.png">
+				<img src="images/plugindev/eclipse-install-dir.png" alt="eclipse install directory" class="figure" />
+			</a>
+			<div class="figurecaption">
+				<p>Fig3: The Eclipse install directory. (Click to Expand) </p>
+			</div>
+		</div>
+		<p class="body_text">The important thing to find is the 
+			<code>eclipse.exe</code> (or equivalent executable on other platforms) that 
+			you can now double-click on to launch Eclipse for the first time. Just 
+			select 'ok' to the defaults about workspace location unless you have a 
+			preference. And then when confronted with the following welcome screen, 
+			press the button in the top right that says <strong>Go to the 
+			workbench</strong> (unless you wish to browse around at the other options 
+			to learn more, they are always available through 
+			<strong>Help->Welcome</strong>.</p>
+		<div align="center">
+			<a href="images/plugindev/eclipse-load.png">
+				<img src="images/plugindev/eclipse-load.png" alt="eclipse welcome screen" class="figure" />
+			</a>
+			<div class="figurecaption">
+				<p>Fig4: The Eclipse Welcome Screen. (Click to Expand) </p>
+			</div>
+		</div>
+		<p class="body_text">That's it, Eclipse is now up and running and we 
+			are ready to move on to the job of actually creating plug-ins using 
+			the Plug-in Development Environment and the custom IVC templates. 
+			First we have to get the IVC Plug-in Development feature from the 
+			IVC Update Site.</p>
+		
+		
+		<hr align="center" width="50%" />
+		<a name="template" id="template"/>
+		<p class="backtotoc"><a href="#section_toc">[Back to Section TOC]</a></p>		
+		<p class="subsection_heading">Getting the IVC Plug-in Development Feature</p>
+		<p class="body_text">
+			To get the IVC Plug-in Development <a href="glossary.html#feature" class="glossary_term">
+			Feature</a> from the IVC <a href="glossary.html#updatesite" class="glossary_term">
+			Update Site</a>, we
+			will use the Eclipse Update Manager tool from within Eclipse. To do this, go
+			to <strong>Help->Software Updates->Find and Install...</strong> in the main
+			menu of Eclipse.  In the dialog that comes up, choose <em>Search for new
+			features to install</em> and press <strong>Next ></strong>.  Now we want
+			to add the IVC Update Site to the list of sites in the dialog, so select
+			<strong>New Remote Site...</strong> and give it a name and the URL:
+			<code>http://ivc.sourceforge.net/update/</code> and press <strong>OK</strong>.
+		</p>
+		<div align="center">
+			<img src="images/update/3.png" alt="adding the IVC Update Site" class="figure" />
+			<div class="figurecaption">
+				<p>Fig5: Add the IVC Update Site.</p>
+			</div>
+		</div>
+		<p class="body_text">
+			Now press the '+' next to the name that was given to the site to expand the
+			tree of available categories to download from the IVC Update Site.
+			Select the <strong>IVC Plug-in Development</strong> category and press
+			<strong>Next ></strong> at the bottom of the screen and the tool will
+			search for the selected features.
+		</p>
+		<p class="body_text">
+			The tool should find the <strong>IVC Plug-in Development</strong> feature
+			available for download.  Select this item and press <strong>Next ></strong>
+			to continue.
+		</p>
+		<div align="center">
+			<img src="images/plugindev/plugindev-feature.png" alt="the IVC Plug-in Development feature" class="figure" />
+			<div class="figurecaption">
+				<p>Fig6: Selecting the IVC Plug-in Development Feature.</p>
+			</div>
+		</div>		
+		<p class="body_text">
+			Mark your acceptance of the licensing agreement, press <strong>Next ></strong>, and
+			then validate the install location and press <strong>Finish</strong> to
+			start installing the Plug-in Development feature.  When asked about
+			jar verification for an unsigned feature, just press <strong>Install</strong>
+			to continue.  This will install the IVC Plug-in Development templates
+			that are used in the other tutorials in this guide to aid plug-in development
+			as well as the underlying IVC core plug-ins that are needed for IVC development
+			to plug into the core.  This is not an exhaustive set though, and it may
+			be possible that something that you wish to extend from is not included.
+			In this case, you will have to reconnect to the IVC Update Site and browse the
+			available plug-ins to find what you need.  The Plug-in Development feature
+			should have everything you need though for stardard plug-in development based
+			on the items included in the core feature of IVC.
+		</p>
+		<p class="body_text">
+			Restart Eclipse when asked, and continue on to one of the other tutorials
+			for specific information about using one of the included templates.
+		</p>
+	
+		<p class="backtotoc"><a href="#section_toc">[Back to Section TOC]</a> | 
+			<a href="main.html#TOC">[Back To TOC]</a></p>
+	</body>
+</html>

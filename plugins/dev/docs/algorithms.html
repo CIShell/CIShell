@@ -1,0 +1,232 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Algorithms Tutorial - IVC Developer Guide</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<link href="ivcdocstyle.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+<p class="backtotoc"><a href="main.html#TOC" class="backtotoc">[Back To TOC]</a></p>
+
+<p><span class="section_heading">Algorithms Tutorial</span><br />
+<span class="metainfo">Author: <a href="mailto:bh2@NOSPAMbh2.net">Bruce Herr</a><br />
+Last Modified: September 8, 2005 </span></p>
+
+<p class="subsection_heading">Summary</p>
+<p class="body_text">In this section you will be learning of the different types of Algorithms and how 
+to use them.</p>
+
+<p class="subsection_heading">Overview</p>
+<p class="body_text">
+An Algorithm has a ParameterMap to publish what Inputs are needed, a PropertyMap to give meta
+information about the Algorithm, and an execute method that takes the Values set for the 
+<a href="glossary.html#parameter" class="glossary_term">Parameters</a> in 
+the ParameterMap and does some sort of processing. There is also a subinterface called ProgressiveAlgorithm
+that adds another method getPercentageDone() which can be polled while the ProgressiveAlgorithm's execute 
+method is running to see how far along the algorithm is in its processing. An AbstractAlgorithm class is
+provided that does some mundane work like setting up the two maps and provides a convenience method,
+createGUIandRun(); which creates a gui, gets input from the user, then schedules the algorithm to be ran.
+</p>
+
+<p class="subsection_heading">Pre-requisites</p>
+<p class="body_text">
+You will want to be familiar with the <a href="guibuilder.html">GUI Builder</a> and all the classes that are
+involved with that. For creating Algorithm Plug-ins, be sure to have Eclipse installed with the IVC Plug-in
+Development Plug-in (a tutorial is <a href="plugindev.html">available here</a>).
+</p>
+
+<p class="section_heading">
+	<span class="subsection_heading">Section Table of Contents</span>
+	<a name="section_toc" id="section_toc"></a>
+</p>
+
+<ol>
+	<li class="body_text">
+		<a href="#usage">Using Algorithms</a>				
+	</li>
+	<li class="body_text">
+		<a href="#plugin">Creating an Algorithm Plug-in</a>
+	</li>
+</ol>
+
+<hr align="center" width="50%" />
+<a name="usage" id="usage" />
+<p class="backtotoc">
+	<a href="#section_toc">[Back to Section TOC]</a>
+</p>
+
+<p class="subsection_heading">Using Algorithms</p>
+<p class="body_text">
+An Algorithm is normally created by implementing the interface Algorithm or ProgressiveAlgorithm. 
+You can also extend the AbstractAlgorithm class which takes care of the mundane parts of implementing
+the Algorithm interface. When creating an algorithm, it is important to provide meta information 
+through the PropertyMap, input needed through the ParameterMap, and define the work to be done in
+the execute() method.
+</p>
+<p class="body_text">
+To define meta information about an Algorithm, you can set values in the Algorithm's PropertyMap.
+This is done by using <code>propertyMap.setPropertyValue(property,value);</code>. 
+<code>edu.iu.iv.core.algorithm.AlgorithmProperty</code> defines some default properties that are used
+in Algorithms.
+</p>
+<p class="body_text">
+To define inputs needed for an Algorithm, you can set values in the Algorithm's ParameterMap.
+This is done by using <code>parameterMap.put("key",parameter);</code>. These Parameters set in the ParameterMap
+can be used by the GUI Builder to build a custom GUI to get input for the Algorithm. For more
+information about Parameters and GUI Building go to the <a href="guibuilder.html">GUI Builder 
+tutorial</a>.
+</p>
+
+<p class="tip">
+<strong>TIP:</strong>
+If your algorithm requires the currently loaded datamodel to work on, then the recommended way of
+getting it into your algorithm is to provide a constructor which takes the data model and have the
+Plugin class that creates the algorithm provide it.
+</p>
+
+<p class="body_text">
+Work to be done is defined in the execute() method. The algorithm can use the values set on the
+Parameter objects in the ParameterMap to get values for the different inputs that are needed from
+the user. 
+</p>
+
+<p class="tip"> 
+<strong>TIP:</strong>
+It is recommended to have a separate class that is instantiated in the execute() method that does 
+most of the logic work. This allows for a cleaner separation between setting up the algorithm 
+and the actual work involved.
+</p>
+
+<hr align="center" width="50%" />
+<a name="plugin" id="plugin" />
+<p class="backtotoc">
+	<a href="#section_toc">[Back to Section TOC]</a>
+</p>		
+
+<p class="subsection_heading">Creating an Algorithm Plug-in</p>
+<p class="body_text">
+Creating an Algorithm or Progressive Algorithm Plug-in is a simple process thanks to our IVC Plug-in
+templates. 
+</p>
+
+<p class="body_text">
+To create an algorithm plug-in project, go to <strong>File->New->Project...</strong>
+and select <strong>Plug-in Project</strong> from the <em>
+Plug-in Development</em> section. Make sure to give the project a name. 
+</p>
+<p class="tip">
+<strong>WARNING:</strong>
+Be sure to uncheck "Create an OSGI manifest bundle for the plug-in."
+</p>
+
+<div align="center">
+		<img src="images/algorithm/1.png" alt="creating an algorithm plug-in" class="figure" />
+	<div class="figurecaption">
+		<p>Fig1: The plug-in project dialog should look like this.</p>
+	</div>
+</div>
+
+<p class="body_text">
+Press <strong>Next ></strong> and fill out the plug-in information
+on the next page of the dialog.
+</p>
+
+<p class="tip">
+<strong>WARNING:</strong>
+Be sure to uncheck the "<i>Generate the java class that controls the plug-in's life cycle 
+(recommended)</i>" checkbox or your Plug-in will not work!<br>
+Also, in newer versions of Eclipse, the Runtime Library is worded Classpath instead. For this plug-in you will want to provide a jar name for it to work correctly.
+</p>
+
+<div align="center">
+		<img src="images/algorithm/2.png" alt="specifying plug-in information" class="figure" />
+	<div class="figurecaption">
+		<p>Fig2: Enter in the desired information and press <strong>Next ></strong>.</p>
+	</div>
+</div>
+
+<p class="body_text">
+Press <strong>Next ></strong> and check the "Create a plug-in using one of the templates". From
+Here you can click on either IVC Basic Algorithm or IVC Progressive Algorithm depending on the 
+type of Algorithm you wish to use.
+</p>
+
+<div align="center">
+		<img src="images/algorithm/3.png" alt="specifying plug-in information" class="figure" />
+	<div class="figurecaption">
+		<p>Fig3: Select the desired template and press <strong>Next ></strong>.</p>
+	</div>
+</div>
+
+<p class="body_text">
+Press <strong>Next ></strong> and fill in the details on what package you wish the Algorithm Plug-in
+to be located in, the plugin class name, the algorithm class name, and the name of the algorithm.
+</p>
+
+<div align="center">
+		<img src="images/algorithm/4.png" alt="specifying plug-in information" class="figure" />
+	<div class="figurecaption">
+		<p>Fig4: Enter in the desired information and press <strong>Next ></strong>.</p>
+	</div>
+</div>
+
+<p class="body_text">
+Press <strong>Next ></strong> and if you wish to add a new top-level menu item to the IVC, 
+fill out the information. Menu ID is the label that it is referred to in the plugin.xml, 
+Menu Label is what is actually displayed on the IVC Menu, and Group Name is only used if you
+are going to group items in this menu (there is a default group called additions that is 
+used most often if there is no grouping going on).
+</p>
+
+<div align="center">
+		<img src="images/algorithm/5.png" alt="specifying plug-in information" class="figure" />
+	<div class="figurecaption">
+		<p>Fig5: Enter in the desired information if you are adding a new top-level menu item
+		to the IVC and press <strong>Next ></strong>.</p>
+	</div>
+</div>
+
+<p class="body_text">
+Press <strong>Next ></strong> and enter the desired information for what the menu item will say
+for this Plug-in, where on the menu it will be, and the tooltip to be shown when hovering over
+the menu item. A menubar path is a slash delimeted path. The first element specifies the top-level
+menu item and the last element on the path is the group that the menu item will belong to 
+(if it doesn't matter, just put additions).
+</p>
+
+<p class="tip"> 
+<strong>TIP:</strong>
+For menubar paths you can actually specify nested menu items (Something like 
+"file/recentItems/additions"). However to do this, you must add nested menu items to the plugin.xml
+of your Plug-in. This however is beyond the scope of this tutorial and requires knowledge of how
+to use Eclipse's <a href="glossary.html#rcp" class="glossary_term">RCP</a> plugin.xml.
+</p>
+
+<div align="center">
+		<img src="images/algorithm/6.png" alt="specifying plug-in information" class="figure" />
+	<div class="figurecaption">
+		<p>Fig6: Enter in the desired information and press <strong>Next ></strong>.</p>
+	</div>
+</div>
+
+<p class="body_text">
+Press <strong>Finish</strong> and the template will create the project and will show up in your
+Eclipse workspace. You may then go into the Plugin class and the Algorithm class and customize
+to your liking.
+</p>
+
+<div align="center">
+	<a href="images/algorithm/7.png">
+		<img src="images/algorithm/7.th.png" alt="the project created by the IVC template" class="figure" />
+	</a>
+	<div class="figurecaption">
+		<p>Fig7: The project created by the IVC Template</p>
+	</div>
+</div>		
+
+
+<p class="backtotoc"><a href="#section_toc">[Back to Section TOC]</a> | 
+	<a href="main.html#TOC">[Back To TOC]</a></p>
+</body>
+</html>

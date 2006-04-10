@@ -1,0 +1,64 @@
+.document_title {
+	font-size: x-large;
+	font-weight: bold;
+	text-align: center;
+}
+.section_heading {
+	font-size: large;
+	font-weight: normal;
+	text-align: left;
+}
+.body_text {
+	font-size: medium;
+	text-align: left;
+	font-weight: normal;
+}
+.glossary_term {
+	border: 1px dotted #CCFFCC;
+	background-color: #CCFFCC;
+}
+.metainfo {
+	text-align: left;
+	font-size: medium;
+	font-weight:normal;
+}
+.subsection_heading {
+	font-size: medium;
+	font-weight: bold;
+}
+.subsubsection_heading {
+	font-size: medium;
+	font-style: italic;
+}
+.figurecaption {
+	font-size: medium;
+	width: 500px;
+}
+.figure {
+	width: 400px;
+}
+.tip {
+	font-size: medium;
+	background-color: #FFFFCC;
+	border: thin dotted #FF9966;
+	width: 500px;
+}
+.glossary_index {
+	font-size: large;
+	font-weight: bold;
+	text-align: center;
+}
+.glossarytermalphabet {
+	font-size: x-large;
+	font-weight: bold;
+	text-align: left;
+}
+.backtotoc {
+	font-size: x-small;
+	font-weight: bold;
+	text-align: right;
+}
+.apiref {
+	border: 1px dotted yellow;
+	background-color: yellow;
+}

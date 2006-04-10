@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Sampledata Tutorial - IVC Developer Guide</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<link href="ivcdocstyle.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+<p class="backtotoc"><a href="main.html#TOC" class="backtotoc">[Back To TOC]</a></p>
+
+<p><span class="section_heading">Sampledata Tutorial</span><br />
+<span class="metainfo">Author: <a href="mailto:bh2@NOSPAMbh2.net">Bruce Herr</a><br />
+Last Modified: September 8, 2005 </span></p>
+
+<p class="subsection_heading">Summary</p>
+<p class="body_text">
+This tutorial shows how to make a Plug-in to provide sample data that may be used in
+the IVC.
+</p>
+
+<p class="subsection_heading">Pre-requisites</p>
+<p class="body_text">
+You will need to have a Plug-in in mind that you wish to provide sample data for and
+have sample data to put in the sampledata folder.
+</p>
+
+<p class="subsection_heading">Creating a Sampledata Plug-in</p>
+<p class="body_text">
+Providing sample data is a simple process thanks to our IVC Plug-in templates. 
+</p>
+
+<p class="body_text">
+To create a sampledata plug-in project, go to <strong>File->New->Project...</strong>
+and select <strong>Plug-in Project</strong> from the <em>
+Plug-in Development</em> section. Make sure to give the project a name. 
+</p>
+
+<p class="tip">
+<strong>NOTE:</strong>
+Be sure to leave the "Create a Java project" checkbox checked, because 
+there is some code that is created that needs to be run to put sampledata
+in the correct spot when starting the IVC. Also, leave the "Create an OSGI
+bundle manifest for the plug-in" unchecked.
+</p>
+
+<div align="center">
+		<img src="images/sampledata/1.png" alt="creating a sampledata plug-in" class="figure" />
+	<div class="figurecaption">
+		<p>Fig1: The plug-in project dialog should look like this.</p>
+	</div>
+</div>
+
+<p class="body_text">
+Press <strong>Next ></strong> and fill out the plug-in information
+on the next page of the dialog.
+</p>
+
+<p class="tip">
+<strong>WARNING:</strong>
+Be sure to uncheck the "<i>Generate the java class that controls the plug-in's life cycle 
+(recommended)</i>" checkbox or your Plug-in will not work!<br>
+Also, in newer versions of Eclipse, the Runtime Library is worded Classpath instead. For this plug-in you will want to provide a jar name for it to work correctly.
+</p>
+
+<div align="center">
+		<img src="images/sampledata/2.png" alt="specifying plug-in information" class="figure" />
+	<div class="figurecaption">
+		<p>Fig2: Enter in the desired information and press <strong>Next ></strong>.</p>
+	</div>
+</div>
+
+<p class="body_text">
+Press <strong>Next ></strong> and check the "Create a plug-in using one of the templates". Choose
+IVC Sampledata template from the list of options.
+</p>
+
+<div align="center">
+		<img src="images/sampledata/3.png" alt="specifying plug-in information" class="figure" />
+	<div class="figurecaption">
+		<p>Fig3: Select the desired template and press <strong>Next ></strong>.</p>
+	</div>
+</div>
+
+<p class="body_text">
+Press <strong>Next ></strong> and fill in the details for your sampledata plug-in. The package
+name and sampledata class name is only for the loader class that will put your files in the right
+spot in the IVC. You will need to know the plug-in id of the plug-in you wish to provide sampledata
+for if you are publishing sampledata for a specific plugin. "The Name of the subdirectory..." textbox
+specifies what subdirectory to put the data in when the IVC is launched, which is usually under
+'ivc-base-directory'/sampledata/'the subdirectory you choose'.
+</p>
+
+<div align="center">
+		<img src="images/sampledata/4.png" alt="specifying plug-in information" class="figure" />
+	<div class="figurecaption">
+		<p>Fig4: Enter in the desired information and press <strong>Next ></strong>.</p>
+	</div>
+</div>
+
+<p class="body_text">
+Press <strong>Finish</strong> and the template will create the project and will show up in your
+Eclipse workspace. You may then place the sample data you wish to provide in the top level sampledata
+folder of the project.
+</p>
+
+<div align="center">
+	<a href="images/sampledata/5.png">
+		<img src="images/sampledata/5.th.png" alt="the project created by the IVC template" class="figure" />
+	</a>
+	<div class="figurecaption">
+		<p>Fig5: The project created by the IVC Template</p>
+	</div>
+</div>		
+
+<p class="backtotoc"><a href="main.html#TOC">[Back To TOC]</a></p>
+</body>
+</html>
+
+

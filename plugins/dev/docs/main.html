@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>InfoVis Cyberinfrastructure Developer's Guide</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<link href="ivcdocstyle.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+ <p class="document_title">InfoVis Cyberinfrastructure Software Framework<br />
+   Developer's Guide
+ </p>
+ <p class="metainfo">Authors: <a href="mailto:jasellis@NOSPAM.cs.indiana.edu">James Ellis</a>, <a href="mailto:bh2@NOSMAPbh2.net">Bruce Herr</a><br />
+ Last Modified: September 8, 2005 </p>
+ <p class="section_heading">Overview</p>
+	<p class="body_text"> The Information Visualization CyberInfrastructure 
+		(IVC) software framework provides a unified architecture 
+		in which diverse data analysis, modeling and visualization algorithms 
+		can be plugged in and run. While the algorithms might be developed by 
+		different researchers and implemented in different programming 
+		languages (e.g., Java, Perl, C, C++) using different graphics, math or 
+		other packages, the IVC framework facilitates the seamless integration 
+		of those algorithms into a unified software package.</p>
+	<p class ="body_text"> The IVC framework 
+		is unique in that it places no restrictions on the type of data 
+		structures, algorithms or persistent data formats. By separating out 
+		functions such as data load and store, graphical user interface, 
+		transaction logging and inter-convertibility between data formats, the 
+		IVC lets a programmer concentrate on developing the core code and frees 
+		her from issues such as loading the data into the a particular data 
+		structure or keeping track of changing results over time. </p>
+	<p class ="body_text">This guide attempts to aid future developers of IVC
+		and its plug-ins by providing the necessary background information and
+		tutorials to get them started. Included is information about the core
+		framework that was chosen and details about the decisions that were made,
+		information about various types of plugin development to specifically
+		target different needs, and information about publishing new plugins using
+		the update site framework so that developers around the world can easily
+		share their work in a uniform manner.</p>
+ <hr class="section_break" />
+ <p class="section_heading">Table of Contents<a name="TOC" id="TOC"></a></p>
+ <ol>
+   <li class="body_text"><a href="core.html">Core Overview and RCP Implementation Details</a></li>
+   <li class="body_text">Plugin Tutorials
+     <ol>
+	   <li class="body_text"><a href="plugindev.html">Beginning Plug-in Development</a></li>
+       <li class="body_text"><a href="algorithms.html">Algorithms</a></li>
+       <li class="body_text"><a href="visualizations.html">Visualizations</a></li>
+       <li class="body_text"><a href="sampledata.html">Sample data</a></li>
+       <li class="body_text"><a href="persister.html">Persisters</a></li>
+       <li class="body_text"><a href="library.html">Library Plugins</a></li>
+       <li class="body_text"><a href="guibuilder.html">The GUI Builder</a></li>
+     </ol>
+   </li>
+   <li class="body_text">Software Update Tool
+	 <ol>
+		<li class="body_text"><a href="updateuse.html">Using the Software Update Tool</a></li>
+		<li class="body_text"><a href="updateextension.html">Extending the IVC Update Site (How to Create New Features)</a></li>
+		<li class="body_text"><a href="updatecreate.html">Creating a new Update Site</a></li>
+	 </ol>
+   </li>
+   <li class="body_text"><a href="glossary.html">Glossary of IVC Terms</a></li>
+</ol>
+</body>
+</html>
