@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Scheduler View Plug-in
+Bundle-SymbolicName: edu.iu.iv.schedulerview; singleton:=true
+Bundle-Version: 1.0.4
+Bundle-Activator: edu.iu.iv.schedulerview.SchedulerViewPlugin
+Bundle-Vendor: Team IVC
+Bundle-Localization: plugin
+Export-Package: edu.iu.iv.schedulerview
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.ui,
+ edu.iu.iv.core,
+ edu.iu.iv.gui
+Eclipse-AutoStart: true
