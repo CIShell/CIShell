@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+
+     <extension
+         point="org.eclipse.ui.startup">
+      <startup class="edu.iu.iv.datamodelview.DataModelTreeView"/>
+   </extension>
+   
+   <extension
+	  point="org.eclipse.ui.views">
+	<view
+         icon="icons/datamodels_view.gif"
+         class="edu.iu.iv.datamodelview.DataModelTreeView"
+         name="Data Models"
+         id="edu.iu.iv.datamodelview.DataModelTreeView"/>
+   </extension>    
+   
+   <extension point="org.eclipse.ui.perspectiveExtensions">
+          <perspectiveExtension targetID="edu.iu.iv.gui.IVCPerspective">
+               <view id="edu.iu.iv.datamodelview.DataModelTreeView"
+                    relative="edu.iu.iv.messaging.IVCConsole"
+                    relationship="right"
+                    ratio="0.75"
+                    moveable = "true"
+                    closeable = "false"                   
+                    visible="true"/>
+          </perspectiveExtension>
+	</extension>   
+
+</plugin>

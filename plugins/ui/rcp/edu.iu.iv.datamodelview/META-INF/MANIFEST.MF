@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Datamodels TreeView
+Bundle-SymbolicName: edu.iu.iv.datamodelview; singleton:=true
+Bundle-Version: 1.0.4
+Bundle-Vendor: Team IVC
+Bundle-Localization: plugin
+Export-Package: edu.iu.iv.datamodelview
+Require-Bundle: org.eclipse.ui,
+ edu.iu.iv.core,
+ org.eclipse.core.runtime,
+ edu.iu.iv.gui
+Eclipse-AutoStart: true
