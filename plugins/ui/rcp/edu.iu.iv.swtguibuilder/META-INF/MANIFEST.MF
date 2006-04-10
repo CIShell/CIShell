@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: SwtGUIBuilder Plug-in
+Bundle-SymbolicName: edu.iu.iv.swtguibuilder
+Bundle-Version: 1.0.5
+Bundle-Activator: edu.iu.iv.SwtGUIBuilderPlugin
+Bundle-Vendor: Team IVC
+Bundle-Localization: plugin
+Require-Bundle: org.eclipse.core.runtime,
+ edu.iu.iv.common,
+ org.eclipse.swt,
+ org.eclipse.ui
+Eclipse-AutoStart: true
+Export-Package: edu.iu.iv.gui.builder,
+ edu.iu.iv.gui.builder.builder,
+ edu.iu.iv.gui.builder.guicomponent
