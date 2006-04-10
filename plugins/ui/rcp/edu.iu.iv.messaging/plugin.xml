@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+
+     <extension
+         point="org.eclipse.ui.startup">
+      <startup class="edu.iu.iv.messaging.IVCConsole"/>
+   </extension>
+   
+   <extension
+	  point="org.eclipse.ui.views">
+	<view
+         icon="icons/console_view.gif"
+         class="edu.iu.iv.messaging.IVCConsole"
+         name="Console"
+         id="edu.iu.iv.messaging.IVCConsole"/>
+   </extension>  
+   
+   <extension point="org.eclipse.ui.perspectiveExtensions">
+          <perspectiveExtension targetID="edu.iu.iv.gui.IVCPerspective">
+               <view id="edu.iu.iv.messaging.IVCConsole"
+                    relative="org.eclipse.ui.editorss"
+                    relationship="top"
+                    moveable = "true"
+                    closeable = "false"
+                    ratio="0.60"/>
+          </perspectiveExtension>
+	</extension>
+
+</plugin>
