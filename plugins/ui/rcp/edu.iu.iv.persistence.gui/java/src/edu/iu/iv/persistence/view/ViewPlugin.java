@@ -12,8 +12,10 @@ import java.util.List;
 
 import org.eclipse.swt.program.Program;
 
+import edu.iu.iv.common.property.PropertyMap;
 import edu.iu.iv.core.IVC;
 import edu.iu.iv.core.datamodels.DataModel;
+import edu.iu.iv.core.datamodels.DataModelProperty;
 import edu.iu.iv.core.persistence.BasicFileResourceDescriptor;
 import edu.iu.iv.core.persistence.PersistenceException;
 import edu.iu.iv.core.persistence.Persister;
@@ -77,7 +79,9 @@ public class ViewPlugin extends AbstractPlugin {
 		try {
 			//Create temporary file
 			String temp = IVC.getInstance().getTemporaryFilesFolder();
-			File tempFile = File.createTempFile("view", ".txt", new File(temp));
+			PropertyMap propMap = model.getProperties();
+			String dataModelLabel = (String)propMap.getPropertyValue(DataModelProperty.LABEL);
+			File tempFile = File.createTempFile(dataModelLabel, ".txt", new File(temp));
 
 			// if the list is empty, log the occurence.
 			if (persisterList.isEmpty()) {
