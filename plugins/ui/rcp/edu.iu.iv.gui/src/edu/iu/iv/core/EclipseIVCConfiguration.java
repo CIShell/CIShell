@@ -23,7 +23,9 @@ public class EclipseIVCConfiguration implements Configuration {
      * 
      */
     public EclipseIVCConfiguration() {
-        while (!Platform.isRunning());
+        while (!Platform.isRunning()) {
+        	// busy wait?
+        }
 
 		if(Platform.isRunning()){
 		    prefs = IVCCorePlugin.getDefault().getPreferenceStore();

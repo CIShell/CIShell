@@ -189,7 +189,7 @@ public class PallettedListBuilder {
                     TableItem[] items = table.getItems();
                     
                     for (int i=destIndex; i < items.length; i++) { 
-                        String[] tmp = getText(items[i]);;
+                        String[] tmp = getText(items[i]);
                         
                         items[i].setText(text);
                         text = tmp;

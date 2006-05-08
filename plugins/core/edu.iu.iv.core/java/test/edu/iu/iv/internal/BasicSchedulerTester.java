@@ -202,7 +202,9 @@ public class BasicSchedulerTester extends TestCase {
     private class DummyAlgorithm implements Algorithm {
 
         public boolean execute() {
-            while(blocked);
+            while(blocked) {
+            	// busy wait?
+            }
             if(error)
                 throw new RuntimeException("aaah");
             else

@@ -26,10 +26,19 @@
    <extension point="org.eclipse.core.runtime.products" id="ivc">
 	   <product
           application="edu.iu.iv.gui.IVCApplication"
-          name="NWB">
+          name="IVC">
        <property
              name="appName"
              value="IVCApplication"/>
+       <property
+             name="aboutImage"
+             value="icons/about.gif"/>
+       <property
+             name="aboutText"
+             value="%blurb"/>
+       <property
+             name="windowImages"
+             value="icons/ivc.gif,icons/ivc.gif"/>
     </product>
    </extension>
 </plugin>

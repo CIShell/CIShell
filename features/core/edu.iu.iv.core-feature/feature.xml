@@ -4,9 +4,9 @@
       label="IVC Core"
       version="1.0.4"
       provider-name="Team IVC"
-      os="linux,win32"
-      ws="gtk,motif,win32"
-      arch="x86,x86_64">
+      os="linux,macosx,win32"
+      ws="carbon,gtk,motif,win32"
+      arch="ppc,x86,x86_64">
 
    <description url="http://ivc.sourceforge.net/">
       The Information Visualization Software Framework Core.
@@ -48,14 +48,14 @@ Dr. Katy Borner (katy@indiana.edu)
          id="org.apache.lucene"
          download-size="0"
          install-size="0"
-         version="1.4.3"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.ui"
          download-size="0"
          install-size="0"
-         version="3.1.0"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
@@ -65,7 +65,7 @@ Dr. Katy Borner (katy@indiana.edu)
          arch="x86"
          download-size="0"
          install-size="0"
-         version="3.1.0"
+         version="0.0.0"
          fragment="true"
          unpack="false"/>
 
@@ -76,7 +76,7 @@ Dr. Katy Borner (katy@indiana.edu)
          arch="x86_64"
          download-size="0"
          install-size="0"
-         version="3.1.0"
+         version="0.0.0"
          fragment="true"
          unpack="false"/>
 
@@ -87,7 +87,7 @@ Dr. Katy Borner (katy@indiana.edu)
          arch="x86"
          download-size="0"
          install-size="0"
-         version="3.1.0"
+         version="0.0.0"
          fragment="true"
          unpack="false"/>
 
@@ -95,126 +95,126 @@ Dr. Katy Borner (katy@indiana.edu)
          id="org.eclipse.core.runtime"
          download-size="0"
          install-size="0"
-         version="3.1.0"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.update.ui"
          download-size="0"
          install-size="0"
-         version="3.1.0"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.core.expressions"
          download-size="0"
          install-size="0"
-         version="3.1.0"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.help"
          download-size="0"
          install-size="0"
-         version="3.1.0"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.jface"
          download-size="0"
          install-size="0"
-         version="3.1.0"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.osgi"
          download-size="0"
          install-size="0"
-         version="3.1.0"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.swt"
          download-size="0"
          install-size="0"
-         version="3.1.0"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.ui.forms"
          download-size="0"
          install-size="0"
-         version="3.1.0"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.ui.workbench"
          download-size="0"
          install-size="0"
-         version="3.1.0"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.update.configurator"
          download-size="0"
          install-size="0"
-         version="3.1.0"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.update.core"
          download-size="0"
          install-size="0"
-         version="3.1.0"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="edu.iu.iv.consoleview"
          download-size="0"
          install-size="0"
-         version="1.0.4"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="edu.iu.iv.core"
          download-size="0"
          install-size="0"
-         version="1.0.4"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="edu.iu.iv.datamodelview"
          download-size="0"
          install-size="0"
-         version="1.0.4"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="edu.iu.iv.gui"
          download-size="0"
          install-size="0"
-         version="1.0.4"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="edu.iu.iv.guimessagehandler"
          download-size="0"
          install-size="0"
-         version="1.0.4"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="edu.iu.iv.persistence"
          download-size="0"
          install-size="0"
-         version="1.0.4"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="edu.iu.iv.schedulerview"
          download-size="0"
          install-size="0"
-         version="1.0.4"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
@@ -224,7 +224,7 @@ Dr. Katy Borner (katy@indiana.edu)
          arch="x86"
          download-size="0"
          install-size="0"
-         version="3.1.0"
+         version="0.0.0"
          fragment="true"
          unpack="false"/>
 
@@ -232,21 +232,21 @@ Dr. Katy Borner (katy@indiana.edu)
          id="edu.iu.iv.swtguibuilder"
          download-size="0"
          install-size="0"
-         version="1.0.4"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="edu.iu.iv.common"
          download-size="0"
          install-size="0"
-         version="1.0.4"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="edu.iu.iv.core.rcp"
          download-size="0"
          install-size="0"
-         version="1.0.4"
+         version="0.0.0"
          fragment="true"
          unpack="false"/>
 
@@ -254,7 +254,15 @@ Dr. Katy Borner (katy@indiana.edu)
          id="org.eclipse.core.commands"
          download-size="0"
          install-size="0"
-         version="3.1.0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.swt.carbon.macosx.ppc"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"
          unpack="false"/>
 
 </feature>
