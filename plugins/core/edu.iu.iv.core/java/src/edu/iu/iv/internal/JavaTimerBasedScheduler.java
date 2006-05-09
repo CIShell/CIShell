@@ -2,6 +2,7 @@ package edu.iu.iv.internal;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -9,7 +10,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Map.Entry;
@@ -23,19 +23,43 @@ import edu.iu.iv.internal.AlgorithmTask.STATE;
 /**
  * A simple scheduler based on {@link java.util.Timer}.
  * 
- * The scheduler starts a timer which runs as long as the scheduler is running.
- * New algorithms are scheduled by giving them to an algorithm scheduler task
- * which is itself scheduled on a different timer and called periodically. The
- * scheduler task scans its list of algorithms, checks their state and schedules
- * them to run if their scheduled time is the current time or has already
- * passed. The algorithms themselves are scheduled on a timer other than the one
- * on which the scheduler task is running. The scheduler task also enforces a
- * limit on the number of algorithms run if so desired. This limit overrides
- * algorithm schedule so that setting a limit too low may cause the algorithm
- * run queue to be full of waiting algorithms.
- * 
- * NOTE: By default this, scheduler allows an unlimited number of algorithms to
- * run.
+ * <b>Implementation Notes:</b>
+ * <ul>
+ * <li> The scheduler starts a TimerTask which runs as long as the scheduler is
+ * running. This scheduler TimerTask checks its list of algorithms, removes
+ * algorithms that have finished running and sets new ones running if
+ * appropriate. It decides whether or not to run an algorithm by checking their
+ * state and schedules them to run if their scheduled time is the current time
+ * or has already passed. This TimerTask is scheduler on a Timer of its own and
+ * is set to run periodically. New algorithms are scheduled by giving them to
+ * the scheduler TimerTask task.</li>
+ * <li> Algorithms themselves inform the scheduler listener of events. However,
+ * only the scheduler TimerTask has access to these tasks and only one scheduler
+ * listener is allowed per algorithm. This listener happens to be the scheduler
+ * TimerTask, which informs the scheduler of events, which in turn informs all
+ * the other listeners. </li>
+ * <li>The scheduler task also enforces a limit on the number of algorithms run
+ * if so desired. This limit overrides algorithm schedule so that setting a
+ * limit too low may cause the algorithm run queue to be full of waiting
+ * algorithms. However, this limit can be safely changed at runtime.</li>
+ * <li>Running algorithms can neither be paused nor stopped reliably so such
+ * methods have either been deprecated and/or they will throw
+ * NotImplementedException.</li>
+ * <li> By default this, scheduler allows an unlimited number of algorithms to
+ * run. </li>
+ * <li> This scheduler TimerTask runs continuously even if the algorithm queue
+ * is empty. If that's not desired, modify the code such that an empty queue
+ * causes the scheduler thread to sleep and to be woken up in response to events
+ * such as a new algorithm being scheduled.</li>
+ * <li>If more control or more UI integration is required, consider
+ * implementing a scheduler based on the Eclipse Jobs API. </li>
+ * <li>If more reliability is required (such as making guarantees that an
+ * algorithm will absolutely run at the specified time), do not set limits on
+ * the number of algorithms to be run. Also if more features are needed in the
+ * future such as the ability to serialize schedules, or run algorithms based on
+ * combinations of conditions or provide the ability to veto the running of an
+ * algorithm, consider using Quartz http://www.opensymphony.com/quartz/ </li>
+ * </ul>
  * 
  * @author Team CIShell
  */
@@ -46,11 +70,6 @@ public class JavaTimerBasedScheduler implements Scheduler {
 	 * This timer runs the algorithm scheduling task.
 	 */
 	private Timer _schedulerTimer;
-
-	/**
-	 * The timer that actually runs the algorithms.
-	 */
-	private Timer _algRunningTimer;
 
 	/**
 	 * The task which schedules algorithms to run on the _algRunningTimer.
@@ -69,30 +88,42 @@ public class JavaTimerBasedScheduler implements Scheduler {
 	public JavaTimerBasedScheduler(int maxSimultaneousAlgsLimit) {
 		this();
 		_algSchedulerTask.setMaxSimultaneousAlgs(maxSimultaneousAlgsLimit);
+		_isShutDown = false;
+	}
+
+	public synchronized final void setMaxSimultaneousAlgs(int max) {
+		_algSchedulerTask.setMaxSimultaneousAlgs(max);
 	}
 
 	private final void _initialize() {
-		_schedulerTimer = new Timer();
-		_algRunningTimer = new Timer();
+		_schedulerTimer = new Timer(true);
 		_schedulerListenerInformer = new SchedulerListenerInformer();
-		_algSchedulerTask = new AlgSchedulerTask(_algRunningTimer,
-				_schedulerListenerInformer);
-		_schedulerTimer.schedule(_algSchedulerTask, 0L, 1000L);
+		_algSchedulerTask = new AlgSchedulerTask(_schedulerListenerInformer);
+		_schedulerTimer.schedule(_algSchedulerTask, 0L, 500L);
 	}
 
 	public synchronized final void shutDown() {
 		_algSchedulerTask.cancel();
-		_algRunningTimer.cancel();
 		_schedulerTimer.cancel();
+		_isShutDown = true;
 	}
 
-	public boolean isEmpty() {
-		return (_algSchedulerTask.getNumAlgsInState(STATE.RUNNING) > 0)
-				|| (_algSchedulerTask.getNumAlgsInState(STATE.NEW) > 0);
+	public final boolean isEmpty() {
+		return _algSchedulerTask.isEmpty();
 	}
 
-	public boolean isRunning() {
-		return _algSchedulerTask.getNumAlgsInState(STATE.RUNNING) > 0;
+	public final boolean isRunning() {
+		return numRunning() > 0;
+	}
+
+	public final int numRunning() {
+		return _algSchedulerTask.numRunning();
+	}
+
+	private boolean _isShutDown = true;
+
+	public final boolean isShutDown() {
+		return _isShutDown;
 	}
 
 	@Deprecated
@@ -128,12 +159,12 @@ public class JavaTimerBasedScheduler implements Scheduler {
 				status = true;
 				break;
 			case NEW:
-				status = _algSchedulerTask.cancel(algorithm);
-				if (status)
-					_algSchedulerTask.schedule(algorithm, newTime);
+				_algSchedulerTask.cancel(algorithm);
+				_algSchedulerTask.schedule(algorithm, newTime);
 				break;
 			default:
-				throw new RuntimeException("WTF!!");
+				throw new IllegalStateException(
+						"Encountered an invalid state: " + algState);
 			}
 		} catch (NoSuchElementException nsee) {
 			_algSchedulerTask.schedule(algorithm, newTime);
@@ -231,12 +262,12 @@ class SchedulerListenerInformer implements SchedulerListener {
 			sl.algorithmScheduled(algorithm, time);
 	}
 
-	public void algorithmStarted(Algorithm algorithm) {
+	public synchronized void algorithmStarted(Algorithm algorithm) {
 		for (SchedulerListener sl : _schedulerListeners)
 			sl.algorithmStarted(algorithm);
 	}
 
-	public void algorithmFinished(Algorithm algorithm) {
+	public synchronized void algorithmFinished(Algorithm algorithm) {
 		for (SchedulerListener sl : _schedulerListeners)
 			sl.algorithmFinished(algorithm);
 	}
@@ -257,37 +288,40 @@ class SchedulerListenerInformer implements SchedulerListener {
 	}
 }
 
-class AlgSchedulerTask extends TimerTask {
+class AlgSchedulerTask extends TimerTask implements SchedulerListener {
 
 	private Map<Algorithm, AlgorithmTask> _algMap;
 
 	// Default allow as many as needed
 	private int _maxSimultaneousAlgs = -1;
 
-	private Timer _timer;
-
 	/**
 	 * Maximum number of algorithms allowed to run simultaneously. This value
-	 * can be changed at runtime without any problems. Allowable values are -1
-	 * (for no limit) and values > 0. If unacceptable values are given, they are
-	 * ignored.
+	 * can be changed at runtime without any problems. Negative values are
+	 * interpreted to mean 'no limit'.
 	 * 
 	 * @param max
 	 *            The maximum number of algorithms that can be simultaneously
 	 *            run.
 	 */
 	public synchronized final void setMaxSimultaneousAlgs(final int max) {
-		if (max < -1 || max == 0)
-			return;
-		this._maxSimultaneousAlgs = max;
+		if (max < -1)
+			this._maxSimultaneousAlgs = -1;
+		else
+			this._maxSimultaneousAlgs = max;
+	}
+
+	public synchronized final boolean isEmpty() {
+		return _algMap.size() == 0;
+	}
+
+	public synchronized final int numRunning() {
+		return _numRunning;
 	}
 
 	private SchedulerListener _schedulerListener;
 
-	public AlgSchedulerTask(final Timer timer, SchedulerListener listener) {
-		// Timer must not be null. Miserably fail otherwise.
-		assert (timer != null) : "Set timer running first.";
-		_timer = timer;
+	public AlgSchedulerTask(SchedulerListener listener) {
 		_algMap = Collections
 				.synchronizedMap(new HashMap<Algorithm, AlgorithmTask>());
 		setSchedulerListener(listener);
@@ -300,19 +334,9 @@ class AlgSchedulerTask extends TimerTask {
 
 	public synchronized final boolean cancel(Algorithm alg) {
 		AlgorithmTask task = this._algMap.get(alg);
-		// If the task doesn't exist, it is equivalent to have been
-		// cancelled.
 		if (task == null)
-			return true;
-		// If this is already stopped and is waiting to be cleaned up, clean it
-		// up first.
-		if (task.getState() == STATE.STOPPED) {
-			purgeFinished();
-			return true;
-		}
-		// Note that getting a return value of true here does not mean the task
-		// is no longer running. It just means it has been scheduled for
-		// successful cancellation. The algorithm will run till the end and
+			return false;
+		// The algorithm will run till the end and
 		// then stop so there's no real way to cancel running algorithms.
 		// Clients should always check the state of an algorithm before trying
 		// to reschedule an existing algorithm.
@@ -329,7 +353,8 @@ class AlgSchedulerTask extends TimerTask {
 			case RUNNING:
 				throw new RuntimeException(
 						"Cannot schedule running algorithm. Check state of algorithm first.");
-			// If its new, we refuse to schedule it to force user to explicitly
+			// If its new or waiting to run, we refuse to schedule it to force
+			// user to explicitly
 			// cancel and reschedule.
 			case NEW:
 				throw new RuntimeException(
@@ -343,7 +368,7 @@ class AlgSchedulerTask extends TimerTask {
 						"State was not one of allowable states: " + state);
 			}
 		}
-		this._algMap.put(alg, new AlgorithmTask(alg, time, _schedulerListener));
+		this._algMap.put(alg, new AlgorithmTask(alg, time, this));
 	}
 
 	public synchronized final int getMaxSimultaneousAlgs() {
@@ -355,43 +380,18 @@ class AlgSchedulerTask extends TimerTask {
 	 *            The algorithm whose state we want to query.
 	 * @return State of the specified algorithm.
 	 */
-	public final STATE getAlgorithmState(Algorithm alg) {
-		synchronized (_algMap) {
-			AlgorithmTask task = this._algMap.get(alg);
-			if (task == null)
-				throw new NoSuchElementException("Algorithm doesn't exist.");
-			return task.getState();
-		}
-	}
-
-	/**
-	 * @param state
-	 *            The state we are interested in.
-	 * @return The number of algorithms in the specified state.
-	 */
-	public final int getNumAlgsInState(STATE state) {
-		int count = 0;
-		for (AlgorithmTask task : this._algMap.values())
-			if (task != null && task.getState() == state)
-				count++;
-		return count;
-	}
-
-	/**
-	 * @return true if we have reached the limit of how many algs we can run,
-	 *         false otherwise. If limit is set to -1, always returns false,
-	 *         i.e. no limit.
-	 */
-	private final boolean _limitReached() {
-		int max = getMaxSimultaneousAlgs();
-		return (max != -1) && (getNumAlgsInState(STATE.RUNNING) >= max);
+	public synchronized final STATE getAlgorithmState(Algorithm alg) {
+		AlgorithmTask task = this._algMap.get(alg);
+		if (task == null)
+			throw new NoSuchElementException("Algorithm doesn't exist.");
+		return task.getState();
 	}
 
 	/**
 	 * Removes all finished algorithms from the queue.
 	 */
 	public synchronized final void purgeFinished() {
-		synchronized (this._algMap) {
+		synchronized (this) {
 			Iterator<Entry<Algorithm, AlgorithmTask>> iter = this._algMap
 					.entrySet().iterator();
 			while (iter.hasNext()) {
@@ -403,30 +403,67 @@ class AlgSchedulerTask extends TimerTask {
 		}
 	}
 
+	private synchronized final boolean _limitReached() {
+		return (_maxSimultaneousAlgs != -1)
+				&& (_numRunning >= _maxSimultaneousAlgs);
+	}
+
 	@Override
 	public void run() {
-		purgeFinished();
-		synchronized (_algMap) {
+		synchronized (this) {
 			// If we are runing the max allowable, wait until next turn.
-			if (_limitReached())
-				return;
+			Date now = Calendar.getInstance().getTime();
 			// Iterate through algorithms.
-			Set<Entry<Algorithm, AlgorithmTask>> entrySet = this._algMap
-					.entrySet();
-			for (Entry<Algorithm, AlgorithmTask> entry : entrySet) {
-				// Check this at every point.
+			Collection<AlgorithmTask> tasks = this._algMap.values();
+			for (AlgorithmTask task : tasks) {
 				if (_limitReached())
-					break;
-				AlgorithmTask task = entry.getValue();
-				Date now = Calendar.getInstance().getTime();
-				// Only schedule algorithms that are fit to be scheduled.
+					return;
 				if ((task.getState() == STATE.NEW)
-						&& now.compareTo(task.getScheduledTime().getTime()) <= 0) {
+						&& now.compareTo(task.getScheduledTime().getTime()) >= 0) {
 					// Run immediately
-					_timer.schedule(task, 0L);
+					task.start();
 				}
 			}
 		}
+	}
+
+	public void algorithmMovedToRunningQueue(Algorithm algorithm, int index) {
+		_schedulerListener.algorithmMovedToRunningQueue(algorithm, index);
+	}
+
+	public void algorithmScheduled(Algorithm algorithm, Calendar time, int index) {
+		_schedulerListener.algorithmScheduled(algorithm, time, index);
+	}
+
+	public void algorithmScheduled(Algorithm algorithm, Calendar time) {
+		_schedulerListener.algorithmScheduled(algorithm, time);
+	}
+
+	private volatile int _numRunning = 0;
+
+	public synchronized void algorithmStarted(Algorithm algorithm) {
+		_numRunning++;
+		_schedulerListener.algorithmStarted(algorithm);
+	}
+
+	public void algorithmFinished(Algorithm algorithm) {
+		purgeFinished();
+		_numRunning--;
+		_schedulerListener.algorithmFinished(algorithm);
+	}
+
+	public void algorithmError(Algorithm algorithm) {
+		purgeFinished();
+		_numRunning--;
+		_schedulerListener.algorithmError(algorithm);
+	}
+
+	public void algorithmMovedUpInRunningQueue(Algorithm algorithm) {
+		_schedulerListener.algorithmMovedUpInRunningQueue(algorithm);
+	}
+
+	public void algorithmMovedDownInRunningQueue(Algorithm algorithm) {
+		_schedulerListener.algorithmMovedDownInRunningQueue(algorithm);
 	}
 }
 
@@ -442,7 +479,7 @@ class AlgSchedulerTask extends TimerTask {
  * @author Team CIShell
  */
 // May 8, 2006 7:19:00 PM Shashikant Penumarthy: Initial implementation.
-class AlgorithmTask extends TimerTask {
+class AlgorithmTask implements Runnable {
 
 	/**
 	 * The states in which algorithm tasks can exist.
@@ -450,12 +487,31 @@ class AlgorithmTask extends TimerTask {
 	 * @author Team IVC
 	 */
 	public static enum STATE {
-		/** Newly scheduled algorithms are in this state. */
+		/** New algorithms are in this state. */
 		NEW,
 		/** Running algorithms are in this state. */
 		RUNNING,
 		/** Algorithms either cancelled or finished are in this state. */
 		STOPPED
+	}
+
+	private volatile boolean _noRun = false;
+
+	public synchronized final boolean cancel() {
+		if (_noRun)
+			return true;
+		if (_state == STATE.RUNNING)
+			return false;
+		_state = STATE.STOPPED;
+		_noRun = true;
+		return _noRun;
+	}
+
+	public synchronized final void start() {
+		if (_noRun)
+			return;
+		_setState(STATE.RUNNING);
+		new Thread(this).start();
 	}
 
 	private final Algorithm _alg;
@@ -464,7 +520,7 @@ class AlgorithmTask extends TimerTask {
 	// using scheduledExecutionTime() method. We don't use that here.
 	private final Calendar _scheduledTime;
 
-	private STATE _state;
+	private volatile STATE _state;
 
 	/**
 	 * Execution status of the algorithm (i.e.) return value.
@@ -504,7 +560,7 @@ class AlgorithmTask extends TimerTask {
 
 	private synchronized final void _setState(STATE state) {
 		this._state = state;
-		// Inform listener appropriately
+		// Inform listeners
 		if (_schedulerListener != null) {
 			switch (this._state) {
 			case NEW:
@@ -514,11 +570,16 @@ class AlgorithmTask extends TimerTask {
 				_schedulerListener.algorithmStarted(_alg);
 				break;
 			case STOPPED:
+				_noRun = true;
 				boolean status = getStatus();
 				if (status)
 					_schedulerListener.algorithmFinished(_alg);
 				else
 					_schedulerListener.algorithmError(_alg);
+				break;
+			default:
+				throw new IllegalStateException(
+						"Encountered illegal algorithm state: " + _state);
 			}
 		}
 	}
@@ -527,10 +588,8 @@ class AlgorithmTask extends TimerTask {
 		return this._state;
 	}
 
-	@Override
 	public void run() {
 		try {
-			_setState(STATE.RUNNING);
 			_status = _alg.execute();
 		} catch (Exception e) {
 			// TODO: This is a really bad idea. We should just
