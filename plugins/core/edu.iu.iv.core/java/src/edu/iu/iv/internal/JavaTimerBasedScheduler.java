@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.Map.Entry;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import edu.iu.iv.core.Scheduler;
@@ -126,15 +125,21 @@ public class JavaTimerBasedScheduler implements Scheduler {
 		return _isShutDown;
 	}
 
-	@Deprecated
+	/**
+	 * @see edu.iu.iv.core.Scheduler#moveDown(edu.iu.iv.core.algorithm.Algorithm)
+	 * @deprecated
+	 */
 	public boolean moveDown(Algorithm algorithm) {
 		throw new RuntimeException(
 				"Scheduler doesn't care about such orderings."
 						+ " Re-schedule the specified algorithm to run before the desired"
 						+ "algorithm. Attempted to move: " + algorithm);
 	}
-
-	@Deprecated
+	
+	/**
+	 * @see edu.iu.iv.core.Scheduler#moveUp(edu.iu.iv.core.algorithm.Algorithm)
+	 * @deprecated
+	 */
 	public boolean moveUp(Algorithm algorithm) {
 		throw new RuntimeException(
 				"Scheduler doesn't care about such orderings."
@@ -149,20 +154,19 @@ public class JavaTimerBasedScheduler implements Scheduler {
 		try {
 			STATE algState = _algSchedulerTask.getAlgorithmState(algorithm);
 			// Cannot reschedule running algs
-			switch (algState) {
-			case RUNNING:
+			if (algState.equals(STATE.RUNNING)) {
 				status = false;
-				break;
-			case STOPPED:
+			}
+			else if (algState.equals(STATE.STOPPED)) {
 				_algSchedulerTask.purgeFinished();
 				_algSchedulerTask.schedule(algorithm, newTime);
 				status = true;
-				break;
-			case NEW:
+			}
+			else if (algState.equals(STATE.NEW)) {
 				_algSchedulerTask.cancel(algorithm);
 				_algSchedulerTask.schedule(algorithm, newTime);
-				break;
-			default:
+			}
+			else {
 				throw new IllegalStateException(
 						"Encountered an invalid state: " + algState);
 			}
@@ -187,7 +191,10 @@ public class JavaTimerBasedScheduler implements Scheduler {
 		_algSchedulerTask.schedule(algorithm, time);
 	}
 
-	@Deprecated
+	/**
+	 * @see edu.iu.iv.core.Scheduler#unblock(edu.iu.iv.core.algorithm.Algorithm)
+	 * @deprecated
+	 */
 	public void unblock(final Algorithm algorithm) {
 		NotImplementedException n = new NotImplementedException();
 		n.initCause(new RuntimeException(
@@ -195,7 +202,10 @@ public class JavaTimerBasedScheduler implements Scheduler {
 						+ "Attempted to schedule: " + algorithm));
 	}
 
-	@Deprecated
+	/**
+	 * @see edu.iu.iv.core.Scheduler#block(edu.iu.iv.core.algorithm.Algorithm)
+	 * @deprecated
+	 */
 	public void block(final Algorithm algorithm) {
 		NotImplementedException n = new NotImplementedException();
 		n.initCause(new RuntimeException(
@@ -229,10 +239,10 @@ public class JavaTimerBasedScheduler implements Scheduler {
  */
 class SchedulerListenerInformer implements SchedulerListener {
 
-	private List<SchedulerListener> _schedulerListeners;
+	private List _schedulerListeners;
 
 	public SchedulerListenerInformer() {
-		_schedulerListeners = new ArrayList<SchedulerListener>();
+		_schedulerListeners = new ArrayList();
 	}
 
 	public void addSchedulerListener(SchedulerListener listener) {
@@ -248,49 +258,65 @@ class SchedulerListenerInformer implements SchedulerListener {
 	}
 
 	public void algorithmMovedToRunningQueue(Algorithm algorithm, int index) {
-		for (SchedulerListener sl : _schedulerListeners)
+		for (Iterator iter = _schedulerListeners.iterator() ; iter.hasNext() ; ) {
+			SchedulerListener sl = (SchedulerListener) iter.next() ;
 			sl.algorithmMovedToRunningQueue(algorithm, index);
+		}
 	}
 
 	public void algorithmScheduled(Algorithm algorithm, Calendar time, int index) {
-		for (SchedulerListener sl : _schedulerListeners)
+		for (Iterator iter = _schedulerListeners.iterator() ; iter.hasNext() ; ) {
+			SchedulerListener sl = (SchedulerListener) iter.next() ;
 			sl.algorithmScheduled(algorithm, time, index);
+		}
 	}
 
 	public void algorithmScheduled(Algorithm algorithm, Calendar time) {
-		for (SchedulerListener sl : _schedulerListeners)
+		for (Iterator iter = _schedulerListeners.iterator() ; iter.hasNext() ; ) {
+			SchedulerListener sl = (SchedulerListener) iter.next() ;
 			sl.algorithmScheduled(algorithm, time);
+		}
 	}
 
 	public synchronized void algorithmStarted(Algorithm algorithm) {
-		for (SchedulerListener sl : _schedulerListeners)
+		for (Iterator iter = _schedulerListeners.iterator() ; iter.hasNext() ; ) {
+			SchedulerListener sl = (SchedulerListener) iter.next() ;
 			sl.algorithmStarted(algorithm);
+		}
 	}
 
 	public synchronized void algorithmFinished(Algorithm algorithm) {
-		for (SchedulerListener sl : _schedulerListeners)
+		for (Iterator iter = _schedulerListeners.iterator() ; iter.hasNext() ; ) {
+			SchedulerListener sl = (SchedulerListener) iter.next() ;
 			sl.algorithmFinished(algorithm);
+		}
 	}
 
 	public void algorithmError(Algorithm algorithm) {
-		for (SchedulerListener sl : _schedulerListeners)
+		for (Iterator iter = _schedulerListeners.iterator() ; iter.hasNext() ; ) {
+			SchedulerListener sl = (SchedulerListener) iter.next() ;
 			sl.algorithmError(algorithm);
+		}
 	}
 
 	public void algorithmMovedUpInRunningQueue(Algorithm algorithm) {
-		for (SchedulerListener sl : _schedulerListeners)
+		for (Iterator iter = _schedulerListeners.iterator() ; iter.hasNext() ; ) {
+			SchedulerListener sl = (SchedulerListener) iter.next() ;
 			sl.algorithmMovedUpInRunningQueue(algorithm);
+		}
 	}
 
 	public void algorithmMovedDownInRunningQueue(Algorithm algorithm) {
-		for (SchedulerListener sl : _schedulerListeners)
+		for (Iterator iter = _schedulerListeners.iterator() ; iter.hasNext() ; ) {
+			SchedulerListener sl = (SchedulerListener) iter.next() ;
 			sl.algorithmMovedDownInRunningQueue(algorithm);
+		}
 	}
 }
 
 class AlgSchedulerTask extends TimerTask implements SchedulerListener {
 
-	private Map<Algorithm, AlgorithmTask> _algMap;
+	private Map _algMap;
 
 	// Default allow as many as needed
 	private int _maxSimultaneousAlgs = -1;
@@ -323,7 +349,7 @@ class AlgSchedulerTask extends TimerTask implements SchedulerListener {
 
 	public AlgSchedulerTask(SchedulerListener listener) {
 		_algMap = Collections
-				.synchronizedMap(new HashMap<Algorithm, AlgorithmTask>());
+				.synchronizedMap(new HashMap());
 		setSchedulerListener(listener);
 	}
 
@@ -333,7 +359,7 @@ class AlgSchedulerTask extends TimerTask implements SchedulerListener {
 	}
 
 	public synchronized final boolean cancel(Algorithm alg) {
-		AlgorithmTask task = this._algMap.get(alg);
+		AlgorithmTask task = (AlgorithmTask) this._algMap.get(alg);
 		if (task == null)
 			return false;
 		// The algorithm will run till the end and
@@ -344,26 +370,27 @@ class AlgSchedulerTask extends TimerTask implements SchedulerListener {
 	}
 
 	public synchronized final void schedule(Algorithm alg, Calendar time) {
-		AlgorithmTask task = this._algMap.get(alg);
+		AlgorithmTask task = (AlgorithmTask) this._algMap.get(alg);
 		// If alg already exists, do some checks...
 		if (task != null) {
 			STATE state = task.getState();
-			switch (state) {
 			// If its still running, we can't schedule it again.
-			case RUNNING:
+			if (state.equals(STATE.RUNNING)) {
 				throw new RuntimeException(
 						"Cannot schedule running algorithm. Check state of algorithm first.");
+			}
 			// If its new or waiting to run, we refuse to schedule it to force
 			// user to explicitly
 			// cancel and reschedule.
-			case NEW:
+			else if (state.equals(STATE.NEW)) {
 				throw new RuntimeException(
 						"Algorithm is already scheduled to run. Cancel existing schedule first.");
-			case STOPPED:
+			}
+			else if (state.equals(STATE.STOPPED)) {
 				// If it was stopped but not cleaned up yet, clean it up
 				purgeFinished();
-				break;
-			default:
+			}
+			else {
 				throw new IllegalStateException(
 						"State was not one of allowable states: " + state);
 			}
@@ -381,7 +408,7 @@ class AlgSchedulerTask extends TimerTask implements SchedulerListener {
 	 * @return State of the specified algorithm.
 	 */
 	public synchronized final STATE getAlgorithmState(Algorithm alg) {
-		AlgorithmTask task = this._algMap.get(alg);
+		AlgorithmTask task = (AlgorithmTask) this._algMap.get(alg);
 		if (task == null)
 			throw new NoSuchElementException("Algorithm doesn't exist.");
 		return task.getState();
@@ -392,11 +419,11 @@ class AlgSchedulerTask extends TimerTask implements SchedulerListener {
 	 */
 	public synchronized final void purgeFinished() {
 		synchronized (this) {
-			Iterator<Entry<Algorithm, AlgorithmTask>> iter = this._algMap
+			Iterator iter = this._algMap
 					.entrySet().iterator();
 			while (iter.hasNext()) {
-				Entry<Algorithm, AlgorithmTask> entry = iter.next();
-				AlgorithmTask task = entry.getValue();
+				Map.Entry entry = (Map.Entry) iter.next();
+				AlgorithmTask task = (AlgorithmTask) entry.getValue();
 				if (task.getState() == STATE.STOPPED)
 					iter.remove();
 			}
@@ -408,14 +435,14 @@ class AlgSchedulerTask extends TimerTask implements SchedulerListener {
 				&& (_numRunning >= _maxSimultaneousAlgs);
 	}
 
-	@Override
 	public void run() {
 		synchronized (this) {
 			// If we are runing the max allowable, wait until next turn.
 			Date now = Calendar.getInstance().getTime();
 			// Iterate through algorithms.
-			Collection<AlgorithmTask> tasks = this._algMap.values();
-			for (AlgorithmTask task : tasks) {
+			Collection tasks = this._algMap.values();
+			for (Iterator iter = tasks.iterator() ; iter.hasNext() ;) {
+				AlgorithmTask task = (AlgorithmTask) iter.next() ;
 				if (_limitReached())
 					return;
 				if ((task.getState() == STATE.NEW)
@@ -486,13 +513,23 @@ class AlgorithmTask implements Runnable {
 	 * 
 	 * @author Team IVC
 	 */
-	public static enum STATE {
+	static final class STATE {
+		private String _name ;
+		public STATE(String name) {
+			this._name = name ;
+		}
+		public final boolean equals(Object object) {
+			if (! (object instanceof STATE))
+				return false ;
+			STATE state = (STATE) object ;
+			return state._name.compareTo(_name) == 0;
+		}
 		/** New algorithms are in this state. */
-		NEW,
+		public static final STATE NEW = new STATE("NEW") ;
 		/** Running algorithms are in this state. */
-		RUNNING,
+		public static final STATE RUNNING = new STATE("RUNNING") ;
 		/** Algorithms either cancelled or finished are in this state. */
-		STOPPED
+		public static final STATE STOPPED = new STATE("STOPPED") ;
 	}
 
 	private volatile boolean _noRun = false;
@@ -500,7 +537,7 @@ class AlgorithmTask implements Runnable {
 	public synchronized final boolean cancel() {
 		if (_noRun)
 			return true;
-		if (_state == STATE.RUNNING)
+		if (_state.equals(STATE.RUNNING))
 			return false;
 		_state = STATE.STOPPED;
 		_noRun = true;
@@ -562,22 +599,21 @@ class AlgorithmTask implements Runnable {
 		this._state = state;
 		// Inform listeners
 		if (_schedulerListener != null) {
-			switch (this._state) {
-			case NEW:
+			if (this._state.equals(STATE.NEW)) {
 				_schedulerListener.algorithmScheduled(_alg, _scheduledTime);
-				break;
-			case RUNNING:
+			}
+			else if (this._state.equals(STATE.RUNNING)) {
 				_schedulerListener.algorithmStarted(_alg);
-				break;
-			case STOPPED:
+			}
+			else if (this._state.equals(STATE.STOPPED)) {
 				_noRun = true;
 				boolean status = getStatus();
 				if (status)
 					_schedulerListener.algorithmFinished(_alg);
 				else
 					_schedulerListener.algorithmError(_alg);
-				break;
-			default:
+			}
+			else {
 				throw new IllegalStateException(
 						"Encountered illegal algorithm state: " + _state);
 			}
