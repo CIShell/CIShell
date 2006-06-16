@@ -13,7 +13,6 @@ import java.util.NoSuchElementException;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import edu.iu.iv.core.Scheduler;
 import edu.iu.iv.core.SchedulerListener;
 import edu.iu.iv.core.algorithm.Algorithm;
@@ -196,7 +195,7 @@ public class JavaTimerBasedScheduler implements Scheduler {
 	 * @deprecated
 	 */
 	public void unblock(final Algorithm algorithm) {
-		NotImplementedException n = new NotImplementedException();
+        UnsupportedOperationException n = new UnsupportedOperationException();
 		n.initCause(new RuntimeException(
 				"Cannot block algs reliably so this feature will be removed. "
 						+ "Attempted to schedule: " + algorithm));
@@ -207,7 +206,7 @@ public class JavaTimerBasedScheduler implements Scheduler {
 	 * @deprecated
 	 */
 	public void block(final Algorithm algorithm) {
-		NotImplementedException n = new NotImplementedException();
+        UnsupportedOperationException n = new UnsupportedOperationException();
 		n.initCause(new RuntimeException(
 				"Cannot block algs reliably so this feature will be removed. "
 						+ "Attempted to schedule: " + algorithm));
