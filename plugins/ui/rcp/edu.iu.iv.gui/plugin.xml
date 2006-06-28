@@ -36,9 +36,6 @@
        <property
              name="aboutText"
              value="%blurb"/>
-       <property
-             name="windowImages"
-             value="icons/ivc.gif,icons/ivc.gif"/>
     </product>
    </extension>
 </plugin>
