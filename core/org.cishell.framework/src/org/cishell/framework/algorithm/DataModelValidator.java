@@ -15,7 +15,37 @@ package org.cishell.framework.algorithm;
 
 import org.cishell.framework.datamodel.DataModel;
 
+
+/**
+ * An additional interface an {@link AlgorithmFactory} can implement that 
+ * allows for further data model validation beyond what is provided in the 
+ * service dictionary's in_data/out_data specifications. This is useful in 
+ * cases where an algorithm expects a certain type of data model, but must 
+ * make additional checks. For example, if an algorithm only worked on 
+ * symmetric matrices, this interface would check the data model ahead of time
+ * to ensure that the given matrix was in fact a symmetric matrix.
+ * 
+ * In order for CIShell clients to fully recognize this additional validation 
+ * method, an algorithm writer must register this interface in addition to the 
+ * algorithm interface when registering their service.
+ * 
+ * @author Bruce Herr (bh2@bh2.net)
+ */
 public interface DataModelValidator {
-    public boolean supports(DataModel[] dm);
-    public String unsupportedReason(DataModel[] dm);
+    
+    /**
+     * Validates the given data model(s) that are proposed to be given to the
+     * algorithm. It can return three different values:
+     * 
+     * <table>
+     * <tr><td><code>null</code></td><td>No validation present</td></tr>
+     * <tr><td><code>""</code></td><td>The data model is valid</td></tr>
+     * <tr><td><code>"..."</code></td>
+     *     <td>A localized description of why its invalid</td></tr>
+     * </table>
+     * 
+     * @param dm The proposed data model that may be given to create an Algorithm
+     * @return <code>null</code>, "", or another string
+     */
+    public String validate(DataModel[] dm);
 }

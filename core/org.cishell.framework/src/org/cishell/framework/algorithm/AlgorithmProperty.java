@@ -9,11 +9,17 @@
  * Created on Jun 15, 2006 at Indiana University.
  * 
  * Contributors:
- *     Indiana University - 
+ *     Indiana University - Initial API
  * ***************************************************************************/
 package org.cishell.framework.algorithm;
 
-
+/**
+ * A standard set of properties and values used for creating a service 
+ * Dictionary that is provided when registering an AlgorithmFactory with the 
+ * OSGi service registry.
+ * 
+ * @author Bruce Herr (bh2@bh2.net)
+ */
 public interface AlgorithmProperty {
     public static String IN_DATA = "in_data";
     public static String OUT_DATA = "out_data";

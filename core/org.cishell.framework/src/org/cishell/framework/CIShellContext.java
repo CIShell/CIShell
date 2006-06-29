@@ -18,13 +18,37 @@ import org.cishell.service.guibuilder.GUIBuilderService;
 import org.osgi.service.log.LogService;
 import org.osgi.service.prefs.PreferencesService;
 
-
+/**
+ * The context by which algorithms in the framework can gain access to standard
+ * CIShell services. An instantiated CIShellContext must provide access to at 
+ * least the default services (as of this specification, the OSGi 
+ * {@link LogService}, the OSGi {@link PreferencesService}, the 
+ * CIShell defined {@link DataConversionService}, and the CIShell defined 
+ * {@link GUIBuilderService}). Other services may be made available through
+ * this class, but anything beyond the standard services is not guaranteed.
+ * 
+ * @author Bruce Herr (bh2@bh2.net)
+ */
 public interface CIShellContext {
+    
+    /**
+     * Contains an array of the strings to access the default services
+     */
     public static final String[] DEFAULT_SERVICES = 
             new String[] { LogService.class.getName(), 
                            PreferencesService.class.getName(),
                            DataConversionService.class.getName(),
                            GUIBuilderService.class.getName()};
     
+    /**
+     * Locates and returns a standard service given the service name. The 
+     * service name is generally the full class name of the service interface.
+     * For example, <code>LogService</code>'s string is 
+     * <code>org.osgi.service.log.LogService</code>
+     * 
+     * @param service A string (usually the associated interface's full 
+     *                class name) that specifies the service to retrieve.
+     * @return An instantiated version of the service requested
+     */
     public Object getService(String service);
 }
