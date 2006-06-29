@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Reference Scripting Client
+Bundle-SymbolicName: org.cishell.reference.scripting
+Bundle-Version: 0.0.1
+Bundle-Activator: org.cishell.reference.scripting.Activator
+Bundle-Localization: plugin
+Import-Package: org.cishell.framework,
+ org.cishell.framework.algorithm,
+ org.cishell.framework.datamodel,
+ org.osgi.framework;version="1.3.0",
+ org.osgi.service.log;version="1.3.0",
+ org.python.core,
+ org.python.util
