@@ -1,0 +1,12 @@
+#TeXlipse project settings
+#Wed Jun 14 10:31:12 EST 2006
+builderNum=2
+outputDir=bin/
+makeIndSty=
+outputFormat=pdf
+tempDir=.tmp
+mainTexFile=draft-spec.tex
+outputFile=cishell-draft-spec.pdf
+langSpell=en
+markDer=true
+srcDir=src/draft-specification/
