@@ -1,0 +1,19 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: CIShell Reference Service Implementations
+Bundle-SymbolicName: org.cishell.reference
+Bundle-Version: 0.0.1
+Bundle-Localization: plugin
+Import-Package: org.cishell.client.service.modelmanager,
+ org.cishell.client.service.scheduler,
+ org.cishell.framework,
+ org.cishell.framework.algorithm,
+ org.cishell.framework.datamodel,
+ org.cishell.service.conversion,
+ org.cishell.service.guibuilder,
+ org.osgi.framework,
+ org.osgi.service.log,
+ org.osgi.service.prefs
+Export-Package: org.cishell.reference.client.service.modelmanager,
+ org.cishell.reference.service.conversion
+Eclipse-LazyStart: true
