@@ -52,7 +52,7 @@ public class AlgorithmAdapter extends AbstractAlgorithm {
      * @see edu.iu.iv.core.algorithm.AbstractAlgorithm#execute()
      */
     public boolean execute() {
-        Algorithm alg = factory.newInstance(dm, makeDictionary(), ciContext);
+        Algorithm alg = factory.createAlgorithm(dm, makeDictionary(), ciContext);
         DataModel[] newData = alg.execute();
         
         if (newData != null) {

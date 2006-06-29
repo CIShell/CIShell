@@ -169,7 +169,8 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, ISelec
                     supports = true;
                     
                     if (validator != null) {
-                        supports = validator.supports(new DataModel[]{new NewDataModelAdapter(dm)});
+                        String valid = validator.validate(new DataModel[]{new NewDataModelAdapter(dm)});
+                        supports = valid == null || (valid != null && valid.length() == 0);
                     }
                 }
             }
@@ -181,7 +182,8 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, ISelec
                 supports = true;
                 
                 if (validator != null) {
-                    supports = validator.supports(new DataModel[]{new NewDataModelAdapter(dm)});
+                    String valid = validator.validate(new DataModel[]{new NewDataModelAdapter(dm)});
+                    supports = valid == null || (valid != null && valid.length() == 0);
                 }
             }
         }
@@ -195,6 +197,7 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, ISelec
     } 
     
     private AlgorithmFactory getDataConverter(String inFormat, String outFormat) {
+        //TODO: automatic datamodel conversion
         DataConversionService converter = (DataConversionService)
             ciContext.getService(DataConversionService.class.getName());
         return converter.converterFor(inFormat, outFormat);
