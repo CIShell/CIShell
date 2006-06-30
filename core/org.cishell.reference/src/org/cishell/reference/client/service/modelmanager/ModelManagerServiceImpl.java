@@ -52,7 +52,7 @@ public class ModelManagerServiceImpl implements ModelManagerService {
      */
     public void addModel(DataModel model) {
         String label = (String)model.getProperties().get(DataModelProperty.LABEL);
-        DataModelType type = (DataModelType)model.getProperties().get(DataModelProperty.TYPE);
+        String type = (String)model.getProperties().get(DataModelProperty.TYPE);
         
         if(type == null){
             type = DataModelType.OTHER;
@@ -84,7 +84,7 @@ public class ModelManagerServiceImpl implements ModelManagerService {
                 label = "Unknown";
             }
             
-            label = label + "." + type.getName();           
+            label = label + "." + type;           
         }
         
         addModel(model, label);
@@ -180,7 +180,7 @@ public class ModelManagerServiceImpl implements ModelManagerService {
         return (String)modelToLabelMap.get(model);
     }
 
-    public DataModel[] getModels() {
+    public DataModel[] getAllModels() {
         return (DataModel[]) models.toArray(new DataModel[]{});
     }
 
