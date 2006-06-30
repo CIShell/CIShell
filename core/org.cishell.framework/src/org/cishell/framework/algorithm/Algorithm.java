@@ -16,7 +16,7 @@ package org.cishell.framework.algorithm;
 import org.cishell.framework.datamodel.DataModel;
 
 /**
- * An algorithm. In CIShell an algorithm can be basically any arbitrary code
+ * In CIShell, an algorithm can be basically any arbitrary code
  * execution cycle. What happens when the execute method is run is entirely
  * up to the Algorithm writer. Some algorithms may be primed with a data model
  * that it analyzes and returns a derivitive data model or it may convert from

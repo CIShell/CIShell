@@ -16,10 +16,13 @@ package org.cishell.client.service.modelmanager;
 import org.cishell.framework.datamodel.DataModel;
 
 /**
+ * An abstract adapter class for notification of changes in the 
+ * {@link ModelManagerService}. The methods in this class are empty. This class
+ * exists as a convenience for creating listener objects.
  * 
- * @author
+ * @author Bruce Herr (bh2@bh2.net)
  */
-public class ModelManagerAdapter implements ModelManagerListener {
+public abstract class ModelManagerAdapter implements ModelManagerListener {
     /**
      * @see org.cishell.client.service.modelmanager.ModelManagerListener#modelAdded(org.cishell.framework.datamodel.DataModel)
      */

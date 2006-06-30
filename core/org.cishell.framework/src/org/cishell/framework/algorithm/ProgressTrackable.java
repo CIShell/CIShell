@@ -35,4 +35,13 @@ public interface ProgressTrackable {
      * @param monitor The monitor the algorithm is to use
      */
     public void setProgressMonitor(ProgressMonitor monitor);
+    
+    /**
+     * Returns the progress monitor currently in use, or <code>null</code> if
+     * no monitor has been set.
+     * 
+     * @return The current progress monitor, or <code>null</code> if there 
+     * isn't one set.
+     */
+    public ProgressMonitor getProgressMonitor();
 }

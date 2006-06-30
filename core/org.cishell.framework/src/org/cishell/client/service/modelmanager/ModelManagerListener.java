@@ -16,8 +16,34 @@ package org.cishell.client.service.modelmanager;
 import org.cishell.framework.datamodel.DataModel;
 
 
+/**
+ * A listener that is notified of changes in the {@link ModelManagerService}.
+ * 
+ * @author Bruce Herr (bh2@bh2.net)
+ */
 public interface ModelManagerListener {
+	
+	/**
+	 * Notifies that a model has been added to the associated 
+	 * {@link ModelManagerService} 
+	 * 
+	 * @param dm The added {@link DataModel}
+	 */
     public void modelAdded(DataModel dm);
+    
+    /**
+     * Notifies that a model has been removed from the associated
+     * {@link ModelManagerService}
+     * 
+     * @param dm The removed {@link DataModel}
+     */
     public void modelRemoved(DataModel dm);
+    
+    /**
+     * Notifies that a set of models have been selected in the associated
+     * {@link ModelManagerService}
+     * 
+     * @param dm The selected {@link DataModel}s
+     */
     public void modelsSelected(DataModel[] dm);
 }
