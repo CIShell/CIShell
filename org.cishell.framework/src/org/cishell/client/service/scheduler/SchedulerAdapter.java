@@ -9,7 +9,7 @@
  * Created on Jun 14, 2006 at Indiana University.
  * 
  * Contributors:
- *     Indiana University - 
+ *     Indiana University - Initial API
  * ***************************************************************************/
 package org.cishell.client.service.scheduler;
 
@@ -18,6 +18,13 @@ import java.util.Calendar;
 import org.cishell.framework.algorithm.Algorithm;
 import org.cishell.framework.datamodel.DataModel;
 
+/**
+ * An abstract adapter class for notification of events happening in a 
+ * {@link SchedulerService}. The methods in this class are empty. This class
+ * exists as a convenience for creating listener objects.
+ * 
+ * @author Bruce Herr (bh2@bh2.net)
+ */
 public class SchedulerAdapter implements SchedulerListener {
 
     public void algorithmError(Algorithm algorithm, Exception error) { }

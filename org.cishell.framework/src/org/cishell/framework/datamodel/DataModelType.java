@@ -9,51 +9,31 @@
  * Created on Jun 15, 2006 at Indiana University.
  * 
  * Contributors:
- *     Indiana University - 
+ *     Indiana University - Initial API
  * ***************************************************************************/
 package org.cishell.framework.datamodel;
 
 
-
 /**
- * Defines some standard DataModelTypes to be used in DataModel PropertyMaps
- * to declare the type of a DataModel, as well as allows for creation of
- * new types when needed.
+ * Defines some standard data model types to be used in a DataModel's meta-data
+ * to declare the type of a {@link DataModel}. These are the values associated 
+ * with the {@link DataModelProperty}, DataModelProperty.TYPE. These 'types' are 
+ * more general and are used to help a user to figure out in a broad sense what 
+ * type of data he or she is looking at.
  *
- * @author Team IVC
+ * @author Bruce Herr (bh2@bh2.net)
  */
-public class DataModelType {        
+public interface DataModelType {        
     
-    /** Matrix data model */
-    public static DataModelType MATRIX = new DataModelType("Matrix");
+    /** Says this data model is abstractly a matrix */
+    public static String MATRIX = "Matrix";
     
-    /** Network data model */
-    public static DataModelType NETWORK = new DataModelType("Network");
+    /** Says this data model is abstractly a network */
+    public static String NETWORK = "Network";
     
-    /** Tree data model */
-    public static DataModelType TREE = new DataModelType("Tree");
+    /** Says this data model is abstractly a tree */
+    public static String TREE = "Tree";
     
-    /** Unknown data model */
-    public static DataModelType OTHER = new DataModelType("Unknown");       
-    
-    private String name;
-    
-    /**
-     * Creates a new DataModelType object.
-     *
-     * @param name the name of this DataModelType
-     */
-    public DataModelType(String name) {
-        this.name = name;
-    }
-
-    /**
-     * Returns the name of this DataModelType.
-     *
-     * @return the name of this DataModelType
-     */
-    public String getName() {
-        return name;
-    }
-    
+    /** Says this data model is abstractly an unknown type */
+    public static String OTHER = "Unknown";           
 }

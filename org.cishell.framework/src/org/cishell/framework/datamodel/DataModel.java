@@ -15,7 +15,31 @@ package org.cishell.framework.datamodel;
 
 import java.util.Dictionary;
 
+/**
+ * A class that encapsulates data and its meta-data. This class is used to pass
+ * data between algorithms and what algorithms optionally create when executed. 
+ * 
+ * @author Bruce Herr (bh2@bh2.net)
+ */
 public interface DataModel {
+	/**
+	 * Returns the meta-data associated with the data stored in this DataModel.
+	 * Some standard keys are in {@link DataModelProperty}.
+	 * 
+	 * @return The data's meta-data
+	 */
     public Dictionary getProperties();
+    
+    /**
+     * Returns the data stored in this DataModel.
+     * 
+     * @return The data (a java object)
+     */
     public Object getData();
+    
+    //TODO: Consider these methods for inclusion in DataModel
+    //public String getType();
+    
+    //public String getUID(); //may be better for specifying parent datamodels
+    //public Object getDataAsType(String type);
 }
