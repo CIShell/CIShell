@@ -45,7 +45,7 @@ public class OldDataModelAdapter extends BasicDataModel
                 newKey = MODIFIED;
             } else if (key == DataModelProperty.TYPE) {
                 newKey = TYPE;
-                String type = ((org.cishell.framework.datamodel.DataModelType)newValue).getName();
+                String type = (String) newValue;
                 newValue = getDataModelType(type);
             } else if (key == DataModelProperty.PARENT) {
                 newKey = PARENT;

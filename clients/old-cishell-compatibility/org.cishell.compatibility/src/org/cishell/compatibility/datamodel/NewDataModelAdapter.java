@@ -60,7 +60,7 @@ public class NewDataModelAdapter extends BasicDataModel implements
         }
     }
 
-    private DataModelType getDataModelType(String type) {
+    private String getDataModelType(String type) {
         if (type.equals(DataModelType.MATRIX)) {
             return DataModelType.MATRIX;
         } else if (type.equals(DataModelType.NETWORK)) {
