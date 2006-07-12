@@ -22,6 +22,8 @@ import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
 import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.datamodel.DataModel;
+import org.cishell.service.conversion.DataConversionService;
+import org.osgi.framework.ServiceReference;
 import org.osgi.service.metatype.MetaTypeProvider;
 
 import edu.iu.iv.core.IVC;
@@ -30,12 +32,14 @@ import edu.iu.iv.core.algorithm.AbstractAlgorithm;
 import edu.iu.iv.core.algorithm.AlgorithmProperty;
 
 
-public class AlgorithmAdapter extends AbstractAlgorithm {
+public class AlgorithmAdapter extends AbstractAlgorithm implements org.cishell.framework.algorithm.AlgorithmProperty {
     private AlgorithmFactory factory;
     private DataModel[] dm;
     private CIShellContext ciContext;
+    private ServiceReference ref;
     
-    public AlgorithmAdapter(String label, AlgorithmFactory factory, DataModel[] dm, CIShellContext ciContext) {
+    public AlgorithmAdapter(ServiceReference ref, String label, AlgorithmFactory factory, DataModel[] dm, CIShellContext ciContext) {
+        this.ref = ref;
         this.factory = factory;
         this.dm = dm;
         this.ciContext = ciContext;
@@ -52,21 +56,68 @@ public class AlgorithmAdapter extends AbstractAlgorithm {
      * @see edu.iu.iv.core.algorithm.AbstractAlgorithm#execute()
      */
     public boolean execute() {
-        Algorithm alg = factory.createAlgorithm(dm, makeDictionary(), ciContext);
-        DataModel[] newData = alg.execute();
+        doDataModelConversion();
         
-        if (newData != null) {
-            for (int i=0; i < newData.length; i++) {
-                try {
-                    IVC.getInstance().addModel(new OldDataModelAdapter(newData[i]));
-                } catch (UnsupportedModelException e) {
-                    e.printStackTrace();
+        Algorithm alg = factory.createAlgorithm(dm, makeDictionary(), ciContext);
+        
+        if (alg != null) {
+            DataModel[] newData = alg.execute();
+            
+            if (newData != null) {
+                for (int i=0; i < newData.length; i++) {
+                    try {
+                        IVC.getInstance().addModel(new OldDataModelAdapter(newData[i]));
+                    } catch (UnsupportedModelException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }
         
         return true;
-    }  
+    }
+    
+    protected void doDataModelConversion() {
+        String inDataText = (String) ref.getProperty(IN_DATA);
+        
+        if (inDataText != null) {
+            String[] inData = inDataText.split(",");
+            
+            if (dm != null && inData.length == dm.length) {
+                for (int i=0; i < dm.length; i++) {
+                    dm[i] = convert(dm[i], inData[i]);
+                }
+            }
+        }
+    }
+    
+    protected DataModel convert(DataModel dm, String outFormat) {
+        DataConversionService converter = (DataConversionService)
+            ciContext.getService(DataConversionService.class.getName());
+        
+        if (dm != null && dm.getData() != null) {
+            Class[] c = dm.getData().getClass().getClasses();
+            
+            if (c.length == 0) {
+                c = new Class[]{dm.getData().getClass()};
+            }
+            
+            for (int i=0; i < c.length; i++) {
+                AlgorithmFactory factory = converter.converterFor(c[i].getName(), outFormat);
+                
+                if (factory != null) {
+                    Algorithm alg = factory.createAlgorithm(new DataModel[]{dm}, new Hashtable(), ciContext);
+                    
+                    DataModel[] newDM = alg.execute();
+                    if (newDM != null && newDM.length == 1) {
+                        dm = newDM[0];
+                    }
+                }
+            }
+        }
+
+        return dm;
+    }
     
     protected Dictionary makeDictionary() {
         if (parameterMap instanceof ParameterMapAdapter) {

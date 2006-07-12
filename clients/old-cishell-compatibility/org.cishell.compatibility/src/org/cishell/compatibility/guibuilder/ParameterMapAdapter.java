@@ -173,8 +173,11 @@ public class ParameterMapAdapter extends ParameterMap implements ParameterProper
     public Dictionary createDictionary() {
         Dictionary dict = new Hashtable();
         
-        AttributeDefinition[] attr = 
-            ocd.getAttributeDefinitions(ObjectClassDefinition.ALL);
+        AttributeDefinition[] attr = new AttributeDefinition[0];
+        
+        if (ocd != null) {
+            attr = ocd.getAttributeDefinitions(ObjectClassDefinition.ALL);
+        }
         
         for (int i=0; i < attr.length; i++) {
             int cardinality = attr[i].getCardinality();

@@ -38,17 +38,17 @@ public class NewDataModelAdapter extends BasicDataModel implements
 
             if (newValue == null) {
                 continue;
-            } else if (key == DataModelProperty.LABEL) {
+            } else if (key.equals(DataModelProperty.LABEL)) {
                 newKey = LABEL;
                 newValue = newValue.toString();
-            } else if (key == DataModelProperty.MODIFIED) {
+            } else if (key.equals(DataModelProperty.MODIFIED)) {
                 newKey = MODIFIED;
-            } else if (key == DataModelProperty.TYPE) {
+            } else if (key.equals(DataModelProperty.TYPE)) {
                 newKey = TYPE;
                 String type = ((edu.iu.iv.core.datamodels.DataModelType) newValue)
                         .getName();
                 newValue = getDataModelType(type);
-            } else if (key == DataModelProperty.PARENT) {
+            } else if (key.equals(DataModelProperty.PARENT)) {
                 newKey = PARENT;
                 newValue = new NewDataModelAdapter(
                         (edu.iu.iv.core.datamodels.DataModel) newValue);

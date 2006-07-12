@@ -132,7 +132,7 @@ public class MenuAdapter implements AlgorithmProperty {
     }
     
     private String getItemID(ServiceReference ref) {
-        return ref.getProperty(LABEL) + "-BID:" + ref.getBundle().getBundleId();
+        return ref.getProperty(Constants.SERVICE_PID) + "-BID:" + ref.getBundle().getBundleId();
     }
     
     private MenuManager createMenu(String name, String id){
@@ -152,8 +152,18 @@ public class MenuAdapter implements AlgorithmProperty {
             case ServiceEvent.UNREGISTERING:
                 removeMenuItem(event.getServiceReference());
                 break;
+            case ServiceEvent.MODIFIED:
+                updateMenuItem(event.getServiceReference());
+                break;
             }
         }
+    }
+    
+    private void updateMenuItem(ServiceReference ref) {
+        Action item = (Action) algorithmToItemMap.get(getItemID(ref));
+        
+        if (item != null) 
+            item.setText(""+ref.getProperty(LABEL));
     }
     
     private void removeMenuItem(ServiceReference ref) {

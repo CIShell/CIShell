@@ -13,8 +13,10 @@
  * ***************************************************************************/
 package org.cishell.compatibility.menu;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import org.cishell.compatibility.algorithm.AlgorithmAdapter;
@@ -66,7 +68,7 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, ISelec
 
         printPluginInformation();
         AlgorithmFactory factory = (AlgorithmFactory) bContext.getService(ref);
-        AlgorithmAdapter algorithm = new AlgorithmAdapter(getText(),factory,dm,ciContext);
+        AlgorithmAdapter algorithm = new AlgorithmAdapter(ref, getText(),factory,dm,ciContext);
         algorithm.createGUIandRun(getText(), "");
     }
     
@@ -132,9 +134,7 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, ISelec
             }
         }
         
-        
         String inData = (String) ref.getProperty(IN_DATA);
-        String outData = (String) ref.getProperty(OUT_DATA);
         boolean supports = false;
 
         if (inData == null || inData.toLowerCase().equals(NULL_DATA)) {
@@ -151,7 +151,7 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, ISelec
                     Iterator iter = cdm.iterator();
                     while (iter.hasNext()) {
                         Object data = ((edu.iu.iv.core.datamodels.DataModel) iter.next()).getData();
-                        if (!goodData.contains(data) && isAsignableFrom(types[i], data)) {
+                        if (!goodData.contains(data) && isAsignableFrom(inData, data)) {
                             goodData.add(data);
                         }
                     }
@@ -160,7 +160,19 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, ISelec
                 if (types.length == goodData.size()) {
                     supports = true;
                     
-                    //TODO: extra validation for multi-dm algorithms
+                    if (validator != null) {
+                        List datamodels = new ArrayList();
+                        
+                        for (Iterator i=cdm.iterator(); i.hasNext();) {
+                            datamodels.add(new NewDataModelAdapter(
+                                    (edu.iu.iv.core.datamodels.DataModel) i.next()));
+                        }
+                        
+                        DataModel[] dms = (DataModel[]) datamodels.toArray(new DataModel[0]);
+                        String valid = validator.validate(dms);
+                        
+                        supports = valid == null || (valid != null && valid.length() == 0);
+                    }
                 }
             } else {
                 Object data = dm.getData();
@@ -188,13 +200,8 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, ISelec
             }
         }
         
-//        if (supports == false && (outData != null || 
-//                AlgorithmProperty.NULL_DATA.equalsIgnoreCase(outData))) {
-//            supports = getDataConverter(inData, outData) != null;
-//        }
-        
         return supports;
-    } 
+    }
     
     private AlgorithmFactory getDataConverter(String inFormat, String outFormat) {
         //TODO: automatic datamodel conversion
@@ -204,15 +211,34 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, ISelec
     }
     
     private boolean isAsignableFrom(String type, Object data) {
+        boolean assignable = false;
+        Class c = null;
         try {
-            Class c = Class.forName(type, false, data.getClass().getClassLoader());
-            if (c.isInstance(data)) {
-                return true;
-            }
+            c = Class.forName(type, false, data.getClass().getClassLoader());
         } catch (ClassNotFoundException e) {
             //Ignore
         }
         
-        return false;
+        if (c != null) {
+            if (c.isInstance(data)) {
+                assignable = true;
+            } else {
+                //see if there is a converter to get the data in the right format
+                Class[] classes = data.getClass().getClasses();
+                
+                if (classes.length == 0) {
+                    classes = new Class[]{data.getClass()};
+                }
+                
+                for (int i=0; i < classes.length; i++) {
+                    if (getDataConverter(classes[i].getName(),type) != null) {
+                        assignable = true;
+                        break;
+                    }
+                }
+            }
+        }
+        
+        return assignable;
     }
 }

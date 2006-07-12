@@ -38,16 +38,16 @@ public class OldDataModelAdapter extends BasicDataModel
             
             if (newValue == null) {
                 continue;
-            } else if (key == DataModelProperty.LABEL) {
+            } else if (key.equals(DataModelProperty.LABEL)) {
                 newKey = LABEL;
                 newValue = newValue.toString();
-            } else if (key == DataModelProperty.MODIFIED) {
+            } else if (key.equals(DataModelProperty.MODIFIED)) {
                 newKey = MODIFIED;
-            } else if (key == DataModelProperty.TYPE) {
+            } else if (key.equals(DataModelProperty.TYPE)) {
                 newKey = TYPE;
                 String type = (String) newValue;
                 newValue = getDataModelType(type);
-            } else if (key == DataModelProperty.PARENT) {
+            } else if (key.equals(DataModelProperty.PARENT)) {
                 newKey = PARENT;
                 newValue = new OldDataModelAdapter((org.cishell.framework.datamodel.DataModel) newValue);
             }

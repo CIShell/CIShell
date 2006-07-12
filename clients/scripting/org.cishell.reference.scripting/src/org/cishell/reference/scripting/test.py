@@ -19,16 +19,16 @@ from org.cishell.framework.datamodel import BasicDataModel
 
 refs = findAlgorithms()
 factory = getAlgorithm(refs[2])
-alg = factory.newInstance([BasicDataModel(None)],Hashtable(),ciContext)
+alg = factory.createAlgorithm([BasicDataModel(None)],Hashtable(),ciContext)
 dm1 = alg.execute()
 
 dm2 = [BasicDataModel("100"),]
 factory = getAlgorithm(refs[0])
-alg = factory.newInstance(dm2,Hashtable(),ciContext)
+alg = factory.createAlgorithm(dm2,Hashtable(),ciContext)
 dm3 = alg.execute()
 
 factory = getAlgorithm(refs[1])
-alg = factory.newInstance(dm3,Hashtable(),ciContext)
+alg = factory.createAlgorithm(dm3,Hashtable(),ciContext)
 dm4 = alg.execute()
 
 

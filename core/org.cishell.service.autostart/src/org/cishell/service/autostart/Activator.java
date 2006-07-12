@@ -44,30 +44,18 @@ public class Activator implements BundleActivator, BundleListener {
     
     private void startBundle(Bundle bundle) {
         Dictionary header = bundle.getHeaders();
-        boolean autostart = false;
-        boolean activator = false;
-        
+
         for (Enumeration iter = header.keys(); iter.hasMoreElements(); ) {
             String key = iter.nextElement().toString();
             
-            if (key.toLowerCase().equals("x-autostart") && 
+            if ("x-autostart".equalsIgnoreCase(key) && 
                     "true".equals(header.get(key))) {
-                autostart = true;
-            }
-            
-            if (key.toLowerCase().equals("bundle-activator") &&
-                    header.get(key) != null) {
-                activator = true;
-            }
-        }
-        
-        if (autostart && !activator) {
-            try {
-                bundle.start();
-            } catch (BundleException e1) {
-                e1.printStackTrace();
+                try {
+                    bundle.start();
+                } catch (BundleException e1) {
+                    e1.printStackTrace();
+                }
             }
         }
     }
-
 }
