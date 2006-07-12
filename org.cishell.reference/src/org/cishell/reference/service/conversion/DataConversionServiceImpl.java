@@ -38,7 +38,7 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
         try {
             String filter = "(&("+IN_DATA+"="+inFormat+") " +
                               "("+OUT_DATA+"="+outFormat+"))";
-            
+
             ServiceReference[] refs = bcontext.getServiceReferences(
                     AlgorithmFactory.class.getName(), filter);
             if (refs != null && refs.length > 0) {
