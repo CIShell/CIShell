@@ -16,6 +16,7 @@ package org.cishell.client.service.scheduler;
 import java.util.Calendar;
 
 import org.cishell.framework.algorithm.Algorithm;
+import org.osgi.framework.ServiceReference;
 
 
 /**
@@ -35,8 +36,10 @@ public interface SchedulerService {
 	 * enough resources to fulfill the request.
 	 * 
 	 * @param algorithm The algorithm to be run
+     * @param ref       A reference to the Algorithm's associated service, may
+     *                  be <code>null</code>
 	 */
-    public void runNow(Algorithm algorithm);
+    public void runNow(Algorithm algorithm, ServiceReference ref);
     
     /**
      * Schedules an Algorithm to be run when convenient. This schedules an
@@ -44,8 +47,10 @@ public interface SchedulerService {
      * Algorithms will be scheduled in this way. 
      * 
      * @param algorithm The Algorithm to be scheduled
+     * @param ref       A reference to the Algorithm's associated service, may
+     *                  be <code>null</code>
      */
-    public void schedule(Algorithm algorithm);
+    public void schedule(Algorithm algorithm, ServiceReference ref);
     
     /**
      * Schedules an Algorithm to be run at a specific time. The Algorithm will
@@ -54,9 +59,11 @@ public interface SchedulerService {
      * resources to fulfill the request.
      * 
      * @param algorithm The Algorithm to be scheduled
+     * @param ref       A reference to the Algorithm's associated service, may
+     *                  be <code>null</code>
      * @param time What time this Algorithm should be run
      */
-    public void schedule(Algorithm algorithm, Calendar time);
+    public void schedule(Algorithm algorithm, ServiceReference ref, Calendar time);
     
     /**
      * Reschedules an already scheduled Algorithm to be run at a different time.
@@ -133,6 +140,16 @@ public interface SchedulerService {
      *         if the Algorithm is not scheduled or has completed execution.
      */
     public Calendar getScheduledTime(Algorithm algorithm);
+    
+    
+    /**
+     * Returns an Algorithm's associated ServiceReference if one was provided
+     * when the Algorithm was scheduled
+     * 
+     * @param algorithm The Algorithm
+     * @return Its associated ServiceReference
+     */
+    public ServiceReference getServiceReference(Algorithm algorithm);
     
     /**
      * Clears all currently scheduled Algorithms to be run. If an Algorithm is

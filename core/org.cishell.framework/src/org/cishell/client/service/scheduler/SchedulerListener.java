@@ -44,6 +44,14 @@ public interface SchedulerListener {
     public void algorithmRescheduled(Algorithm algorithm, Calendar time);
     
     /**
+     * Notification that an already scheduled Algorithm has been unscheduled
+     * and will therefore not be run.
+     * 
+     * @param algorithm The scheduled Algorithm that was unscheduled
+     */
+    public void algorithmUnscheduled(Algorithm algorithm);
+    
+    /**
      * Notification that an Algorithm has started execution
      *  
      * @param algorithm The scheduled algorithm
