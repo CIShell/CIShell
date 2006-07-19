@@ -32,6 +32,8 @@ public class SchedulerAdapter implements SchedulerListener {
     public void algorithmFinished(Algorithm algorithm, DataModel[] createdDM) { }
 
     public void algorithmRescheduled(Algorithm algorithm, Calendar time) { }
+    
+    public void algorithmUnscheduled(Algorithm algorithm) {}
 
     public void algorithmScheduled(Algorithm algorithm, Calendar time) { }
 
