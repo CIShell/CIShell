@@ -24,11 +24,11 @@ import java.util.Dictionary;
 public interface DataModel {
 	/**
 	 * Returns the meta-data associated with the data stored in this DataModel.
-	 * Some standard keys are in {@link DataModelProperty}.
+	 * Some standard keys are in the {@link DataModelProperty} interface.
 	 * 
 	 * @return The data's meta-data
 	 */
-    public Dictionary getProperties();
+    public Dictionary getMetaData();
     
     /**
      * Returns the data stored in this DataModel.

@@ -55,7 +55,7 @@ public class NewDataModelAdapter extends BasicDataModel implements
             }
 
             if (newKey != null) {
-                this.getProperties().put(newKey, newValue);
+                this.getMetaData().put(newKey, newValue);
             }
         }
     }

@@ -80,7 +80,7 @@ public class AlgorithmAdapter extends AbstractAlgorithm implements org.cishell.f
     protected void doDataModelConversion() {
         String inDataText = (String) ref.getProperty(IN_DATA);
         
-        if (inDataText != null) {
+        if (inDataText != null && !inDataText.equals(NULL_DATA)) {
             String[] inData = inDataText.split(",");
             
             if (dm != null && inData.length == dm.length) {
@@ -95,28 +95,7 @@ public class AlgorithmAdapter extends AbstractAlgorithm implements org.cishell.f
         DataConversionService converter = (DataConversionService)
             ciContext.getService(DataConversionService.class.getName());
         
-        if (dm != null && dm.getData() != null) {
-            Class[] c = dm.getData().getClass().getClasses();
-            
-            if (c.length == 0) {
-                c = new Class[]{dm.getData().getClass()};
-            }
-            
-            for (int i=0; i < c.length; i++) {
-                AlgorithmFactory factory = converter.converterFor(c[i].getName(), outFormat);
-                
-                if (factory != null) {
-                    Algorithm alg = factory.createAlgorithm(new DataModel[]{dm}, new Hashtable(), ciContext);
-                    
-                    DataModel[] newDM = alg.execute();
-                    if (newDM != null && newDM.length == 1) {
-                        dm = newDM[0];
-                    }
-                }
-            }
-        }
-
-        return dm;
+        return converter.convert(dm, outFormat);
     }
     
     protected Dictionary makeDictionary() {

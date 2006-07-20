@@ -2,10 +2,12 @@ package org.cishell.compatibility;
 
 import java.util.Hashtable;
 
+import org.cishell.client.service.scheduler.SchedulerService;
 import org.cishell.compatibility.log.OSGiLogListener;
 import org.cishell.compatibility.menu.MenuAdapter;
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.LocalCIShellContext;
+import org.cishell.reference.client.service.scheduler.SchedulerServiceImpl;
 import org.cishell.reference.service.conversion.DataConversionServiceImpl;
 import org.cishell.service.conversion.DataConversionService;
 import org.osgi.framework.BundleContext;
@@ -20,6 +22,7 @@ public class Activator {
     private MenuAdapter menuAdapter;
     private OSGiLogListener logListener;
     private ServiceRegistration conversionReg;
+    private ServiceRegistration schedulerReg;
 
     protected void activate(ComponentContext ctxt) {
         this.bContext = ctxt.getBundleContext();
@@ -43,12 +46,17 @@ public class Activator {
                 new DataConversionServiceImpl(bContext, ciContext);
         conversionReg = bContext.registerService(
                 DataConversionService.class.getName(), conversionService, new Hashtable());
+        
+        SchedulerService scheduler = new SchedulerServiceImpl();
+        schedulerReg = bContext.registerService(
+                SchedulerService.class.getName(), scheduler, new Hashtable());
     }
     
     protected void deactivate(ComponentContext ctxt) {
         menuAdapter.stop();
         logListener.stop();
         conversionReg.unregister();
+        schedulerReg.unregister();
         
         bContext = null;
         ciContext = null;

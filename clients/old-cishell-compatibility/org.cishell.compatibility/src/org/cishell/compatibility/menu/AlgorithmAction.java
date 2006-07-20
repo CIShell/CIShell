@@ -26,6 +26,7 @@ import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.algorithm.AlgorithmProperty;
 import org.cishell.framework.algorithm.DataModelValidator;
 import org.cishell.framework.datamodel.DataModel;
+import org.cishell.service.conversion.Converter;
 import org.cishell.service.conversion.DataConversionService;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ISelection;
@@ -203,11 +204,10 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, ISelec
         return supports;
     }
     
-    private AlgorithmFactory getDataConverter(String inFormat, String outFormat) {
-        //TODO: automatic datamodel conversion
+    private Converter[] getDataConverters(String inFormat, String outFormat) {
         DataConversionService converter = (DataConversionService)
             ciContext.getService(DataConversionService.class.getName());
-        return converter.converterFor(inFormat, outFormat);
+        return converter.findConverters(inFormat, outFormat);
     }
     
     private boolean isAsignableFrom(String type, Object data) {
@@ -231,7 +231,7 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, ISelec
                 }
                 
                 for (int i=0; i < classes.length; i++) {
-                    if (getDataConverter(classes[i].getName(),type) != null) {
+                    if (getDataConverters(classes[i].getName(),type).length > 0) {
                         assignable = true;
                         break;
                     }

@@ -56,9 +56,9 @@ public class BasicDataModel implements DataModel {
     }
 
     /**
-     * @see org.cishell.framework.datamodel.DataModel#getProperties()
+     * @see org.cishell.framework.datamodel.DataModel#getMetaData()
      */
-    public Dictionary getProperties() {
+    public Dictionary getMetaData() {
         return properties;
     }
 }

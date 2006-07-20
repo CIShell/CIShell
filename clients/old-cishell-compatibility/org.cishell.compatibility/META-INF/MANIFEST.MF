@@ -7,9 +7,11 @@ Bundle-Localization: plugin
 Service-Component: OSGI-INF/component.xml
 X-AutoStart: true
 Import-Package: edu.iu.iv.gui,
+ org.cishell.client.service.scheduler,
  org.cishell.framework,
  org.cishell.framework.algorithm,
  org.cishell.framework.datamodel,
+ org.cishell.reference.client.service.scheduler,
  org.cishell.reference.service.conversion,
  org.cishell.service.conversion,
  org.eclipse.core.commands.common,

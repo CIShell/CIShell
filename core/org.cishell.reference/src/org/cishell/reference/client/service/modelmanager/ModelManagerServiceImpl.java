@@ -51,12 +51,12 @@ public class ModelManagerServiceImpl implements ModelManagerService {
      * @see edu.iu.iv.core.ModelManager#addModel(java.lang.Object)
      */
     public void addModel(DataModel model) {
-        String label = (String)model.getProperties().get(DataModelProperty.LABEL);
-        String type = (String)model.getProperties().get(DataModelProperty.TYPE);
+        String label = (String)model.getMetaData().get(DataModelProperty.LABEL);
+        String type = (String)model.getMetaData().get(DataModelProperty.TYPE);
         
         if(type == null){
             type = DataModelType.OTHER;
-            model.getProperties().put(DataModelProperty.TYPE, type);
+            model.getMetaData().put(DataModelProperty.TYPE, type);
         }
         
         //generate label if needed
@@ -96,9 +96,9 @@ public class ModelManagerServiceImpl implements ModelManagerService {
 
     private void addModel(DataModel model, String label) {
         label = findUniqueLabel(label);
-        model.getProperties().put(DataModelProperty.LABEL, label);
+        model.getMetaData().put(DataModelProperty.LABEL, label);
         //set the model to be unsaved initially
-        model.getProperties().put(DataModelProperty.MODIFIED, new Boolean(true));
+        model.getMetaData().put(DataModelProperty.MODIFIED, new Boolean(true));
                 
         modelToLabelMap.put(model, label);
         labelToModelMap.put(label, model);      

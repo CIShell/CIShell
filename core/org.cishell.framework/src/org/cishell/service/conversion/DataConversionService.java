@@ -26,13 +26,15 @@ import org.cishell.framework.datamodel.DataModel;
  * and other standard algorithm properties, a DataConversionService will try and
  * find the fastest, most efficient way to convert from a one format to another.
  * 
+ * TODO: Fix conversion service docu
+ * 
  * @author Bruce Herr (bh2@bh2.net)
  */
 public interface DataConversionService {
 	
 	/**
 	 * Finds a converter from one format to another if at all possible. The
-	 * returned {@link AlgorithmFactory}, which may be a composite of multiple
+	 * returned {@link Converter}s, which may be a composite of multiple
 	 * algorithms, will take a {@link DataModel} of the specified 
 	 * <code>inFormat</code> and convert it to a DataModel of type 
 	 * <code>outFormat</code>. If there is no way to convert the data model,
@@ -49,13 +51,13 @@ public interface DataConversionService {
 	 *         inFormat to the given outFormat, or <code>null</code> if there is 
 	 *         no way to convert.
 	 */
-    public AlgorithmFactory converterFor(String inFormat, String outFormat);
+    public Converter[] findConverters(String inFormat, String outFormat);
     
     /**
      * Finds a converter from one format to another falling within the given
      * parameters. The max number of converters to use (maxHops) and the 
      * maximum allowed complexity for the converters to limit the impact a 
-     * conversion will make. The returned {@link AlgorithmFactory}, which may 
+     * conversion will make. The returned {@link Converter}s, which may 
      * be a composite of multiple algorithms, will take a {@link DataModel} of 
      * the specified <code>inFormat</code> and convert it to a DataModel of type 
 	 * <code>outFormat</code>. If there is no way to convert the data model 
@@ -78,8 +80,10 @@ public interface DataConversionService {
 	 *         inFormat to the given outFormat, or <code>null</code> if there is 
 	 *         no way to convert within the given parameters.
      */
-    public AlgorithmFactory converterFor(String inFormat, String outFormat,
+    public Converter[] findConverters(String inFormat, String outFormat,
             int maxHops, String maxComplexity);
     
-    //TODO: More methods of conversion here?
+    public DataModel convert(DataModel dm, String outFormat);
+    
+    //  TODO: More methods of conversion here?
 }

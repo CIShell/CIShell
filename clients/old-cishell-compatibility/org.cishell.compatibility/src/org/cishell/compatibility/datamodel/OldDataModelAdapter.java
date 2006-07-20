@@ -29,7 +29,7 @@ public class OldDataModelAdapter extends BasicDataModel
     public OldDataModelAdapter(org.cishell.framework.datamodel.DataModel dataModel) {
         super(dataModel.getData());
     
-        Dictionary properties = dataModel.getProperties();
+        Dictionary properties = dataModel.getMetaData();
         Enumeration keys = properties.keys();
         while (keys.hasMoreElements()) {
             Object key = keys.nextElement();
