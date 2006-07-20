@@ -13,9 +13,17 @@
  * ***************************************************************************/
 package org.cishell.reference.service.conversion;
 
+import java.util.Dictionary;
+import java.util.Hashtable;
+
 import org.cishell.framework.CIShellContext;
+import org.cishell.framework.algorithm.Algorithm;
 import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.algorithm.AlgorithmProperty;
+import org.cishell.framework.datamodel.BasicDataModel;
+import org.cishell.framework.datamodel.DataModel;
+import org.cishell.framework.datamodel.DataModelProperty;
+import org.cishell.service.conversion.Converter;
 import org.cishell.service.conversion.DataConversionService;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
@@ -23,39 +31,101 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogService;
 
 public class DataConversionServiceImpl implements DataConversionService, AlgorithmProperty {
-    private BundleContext bcontext;
+    private BundleContext bContext;
     private CIShellContext ciContext;
     
-    public DataConversionServiceImpl(BundleContext bcontext, CIShellContext ciContext) {
-        this.bcontext = bcontext;
+    public DataConversionServiceImpl(BundleContext bContext, CIShellContext ciContext) {
+        this.bContext = bContext;
         this.ciContext = ciContext;
     }
 
     /**
-     * @see org.cishell.service.conversion.DataConversionService#converterFor(java.lang.String, java.lang.String)
+     * TODO: Only provides a direct conversion, need to improve
+     * 
+     * @see org.cishell.service.conversion.DataConversionService#findConverters(java.lang.String, java.lang.String)
      */
-    public AlgorithmFactory converterFor(String inFormat, String outFormat) {
+    public Converter[] findConverters(String inFormat, String outFormat) {
         try {
             String filter = "(&("+IN_DATA+"="+inFormat+") " +
                               "("+OUT_DATA+"="+outFormat+"))";
 
-            ServiceReference[] refs = bcontext.getServiceReferences(
+            ServiceReference[] refs = bContext.getServiceReferences(
                     AlgorithmFactory.class.getName(), filter);
+            
             if (refs != null && refs.length > 0) {
-                return (AlgorithmFactory)bcontext.getService(refs[0]);
+                Converter[] converters = new Converter[refs.length];
+                for (int i=0; i < converters.length; i++) {
+                    converters[i] = new ConverterImpl(bContext, new ServiceReference[]{refs[i]});
+                }
+                
+                return converters;
+            } else {
+                return new Converter[0];
             }
         } catch (InvalidSyntaxException e) {
             getLog().log(LogService.LOG_ERROR, "Incorrect Syntax", e);
+            throw new RuntimeException(e);
         }
-        return null;
     }
 
     /**
-     * @see org.cishell.service.conversion.DataConversionService#converterFor(java.lang.String, java.lang.String, int, java.lang.String)
+     * @see org.cishell.service.conversion.DataConversionService#findConverters(java.lang.String, java.lang.String, int, java.lang.String)
      */
-    public AlgorithmFactory converterFor(String inFormat, String outFormat,
+    public Converter[] findConverters(String inFormat, String outFormat,
             int maxHops, String maxComplexity) {
-        return converterFor(inFormat, outFormat);
+        return findConverters(inFormat, outFormat);
+    }
+
+    public DataModel convert(DataModel inDM, String outFormat) {
+        String inFormat = (String)inDM.getMetaData().get(DataModelProperty.FORMAT);
+        
+        Converter[] converters = new Converter[0];
+        if (inFormat != null) {
+            if (inFormat.equals(outFormat)) return inDM;
+            
+            converters = findConverters(inFormat, outFormat);
+        } else {
+            //try to find a converter that will convert the java object to
+            //the correct outFormat
+            
+            inFormat = inDM.getData().getClass().getName();
+            if (inFormat.equals(outFormat)) return inDM;
+            converters = findConverters(inFormat, outFormat);
+            
+            Class[] classes = inDM.getData().getClass().getClasses();
+            
+            for (int i=0; i < classes.length && converters.length == 0; i++) {
+                inFormat = classes[i].getName();
+                
+                if (inFormat.equals(outFormat)) return inDM;
+                
+                converters = findConverters(inFormat, outFormat);
+            }
+        }
+        
+        Object outData = null;
+        
+        if (converters.length > 0) {
+            DataModel[] dm = new DataModel[]{inDM};
+            
+            AlgorithmFactory factory = converters[0].getAlgorithmFactory();
+            Algorithm alg = factory.createAlgorithm(dm, new Hashtable(), ciContext);
+            
+            dm = alg.execute();
+            
+            if (dm != null && dm.length > 0) {
+                outData = dm[0].getData();
+            }
+        }
+        
+        if (outData != null) {
+            Dictionary props = inDM.getMetaData();
+            props.put(DataModelProperty.FORMAT, outFormat);
+            
+            return new BasicDataModel(props, outData);
+        } else {
+            return null;
+        }        
     }
     
     private LogService getLog() {
