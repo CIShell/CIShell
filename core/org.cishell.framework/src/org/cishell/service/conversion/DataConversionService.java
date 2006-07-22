@@ -85,5 +85,7 @@ public interface DataConversionService {
     
     public DataModel convert(DataModel dm, String outFormat);
     
+    public Converter[] findConverters(DataModel dm, String outFormat);
+    
     //  TODO: More methods of conversion here?
 }
