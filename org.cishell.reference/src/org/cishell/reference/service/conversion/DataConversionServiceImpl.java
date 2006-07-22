@@ -13,8 +13,13 @@
  * ***************************************************************************/
 package org.cishell.reference.service.conversion;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Dictionary;
+import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.List;
 
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
@@ -84,7 +89,7 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
             if (inFormat.equals(outFormat)) return inDM;
             
             converters = findConverters(inFormat, outFormat);
-        } else {
+        } else if (inDM.getData() != null) {
             //try to find a converter that will convert the java object to
             //the correct outFormat
             
@@ -110,7 +115,7 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
             
             AlgorithmFactory factory = converters[0].getAlgorithmFactory();
             Algorithm alg = factory.createAlgorithm(dm, new Hashtable(), ciContext);
-            
+
             dm = alg.execute();
             
             if (dm != null && dm.length > 0) {
@@ -120,12 +125,44 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
         
         if (outData != null) {
             Dictionary props = inDM.getMetaData();
-            props.put(DataModelProperty.FORMAT, outFormat);
+            Dictionary newProps = new Hashtable();
             
-            return new BasicDataModel(props, outData);
+            for (Enumeration e=props.keys(); e.hasMoreElements();) {
+                Object key = e.nextElement();
+                newProps.put(key, props.get(key));
+            }
+            
+            newProps.put(DataModelProperty.FORMAT, outFormat);
+            
+            return new BasicDataModel(newProps, outData);
         } else {
             return null;
         }        
+    }
+    
+    public Converter[] findConverters(DataModel dm, String outFormat) {
+        String format = (String)dm.getMetaData().get(DataModelProperty.FORMAT);
+        
+        List list = new ArrayList();
+        Converter[] converters = new Converter[0];
+        if (format != null) {
+            converters = findConverters(format, outFormat);
+            list.addAll(Arrays.asList(converters));
+        } 
+        
+        if (!(dm.getData() instanceof File) && dm.getData() != null) {
+            converters = findConverters(
+                    dm.getData().getClass().getName(), outFormat);
+            list.addAll(Arrays.asList(converters));
+            
+            Class[] classes = dm.getData().getClass().getClasses();
+            for (int i=0; i < classes.length; i++) {
+                converters = findConverters(classes[i].getName(), outFormat);
+                list.addAll(Arrays.asList(converters));
+            }
+        }
+        
+        return (Converter[]) list.toArray(new Converter[0]);
     }
     
     private LogService getLog() {
