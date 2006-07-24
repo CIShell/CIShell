@@ -79,6 +79,7 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, ISelec
  
         console.printAlgorithmInformation(getText() + " was selected.\n");
 
+        //TODO: Print Algorithm Information
 //        String author = (String)ref.getProperty(AlgorithmProperty.AUTHOR);
 //        String citation = (String) ref.getProperty(AlgorithmProperty.CITATION);
 //        String docu = (String) ref.getProperty(AlgorithmProperty.DOCUMENTATION);
@@ -106,13 +107,12 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, ISelec
         if(models.size() == 0){
             boolean supports;
             try{
-            supports = supports(new BasicDataModel(null));
+                supports = supports(new BasicDataModel(null));
             } catch(NullPointerException e){
                 supports = false;
             }
             setEnabled(supports);
-        }
-        if(models.size() == 1){
+        } else if(models.size() == 1){
             setEnabled(supports((edu.iu.iv.core.datamodels.DataModel)models.toArray()[0]));
         } else {        
             CompositeDataModel composite = new BasicCompositeDataModel();
@@ -164,7 +164,7 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, ISelec
                     if (validator != null) {
                         List datamodels = new ArrayList();
                         
-                        for (Iterator i=cdm.iterator(); i.hasNext();) {
+                        for (Iterator i=cdm.iterator(); i.hasNext(); ) {
                             datamodels.add(new NewDataModelAdapter(
                                     (edu.iu.iv.core.datamodels.DataModel) i.next()));
                         }
@@ -207,6 +207,7 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, ISelec
     private Converter[] getDataConverters(String inFormat, String outFormat) {
         DataConversionService converter = (DataConversionService)
             ciContext.getService(DataConversionService.class.getName());
+
         return converter.findConverters(inFormat, outFormat);
     }
     

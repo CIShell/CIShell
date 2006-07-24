@@ -25,10 +25,7 @@ import edu.iu.iv.core.IVC;
 import edu.iu.iv.core.messaging.ConsoleLevel;
 import edu.iu.iv.core.messaging.ConsoleManager;
 
-/**
- * 
- * @author Bruce Herr
- */
+
 public class OSGiLogListener implements LogListener {
     private BundleContext bContext;
 
@@ -63,7 +60,6 @@ public class OSGiLogListener implements LogListener {
         default:
             level = ConsoleLevel.ALGORITHM_INFORMATION;
         }
-        
         
         if (goodMessage(entry.getMessage())) {
             console.print(entry.getMessage() + "\n", level);

@@ -90,6 +90,22 @@ public class MenuAdapter implements AlgorithmProperty {
         }
     }
     
+    private class ContextListener implements ServiceListener {
+        public void serviceChanged(ServiceEvent event) {
+            switch (event.getType()) {
+            case ServiceEvent.REGISTERED:
+                makeMenuItem(event.getServiceReference());
+                break;
+            case ServiceEvent.UNREGISTERING:
+                removeMenuItem(event.getServiceReference());
+                break;
+            case ServiceEvent.MODIFIED:
+                updateMenuItem(event.getServiceReference());
+                break;
+            }
+        }
+    }
+    
     private void makeMenuItem(ServiceReference ref) {
         String path = (String)ref.getProperty(MENU_PATH);
         
@@ -132,7 +148,8 @@ public class MenuAdapter implements AlgorithmProperty {
     }
     
     private String getItemID(ServiceReference ref) {
-        return ref.getProperty(Constants.SERVICE_PID) + "-BID:" + ref.getBundle().getBundleId();
+        return ref.getProperty("PID:" + Constants.SERVICE_PID) + "-SID:" + 
+                                ref.getProperty(Constants.SERVICE_ID);
     }
     
     private MenuManager createMenu(String name, String id){
@@ -141,22 +158,6 @@ public class MenuAdapter implements AlgorithmProperty {
         menu.add(new GroupMarker(ADDITIONS_GROUP));
         menu.add(new GroupMarker(END_GROUP));
         return menu;
-    }
-    
-    private class ContextListener implements ServiceListener {
-        public void serviceChanged(ServiceEvent event) {
-            switch (event.getType()) {
-            case ServiceEvent.REGISTERED:
-                makeMenuItem(event.getServiceReference());
-                break;
-            case ServiceEvent.UNREGISTERING:
-                removeMenuItem(event.getServiceReference());
-                break;
-            case ServiceEvent.MODIFIED:
-                updateMenuItem(event.getServiceReference());
-                break;
-            }
-        }
     }
     
     private void updateMenuItem(ServiceReference ref) {

@@ -78,24 +78,19 @@ public class AlgorithmAdapter extends AbstractAlgorithm implements org.cishell.f
     }
     
     protected void doDataModelConversion() {
-        String inDataText = (String) ref.getProperty(IN_DATA);
+        DataConversionService converter = (DataConversionService)
+            ciContext.getService(DataConversionService.class.getName());
         
+        String inDataText = (String) ref.getProperty(IN_DATA);
         if (inDataText != null && !inDataText.equals(NULL_DATA)) {
             String[] inData = inDataText.split(",");
             
             if (dm != null && inData.length == dm.length) {
                 for (int i=0; i < dm.length; i++) {
-                    dm[i] = convert(dm[i], inData[i]);
+                    dm[i] = converter.convert(dm[i], inData[i]);
                 }
             }
         }
-    }
-    
-    protected DataModel convert(DataModel dm, String outFormat) {
-        DataConversionService converter = (DataConversionService)
-            ciContext.getService(DataConversionService.class.getName());
-        
-        return converter.convert(dm, outFormat);
     }
     
     protected Dictionary makeDictionary() {

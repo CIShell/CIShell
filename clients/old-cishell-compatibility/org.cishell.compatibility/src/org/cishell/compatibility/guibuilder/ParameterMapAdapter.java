@@ -33,9 +33,10 @@ public class ParameterMapAdapter extends ParameterMap implements ParameterProper
     protected ObjectClassDefinition ocd;
     
     public ParameterMapAdapter(MetaTypeProvider provider) {
+       ObjectClassDefinition ocd = null;
+       
        //String locale = Locale.getDefault().getDisplayName();
        //TODO: better locale matching
-       ObjectClassDefinition ocd = null;
        
        if (ocd == null) {
            String[] locales = provider.getLocales();
@@ -63,8 +64,9 @@ public class ParameterMapAdapter extends ParameterMap implements ParameterProper
     }
     
     protected void createParameter(AttributeDefinition attr) {
-        //TODO: support for arbitrary additions of types
         int cardinality = attr.getCardinality();
+        
+        //TODO: support for arbitrary additions of types
         if (cardinality == Integer.MAX_VALUE) {
             cardinality = 5;
         } else if (cardinality == Integer.MIN_VALUE) {
@@ -236,7 +238,7 @@ public class ParameterMapAdapter extends ParameterMap implements ParameterProper
     }
     
     protected Object getValue(AttributeDefinition attr, Object value) {
-        //convert the speical types that aren't represented by the old GUI Builder
+        //convert the special types that aren't represented by the old GUI Builder
         switch (attr.getType()) {
         case AttributeDefinition.CHARACTER:
             if (value != null && value.toString().length() > 0) 
