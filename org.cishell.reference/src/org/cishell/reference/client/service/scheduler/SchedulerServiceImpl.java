@@ -26,8 +26,8 @@ import java.util.NoSuchElementException;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import org.cishell.client.service.scheduler.SchedulerListener;
-import org.cishell.client.service.scheduler.SchedulerService;
+import org.cishell.app.service.scheduler.SchedulerListener;
+import org.cishell.app.service.scheduler.SchedulerService;
 import org.cishell.framework.algorithm.Algorithm;
 import org.cishell.framework.datamodel.DataModel;
 import org.cishell.reference.client.service.scheduler.AlgorithmTask.STATE;
@@ -266,7 +266,7 @@ class SchedulerListenerInformer implements SchedulerListener {
         }
     }
 
-    public void algorithmError(Algorithm algorithm, Exception error) {
+    public void algorithmError(Algorithm algorithm, Throwable error) {
         for (Iterator iter = _schedulerListeners.iterator() ; iter.hasNext() ; ) {
             SchedulerListener sl = (SchedulerListener) iter.next() ;
             sl.algorithmError(algorithm, error);
@@ -492,7 +492,7 @@ class AlgSchedulerTask extends TimerTask implements SchedulerListener {
         _schedulerListener.algorithmStarted(algorithm);
     }
 
-    public void algorithmError(Algorithm algorithm, Exception error) {
+    public void algorithmError(Algorithm algorithm, Throwable error) {
         purgeFinished();
         _numRunning--;
         _schedulerListener.algorithmError(algorithm, error);

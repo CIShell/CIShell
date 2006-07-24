@@ -11,7 +11,7 @@
  * Contributors:
  *     Indiana University - 
  * ***************************************************************************/
-package org.cishell.client.service.modelmanager;
+package org.cishell.app.service.modelmanager;
 
 import org.cishell.framework.datamodel.DataModel;
 

@@ -26,6 +26,7 @@ import java.util.Hashtable;
 public class BasicDataModel implements DataModel {
     private Dictionary properties;
     private Object data;
+    private String format;
     
     /**
      * Creates a DataModel with the given data and an empty meta-data
@@ -33,8 +34,8 @@ public class BasicDataModel implements DataModel {
      * 
      * @param data The data being wrapped
      */
-    public BasicDataModel(Object data) {
-        this(new Hashtable(), data);
+    public BasicDataModel(Object data, String format) {
+        this(new Hashtable(), data, format);
     }
     
     /**
@@ -43,9 +44,10 @@ public class BasicDataModel implements DataModel {
      * @param properties The meta-data about the data
      * @param data       The data being wrapped
      */
-    public BasicDataModel(Dictionary properties, Object data) {
+    public BasicDataModel(Dictionary properties, Object data, String format) {
         this.properties = properties;
         this.data = data;
+        this.format = format;
     }
     
     /**
@@ -60,5 +62,9 @@ public class BasicDataModel implements DataModel {
      */
     public Dictionary getMetaData() {
         return properties;
+    }
+
+    public String getFormat() {
+        return format;
     }
 }

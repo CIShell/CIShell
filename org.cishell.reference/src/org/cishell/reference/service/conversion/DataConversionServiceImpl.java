@@ -27,7 +27,6 @@ import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.algorithm.AlgorithmProperty;
 import org.cishell.framework.datamodel.BasicDataModel;
 import org.cishell.framework.datamodel.DataModel;
-import org.cishell.framework.datamodel.DataModelProperty;
 import org.cishell.service.conversion.Converter;
 import org.cishell.service.conversion.DataConversionService;
 import org.osgi.framework.BundleContext;
@@ -82,7 +81,7 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
     }
 
     public DataModel convert(DataModel inDM, String outFormat) {
-        String inFormat = (String)inDM.getMetaData().get(DataModelProperty.FORMAT);
+        String inFormat = inDM.getFormat();
         
         Converter[] converters = new Converter[0];
         if (inFormat != null) {
@@ -131,17 +130,15 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
                 Object key = e.nextElement();
                 newProps.put(key, props.get(key));
             }
-            
-            newProps.put(DataModelProperty.FORMAT, outFormat);
-            
-            return new BasicDataModel(newProps, outData);
+                        
+            return new BasicDataModel(newProps, outData, outFormat);
         } else {
             return null;
         }        
     }
     
     public Converter[] findConverters(DataModel dm, String outFormat) {
-        String format = (String)dm.getMetaData().get(DataModelProperty.FORMAT);
+        String format = dm.getFormat();
         
         List list = new ArrayList();
         Converter[] converters = new Converter[0];

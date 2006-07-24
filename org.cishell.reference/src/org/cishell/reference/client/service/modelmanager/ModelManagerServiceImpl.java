@@ -20,8 +20,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import org.cishell.client.service.modelmanager.ModelManagerListener;
-import org.cishell.client.service.modelmanager.ModelManagerService;
+import org.cishell.app.service.modelmanager.ModelManagerListener;
+import org.cishell.app.service.modelmanager.ModelManagerService;
 import org.cishell.framework.datamodel.DataModel;
 import org.cishell.framework.datamodel.DataModelProperty;
 import org.cishell.framework.datamodel.DataModelType;

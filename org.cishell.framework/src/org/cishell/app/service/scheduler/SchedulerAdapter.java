@@ -11,7 +11,7 @@
  * Contributors:
  *     Indiana University - Initial API
  * ***************************************************************************/
-package org.cishell.client.service.scheduler;
+package org.cishell.app.service.scheduler;
 
 import java.util.Calendar;
 
@@ -27,7 +27,7 @@ import org.cishell.framework.datamodel.DataModel;
  */
 public class SchedulerAdapter implements SchedulerListener {
 
-    public void algorithmError(Algorithm algorithm, Exception error) { }
+    public void algorithmError(Algorithm algorithm, Throwable error) { }
 
     public void algorithmFinished(Algorithm algorithm, DataModel[] createdDM) { }
 
