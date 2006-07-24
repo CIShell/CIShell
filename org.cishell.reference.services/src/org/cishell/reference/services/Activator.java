@@ -5,7 +5,7 @@ import java.util.Hashtable;
 import org.cishell.app.service.scheduler.SchedulerService;
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.LocalCIShellContext;
-import org.cishell.reference.client.service.scheduler.SchedulerServiceImpl;
+import org.cishell.reference.app.service.scheduler.SchedulerServiceImpl;
 import org.cishell.reference.service.conversion.DataConversionServiceImpl;
 import org.cishell.service.conversion.DataConversionService;
 import org.osgi.framework.BundleActivator;
