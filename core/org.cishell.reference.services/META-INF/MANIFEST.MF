@@ -8,7 +8,7 @@ Bundle-Localization: plugin
 X-AutoStart: true
 Import-Package: org.cishell.app.service.scheduler,
  org.cishell.framework,
- org.cishell.reference.client.service.scheduler,
+ org.cishell.reference.app.service.scheduler,
  org.cishell.reference.service.conversion,
  org.cishell.service.conversion,
  org.osgi.framework;version="1.3.0"

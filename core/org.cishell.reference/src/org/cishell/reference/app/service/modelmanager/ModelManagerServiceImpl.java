@@ -11,7 +11,7 @@
  * Contributors:
  *     Indiana University - 
  * ***************************************************************************/
-package org.cishell.reference.client.service.modelmanager;
+package org.cishell.reference.app.service.modelmanager;
 
 import java.util.Arrays;
 import java.util.HashMap;

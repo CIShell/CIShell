@@ -11,7 +11,7 @@
  * Contributors:
  *     Indiana University - 
  * ***************************************************************************/
-package org.cishell.reference.client.service.scheduler;
+package org.cishell.reference.app.service.scheduler;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -30,7 +30,7 @@ import org.cishell.app.service.scheduler.SchedulerListener;
 import org.cishell.app.service.scheduler.SchedulerService;
 import org.cishell.framework.algorithm.Algorithm;
 import org.cishell.framework.datamodel.DataModel;
-import org.cishell.reference.client.service.scheduler.AlgorithmTask.STATE;
+import org.cishell.reference.app.service.scheduler.AlgorithmTask.STATE;
 import org.osgi.framework.ServiceReference;
 
 /**
