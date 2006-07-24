@@ -13,7 +13,6 @@
  * ***************************************************************************/
 package org.cishell.framework.datamodel;
 
-import java.io.File;
 
 
 /**
@@ -55,13 +54,4 @@ public interface DataModelProperty {
      * it. The type associated with this property is of type {@link Boolean}.
      */
     public static final String MODIFIED = "Modified";
-    
-    
-    /**
-     * If the data is a {@link File}, then this property tells what MIME type 
-     * it is. Any other Java object does not need to specify its format since 
-     * we can use reflection to find its interfaces which act as it's formats.
-     * The type associated with this property is of type {@link String}.
-     */
-    public static final String FORMAT = "Format";
 }

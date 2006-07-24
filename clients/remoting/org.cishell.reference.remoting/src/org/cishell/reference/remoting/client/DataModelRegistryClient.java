@@ -33,7 +33,6 @@ import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.algorithm.AlgorithmProperty;
 import org.cishell.framework.datamodel.BasicDataModel;
 import org.cishell.framework.datamodel.DataModel;
-import org.cishell.framework.datamodel.DataModelProperty;
 import org.cishell.reference.remoting.RemotingClient;
 import org.cishell.remoting.service.conversion.RemoteDataConversionService;
 import org.cishell.remoting.service.framework.DataModelRegistry;
@@ -142,7 +141,7 @@ public class DataModelRegistryClient extends RemotingClient implements
             
             
             //find file-friendly format to convert to
-            String format = (String)properties.get(DataModelProperty.FORMAT);
+            String format = dm.getFormat();
             String finalOutFormat = null;
             
             if (format == null || !format.startsWith("file:")) {
@@ -260,7 +259,7 @@ public class DataModelRegistryClient extends RemotingClient implements
         }
 
         public Object getData() {
-            String format = (String) getMetaData().get(DataModelProperty.FORMAT);
+            String format = getFormat();
             
             if (!gotData && format != null) {                
                 DataConversionService converter = (DataConversionService)
@@ -293,10 +292,9 @@ public class DataModelRegistryClient extends RemotingClient implements
                             data = file;
                             
                             Dictionary props = new Hashtable();
-                            props.put(DataModelProperty.FORMAT, inFormat);
                             
                             DataModel[] dm = new DataModel[] {
-                                    new BasicDataModel(props, data)
+                                    new BasicDataModel(props, data, inFormat)
                             };
                             
                             AlgorithmFactory factory = convert[0].getAlgorithmFactory();
@@ -322,6 +320,10 @@ public class DataModelRegistryClient extends RemotingClient implements
             }
             
             return properties;
+        }
+        
+        public String getFormat() {
+            return (String)reg.getDataFormats(dmID).get(0);
         }
         
         protected void finalize() {

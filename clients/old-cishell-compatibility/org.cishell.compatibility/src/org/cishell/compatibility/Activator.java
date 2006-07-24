@@ -1,15 +1,9 @@
 package org.cishell.compatibility;
 
-import java.util.Hashtable;
-
-import org.cishell.client.service.scheduler.SchedulerService;
 import org.cishell.compatibility.log.OSGiLogListener;
 import org.cishell.compatibility.menu.MenuAdapter;
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.LocalCIShellContext;
-import org.cishell.reference.client.service.scheduler.SchedulerServiceImpl;
-import org.cishell.reference.service.conversion.DataConversionServiceImpl;
-import org.cishell.service.conversion.DataConversionService;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.ComponentContext;
@@ -41,15 +35,6 @@ public class Activator {
         
         this.menuAdapter = new MenuAdapter(IVCApplication.getMenuManager(),
                 IVCApplication.getShell(), this.bContext, ciContext);
-        
-        DataConversionService conversionService = 
-                new DataConversionServiceImpl(bContext, ciContext);
-        conversionReg = bContext.registerService(
-                DataConversionService.class.getName(), conversionService, new Hashtable());
-        
-        SchedulerService scheduler = new SchedulerServiceImpl();
-        schedulerReg = bContext.registerService(
-                SchedulerService.class.getName(), scheduler, new Hashtable());
     }
     
     protected void deactivate(ComponentContext ctxt) {

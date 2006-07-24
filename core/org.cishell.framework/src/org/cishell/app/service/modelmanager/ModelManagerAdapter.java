@@ -11,7 +11,7 @@
  * Contributors:
  *     Indiana University - 
  * ***************************************************************************/
-package org.cishell.client.service.modelmanager;
+package org.cishell.app.service.modelmanager;
 
 import org.cishell.framework.datamodel.DataModel;
 
@@ -24,17 +24,17 @@ import org.cishell.framework.datamodel.DataModel;
  */
 public abstract class ModelManagerAdapter implements ModelManagerListener {
     /**
-     * @see org.cishell.client.service.modelmanager.ModelManagerListener#modelAdded(org.cishell.framework.datamodel.DataModel)
+     * @see org.cishell.app.service.modelmanager.ModelManagerListener#modelAdded(org.cishell.framework.datamodel.DataModel)
      */
     public void modelAdded(DataModel dm) {}
 
     /**
-     * @see org.cishell.client.service.modelmanager.ModelManagerListener#modelRemoved(org.cishell.framework.datamodel.DataModel)
+     * @see org.cishell.app.service.modelmanager.ModelManagerListener#modelRemoved(org.cishell.framework.datamodel.DataModel)
      */
     public void modelRemoved(DataModel dm) {}
 
     /**
-     * @see org.cishell.client.service.modelmanager.ModelManagerListener#modelsSelected(org.cishell.framework.datamodel.DataModel[])
+     * @see org.cishell.app.service.modelmanager.ModelManagerListener#modelsSelected(org.cishell.framework.datamodel.DataModel[])
      */
     public void modelsSelected(DataModel[] dm) {}
 }

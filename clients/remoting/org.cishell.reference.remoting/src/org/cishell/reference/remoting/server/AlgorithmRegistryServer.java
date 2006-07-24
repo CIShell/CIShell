@@ -18,8 +18,8 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Vector;
 
-import org.cishell.client.service.scheduler.SchedulerAdapter;
-import org.cishell.client.service.scheduler.SchedulerService;
+import org.cishell.app.service.scheduler.SchedulerAdapter;
+import org.cishell.app.service.scheduler.SchedulerService;
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
 import org.cishell.framework.datamodel.DataModel;

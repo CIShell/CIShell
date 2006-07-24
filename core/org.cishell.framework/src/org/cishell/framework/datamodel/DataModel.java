@@ -13,6 +13,7 @@
  * ***************************************************************************/
 package org.cishell.framework.datamodel;
 
+import java.io.File;
 import java.util.Dictionary;
 
 /**
@@ -36,6 +37,17 @@ public interface DataModel {
      * @return The data (a java object)
      */
     public Object getData();
+    
+    
+    /**
+     * If the data is a {@link File}, then this method returns what MIME type 
+     * it is. 
+     * 
+     * TODO: fix this docu
+     * 
+     * @return The main format of the data
+     */
+    public String getFormat();
     
     //TODO: Consider these methods for inclusion in DataModel
     //public String getType();

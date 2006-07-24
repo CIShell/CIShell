@@ -11,7 +11,7 @@
  * Contributors:
  *     Indiana University - Initial API
  * ***************************************************************************/
-package org.cishell.client.service.scheduler;
+package org.cishell.app.service.scheduler;
 
 import java.util.Calendar;
 
@@ -73,7 +73,7 @@ public interface SchedulerListener {
      * @param algorithm The scheduled Algorithm
      * @param error The error it threw while executing
      */
-    public void algorithmError(Algorithm algorithm, Exception error);
+    public void algorithmError(Algorithm algorithm, Throwable error);
     
     /**
      * Notification that the scheduler's run state (paused or unpaused) has 

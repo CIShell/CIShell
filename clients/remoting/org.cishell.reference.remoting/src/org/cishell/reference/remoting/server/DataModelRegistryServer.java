@@ -25,7 +25,6 @@ import java.util.Vector;
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.datamodel.BasicDataModel;
 import org.cishell.framework.datamodel.DataModel;
-import org.cishell.framework.datamodel.DataModelProperty;
 import org.cishell.reference.remoting.ObjectRegistry;
 import org.cishell.remoting.service.framework.DataModelRegistry;
 import org.cishell.service.conversion.DataConversionService;
@@ -67,8 +66,7 @@ public class DataModelRegistryServer implements DataModelRegistry {
             properties = new Hashtable();
         }
         
-        properties.put(DataModelProperty.FORMAT, format);
-        DataModel dm = new BasicDataModel(properties, dataFile);
+        DataModel dm = new BasicDataModel(properties, dataFile, format);
         
         return registerDataModel(dm);
     }
@@ -117,7 +115,7 @@ public class DataModelRegistryServer implements DataModelRegistry {
     public Vector getDataFormats(String dataModelID) {
         DataModel dm = getDataModel(dataModelID);
         
-        String format = (String)dm.getMetaData().get(DataModelProperty.FORMAT);
+        String format = dm.getFormat();
         Vector v = new Vector();
         
         if (format != null){
@@ -210,5 +208,9 @@ public class DataModelRegistryServer implements DataModelRegistry {
 
         public Dictionary getMetaData() {
             return new Hashtable();
+        }
+
+        public String getFormat() {
+            return "";
         }};
 }

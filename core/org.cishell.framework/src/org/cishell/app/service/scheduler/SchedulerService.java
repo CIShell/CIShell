@@ -11,7 +11,7 @@
  * Contributors:
  *     Indiana University - Initial API
  * ***************************************************************************/
-package org.cishell.client.service.scheduler;
+package org.cishell.app.service.scheduler;
 
 import java.util.Calendar;
 

@@ -6,7 +6,7 @@ Bundle-Version: 0.0.1
 Bundle-Localization: plugin
 Service-Component: OSGI-INF/server.xml, OSGI-INF/client.xml
 X-AutoStart: true
-Import-Package: org.cishell.client.service.scheduler,
+Import-Package: org.cishell.app.service.scheduler,
  org.cishell.framework,
  org.cishell.framework.algorithm,
  org.cishell.framework.datamodel,

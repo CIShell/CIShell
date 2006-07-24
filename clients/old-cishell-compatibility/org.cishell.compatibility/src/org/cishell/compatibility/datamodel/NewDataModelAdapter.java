@@ -27,7 +27,7 @@ public class NewDataModelAdapter extends BasicDataModel implements
 
     public NewDataModelAdapter(
             edu.iu.iv.core.datamodels.DataModel dataModel) {
-        super(dataModel.getData());
+        super(dataModel.getData(), dataModel.getData().getClass().getName());
 
         PropertyMap properties = dataModel.getProperties();
         Iterator keys = properties.getAllPropertiesSet().iterator();
