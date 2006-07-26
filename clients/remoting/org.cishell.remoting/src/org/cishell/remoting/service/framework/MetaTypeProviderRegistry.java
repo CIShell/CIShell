@@ -19,7 +19,6 @@ import org.osgi.service.metatype.MetaTypeProvider;
 
 public interface MetaTypeProviderRegistry {
     public static String SERVICE_NAME = "MetaTypeProviderRegistry";
-    public static String SERVICE_METHODS = "*";
     
     public Vector getLocales(String providerID);
     public String getObjectClassDefinition(String providerID, String id, String locale);

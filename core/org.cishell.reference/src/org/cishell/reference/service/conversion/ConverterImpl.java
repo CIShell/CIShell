@@ -14,15 +14,18 @@
 package org.cishell.reference.service.conversion;
 
 import java.util.Dictionary;
+import java.util.Enumeration;
 import java.util.Hashtable;
 
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
 import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.algorithm.AlgorithmProperty;
+import org.cishell.framework.datamodel.BasicDataModel;
 import org.cishell.framework.datamodel.DataModel;
 import org.cishell.service.conversion.Converter;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.metatype.MetaTypeProvider;
 
@@ -34,9 +37,11 @@ public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProp
     private ServiceReference[] refs;
     private BundleContext bContext;
     private Dictionary props;
+    private CIShellContext ciContext;
     
-    public ConverterImpl(BundleContext bContext, ServiceReference[] refs) {
+    public ConverterImpl(BundleContext bContext, CIShellContext ciContext, ServiceReference[] refs) {
         this.bContext = bContext;
+        this.ciContext = ciContext;
         this.refs = refs;
         
         props = new Hashtable();
@@ -54,6 +59,39 @@ public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProp
         //TODO: Do the same thing for complexity
         props.put(CONVERSION, lossiness);
     }
+    
+    /**
+     * @see org.cishell.service.conversion.Converter#convert(org.cishell.framework.datamodel.DataModel)
+     */
+    public DataModel convert(DataModel inDM) {
+        DataModel[] dm = new DataModel[]{inDM};
+        
+        AlgorithmFactory factory = getAlgorithmFactory();
+        Algorithm alg = factory.createAlgorithm(dm, new Hashtable(), ciContext);
+
+        dm = alg.execute();
+        
+        Object outData = null;
+        if (dm != null && dm.length > 0) {
+            outData = dm[0].getData();
+        }
+        
+        if (outData != null) {
+            Dictionary props = inDM.getMetaData();
+            Dictionary newProps = new Hashtable();
+            
+            for (Enumeration e=props.keys(); e.hasMoreElements();) {
+                Object key = e.nextElement();
+                newProps.put(key, props.get(key));
+            }
+               
+            String outFormat = (String)getProperties().get(AlgorithmProperty.OUT_DATA);
+            return new BasicDataModel(newProps, outData, outFormat);
+        } else {
+            return null;
+        }
+    }
+    
     
     /**
      * @see org.cishell.service.conversion.Converter#getAlgorithmFactory()
@@ -106,7 +144,7 @@ public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProp
                     dm = alg.execute();
                 } else {
                     throw new RuntimeException("Missing subconverter: " 
-                            + refs[i].getProperty(AlgorithmProperty.LABEL));
+                            + refs[i].getProperty(Constants.SERVICE_PID));
                 }
             }
             

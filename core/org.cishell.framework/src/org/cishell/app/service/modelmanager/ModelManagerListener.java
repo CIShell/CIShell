@@ -27,9 +27,18 @@ public interface ModelManagerListener {
 	 * Notifies that a model has been added to the associated 
 	 * {@link ModelManagerService} 
 	 * 
-	 * @param dm The added {@link DataModel}
+	 * @param dm    The added {@link DataModel}
+     * @param label The label assigned to the datamodel
 	 */
-    public void modelAdded(DataModel dm);
+    public void modelAdded(DataModel dm, String label);
+    
+    /**
+     * Notifies that a model has had its label changed
+     * 
+     * @param dm    The DataModel
+     * @param label The new label
+     */
+    public void modelLabelChanged(DataModel dm, String label);
     
     /**
      * Notifies that a model has been removed from the associated

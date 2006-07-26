@@ -80,4 +80,8 @@ public interface ModelManagerService {
      * @param listener The listener to be removed
      */
     public void removeModelManagerListener(ModelManagerListener listener);
+    
+    //TODO: Documentation
+    public String getLabel(DataModel dm);
+    public void setLabel(DataModel dm, String label);
 }

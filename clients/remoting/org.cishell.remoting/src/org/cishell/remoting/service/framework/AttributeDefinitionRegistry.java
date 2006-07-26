@@ -19,7 +19,6 @@ import org.osgi.service.metatype.AttributeDefinition;
 
 public interface AttributeDefinitionRegistry {
     public static String SERVICE_NAME = "AttributeDefinitionRegistry";
-    public static String SERVICE_METHODS = "*";
     
     public int getCardinality(String attrID);
     public Vector getDefaultValue(String attrID);

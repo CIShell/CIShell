@@ -18,7 +18,6 @@ import org.cishell.framework.algorithm.Algorithm;
 
 public interface AlgorithmRegistry {
     public static String SERVICE_NAME = "AlgorithmRegistry";
-    public static String SERVICE_METHODS = "execute unregisterAlgorithm";
     
     public void execute(String sessionID, String algorithmID);
     

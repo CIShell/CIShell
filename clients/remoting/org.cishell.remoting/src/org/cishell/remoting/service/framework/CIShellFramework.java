@@ -18,7 +18,6 @@ import java.util.Vector;
 
 public interface CIShellFramework {
     public static String SERVICE_NAME = "CIShellFramework";
-    public static String SERVICE_METHODS = "createSession getLifeCycleEvents getAlgorithmFactories";
     
     public String createSession(String clientURL);
     public void closeSession(String sessionID);

@@ -20,7 +20,6 @@ import org.cishell.framework.datamodel.DataModel;
 
 public interface DataModelRegistry {
     public static String SERVICE_NAME = "DataModelRegistry";
-    public static String SERVICE_METHODS = "*";
     
     public Hashtable getProperties(String dataModelID);
     

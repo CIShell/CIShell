@@ -22,12 +22,12 @@ import org.cishell.framework.datamodel.DataModel;
  * 
  * @author Bruce Herr (bh2@bh2.net)
  */
-public abstract class ModelManagerAdapter implements ModelManagerListener {
+public class ModelManagerAdapter implements ModelManagerListener {
     /**
-     * @see org.cishell.app.service.modelmanager.ModelManagerListener#modelAdded(org.cishell.framework.datamodel.DataModel)
+     * @see org.cishell.app.service.modelmanager.ModelManagerListener#modelAdded(org.cishell.framework.datamodel.DataModel, java.lang.String)
      */
-    public void modelAdded(DataModel dm) {}
-
+    public void modelAdded(DataModel dm, String label) {}
+    
     /**
      * @see org.cishell.app.service.modelmanager.ModelManagerListener#modelRemoved(org.cishell.framework.datamodel.DataModel)
      */
@@ -37,4 +37,9 @@ public abstract class ModelManagerAdapter implements ModelManagerListener {
      * @see org.cishell.app.service.modelmanager.ModelManagerListener#modelsSelected(org.cishell.framework.datamodel.DataModel[])
      */
     public void modelsSelected(DataModel[] dm) {}
+
+    /**
+     * @see org.cishell.app.service.modelmanager.ModelManagerListener#modelLabelChanged(org.cishell.framework.datamodel.DataModel, java.lang.String)
+     */
+    public void modelLabelChanged(DataModel dm, String label) {}
 }

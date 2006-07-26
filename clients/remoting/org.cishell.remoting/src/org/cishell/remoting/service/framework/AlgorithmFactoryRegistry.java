@@ -20,7 +20,6 @@ import org.cishell.framework.algorithm.AlgorithmFactory;
 
 public interface AlgorithmFactoryRegistry {
     public static String SERVICE_NAME = "AlgorithmFactoryRegistry";
-    public static String SERVICE_METHODS = "createParameters createAlgorithm";
     
     public String createParameters(String servicePID, Vector dataModelIDs);
 

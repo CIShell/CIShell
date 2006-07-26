@@ -19,7 +19,6 @@ import org.osgi.service.metatype.ObjectClassDefinition;
 
 public interface ObjectClassDefinitionRegistry {
     public static String SERVICE_NAME = "ObjectClassDefinitionRegistry";
-    public static String SERVICE_METHODS = "*";
     
     public String getID(String ocdID);
     public String getName(String ocdID);

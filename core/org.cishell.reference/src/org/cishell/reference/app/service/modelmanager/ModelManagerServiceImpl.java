@@ -75,8 +75,8 @@ public class ModelManagerServiceImpl implements ModelManagerService {
                         className = className.substring(0,className.lastIndexOf("Algorithm"));
                     }
                     
-                    if (className.endsWith("Plugin")) {
-                        className = className.substring(0,className.lastIndexOf("Plugin"));
+                    if (className.endsWith("Factory")) {
+                        className = className.substring(0,className.lastIndexOf("Factory"));
                     }
                 }           
                 label = className;  
@@ -90,7 +90,7 @@ public class ModelManagerServiceImpl implements ModelManagerService {
         addModel(model, label);
         
         for (Iterator iter=listeners.iterator(); iter.hasNext();) {
-            ((ModelManagerListener) iter.next()).modelAdded(model);
+            ((ModelManagerListener) iter.next()).modelAdded(model, label);
         }
     }
 
@@ -145,7 +145,7 @@ public class ModelManagerServiceImpl implements ModelManagerService {
 
 
     public void removeModel(DataModel model) {
-        String label = getLabelForModel(model);
+        String label = getLabel(model);
         
         labelToModelMap.remove(label);
         modelToLabelMap.remove(model);
@@ -176,8 +176,19 @@ public class ModelManagerServiceImpl implements ModelManagerService {
         return (DataModel)labelToModelMap.get(label);
     }
     
-    private String getLabelForModel(DataModel model){
+    public String getLabel(DataModel model){
         return (String)modelToLabelMap.get(model);
+    }
+    
+    public synchronized void setLabel(DataModel model, String label) {
+        label = findUniqueLabel(label);
+        
+        modelToLabelMap.put(model, label);
+        labelToModelMap.put(label, model);  
+        
+        for (Iterator iter=listeners.iterator(); iter.hasNext();) {
+            ((ModelManagerListener) iter.next()).modelLabelChanged(model, label);
+        }
     }
 
     public DataModel[] getAllModels() {
