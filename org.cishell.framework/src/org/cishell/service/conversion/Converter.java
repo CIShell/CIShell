@@ -16,6 +16,7 @@ package org.cishell.service.conversion;
 import java.util.Dictionary;
 
 import org.cishell.framework.algorithm.AlgorithmFactory;
+import org.cishell.framework.datamodel.DataModel;
 import org.osgi.framework.ServiceReference;
 
 /**
@@ -25,4 +26,6 @@ public interface Converter {
     public ServiceReference[] getConverterChain();
     public AlgorithmFactory getAlgorithmFactory();
     public Dictionary getProperties();
+    
+    public DataModel convert(DataModel dm);
 }
