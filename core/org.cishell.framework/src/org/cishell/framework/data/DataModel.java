@@ -11,7 +11,7 @@
  * Contributors:
  *     Indiana University - Initial API
  * ***************************************************************************/
-package org.cishell.framework.datamodel;
+package org.cishell.framework.data;
 
 import java.io.File;
 import java.util.Dictionary;
@@ -24,7 +24,7 @@ import java.util.Dictionary;
  */
 public interface DataModel {
 	/**
-	 * Returns the meta-data associated with the data stored in this DataModel.
+	 * Returns the meta-data associated with the data stored in this Data.
 	 * Some standard keys are in the {@link DataModelProperty} interface.
 	 * 
 	 * @return The data's meta-data
@@ -32,7 +32,7 @@ public interface DataModel {
     public Dictionary getMetaData();
     
     /**
-     * Returns the data stored in this DataModel.
+     * Returns the data stored in this Data.
      * 
      * @return The data (a java object)
      */
@@ -49,7 +49,7 @@ public interface DataModel {
      */
     public String getFormat();
     
-    //TODO: Consider these methods for inclusion in DataModel    
+    //TODO: Consider these methods for inclusion in Data    
     //public String getUID(); //may be better for specifying parent datamodels
     //public Object getDataAsFormat(String format);
 }

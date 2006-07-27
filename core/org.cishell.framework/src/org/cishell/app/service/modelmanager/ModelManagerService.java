@@ -13,10 +13,10 @@
  * ***************************************************************************/
 package org.cishell.app.service.modelmanager;
 
-import org.cishell.framework.datamodel.DataModel;
+import org.cishell.framework.data.Data;
 
 /**
- * A service for managing loaded {@link DataModel}s. 
+ * A service for managing loaded {@link Data}s. 
  * {@link ModelManagerListener}s may be registered to be notified of changes
  * in the model manager.
  * 
@@ -29,41 +29,41 @@ import org.cishell.framework.datamodel.DataModel;
  */
 public interface ModelManagerService {
 	/**
-	 * Adds a DataModel to the manager
+	 * Adds a Data to the manager
 	 * 
 	 * @param model The data model
 	 */
-    public void addModel(DataModel model);
+    public void addModel(Data model);
     
     /**
-     * Removes a DataModel from the manager
+     * Removes a Data from the manager
      * 
      * @param model The data model
      */
-    public void removeModel(DataModel model);
+    public void removeModel(Data model);
     
     /**
-     * Sets which data models are selected in the manager. If a given DataModel
+     * Sets which data models are selected in the manager. If a given Data
      * in the array of DataModels is not in the model manager, then it will be
      * automatically added before selection.
      * 
      * @param models The data models to select
      */
-    public void setSelectedModels(DataModel[] models);
+    public void setSelectedModels(Data[] models);
     
     /**
      * Returns the models that have been selected in the manager
      * 
      * @return An array of DataModels, length may be zero
      */
-    public DataModel[] getSelectedModels();
+    public Data[] getSelectedModels();
     
     /**
      * Returns all of the DataModels loaded into the manager
      * 
      * @return An array of DataModels, length may be zero
      */
-    public DataModel[] getAllModels();
+    public Data[] getAllModels();
     
     /**
      * Adds a {@link ModelManagerListener} that will be notified as DataModels
@@ -83,19 +83,19 @@ public interface ModelManagerService {
     
 
     /**
-     * Returns the label for a stored DataModel
+     * Returns the label for a stored Data
      * 
-     * @param dm The DataModel
-     * @return A label for the DataModel
+     * @param dm The Data
+     * @return A label for the Data
      */
-    public String getLabel(DataModel dm);
+    public String getLabel(Data dm);
     
     /**
      * Set the label to be used for the data model. The model manager is free
      * to change the label so that it is unique.
      * 
-     * @param dm The DataModel
+     * @param dm The Data
      * @param label The new label for the data model.
      */
-    public void setLabel(DataModel dm, String label);
+    public void setLabel(Data dm, String label);
 }

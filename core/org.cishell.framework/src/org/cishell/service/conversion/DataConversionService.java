@@ -14,7 +14,7 @@
 package org.cishell.service.conversion;
 
 import org.cishell.framework.algorithm.AlgorithmFactory;
-import org.cishell.framework.datamodel.DataModel;
+import org.cishell.framework.data.Data;
 
 /**
  * A service for converting data to different formats. This service should 
@@ -33,8 +33,8 @@ public interface DataConversionService {
 	/**
 	 * Finds a converter from one format to another if at all possible. The
 	 * returned {@link Converter}s, which may be a composite of multiple
-	 * algorithms, will take a {@link DataModel} of the specified 
-	 * <code>inFormat</code> and convert it to a DataModel of type 
+	 * algorithms, will take a {@link Data} of the specified 
+	 * <code>inFormat</code> and convert it to a Data of type 
 	 * <code>outFormat</code>. If there is no way to convert the data model,
 	 * <code>null</code> will be returned.
 	 * 
@@ -56,8 +56,8 @@ public interface DataConversionService {
      * parameters. The max number of converters to use (maxHops) and the 
      * maximum allowed complexity for the converters to limit the impact a 
      * conversion will make. The returned {@link Converter}s, which may 
-     * be a composite of multiple algorithms, will take a {@link DataModel} of 
-     * the specified <code>inFormat</code> and convert it to a DataModel of type 
+     * be a composite of multiple algorithms, will take a {@link Data} of 
+     * the specified <code>inFormat</code> and convert it to a Data of type 
 	 * <code>outFormat</code>. If there is no way to convert the data model 
 	 * within the given parameters, <code>null</code> will be returned.
      * 
@@ -83,26 +83,26 @@ public interface DataConversionService {
     
     /**
      * Tries to find all the converters that can be used to transform the given
-     * DataModel to the specified output format
+     * Data to the specified output format
      * 
-     * @param dm        The DataModel to convert
+     * @param dm        The Data to convert
      * @param outFormat The output format to convert to
      * @return An array of converters (may be zero length) that can convert the
-     *         given DataModel to the specified output format.
+     *         given Data to the specified output format.
      */
-    public Converter[] findConverters(DataModel dm, String outFormat);
+    public Converter[] findConverters(Data dm, String outFormat);
     
     /**
-     * Tries to convert a given DataModel to the specified output format. If 
+     * Tries to convert a given Data to the specified output format. If 
      * the conversion fails or there is no way to convert it, this method will 
      * return a <code>null</code>
      * 
-     * @param dm        The DataModel to convert
-     * @param outFormat The format of the DataModel to be returned 
-     * @return A DataModel with the specified output format, or 
+     * @param dm        The Data to convert
+     * @param outFormat The format of the Data to be returned 
+     * @return A Data with the specified output format, or 
      *         <code>null</code> if the conversion fails
      */
-    public DataModel convert(DataModel dm, String outFormat);
+    public Data convert(Data dm, String outFormat);
         
     //  TODO: More methods of conversion here?
 }

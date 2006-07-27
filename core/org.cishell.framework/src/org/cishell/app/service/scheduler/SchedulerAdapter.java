@@ -16,7 +16,7 @@ package org.cishell.app.service.scheduler;
 import java.util.Calendar;
 
 import org.cishell.framework.algorithm.Algorithm;
-import org.cishell.framework.datamodel.DataModel;
+import org.cishell.framework.data.Data;
 
 /**
  * An abstract adapter class for notification of events happening in a 
@@ -29,7 +29,7 @@ public abstract class SchedulerAdapter implements SchedulerListener {
 
     public void algorithmError(Algorithm algorithm, Throwable error) { }
 
-    public void algorithmFinished(Algorithm algorithm, DataModel[] createdDM) { }
+    public void algorithmFinished(Algorithm algorithm, Data[] createdDM) { }
 
     public void algorithmRescheduled(Algorithm algorithm, Calendar time) { }
     

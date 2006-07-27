@@ -13,7 +13,7 @@ Export-Package: org.cishell.app.service.modelmanager,
  org.cishell.app.service.scheduler,
  org.cishell.framework,
  org.cishell.framework.algorithm,
- org.cishell.framework.datamodel,
+ org.cishell.framework.data,
  org.cishell.service.conversion,
  org.cishell.service.guibuilder
 Eclipse-LazyStart: true

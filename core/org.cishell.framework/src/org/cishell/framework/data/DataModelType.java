@@ -11,12 +11,12 @@
  * Contributors:
  *     Indiana University - Initial API
  * ***************************************************************************/
-package org.cishell.framework.datamodel;
+package org.cishell.framework.data;
 
 
 /**
- * Defines some standard data model types to be used in a DataModel's meta-data
- * to declare the type of a {@link DataModel}. These are the values associated 
+ * Defines some standard data model types to be used in a Data's meta-data
+ * to declare the type of a {@link Data}. These are the values associated 
  * with the {@link DataModelProperty}, DataModelProperty.GENERAL_TYPE. These 'types' are 
  * more general and are used to help a user to figure out in a broad sense what 
  * type of data he or she is looking at.
