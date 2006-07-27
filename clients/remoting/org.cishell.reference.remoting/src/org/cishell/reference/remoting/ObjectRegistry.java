@@ -16,10 +16,7 @@ package org.cishell.reference.remoting;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * 
- * @author Bruce Herr (bh2@bh2.net)
- */
+
 public class ObjectRegistry {
     long lastID;
     Map idToObjectMap;

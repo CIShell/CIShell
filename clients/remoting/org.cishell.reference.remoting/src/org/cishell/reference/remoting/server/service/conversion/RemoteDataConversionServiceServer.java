@@ -91,16 +91,17 @@ public class RemoteDataConversionServiceServer implements
         return null;
     }
 
+    /**
+     * @see org.cishell.remoting.service.conversion.RemoteDataConversionService#getConversions(java.lang.String, java.lang.String)
+     */
     public Vector getConversions(String dataModelID, String outFormat) {
         DataModelRegistry dmRegistry = (DataModelRegistry) dmReg.getService();
-        DataConversionService converter = getConverter();
+        DataModel dm = dmRegistry.getDataModel(dataModelID);
         
         Set conversions = new HashSet();
-        Vector formats = dmRegistry.getDataFormats(dataModelID);
-        for (Iterator i=formats.iterator(); i.hasNext(); ) {
-            String inFormat = (String) i.next();
+        if (dm != null) {
+            Converter[] converters = getConverter().findConverters(dm, outFormat);
             
-            Converter[] converters = converter.findConverters(inFormat, outFormat);
             for (int j=0; j < converters.length; j++) {
                 conversions.add(converters[j].getProperties().get(AlgorithmProperty.OUT_DATA));
             }

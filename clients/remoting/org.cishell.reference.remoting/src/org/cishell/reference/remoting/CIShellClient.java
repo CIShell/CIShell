@@ -188,7 +188,7 @@ public class CIShellClient {
                 if ("AlgServiceListener".equalsIgnoreCase(
                         (String)inEvent.get(CIShellEventConstants.TARGET_SERVICE))){
                     
-                    updateAlgs(event);
+                    processAlgEvent(event);
                 } else {
                     eventAdmin.postEvent(event);
                 }
@@ -196,7 +196,7 @@ public class CIShellClient {
         }
     }
     
-    private void updateAlgs(Event inEvent) {
+    private void processAlgEvent(Event inEvent) {
         String pid = (String) inEvent.getProperty(Constants.SERVICE_PID);
         String event = ((String) inEvent.getProperty(CIShellEventConstants.EVENT_TYPE));
         

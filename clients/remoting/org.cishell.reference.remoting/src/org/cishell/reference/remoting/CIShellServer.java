@@ -39,10 +39,7 @@ import org.cishell.remoting.service.framework.ObjectClassDefinitionRegistry;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
-/**
- * 
- * @author Bruce Herr (bh2@bh2.net)
- */
+
 public class CIShellServer {
     private BundleContext bContext;
     private List services;

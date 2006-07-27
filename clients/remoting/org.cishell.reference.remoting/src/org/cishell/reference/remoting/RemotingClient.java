@@ -16,6 +16,7 @@ package org.cishell.reference.remoting;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -32,10 +33,6 @@ import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
 
-/**
- * 
- * @author Bruce Herr (bh2@bh2.net)
- */
 public class RemotingClient {
     public static final String NULL_STR = "@@NULL@@";
 
@@ -61,8 +58,8 @@ public class RemotingClient {
         slowCache = new CacheMap(10000);
     }
     
-    protected void setCacheing(String command, boolean fastCacheing) {
-        if (fastCacheing) {
+    protected void setCacheing(String command, boolean doFastCacheing) {
+        if (doFastCacheing) {
             caches.put(command, fastCache);
         } else {
             caches.put(command, slowCache);
@@ -74,7 +71,7 @@ public class RemotingClient {
         endpoint = host + servicePath;
 
         httpTransport = new HttpTransportSE(endpoint);
-        httpTransport.debug = true;
+        httpTransport.debug = bDebug;
         
         soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER12);
         new MarshalHashtable().register(soapEnvelope);
@@ -131,10 +128,8 @@ public class RemotingClient {
             new MarshalHashtable().register(soapEnvelope);
             new MarshalBase64().register(soapEnvelope);
             
-                SoapObject rpc = new SoapObject(
-                        "http://www.w3.org/2001/12/soap-envelope", opName);
-//            SoapObject rpc = new SoapObject(
-//                    "http://schemas.xmlsoap.org/soap/envelope/", opName);
+            SoapObject rpc = new SoapObject(
+                    "http://www.w3.org/2001/12/soap-envelope", opName);
             
             for (int i = 0; i < params.length; i++) {
                 if (bDebug)
@@ -156,11 +151,9 @@ public class RemotingClient {
             }
             return r;
         } catch (Exception e) {
-            e.printStackTrace();
             throw new NestedRuntimeException("Failed to call " + opName
                     + ": ", e);
         }
-    
     }
 
     protected long[] toLongArray(Object obj) {
@@ -216,7 +209,20 @@ public class RemotingClient {
         //TODO: better hashtable parsing
         for (Enumeration i = dict.keys(); i.hasMoreElements() ;) {
             Object key = i.nextElement().toString();
-            ht.put(key, "" + dict.get(key));
+            
+            Object value = dict.get(key);
+            
+            if (value instanceof Vector) {
+                
+            } else if (value instanceof Dictionary) {
+                value = toHashtable(dict);
+            } else if (value instanceof String[]) {
+                value = new Vector(Arrays.asList((String[])value));
+            } else {
+                value = "" + value;
+            }
+            
+            ht.put(key, value);
         }
         
         return ht;

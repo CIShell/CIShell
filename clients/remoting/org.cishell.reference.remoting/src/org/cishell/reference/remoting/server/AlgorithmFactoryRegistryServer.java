@@ -13,6 +13,7 @@
  * ***************************************************************************/
 package org.cishell.reference.remoting.server;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
@@ -71,9 +72,6 @@ public class AlgorithmFactoryRegistryServer implements AlgorithmFactoryRegistry 
             DataModel[] dm = dmReg.getDataModels(dataModelIDs);
             
             CIShellContext ciContext = null;
-            //TODO: fix dictionary parsing
-            //long mtpID = createParameters(servicePID, dataModelIDs);
-            //dictionary = mtpReg.parseDictionary(mtpID, "-1", dictionary);
             synchronized (sidToContextMap) {
                 ciContext = (CIShellContext) sidToContextMap.get(sessionID); 
                 
@@ -83,6 +81,8 @@ public class AlgorithmFactoryRegistryServer implements AlgorithmFactoryRegistry 
                 }
             }
             
+            //TODO: should parse the given hashtable since values may need to 
+            //be changed to different types (Vector->String[], etc...)
             Algorithm alg = factory.createAlgorithm(dm, dictionary, ciContext);
             if (alg != null) {
                 algID = algReg.registerAlgorithm(alg);
@@ -129,7 +129,17 @@ public class AlgorithmFactoryRegistryServer implements AlgorithmFactoryRegistry 
             String[] keys = refs[0].getPropertyKeys();
             
             for (int i=0; i < keys.length; i++) {
-                ht.put(keys[i], ""+refs[0].getProperty(keys[i]));
+                Object value = refs[0].getProperty(keys[i]);
+                
+                if (value instanceof Vector) {
+                    
+                } else if (value instanceof String[]) {
+                    value = new Vector(Arrays.asList((String[])value));
+                } else {
+                    value = "" + value;
+                }
+                
+                ht.put(keys[i], value);
             }
             
             return ht;

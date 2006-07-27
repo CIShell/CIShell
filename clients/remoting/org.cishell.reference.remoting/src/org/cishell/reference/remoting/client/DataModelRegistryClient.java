@@ -130,15 +130,10 @@ public class DataModelRegistryClient extends RemotingClient implements
         } else {
             Hashtable properties = null;
             if (dm.getMetaData() != null) {
-                properties = new Hashtable(dm.getMetaData().size());
-                for (Enumeration i = dm.getMetaData().keys(); i.hasMoreElements(); ) {
-                    Object key = i.nextElement();
-                    properties.put(key, dm.getMetaData().get(key).toString());
-                }
+                properties = toHashtable(dm.getMetaData());
             } else {
                 properties = new Hashtable();
             }
-            
             
             //find file-friendly format to convert to
             String format = dm.getFormat();
@@ -289,20 +284,12 @@ public class DataModelRegistryClient extends RemotingClient implements
                             out.write(raw);
                             out.close();
                             
-                            data = file;
-                            
-                            Dictionary props = new Hashtable();
-                            
-                            DataModel[] dm = new DataModel[] {
-                                    new BasicDataModel(props, data, inFormat)
-                            };
-                            
-                            AlgorithmFactory factory = convert[0].getAlgorithmFactory();
-                            Algorithm alg = factory.createAlgorithm(dm, new Hashtable(), ciContext);
-                            dm = alg.execute();
+                            DataModel dm = new BasicDataModel(new Hashtable(), 
+                                    file, inFormat);
+                            dm = convert[0].convert(dm);
                             
                             if (dm != null) {
-                                data = dm[0].getData();
+                                data = dm.getData();
                             }
                         }
                     } catch (IOException e) {

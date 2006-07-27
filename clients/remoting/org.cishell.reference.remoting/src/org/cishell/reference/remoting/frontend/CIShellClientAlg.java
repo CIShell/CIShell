@@ -53,8 +53,6 @@ public class CIShellClientAlg implements AlgorithmFactory {
                 int port = ((Integer) parameters.get("org.cishell.reference.remoting.frontend.client.port")).intValue();
                 
                 new ClientInstanceAlg(bContext, context).connect(host, port);
-//                new ClientInstanceAlg(bContext).connect("localhost", 8180);
-                
                 return null;
             }};
         

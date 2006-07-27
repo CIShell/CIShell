@@ -22,7 +22,7 @@ import org.osgi.service.prefs.Preferences;
 import org.osgi.service.prefs.PreferencesService;
 import org.osgi.util.tracker.ServiceTracker;
 
-//TODO: Finish making this class..
+//TODO: Finish making remote prefrences class..
 public class RemotePreferencesService extends AbstractEventConsumerProducer {
     ServiceTracker localPrefs;
     String[] users;
