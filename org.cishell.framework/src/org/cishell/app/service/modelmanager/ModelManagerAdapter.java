@@ -13,7 +13,7 @@
  * ***************************************************************************/
 package org.cishell.app.service.modelmanager;
 
-import org.cishell.framework.datamodel.DataModel;
+import org.cishell.framework.data.Data;
 
 /**
  * An abstract adapter class for notification of changes in the 
@@ -24,22 +24,22 @@ import org.cishell.framework.datamodel.DataModel;
  */
 public class ModelManagerAdapter implements ModelManagerListener {
     /**
-     * @see org.cishell.app.service.modelmanager.ModelManagerListener#modelAdded(org.cishell.framework.datamodel.DataModel, java.lang.String)
+     * @see org.cishell.app.service.modelmanager.ModelManagerListener#modelAdded(org.cishell.framework.data.Data, java.lang.String)
      */
-    public void modelAdded(DataModel dm, String label) {}
+    public void modelAdded(Data dm, String label) {}
     
     /**
-     * @see org.cishell.app.service.modelmanager.ModelManagerListener#modelRemoved(org.cishell.framework.datamodel.DataModel)
+     * @see org.cishell.app.service.modelmanager.ModelManagerListener#modelRemoved(org.cishell.framework.data.Data)
      */
-    public void modelRemoved(DataModel dm) {}
+    public void modelRemoved(Data dm) {}
 
     /**
-     * @see org.cishell.app.service.modelmanager.ModelManagerListener#modelsSelected(org.cishell.framework.datamodel.DataModel[])
+     * @see org.cishell.app.service.modelmanager.ModelManagerListener#modelsSelected(org.cishell.framework.data.Data[])
      */
-    public void modelsSelected(DataModel[] dm) {}
+    public void modelsSelected(Data[] dm) {}
 
     /**
-     * @see org.cishell.app.service.modelmanager.ModelManagerListener#modelLabelChanged(org.cishell.framework.datamodel.DataModel, java.lang.String)
+     * @see org.cishell.app.service.modelmanager.ModelManagerListener#modelLabelChanged(org.cishell.framework.data.Data, java.lang.String)
      */
-    public void modelLabelChanged(DataModel dm, String label) {}
+    public void modelLabelChanged(Data dm, String label) {}
 }

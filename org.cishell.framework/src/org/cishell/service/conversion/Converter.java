@@ -16,7 +16,7 @@ package org.cishell.service.conversion;
 import java.util.Dictionary;
 
 import org.cishell.framework.algorithm.AlgorithmFactory;
-import org.cishell.framework.datamodel.DataModel;
+import org.cishell.framework.data.Data;
 import org.osgi.framework.ServiceReference;
 
 /**
@@ -26,7 +26,7 @@ public interface Converter {
     
     /**
      * Returns an array of ServiceReferences to converters in the order that
-     * they will be called when converting a DataModel
+     * they will be called when converting a Data
      *  
      * @return An array ServiceReferences to converters to be used 
      */
@@ -34,8 +34,8 @@ public interface Converter {
     
     /**
      * Returns the AlgorithmFactory that can be invoked to convert a given 
-     * DataModel of the correct in format (as specified in the Dictionary from
-     * getProperties()) to a DataModel of the correct out format.
+     * Data of the correct in format (as specified in the Dictionary from
+     * getProperties()) to a Data of the correct out format.
      * 
      * @return The AlgorithmFactory to do the converting
      */
@@ -52,12 +52,12 @@ public interface Converter {
     public Dictionary getProperties();
     
     /**
-     * Convenience method to use this converter to convert a DataModel of the 
-     * corrent format to the a DataModel of the defined out format
+     * Convenience method to use this converter to convert a Data of the 
+     * corrent format to the a Data of the defined out format
      * 
-     * @param dm The DataModel with compatible in format
-     * @return A DataModel of correct out format, or <code>null</code> if the
+     * @param dm The Data with compatible in format
+     * @return A Data of correct out format, or <code>null</code> if the
      *         conversion fails
      */
-    public DataModel convert(DataModel dm);
+    public Data convert(Data dm);
 }

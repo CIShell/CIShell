@@ -16,7 +16,7 @@ package org.cishell.framework.algorithm;
 import java.util.Dictionary;
 
 import org.cishell.framework.CIShellContext;
-import org.cishell.framework.datamodel.DataModel;
+import org.cishell.framework.data.Data;
 import org.osgi.service.metatype.MetaTypeProvider;
 
 /**
@@ -43,7 +43,7 @@ public interface AlgorithmFactory {
      *         needed by the Algorithm this class creates. May be 
      *         <code>null</code> if no parameters are needed.
      */
-    public MetaTypeProvider createParameters(DataModel[] dm);
+    public MetaTypeProvider createParameters(Data[] dm);
     
     /**
      * Creates an {@link Algorithm} to be executed. 
@@ -59,7 +59,7 @@ public interface AlgorithmFactory {
      *                   standard CIShell services
      * @return An <code>Algorithm</code> primed for execution
      */
-    public Algorithm createAlgorithm(DataModel[] dm, 
+    public Algorithm createAlgorithm(Data[] dm, 
                                      Dictionary parameters,
                                      CIShellContext context);
 }

@@ -11,25 +11,25 @@
  * Contributors:
  *     Indiana University - 
  * ***************************************************************************/
-package org.cishell.framework.datamodel;
+package org.cishell.framework.data;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
 
 /**
- * A basic implementation of {@link DataModel}. This class was included since 
- * a simple implementation of DataModel will be used quite often in both client
+ * A basic implementation of {@link Data}. This class was included since 
+ * a simple implementation of Data will be used quite often in both client
  * and algorithm code.
  * 
  * @author Bruce Herr (bh2@bh2.net)
  */
-public class BasicDataModel implements DataModel {
+public class BasicDataModel implements Data {
     private Dictionary properties;
     private Object data;
     private String format;
     
     /**
-     * Creates a DataModel with the given data and an empty meta-data
+     * Creates a Data with the given data and an empty meta-data
      * {@link Dictionary}
      * 
      * @param data The data being wrapped
@@ -39,7 +39,7 @@ public class BasicDataModel implements DataModel {
     }
     
     /**
-     * Creates a DataModel with the given data and meta-data {@link Dictionary}
+     * Creates a Data with the given data and meta-data {@link Dictionary}
      * 
      * @param properties The meta-data about the data
      * @param data       The data being wrapped
@@ -51,21 +51,21 @@ public class BasicDataModel implements DataModel {
     }
     
     /**
-     * @see org.cishell.framework.datamodel.DataModel#getData()
+     * @see org.cishell.framework.data.Data#getData()
      */
     public Object getData() {
         return data;
     }
 
     /**
-     * @see org.cishell.framework.datamodel.DataModel#getMetaData()
+     * @see org.cishell.framework.data.Data#getMetaData()
      */
     public Dictionary getMetaData() {
         return properties;
     }
 
     /**
-     * @see org.cishell.framework.datamodel.DataModel#getFormat()
+     * @see org.cishell.framework.data.Data#getFormat()
      */
     public String getFormat() {
         return format;

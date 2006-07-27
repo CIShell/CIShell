@@ -16,7 +16,7 @@ package org.cishell.app.service.scheduler;
 import java.util.Calendar;
 
 import org.cishell.framework.algorithm.Algorithm;
-import org.cishell.framework.datamodel.DataModel;
+import org.cishell.framework.data.Data;
 
 
 /**
@@ -62,10 +62,10 @@ public interface SchedulerListener {
      * Notification that an Algorithm has finished executing
      * 
      * @param algorithm The scheduled Algorithm
-     * @param createdDM The DataModel(s) it returned, or <code>null</code> if
+     * @param createdDM The Data(s) it returned, or <code>null</code> if
      *                  it returned <code>null</code>
      */
-    public void algorithmFinished(Algorithm algorithm, DataModel[] createdDM);
+    public void algorithmFinished(Algorithm algorithm, Data[] createdDM);
     
     /**
      * Notification that an Algorithm had an error while being executed

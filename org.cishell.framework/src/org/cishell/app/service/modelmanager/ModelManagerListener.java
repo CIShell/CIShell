@@ -13,7 +13,7 @@
  * ***************************************************************************/
 package org.cishell.app.service.modelmanager;
 
-import org.cishell.framework.datamodel.DataModel;
+import org.cishell.framework.data.Data;
 
 
 /**
@@ -27,32 +27,32 @@ public interface ModelManagerListener {
 	 * Notifies that a model has been added to the associated 
 	 * {@link ModelManagerService} 
 	 * 
-	 * @param dm    The added {@link DataModel}
+	 * @param dm    The added {@link Data}
      * @param label The label assigned to the datamodel
 	 */
-    public void modelAdded(DataModel dm, String label);
+    public void modelAdded(Data dm, String label);
     
     /**
      * Notifies that a model has had its label changed
      * 
-     * @param dm    The DataModel
+     * @param dm    The Data
      * @param label The new label
      */
-    public void modelLabelChanged(DataModel dm, String label);
+    public void modelLabelChanged(Data dm, String label);
     
     /**
      * Notifies that a model has been removed from the associated
      * {@link ModelManagerService}
      * 
-     * @param dm The removed {@link DataModel}
+     * @param dm The removed {@link Data}
      */
-    public void modelRemoved(DataModel dm);
+    public void modelRemoved(Data dm);
     
     /**
      * Notifies that a set of models have been selected in the associated
      * {@link ModelManagerService}
      * 
-     * @param dm The selected {@link DataModel}s
+     * @param dm The selected {@link Data}s
      */
-    public void modelsSelected(DataModel[] dm);
+    public void modelsSelected(Data[] dm);
 }

@@ -11,36 +11,36 @@
  * Contributors:
  *     Indiana University - Initial API
  * ***************************************************************************/
-package org.cishell.framework.datamodel;
+package org.cishell.framework.data;
 
 
 
 /**
  * Standard property keys to use when creating meta-data for a 
- * {@link DataModel}.
+ * {@link Data}.
  * 
  * @author Bruce Herr (bh2@bh2.net)
  */
 public interface DataModelProperty {
     /** 
-     * The label to give the DataModel if displayed. The type associated with
+     * The label to give the Data if displayed. The type associated with
      * this property is of type {@link String}.
      */
     public static final String LABEL = "Label";
     
     /** 
-     * The parent DataModel of the DataModel. This is used when a DataModel
-     * is derived from another DataModel to show the hierarchical relationship
-     * between them.  This property can be null, signifying that the DataModel
-     * was not derived from any DataModel, such as when loading a new DataModel
+     * The parent Data of the Data. This is used when a Data
+     * is derived from another Data to show the hierarchical relationship
+     * between them.  This property can be null, signifying that the Data
+     * was not derived from any Data, such as when loading a new Data
      * from a file. The type associated with this property is of type 
-     * {@link DataModel} 
+     * {@link Data} 
      */
     public static final String PARENT = "Parent";    
     
     //TODO: should we consider removing this/changing it?
     /**
-     * The general type of the DataModel. Various standard types are created as 
+     * The general type of the Data. Various standard types are created as 
      * constants in the {@link DataModelType} class. These can be used, or new
      * types can be introduced as needed. The type associated with this 
      * property is of type {@link String}.
@@ -48,9 +48,9 @@ public interface DataModelProperty {
     public static final String GENERAL_TYPE = "Type";
     
     /**
-     * Flag to determine if this DataModel has been modified and not saved since
+     * Flag to determine if this Data has been modified and not saved since
      * the modification. This is used to do things like notify the user before 
-     * they exit that a modified DataModel exists and see if they want to save 
+     * they exit that a modified Data exists and see if they want to save 
      * it. The type associated with this property is of type {@link Boolean}.
      */
     public static final String MODIFIED = "Modified";

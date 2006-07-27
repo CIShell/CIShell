@@ -13,7 +13,7 @@
  * ***************************************************************************/
 package org.cishell.framework.algorithm;
 
-import org.cishell.framework.datamodel.DataModel;
+import org.cishell.framework.data.Data;
 
 
 /**
@@ -47,5 +47,5 @@ public interface DataModelValidator {
      * @param dm The proposed data model that may be given to create an Algorithm
      * @return <code>null</code>, "", or another string
      */
-    public String validate(DataModel[] dm);
+    public String validate(Data[] dm);
 }

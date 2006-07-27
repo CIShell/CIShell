@@ -13,7 +13,7 @@
  * ***************************************************************************/
 package org.cishell.framework.algorithm;
 
-import org.cishell.framework.datamodel.DataModel;
+import org.cishell.framework.data.Data;
 
 /**
  * In CIShell, an algorithm can be basically any arbitrary code
@@ -40,5 +40,5 @@ public interface Algorithm {
     * 
     * @return A data model that was created or <code>null</code>
     */
-   public DataModel[] execute(); 
+   public Data[] execute(); 
 }
