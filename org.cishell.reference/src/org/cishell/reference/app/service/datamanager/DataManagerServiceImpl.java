@@ -26,7 +26,7 @@ import org.cishell.framework.data.Data;
 import org.cishell.framework.data.DataProperty;
 
 
-public class ModelManagerServiceImpl implements DataManagerService {
+public class DataManagerServiceImpl implements DataManagerService {
     private Map modelToLabelMap;
     private Map labelToModelMap; 
     private Map substringToNumberMap;
@@ -38,7 +38,7 @@ public class ModelManagerServiceImpl implements DataManagerService {
     /**
      * Creates a new BasicModelManager Object.
      */
-    public ModelManagerServiceImpl() {
+    public DataManagerServiceImpl() {
         modelToLabelMap = new HashMap();
         labelToModelMap = new HashMap();
         substringToNumberMap = new HashMap();
