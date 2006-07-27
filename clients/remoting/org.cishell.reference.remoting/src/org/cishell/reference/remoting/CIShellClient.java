@@ -230,6 +230,8 @@ public class CIShellClient {
         String pid = (String) props.get(Constants.SERVICE_PID);
         props.put(Constants.SERVICE_PID, pid + ".remote."+host);
         
+        props.put(AlgorithmProperty.REMOTE, host);
+        
         AlgorithmFactory factory = algFactoryReg.getAlgorithmFactory(servicePID);
         
         if (props != null && factory != null) {

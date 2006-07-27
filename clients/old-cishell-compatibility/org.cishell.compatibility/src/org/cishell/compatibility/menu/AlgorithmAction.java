@@ -25,6 +25,7 @@ import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.algorithm.AlgorithmProperty;
 import org.cishell.framework.algorithm.DataValidator;
+import org.cishell.framework.data.BasicData;
 import org.cishell.framework.data.Data;
 import org.cishell.service.conversion.Converter;
 import org.cishell.service.conversion.DataConversionService;
@@ -204,14 +205,10 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, ISelec
         return supports;
     }
     
-    private Converter[] getDataConverters(String inFormat, String outFormat) {
+    private boolean isAsignableFrom(String type, Object data) {
         DataConversionService converter = (DataConversionService)
             ciContext.getService(DataConversionService.class.getName());
-
-        return converter.findConverters(inFormat, outFormat);
-    }
-    
-    private boolean isAsignableFrom(String type, Object data) {
+        
         boolean assignable = false;
         Class c = null;
         try {
@@ -224,19 +221,12 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, ISelec
             if (c.isInstance(data)) {
                 assignable = true;
             } else {
-                //see if there is a converter to get the data in the right format
-                Class[] classes = data.getClass().getClasses();
+                Converter[] converters = converter.findConverters(
+                        new BasicData(data,data.getClass().getName()), type);
                 
-                if (classes.length == 0) {
-                    classes = new Class[]{data.getClass()};
-                }
+                assignable = converters.length > 0;
                 
-                for (int i=0; i < classes.length; i++) {
-                    if (getDataConverters(classes[i].getName(),type).length > 0) {
-                        assignable = true;
-                        break;
-                    }
-                }
+                System.out.println(type + "=(" + assignable + ")=" + data);
             }
         }
         
