@@ -40,12 +40,12 @@ public interface DataModelProperty {
     
     //TODO: should we consider removing this/changing it?
     /**
-     * The type of the DataModel. Various standard types are created as 
+     * The general type of the DataModel. Various standard types are created as 
      * constants in the {@link DataModelType} class. These can be used, or new
      * types can be introduced as needed. The type associated with this 
      * property is of type {@link String}.
      */
-    public static final String TYPE = "Type";
+    public static final String GENERAL_TYPE = "Type";
     
     /**
      * Flag to determine if this DataModel has been modified and not saved since

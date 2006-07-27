@@ -26,8 +26,6 @@ import org.cishell.framework.datamodel.DataModel;
  * and other standard algorithm properties, a DataConversionService will try and
  * find the fastest, most efficient way to convert from a one format to another.
  * 
- * TODO: Fix conversion service docu
- * 
  * @author Bruce Herr (bh2@bh2.net)
  */
 public interface DataConversionService {
@@ -83,9 +81,28 @@ public interface DataConversionService {
     public Converter[] findConverters(String inFormat, String outFormat,
             int maxHops, String maxComplexity);
     
-    public DataModel convert(DataModel dm, String outFormat);
-    
+    /**
+     * Tries to find all the converters that can be used to transform the given
+     * DataModel to the specified output format
+     * 
+     * @param dm        The DataModel to convert
+     * @param outFormat The output format to convert to
+     * @return An array of converters (may be zero length) that can convert the
+     *         given DataModel to the specified output format.
+     */
     public Converter[] findConverters(DataModel dm, String outFormat);
     
+    /**
+     * Tries to convert a given DataModel to the specified output format. If 
+     * the conversion fails or there is no way to convert it, this method will 
+     * return a <code>null</code>
+     * 
+     * @param dm        The DataModel to convert
+     * @param outFormat The format of the DataModel to be returned 
+     * @return A DataModel with the specified output format, or 
+     *         <code>null</code> if the conversion fails
+     */
+    public DataModel convert(DataModel dm, String outFormat);
+        
     //  TODO: More methods of conversion here?
 }

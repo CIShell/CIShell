@@ -44,7 +44,7 @@ public class NewDataModelAdapter extends BasicDataModel implements
             } else if (key.equals(DataModelProperty.MODIFIED)) {
                 newKey = MODIFIED;
             } else if (key.equals(DataModelProperty.TYPE)) {
-                newKey = TYPE;
+                newKey = GENERAL_TYPE;
                 String type = ((edu.iu.iv.core.datamodels.DataModelType) newValue)
                         .getName();
                 newValue = getDataModelType(type);

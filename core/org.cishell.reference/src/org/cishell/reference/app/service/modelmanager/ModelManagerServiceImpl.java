@@ -52,11 +52,11 @@ public class ModelManagerServiceImpl implements ModelManagerService {
      */
     public void addModel(DataModel model) {
         String label = (String)model.getMetaData().get(DataModelProperty.LABEL);
-        String type = (String)model.getMetaData().get(DataModelProperty.TYPE);
+        String type = (String)model.getMetaData().get(DataModelProperty.GENERAL_TYPE);
         
         if(type == null){
             type = DataModelType.OTHER;
-            model.getMetaData().put(DataModelProperty.TYPE, type);
+            model.getMetaData().put(DataModelProperty.GENERAL_TYPE, type);
         }
         
         //generate label if needed

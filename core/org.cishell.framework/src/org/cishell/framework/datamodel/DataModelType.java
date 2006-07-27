@@ -17,7 +17,7 @@ package org.cishell.framework.datamodel;
 /**
  * Defines some standard data model types to be used in a DataModel's meta-data
  * to declare the type of a {@link DataModel}. These are the values associated 
- * with the {@link DataModelProperty}, DataModelProperty.TYPE. These 'types' are 
+ * with the {@link DataModelProperty}, DataModelProperty.GENERAL_TYPE. These 'types' are 
  * more general and are used to help a user to figure out in a broad sense what 
  * type of data he or she is looking at.
  *

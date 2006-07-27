@@ -41,17 +41,15 @@ public interface DataModel {
     
     /**
      * If the data is a {@link File}, then this method returns what MIME type 
-     * it is. 
-     * 
-     * TODO: fix this docu
+     * it is with "file:" prepended (eg. file:text/plain). Otherwise, the 
+     * string returned should be the java class it represents. For algorithms
+     * this format should be the same as their OUT_DATA property. 
      * 
      * @return The main format of the data
      */
     public String getFormat();
     
-    //TODO: Consider these methods for inclusion in DataModel
-    //public String getType();
-    
+    //TODO: Consider these methods for inclusion in DataModel    
     //public String getUID(); //may be better for specifying parent datamodels
-    //public Object getDataAsType(String type);
+    //public Object getDataAsFormat(String format);
 }

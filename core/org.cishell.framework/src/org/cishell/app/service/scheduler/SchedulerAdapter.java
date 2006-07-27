@@ -25,7 +25,7 @@ import org.cishell.framework.datamodel.DataModel;
  * 
  * @author Bruce Herr (bh2@bh2.net)
  */
-public class SchedulerAdapter implements SchedulerListener {
+public abstract class SchedulerAdapter implements SchedulerListener {
 
     public void algorithmError(Algorithm algorithm, Throwable error) { }
 

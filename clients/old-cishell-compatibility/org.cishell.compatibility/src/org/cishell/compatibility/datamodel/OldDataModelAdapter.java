@@ -43,7 +43,7 @@ public class OldDataModelAdapter extends BasicDataModel
                 newValue = newValue.toString();
             } else if (key.equals(DataModelProperty.MODIFIED)) {
                 newKey = MODIFIED;
-            } else if (key.equals(DataModelProperty.TYPE)) {
+            } else if (key.equals(DataModelProperty.GENERAL_TYPE)) {
                 newKey = TYPE;
                 String type = (String) newValue;
                 newValue = getDataModelType(type);

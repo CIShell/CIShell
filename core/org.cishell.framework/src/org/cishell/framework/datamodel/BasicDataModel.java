@@ -64,6 +64,9 @@ public class BasicDataModel implements DataModel {
         return properties;
     }
 
+    /**
+     * @see org.cishell.framework.datamodel.DataModel#getFormat()
+     */
     public String getFormat() {
         return format;
     }
