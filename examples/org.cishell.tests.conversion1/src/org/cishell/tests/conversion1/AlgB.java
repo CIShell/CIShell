@@ -18,34 +18,34 @@ import java.util.Dictionary;
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
 import org.cishell.framework.algorithm.AlgorithmFactory;
-import org.cishell.framework.algorithm.DataModelValidator;
-import org.cishell.framework.datamodel.BasicDataModel;
-import org.cishell.framework.datamodel.DataModel;
-import org.cishell.framework.datamodel.DataModelProperty;
+import org.cishell.framework.algorithm.DataValidator;
+import org.cishell.framework.data.BasicData;
+import org.cishell.framework.data.Data;
+import org.cishell.framework.data.DataProperty;
 import org.osgi.service.metatype.MetaTypeProvider;
 
 /**
  * 
  * @author Bruce Herr
  */
-public class AlgB implements AlgorithmFactory, DataModelValidator {
+public class AlgB implements AlgorithmFactory, DataValidator {
 
     /**
-     * @see org.cishell.framework.algorithm.AlgorithmFactory#createParameters(org.cishell.framework.datamodel.DataModel[])
+     * @see org.cishell.framework.algorithm.AlgorithmFactory#createParameters(org.cishell.framework.data.Data[])
      */
-    public MetaTypeProvider createParameters(DataModel[] dm) {
+    public MetaTypeProvider createParameters(Data[] dm) {
         return null;
     }
 
     /**
-     * @see org.cishell.framework.algorithm.AlgorithmFactory#createAlgorithm(org.cishell.framework.datamodel.DataModel[], java.util.Dictionary, org.cishell.framework.CIShellContext)
+     * @see org.cishell.framework.algorithm.AlgorithmFactory#createAlgorithm(org.cishell.framework.data.Data[], java.util.Dictionary, org.cishell.framework.CIShellContext)
      */
-    public Algorithm createAlgorithm(DataModel[] dm, Dictionary parameters,
+    public Algorithm createAlgorithm(Data[] dm, Dictionary parameters,
             CIShellContext context) {
         return new AlgorithmB(dm);
     }
     
-    public String validate(DataModel[] dm) {
+    public String validate(Data[] dm) {
         try {
             new Integer(dm[0].getData().toString());
             return "";
@@ -55,18 +55,18 @@ public class AlgB implements AlgorithmFactory, DataModelValidator {
     }
     
     private class AlgorithmB implements Algorithm {
-        DataModel[] dm;
+        Data[] dm;
         
-        public AlgorithmB(DataModel[] dm) {
+        public AlgorithmB(Data[] dm) {
             this.dm = dm;
         }
 
-        public DataModel[] execute() {
+        public Data[] execute() {
             Integer i = new Integer(dm[0].getData().toString());           
             
-            DataModel[] dm1 = new DataModel[]{ new BasicDataModel(i, Integer.class.getName()) };
-            dm1[0].getMetaData().put(DataModelProperty.LABEL, "My Integer: " + i);
-            //dm1[0].getProperties().put(DataModelProperty.PARENT, dm[0]);
+            Data[] dm1 = new Data[]{ new BasicData(i, Integer.class.getName()) };
+            dm1[0].getMetaData().put(DataProperty.LABEL, "My Integer: " + i);
+            //dm1[0].getProperties().put(DataProperty.PARENT, dm[0]);
             
             return dm1;
         }

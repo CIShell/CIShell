@@ -16,7 +16,7 @@ package org.cishell.compatibility.datamodel;
 import java.util.Dictionary;
 import java.util.Enumeration;
 
-import org.cishell.framework.datamodel.DataModelProperty;
+import org.cishell.framework.data.DataProperty;
 
 import edu.iu.iv.common.property.Property;
 import edu.iu.iv.core.datamodels.BasicDataModel;
@@ -26,7 +26,7 @@ import edu.iu.iv.core.datamodels.DataModelType;
 public class OldDataModelAdapter extends BasicDataModel 
                     implements edu.iu.iv.core.datamodels.DataModelProperty {
 
-    public OldDataModelAdapter(org.cishell.framework.datamodel.DataModel dataModel) {
+    public OldDataModelAdapter(org.cishell.framework.data.Data dataModel) {
         super(dataModel.getData());
     
         Dictionary properties = dataModel.getMetaData();
@@ -38,18 +38,18 @@ public class OldDataModelAdapter extends BasicDataModel
             
             if (newValue == null) {
                 continue;
-            } else if (key.equals(DataModelProperty.LABEL)) {
+            } else if (key.equals(DataProperty.LABEL)) {
                 newKey = LABEL;
                 newValue = newValue.toString();
-            } else if (key.equals(DataModelProperty.MODIFIED)) {
+            } else if (key.equals(DataProperty.MODIFIED)) {
                 newKey = MODIFIED;
-            } else if (key.equals(DataModelProperty.GENERAL_TYPE)) {
+            } else if (key.equals(DataProperty.TYPE)) {
                 newKey = TYPE;
                 String type = (String) newValue;
                 newValue = getDataModelType(type);
-            } else if (key.equals(DataModelProperty.PARENT)) {
+            } else if (key.equals(DataProperty.PARENT)) {
                 newKey = PARENT;
-                newValue = new OldDataModelAdapter((org.cishell.framework.datamodel.DataModel) newValue);
+                newValue = new OldDataModelAdapter((org.cishell.framework.data.Data) newValue);
             }
             
             if (newKey != null) {

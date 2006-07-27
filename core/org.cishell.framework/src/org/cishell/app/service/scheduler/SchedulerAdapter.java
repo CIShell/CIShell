@@ -29,7 +29,7 @@ public abstract class SchedulerAdapter implements SchedulerListener {
 
     public void algorithmError(Algorithm algorithm, Throwable error) { }
 
-    public void algorithmFinished(Algorithm algorithm, Data[] createdDM) { }
+    public void algorithmFinished(Algorithm algorithm, Data[] createdData) { }
 
     public void algorithmRescheduled(Algorithm algorithm, Calendar time) { }
     

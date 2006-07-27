@@ -15,15 +15,15 @@ package org.cishell.compatibility.datamodel;
 
 import java.util.Iterator;
 
-import org.cishell.framework.datamodel.BasicDataModel;
-import org.cishell.framework.datamodel.DataModelType;
+import org.cishell.framework.data.BasicData;
+import org.cishell.framework.data.DataProperty;
 
 import edu.iu.iv.common.property.Property;
 import edu.iu.iv.common.property.PropertyMap;
 import edu.iu.iv.core.datamodels.DataModelProperty;
 
-public class NewDataModelAdapter extends BasicDataModel implements
-        org.cishell.framework.datamodel.DataModelProperty {
+public class NewDataModelAdapter extends BasicData implements
+        org.cishell.framework.data.DataProperty {
 
     public NewDataModelAdapter(
             edu.iu.iv.core.datamodels.DataModel dataModel) {
@@ -44,7 +44,7 @@ public class NewDataModelAdapter extends BasicDataModel implements
             } else if (key.equals(DataModelProperty.MODIFIED)) {
                 newKey = MODIFIED;
             } else if (key.equals(DataModelProperty.TYPE)) {
-                newKey = GENERAL_TYPE;
+                newKey = TYPE;
                 String type = ((edu.iu.iv.core.datamodels.DataModelType) newValue)
                         .getName();
                 newValue = getDataModelType(type);
@@ -61,14 +61,14 @@ public class NewDataModelAdapter extends BasicDataModel implements
     }
 
     private String getDataModelType(String type) {
-        if (type.equals(DataModelType.MATRIX)) {
-            return DataModelType.MATRIX;
-        } else if (type.equals(DataModelType.NETWORK)) {
-            return DataModelType.NETWORK;
-        } else if (type.equals(DataModelType.TREE)) {
-            return DataModelType.TREE;
+        if (type.equals(DataProperty.MATRIX_TYPE)) {
+            return DataProperty.MATRIX_TYPE;
+        } else if (type.equals(DataProperty.NETWORK_TYPE)) {
+            return DataProperty.NETWORK_TYPE;
+        } else if (type.equals(DataProperty.TREE_TYPE)) {
+            return DataProperty.TREE_TYPE;
         } else {
-            return DataModelType.OTHER;
+            return DataProperty.OTHER_TYPE;
         }
     }
 }

@@ -18,10 +18,10 @@ import org.cishell.framework.data.Data;
 /**
  * In CIShell, an algorithm can be basically any arbitrary code
  * execution cycle. What happens when the execute method is run is entirely
- * up to the Algorithm writer. Some algorithms may be primed with a data model
- * that it analyzes and returns a derivitive data model or it may convert from
- * one data model to another or not take in any data model and based on some 
- * given parameters create an entirely new data model. 
+ * up to the Algorithm writer. Some algorithms may be primed with a Data array
+ * that it analyzes and returns a derivitive Data array or it may convert from
+ * one Data array to another or not take in any Data array and based on some 
+ * given parameters create an entirely new Data array. 
  * 
  * Algorithms are typically also given a {@link CIShellContext} by which they 
  * can gain access to standard services like logging, preferences, and gui 
@@ -34,11 +34,11 @@ import org.cishell.framework.data.Data;
 public interface Algorithm {
     
    /**
-    * Executes and optionally returns a data model. Algorithms are usually 
+    * Executes and optionally returns a Data array. Algorithms are usually 
     * primed ahead of time with all the necessary data needed. This allows
     * an Algorithm to be set up, then scheduled for later execution.
     * 
-    * @return A data model that was created or <code>null</code>
+    * @return A Data array that was created or <code>null</code>
     */
    public Data[] execute(); 
 }

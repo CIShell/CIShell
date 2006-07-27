@@ -18,33 +18,33 @@ import java.util.Hashtable;
 
 /**
  * A basic implementation of {@link Data}. This class was included since 
- * a simple implementation of Data will be used quite often in both client
+ * a simple implementation of Data will be used quite often in both application
  * and algorithm code.
  * 
  * @author Bruce Herr (bh2@bh2.net)
  */
-public class BasicDataModel implements Data {
+public class BasicData implements Data {
     private Dictionary properties;
     private Object data;
     private String format;
     
     /**
-     * Creates a Data with the given data and an empty meta-data
+     * Creates a Data object with the given data and an empty meta-data
      * {@link Dictionary}
      * 
      * @param data The data being wrapped
      */
-    public BasicDataModel(Object data, String format) {
+    public BasicData(Object data, String format) {
         this(new Hashtable(), data, format);
     }
     
     /**
-     * Creates a Data with the given data and meta-data {@link Dictionary}
+     * Creates a Data object with the given data and meta-data {@link Dictionary}
      * 
      * @param properties The meta-data about the data
      * @param data       The data being wrapped
      */
-    public BasicDataModel(Dictionary properties, Object data, String format) {
+    public BasicData(Dictionary properties, Object data, String format) {
         this.properties = properties;
         this.data = data;
         this.format = format;

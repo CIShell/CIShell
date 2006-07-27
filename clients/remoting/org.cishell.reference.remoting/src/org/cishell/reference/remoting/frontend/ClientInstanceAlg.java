@@ -20,7 +20,7 @@ import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
 import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.algorithm.AlgorithmProperty;
-import org.cishell.framework.datamodel.DataModel;
+import org.cishell.framework.data.Data;
 import org.cishell.reference.remoting.CIShellClient;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -70,22 +70,22 @@ public class ClientInstanceAlg implements AlgorithmFactory, AlgorithmProperty, A
     }
     
     /**
-     * @see org.cishell.framework.algorithm.AlgorithmFactory#createAlgorithm(org.cishell.framework.datamodel.DataModel[], java.util.Dictionary, org.cishell.framework.CIShellContext)
+     * @see org.cishell.framework.algorithm.AlgorithmFactory#createAlgorithm(org.cishell.framework.data.Data[], java.util.Dictionary, org.cishell.framework.CIShellContext)
      */
-    public Algorithm createAlgorithm(DataModel[] dm, Dictionary parameters,
+    public Algorithm createAlgorithm(Data[] dm, Dictionary parameters,
             CIShellContext context) {
         return this;
     }
     
-    public DataModel[] execute() {
+    public Data[] execute() {
         disconnect();
         return null;
     }
 
     /**
-     * @see org.cishell.framework.algorithm.AlgorithmFactory#createParameters(org.cishell.framework.datamodel.DataModel[])
+     * @see org.cishell.framework.algorithm.AlgorithmFactory#createParameters(org.cishell.framework.data.Data[])
      */
-    public MetaTypeProvider createParameters(DataModel[] dm) {
+    public MetaTypeProvider createParameters(Data[] dm) {
         return null;
     }
 }

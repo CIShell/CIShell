@@ -21,9 +21,9 @@ import java.util.Dictionary;
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
 import org.cishell.framework.algorithm.AlgorithmFactory;
-import org.cishell.framework.datamodel.BasicDataModel;
-import org.cishell.framework.datamodel.DataModel;
-import org.cishell.framework.datamodel.DataModelProperty;
+import org.cishell.framework.data.BasicData;
+import org.cishell.framework.data.Data;
+import org.cishell.framework.data.DataProperty;
 import org.osgi.service.metatype.MetaTypeProvider;
 
 /**
@@ -33,18 +33,18 @@ import org.osgi.service.metatype.MetaTypeProvider;
 public class Integer2File implements AlgorithmFactory {
 
     /**
-     * @see org.cishell.framework.algorithm.AlgorithmFactory#createAlgorithm(org.cishell.framework.datamodel.DataModel[], java.util.Dictionary, org.cishell.framework.CIShellContext)
+     * @see org.cishell.framework.algorithm.AlgorithmFactory#createAlgorithm(org.cishell.framework.data.Data[], java.util.Dictionary, org.cishell.framework.CIShellContext)
      */
-    public Algorithm createAlgorithm(DataModel[] dm, Dictionary parameters,
+    public Algorithm createAlgorithm(Data[] dm, Dictionary parameters,
             CIShellContext context) {
         
         return new Integer2FileAlgorithm(dm[0]);
     }
 
     /**
-     * @see org.cishell.framework.algorithm.AlgorithmFactory#createParameters(org.cishell.framework.datamodel.DataModel[])
+     * @see org.cishell.framework.algorithm.AlgorithmFactory#createParameters(org.cishell.framework.data.Data[])
      */
-    public MetaTypeProvider createParameters(DataModel[] dm) {
+    public MetaTypeProvider createParameters(Data[] dm) {
         return null;
     }
     
@@ -52,12 +52,12 @@ public class Integer2File implements AlgorithmFactory {
         Integer i;
         String label;
         
-        public Integer2FileAlgorithm(DataModel dm) {
+        public Integer2FileAlgorithm(Data dm) {
             i = (Integer)dm.getData();
-            label = (String)dm.getMetaData().get(DataModelProperty.LABEL);
+            label = (String)dm.getMetaData().get(DataProperty.LABEL);
         }
 
-        public DataModel[] execute() {
+        public Data[] execute() {
             try {
                 File file = File.createTempFile("String2File-", "txt");
                 FileWriter fw = new FileWriter(file);
@@ -65,10 +65,10 @@ public class Integer2File implements AlgorithmFactory {
                 fw.write(i.toString());
                 fw.close();
                 
-                DataModel dm = new BasicDataModel(file, "file:text/plain");
-                dm.getMetaData().put(DataModelProperty.LABEL, "File of "+label);
+                Data dm = new BasicData(file, "file:text/plain");
+                dm.getMetaData().put(DataProperty.LABEL, "File of "+label);
                 
-                return new DataModel[]{dm};
+                return new Data[]{dm};
             } catch (IOException e) {
                 e.printStackTrace();
             }

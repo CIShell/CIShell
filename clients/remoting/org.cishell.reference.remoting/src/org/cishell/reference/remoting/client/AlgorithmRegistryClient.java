@@ -18,7 +18,7 @@ import java.util.Hashtable;
 import java.util.Vector;
 
 import org.cishell.framework.algorithm.Algorithm;
-import org.cishell.framework.datamodel.DataModel;
+import org.cishell.framework.data.Data;
 import org.cishell.reference.remoting.RemotingClient;
 import org.cishell.reference.remoting.event.AbstractEventConsumerProducer;
 import org.cishell.remoting.service.framework.AlgorithmRegistry;
@@ -95,7 +95,7 @@ public class AlgorithmRegistryClient extends RemotingClient implements
             bContext.registerService(EventHandler.class.getName(), this, dict);
         }
 
-        public synchronized DataModel[] execute() {
+        public synchronized Data[] execute() {
             AlgorithmRegistryClient.this.execute(sessionID, algorithmID);
             
             while (dmID == null) {

@@ -35,22 +35,22 @@ public interface AlgorithmFactory {
      * Creates a set of parameter definitions that define what parameters are 
      * needed in order to run its associated Algorithm.  
      * 
-     * @param dm An optional argument, the data model that will be given to 
+     * @param data An optional argument, the Data array that will be given to 
      *           this class to create an Algorithm with the createAlgorithm 
-     *           method. Clients that don't know the data model that is going
+     *           method. Clients that don't know the Data array that is going
      *           to be used ahead of time can give a <code>null</code> value. 
      * @return An OSGi {@link MetaTypeProvider} that defines the parameters
      *         needed by the Algorithm this class creates. May be 
      *         <code>null</code> if no parameters are needed.
      */
-    public MetaTypeProvider createParameters(Data[] dm);
+    public MetaTypeProvider createParameters(Data[] data);
     
     /**
      * Creates an {@link Algorithm} to be executed. 
      * 
-     * @param dm         The data to be given to the Algorithm to process. 
+     * @param data       The data to be given to the Algorithm to process. 
      *                   Some Algorithms may ignore this value. The order and
-     *                   type of data models given are specified in the service
+     *                   type of data given are specified in the service
      *                   dictionary (the 'in_data' key) when registered as a 
      *                   service in OSGi.
      * @param parameters A set of key-value pairs that were created based on 
@@ -59,7 +59,7 @@ public interface AlgorithmFactory {
      *                   standard CIShell services
      * @return An <code>Algorithm</code> primed for execution
      */
-    public Algorithm createAlgorithm(Data[] dm, 
+    public Algorithm createAlgorithm(Data[] data, 
                                      Dictionary parameters,
                                      CIShellContext context);
 }

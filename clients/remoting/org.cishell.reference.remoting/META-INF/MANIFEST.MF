@@ -9,7 +9,7 @@ X-AutoStart: true
 Import-Package: org.cishell.app.service.scheduler,
  org.cishell.framework,
  org.cishell.framework.algorithm,
- org.cishell.framework.datamodel,
+ org.cishell.framework.data,
  org.cishell.remoting.service.conversion,
  org.cishell.remoting.service.framework,
  org.cishell.service.conversion,

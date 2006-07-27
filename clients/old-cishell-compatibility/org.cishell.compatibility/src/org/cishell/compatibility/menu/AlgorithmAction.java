@@ -24,8 +24,8 @@ import org.cishell.compatibility.datamodel.NewDataModelAdapter;
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.algorithm.AlgorithmProperty;
-import org.cishell.framework.algorithm.DataModelValidator;
-import org.cishell.framework.datamodel.DataModel;
+import org.cishell.framework.algorithm.DataValidator;
+import org.cishell.framework.data.Data;
 import org.cishell.service.conversion.Converter;
 import org.cishell.service.conversion.DataConversionService;
 import org.eclipse.jface.action.Action;
@@ -61,7 +61,7 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, ISelec
     public void run() {
         //Convert old datamodel to new datamodel
         Set modelSet = IVC.getInstance().getModelManager().getSelectedModels();
-        DataModel[] dm = new DataModel[modelSet.size()];
+        Data[] dm = new Data[modelSet.size()];
         Iterator iter = modelSet.iterator();
         for (int i=0; i < modelSet.size(); i++) {
             dm[i] = new NewDataModelAdapter((edu.iu.iv.core.datamodels.DataModel) iter.next());
@@ -125,12 +125,12 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, ISelec
     }
     
     private boolean supports(edu.iu.iv.core.datamodels.DataModel dm) {
-        DataModelValidator validator = null;
+        DataValidator validator = null;
         String[] interfaces = (String[])ref.getProperty(Constants.OBJECTCLASS);
         if (interfaces != null) {
             for (int i=0; i < interfaces.length; i++) {
-                if (interfaces[i].equals(DataModelValidator.class.getName())) {
-                    validator = (DataModelValidator) bContext.getService(ref);
+                if (interfaces[i].equals(DataValidator.class.getName())) {
+                    validator = (DataValidator) bContext.getService(ref);
                 }
             }
         }
@@ -169,7 +169,7 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, ISelec
                                     (edu.iu.iv.core.datamodels.DataModel) i.next()));
                         }
                         
-                        DataModel[] dms = (DataModel[]) datamodels.toArray(new DataModel[0]);
+                        Data[] dms = (Data[]) datamodels.toArray(new Data[0]);
                         String valid = validator.validate(dms);
                         
                         supports = valid == null || (valid != null && valid.length() == 0);
@@ -182,7 +182,7 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, ISelec
                     supports = true;
                     
                     if (validator != null) {
-                        String valid = validator.validate(new DataModel[]{new NewDataModelAdapter(dm)});
+                        String valid = validator.validate(new Data[]{new NewDataModelAdapter(dm)});
                         supports = valid == null || (valid != null && valid.length() == 0);
                     }
                 }
@@ -195,7 +195,7 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, ISelec
                 supports = true;
                 
                 if (validator != null) {
-                    String valid = validator.validate(new DataModel[]{new NewDataModelAdapter(dm)});
+                    String valid = validator.validate(new Data[]{new NewDataModelAdapter(dm)});
                     supports = valid == null || (valid != null && valid.length() == 0);
                 }
             }

@@ -22,7 +22,7 @@ import java.util.Vector;
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
 import org.cishell.framework.algorithm.AlgorithmFactory;
-import org.cishell.framework.datamodel.DataModel;
+import org.cishell.framework.data.Data;
 import org.cishell.remoting.service.framework.AlgorithmFactoryRegistry;
 import org.cishell.remoting.service.framework.AlgorithmRegistry;
 import org.cishell.remoting.service.framework.DataModelRegistry;
@@ -69,7 +69,7 @@ public class AlgorithmFactoryRegistryServer implements AlgorithmFactoryRegistry 
         
         String algID = "-1";
         if (factory != null && algReg != null && mtpReg != null && dmReg != null) {
-            DataModel[] dm = dmReg.getDataModels(dataModelIDs);
+            Data[] dm = dmReg.getDataModels(dataModelIDs);
             
             CIShellContext ciContext = null;
             synchronized (sidToContextMap) {
@@ -104,7 +104,7 @@ public class AlgorithmFactoryRegistryServer implements AlgorithmFactoryRegistry 
         
         String mtpID = "-1";
         if (factory != null && algReg != null && mtpReg != null && dmReg != null) {
-            DataModel[] dm = dmReg.getDataModels(dataModelIDs);
+            Data[] dm = dmReg.getDataModels(dataModelIDs);
             
             MetaTypeProvider mtp = factory.createParameters(dm);
             mtpID = mtpReg.registerMetaTypeProvider(mtp);

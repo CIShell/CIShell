@@ -18,21 +18,21 @@ import java.util.Dictionary;
 
 /**
  * A class that encapsulates data and its meta-data. This class is used to pass
- * data between algorithms and what algorithms optionally create when executed. 
+ * data between algorithms and is what algorithms optionally create when executed. 
  * 
  * @author Bruce Herr (bh2@bh2.net)
  */
-public interface DataModel {
+public interface Data {
 	/**
-	 * Returns the meta-data associated with the data stored in this Data.
-	 * Some standard keys are in the {@link DataModelProperty} interface.
+	 * Returns the meta-data associated with the data stored in this Data object.
+	 * Some standard keys are in the {@link DataProperty} interface.
 	 * 
 	 * @return The data's meta-data
 	 */
     public Dictionary getMetaData();
     
     /**
-     * Returns the data stored in this Data.
+     * Returns the data stored in this Data object.
      * 
      * @return The data (a java object)
      */

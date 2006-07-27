@@ -20,7 +20,7 @@ import java.util.Vector;
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
 import org.cishell.framework.algorithm.AlgorithmFactory;
-import org.cishell.framework.datamodel.DataModel;
+import org.cishell.framework.data.Data;
 import org.cishell.reference.remoting.RemotingClient;
 import org.cishell.remoting.service.framework.AlgorithmFactoryRegistry;
 import org.cishell.remoting.service.framework.AlgorithmRegistry;
@@ -93,7 +93,7 @@ public class AlgorithmFactoryRegistryClient extends RemotingClient implements
             this.servicePID = servicePID;
         }
 
-        public Algorithm createAlgorithm(DataModel[] dm, Dictionary parameters, CIShellContext context) {
+        public Algorithm createAlgorithm(Data[] dm, Dictionary parameters, CIShellContext context) {
             Vector dataModelIDs = dmReg.registerDataModels(dm);
             Hashtable ht = toHashtable(parameters);
             String algID = AlgorithmFactoryRegistryClient.this.createAlgorithm(sessionID, servicePID, dataModelIDs, ht);
@@ -101,7 +101,7 @@ public class AlgorithmFactoryRegistryClient extends RemotingClient implements
             return algReg.getAlgorithm(algID); 
         }
 
-        public MetaTypeProvider createParameters(DataModel[] dm) {
+        public MetaTypeProvider createParameters(Data[] dm) {
             Vector dataModelIDs = dmReg.registerDataModels(dm);
             String providerID = AlgorithmFactoryRegistryClient.this.createParameters(servicePID, dataModelIDs); 
             

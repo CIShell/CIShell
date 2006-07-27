@@ -23,8 +23,8 @@ import java.util.Hashtable;
 import java.util.Vector;
 
 import org.cishell.framework.CIShellContext;
-import org.cishell.framework.datamodel.BasicDataModel;
-import org.cishell.framework.datamodel.DataModel;
+import org.cishell.framework.data.BasicData;
+import org.cishell.framework.data.Data;
 import org.cishell.reference.remoting.ObjectRegistry;
 import org.cishell.remoting.service.framework.DataModelRegistry;
 import org.cishell.service.conversion.DataConversionService;
@@ -66,7 +66,7 @@ public class DataModelRegistryServer implements DataModelRegistry {
             properties = new Hashtable();
         }
         
-        DataModel dm = new BasicDataModel(properties, dataFile, format);
+        Data dm = new BasicData(properties, dataFile, format);
         
         return registerDataModel(dm);
     }
@@ -78,7 +78,7 @@ public class DataModelRegistryServer implements DataModelRegistry {
         DataConversionService converter = (DataConversionService) 
             ciContext.getService(DataConversionService.class.getName());
         
-        DataModel dm = getDataModel(dataModelID);
+        Data dm = getDataModel(dataModelID);
         dm = converter.convert(dm, format);
         byte[] data = null;
         
@@ -113,7 +113,7 @@ public class DataModelRegistryServer implements DataModelRegistry {
      * @see org.cishell.remoting.service.framework.DataModelRegistry#getDataFormats(String)
      */
     public Vector getDataFormats(String dataModelID) {
-        DataModel dm = getDataModel(dataModelID);
+        Data dm = getDataModel(dataModelID);
         
         String format = dm.getFormat();
         Vector v = new Vector();
@@ -144,8 +144,8 @@ public class DataModelRegistryServer implements DataModelRegistry {
     /**
      * @see org.cishell.remoting.service.framework.DataModelRegistry#getDataModel(String)
      */
-    public DataModel getDataModel(String dataModelID) {
-        DataModel dm = (DataModel) registry.getObject(dataModelID);
+    public Data getDataModel(String dataModelID) {
+        Data dm = (Data) registry.getObject(dataModelID);
         
         return dm == null ? NULL_DM : dm;
     }
@@ -153,11 +153,11 @@ public class DataModelRegistryServer implements DataModelRegistry {
     /**
      * @see org.cishell.remoting.service.framework.DataModelRegistry#getDataModels(Vector)
      */
-    public DataModel[] getDataModels(Vector dataModelIDs) {
-        DataModel[] dm = null;
+    public Data[] getDataModels(Vector dataModelIDs) {
+        Data[] dm = null;
         
         if (dataModelIDs != null) {
-            dm = new DataModel[dataModelIDs.size()];
+            dm = new Data[dataModelIDs.size()];
             
             for (int i=0; i < dm.length; i++) {
                 dm[i] = getDataModel((String)dataModelIDs.get(i));
@@ -168,9 +168,9 @@ public class DataModelRegistryServer implements DataModelRegistry {
     }
 
     /**
-     * @see org.cishell.remoting.service.framework.DataModelRegistry#registerDataModel(org.cishell.framework.datamodel.DataModel)
+     * @see org.cishell.remoting.service.framework.DataModelRegistry#registerDataModel(org.cishell.framework.data.Data)
      */
-    public String registerDataModel(DataModel dataModel) {
+    public String registerDataModel(Data dataModel) {
         if (dataModel != NULL_DM) {
             return registry.register(dataModel);
         } else {
@@ -179,9 +179,9 @@ public class DataModelRegistryServer implements DataModelRegistry {
     }
     
     /**
-     * @see org.cishell.remoting.service.framework.DataModelRegistry#registerDataModels(org.cishell.framework.datamodel.DataModel[])
+     * @see org.cishell.remoting.service.framework.DataModelRegistry#registerDataModels(org.cishell.framework.data.Data[])
      */
-    public Vector registerDataModels(DataModel[] dataModel) {
+    public Vector registerDataModels(Data[] dataModel) {
         Vector dmIDs = null;
         if (dataModel != null) {
             dmIDs = new Vector(dataModel.length);
@@ -201,7 +201,7 @@ public class DataModelRegistryServer implements DataModelRegistry {
         registry.unregister(dataModelID);
     }
     
-    private static final DataModel NULL_DM = new DataModel() {
+    private static final Data NULL_DM = new Data() {
         public Object getData() {
             return null;
         }

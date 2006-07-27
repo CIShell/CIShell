@@ -19,9 +19,9 @@ import java.util.Hashtable;
 
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
-import org.cishell.framework.datamodel.BasicDataModel;
-import org.cishell.framework.datamodel.DataModel;
-import org.cishell.framework.datamodel.DataModelProperty;
+import org.cishell.framework.data.BasicData;
+import org.cishell.framework.data.Data;
+import org.cishell.framework.data.DataProperty;
 import org.osgi.service.log.LogService;
 
 public class Alg implements Algorithm {
@@ -33,7 +33,7 @@ public class Alg implements Algorithm {
         this.parameters = parameters;
     }
 
-    public DataModel[] execute() {
+    public Data[] execute() {
         LogService log = (LogService)context.getService(LogService.class.getName());
         
         log.log(LogService.LOG_INFO, "My Parameters:");
@@ -43,8 +43,8 @@ public class Alg implements Algorithm {
         }
         
         Dictionary dict = new Hashtable();
-        dict.put(DataModelProperty.LABEL, "Weee!!!");
+        dict.put(DataProperty.LABEL, "Weee!!!");
         
-        return new DataModel[] {new BasicDataModel(dict, "Weee!!!", String.class.getName())};
+        return new Data[] {new BasicData(dict, "Weee!!!", String.class.getName())};
     }
 }

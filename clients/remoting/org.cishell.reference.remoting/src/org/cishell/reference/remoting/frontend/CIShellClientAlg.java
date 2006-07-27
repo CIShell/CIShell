@@ -18,7 +18,7 @@ import java.util.Dictionary;
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
 import org.cishell.framework.algorithm.AlgorithmFactory;
-import org.cishell.framework.datamodel.DataModel;
+import org.cishell.framework.data.Data;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.metatype.MetaTypeProvider;
@@ -42,13 +42,13 @@ public class CIShellClientAlg implements AlgorithmFactory {
     }
     
     /**
-     * @see org.cishell.framework.algorithm.AlgorithmFactory#createAlgorithm(org.cishell.framework.datamodel.DataModel[], java.util.Dictionary, org.cishell.framework.CIShellContext)
+     * @see org.cishell.framework.algorithm.AlgorithmFactory#createAlgorithm(org.cishell.framework.data.Data[], java.util.Dictionary, org.cishell.framework.CIShellContext)
      */
-    public Algorithm createAlgorithm(DataModel[] dm, final Dictionary parameters,
+    public Algorithm createAlgorithm(Data[] dm, final Dictionary parameters,
             final CIShellContext context) {
         
         Algorithm alg = new Algorithm() {
-            public DataModel[] execute() {
+            public Data[] execute() {
                 String host = (String) parameters.get("org.cishell.reference.remoting.frontend.client.host");
                 int port = ((Integer) parameters.get("org.cishell.reference.remoting.frontend.client.port")).intValue();
                 
@@ -60,9 +60,9 @@ public class CIShellClientAlg implements AlgorithmFactory {
     }
 
     /**
-     * @see org.cishell.framework.algorithm.AlgorithmFactory#createParameters(org.cishell.framework.datamodel.DataModel[])
+     * @see org.cishell.framework.algorithm.AlgorithmFactory#createParameters(org.cishell.framework.data.Data[])
      */
-    public MetaTypeProvider createParameters(DataModel[] dm) {
+    public MetaTypeProvider createParameters(Data[] dm) {
         return provider;
     }
 }

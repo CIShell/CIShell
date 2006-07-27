@@ -18,9 +18,9 @@ import java.util.Dictionary;
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
 import org.cishell.framework.algorithm.AlgorithmFactory;
-import org.cishell.framework.datamodel.BasicDataModel;
-import org.cishell.framework.datamodel.DataModel;
-import org.cishell.framework.datamodel.DataModelProperty;
+import org.cishell.framework.data.BasicData;
+import org.cishell.framework.data.Data;
+import org.cishell.framework.data.DataProperty;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.metatype.MetaTypeProvider;
 import org.osgi.service.metatype.MetaTypeService;
@@ -41,16 +41,16 @@ public class AlgA implements AlgorithmFactory {
     }
 
     /**
-     * @see org.cishell.framework.algorithm.AlgorithmFactory#createParameters(org.cishell.framework.datamodel.DataModel[])
+     * @see org.cishell.framework.algorithm.AlgorithmFactory#createParameters(org.cishell.framework.data.Data[])
      */
-    public MetaTypeProvider createParameters(DataModel[] dm) {
+    public MetaTypeProvider createParameters(Data[] dm) {
         return provider;
     }
 
     /**
-     * @see org.cishell.framework.algorithm.AlgorithmFactory#createAlgorithm(org.cishell.framework.datamodel.DataModel[], java.util.Dictionary, org.cishell.framework.CIShellContext)
+     * @see org.cishell.framework.algorithm.AlgorithmFactory#createAlgorithm(org.cishell.framework.data.Data[], java.util.Dictionary, org.cishell.framework.CIShellContext)
      */
-    public Algorithm createAlgorithm(DataModel[] dm, Dictionary parameters,
+    public Algorithm createAlgorithm(Data[] dm, Dictionary parameters,
             CIShellContext context) {
         return new AlgorithmA(parameters);
     }
@@ -62,11 +62,11 @@ public class AlgA implements AlgorithmFactory {
             this.parameters = parameters;
         }
 
-        public DataModel[] execute() {
+        public Data[] execute() {
             String i = (String) parameters.get("org.cishell.tests.conversion1.AlgA.myInput");
             
-            DataModel[] dm = new DataModel[]{ new BasicDataModel(i, String.class.getName()) };
-            dm[0].getMetaData().put(DataModelProperty.LABEL, "My String: " + i);
+            Data[] dm = new Data[]{ new BasicData(i, String.class.getName()) };
+            dm[0].getMetaData().put(DataProperty.LABEL, "My String: " + i);
             
             return dm;
         }

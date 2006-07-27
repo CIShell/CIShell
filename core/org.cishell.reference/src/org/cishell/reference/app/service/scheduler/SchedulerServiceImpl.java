@@ -29,7 +29,7 @@ import java.util.TimerTask;
 import org.cishell.app.service.scheduler.SchedulerListener;
 import org.cishell.app.service.scheduler.SchedulerService;
 import org.cishell.framework.algorithm.Algorithm;
-import org.cishell.framework.datamodel.DataModel;
+import org.cishell.framework.data.Data;
 import org.cishell.reference.app.service.scheduler.AlgorithmTask.STATE;
 import org.osgi.framework.ServiceReference;
 
@@ -273,7 +273,7 @@ class SchedulerListenerInformer implements SchedulerListener {
         }
     }
 
-    public void algorithmFinished(Algorithm algorithm, DataModel[] createdDM) {
+    public void algorithmFinished(Algorithm algorithm, Data[] createdDM) {
         for (Iterator iter = _schedulerListeners.iterator() ; iter.hasNext() ; ) {
             SchedulerListener sl = (SchedulerListener) iter.next() ;
             sl.algorithmFinished(algorithm, createdDM);
@@ -498,7 +498,7 @@ class AlgSchedulerTask extends TimerTask implements SchedulerListener {
         _schedulerListener.algorithmError(algorithm, error);
     }
 
-    public void algorithmFinished(Algorithm algorithm, DataModel[] createdDM) {
+    public void algorithmFinished(Algorithm algorithm, Data[] createdDM) {
         purgeFinished();
         _numRunning--;
         _schedulerListener.algorithmFinished(algorithm, createdDM);
@@ -595,7 +595,7 @@ class AlgorithmTask implements Runnable {
     /**
      * Execution status of the algorithm (i.e.) return value.
      */
-    private DataModel[] _result;
+    private Data[] _result;
     
     /**
      * The error, if an algorithm had one while executing
@@ -634,7 +634,7 @@ class AlgorithmTask implements Runnable {
         _setState(STATE.NEW);
     }
 
-    public synchronized final DataModel[] getResult() {
+    public synchronized final Data[] getResult() {
         return _result;
     }
 

@@ -22,7 +22,7 @@ import org.cishell.app.service.scheduler.SchedulerAdapter;
 import org.cishell.app.service.scheduler.SchedulerService;
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
-import org.cishell.framework.datamodel.DataModel;
+import org.cishell.framework.data.Data;
 import org.cishell.reference.remoting.ObjectRegistry;
 import org.cishell.reference.remoting.event.CIShellEventConstants;
 import org.cishell.reference.remoting.event.IDGenerator;
@@ -94,7 +94,7 @@ public class AlgorithmRegistryServer extends SchedulerAdapter implements Algorit
         registry.unregister(algorithmID);
     }
         
-    public void algorithmFinished(Algorithm algorithm, DataModel[] createdDM) {
+    public void algorithmFinished(Algorithm algorithm, Data[] createdDM) {
         if (algorithm instanceof WrapperAlgorithm) {
             WrapperAlgorithm alg = (WrapperAlgorithm) algorithm;
             
@@ -121,7 +121,7 @@ public class AlgorithmRegistryServer extends SchedulerAdapter implements Algorit
     }
         
     private static final Algorithm NULL_ALG = new Algorithm() {
-        public DataModel[] execute() {
+        public Data[] execute() {
             return null;
         }};
         
@@ -136,7 +136,7 @@ public class AlgorithmRegistryServer extends SchedulerAdapter implements Algorit
             this.algorithmID = algorithmID;
         }
 
-        public DataModel[] execute() {
+        public Data[] execute() {
             return algorithm.execute();
         }
     }

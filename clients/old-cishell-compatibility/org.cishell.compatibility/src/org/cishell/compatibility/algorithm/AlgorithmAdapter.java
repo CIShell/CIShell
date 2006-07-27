@@ -21,7 +21,7 @@ import org.cishell.compatibility.guibuilder.ParameterMapAdapter;
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
 import org.cishell.framework.algorithm.AlgorithmFactory;
-import org.cishell.framework.datamodel.DataModel;
+import org.cishell.framework.data.Data;
 import org.cishell.service.conversion.DataConversionService;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.metatype.MetaTypeProvider;
@@ -34,11 +34,11 @@ import edu.iu.iv.core.algorithm.AlgorithmProperty;
 
 public class AlgorithmAdapter extends AbstractAlgorithm implements org.cishell.framework.algorithm.AlgorithmProperty {
     private AlgorithmFactory factory;
-    private DataModel[] dm;
+    private Data[] dm;
     private CIShellContext ciContext;
     private ServiceReference ref;
     
-    public AlgorithmAdapter(ServiceReference ref, String label, AlgorithmFactory factory, DataModel[] dm, CIShellContext ciContext) {
+    public AlgorithmAdapter(ServiceReference ref, String label, AlgorithmFactory factory, Data[] dm, CIShellContext ciContext) {
         this.ref = ref;
         this.factory = factory;
         this.dm = dm;
@@ -56,12 +56,12 @@ public class AlgorithmAdapter extends AbstractAlgorithm implements org.cishell.f
      * @see edu.iu.iv.core.algorithm.AbstractAlgorithm#execute()
      */
     public boolean execute() {
-        doDataModelConversion();
+        doDataConversion();
         
         Algorithm alg = factory.createAlgorithm(dm, makeDictionary(), ciContext);
         
         if (alg != null) {
-            DataModel[] newData = alg.execute();
+            Data[] newData = alg.execute();
             
             if (newData != null) {
                 for (int i=0; i < newData.length; i++) {
@@ -77,7 +77,7 @@ public class AlgorithmAdapter extends AbstractAlgorithm implements org.cishell.f
         return true;
     }
     
-    protected void doDataModelConversion() {
+    protected void doDataConversion() {
         DataConversionService converter = (DataConversionService)
             ciContext.getService(DataConversionService.class.getName());
         

@@ -20,7 +20,7 @@ import java.util.Vector;
 
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.AlgorithmProperty;
-import org.cishell.framework.datamodel.DataModel;
+import org.cishell.framework.data.Data;
 import org.cishell.remoting.service.conversion.RemoteDataConversionService;
 import org.cishell.remoting.service.framework.DataModelRegistry;
 import org.cishell.service.conversion.Converter;
@@ -53,7 +53,7 @@ public class RemoteDataConversionServiceServer implements
         
         DataModelRegistry dmRegistry = (DataModelRegistry) dmReg.getService();
         
-        DataModel dm = dmRegistry.getDataModel(dataModelID);
+        Data dm = dmRegistry.getDataModel(dataModelID);
         if (dm != null) {
             dm = converter.convert(dm, outFormat);
             
@@ -96,7 +96,7 @@ public class RemoteDataConversionServiceServer implements
      */
     public Vector getConversions(String dataModelID, String outFormat) {
         DataModelRegistry dmRegistry = (DataModelRegistry) dmReg.getService();
-        DataModel dm = dmRegistry.getDataModel(dataModelID);
+        Data dm = dmRegistry.getDataModel(dataModelID);
         
         Set conversions = new HashSet();
         if (dm != null) {

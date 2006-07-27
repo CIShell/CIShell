@@ -28,8 +28,8 @@ import java.util.Vector;
 
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.AlgorithmProperty;
-import org.cishell.framework.datamodel.BasicDataModel;
-import org.cishell.framework.datamodel.DataModel;
+import org.cishell.framework.data.BasicData;
+import org.cishell.framework.data.Data;
 import org.cishell.reference.remoting.RemotingClient;
 import org.cishell.remoting.service.conversion.RemoteDataConversionService;
 import org.cishell.remoting.service.framework.DataModelRegistry;
@@ -56,8 +56,8 @@ public class DataModelRegistryClient extends RemotingClient implements
     /**
      * @see org.cishell.remoting.service.framework.DataModelRegistry#getDataModel(String)
      */
-    public DataModel getDataModel(String dataModelID) {
-        DataModel dm = (DataModel) idToDMMap.get(dataModelID);
+    public Data getDataModel(String dataModelID) {
+        Data dm = (Data) idToDMMap.get(dataModelID);
         
         if (dm == null) {
             dm = new RemoteDataModel(dataModelID);
@@ -70,10 +70,10 @@ public class DataModelRegistryClient extends RemotingClient implements
     /**
      * @see org.cishell.remoting.service.framework.DataModelRegistry#getDataModels(Vector)
      */
-    public DataModel[] getDataModels(Vector dataModelIDs) {
-        DataModel[] dm = null;
+    public Data[] getDataModels(Vector dataModelIDs) {
+        Data[] dm = null;
         if (dataModelIDs != null) {
-            dm = new DataModel[dataModelIDs.size()];
+            dm = new Data[dataModelIDs.size()];
             for (int i=0; i < dm.length; i++) {
                 dm[i] = getDataModel((String) dataModelIDs.get(i));
             }
@@ -117,9 +117,9 @@ public class DataModelRegistryClient extends RemotingClient implements
     }
 
     /**
-     * @see org.cishell.remoting.service.framework.DataModelRegistry#registerDataModel(org.cishell.framework.datamodel.DataModel)
+     * @see org.cishell.remoting.service.framework.DataModelRegistry#registerDataModel(org.cishell.framework.data.Data)
      */
-    public String registerDataModel(DataModel dm) {
+    public String registerDataModel(Data dm) {
         String id = "-1";
         if (dm instanceof RemoteDataModel 
                 && ((RemoteDataModel) dm).host.equals(host)) {
@@ -211,9 +211,9 @@ public class DataModelRegistryClient extends RemotingClient implements
     }
 
     /**
-     * @see org.cishell.remoting.service.framework.DataModelRegistry#registerDataModels(org.cishell.framework.datamodel.DataModel[])
+     * @see org.cishell.remoting.service.framework.DataModelRegistry#registerDataModels(org.cishell.framework.data.Data[])
      */
-    public Vector registerDataModels(DataModel[] dataModel) {
+    public Vector registerDataModels(Data[] dataModel) {
         Vector dmIDs = null;
         if (dataModel != null) {
             dmIDs = new Vector(dataModel.length);
@@ -236,7 +236,7 @@ public class DataModelRegistryClient extends RemotingClient implements
         doCall("unregisterDataModel", dataModelID);
     }
     
-    protected class RemoteDataModel implements DataModel{
+    protected class RemoteDataModel implements Data{
         String dmID;
         String host = DataModelRegistryClient.this.host;
         DataModelRegistry reg = DataModelRegistryClient.this;
@@ -281,7 +281,7 @@ public class DataModelRegistryClient extends RemotingClient implements
                             out.write(raw);
                             out.close();
                             
-                            DataModel dm = new BasicDataModel(new Hashtable(), 
+                            Data dm = new BasicData(new Hashtable(), 
                                     file, inFormat);
                             dm = convert[0].convert(dm);
                             

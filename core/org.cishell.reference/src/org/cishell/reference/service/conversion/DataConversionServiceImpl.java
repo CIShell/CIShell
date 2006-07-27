@@ -21,7 +21,7 @@ import java.util.List;
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.algorithm.AlgorithmProperty;
-import org.cishell.framework.datamodel.DataModel;
+import org.cishell.framework.data.Data;
 import org.cishell.service.conversion.Converter;
 import org.cishell.service.conversion.DataConversionService;
 import org.osgi.framework.BundleContext;
@@ -75,9 +75,9 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
     }
 
     /**
-     * @see org.cishell.service.conversion.DataConversionService#findConverters(org.cishell.framework.datamodel.DataModel, java.lang.String)
+     * @see org.cishell.service.conversion.DataConversionService#findConverters(org.cishell.framework.data.Data, java.lang.String)
      */
-    public Converter[] findConverters(DataModel dm, String outFormat) {
+    public Converter[] findConverters(Data dm, String outFormat) {
         String format = dm.getFormat();
         
         List list = new ArrayList();
@@ -103,9 +103,9 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
     }
     
     /**
-     * @see org.cishell.service.conversion.DataConversionService#convert(org.cishell.framework.datamodel.DataModel, java.lang.String)
+     * @see org.cishell.service.conversion.DataConversionService#convert(org.cishell.framework.data.Data, java.lang.String)
      */
-    public DataModel convert(DataModel inDM, String outFormat) {
+    public Data convert(Data inDM, String outFormat) {
         String inFormat = inDM.getFormat();
         
         if (inFormat != null && inFormat.equals(outFormat)) {
