@@ -35,6 +35,7 @@ public interface AlgorithmProperty {
     public static final String END_GROUP = "end";
     public static final String METATYPE_ID = "metatype-id";
     public static final String REMOTEABLE = "remoteable";
+    public static final String REMOTE = "remote";
     public static final String ALGORITHM_TYPE = "type";
     public static final String TYPE_CONVERTER = "converter";
     public static final String TYPE_ALGORITHM = "algorithm";

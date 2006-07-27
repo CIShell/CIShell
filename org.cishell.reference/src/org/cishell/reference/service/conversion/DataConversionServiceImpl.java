@@ -46,7 +46,7 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
         try {
             String filter = "(&("+IN_DATA+"="+inFormat+") " +
                               "("+OUT_DATA+"="+outFormat+")" +
-                              "(!("+REMOTEABLE+"=*)))";
+                              "(!("+REMOTE+"=*)))";
 
             ServiceReference[] refs = bContext.getServiceReferences(
                     AlgorithmFactory.class.getName(), filter);
@@ -77,8 +77,8 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
     /**
      * @see org.cishell.service.conversion.DataConversionService#findConverters(org.cishell.framework.data.Data, java.lang.String)
      */
-    public Converter[] findConverters(Data dm, String outFormat) {
-        String format = dm.getFormat();
+    public Converter[] findConverters(Data data, String outFormat) {
+        String format = data.getFormat();
         
         List list = new ArrayList();
         Converter[] converters = new Converter[0];
@@ -87,12 +87,12 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
             list.addAll(Arrays.asList(converters));
         } 
         
-        if (!(dm.getData() instanceof File) && dm.getData() != null) {
+        if (!(data.getData() instanceof File) && data.getData() != null) {
             converters = findConverters(
-                    dm.getData().getClass().getName(), outFormat);
+                    data.getData().getClass().getName(), outFormat);
             list.addAll(Arrays.asList(converters));
             
-            Class[] classes = dm.getData().getClass().getClasses();
+            Class[] classes = data.getData().getClass().getClasses();
             for (int i=0; i < classes.length; i++) {
                 converters = findConverters(classes[i].getName(), outFormat);
                 list.addAll(Arrays.asList(converters));
