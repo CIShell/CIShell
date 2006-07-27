@@ -65,7 +65,7 @@ public interface SchedulerListener {
      * @param createdDM The Data(s) it returned, or <code>null</code> if
      *                  it returned <code>null</code>
      */
-    public void algorithmFinished(Algorithm algorithm, Data[] createdDM);
+    public void algorithmFinished(Algorithm algorithm, Data[] createdData);
     
     /**
      * Notification that an Algorithm had an error while being executed

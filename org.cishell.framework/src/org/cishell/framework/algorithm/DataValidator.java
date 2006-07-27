@@ -18,34 +18,33 @@ import org.cishell.framework.data.Data;
 
 /**
  * An additional interface an {@link AlgorithmFactory} can implement that 
- * allows for further data model validation beyond what is provided in the 
+ * allows for further data validation beyond what is provided in the 
  * service dictionary's in_data/out_data specifications. This is useful in 
- * cases where an algorithm expects a certain type of data model, but must 
+ * cases where an algorithm expects a certain type of data, but must 
  * make additional checks. For example, if an algorithm only worked on 
- * symmetric matrices, this interface would check the data model ahead of time
+ * symmetric matrices, this interface would check the data ahead of time
  * to ensure that the given matrix was in fact a symmetric matrix.
- * 
+ * <br />
  * In order for CIShell clients to fully recognize this additional validation 
  * method, an algorithm writer must register this interface in addition to the 
  * algorithm interface when registering their service.
  * 
  * @author Bruce Herr (bh2@bh2.net)
  */
-public interface DataModelValidator {
-    
+public interface DataValidator {
     /**
-     * Validates the given data model(s) that are proposed to be given to the
+     * Validates the given data that is proposed to be given to the
      * algorithm. It can return three different values:
      * 
      * <table>
      * <tr><td><code>null</code></td><td>No validation present</td></tr>
-     * <tr><td><code>""</code></td><td>The data model is valid</td></tr>
+     * <tr><td><code>""</code></td><td>The data is valid</td></tr>
      * <tr><td><code>"..."</code></td>
      *     <td>A localized description of why its invalid</td></tr>
      * </table>
      * 
-     * @param dm The proposed data model that may be given to create an Algorithm
+     * @param data The proposed data that may be given to create an Algorithm
      * @return <code>null</code>, "", or another string
      */
-    public String validate(Data[] dm);
+    public String validate(Data[] data);
 }

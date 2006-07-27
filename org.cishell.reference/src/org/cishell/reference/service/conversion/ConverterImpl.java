@@ -21,8 +21,8 @@ import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
 import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.algorithm.AlgorithmProperty;
-import org.cishell.framework.datamodel.BasicDataModel;
-import org.cishell.framework.datamodel.DataModel;
+import org.cishell.framework.data.BasicData;
+import org.cishell.framework.data.Data;
 import org.cishell.service.conversion.Converter;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -61,10 +61,10 @@ public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProp
     }
     
     /**
-     * @see org.cishell.service.conversion.Converter#convert(org.cishell.framework.datamodel.DataModel)
+     * @see org.cishell.service.conversion.Converter#convert(org.cishell.framework.data.Data)
      */
-    public DataModel convert(DataModel inDM) {
-        DataModel[] dm = new DataModel[]{inDM};
+    public Data convert(Data inDM) {
+        Data[] dm = new Data[]{inDM};
         
         AlgorithmFactory factory = getAlgorithmFactory();
         Algorithm alg = factory.createAlgorithm(dm, new Hashtable(), ciContext);
@@ -86,7 +86,7 @@ public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProp
             }
                
             String outFormat = (String)getProperties().get(AlgorithmProperty.OUT_DATA);
-            return new BasicDataModel(newProps, outData, outFormat);
+            return new BasicData(newProps, outData, outFormat);
         } else {
             return null;
         }
@@ -114,27 +114,27 @@ public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProp
         return props;
     }
 
-    public Algorithm createAlgorithm(DataModel[] dm, Dictionary parameters, CIShellContext context) {
+    public Algorithm createAlgorithm(Data[] dm, Dictionary parameters, CIShellContext context) {
         return new ConverterAlgorithm(dm, parameters, context);
     }
 
-    public MetaTypeProvider createParameters(DataModel[] dm) {
+    public MetaTypeProvider createParameters(Data[] dm) {
         return null;
     }
     
     private class ConverterAlgorithm implements Algorithm {
-        DataModel[] inDM;
+        Data[] inDM;
         CIShellContext context;
         Dictionary parameters;
         
-        public ConverterAlgorithm(DataModel[] dm, Dictionary parameters, CIShellContext context) {
+        public ConverterAlgorithm(Data[] dm, Dictionary parameters, CIShellContext context) {
             this.inDM = dm;
             this.parameters = parameters;
             this.context = context;
         }
         
-        public DataModel[] execute() {
-            DataModel[] dm = inDM;
+        public Data[] execute() {
+            Data[] dm = inDM;
             for (int i=0; i < refs.length; i++) {
                 AlgorithmFactory factory = (AlgorithmFactory)bContext.getService(refs[i]);
                 

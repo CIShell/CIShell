@@ -11,7 +11,7 @@
  * Contributors:
  *     Indiana University - 
  * ***************************************************************************/
-package org.cishell.reference.app.service.modelmanager;
+package org.cishell.reference.app.service.datamanager;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -20,14 +20,13 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import org.cishell.app.service.modelmanager.ModelManagerListener;
-import org.cishell.app.service.modelmanager.ModelManagerService;
-import org.cishell.framework.datamodel.DataModel;
-import org.cishell.framework.datamodel.DataModelProperty;
-import org.cishell.framework.datamodel.DataModelType;
+import org.cishell.app.service.datamanager.DataManagerListener;
+import org.cishell.app.service.datamanager.DataManagerService;
+import org.cishell.framework.data.Data;
+import org.cishell.framework.data.DataProperty;
 
 
-public class ModelManagerServiceImpl implements ModelManagerService {
+public class ModelManagerServiceImpl implements DataManagerService {
     private Map modelToLabelMap;
     private Map labelToModelMap; 
     private Map substringToNumberMap;
@@ -48,15 +47,15 @@ public class ModelManagerServiceImpl implements ModelManagerService {
     }
 
     /**
-     * @see edu.iu.iv.core.ModelManager#addModel(java.lang.Object)
+     * @see edu.iu.iv.core.ModelManager#addData(java.lang.Object)
      */
-    public void addModel(DataModel model) {
-        String label = (String)model.getMetaData().get(DataModelProperty.LABEL);
-        String type = (String)model.getMetaData().get(DataModelProperty.GENERAL_TYPE);
+    public void addData(Data model) {
+        String label = (String)model.getMetaData().get(DataProperty.LABEL);
+        String type = (String)model.getMetaData().get(DataProperty.TYPE);
         
         if(type == null){
-            type = DataModelType.OTHER;
-            model.getMetaData().put(DataModelProperty.GENERAL_TYPE, type);
+            type = DataProperty.OTHER_TYPE;
+            model.getMetaData().put(DataProperty.TYPE, type);
         }
         
         //generate label if needed
@@ -90,15 +89,15 @@ public class ModelManagerServiceImpl implements ModelManagerService {
         addModel(model, label);
         
         for (Iterator iter=listeners.iterator(); iter.hasNext();) {
-            ((ModelManagerListener) iter.next()).modelAdded(model, label);
+            ((DataManagerListener) iter.next()).dataAdded(model, label);
         }
     }
 
-    private void addModel(DataModel model, String label) {
+    private void addModel(Data model, String label) {
         label = findUniqueLabel(label);
-        model.getMetaData().put(DataModelProperty.LABEL, label);
+        model.getMetaData().put(DataProperty.LABEL, label);
         //set the model to be unsaved initially
-        model.getMetaData().put(DataModelProperty.MODIFIED, new Boolean(true));
+        model.getMetaData().put(DataProperty.MODIFIED, new Boolean(true));
                 
         modelToLabelMap.put(model, label);
         labelToModelMap.put(label, model);      
@@ -144,7 +143,7 @@ public class ModelManagerServiceImpl implements ModelManagerService {
     }
 
 
-    public void removeModel(DataModel model) {
+    public void removeData(Data model) {
         String label = getLabel(model);
         
         labelToModelMap.remove(label);
@@ -152,54 +151,54 @@ public class ModelManagerServiceImpl implements ModelManagerService {
         models.remove(model);
         
         for (Iterator iter=listeners.iterator(); iter.hasNext();) {
-            ((ModelManagerListener) iter.next()).modelRemoved(model);
+            ((DataManagerListener) iter.next()).dataRemoved(model);
         }
     }
 
-    public DataModel[] getSelectedModels() {
+    public Data[] getSelectedData() {
         if (selectedModels == null) {
             selectedModels = new HashSet();
         }
         
-        return (DataModel[]) selectedModels.toArray(new DataModel[]{});
+        return (Data[]) selectedModels.toArray(new Data[]{});
     }
 
-    public void setSelectedModels(DataModel[] models) {
+    public void setSelectedData(Data[] models) {
         selectedModels = new HashSet(Arrays.asList(models));
         
         for (Iterator iter=listeners.iterator(); iter.hasNext();) {
-            ((ModelManagerListener) iter.next()).modelsSelected(models);
+            ((DataManagerListener) iter.next()).dataSelected(models);
         }
     }
     
-    private DataModel getModelForLabel(String label){
-        return (DataModel)labelToModelMap.get(label);
+    private Data getModelForLabel(String label){
+        return (Data)labelToModelMap.get(label);
     }
     
-    public String getLabel(DataModel model){
+    public String getLabel(Data model){
         return (String)modelToLabelMap.get(model);
     }
     
-    public synchronized void setLabel(DataModel model, String label) {
+    public synchronized void setLabel(Data model, String label) {
         label = findUniqueLabel(label);
         
         modelToLabelMap.put(model, label);
         labelToModelMap.put(label, model);  
         
         for (Iterator iter=listeners.iterator(); iter.hasNext();) {
-            ((ModelManagerListener) iter.next()).modelLabelChanged(model, label);
+            ((DataManagerListener) iter.next()).dataLabelChanged(model, label);
         }
     }
 
-    public DataModel[] getAllModels() {
-        return (DataModel[]) models.toArray(new DataModel[]{});
+    public Data[] getAllData() {
+        return (Data[]) models.toArray(new Data[]{});
     }
 
-    public void addModelManagerListener(ModelManagerListener listener) {
+    public void addDataManagerListener(DataManagerListener listener) {
         listeners.add(listener);
     }
 
-    public void removeModelManagerListener(ModelManagerListener listener) {
+    public void removeDataManagerListener(DataManagerListener listener) {
         listeners.remove(listener);
     }
 }

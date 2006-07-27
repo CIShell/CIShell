@@ -24,7 +24,7 @@ import org.cishell.framework.data.Data;
  * ('in_data'), what it converts it to ('out_data'), and whether any information
  * will be lost in the conversion ('consersion'='lossless'|'lossy'). Using this
  * and other standard algorithm properties, a DataConversionService will try and
- * find the fastest, most efficient way to convert from a one format to another.
+ * find the fastest, most efficient way to convert from one format to another.
  * 
  * @author Bruce Herr (bh2@bh2.net)
  */
@@ -33,19 +33,19 @@ public interface DataConversionService {
 	/**
 	 * Finds a converter from one format to another if at all possible. The
 	 * returned {@link Converter}s, which may be a composite of multiple
-	 * algorithms, will take a {@link Data} of the specified 
-	 * <code>inFormat</code> and convert it to a Data of type 
-	 * <code>outFormat</code>. If there is no way to convert the data model,
+	 * algorithms, will take a {@link Data} object of the specified 
+	 * <code>inFormat</code> and convert it to a Data object of type 
+	 * <code>outFormat</code>. If there is no way to convert the Data object,
 	 * <code>null</code> will be returned.
 	 * 
-	 * @param inFormat  The type of data model to be converted. This String 
+	 * @param inFormat  The type of Data object to be converted. This String 
 	 *                  should be formatted in the same way as an algorithm's
-	 *                  {@link AlgorithmProperty#IN_DATA 'in_data'}.
-	 * @param outFormat The type of data model that should be produced. This 
+	 *                  {@link AlgorithmProperty#IN_DATA}'s 'in_data'.
+	 * @param outFormat The type of Data object that should be produced. This 
 	 * 			        String should be formatted in the same way as an 
 	 *                  algorithm's 
-	 *                  {@link AlgorithmProperty#OUT_DATA 'out_data'}.
-	 * @return An AlgorithmFactory that will convert a data model of the given
+	 *                  {@link AlgorithmProperty#OUT_DATA}'s 'out_data'.
+	 * @return An AlgorithmFactory that will convert a Data object of the given
 	 *         inFormat to the given outFormat, or <code>null</code> if there is 
 	 *         no way to convert.
 	 */
@@ -56,25 +56,25 @@ public interface DataConversionService {
      * parameters. The max number of converters to use (maxHops) and the 
      * maximum allowed complexity for the converters to limit the impact a 
      * conversion will make. The returned {@link Converter}s, which may 
-     * be a composite of multiple algorithms, will take a {@link Data} of 
-     * the specified <code>inFormat</code> and convert it to a Data of type 
-	 * <code>outFormat</code>. If there is no way to convert the data model 
+     * be a composite of multiple algorithms, will take a {@link Data} object of 
+     * the specified <code>inFormat</code> and convert it to a Data object of type 
+	 * <code>outFormat</code>. If there is no way to convert the Data object 
 	 * within the given parameters, <code>null</code> will be returned.
      * 
-	 * @param inFormat  The type of data model to be converted. This String 
+	 * @param inFormat  The type of Data object to be converted. This String 
 	 *                  should be formatted in the same way as an algorithm's
-	 *                  {@link AlgorithmProperty#IN_DATA 'in_data'}.
-	 * @param outFormat The type of data model that should be produced. This 
+	 *                  {@link AlgorithmProperty#IN_DATA}'s 'in_data'.
+	 * @param outFormat The type of Data object that should be produced. This 
 	 * 			        String should be formatted in the same way as an 
 	 *                  algorithm's 
-	 *                  {@link AlgorithmProperty#OUT_DATA 'out_data'}.
+	 *                  {@link AlgorithmProperty#OUT_DATA}'s 'out_data'.
      * @param maxHops   The maximum number of converters to use for the 
      *                  conversion.
      * @param maxComplexity The maximum complexity the conversion algorithm can
      *                  have in order to be considered for use in the 
      *                  conversion. The format of the String is in big-O 
      *                  notation. Examples are 'O(n)', 'O(n^2)', 'O(log(n))'.
-	 * @return An AlgorithmFactory that will convert a data model of the given
+	 * @return An AlgorithmFactory that will convert a Data object of the given
 	 *         inFormat to the given outFormat, or <code>null</code> if there is 
 	 *         no way to convert within the given parameters.
      */
@@ -83,26 +83,26 @@ public interface DataConversionService {
     
     /**
      * Tries to find all the converters that can be used to transform the given
-     * Data to the specified output format
+     * Data object to the specified output format
      * 
-     * @param dm        The Data to convert
+     * @param data      The Data object to convert
      * @param outFormat The output format to convert to
      * @return An array of converters (may be zero length) that can convert the
-     *         given Data to the specified output format.
+     *         given Data object to the specified output format.
      */
-    public Converter[] findConverters(Data dm, String outFormat);
+    public Converter[] findConverters(Data data, String outFormat);
     
     /**
-     * Tries to convert a given Data to the specified output format. If 
+     * Tries to convert a given Data object to the specified output format. If 
      * the conversion fails or there is no way to convert it, this method will 
      * return a <code>null</code>
      * 
-     * @param dm        The Data to convert
-     * @param outFormat The format of the Data to be returned 
-     * @return A Data with the specified output format, or 
+     * @param data      The Data to convert
+     * @param outFormat The format of the Data object to be returned 
+     * @return A Data object with the specified output format, or 
      *         <code>null</code> if the conversion fails
      */
-    public Data convert(Data dm, String outFormat);
+    public Data convert(Data data, String outFormat);
         
     //  TODO: More methods of conversion here?
 }

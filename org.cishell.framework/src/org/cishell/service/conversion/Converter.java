@@ -20,7 +20,9 @@ import org.cishell.framework.data.Data;
 import org.osgi.framework.ServiceReference;
 
 /**
- * TODO: Documentation for Converter
+ * A class for converting Data objects.
+ * 
+ * @author Bruce Herr (bh2@bh2.net)
  */
 public interface Converter {
     
@@ -52,12 +54,12 @@ public interface Converter {
     public Dictionary getProperties();
     
     /**
-     * Convenience method to use this converter to convert a Data of the 
-     * corrent format to the a Data of the defined out format
+     * Convenience method to use this converter to convert a Data object of the 
+     * corrent format to a Data object of the defined out format
      * 
-     * @param dm The Data with compatible in format
-     * @return A Data of correct out format, or <code>null</code> if the
+     * @param data The Data object with compatible in format
+     * @return A Data object of correct out format, or <code>null</code> if the
      *         conversion fails
      */
-    public Data convert(Data dm);
+    public Data convert(Data data);
 }
