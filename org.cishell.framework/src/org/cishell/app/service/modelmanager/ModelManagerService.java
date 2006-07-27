@@ -81,7 +81,21 @@ public interface ModelManagerService {
      */
     public void removeModelManagerListener(ModelManagerListener listener);
     
-    //TODO: Documentation
+
+    /**
+     * Returns the label for a stored DataModel
+     * 
+     * @param dm The DataModel
+     * @return A label for the DataModel
+     */
     public String getLabel(DataModel dm);
+    
+    /**
+     * Set the label to be used for the data model. The model manager is free
+     * to change the label so that it is unique.
+     * 
+     * @param dm The DataModel
+     * @param label The new label for the data model.
+     */
     public void setLabel(DataModel dm, String label);
 }

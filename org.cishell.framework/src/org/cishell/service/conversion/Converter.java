@@ -23,9 +23,41 @@ import org.osgi.framework.ServiceReference;
  * TODO: Documentation for Converter
  */
 public interface Converter {
+    
+    /**
+     * Returns an array of ServiceReferences to converters in the order that
+     * they will be called when converting a DataModel
+     *  
+     * @return An array ServiceReferences to converters to be used 
+     */
     public ServiceReference[] getConverterChain();
+    
+    /**
+     * Returns the AlgorithmFactory that can be invoked to convert a given 
+     * DataModel of the correct in format (as specified in the Dictionary from
+     * getProperties()) to a DataModel of the correct out format.
+     * 
+     * @return The AlgorithmFactory to do the converting
+     */
     public AlgorithmFactory getAlgorithmFactory();
+    
+    /**
+     * A set of properties that correspond to the {@link AlgorithmProperty}s 
+     * properties. The IN_DATA and OUT_DATA properties are guaranteed to be set
+     * in this Dictionary.
+     * 
+     * @return A set of properties describing the converter (including its in
+     *         and out data)
+     */
     public Dictionary getProperties();
     
+    /**
+     * Convenience method to use this converter to convert a DataModel of the 
+     * corrent format to the a DataModel of the defined out format
+     * 
+     * @param dm The DataModel with compatible in format
+     * @return A DataModel of correct out format, or <code>null</code> if the
+     *         conversion fails
+     */
     public DataModel convert(DataModel dm);
 }
