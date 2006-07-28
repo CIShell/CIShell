@@ -14,6 +14,7 @@
 package org.cishell.service.conversion;
 
 import org.cishell.framework.algorithm.AlgorithmFactory;
+import org.cishell.framework.algorithm.AlgorithmProperty;
 import org.cishell.framework.data.Data;
 
 /**
@@ -40,11 +41,10 @@ public interface DataConversionService {
 	 * 
 	 * @param inFormat  The type of Data object to be converted. This String 
 	 *                  should be formatted in the same way as an algorithm's
-	 *                  {@link AlgorithmProperty#IN_DATA}'s 'in_data'.
+	 *                  {@link AlgorithmProperty#IN_DATA}.
 	 * @param outFormat The type of Data object that should be produced. This 
 	 * 			        String should be formatted in the same way as an 
-	 *                  algorithm's 
-	 *                  {@link AlgorithmProperty#OUT_DATA}'s 'out_data'.
+	 *                  algorithm's {@link AlgorithmProperty#OUT_DATA}.
 	 * @return An AlgorithmFactory that will convert a Data object of the given
 	 *         inFormat to the given outFormat, or <code>null</code> if there is 
 	 *         no way to convert.
@@ -63,11 +63,10 @@ public interface DataConversionService {
      * 
 	 * @param inFormat  The type of Data object to be converted. This String 
 	 *                  should be formatted in the same way as an algorithm's
-	 *                  {@link AlgorithmProperty#IN_DATA}'s 'in_data'.
+	 *                  {@link AlgorithmProperty#IN_DATA}.
 	 * @param outFormat The type of Data object that should be produced. This 
 	 * 			        String should be formatted in the same way as an 
-	 *                  algorithm's 
-	 *                  {@link AlgorithmProperty#OUT_DATA}'s 'out_data'.
+	 *                  algorithm's {@link AlgorithmProperty#OUT_DATA}.
      * @param maxHops   The maximum number of converters to use for the 
      *                  conversion.
      * @param maxComplexity The maximum complexity the conversion algorithm can
