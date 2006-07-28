@@ -40,10 +40,11 @@ public interface Data {
     
     
     /**
-     * If the data is a {@link File}, then this method returns what MIME type 
-     * it is with "file:" prepended (eg. file:text/plain). Otherwise, the 
-     * string returned should be the java class it represents. For algorithms
-     * this format should be the same as their OUT_DATA property. 
+     * Get the format of the encapsulated data. If the data is a {@link File}, 
+     * then this method returns what MIME type it is with "file:" prepended 
+     * (eg. file:text/plain). Otherwise, the string returned should be the java 
+     * class it represents. For algorithms this format should be the same as 
+     * their OUT_DATA property. 
      * 
      * @return The main format of the data
      */

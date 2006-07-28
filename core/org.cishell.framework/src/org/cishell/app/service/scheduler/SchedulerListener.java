@@ -62,7 +62,7 @@ public interface SchedulerListener {
      * Notification that an Algorithm has finished executing
      * 
      * @param algorithm The scheduled Algorithm
-     * @param createdDM The Data(s) it returned, or <code>null</code> if
+     * @param createdData The Data(s) it returned, or <code>null</code> if
      *                  it returned <code>null</code>
      */
     public void algorithmFinished(Algorithm algorithm, Data[] createdData);

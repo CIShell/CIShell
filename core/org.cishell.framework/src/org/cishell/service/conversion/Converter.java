@@ -16,6 +16,7 @@ package org.cishell.service.conversion;
 import java.util.Dictionary;
 
 import org.cishell.framework.algorithm.AlgorithmFactory;
+import org.cishell.framework.algorithm.AlgorithmProperty;
 import org.cishell.framework.data.Data;
 import org.osgi.framework.ServiceReference;
 
@@ -44,9 +45,10 @@ public interface Converter {
     public AlgorithmFactory getAlgorithmFactory();
     
     /**
-     * A set of properties that correspond to the {@link AlgorithmProperty}s 
-     * properties. The IN_DATA and OUT_DATA properties are guaranteed to be set
-     * in this Dictionary.
+     * Get properties of the converter (same as algorithm service properties).
+     * It is a set of properties that correspond to the 
+     * {@link AlgorithmProperty}s properties. The IN_DATA and OUT_DATA 
+     * properties are guaranteed to be set in this Dictionary.
      * 
      * @return A set of properties describing the converter (including its in
      *         and out data)
@@ -54,8 +56,9 @@ public interface Converter {
     public Dictionary getProperties();
     
     /**
-     * Convenience method to use this converter to convert a Data object of the 
-     * corrent format to a Data object of the defined out format
+     * Uses this converter to convert the given Data object to a new format. 
+     * This is a convenience method that uses this converter to convert a Data 
+     * object of the corrent format to a Data object of the defined out format
      * 
      * @param data The Data object with compatible in format
      * @return A Data object of correct out format, or <code>null</code> if the

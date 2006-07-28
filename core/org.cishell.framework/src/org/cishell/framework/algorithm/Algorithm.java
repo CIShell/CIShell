@@ -13,6 +13,7 @@
  * ***************************************************************************/
 package org.cishell.framework.algorithm;
 
+import org.cishell.framework.CIShellContext;
 import org.cishell.framework.data.Data;
 
 /**
