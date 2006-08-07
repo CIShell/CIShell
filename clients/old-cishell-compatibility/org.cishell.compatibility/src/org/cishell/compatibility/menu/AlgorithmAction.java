@@ -217,17 +217,13 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, ISelec
             //Ignore
         }
         
-        if (c != null) {
-            if (c.isInstance(data)) {
-                assignable = true;
-            } else {
-                Converter[] converters = converter.findConverters(
-                        new BasicData(data,data.getClass().getName()), type);
-                
-                assignable = converters.length > 0;
-                
-                System.out.println(type + "=(" + assignable + ")=" + data);
-            }
+        if (c != null && c.isInstance(data)) {
+            assignable = true;
+        } else {
+            Converter[] converters = converter.findConverters(
+                    new BasicData(data,data.getClass().getName()), type);
+            
+            assignable = converters.length > 0;
         }
         
         return assignable;
