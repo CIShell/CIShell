@@ -77,11 +77,9 @@ public class MenuAdapter implements AlgorithmProperty {
         }
     }
     
-    private void initializeMenu() throws InvalidSyntaxException{
-        String filter = "(!("+CONVERSION+"=*))";
-        
+    private void initializeMenu() throws InvalidSyntaxException{        
         ServiceReference[] refs = bContext.getAllServiceReferences(
-                AlgorithmFactory.class.getName(), filter);
+                AlgorithmFactory.class.getName(), null);
         
         if (refs != null) {
             for (int i=0; i < refs.length; i++) {
