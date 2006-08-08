@@ -16,7 +16,11 @@ package org.cishell.reference.service.conversion;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.AlgorithmFactory;
@@ -87,19 +91,37 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
             list.addAll(Arrays.asList(converters));
         } 
         
-        if (!(data.getData() instanceof File) && data.getData() != null) {
-            converters = findConverters(
-                    data.getData().getClass().getName(), outFormat);
-            list.addAll(Arrays.asList(converters));
-            
-            Class[] classes = data.getData().getClass().getClasses();
-            for (int i=0; i < classes.length; i++) {
-                converters = findConverters(classes[i].getName(), outFormat);
+        if (!(data.getData() instanceof File) && data.getData() != null) {            
+            Iterator iter = getClassesFor(data.getData().getClass()).iterator();
+            while (iter.hasNext()) {
+                Class c = (Class) iter.next();
+                converters = findConverters(c.getName(), outFormat);
                 list.addAll(Arrays.asList(converters));
             }
         }
         
         return (Converter[]) list.toArray(new Converter[0]);
+    }
+    
+    protected Collection getClassesFor(Class clazz) {
+        Set classes = new HashSet();
+        
+        Class[] c = clazz.getInterfaces();
+        for (int i=0; i < c.length; i++) {
+            classes.addAll(getClassesFor(c[i]));
+        }
+        
+        Class superC = clazz.getSuperclass();
+        
+        if (superC != Object.class) {
+            classes.addAll(getClassesFor(superC));
+        } else {
+            classes.add(superC);
+        }
+        
+        classes.add(clazz);
+        
+        return classes;
     }
     
     /**
