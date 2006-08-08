@@ -12,5 +12,6 @@ Import-Package: org.cishell.framework,
  org.osgi.service.component;version="1.0.0",
  org.osgi.service.log;version="1.3.0",
  org.osgi.service.metatype;version="1.1.0"
-Export-Package: org.cishell.templates.staticexecutable
+Export-Package: org.cishell.templates.dataset,
+ org.cishell.templates.staticexecutable
 Bundle-Activator: org.cishell.templates.Activator

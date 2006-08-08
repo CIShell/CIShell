@@ -6,21 +6,21 @@
  * this distribution, and is available at:
  * http://www.apache.org/licenses/LICENSE-2.0.html
  * 
- * Created on Aug 2, 2006 at Indiana University.
+ * Created on Aug 7, 2006 at Indiana University.
  * 
  * Contributors:
  *     Indiana University - 
  * ***************************************************************************/
-package org.cishell.templates.staticexecutable;
+package org.cishell.templates.dataset;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.List;
 import java.util.Properties;
 
 import org.apache.tools.ant.BuildException;
@@ -29,16 +29,16 @@ import org.apache.tools.ant.taskdefs.Replace;
 import org.apache.tools.ant.util.FileUtils;
 
 
-public class StaticExecutableIntegrationTask extends Task {
+public class DatasetIntegrationTask extends Task {
     private PrintWriter mf;
     private String componentAttr;
     private File baseDir;
-    private File baseProperties;
+    private Properties baseProperties;
     private FileUtils util;
     private File template;
     private String symbolicName;
     
-    public StaticExecutableIntegrationTask() {
+    public DatasetIntegrationTask() {
         componentAttr = new String();
         util = FileUtils.getFileUtils();
         symbolicName = "unknown";
@@ -52,23 +52,23 @@ public class StaticExecutableIntegrationTask extends Task {
         baseDir = file;
     }
     
-    public void setBaseproperties(File file) {
-        this.baseProperties = file;
+    public void setBaseproperties(File file) throws IOException {
+        baseProperties = new Properties();
+        baseProperties.load(new FileInputStream(file));
     }
         
     public void execute() throws BuildException {
         if (baseDir != null && baseDir.exists() && baseDir.isDirectory() &&
-            baseProperties != null && baseProperties.exists() &&
-            template != null && template.exists()) {
+            baseProperties != null && template != null && template.exists()) {
             try {
                 setupManifest();
                 
-                File[] files = baseDir.listFiles();
-                for (int i=0; i < files.length; i++) {
-                    if (files[i].isDirectory() && 
-                            !files[i].getName().equalsIgnoreCase("default")) {
-                        addAlgorithm(files[i]);
-                    }
+                File dataDir = new File(baseDir.getAbsolutePath() + File.separator + "data");
+                
+                if (dataDir.exists() && dataDir.isDirectory()) {
+                    processDir(dataDir);
+                } else {
+                    throw new BuildException("Missing required 'data' directory");
                 }
                 
                 writeManifest();
@@ -81,39 +81,68 @@ public class StaticExecutableIntegrationTask extends Task {
         }
     }
     
-    protected void addAlgorithm(File dir) throws IOException {
-        File serviceFile = null;
-        File configFile = null;
-        List osDirs = new ArrayList();
+    protected void processDir(File dir) throws IOException {
+        File[] files = dir.listFiles(new FileFilter(){
+            public boolean accept(File pathname) {
+                if (pathname.isDirectory()) {
+                    return true;
+                } else {
+                    return pathname.getName().endsWith(".properties");
+                }
+            }});
         
-        File[] files = dir.listFiles();
         for (int i=0; i < files.length; i++) {
-            String name = files[i].getName();
-            if (name.equalsIgnoreCase("config.properties")) {
-                configFile = files[i];
-            } else if (name.equalsIgnoreCase("service.properties")) {
-                serviceFile = files[i];
-            } else if (files[i].isDirectory() && 
-                    !name.equalsIgnoreCase("default")) {
-                osDirs.add(files[i]);
+            if (files[i].isDirectory()) {
+                processDir(files[i]);
+            } else {
+                addDataset(files[i]);
             }
+        }
+    }
+    
+    protected void addDataset(File dataProps) throws IOException {
+        File dataFile = new File(dataProps.getParent() + File.separator + 
+                dataProps.getName().substring(0, dataProps.getName().length()-11));
+        
+        if (!dataFile.exists()) {
+            throw new BuildException("Data file: " + dataFile.getName() + " for .properties file does not exist!");
         }
         
-        if (serviceFile != null && configFile != null) {
-            File componentFile = new File(serviceFile.getParentFile().getPath()+
-                    File.separator+"component.xml");
-            util.copyFile(template, componentFile);
-            
-            String algName = serviceFile.getParentFile().getName();
-            replace(componentFile,"${service.properties}",algName+"/"+serviceFile.getName());
-            replace(componentFile,"${component.id}",symbolicName+"." + algName + ".component");
-            replace(componentFile,"${alg.dir}",algName);
-            
-            if (componentAttr.length() != 0) {
-                componentAttr += ", ";
-            }
-            componentAttr += algName+"/component.xml";
+        PrintWriter out = new PrintWriter(new FileWriter(dataProps, true));
+        out.println();
+        out.println("type=dataset");
+        out.println("remoteable=true");
+
+        String symbolicDir = "";
+        File parent = dataProps.getParentFile();
+        while (parent != null && !parent.getName().equals("data") &&
+                !parent.getParent().equals(baseDir.getName())) {
+            symbolicDir = parent.getName() + "/" + symbolicDir;
+            parent = parent.getParentFile();
         }
+        //symbolicDir at this point should be '/' or /dir1/dir2/
+        symbolicDir = "/" + symbolicDir;
+        
+        String pid = symbolicName + symbolicDir.replace(File.separatorChar, '.')
+            + dataFile.getName();
+        
+        out.println("service.pid="+pid);
+        out.close();
+
+        //now /data/dir1/dir2/
+        symbolicDir = "/data" + symbolicDir;
+        
+        File componentFile = new File(dataFile.getPath()+".component.xml");
+        util.copyFile(template, componentFile);
+               
+        replace(componentFile, "${service.properties}", symbolicDir+dataProps.getName());
+        replace(componentFile, "${component.id}", pid + ".component");
+        replace(componentFile, "${dataset}", symbolicDir+dataFile.getName());
+                
+        if (componentAttr.length() != 0) {
+            componentAttr += ", ";
+        }
+        componentAttr += symbolicDir+componentFile.getName();
     }
     
     protected void replace(File file, String token, String value) {
@@ -141,8 +170,7 @@ public class StaticExecutableIntegrationTask extends Task {
         mf.println("Manifest-Version: 1.0");
         mf.println("Bundle-ManifestVersion: 2");
         
-        Properties properties = new Properties();
-        properties.load(new FileInputStream(baseProperties));
+        Properties properties = baseProperties;
         
         for (Enumeration i=properties.keys(); i.hasMoreElements(); ) {
             String key = (String)i.nextElement();
@@ -160,7 +188,7 @@ public class StaticExecutableIntegrationTask extends Task {
         mf.println("Import-Package: org.cishell.framework.algorithm, " +
                 "org.cishell.framework.data, " +
                 "org.osgi.framework;version=\"1.3.0\", " +
-                "org.cishell.templates.staticexecutable, " +
+                "org.cishell.templates.dataset, " +
                 "org.osgi.service.component;version=\"1.0.0\", " +
                 "org.osgi.service.metatype;version=\"1.1.0\", " +
                 "org.osgi.service.log");

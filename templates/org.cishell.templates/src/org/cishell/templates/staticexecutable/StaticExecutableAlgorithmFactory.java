@@ -102,19 +102,26 @@ public class StaticExecutableAlgorithmFactory implements AlgorithmFactory {
             
             String os = bContext.getProperty("osgi.os");
             String arch = bContext.getProperty("osgi.arch");
+            boolean foundExecutable = false;
             
             while (e != null && e.hasMoreElements()) {
                 String path = (String)e.nextElement();
                 
                 if (path.endsWith("/")) {
-                    if (path.endsWith("default/") || 
-                            path.endsWith(os+"."+arch+"/") ||
-                            path.endsWith("win32/") && os.equals("win32")) {
+                    if (path.endsWith("default/")) {
                         copyDir(dir, path);
+                    } else if (path.endsWith(os+"."+arch+"/") ||
+                               path.endsWith("win32/") && os.equals("win32")) {
+                        copyDir(dir, path);
+                        foundExecutable = true;
                     }
                 } else {
                     //copyFile(dir, path);
                 }
+            }
+            
+            if (!foundExecutable) {
+                throw new RuntimeException("Unable to find compatible executable");
             }
         }
         
