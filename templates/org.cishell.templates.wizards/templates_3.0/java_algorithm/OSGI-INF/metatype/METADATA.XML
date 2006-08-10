@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metatype:MetaData xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.0.0">
+<!-- Sample. Refer to the OSGi R4 companion for more details 
+	<OCD name="%name" id="$algFullClass$.OCD"
+		 description="%name_desc">
+		<AD name="%input" id="$algFullClass$.myInput" type="String" 
+			default="1" description="%desc" />
+	</OCD>
+	<Designate pid="$algFullClass$">
+		<Object ocdref="$algClass$.OCD" />
+	</Designate>
+ -->
+</metatype:MetaData>

@@ -1,0 +1,20 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: CIShell Integration Wizards
+Bundle-SymbolicName: org.cishell.templates.wizards;singleton:=true
+Bundle-Version: 0.0.1
+Bundle-Activator: org.cishell.templates.wizards.Activator
+Bundle-Localization: plugin
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.ui.ide,
+ org.eclipse.core.resources,
+ org.eclipse.core.runtime,
+ org.eclipse.pde,
+ org.eclipse.pde.ui,
+ org.eclipse.pde.core,
+ org.eclipse.jface,
+ org.eclipse.jdt,
+ org.eclipse.jdt.ui,
+ org.eclipse.jdt.core,
+ org.eclipse.jdt.launching
+Eclipse-LazyStart: true
