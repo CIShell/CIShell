@@ -13,12 +13,15 @@
  * ***************************************************************************/
 package org.cishell.templates.wizards.java;
 
+import java.io.File;
+
 import org.cishell.templates.wizards.BasicTemplate;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardPage;
+import org.eclipse.pde.core.plugin.IPluginModelBase;
 import org.eclipse.pde.ui.templates.TemplateOption;
 import org.eclipse.ui.dialogs.WizardNewProjectCreationPage;
 
@@ -43,14 +46,14 @@ public class NewJavaAlgorithmTemplate extends BasicTemplate {
         addOption("algClass", "Algorithm Class Name", "MyAlgorithm", 2).setRequired(true);
         addOption("algPkg", "Algorithm Package", "org.my.algorithm", 2).setRequired(true);
         
-        addOption("in_data", "Data the algorithm will take in", "file:text/plain or java.lang.ClassName or null", 3).setRequired(true);
-        addOption("out_data", "Data the algorithm will produce", "file:text/plain or java.lang.ClassName or null", 3).setRequired(true);
+        addOption("in_data", "Data the algorithm will take in", "file:mime/type or java.lang.ClassName or null", 3).setRequired(true);
+        addOption("out_data", "Data the algorithm will produce", "file:mime/type or java.lang.ClassName or null", 3).setRequired(true);
         addOption("remoteable", "Remoteable Algorithm", false, 3);
         addOption("onMenu", "On The Menu", false, 3);
         addOption("menu_path", "Menu Path", "visualization/SubMenu/additions", 3).setEnabled(false);
         
         addOption("useParams", "Requires parameters in addition to the given data", false, 4);
-        addOption("shouldHaveParameters", "", "GUI For parameter creation not implemented", 4).setEnabled(false);
+        addOption("shouldHaveParameters", "", "GUI for parameter creation not implemented yet", 4).setEnabled(false);
     }
     
     public void addPages(Wizard wizard) {
@@ -65,7 +68,6 @@ public class NewJavaAlgorithmTemplate extends BasicTemplate {
         page.setDescription("Enter properties for the project as a whole");
         //page.setPageComplete(false);
         wizard.addPage(page);
-        
         
         page = createPage(2);
         page.setTitle("Algorithm Properties");
@@ -86,31 +88,58 @@ public class NewJavaAlgorithmTemplate extends BasicTemplate {
         wizard.addPage(page);
         
         markPagesAdded();
-        
+    }
+
+    public void execute(IProject project, IPluginModelBase model, IProgressMonitor monitor) throws CoreException {
         setValue("packageName", getValue("algPkg"));
         setValue("algFullClass", getValue("algPkg")+"."+getValue("algClass"));
         setValue("algFactoryFullClass", getValue("algFullClass")+"Factory");
-    }
 
-    protected void updateModel(IProgressMonitor monitor) throws CoreException {
+        if (getOption("onMenu").getValue() != Boolean.TRUE) {
+            setValue("isOnMenu", "#");
+        } else {
+            setValue("isOnMenu", "");
+        }
         
+        super.execute(project, model, monitor);
     }
 
+    protected void updateModel(IProgressMonitor monitor) throws CoreException {}
+    
     public void validateOptions(TemplateOption changed) {
         int page = getPageIndex(changed);
         
         switch (page) {
-        case 0:
-            break;
         case 1:
+            break;
+        case 2:
+            break;
+        case 3:
+            if (changed.getName().equals("onMenu")) {
+                if (Boolean.TRUE == changed.getValue()) {
+                    getOption("menu_path").setEnabled(true);
+                }else {
+                    getOption("menu_path").setEnabled(false);
+                }
+            }
+            
             break;
         default:
             break;
         }
-        
-        setValue("packageName", getValue("algPkg"));
-        setValue("algFullClass", getValue("algPkg")+"."+getValue("algClass"));
-        setValue("algFactoryFullClass", getValue("algFullClass")+"Factory");
+    }
+    
+    /**
+     * @see org.eclipse.pde.ui.templates.AbstractTemplateSection#isOkToCreateFolder(java.io.File)
+     */
+    protected boolean isOkToCreateFolder(File sourceFolder) {
+        String name = sourceFolder.getName();
+        if ((name.equals("l10n") || name.equals("metatype")) && 
+                Boolean.FALSE == getOption("useParams").getValue()) {
+            return false;
+        } else {
+            return super.isOkToCreateFolder(sourceFolder);
+        }
     }
 
     public IProject getProjectHandle() {

@@ -31,10 +31,12 @@ import org.eclipse.pde.ui.templates.TemplateOption;
 public abstract class BasicTemplate extends OptionTemplateSection {
     protected final String sectionID;
     protected Map valueMap;
+    protected Map optionMap;
 
     protected BasicTemplate(String sectionID) {
         this.sectionID = sectionID;
         this.valueMap = new HashMap();
+        this.optionMap = new HashMap();
     }
 
     /**
@@ -53,7 +55,16 @@ public abstract class BasicTemplate extends OptionTemplateSection {
      * @see org.eclipse.pde.ui.templates.AbstractTemplateSection#updateModel(org.eclipse.core.runtime.IProgressMonitor)
      */
     protected abstract void updateModel(IProgressMonitor monitor) throws CoreException;
-    
+        
+    protected void registerOption(TemplateOption option, Object value, int pageIndex) {
+        optionMap.put(option.getName(), option);
+        
+        super.registerOption(option, value, pageIndex);
+    }
+
+    protected TemplateOption getOption(String name) {
+        return (TemplateOption) optionMap.get(name);
+    }
     
     /**
      * Set a value for the key. this will be used in variable
