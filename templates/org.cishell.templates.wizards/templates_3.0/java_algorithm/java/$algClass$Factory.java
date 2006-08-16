@@ -15,6 +15,9 @@ public class $algClass$Factory implements AlgorithmFactory {
     private MetaTypeProvider provider;
 
     protected void activate(ComponentContext ctxt) {
+        //You may delete all references to metatype service if 
+        //your algorithm does not require parameters and return
+        //null in the createParameters() method
         MetaTypeService mts = (MetaTypeService)ctxt.locateService("MTS");
         provider = mts.getMetaTypeInformation(ctxt.getBundleContext().getBundle());       
     }

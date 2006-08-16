@@ -49,8 +49,12 @@ public class NewJavaAlgorithmTemplate extends BasicTemplate {
         addOption("in_data", "Data the algorithm will take in", "file:mime/type or java.lang.ClassName or null", 3).setRequired(true);
         addOption("out_data", "Data the algorithm will produce", "file:mime/type or java.lang.ClassName or null", 3).setRequired(true);
         addOption("remoteable", "Remoteable Algorithm", false, 3);
-        addOption("onMenu", "On The Menu", false, 3);
-        addOption("menu_path", "Menu Path", "visualization/SubMenu/additions", 3).setEnabled(false);
+        addOption("onMenu", "On the menu", false, 3);
+        addOption("menu_path", "Menu path", "visualization/SubMenu", 3).setEnabled(false);
+        addOption("menu_group", "Menu item placement", new String[][]{
+                {"start", "Beginning of the menu"},
+                {"additions", "Anywhere"},
+                {"end", "End of the menu"}}, "additions", 3).setEnabled(false);
         
         addOption("useParams", "Requires parameters in addition to the given data", false, 4);
         addOption("shouldHaveParameters", "", "GUI for parameter creation not implemented yet", 4).setEnabled(false);
@@ -101,6 +105,14 @@ public class NewJavaAlgorithmTemplate extends BasicTemplate {
             setValue("isOnMenu", "");
         }
         
+        String menuPath = (String)getValue("menu_path");
+        if (!menuPath.endsWith("/")) {
+            menuPath += "/";
+        }
+        menuPath += (String)getValue("menu_group");
+        
+        setValue("full_menu_path", menuPath);
+        
         super.execute(project, model, monitor);
     }
 
@@ -118,8 +130,10 @@ public class NewJavaAlgorithmTemplate extends BasicTemplate {
             if (changed.getName().equals("onMenu")) {
                 if (Boolean.TRUE == changed.getValue()) {
                     getOption("menu_path").setEnabled(true);
-                }else {
+                    getOption("menu_group").setEnabled(true);
+                } else {
                     getOption("menu_path").setEnabled(false);
+                    getOption("menu_group").setEnabled(false);
                 }
             }
             
