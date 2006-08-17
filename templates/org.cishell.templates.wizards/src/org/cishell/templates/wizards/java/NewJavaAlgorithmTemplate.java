@@ -13,9 +13,8 @@
  * ***************************************************************************/
 package org.cishell.templates.wizards.java;
 
-import java.io.File;
-
 import org.cishell.templates.wizards.BasicTemplate;
+import org.cishell.templates.wizards.pages.ParameterListBuilderPage;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -31,6 +30,7 @@ import org.eclipse.ui.dialogs.WizardNewProjectCreationPage;
  */
 public class NewJavaAlgorithmTemplate extends BasicTemplate {
     WizardNewProjectCreationPage projectPage;
+    ParameterListBuilderPage builderPage;
 
     public NewJavaAlgorithmTemplate() {
         super("java_algorithm");
@@ -54,18 +54,15 @@ public class NewJavaAlgorithmTemplate extends BasicTemplate {
         addOption("menu_group", "Menu item placement", new String[][]{
                 {"start", "Beginning of the menu"},
                 {"additions", "Anywhere"},
-                {"end", "End of the menu"}}, "additions", 3).setEnabled(false);
-        
-        addOption("useParams", "Requires parameters in addition to the given data", false, 4);
-        addOption("shouldHaveParameters", "", "GUI for parameter creation not implemented yet", 4).setEnabled(false);
+                {"end", "End of the menu"}}, "Anywhere", 3).setEnabled(false);
     }
     
     public void addPages(Wizard wizard) {
-        WizardPage page = new WizardNewProjectCreationPage("projectPage");
+        projectPage = new WizardNewProjectCreationPage("projectPage");
+        WizardPage page = projectPage;
         page.setTitle("Project Properties");
         page.setDescription("Enter the project name and location");
         wizard.addPage(page);
-        projectPage = (WizardNewProjectCreationPage) page;
 
         page = createPage(1);
         page.setTitle("Bundle Properties");
@@ -85,9 +82,10 @@ public class NewJavaAlgorithmTemplate extends BasicTemplate {
         //page.setPageComplete(false);
         wizard.addPage(page);
         
-        page = createPage(4);
+        builderPage = new ParameterListBuilderPage("builderPage");
+        page = builderPage;
         page.setTitle("Algorithm Parameters");
-        page.setDescription("Enter what parameters are needed for the algorithm");
+        page.setDescription("Enter what extra parameters are needed for the algorithm");
         //page.setPageComplete(false);
         wizard.addPage(page);
         
@@ -112,6 +110,8 @@ public class NewJavaAlgorithmTemplate extends BasicTemplate {
         menuPath += (String)getValue("menu_group");
         
         setValue("full_menu_path", menuPath);
+        setValue("useParams", Boolean.TRUE);
+        setValue("attributeDefinitions", builderPage.toOutputString());
         
         super.execute(project, model, monitor);
     }
@@ -140,19 +140,6 @@ public class NewJavaAlgorithmTemplate extends BasicTemplate {
             break;
         default:
             break;
-        }
-    }
-    
-    /**
-     * @see org.eclipse.pde.ui.templates.AbstractTemplateSection#isOkToCreateFolder(java.io.File)
-     */
-    protected boolean isOkToCreateFolder(File sourceFolder) {
-        String name = sourceFolder.getName();
-        if ((name.equals("l10n") || name.equals("metatype")) && 
-                Boolean.FALSE == getOption("useParams").getValue()) {
-            return false;
-        } else {
-            return super.isOkToCreateFolder(sourceFolder);
         }
     }
 
