@@ -40,7 +40,4 @@ public interface AlgorithmProperty {
     public static final String TYPE_CONVERTER = "converter";
     public static final String TYPE_ALGORITHM = "algorithm";
     public static final String TYPE_DATASET = "dataset";
-    
-    //TODO: delete this property
-    public static final String DEFAULT_METATYPE_ID = "default.id";
 }
