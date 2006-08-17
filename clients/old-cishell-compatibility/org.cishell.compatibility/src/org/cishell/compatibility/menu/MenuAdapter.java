@@ -24,6 +24,7 @@ import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.ISelectionService;
@@ -106,19 +107,21 @@ public class MenuAdapter implements AlgorithmProperty {
     
     private void makeMenuItem(ServiceReference ref) {
         String path = (String)ref.getProperty(MENU_PATH);
+        String[] items = (path == null) ? null : path.split("/");
         
-        if (path == null) return;
-        
-        AlgorithmAction action = new AlgorithmAction(ref, bContext, ciContext);
-        action.setId(getItemID(ref));
-        
-        IMenuManager targetMenu = menuBar;
-        String group = ADDITIONS_GROUP;
-        String[] items = path.split("/");
-        
-        if (items.length > 1) {
+        if (items != null && items.length > 1) {
+            AlgorithmAction action = new AlgorithmAction(ref, bContext, ciContext);
+            action.setId(getItemID(ref));
+            
+            IMenuManager targetMenu = menuBar;
+            String group = items[items.length-1];
+            
             for (int i=0; i < items.length-1; i++) {
                 IMenuManager menu = targetMenu.findMenuUsingPath(items[i]);
+                
+                if (menu == null && items[i] != null) {
+                    menu = targetMenu.findMenuUsingPath(items[i].toLowerCase());
+                }
                 
                 if (menu == null) {
                     menu = createMenu(items[i],items[i]);
@@ -129,21 +132,29 @@ public class MenuAdapter implements AlgorithmProperty {
             }
             
             group = items[items.length-1];
-            IContributionItem groupItem = targetMenu.find(group); 
+            IContributionItem groupItem = targetMenu.find(group);
             if (groupItem == null) {
                 groupItem = new GroupMarker(group);
                 targetMenu.appendToGroup(ADDITIONS_GROUP, groupItem);
             }
             
-            selectionService.addSelectionListener(action);
             targetMenu.appendToGroup(group, action);
+            selectionService.addSelectionListener(action);
             algorithmToItemMap.put(getItemID(ref), action);
             itemToParentMap.put(action, targetMenu);
+            
+            Display.getDefault().asyncExec(updateAction);
         } else {
             getLog().log(LogService.LOG_WARNING, 
                     "Bad menu path for Algorithm: " + ref.getProperty(LABEL));
         }
     }
+    
+    private Runnable updateAction = new Runnable() {
+        public void run() {
+            menuBar.updateAll(true);
+        }
+    };
     
     private String getItemID(ServiceReference ref) {
         return ref.getProperty("PID:" + Constants.SERVICE_PID) + "-SID:" + 

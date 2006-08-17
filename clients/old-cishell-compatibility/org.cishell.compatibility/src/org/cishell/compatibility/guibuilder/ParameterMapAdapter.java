@@ -17,7 +17,6 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Vector;
 
-import org.cishell.framework.algorithm.AlgorithmProperty;
 import org.osgi.service.metatype.AttributeDefinition;
 import org.osgi.service.metatype.MetaTypeProvider;
 import org.osgi.service.metatype.ObjectClassDefinition;
@@ -32,20 +31,28 @@ import edu.iu.iv.common.parameter.Validator;
 public class ParameterMapAdapter extends ParameterMap implements ParameterProperty  {
     protected ObjectClassDefinition ocd;
     
-    public ParameterMapAdapter(MetaTypeProvider provider) {
+    public ParameterMapAdapter(MetaTypeProvider provider, String id) {
        ObjectClassDefinition ocd = null;
        
        //String locale = Locale.getDefault().getDisplayName();
        //TODO: better locale matching
        
-       if (ocd == null) {
-           String[] locales = provider.getLocales();
-           for (int i=0; i < locales.length; i++) {
-               ocd = provider.getObjectClassDefinition(
-                       AlgorithmProperty.DEFAULT_METATYPE_ID, locales[i]);
-               
-               if (ocd != null) {
-                   break;
+       String[] locales = provider.getLocales();
+       for (int i=0; i < locales.length && ocd == null; i++) {
+           
+           try {
+               ocd = provider.getObjectClassDefinition(id, locales[i]);
+           } catch (IllegalArgumentException e) {
+               //This will be thrown if the metatype provider 
+               //doesn't have the correct ID
+           }
+           
+           //if the pid doesn't work, try 'default.id' as a last resort
+           if (ocd == null) {
+               try {
+                   ocd = provider.getObjectClassDefinition("default.id", locales[i]);
+               } catch (IllegalArgumentException e) {
+                   //same as above
                }
            }
        }

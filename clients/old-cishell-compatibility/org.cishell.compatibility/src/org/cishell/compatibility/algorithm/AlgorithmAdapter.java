@@ -23,6 +23,7 @@ import org.cishell.framework.algorithm.Algorithm;
 import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.data.Data;
 import org.cishell.service.conversion.DataConversionService;
+import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.metatype.MetaTypeProvider;
 
@@ -46,7 +47,9 @@ public class AlgorithmAdapter extends AbstractAlgorithm implements org.cishell.f
         
         MetaTypeProvider provider = factory.createParameters(dm);
         if (provider != null) {
-            this.parameterMap = new ParameterMapAdapter(factory.createParameters(dm));
+            this.parameterMap = 
+                new ParameterMapAdapter(factory.createParameters(dm), 
+                        (String)ref.getProperty(Constants.SERVICE_PID));
         }
         
         getProperties().setPropertyValue(AlgorithmProperty.LABEL, label);
