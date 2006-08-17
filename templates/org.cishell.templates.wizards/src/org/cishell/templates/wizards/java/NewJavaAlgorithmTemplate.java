@@ -31,6 +31,10 @@ import org.eclipse.ui.dialogs.WizardNewProjectCreationPage;
 public class NewJavaAlgorithmTemplate extends BasicTemplate {
     WizardNewProjectCreationPage projectPage;
     ParameterListBuilderPage builderPage;
+    String[][] groupChoices = new String[][]{
+            {"start", "Beginning of the menu"},
+            {"additions", "Anywhere"},
+            {"end", "End of the menu"}};
 
     public NewJavaAlgorithmTemplate() {
         super("java_algorithm");
@@ -50,11 +54,8 @@ public class NewJavaAlgorithmTemplate extends BasicTemplate {
         addOption("out_data", "Data the algorithm will produce", "file:mime/type or java.lang.ClassName or null", 3).setRequired(true);
         addOption("remoteable", "Remoteable Algorithm", false, 3);
         addOption("onMenu", "On the menu", false, 3);
-        addOption("menu_path", "Menu path", "visualization/SubMenu", 3).setEnabled(false);
-        addOption("menu_group", "Menu item placement", new String[][]{
-                {"start", "Beginning of the menu"},
-                {"additions", "Anywhere"},
-                {"end", "End of the menu"}}, "Anywhere", 3).setEnabled(false);
+        addOption("menu_path", "Menu path", "Visualization/SubMenu", 3).setEnabled(false);
+        addOption("menu_group", "Menu item placement", groupChoices, "Anywhere", 3).setEnabled(false);
     }
     
     public void addPages(Wizard wizard) {
@@ -107,7 +108,15 @@ public class NewJavaAlgorithmTemplate extends BasicTemplate {
         if (!menuPath.endsWith("/")) {
             menuPath += "/";
         }
-        menuPath += (String)getValue("menu_group");
+        
+        String choice = (String)getOption("menu_group").getValue();
+        
+        for (int i=0; i < groupChoices.length; i++) {
+            if (groupChoices[i][1].equals(choice)) {
+                menuPath += groupChoices[i][0];
+                break;
+            }
+        }
         
         setValue("full_menu_path", menuPath);
         setValue("useParams", Boolean.TRUE);
