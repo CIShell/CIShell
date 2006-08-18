@@ -99,7 +99,7 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
                 list.addAll(Arrays.asList(converters));
             }
         }
-        
+                
         return (Converter[]) list.toArray(new Converter[0]);
     }
     
@@ -114,7 +114,8 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
         Class superC = clazz.getSuperclass();
         
         if (superC != Object.class) {
-            classes.addAll(getClassesFor(superC));
+            if (superC != null)
+                classes.addAll(getClassesFor(superC));
         } else {
             classes.add(superC);
         }
