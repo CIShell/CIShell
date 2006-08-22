@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   	<extension point="org.eclipse.core.runtime.products" id="cishell">
+	   <product
+	      name="%productName"
+          application="org.cishell.reference.gui.workspace.CIShellApplication">
+	       <property
+	             name="appName"
+	             value="%appName"/>
+	       <property
+	             name="aboutImage"
+	             value="%aboutImage"/>
+	       <property
+	             name="aboutText"
+	             value="%blurb"/>
+           <property 
+           		 name="windowImages"
+           		 value="%windowImages"/>
+	   </product>
+   	</extension>
+	   
+	<extension point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension targetID="org.cishell.reference.gui.workspace.Perspective">
+           <view id="org.cishell.reference.gui.log.LogView"
+                relative="org.eclipse.ui.editors"
+                relationship="top"
+                moveable = "true"
+                closeable = "false"
+                ratio="0.60"/>
+      </perspectiveExtension>
+	
+      <perspectiveExtension targetID="org.cishell.reference.gui.workspace.Perspective">
+           <view id="org.cishell.reference.gui.datamanager.DataManagerView"
+                relative="org.cishell.reference.gui.log.LogView"
+                relationship="right"
+                ratio="0.75"
+                moveable = "true"
+                closeable = "false"                   
+                visible="true"/>
+      </perspectiveExtension>
+	</extension>
+	
+	<extension point="org.eclipse.ui.startup">
+    	<startup/>
+ 	</extension>
+</plugin>
