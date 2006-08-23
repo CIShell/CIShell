@@ -82,6 +82,14 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
      * @see org.cishell.service.conversion.DataConversionService#findConverters(org.cishell.framework.data.Data, java.lang.String)
      */
     public Converter[] findConverters(Data data, String outFormat) {
+        if (data == null) {
+            if (NULL_DATA.equalsIgnoreCase(""+outFormat)) {
+                return new Converter[]{new ConverterImpl(bContext, ciContext, new ServiceReference[0])};
+            } else {
+                return new Converter[0];
+            }
+        }
+        
         String format = data.getFormat();
         
         List list = new ArrayList();
