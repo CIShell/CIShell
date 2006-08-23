@@ -6,8 +6,10 @@ Bundle-Version: 1.0.0
 Bundle-Activator: org.cishell.reference.services.Activator
 Bundle-Localization: plugin
 X-AutoStart: true
-Import-Package: org.cishell.app.service.scheduler,
+Import-Package: org.cishell.app.service.datamanager,
+ org.cishell.app.service.scheduler,
  org.cishell.framework,
+ org.cishell.reference.app.service.datamanager,
  org.cishell.reference.app.service.scheduler,
  org.cishell.reference.service.conversion,
  org.cishell.service.conversion,
