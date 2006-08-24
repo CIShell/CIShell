@@ -7,7 +7,7 @@ Bundle-Activator: org.cishell.reference.gui.menumanager.Activator
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime
-Eclipse-LazyStart: false
+Eclipse-LazyStart: true
 Import-Package: org.cishell.app.service.datamanager,
  org.cishell.app.service.scheduler,
  org.cishell.framework,
