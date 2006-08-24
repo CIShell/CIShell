@@ -69,6 +69,10 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, DataMa
     
     public void runTask() {
         try {
+            //save the current data
+            Data[] data = this.data;
+            Converter[][] converters = this.converters;
+            
             SchedulerService scheduler = (SchedulerService) 
                 bContext.getService(bContext.getServiceReference(
                         SchedulerService.class.getName()));
@@ -112,6 +116,7 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, DataMa
                     
                     if (datum != null) {
                         if (isAsignableFrom(inData[i], datum)) {
+                            dataSet.remove(j);
                             data[i] = datum;
                             converters[i] = null;
                         } else {
