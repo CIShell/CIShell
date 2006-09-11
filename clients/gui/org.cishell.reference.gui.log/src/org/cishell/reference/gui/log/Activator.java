@@ -2,10 +2,6 @@ package org.cishell.reference.gui.log;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
-import org.osgi.service.log.LogEntry;
-import org.osgi.service.log.LogListener;
-import org.osgi.service.log.LogReaderService;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -13,6 +9,7 @@ import org.osgi.service.log.LogReaderService;
 public class Activator extends AbstractUIPlugin {
 	public static final String PLUGIN_ID = "org.cishell.reference.gui.log";
 	private static Activator plugin;
+	private static BundleContext context;
 	
 	public Activator() {
 		plugin = this;
@@ -20,6 +17,9 @@ public class Activator extends AbstractUIPlugin {
 
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
+		Activator.context = context; 
+		
+/*		System.out.println("Started...");
         
         LogListener listener = new LogListener() {
             public void logged(LogEntry e) {
@@ -39,12 +39,14 @@ public class Activator extends AbstractUIPlugin {
                 }
             }
         };
-        
+       
         ServiceReference ref = context.getServiceReference(LogReaderService.class.getName());
         LogReaderService reader = (LogReaderService) context.getService(ref);
         if (reader != null) {
-            reader.addLogListener(listener);
+            reader.addLogListener(listener);   
+            reader.addLogListener(new LogView());
         }
+ */       
 	}
 
 	public void stop(BundleContext context) throws Exception {
@@ -54,5 +56,9 @@ public class Activator extends AbstractUIPlugin {
 
 	public static Activator getDefault() {
 		return plugin;
+	}
+	
+	public static BundleContext getContext() {
+		return context;
 	}
 }
