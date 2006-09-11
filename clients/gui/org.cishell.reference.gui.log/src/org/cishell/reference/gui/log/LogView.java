@@ -110,10 +110,10 @@ public class LogView extends ViewPart implements LogListener{
         }
 */
         colorMapping = new HashMap();
-        colorMapping.put(LogService.LOG_DEBUG, LOG_DEBUG_COLOR);
-        colorMapping.put(LogService.LOG_INFO, LOG_INFO_COLOR);
-        colorMapping.put(LogService.LOG_WARNING, LOG_WARNING_COLOR);
-        colorMapping.put(LogService.LOG_ERROR, LOG_ERROR_COLOR);
+        colorMapping.put(""+LogService.LOG_DEBUG, LOG_DEBUG_COLOR);
+        colorMapping.put(""+LogService.LOG_INFO, LOG_INFO_COLOR);
+        colorMapping.put(""+LogService.LOG_WARNING, LOG_WARNING_COLOR);
+        colorMapping.put(""+LogService.LOG_ERROR, LOG_ERROR_COLOR);
 
     }
 
@@ -195,7 +195,7 @@ public class LogView extends ViewPart implements LogListener{
 				String message = entry.getMessage();
 				try {
 					if (goodMessage(message)) {
-						appendString(message, (Color) colorMapping.get(entry.getLevel()));						
+						appendString(message, (Color) colorMapping.get(""+entry.getLevel()));						
 					}
 				} catch (Throwable e) {
 					e.printStackTrace();

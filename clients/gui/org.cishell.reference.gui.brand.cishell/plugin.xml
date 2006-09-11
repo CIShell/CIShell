@@ -3,7 +3,7 @@
 <plugin>
    	<extension point="org.eclipse.core.runtime.products" id="cishell">
 	   <product
-	      name="%productName"
+	      name="Cyberinfrastructure Shell"
           application="org.cishell.reference.gui.workspace.CIShellApplication">
 	       <property
 	             name="appName"
