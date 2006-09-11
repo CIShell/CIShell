@@ -3,20 +3,17 @@
 <plugin>
    	<extension point="org.eclipse.core.runtime.products" id="cishell">
 	   <product
-	      name="%productName"
+	      name="Cyberinfrastructure Shell"
           application="org.cishell.reference.gui.workspace.CIShellApplication">
 	       <property
 	             name="appName"
 	             value="%appName"/>
 	       <property
 	             name="aboutImage"
-	             value="%aboutImage"/>
+	             value="icons/about.gif"/>
 	       <property
 	             name="aboutText"
 	             value="%blurb"/>
-           <property 
-           		 name="windowImages"
-           		 value="%windowImages"/>
 	   </product>
    	</extension>
 	   
