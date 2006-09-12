@@ -3,6 +3,7 @@ package org.cishell.reference.gui.workspace;
 import org.eclipse.core.runtime.IPlatformRunnable;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
 /**
@@ -10,6 +11,7 @@ import org.eclipse.ui.PlatformUI;
  */
 public class CIShellApplication implements IPlatformRunnable {
     private static IMenuManager menuManager;
+    private static IWorkbenchWindow workbench;
 
 	/**
 	 * @see org.eclipse.core.runtime.IPlatformRunnable#run(java.lang.Object)
@@ -27,11 +29,19 @@ public class CIShellApplication implements IPlatformRunnable {
 		}
 	}
     
-    public static void setMenuManager(IMenuManager menuManager) {
+    protected static void setMenuManager(IMenuManager menuManager) {
         CIShellApplication.menuManager = menuManager; 
     }
     
     public static IMenuManager getMenuManager() {
         return menuManager;
+    }
+    
+    protected static void setWorkbench(IWorkbenchWindow workbench) {
+        CIShellApplication.workbench = workbench;
+    }
+    
+    public static IWorkbenchWindow getWorkbench() {
+        return CIShellApplication.workbench;
     }
 }

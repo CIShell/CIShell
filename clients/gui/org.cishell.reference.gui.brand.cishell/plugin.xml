@@ -41,4 +41,26 @@
 	<extension point="org.eclipse.ui.startup">
     	<startup/>
  	</extension>
+ <extension
+       point="org.eclipse.ui.actionSets">
+    <actionSet
+          id="org.cishell.reference.gui.management"
+          label="Manager Action Set"
+          visible="true">
+       <action
+             class="org.cishell.reference.gui.brand.cishell.ManageConfigurationAction"
+             icon="icons/manage.gif"
+             id="org.cishell.reference.gui.configuration.manager.action"
+             label="Manage Configuration..."
+             menubarPath="help/end"
+             style="push"/>
+       <action
+             class="org.cishell.reference.gui.brand.cishell.UpdateAction"
+             icon="icons/findandinstall.gif"
+             id="org.cishell.reference.gui.update.manager.action"
+             label="Update..."
+             menubarPath="help/end"
+             style="push"/>
+    </actionSet>
+ </extension>
 </plugin>

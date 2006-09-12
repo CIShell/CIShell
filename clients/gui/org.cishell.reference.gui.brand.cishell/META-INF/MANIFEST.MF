@@ -10,5 +10,6 @@ Require-Bundle: org.eclipse.ui,
  org.cishell.reference.gui.datamanager,
  org.cishell.reference.gui.log,
  org.cishell.reference.gui.workspace,
- org.cishell.reference.gui.menumanager
+ org.cishell.reference.gui.menumanager,
+ org.eclipse.update.ui
 Eclipse-LazyStart: true

@@ -3,6 +3,7 @@ package org.cishell.reference.gui.workspace;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.action.Separator;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.actions.ActionFactory;
@@ -21,20 +22,19 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	// them in the fill methods. This ensures that the actions aren't recreated
 	// when fillActionBars is called with FILL_PROXY.
 	private IWorkbenchAction exitAction;
-    private IWorkbenchAction aboutAction;
-    
+    private IWorkbenchAction aboutAction;    
 
 	public ApplicationActionBarAdvisor(IActionBarConfigurer configurer) {
 		super(configurer);
 	}
 
 	protected void makeActions(final IWorkbenchWindow window) {
+        CIShellApplication.setWorkbench(window);
 		// Creates the actions and registers them.
 		// Registering is needed to ensure that key bindings work.
 		// The corresponding commands keybindings are defined in the plugin.xml
 		// file. Registering also provides automatic disposal of the actions 
 		// when the window is closed.
-
 		exitAction = ActionFactory.QUIT.create(window);
 		register(exitAction);
         
@@ -60,6 +60,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
         fileMenu.add(exitAction);
        
         //Help menu items
+        helpMenu.add(new Separator());
         helpMenu.add(aboutAction);
 	}
     
