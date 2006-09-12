@@ -163,11 +163,17 @@ public class DataManagerServiceImpl implements DataManagerService {
         return (Data[]) selectedModels.toArray(new Data[]{});
     }
 
-    public void setSelectedData(Data[] models) {
-        selectedModels = new HashSet(Arrays.asList(models));
+    public void setSelectedData(Data[] inModels) {
+        selectedModels = new HashSet(Arrays.asList(inModels));
+        
+        for (int i=0; i < inModels.length; i++) {
+        	if (!this.models.contains(inModels[i])) {
+        		addData(inModels[i]);
+        	}
+        }
         
         for (Iterator iter=listeners.iterator(); iter.hasNext();) {
-            ((DataManagerListener) iter.next()).dataSelected(models);
+            ((DataManagerListener) iter.next()).dataSelected(inModels);
         }
     }
     
