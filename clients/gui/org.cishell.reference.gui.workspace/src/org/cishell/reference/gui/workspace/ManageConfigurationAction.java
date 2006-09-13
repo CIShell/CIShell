@@ -11,7 +11,7 @@
  * Contributors:
  *     Indiana University - 
  * ***************************************************************************/
-package org.cishell.reference.gui.brand.cishell;
+package org.cishell.reference.gui.workspace;
 
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
@@ -20,13 +20,13 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 import org.eclipse.update.ui.UpdateManagerUI;
 
-public class UpdateAction implements IWorkbenchWindowActionDelegate {
+public class ManageConfigurationAction implements IWorkbenchWindowActionDelegate {
     Shell s;
     
     public void run(IAction action) {
-        UpdateManagerUI.openInstaller(s);
+        UpdateManagerUI.openConfigurationManager(s);
     }
-
+    
     public void init(IWorkbenchWindow window) {
         s = window.getShell();
     }

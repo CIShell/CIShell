@@ -5,11 +5,10 @@ Bundle-SymbolicName: org.cishell.reference.gui.brand.cishell;singleton:=true
 Bundle-Version: 0.0.1.qualifier
 Bundle-Activator: org.cishell.reference.gui.brand.cishell.Activator
 Bundle-Localization: plugin
-Require-Bundle: org.eclipse.ui,
- org.eclipse.core.runtime,
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.ui,
  org.cishell.reference.gui.datamanager,
  org.cishell.reference.gui.log,
  org.cishell.reference.gui.workspace,
- org.cishell.reference.gui.menumanager,
- org.eclipse.update.ui
+ org.cishell.reference.gui.menumanager
 Eclipse-LazyStart: true

@@ -14,6 +14,9 @@
 	       <property
 	             name="aboutText"
 	             value="%blurb"/>
+        <property
+              name="startupProgressRect"
+              value="0,163,500,10"/>
 	   </product>
    	</extension>
 	   
@@ -39,7 +42,7 @@
 	</extension>
 	
 	<extension point="org.eclipse.ui.startup">
-    	<startup/>
+    	<startup class="org.cishell.reference.gui.brand.cishell.Activator"/>
  	</extension>
  <extension
        point="org.eclipse.ui.actionSets">
@@ -48,14 +51,14 @@
           label="Manager Action Set"
           visible="true">
        <action
-             class="org.cishell.reference.gui.brand.cishell.ManageConfigurationAction"
+             class="org.cishell.reference.gui.workspace.ManageConfigurationAction"
              icon="icons/manage.gif"
              id="org.cishell.reference.gui.configuration.manager.action"
              label="Manage Configuration..."
              menubarPath="help/end"
              style="push"/>
        <action
-             class="org.cishell.reference.gui.brand.cishell.UpdateAction"
+             class="org.cishell.reference.gui.workspace.UpdateAction"
              icon="icons/findandinstall.gif"
              id="org.cishell.reference.gui.update.manager.action"
              label="Update..."

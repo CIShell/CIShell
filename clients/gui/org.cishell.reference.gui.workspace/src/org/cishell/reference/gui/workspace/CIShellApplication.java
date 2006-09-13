@@ -3,13 +3,14 @@ package org.cishell.reference.gui.workspace;
 import org.eclipse.core.runtime.IPlatformRunnable;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IStartup;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
 /**
  * This class controls all aspects of the application's execution
  */
-public class CIShellApplication implements IPlatformRunnable {
+public class CIShellApplication implements IPlatformRunnable, IStartup {
     private static IMenuManager menuManager;
     private static IWorkbenchWindow workbench;
 
@@ -43,5 +44,9 @@ public class CIShellApplication implements IPlatformRunnable {
     
     public static IWorkbenchWindow getWorkbench() {
         return CIShellApplication.workbench;
+    }
+
+    public void earlyStartup() {
+        
     }
 }
