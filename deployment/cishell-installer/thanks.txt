@@ -1,0 +1,13 @@
+Installation of CIShell: Cyberinfrastructure Shell was successful!
+
+WARNING: This is an early pre-ALPHA release of CIShell.
+
+Also, there are no algorithms integrated. This release is mainly only
+useful for early adopters for testing integration of their own algorithms.
+
+If you have any problems, please contact the CIShell development team at 
+cishell-developers@lists.sourceforge.net.
+New releases will be announced on the users list. You can sign up on our 
+sourceforge page at http://sourceforge.net/projects/cishell 
+
+Please go to http://cishell.org for more information and breaking news.

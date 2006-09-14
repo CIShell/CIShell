@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+
+<shortcuts>
+
+  <programGroup defaultName="InfoVis" location="applications"/>
+
+   <shortcut
+     name="ivc"
+     programGroup="yes"
+     desktop="yes"
+     applications="no"
+     startMenu="yes"
+     startup="no"
+     target="$INSTALL_PATH/cishell.sh"
+     commandLine=""
+     workingDirectory="$INSTALL_PATH"
+     description="CIShell: Cyberinfrastructure Shell"
+     iconFile="$INSTALL_PATH/icon.xpm"
+     iconIndex="0"
+     type="Application"
+     encoding="UTF-8"
+     terminal="false"
+     KdeSubstUID="false"
+     initialState="normal">
+
+     <createForPack name="Base"/>
+   </shortcut>
+
+</shortcuts>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+
+<shortcuts>
+  <programGroup defaultName="CIShell"
+                location="startMenu"/>
+  <shortcut
+    name="Cyberinfrastructure Shell"
+    target="$INSTALL_PATH\cishell.exe"
+    commandLine=""
+    workingDirectory="$INSTALL_PATH"
+    description="Cyberinfrastructure Shell"
+    iconFile="$INSTALL_PATH\cishell.ico"
+    iconIndex="0"
+    initialState="normal"
+    programGroup="yes"
+    desktop="yes"
+    applications="no"
+    startMenu="yes"
+    startup="no">
+
+    <createForPack name="Base"/>
+  </shortcut>
+  
+  <shortcut
+    name="Uninstall CIShell"
+    target="$INSTALL_PATH\Uninstaller\uninstaller.jar"
+    commandLine=""
+    workingDirectory="$INSTALL_PATH\Uninstaller"
+    description="Uninstall CIShell"
+    iconFile="$INSTALL_PATH\cishell.ico"
+    iconIndex="0"
+    initialState="normal"
+    programGroup="yes"
+    desktop="yes"
+    applications="no"
+    startMenu="yes"
+    startup="no">
+
+    <createForPack name="Base"/>
+  </shortcut>
+  
+</shortcuts>
