@@ -14,6 +14,7 @@
 package org.cishell.reference.gui.guibuilder.temp;
 
 import java.util.Dictionary;
+import java.util.Hashtable;
 
 import org.cishell.service.guibuilder.GUI;
 import org.cishell.service.guibuilder.SelectionListener;
@@ -27,24 +28,28 @@ import edu.iu.iv.gui.builder.SwtGUIBuilder;
  * 
  * @author Bruce Herr (bh2@bh2.net)
  */
-public class GUIImpl implements GUI {
+public class GUIImpl implements GUI {	
     boolean closed;
     GUIBuilder builder;
     ParameterMapAdapter pmap;
 
     public GUIImpl(String id, MetaTypeProvider provider) {
         pmap = new ParameterMapAdapter(provider, id);
-        final String title = pmap.getObjectClassDefinition().getName();
-        final String message = pmap.getObjectClassDefinition().getDescription();
-                
-        GUIBuilder.setGUIBuilder(SwtGUIBuilder.getGUIBuilder());
         
-        PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() {
-            public void run() {
-                builder = GUIBuilder.createGUI(title, message, pmap);
-            }});
-        
-        closed = false;
+        if (provider != null && pmap.getObjectClassDefinition() != null) {
+	        final String title = pmap.getObjectClassDefinition().getName();
+	        final String message = pmap.getObjectClassDefinition().getDescription();
+	                
+	        GUIBuilder.setGUIBuilder(SwtGUIBuilder.getGUIBuilder());
+	        
+	        PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() {
+	            public void run() {
+	                builder = GUIBuilder.createGUI(title, message, pmap);
+	            }});
+	        closed = false;
+        } else {
+        	builder = GUIBuilder.NULL_BUILDER;
+        }
     }
 
     /**
@@ -66,31 +71,35 @@ public class GUIImpl implements GUI {
      * @see org.cishell.service.guibuilder.GUI#open()
      */
     public void open() {
-        builder.open();
+		builder.open();
     }
 
     /**
      * @see org.cishell.service.guibuilder.GUI#openAndWait()
      */
     public synchronized Dictionary openAndWait() {
-        final WaitingSelectionListener listener = new WaitingSelectionListener();
-        
-        PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
-            public void run() {
-                open();
-                
-                setSelectionListener(listener);
-            }});
-        
-        while (!listener.gotResult) {
-            try {
-                wait(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        
-        return listener.result;
+    	if (builder != GUIBuilder.NULL_BUILDER) {
+		    final WaitingSelectionListener listener = new WaitingSelectionListener();
+		    
+		    PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
+		        public void run() {
+		            open();
+		            
+		            setSelectionListener(listener);
+		        }});
+		    
+		    while (!listener.gotResult) {
+		        try {
+		            wait(500);
+		        } catch (InterruptedException e) {
+		            e.printStackTrace();
+		        }
+		    }
+		    
+		    return listener.result;
+    	} else {
+    		return new Hashtable();
+    	}
     }
     
     private class WaitingSelectionListener implements SelectionListener {
