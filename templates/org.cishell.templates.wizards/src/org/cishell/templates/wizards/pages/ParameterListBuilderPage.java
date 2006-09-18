@@ -57,6 +57,7 @@ public class ParameterListBuilderPage extends WizardPage {
             output += "\t\t<AD name=\""+attrs[i].getName()+"\" "+
                           "id=\""+attrs[i].getID()+"\" "+
                           "type=\""+getTypeString(attrs[i])+"\" "+
+                          "description=\""+attrs[i].getDescription()+"\" "+
                           "default=\""+attrs[i].getDefaultValue()[0]+"\"/>\n";
         }
         
