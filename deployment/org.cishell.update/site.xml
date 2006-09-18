@@ -18,7 +18,7 @@
    <feature url="features/org.cishell.algorithm.examples.feature_0.0.1.200609131643.jar" id="org.cishell.algorithm.examples.feature" version="0.0.1.200609131643">
       <category name="Development"/>
    </feature>
-   <feature url="features/org.cishell.development.feature_0.0.1.200609131643.jar" id="org.cishell.development.feature" version="0.0.1.200609131643">
+   <feature url="features/org.cishell.development.feature_0.0.1.200609181727.jar" id="org.cishell.development.feature" version="0.0.1.200609181727">
       <category name="Development"/>
    </feature>
    <category-def name="Development" label="Development"/>
