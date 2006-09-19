@@ -19,6 +19,17 @@
               value="0,163,500,10"/>
 	   </product>
    	</extension>
+   	
+   	<extension
+	       point="org.eclipse.ui.views">
+	     <view
+         allowMultiple="false"
+         class="org.cishell.reference.gui.brand.cishell.DataManagerView"
+         icon="icons/datamanager_icon.gif"
+         id="org.cishell.reference.gui.datamanager.DataManagerView"
+         name="Data Manager"/>
+     </extension> 
+   	
 	   
 	<extension point="org.eclipse.ui.perspectiveExtensions">
       <perspectiveExtension targetID="org.cishell.reference.gui.workspace.Perspective">
