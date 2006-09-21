@@ -6,7 +6,7 @@
    <feature url="features/org.cishell.feature_0.0.1.200609131643.jar" id="org.cishell.feature" version="0.0.1.200609131643">
       <category name="Core Features"/>
    </feature>
-   <feature url="features/org.cishell.reference.gui.feature_0.0.1.200609131643.jar" id="org.cishell.reference.gui.feature" version="0.0.1.200609131643">
+   <feature url="features/org.cishell.reference.gui.feature_0.0.1.200609210951.jar" id="org.cishell.reference.gui.feature" version="0.0.1.200609210951">
       <category name="Applications"/>
    </feature>
    <feature url="features/org.cishell.environment.equinox.feature_0.0.1.jar" id="org.cishell.environment.equinox.feature" version="0.0.1">
