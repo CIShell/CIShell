@@ -70,7 +70,7 @@ public class StaticExecutableRunner implements Algorithm {
             String algDir = tempDir + File.separator + props.getProperty("Algorithm-Directory") + File.separator;
             
             chmod(algDir);
-            File[] output = execute(algDir + getTemplate(), algDir);
+            File[] output = execute(getTemplate(algDir), algDir);
             
             return toData(output);
         } catch (Exception e) {
@@ -137,11 +137,11 @@ public class StaticExecutableRunner implements Algorithm {
         }
     }
     
-    protected File[] execute(String execString, String baseDir) throws Exception {
+    protected File[] execute(String[] cmdarray, String baseDir) throws Exception {
         File dir = new File(baseDir);
         String[] beforeFiles = dir.list();
         
-        Process process = Runtime.getRuntime().exec(execString, null, new File(baseDir));
+        Process process = Runtime.getRuntime().exec(cmdarray, null, new File(baseDir));
 
         logStream(LogService.LOG_INFO, process.getInputStream());
         logStream(LogService.LOG_ERROR, process.getErrorStream());
@@ -154,7 +154,6 @@ public class StaticExecutableRunner implements Algorithm {
         Arrays.sort(afterFiles);
         
         List outputs = new ArrayList();
-        String tempDir = this.tempDir + File.separator;
         
         int beforeIndex = 0;
         int afterIndex = 0;
@@ -164,14 +163,14 @@ public class StaticExecutableRunner implements Algorithm {
                 beforeIndex++;
                 afterIndex++;
             } else {
-                outputs.add(new File(tempDir + afterFiles[afterIndex]));
+                outputs.add(new File(baseDir + afterFiles[afterIndex]));
                 afterIndex++;
             }
-        }  
+        }
         
         //get any remaining new files
         while (afterIndex < afterFiles.length) {
-            outputs.add(new File(tempDir + afterFiles[afterIndex]));
+            outputs.add(new File(baseDir + afterFiles[afterIndex]));
             afterIndex++;
         }
         
@@ -196,14 +195,24 @@ public class StaticExecutableRunner implements Algorithm {
         }
     }
 
-    protected String getTemplate() {
-        String template = props.getProperty("template");
+    protected String[] getTemplate(String algDir) {
+        String template = "" + props.getProperty("template");
+        String[] cmdarray = template.split("\\s");
         
-        template = template.replaceAll("\\$\\{executable\\}", props.getProperty("executable"));
+        for (int i=0; i < cmdarray.length; i++) {
+            cmdarray[i] = substiteVars(cmdarray[i]);
+        }
+        cmdarray[0] = algDir + cmdarray[0];
+        
+        return cmdarray;
+    }
+    
+    protected String substiteVars(String str) {
+        str = str.replaceAll("\\$\\{executable\\}", props.getProperty("executable"));
         
         for (int i=0; i < data.length; i++) {
             String file = ((File) data[i].getData()).getAbsolutePath();
-            template = template.replaceAll("\\$\\{inFile\\["+i+"\\]\\}", "\""+file+"\"");
+            str = str.replaceAll("\\$\\{inFile\\["+i+"\\]\\}", file);
         }
         
         for (Enumeration i=parameters.keys(); i.hasMoreElements(); ) {
@@ -212,10 +221,10 @@ public class StaticExecutableRunner implements Algorithm {
             
             if (value == null) value = "";
             
-            template = template.replaceAll("\\$\\{"+key+"\\}", value.toString());
+            str = str.replaceAll("\\$\\{"+key+"\\}", value.toString());
         }
         
-        return template;
+        return str;
     }
     
     public File getTempDirectory() {
