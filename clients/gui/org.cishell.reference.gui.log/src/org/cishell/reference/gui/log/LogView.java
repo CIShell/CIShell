@@ -307,7 +307,7 @@ public class LogView extends ViewPart implements LogListener{
                 Integer offset = offsets[i];
                 String url = (String) offsetToUrlMap.get(offset);
 
-                if ((position >= offset.intValue()) &&
+                if (offset != null && url != null && (position >= offset.intValue()) &&
                         (position <= (offset.intValue() + url.length()))) {
                     overURL = true;
 
@@ -358,7 +358,7 @@ public class LogView extends ViewPart implements LogListener{
                 Integer offset = offsets[i];
                 String url = (String) offsetToUrlMap.get(offset);
 
-                if ((clicked >= offset.intValue()) &&
+                if (url != null && (clicked >= offset.intValue()) &&
                         (clicked <= (offset.intValue() + url.length()))) {
                     try {
                         Program.launch(url);
