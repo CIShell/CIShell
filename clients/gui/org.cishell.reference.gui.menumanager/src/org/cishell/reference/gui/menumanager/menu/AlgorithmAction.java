@@ -88,7 +88,9 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, DataMa
                 params = builder.createGUIandWait(pid, provider);
             }
             
-            scheduler.schedule(new AlgorithmWrapper(ref, bContext, ciContext, data, converters, params), ref);
+            if (params != null) {
+                scheduler.schedule(new AlgorithmWrapper(ref, bContext, ciContext, data, converters, params), ref);
+            }
         } catch (Throwable e) {
             e.printStackTrace();
         }
