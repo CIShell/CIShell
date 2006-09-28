@@ -189,9 +189,8 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 		dataToDataGUIItemMap.put(data, item);
 
 		// update the ModelManager with the new selection
-		Set selection = new HashSet();
+		final Set selection = new HashSet();
 		selection.add(data);
-		manager.setSelectedData((Data[]) selection.toArray(new Data[0]));
 		Display.getDefault().syncExec(new Runnable() {
 			public void run() {
 				if (!tree.isDisposed()) {
@@ -202,25 +201,10 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 					updateContextMenu(data);
 					// update the global selection
 					viewer.expandToLevel(item, 0);
-					selectItem(item, tree.getItems());
-					getSite().getSelectionProvider().setSelection(
-							new StructuredSelection(new Data[] { data }));
-					setFocus();
+					manager.setSelectedData((Data[]) selection.toArray(new Data[0]));
 				}
 			}
 		});
-	}
-
-	private void selectItem(DataGUIItem item, TreeItem[] items) {
-		for (int i = 0; i < items.length; i++) {
-			TreeItem treeItem = items[i];
-			if (treeItem.getData() == item) {
-				manager.setSelectedData(new Data[] { item.getModel() });
-				treeItem.getParent().setSelection(new TreeItem[] { treeItem });
-				return;
-			}
-			selectItem(item, treeItem.getItems());
-		}
 	}
 
 	public void dataLabelChanged(Data data, String label) {
@@ -246,11 +230,11 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 
 	public void dataSelected(final Data[] data) {
 		if (data != null) {
+			//setFocus();
 			Display.getDefault().syncExec(new Runnable() {
 				public void run() {
 					Set itemSet = new HashSet();
 					for (int i = 0; i < data.length; ++i) {
-
 						TreeItem[] treeItems = tree.getItems();
 						for (int j = 0; j < treeItems.length; ++j) {
 							if (treeItems[i].getData() == data[i]) {
@@ -261,6 +245,8 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 					}
 					tree.setSelection((TreeItem[]) itemSet
 							.toArray(new TreeItem[0]));
+					getSite().getSelectionProvider().setSelection(
+							new StructuredSelection(data));
 				}
 			});
 		}
@@ -298,8 +284,6 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 			}
 
 			manager.setSelectedData(modelArray);
-			getSite().getSelectionProvider().setSelection(
-					new StructuredSelection(modelArray));
 		}
 	}
 
@@ -440,10 +424,10 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 	 */
 	private class TreeItemEditorListener extends MouseAdapter implements
 			KeyListener {
-		// private TreeEditor editor;
+		private TreeEditor editor;
 
 		public TreeItemEditorListener(TreeEditor editor) {
-			// this.editor = editor;
+			this.editor = editor;
 		}
 
 		public void keyReleased(KeyEvent e) {
@@ -458,7 +442,11 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 
 		public void keyPressed(KeyEvent e) {
 		}
+		
+		public void mouseDown(MouseEvent e) {
+		}
 	}
+
 
 	private class DataModelSelectionProvider implements ISelectionProvider {
 
