@@ -1,6 +1,9 @@
 package org.cishell.reference.gui.workspace;
 
+import org.cishell.reference.gui.guibuilder.swt.SWTGuiBuilderService;
+import org.cishell.service.guibuilder.GUIBuilderService;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
@@ -23,4 +26,11 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		configurer.setShowCoolBar(false);
 		configurer.setShowStatusLine(false);
 	}
+    
+    public void postWindowOpen() {
+        Display display = getWindowConfigurer().getWindow().getShell().getDisplay();
+        
+        GUIBuilderService builder = new SWTGuiBuilderService(display);
+        Activator.getDefault().registerBuilder(builder);
+    }
 }

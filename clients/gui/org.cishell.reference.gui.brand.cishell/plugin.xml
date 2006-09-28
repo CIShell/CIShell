@@ -17,6 +17,9 @@
         <property
               name="startupProgressRect"
               value="0,163,500,10"/>
+        <property
+              name="windowImage"
+              value="icons/alt32.gif"/>
 	   </product>
    	</extension>
    	

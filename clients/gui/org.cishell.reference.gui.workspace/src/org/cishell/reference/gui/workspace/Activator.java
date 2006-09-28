@@ -2,7 +2,6 @@ package org.cishell.reference.gui.workspace;
 
 import java.util.Hashtable;
 
-import org.cishell.reference.gui.guibuilder.temp.GUIBuilderServiceImpl;
 import org.cishell.service.guibuilder.GUIBuilderService;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -20,6 +19,7 @@ public class Activator extends AbstractUIPlugin {
 	// The shared instance
 	private static Activator plugin;
     private ServiceRegistration guiBuilderReg;
+    private BundleContext context;
 	
 	/**
 	 * The constructor
@@ -34,10 +34,7 @@ public class Activator extends AbstractUIPlugin {
 	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
-        
-        GUIBuilderService guiBuilder = new GUIBuilderServiceImpl();
-        guiBuilderReg = context.registerService(
-                GUIBuilderService.class.getName(), guiBuilder, new Hashtable());
+        this.context = context;
 	}
 
 	/*
@@ -50,6 +47,11 @@ public class Activator extends AbstractUIPlugin {
         guiBuilderReg.unregister();
 	}
 
+    public void registerBuilder(GUIBuilderService guiBuilder) {
+        guiBuilderReg = context.registerService(
+                GUIBuilderService.class.getName(), guiBuilder, new Hashtable());
+    }
+    
 	/**
 	 * Returns the shared instance
 	 *

@@ -22,6 +22,7 @@ import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.algorithm.AlgorithmProperty;
 import org.cishell.framework.data.Data;
 import org.cishell.service.conversion.Converter;
+import org.cishell.service.guibuilder.GUIBuilderService;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
@@ -72,7 +73,11 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty {
             
             return outData;
         } catch (Throwable e) {
-            e.printStackTrace();
+            GUIBuilderService guiBuilder = (GUIBuilderService) 
+                ciContext.getService(GUIBuilderService.class.getName());
+            guiBuilder.showError("Error!", 
+                    "The Algorithm: \""+ref.getProperty(AlgorithmProperty.LABEL)+
+                    "\" had an error while executing.", e);
             
             return new Data[0];
         }
