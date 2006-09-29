@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metatype:MetaData xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.0.0">
+	<OCD name="GUIBuilder Tester" id="org.cishell.tests.guibuilder1.GUIBuilderTester1Algorithm.OCD"
+		 description="Test!">
+		<AD name="String" id="1" type="String" description="Parameter Description" default="Default value"/>
+		<AD name="Integer" id="2" type="Integer" description="Parameter Description" default="1" min="0" max="2"/>
+		<AD name="Long" id="3" type="Long" description="Parameter Description" default="100"/>
+		<AD name="Short" id="4" type="Short" description="Parameter Description" default="12"/>
+		<AD name="Double" id="5" type="Double" description="Parameter Description" default="1.0"/>
+		<AD name="Float" id="6" type="Float" description="Parameter Description" default="1.0"/>
+		<AD name="Boolean" id="7" type="Boolean" description="Parameter Description" default="false"/>
+		<AD name="Character" id="8" type="Char" description="Parameter Description" default="c"/>
+		<AD name="Byte" id="9" type="Byte" description="Parameter Description" default="0"/>
+		<AD name="File (optional)" id="10" type="String" description="Parameter Description" required="false" default="file:"/>
+		<AD name="Directory" id="11" type="String" description="Parameter Description" default="directory:"/>
+	</OCD>
+	<Designate pid="org.cishell.tests.guibuilder1.GUIBuilderTester1Algorithm">
+		<Object ocdref="org.cishell.tests.guibuilder1.GUIBuilderTester1Algorithm.OCD" />
+	</Designate>
+</metatype:MetaData>
