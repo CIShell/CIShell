@@ -21,6 +21,7 @@ import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.algorithm.Algorithm;
 import org.cishell.framework.data.Data;
 import org.cishell.framework.data.BasicData;
+import org.cishell.service.guibuilder.GUIBuilderService;
 
 /* 
  * @author Weixia(Bonnie) Huang (huangb@indiana.edu)
@@ -28,14 +29,19 @@ import org.cishell.framework.data.BasicData;
 public class FileLoad implements Algorithm{
 
     private static File currentDir;
+    
     private final LogService logger;
-    private final BundleContext bContext;
+    private final GUIBuilderService guiBuilder;
+    
+    private BundleContext bContext;
     private CIShellContext ciContext;
     
     public FileLoad(CIShellContext ciContext, BundleContext bContext) {
         this.ciContext = ciContext;
         this.bContext = bContext;
-        logger = (LogService) ciContext.getService(LogService.class.getName());
+       	logger = (LogService) ciContext.getService(LogService.class.getName());
+        guiBuilder = (GUIBuilderService)ciContext.getService(GUIBuilderService.class.getName());
+
     }
  
     public void selectionChanged(IAction action, ISelection selection) {
@@ -47,9 +53,10 @@ public class FileLoad implements Algorithm{
 //    	System.out.println("counter is "+counter);
 //      ?? why getActiveWorkbenchWindow() didn't work??
     	Data[] returnDM;
+
     	final IWorkbenchWindow[] windows = PlatformUI.getWorkbench().getWorkbenchWindows();
     	if (windows.length ==0){
-    		System.out.println("windows[0] is null!!");
+//    		System.out.println("windows[0] is null!!");
     		return null;
     	}
     
@@ -75,7 +82,7 @@ public class FileLoad implements Algorithm{
 	    String fileName = theFile.getName() ;
 	    String extension ;
 		if (fileName.lastIndexOf(".") != -1)
-		    extension = fileName.substring(fileName.lastIndexOf(".")) ;
+		    extension = fileName.substring(fileName.lastIndexOf(".")+1) ;
 		else
 		    extension = "" ;
 		return extension ;
@@ -93,7 +100,8 @@ public class FileLoad implements Algorithm{
     	
     	    	FileDialog dialog = new FileDialog(window.getShell(), SWT.OPEN);
 		        if (currentDir == null) {
-		            currentDir = new File(System.getProperty("user.dir") + File.separator + "sampledata" + File.separator + "anything");
+		            currentDir = new File(System.getProperty("user.dir") + File.separator + "sampledata");
+//		            currentDir = new File(System.getProperty("user.dir") + File.separator + "sampledata" + File.separator + "anything");
 		        }
 		        dialog.setFilterPath(currentDir.getPath());
 		        dialog.setText("Select a File");
@@ -109,8 +117,6 @@ public class FileLoad implements Algorithm{
 		        } else {
 		        	currentDir = new File(file.getPath());
 		        }
-//		   		FileResourceDescriptor frd = new BasicFileResourceDescriptor(file);
-//	       		String fileExtension = frd.getFileExtension();
 		   		
 		   		String fileExtension = getFileExtension(file);
 	       		System.out.println("fileExtension = "+fileExtension);
@@ -122,15 +128,16 @@ public class FileLoad implements Algorithm{
 		       		// to nocompression by default.
 
 		       		// get all the service references of converters that can load this type of file.
-//		       		ServiceReference[] serviceRefList = bContext.getServiceReferences(null, filter);
 		            ServiceReference[] serviceRefList = bContext.getAllServiceReferences(
 		                    AlgorithmFactory.class.getName(), filter);
 	        		
 
 		       		// no converters found means the file format is not supported
 		       		if (serviceRefList == null || serviceRefList.length == 0){
-	        			//log "The file format is not supported"
-		       			logger.log(LogService.LOG_INFO, "Sorry, the file format: *"+fileExtension+" is not supported so far.");
+		       			guiBuilder.showError("Unsupported File Format", "Sorry, the file format: *"+fileExtension+" is not supported so far.", 
+		       					"Sorry, the file format: *"+fileExtension+" is not supported so far. \n"+
+		       					"Please send your requests to cishell-developers@lists.sourceforge.net. \n"
+		       					+"Thank you.");
 		           		return;
 	        		}
 		       		
