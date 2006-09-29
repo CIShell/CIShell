@@ -145,7 +145,6 @@ public class LoadPersisterChooser extends AbstractDialog {
     private void updateDetailPane(ServiceReference persister) {
     
         detailPane.setText("");
-        System.out.println("length="+details_prop_names.length);
         for (int i=0; i<details_prop_names.length; i++){
            	String val = (String) persister.getProperty(details_prop_names[i]);
             
