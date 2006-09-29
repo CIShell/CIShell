@@ -15,6 +15,8 @@ package org.cishell.templates.guibuilder;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
@@ -31,10 +33,11 @@ import org.eclipse.swt.widgets.Text;
 public class AttributeDefinitionEditor extends Dialog {
     protected EditableAttributeDefinition attr;
     public static final String[] TYPE_LABELS = new String[]{
-        "String","Integer","Long","Short","Double","Float","Boolean", "Character", "Byte"
+        "String","Integer","Long","Short","Double","Float","Boolean", "Char", 
+        "Byte", "File", "Directory"
     };
     public static final int[] TYPE_VALUES = new int[] {
-        1,3,2,4,7,8,11,5,6
+        1,3,2,4,7,8,11,5,6,1,1
     };
     
     protected Text id;
@@ -75,6 +78,22 @@ public class AttributeDefinitionEditor extends Dialog {
         type = newListInput(panel, "Input Type");
         type.setItems(TYPE_LABELS);
         
+        type.addSelectionListener(new SelectionListener(){
+            public void widgetDefaultSelected(SelectionEvent e) {
+                widgetSelected(e);
+            }
+
+            public void widgetSelected(SelectionEvent e) {
+                int i = type.getSelectionIndex();
+                if (i == 9) { //file
+                    defaultValue.setText("file:");
+                }
+                if (i == 10) { //directory
+                    defaultValue.setText("directory:");
+                }
+                defaultValue.setEnabled(i != 9 && i != 10);
+            }});
+        
         for (int i=0; i < TYPE_VALUES.length; i++) {
             if (TYPE_VALUES[i] == attr.getType()) {
                 type.select(i);
@@ -112,12 +131,23 @@ public class AttributeDefinitionEditor extends Dialog {
     }
     
     protected void okPressed() {
-        attr.setID(id.getText());
-        attr.setName(name.getText());
-        attr.setDescription(description.getText());
-        attr.setDefaultValue(new String[]{defaultValue.getText()});
+        attr.setID(cleanText(id.getText()));
+        attr.setName(cleanText(name.getText()));
+        String desc = cleanText(description.getText());
+        if (desc.length() == 0) {
+            desc = " ";
+        }
+        attr.setDescription(desc);
+        attr.setDefaultValue(new String[]{cleanText(defaultValue.getText())});
         attr.setType(TYPE_VALUES[type.getSelectionIndex()]);
         
         super.okPressed();
+    }
+    
+    protected String cleanText(String text) {
+        text = text.replaceAll("<", "&lt;");
+        text = text.replaceAll(">", "&gt;");
+        
+        return text;
     }
 }

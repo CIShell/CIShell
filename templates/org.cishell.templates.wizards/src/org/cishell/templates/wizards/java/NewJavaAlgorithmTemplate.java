@@ -110,12 +110,17 @@ public class NewJavaAlgorithmTemplate extends BasicTemplate {
         }
         
         String choice = (String)getOption("menu_group").getValue();
-        
+
         for (int i=0; i < groupChoices.length; i++) {
             if (groupChoices[i][1].equals(choice)) {
                 menuPath += groupChoices[i][0];
                 break;
             }
+            if (groupChoices[i][0].equals(choice)) {
+                menuPath += groupChoices[i][0];
+                break;
+            }
+            
         }
         
         setValue("full_menu_path", menuPath);
