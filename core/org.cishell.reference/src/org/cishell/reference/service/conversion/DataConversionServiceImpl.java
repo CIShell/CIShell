@@ -48,7 +48,8 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
      */
     public Converter[] findConverters(String inFormat, String outFormat) {
         try {
-            String filter = "(&("+IN_DATA+"="+inFormat+") " +
+            String filter = "(&("+ALGORITHM_TYPE+"="+TYPE_CONVERTER+")" +
+            				  "("+IN_DATA+"="+inFormat+") " +
                               "("+OUT_DATA+"="+outFormat+")" +
                               "(!("+REMOTE+"=*)))";
 
