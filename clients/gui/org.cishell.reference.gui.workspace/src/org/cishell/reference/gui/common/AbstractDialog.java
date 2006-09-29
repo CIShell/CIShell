@@ -236,7 +236,7 @@ public abstract class AbstractDialog extends Dialog {
                 });
         }
         GridData canvasData = new GridData();
-        canvasData.heightHint = 35;        
+        canvasData.heightHint = image.getBounds().height;         
         canvas.setLayoutData(canvasData);
         
 
