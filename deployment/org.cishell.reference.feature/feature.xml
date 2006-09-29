@@ -2,7 +2,7 @@
 <feature
       id="org.cishell.reference.feature"
       label="CIShell Reference Bundles"
-      version="0.0.1.qualifier">
+      version="0.1.0.qualifier">
 
    <description url="http://cishell.org">
       CIShell Reference Bundles
@@ -33,7 +33,7 @@ Dr. Katy Borner (katy@indiana.edu)
 
    <url>
       <update label="CIShell Update Site" url="http://cishell.org/update"/>
-      <discovery label="CIShell Update Site" url="http://cishell.org/update"/>      
+      <discovery label="CIShell Update Site" url="http://cishell.org/update"/>
    </url>
 
    <plugin

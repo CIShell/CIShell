@@ -2,7 +2,7 @@
 <feature
       id="org.cishell.environment.equinox.feature"
       label="CIShell Equinox Execution Environment"
-      version="0.0.1">
+      version="0.1.0">
 
    <description url="http://cishell.org">
       CIShell OSGi Environment (Eclipse Equinox)
@@ -198,6 +198,16 @@ Dr. Katy Borner (katy@indiana.edu)
 
    <plugin
          id="org.eclipse.swt.carbon.macosx"
+         os="macosx"
+         ws="carbon"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.ui.carbon"
          os="macosx"
          ws="carbon"
          download-size="0"

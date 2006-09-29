@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Persistence Plug-in
 Bundle-SymbolicName: org.cishell.reference.gui.persistence
-Bundle-Version: 0.0.1
+Bundle-Version: 0.1.0.qualifier
 Bundle-ClassPath: .
 Bundle-Localization: plugin
 Import-Package: org.cishell.app.service.datamanager,

@@ -2,7 +2,7 @@
 <feature
       id="org.cishell.algorithm.examples.feature"
       label="CIShell Sample Algorithms"
-      version="0.0.1.qualifier">
+      version="0.1.0.qualifier">
 
    <description>
       Example algorithms for development and testing of CIShell.
@@ -33,11 +33,18 @@ Dr. Katy Borner (katy@indiana.edu)
 
    <url>
       <update label="CIShell Update Site" url="http://cishell.org/update"/>
-      <discovery label="CIShell Update Site" url="http://cishell.org/update"/>      
+      <discovery label="CIShell Update Site" url="http://cishell.org/update"/>
    </url>
 
    <plugin
          id="org.cishell.tests.conversion1"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.cishell.tests.guibuilder1"
          download-size="0"
          install-size="0"
          version="0.0.0"

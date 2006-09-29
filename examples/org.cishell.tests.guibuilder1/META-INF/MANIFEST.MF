@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: GUIBuilder Tester
 Bundle-SymbolicName: org.cishell.tests.guibuilder1
-Bundle-Version: 0.0.1
+Bundle-Version: 0.1.0
 Bundle-ClassPath: .
 Bundle-Localization: plugin
 Import-Package: org.cishell.framework,

@@ -2,7 +2,7 @@
 <feature
       id="org.cishell.reference.gui.feature"
       label="CIShell Reference GUI"
-      version="0.0.1.qualifier">
+      version="0.1.0.qualifier">
 
    <description url="http://cishell.org">
       CIShell Reference GUI
@@ -51,13 +51,6 @@ Dr. Katy Borner (katy@indiana.edu)
          unpack="false"/>
 
    <plugin
-         id="org.cishell.reference.gui.guibuilder.temp"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="org.cishell.reference.gui.log"
          download-size="0"
          install-size="0"
@@ -79,14 +72,14 @@ Dr. Katy Borner (katy@indiana.edu)
          unpack="false"/>
 
    <plugin
-         id="edu.iu.iv.common"
+         id="org.cishell.reference.gui.guibuilder.swt"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="edu.iu.iv.swtguibuilder"
+         id="org.cishell.reference.gui.persistence"
          download-size="0"
          install-size="0"
          version="0.0.0"

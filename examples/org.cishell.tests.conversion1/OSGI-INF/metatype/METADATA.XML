@@ -5,7 +5,7 @@
 		<AD name="%input" id="org.cishell.tests.conversion1.AlgA.myInput" type="String" 
 			default="1" description="%desc" />
 	</OCD>
-	<Designate pid="default.id">
+	<Designate pid="org.cishell.tests.conversion1.algA">
 		<Object ocdref="org.cishell.tests.conversion1.AlgA.OCD" />
 	</Designate>
 </metatype:MetaData>

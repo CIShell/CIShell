@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: CIShell Algorithms to test auto-conversion
 Bundle-SymbolicName: org.cishell.tests.conversion1
-Bundle-Version: 0.0.1
+Bundle-Version: 0.1.0
 Bundle-Localization: plugin
 Service-Component: OSGI-INF/componentA.xml, OSGI-INF/componentB.xml, OSGI-INF/componentC.xml, OSGI-INF/file2string.xml, OSGI-INF/string2file.xml, OSGI-INF/file2integer.xml, OSGI-INF/integer2file.xml
 X-AutoStart: true
