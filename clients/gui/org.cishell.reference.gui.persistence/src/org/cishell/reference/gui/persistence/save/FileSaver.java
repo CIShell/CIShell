@@ -12,7 +12,9 @@ import java.nio.channels.FileChannel;
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.AlgorithmProperty;
 import org.cishell.framework.data.Data;
+import org.cishell.framework.data.DataProperty;
 import org.cishell.service.conversion.Converter;
+import org.cishell.service.guibuilder.GUIBuilderService;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
@@ -28,11 +30,15 @@ public class FileSaver {
     private Shell parent;
     private LogService logService;
     private CIShellContext ciContext;
+    
+    private GUIBuilderService guiBuilder;
+
 
     public FileSaver(Shell parent, CIShellContext context){
         this.parent = parent;
         this.ciContext = context;
         this.logService = (LogService) ciContext.getService(LogService.class.getName());
+        this.guiBuilder = (GUIBuilderService)context.getService(GUIBuilderService.class.getName());
     }       
 
     private boolean confirmFileOverwrite(File file) {
@@ -40,6 +46,7 @@ public class FileSaver {
             + "\nalready exists. Are you sure you want to overwrite it?";
         logService.log(LogService.LOG_INFO, "Confirm File Overwrite: " + message);
         return true;
+        //return guiBuilder.showConfirm("File Overwrite", message, message);
     }
 
     private boolean isSaveFileValid(File file) {
@@ -71,8 +78,15 @@ public class FileSaver {
         dialog.setFilterPath(currentDir.getPath());
         
         dialog.setFilterExtensions(new String[]{"*" + ext});
-        dialog.setText("Choose File");   
-        dialog.setFileName((String)data.getMetaData().get(AlgorithmProperty.LABEL));
+        dialog.setText("Choose File");
+        
+        String fileLabel = (String)data.getMetaData().get(DataProperty.LABEL);
+        if (fileLabel == null) {
+        	dialog.setFileName("*" + ext);
+        }
+        else {
+        	dialog.setFileName(fileLabel + '.' + ext);        	
+        }
 
         boolean done = false;
         
@@ -97,11 +111,17 @@ public class FileSaver {
                 }
                     
                 done = true ;
-                
+       
+                //guiBuilder.showInformation("File Saved", 
+                //		"File successfully Saved", 
+                //		"File saved: " + selectedFile.getPath());
                 logService.log(LogService.LOG_INFO, "File saved: " + selectedFile.getPath() + "\n");
                 //DataManagerService dms = (DataManagerService)context.getService(DataManagerService.class.getName());
                 //dms.addData(data);
             } else {
+            	//guiBuilder.showInformation("File Save Cancel", 
+            	//		"File save has been cancelled",
+            	//		"File save has been cancelled");
                 logService.log(LogService.LOG_INFO, "File save cancelled.\n");
                 done = true;
                 return false;
@@ -120,6 +140,8 @@ public class FileSaver {
     		
     		writableChannel.truncate(0);
     		writableChannel.transferFrom(readableChannel, 0, readableChannel.size());
+    		fis.close();
+    		fos.close();
     		return true;
     	}
     	catch (IOException ioe) {

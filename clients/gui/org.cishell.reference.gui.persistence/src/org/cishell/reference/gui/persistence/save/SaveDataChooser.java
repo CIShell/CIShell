@@ -46,7 +46,6 @@ public class SaveDataChooser extends AbstractDialog {
     private StyledText detailPane;
     //private Shell parent;
     CIShellContext context;
-    //private LogService logService;
     public static final Image QUESTION = Display.getCurrent().getSystemImage(SWT.ICON_QUESTION);
 
     /**
@@ -65,7 +64,6 @@ public class SaveDataChooser extends AbstractDialog {
         //this.parent = parent;
         this.converterArray = converterArray;
         this.context = context;
-        //this.logService = (LogService) context.getService(LogService.class.getName());
     }   
 
     /*
