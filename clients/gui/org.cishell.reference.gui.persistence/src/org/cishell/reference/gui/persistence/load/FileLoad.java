@@ -119,7 +119,7 @@ public class FileLoad implements Algorithm{
 		        }
 		   		
 		   		String fileExtension = getFileExtension(file);
-	       		System.out.println("fileExtension = "+fileExtension);
+	       		//System.out.println("fileExtension = "+fileExtension);
 	       		String filter = "(&(type=converter)(in_data=file-ext:"+fileExtension+"))";
 		        try {
 
