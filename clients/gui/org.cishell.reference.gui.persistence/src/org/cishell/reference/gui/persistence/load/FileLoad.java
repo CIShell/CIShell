@@ -99,7 +99,12 @@ public class FileLoad implements Algorithm{
     	    	FileDialog dialog = new FileDialog(window.getShell(), SWT.OPEN);
 		        if (currentDir == null) {
 		            currentDir = new File(System.getProperty("user.dir") + File.separator + "sampledata");
-//		            currentDir = new File(System.getProperty("user.dir") + File.separator + "sampledata" + File.separator + "anything");
+                    
+                    if (!currentDir.exists()) {
+                        currentDir = new File(System.getProperty("user.home") + File.separator + "anything");
+                    } else {
+                        currentDir = new File(System.getProperty("user.dir") + File.separator + "sampledata" + File.separator + "anything");
+                    }
 		        }
 		        dialog.setFilterPath(currentDir.getPath());
 		        dialog.setText("Select a File");
@@ -110,12 +115,12 @@ public class FileLoad implements Algorithm{
 		        
 		   		File file = new File(fileName);
 		        
-		   		if (file.isDirectory()) {
-		        	currentDir = file;
-		        } else {
-		        	currentDir = new File(file.getPath());
-		        }
-		   		
+                if (file.isDirectory()) {
+                    currentDir = new File(file + File.separator + "anything");
+                } else {
+                    currentDir = new File(file.getParent() + File.separator + "anything");
+                }
+                
 		   		String fileExtension = getFileExtension(file);
 	       		String filter = "(&(type=converter)(in_data=file-ext:"+fileExtension+"))";
 		        try {

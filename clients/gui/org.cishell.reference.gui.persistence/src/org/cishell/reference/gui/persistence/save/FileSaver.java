@@ -44,14 +44,14 @@ public class FileSaver {
     private boolean confirmFileOverwrite(File file) {
         String message = "The file:\n" + file.getPath()
             + "\nalready exists. Are you sure you want to overwrite it?";
-        return guiBuilder.showConfirm("File Overwrite", message, message);
+        return guiBuilder.showConfirm("File Overwrite", message, "");
     }
 
     private boolean isSaveFileValid(File file) {
         boolean valid = false;
         if (file.isDirectory()) {
             String message = "Destination cannot be a directory. Please choose a file";
-            guiBuilder.showError("Invalid Destination", message, message);
+            guiBuilder.showError("Invalid Destination", message, "");
             valid = false;
         } else if (file.exists()) {
             valid = confirmFileOverwrite(file);
@@ -68,21 +68,24 @@ public class FileSaver {
 
     	String ext = outDataStr.substring(outDataStr.indexOf(':')+1);
         
+        if ((""+ext).startsWith(".")) {
+            ext = ext.substring(1);
+        }
+        
         FileDialog dialog = new FileDialog(parent, SWT.SAVE);
         
         if (currentDir == null) {
-            currentDir = new File(System.getProperty("user.home"));
+            currentDir = new File(System.getProperty("user.home") + File.separator + "anything");
         }
         dialog.setFilterPath(currentDir.getPath());
         
-        dialog.setFilterExtensions(new String[]{"*" + ext});
+        dialog.setFilterExtensions(new String[]{"*." + ext});
         dialog.setText("Choose File");
         
         String fileLabel = (String)data.getMetaData().get(DataProperty.LABEL);
         if (fileLabel == null) {
-        	dialog.setFileName("*" + ext);
-        }
-        else {
+        	dialog.setFileName("*." + ext);
+        } else {
         	dialog.setFileName(fileLabel + '.' + ext);        	
         }
 
@@ -96,19 +99,19 @@ public class FileSaver {
                     continue;
                 if (ext != null && ext.length() != 0)
                     if (!selectedFile.getPath().endsWith(ext))
-                        selectedFile = new File(selectedFile.getPath() + ext) ;
+                        selectedFile = new File(selectedFile.getPath()+'.'+ ext);
 
                 Data newData = converter.convert(data);
                 
                 copy((File)newData.getData(), selectedFile);
                 
                 if (selectedFile.isDirectory()) {
-                	currentDir = selectedFile;
+                	currentDir = new File(selectedFile + File.separator + "anything");
                 } else {
-                	currentDir = new File(selectedFile.getParent());
+                	currentDir = new File(selectedFile.getParent() + File.separator + "anything");
                 }
                     
-                done = true ;
+                done = true;
        
                 logService.log(LogService.LOG_INFO, "Saved: " + selectedFile.getPath() + "\n");
             } else {
