@@ -10,7 +10,6 @@ import org.cishell.service.conversion.DataConversionService;
 import org.cishell.service.guibuilder.GUIBuilderService;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
-import org.osgi.service.log.LogService;
 
 public class Save implements Algorithm {
     Data[] data;
@@ -21,7 +20,7 @@ public class Save implements Algorithm {
     
     private GUIBuilderService guiBuilder;    
     private DataConversionService conversionManager;
-    private LogService logService;
+    //private LogService logService;
     
     public Save(Data[] data, Dictionary parameters, CIShellContext context) {
         this.data = data;
@@ -33,7 +32,7 @@ public class Save implements Algorithm {
         this.conversionManager = (DataConversionService) context.getService(
         		DataConversionService.class.getName());
         
-        this.logService = (LogService)context.getService(LogService.class.getName());
+        //this.logService = (LogService)context.getService(LogService.class.getName());
         this.guiBuilder = (GUIBuilderService)context.getService(GUIBuilderService.class.getName());
     }
 

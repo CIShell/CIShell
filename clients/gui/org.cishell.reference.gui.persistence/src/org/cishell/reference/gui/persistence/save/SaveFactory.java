@@ -3,6 +3,7 @@ package org.cishell.reference.gui.persistence.save;
 import java.util.Dictionary;
 
 import org.cishell.framework.CIShellContext;
+import org.cishell.framework.LocalCIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
 import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.algorithm.DataValidator;
@@ -16,7 +17,9 @@ import org.osgi.service.metatype.MetaTypeProvider;
 public class SaveFactory implements AlgorithmFactory, DataValidator {
     private CIShellContext context;	
 
-    protected void activate(ComponentContext ctxt) {}
+    protected void activate(ComponentContext ctxt) {
+        context = new LocalCIShellContext(ctxt.getBundleContext());
+    }
     protected void deactivate(ComponentContext ctxt) {}
 
     public Algorithm createAlgorithm(Data[] data, Dictionary parameters, CIShellContext context) {

@@ -52,7 +52,6 @@ public class FileSaver {
         if (file.isDirectory()) {
             String message = "Destination cannot be a directory. Please choose a file";
             guiBuilder.showError("Invalid Destination", message, message);
-            //logService.log(LogService.LOG_ERROR, "Invalid Destination: " + message);
             valid = false;
         } else if (file.exists()) {
             valid = confirmFileOverwrite(file);
@@ -111,17 +110,8 @@ public class FileSaver {
                     
                 done = true ;
        
-                guiBuilder.showInformation("File Saved", 
-                		"File successfully Saved", 
-                		"File saved: " + selectedFile.getPath());
-                //logService.log(LogService.LOG_INFO, "File saved: " + selectedFile.getPath() + "\n");
-                //DataManagerService dms = (DataManagerService)context.getService(DataManagerService.class.getName());
-                //dms.addData(data);
+                logService.log(LogService.LOG_INFO, "Saved: " + selectedFile.getPath() + "\n");
             } else {
-            	guiBuilder.showInformation("File Save Cancel", 
-            			"File save has been cancelled",
-            			"File save has been cancelled");
-                //logService.log(LogService.LOG_INFO, "File save cancelled.\n");
                 done = true;
                 return false;
             }            
@@ -145,7 +135,6 @@ public class FileSaver {
     	}
     	catch (IOException ioe) {
     		guiBuilder.showError("Copy Error", "IOException during copy", ioe.getMessage());
-            logService.log(LogService.LOG_ERROR, ioe.getMessage());
             return false;
     	}
     }
