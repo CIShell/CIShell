@@ -56,7 +56,6 @@ public class FileLoad implements Algorithm{
 
     	final IWorkbenchWindow[] windows = PlatformUI.getWorkbench().getWorkbenchWindows();
     	if (windows.length ==0){
-//    		System.out.println("windows[0] is null!!");
     		return null;
     	}
     
@@ -72,7 +71,6 @@ public class FileLoad implements Algorithm{
     		return returnDM;
     	}
     	else {    		
-//   		logger.log(LogService.LOG_INFO, "Did not load any data...");
     		return null;
     	}
     	
@@ -119,7 +117,6 @@ public class FileLoad implements Algorithm{
 		        }
 		   		
 		   		String fileExtension = getFileExtension(file);
-	       		//System.out.println("fileExtension = "+fileExtension);
 	       		String filter = "(&(type=converter)(in_data=file-ext:"+fileExtension+"))";
 		        try {
 
