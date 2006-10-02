@@ -50,6 +50,7 @@ public class SWTGuiBuilderService implements GUIBuilderService {
         }};
         
     private Display display;
+    private Shell lastShell;
         
     
     public SWTGuiBuilderService(Display display) {
@@ -97,8 +98,17 @@ public class SWTGuiBuilderService implements GUIBuilderService {
         guiRun(new Runnable() {
             public void run() {
                 returner.returnValue = display.getActiveShell();
+                
+                if (returner.returnValue == null) {
+                    if (lastShell != null) {
+                        returner.returnValue = lastShell;
+                    } else {
+                        returner.returnValue = new Shell();
+                    }
+                }
             }});
         
+        lastShell = (Shell) returner.returnValue;
         return (Shell) returner.returnValue;
     }
 
