@@ -44,16 +44,15 @@ public class FileSaver {
     private boolean confirmFileOverwrite(File file) {
         String message = "The file:\n" + file.getPath()
             + "\nalready exists. Are you sure you want to overwrite it?";
-        logService.log(LogService.LOG_INFO, "Confirm File Overwrite: " + message);
-        return true;
-        //return guiBuilder.showConfirm("File Overwrite", message, message);
+        return guiBuilder.showConfirm("File Overwrite", message, message);
     }
 
     private boolean isSaveFileValid(File file) {
         boolean valid = false;
         if (file.isDirectory()) {
             String message = "Destination cannot be a directory. Please choose a file";
-            logService.log(LogService.LOG_ERROR, "Invalid Destination: " + message);
+            guiBuilder.showError("Invalid Destination", message, message);
+            //logService.log(LogService.LOG_ERROR, "Invalid Destination: " + message);
             valid = false;
         } else if (file.exists()) {
             valid = confirmFileOverwrite(file);
@@ -112,17 +111,17 @@ public class FileSaver {
                     
                 done = true ;
        
-                //guiBuilder.showInformation("File Saved", 
-                //		"File successfully Saved", 
-                //		"File saved: " + selectedFile.getPath());
-                logService.log(LogService.LOG_INFO, "File saved: " + selectedFile.getPath() + "\n");
+                guiBuilder.showInformation("File Saved", 
+                		"File successfully Saved", 
+                		"File saved: " + selectedFile.getPath());
+                //logService.log(LogService.LOG_INFO, "File saved: " + selectedFile.getPath() + "\n");
                 //DataManagerService dms = (DataManagerService)context.getService(DataManagerService.class.getName());
                 //dms.addData(data);
             } else {
-            	//guiBuilder.showInformation("File Save Cancel", 
-            	//		"File save has been cancelled",
-            	//		"File save has been cancelled");
-                logService.log(LogService.LOG_INFO, "File save cancelled.\n");
+            	guiBuilder.showInformation("File Save Cancel", 
+            			"File save has been cancelled",
+            			"File save has been cancelled");
+                //logService.log(LogService.LOG_INFO, "File save cancelled.\n");
                 done = true;
                 return false;
             }            
@@ -145,6 +144,7 @@ public class FileSaver {
     		return true;
     	}
     	catch (IOException ioe) {
+    		guiBuilder.showError("Copy Error", "IOException during copy", ioe.getMessage());
             logService.log(LogService.LOG_ERROR, ioe.getMessage());
             return false;
     	}

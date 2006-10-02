@@ -4,7 +4,6 @@ import java.util.Dictionary;
 
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
-import org.cishell.framework.algorithm.DataValidator;
 import org.cishell.framework.data.Data;
 import org.cishell.service.conversion.Converter;
 import org.cishell.service.conversion.DataConversionService;
@@ -13,7 +12,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 import org.osgi.service.log.LogService;
 
-public class Save implements Algorithm, DataValidator {
+public class Save implements Algorithm {
     Data[] data;
     Dictionary parameters;
     CIShellContext context;
@@ -43,11 +42,11 @@ public class Save implements Algorithm, DataValidator {
     	final Converter[] converters = conversionManager.findConverters(data[0], "file-ext:*");
 
     	if (converters.length < 1) {
-    		logService.log(LogService.LOG_ERROR, "No valid converters found!");
-    		//guiBuilder.showError("No Converters", 
-    		//		"No valid converters for data type: " + 
-    		//		data[0].getData().getClass().getName(), 
-    		//		"Please install a plugin that will save the data type to a file");
+    		//logService.log(LogService.LOG_ERROR, "No valid converters found!");
+    		guiBuilder.showError("No Converters", 
+    				"No valid converters for data type: " + 
+    				data[0].getData().getClass().getName(), 
+    				"Please install a plugin that will save the data type to a file");
     	}
     	else {
     		if (!parentShell.isDisposed()) {
@@ -66,15 +65,4 @@ public class Save implements Algorithm, DataValidator {
     	}
         return null;
     }
-
-	public String validate(Data[] data) {
-    	Converter[] converters = conversionManager.findConverters(data[0], "file-ext:*");
-    	if (converters.length == 0) {
-    		return "No valid converters from " + 
-    				data[0].getData().getClass().getName() + " to any file extension";
-    	}
-    	else {
-    		return "";
-    	}
-	}
 }
