@@ -16,7 +16,7 @@
 	<info>
 		<appname>CIShell: Cyberinfrastructure Shell</appname>
 		<appsubpath>cishell</appsubpath>
-		<appversion>0.0.1</appversion>
+		<appversion>0.1.0</appversion>
 		<authors>
 			<author name="Bruce Herr" email="bh2@bh2.net" />
 			<author name="Weixia Huang" email="huangb@indiana.edu" />
@@ -61,6 +61,7 @@
 		<!-- <res src="../unix_shortcut_specification.xml"
 			id="Unix_shortcutSpec.xml"/> -->
 		<res id="InfoPanel.info" src="../thanks.txt" />
+		<res id="XInfoPanel.info" src="../mac_instructions.txt" />
 	</resources>
 
 	<native type="izpack" name="ShellLink.dll" />
@@ -76,6 +77,7 @@
 		<!-- <panel classname="PacksPanel"/> -->
 		<panel classname="InstallPanel" />
 		<panel os="windows" classname="ShortcutPanel" />
+		<panel os="mac" classname="XInfoPanel" />
 		<panel classname="InfoPanel" />
 		<panel classname="SimpleFinishPanel" />
 	</panels>
