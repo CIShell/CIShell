@@ -59,10 +59,22 @@ public class SWTGuiBuilderService implements GUIBuilderService {
 
     
     public GUI createGUI(String id, MetaTypeProvider parameters) {
-        GUICreator creator = new GUICreator(id, parameters);
-        display.syncExec(creator);
+        boolean validParams = true;
         
-        return creator.gui;
+        try {
+            validParams = parameters.getObjectClassDefinition(id, null) != null;
+        } catch (IllegalArgumentException e) {
+            validParams = false;
+        }
+        
+        if (validParams) {
+            GUICreator creator = new GUICreator(id, parameters);
+            display.syncExec(creator);
+            
+            return creator.gui;
+        } else {
+            return NULL_GUI;
+        }
     }
     
     private class GUICreator implements Runnable {
@@ -77,7 +89,7 @@ public class SWTGuiBuilderService implements GUIBuilderService {
         
         public void run() {
             try {
-                Shell activeShell = display.getActiveShell();
+                Shell activeShell = getActiveShell();
                 
                 Shell shell = new Shell(activeShell, SWT.DIALOG_TRIM | SWT.RESIZE);
                 if (activeShell != null) {
