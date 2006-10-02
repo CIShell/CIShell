@@ -25,6 +25,7 @@ import org.cishell.app.service.scheduler.SchedulerService;
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.algorithm.AlgorithmProperty;
+import org.cishell.framework.algorithm.DataValidator;
 import org.cishell.framework.data.Data;
 import org.cishell.service.conversion.Converter;
 import org.cishell.service.conversion.DataConversionService;
@@ -141,7 +142,32 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, DataMa
                 }
             }
         }
-        setEnabled(data != null);
+        setEnabled(data != null && isValid());
+    }
+    
+    private boolean isValid() {
+        String valid = null;
+        String[] classes = (String[]) ref.getProperty(Constants.OBJECTCLASS);
+        
+        if (classes != null && data != null) {
+            for (int i=0; i < classes.length; i++) {
+                if (classes[i].equals(DataValidator.class.getName())) {
+                    DataValidator validator = (DataValidator) bContext.getService(ref);
+                    
+                    synchronized(this) {
+                        for (int j=0; j < data.length; j++) {
+                            if (converters[j] != null && converters[j].length > 0) {
+                                data[j] = converters[j][0].convert(data[j]);
+                            }
+                        }
+                        
+                        valid = validator.validate(data);
+                    }
+                }
+            }
+        }
+        
+        return valid == null || valid.length() == 0;
     }
     
     private boolean isAsignableFrom(String type, Data datum) {
