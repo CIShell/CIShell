@@ -11,6 +11,11 @@ import org.cishell.service.guibuilder.GUIBuilderService;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 
+/**
+ * Save algorithm for persisting a data object
+ * 
+ * @author bmarkine
+ */
 public class Save implements Algorithm {
     Data[] data;
     Dictionary parameters;
@@ -20,8 +25,14 @@ public class Save implements Algorithm {
     
     private GUIBuilderService guiBuilder;    
     private DataConversionService conversionManager;
-    //private LogService logService;
     
+    /**
+     * Sets up default services for the algorithm
+     * 
+     * @param data The data array to persist
+     * @param parameters Parameters for the algorithm
+     * @param context Provides services to CIShell services
+     */
     public Save(Data[] data, Dictionary parameters, CIShellContext context) {
         this.data = data;
         this.parameters = parameters;
@@ -32,16 +43,19 @@ public class Save implements Algorithm {
         this.conversionManager = (DataConversionService) context.getService(
         		DataConversionService.class.getName());
         
-        //this.logService = (LogService)context.getService(LogService.class.getName());
         this.guiBuilder = (GUIBuilderService)context.getService(GUIBuilderService.class.getName());
     }
 
+    /**
+     * Executes the algorithm
+     * 
+     * @return Null for this algorithm
+     */
     public Data[] execute() {
     	//This only checks the first Data in the array
     	final Converter[] converters = conversionManager.findConverters(data[0], "file-ext:*");
 
     	if (converters.length < 1) {
-    		//logService.log(LogService.LOG_ERROR, "No valid converters found!");
     		guiBuilder.showError("No Converters", 
     				"No valid converters for data type: " + 
     				data[0].getData().getClass().getName(), 
@@ -51,7 +65,6 @@ public class Save implements Algorithm {
     		if (!parentShell.isDisposed()) {
     			parentShell.getDisplay().syncExec(new Runnable() {
     				public void run() {
-    					//Shell shell = new Shell(parentShell);
     					SaveDataChooser sdc = new SaveDataChooser(data[0],
     		    			                     			parentShell, converters,
     		    			                     			"title",

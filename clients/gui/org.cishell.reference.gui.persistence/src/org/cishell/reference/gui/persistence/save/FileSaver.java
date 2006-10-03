@@ -19,34 +19,48 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.osgi.framework.ServiceReference;
-import org.osgi.service.log.LogService;
 
 /**
- * @author Team IVC
+ * Persist the file to disk for the user
+ * 
+ * @author Team 
  */
 public class FileSaver {
     private static File currentDir;
 
     private Shell parent;
-    private LogService logService;
-    private CIShellContext ciContext;
     
     private GUIBuilderService guiBuilder;
 
 
+    /**
+     * Initializes services to output messages
+     * 
+     * @param parent
+     * @param context
+     */
     public FileSaver(Shell parent, CIShellContext context){
         this.parent = parent;
-        this.ciContext = context;
-        this.logService = (LogService) ciContext.getService(LogService.class.getName());
         this.guiBuilder = (GUIBuilderService)context.getService(GUIBuilderService.class.getName());
     }       
 
+    /**
+     * File exists, so make sure the user wants to overwrite
+     * @param file The file to possibly overwrite
+     * @return Whether or not the user decides to overwrite
+     */
     private boolean confirmFileOverwrite(File file) {
         String message = "The file:\n" + file.getPath()
             + "\nalready exists. Are you sure you want to overwrite it?";
         return guiBuilder.showConfirm("File Overwrite", message, "");
     }
 
+    /**
+     * Checks for a valid file destination
+     * 
+     * @param file to save to
+     * @return True on valid file save
+     */
     private boolean isSaveFileValid(File file) {
         boolean valid = false;
         if (file.isDirectory()) {
@@ -61,6 +75,13 @@ public class FileSaver {
         return valid;
     }
 
+    /**
+     * Given a converter, save the data
+     * 
+     * @param converter Saves the data to a file
+     * @param data Data object to save
+     * @return Whether or not the save was successful
+     */
     public boolean save(Converter converter, Data data) {
     	ServiceReference[] serviceReferenceArray = converter.getConverterChain();
     	String outDataStr = (String)serviceReferenceArray[serviceReferenceArray.length-1]
@@ -113,7 +134,9 @@ public class FileSaver {
                     
                 done = true;
        
-                logService.log(LogService.LOG_INFO, "Saved: " + selectedFile.getPath() + "\n");
+                guiBuilder.showInformation("Data Saved", 
+                		"Data successfully saved to disk", 
+                		"Saved: " + selectedFile.getPath());
             } else {
                 done = true;
                 return false;
@@ -122,6 +145,13 @@ public class FileSaver {
         return true;
     }
     
+    /**
+     * Converter puts it into a temporary directory, this copies it over
+     * 
+     * @param in The temp file to copy
+     * @param out Destination to copy to
+     * @return True on successful copy, false otherwise
+     */
     private boolean copy(File in, File out) {
     	try {
     		FileInputStream  fis = new FileInputStream(in);

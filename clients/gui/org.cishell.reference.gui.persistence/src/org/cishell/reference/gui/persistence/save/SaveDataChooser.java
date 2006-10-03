@@ -32,13 +32,12 @@ import org.eclipse.swt.widgets.Shell;
 import org.cishell.reference.gui.common.AbstractDialog;
 
 /**
- * SavePersisterChooser is a simple user interface to allow for selection
+ * SaveDataChooser is a simple user interface to allow for selection
  * among several Persisters that support the selected model, in the event
  * that more than one is found.
  *
  * @author Team IVC
  */
-//public class SaveDataChooser extends Shell {
 public class SaveDataChooser extends AbstractDialog {
     protected Data data;
     protected Converter[] converterArray;
@@ -49,31 +48,33 @@ public class SaveDataChooser extends AbstractDialog {
     public static final Image QUESTION = Display.getCurrent().getSystemImage(SWT.ICON_QUESTION);
 
     /**
-     * Creates a new SavePersisterChooser object.
+     * Creates a new SaveChooser object.
      *
-     * @param title the desired Title of the SavePersisterChooser window
-     * @param model the model that this SavePersisterChooser is attempting to save
-     * @param window the IWorkbenchWindow that this SavePersisterChooser belongs to
-     * @param persisters the Persisters that can be used to save the given model
+     * @param data The data object to save
+     * @param parent The parent shell
+     * @param converterArray The array of converters to persist the data
+     * @param title Title of the Window
+     * @param brandPluginID The plugin that supplies the branding
+     * @param context The CIShellContext to retrieve available services
      */
-    //public SaveDataChooser(String title, Data data, Shell parent, Data[] converterArray) {
     public SaveDataChooser(Data data, Shell parent, Converter[] converterArray,
     						String title, String brandPluginID, CIShellContext context) {
     	super(parent, title, QUESTION);
         this.data = data;        
-        //this.parent = parent;
         this.converterArray = converterArray;
         this.context = context;
     }   
 
-    /*
-     * Initialize the GUI for this SavePersisterChooser
+    /**
+     * Initialize the GUI for the chooser
+     * @param parent The parent window
+     * @return The new window containing the chooser
      */
     private Composite initGUI(Composite parent) {
         Composite content = new Composite(parent, SWT.NONE);
         GridLayout layout = new GridLayout();
         layout.numColumns = 2;
-        content.setLayout(layout);                
+        content.setLayout(layout);
         //parent.setLayout(layout);                
 
         Group converterGroup = new Group(content, SWT.NONE);
@@ -97,7 +98,6 @@ public class SaveDataChooser extends AbstractDialog {
             });
 
         Group detailsGroup = new Group(content, SWT.NONE);
-        //Group detailsGroup = new Group(parent, SWT.NONE);
         detailsGroup.setText("Details");
         detailsGroup.setLayout(new FillLayout());        
         GridData detailsData = new GridData(GridData.FILL_BOTH);
@@ -113,7 +113,7 @@ public class SaveDataChooser extends AbstractDialog {
         return content;
     }
 
-    /*
+    /**
      * Initialize the Listbox of Persisters using the stored Persister array
      */
     private void initConverterList() {
@@ -133,8 +133,10 @@ public class SaveDataChooser extends AbstractDialog {
         }
     }
 
-    /*
-     * Sets up the DetailPane where the details from the Persister PropertyMaps are displayed. 
+    /**
+     * Sets up the DetailPane where the details from the Persister PropertyMaps are displayed.
+     * @param detailsGroup The detail pane to init
+     * @return A style of the text 
      */
     private StyledText initDetailPane(Group detailsGroup) {
         StyledText detailPane = new StyledText(detailsGroup, SWT.H_SCROLL | SWT.V_SCROLL);
@@ -144,9 +146,10 @@ public class SaveDataChooser extends AbstractDialog {
         return detailPane;
     }
 
-    /*
+    /**
      * Changes the information displayed in the DetailsPane whenever a new Persister
      * is selected.
+     * @param converter A converter that contains the properties for the detail pane
      */
     private void updateDetailPane(Converter converter) {
         Dictionary dict = converter.getProperties();
@@ -157,8 +160,6 @@ public class SaveDataChooser extends AbstractDialog {
         while (keysEnum.hasMoreElements()) {
             Object key = keysEnum.nextElement();
             Object val = dict.get(key);
-            //if(property.getAcceptableClass().equals(String.class)){
-	        //    String val = (String) dict.getPropertyValue(property);
 	
             StyleRange styleRange = new StyleRange();
             styleRange.start = detailPane.getText().length();
@@ -168,13 +169,13 @@ public class SaveDataChooser extends AbstractDialog {
             detailPane.setStyleRange(styleRange);
 	
             detailPane.append(val + "\n");
-            //}
         }
     }
 
-    /*
+    /**
      * When a Persister is chosen to Persist this model, this method handles the job
      * of opening the FileSaver and saving the model.
+     * @param selectedIndex The chosen converter
      */
     protected void selectionMade(int selectedIndex) {
         getShell().setVisible(false);
@@ -183,6 +184,12 @@ public class SaveDataChooser extends AbstractDialog {
         close(saver.save(converter, data));
     }
 
+    /**
+     * Create the buttons for either cancelling or continuing with
+     * the save
+     * 
+     * @param parent The GUI to place the buttons
+     */
     public void createDialogButtons(Composite parent) {
         Button select = new Button(parent, SWT.PUSH);
         select.setText("Select");
@@ -205,6 +212,12 @@ public class SaveDataChooser extends AbstractDialog {
             });
     }
 
+    /**
+     * Checks for the number of file savers.  If there is one
+     * converter then it will save directly, otherwise intialize the chooser.
+     * 
+     * @param parent The parent GUI for new dialog windows.
+     */
     public Composite createContent(Composite parent) {
     	if (converterArray.length == 1) {
             final FileSaver saver = new FileSaver((Shell)parent, context);
