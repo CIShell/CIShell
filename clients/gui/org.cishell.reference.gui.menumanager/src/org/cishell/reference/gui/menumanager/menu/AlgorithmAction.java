@@ -158,6 +158,7 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, DataMa
                         for (int j=0; j < data.length; j++) {
                             if (converters[j] != null && converters[j].length > 0) {
                                 data[j] = converters[j][0].convert(data[j]);
+                                converters[j] = null;
                             }
                         }
                         

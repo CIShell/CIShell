@@ -54,6 +54,7 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty {
             for (int i=0; i < data.length; i++) {
                 if (converters[i] != null) {
                     data[i] = converters[i][0].convert(data[i]);
+                    converters[i] = null;
                 }
             }
             
