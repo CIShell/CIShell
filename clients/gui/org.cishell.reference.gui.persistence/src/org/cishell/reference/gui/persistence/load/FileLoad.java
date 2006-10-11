@@ -157,7 +157,7 @@ public class FileLoad implements Algorithm{
 	        		}
 	  
 	        		// lots of persisters found, return the chooser
-		       		new LoadPersisterChooser("Load", file, window.getShell(), 
+		       		new LoadDataChooser("Load", file, window.getShell(), 
 	    							ciContext, bContext, serviceRefList, returnList).open();			
 	
 
