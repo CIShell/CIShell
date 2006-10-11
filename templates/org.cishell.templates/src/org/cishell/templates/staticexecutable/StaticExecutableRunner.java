@@ -212,7 +212,16 @@ public class StaticExecutableRunner implements Algorithm {
         
         for (int i=0; i < data.length; i++) {
             String file = ((File) data[i].getData()).getAbsolutePath();
+            
+            if (File.separatorChar == '\\') {
+            	file = file.replace(File.separatorChar, '/');
+        	}
+            
             str = str.replaceAll("\\$\\{inFile\\["+i+"\\]\\}", file);
+            
+            if (File.separatorChar == '\\') {
+            	str = str.replace('/',File.separatorChar);
+            }
         }
         
         for (Enumeration i=parameters.keys(); i.hasMoreElements(); ) {
