@@ -58,7 +58,7 @@ public class SaveDataChooser extends AbstractDialog {
      * @param context The CIShellContext to retrieve available services
      */
     public SaveDataChooser(Data data, Shell parent, Converter[] converterArray,
-    						String title, String brandPluginID, CIShellContext context) {
+    						String title, CIShellContext context) {
     	super(parent, title, QUESTION);
         this.data = data;        
         this.converterArray = converterArray;
