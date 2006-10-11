@@ -18,7 +18,6 @@ Import-Package: org.cishell.app.service.datamanager,
  org.osgi.service.metatype;version="1.1.0",
  org.osgi.service.prefs;version="1.1.0"
 X-AutoStart: true
-Service-Component: OSGI-INF/load.xml, OSGI-INF/save.xml
+Service-Component: OSGI-INF/load.xml, OSGI-INF/save.xml, OSGI-INF/view.xml
 Require-Bundle: org.eclipse.swt,
  org.eclipse.ui
- 
