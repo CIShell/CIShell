@@ -49,8 +49,18 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
                 IWorkbenchActionConstants.M_FILE);
         MenuManager helpMenu = createMenu("&Help", 
                 IWorkbenchActionConstants.M_HELP);
-        
+
 		menuBar.add(fileMenu);
+        
+        //Pre-adding menus so they show up in this order...
+        createAndAddMenu(menuBar, "Preprocessing", "preprocessing");
+        createAndAddMenu(menuBar, "Modeling", "modeling");
+        createAndAddMenu(menuBar, "Analysis", "analysis");
+        createAndAddMenu(menuBar, "Visualization", "visualization");
+        createAndAddMenu(menuBar, "Converters", "converters");
+        createAndAddMenu(menuBar, "Toolkits", "toolkits");
+        createAndAddMenu(menuBar, "Tools", "tools");
+        
         menuBar.add(new GroupMarker("start"));
         menuBar.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
         menuBar.add(new GroupMarker("end"));
@@ -63,6 +73,11 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
         helpMenu.add(new Separator());
         helpMenu.add(aboutAction);
 	}
+    
+    private void createAndAddMenu(IMenuManager menuBar, String text, String id) {
+        MenuManager menu = createMenu(text, id);
+        menuBar.add(menu);
+    }
     
     private MenuManager createMenu(String text, String id) {
         MenuManager menu = new MenuManager(text, id);
