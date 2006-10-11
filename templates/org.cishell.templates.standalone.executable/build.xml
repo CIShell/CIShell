@@ -38,6 +38,7 @@
 				<exclude name="l10n/**/*"/>
 				<exclude name="build/**/*"/>
 				<exclude name="lib/**/*"/>
+				<exclude name="src/**/*"/>
 				<exclude name="*"/>
 			</fileset>
 		</copy>
