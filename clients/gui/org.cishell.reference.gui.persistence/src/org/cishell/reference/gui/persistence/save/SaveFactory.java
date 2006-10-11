@@ -65,6 +65,8 @@ public class SaveFactory implements AlgorithmFactory, DataValidator {
 		DataConversionService conversionManager = (DataConversionService) context.getService(
         		DataConversionService.class.getName());
 
+		//Fix me
+		//Bonnie:why only check data[0]? An user can select multiple objects from data manager.
     	Converter[] converters = conversionManager.findConverters(data[0], "file-ext:*");
     	if (converters.length == 0) {
     		return "No valid converters from " + 
