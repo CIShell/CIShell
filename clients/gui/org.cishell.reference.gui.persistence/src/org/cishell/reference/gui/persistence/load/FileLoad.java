@@ -61,7 +61,13 @@ public class FileLoad implements Algorithm{
     
     	Display display = PlatformUI.getWorkbench().getDisplay();
     	DataUpdater dataUpdater = new DataUpdater (windows[0]);
-    	display.syncExec(dataUpdater);
+    	
+    	if (Thread.currentThread() != display.getThread()) {
+    		display.syncExec(dataUpdater);
+		} else {
+			dataUpdater.run();
+		}
+    	
     	if (!dataUpdater.returnList.isEmpty()){
     		int size = dataUpdater.returnList.size();
     		returnDM = new Data[size];

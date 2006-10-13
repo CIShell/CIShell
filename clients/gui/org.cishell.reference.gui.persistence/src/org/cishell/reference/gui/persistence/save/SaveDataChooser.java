@@ -12,6 +12,7 @@ import java.util.Enumeration;
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.AlgorithmProperty;
 import org.cishell.framework.data.Data;
+import org.cishell.reference.gui.common.AbstractDialog;
 import org.cishell.service.conversion.Converter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
@@ -28,8 +29,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Shell;
-
-import org.cishell.reference.gui.common.AbstractDialog;
 
 /**
  * SaveDataChooser is a simple user interface to allow for selection
@@ -118,26 +117,32 @@ public class SaveDataChooser extends AbstractDialog {
      */
     private void initConverterList() {
         for (int i = 0; i < converterArray.length; ++i) {
-            Dictionary dict = converterArray[i].getProperties();
+			if (converterArray[i] != null) {
+				Dictionary dict = converterArray[i].getProperties();
 
-            // get the name of the persister from the property map
-            String outData = (String) dict.get(AlgorithmProperty.LABEL);
+				// get the name of the persister from the property map
+				String outData = (String) dict.get(AlgorithmProperty.LABEL);
 
-            // if someone was sloppy enough to not provide a name, then use the
-            // name of the class instead.
-            if ((outData == null) || (outData.length() == 0)) {
-                outData = converterArray[i].getClass().getName();
-            }
+				// if someone was sloppy enough to not provide a name, then use
+				// the
+				// name of the class instead.
+				if ((outData == null) || (outData.length() == 0)) {
+					outData = converterArray[i].getClass().getName();
+				}
 
-            converterList.add(outData);
-        }
+				converterList.add(outData);
+			}
+		}
     }
 
     /**
-     * Sets up the DetailPane where the details from the Persister PropertyMaps are displayed.
-     * @param detailsGroup The detail pane to init
-     * @return A style of the text 
-     */
+	 * Sets up the DetailPane where the details from the Persister PropertyMaps
+	 * are displayed.
+	 * 
+	 * @param detailsGroup
+	 *            The detail pane to init
+	 * @return A style of the text
+	 */
     private StyledText initDetailPane(Group detailsGroup) {
         StyledText detailPane = new StyledText(detailsGroup, SWT.H_SCROLL | SWT.V_SCROLL);
         detailPane.setEditable(false);
