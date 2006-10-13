@@ -1,8 +1,6 @@
 package org.cishell.reference.gui.persistence.save;
 
 import java.util.Dictionary;
-import java.util.Set;
-import java.util.TreeSet;
 
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
@@ -12,8 +10,6 @@ import org.cishell.service.conversion.DataConversionService;
 import org.cishell.service.guibuilder.GUIBuilderService;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
-import org.osgi.framework.Constants;
-import org.osgi.framework.ServiceReference;
 
 /**
  * Save algorithm for persisting a data object
@@ -59,19 +55,6 @@ public class Save implements Algorithm {
     	//This only checks the first Data in the array
     	final Converter[] converters = conversionManager.findConverters(data[0], "file-ext:*");
 
-    	Set conversionSet = new TreeSet();
-    	for (int i=0; i < converters.length; i++) {
-    		if (!conversionSet.contains(converters[i])) {
-    			conversionSet.add(converters[i]);
-    			
-    			ServiceReference[] refs = converters[i].getConverterChain();
-    			for (int j=0; j < refs.length; j++) {
-    				System.out.print(refs[j].getProperty(Constants.SERVICE_PID+"->"));
-    			}
-    			
-    		}
-    	}
-    	
     	if (converters.length < 1) {
     		guiBuilder.showError("No Converters", 
     				"No valid converters for data type: " + 
