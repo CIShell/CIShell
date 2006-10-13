@@ -128,7 +128,8 @@ public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProp
 	    	ServiceReference[] otherServiceReference = ((Converter)o).getConverterChain();
 	    	if (refs.length == otherServiceReference.length) {
 		    	for (int i = 0; i < otherServiceReference.length; i++) {
-		    		if (refs[i].getProperty(Constants.SERVICE_ID).equals(otherServiceReference[i].getProperty(Constants.SERVICE_ID))) {
+		    		if (refs[i].getProperty(Constants.SERVICE_ID).equals(
+                            otherServiceReference[i].getProperty(Constants.SERVICE_ID))) {
 		    			equals = true;
 		    		} else {
 		    			equals = false;
