@@ -19,3 +19,4 @@ Export-Package: org.cishell.reference.app.service.datamanager,
  org.cishell.reference.app.service.scheduler,
  org.cishell.reference.service.conversion
 Eclipse-LazyStart: true
+Require-Bundle: edu.uci.ics.jung
