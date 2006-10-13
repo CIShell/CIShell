@@ -16,6 +16,7 @@ package org.cishell.reference.gui.datamanager;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -23,6 +24,8 @@ import java.util.StringTokenizer;
 
 import org.cishell.app.service.datamanager.DataManagerListener;
 import org.cishell.app.service.datamanager.DataManagerService;
+import org.cishell.framework.algorithm.Algorithm;
+import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.data.Data;
 import org.cishell.framework.data.DataProperty;
 import org.eclipse.jface.viewers.ISelection;
@@ -84,8 +87,12 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 	private Menu menu;
 
 	private Map dataToDataGUIItemMap;
+	
+	private AlgorithmFactory saveFactory;
 
 	private DiscardListener discardListener;
+
+	private SaveListener saveListener;
 
 	public AbstractDataManagerView(String brandPluginID) {
 		manager = Activator.getDataManagerService();
@@ -124,7 +131,14 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 
 		MenuItem saveItem = new MenuItem(menu, SWT.PUSH);
 		saveItem.setText("Save");
-		saveItem.setEnabled(false);
+		this.saveFactory = Activator.getSaveService();
+		if (this.saveFactory != null) {
+			saveListener = new SaveListener();
+			saveItem.addListener(SWT.Selection, saveListener);
+		}
+		else {
+			saveItem.setEnabled(false);
+		}
 
 		MenuItem renameItem = new MenuItem(menu, SWT.PUSH);
 		renameItem.setText("Rename");
@@ -191,7 +205,8 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 		// update the ModelManager with the new selection
 		final Set selection = new HashSet();
 		selection.add(data);
-		Display.getDefault().syncExec(new Runnable() {
+
+		guiRun(new Runnable() {
 			public void run() {
 				if (!tree.isDisposed()) {
 					// update the TreeView
@@ -205,6 +220,14 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 				}
 			}
 		});
+	}
+	
+	private void guiRun(Runnable run) {
+		if (Thread.currentThread() == Display.getDefault().getThread()) {
+			run.run();
+		} else {
+			Display.getDefault().syncExec(run);
+		}
 	}
 
 	public void dataLabelChanged(Data data, String label) {
@@ -231,7 +254,7 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 	public void dataSelected(final Data[] data) {
 		if (data != null) {
 			//setFocus();
-			Display.getDefault().syncExec(new Runnable() {
+			guiRun(new Runnable() {
 				public void run() {
 					Set itemSet = new HashSet();
 					for (int i = 0; i < data.length; ++i) {
@@ -392,6 +415,20 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 				} else {
 					tree.getMenu().setVisible(false);
 				}
+			}
+		}
+	}
+
+
+	private class SaveListener implements Listener {
+		public void handleEvent(Event event) {
+			if (AbstractDataManagerView.this.saveFactory != null) {
+				TreeItem[] selection = AbstractDataManagerView.this.tree.getSelection();
+				Data data = ((DataGUIItem)selection[0].getData()).getModel();
+				Algorithm algorithm = AbstractDataManagerView.this.saveFactory.createAlgorithm(new Data[]{data}, 
+																							new Hashtable(), 
+																							Activator.getCIShellContext());
+				algorithm.execute();
 			}
 		}
 	}

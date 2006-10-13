@@ -1,8 +1,14 @@
 package org.cishell.reference.gui.datamanager;
 
 import org.cishell.app.service.datamanager.DataManagerService;
+import org.cishell.framework.CIShellContext;
+import org.cishell.framework.LocalCIShellContext;
+import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogService;
 
 /**
@@ -64,5 +70,25 @@ public class Activator extends AbstractUIPlugin {
 				context.getServiceReference(LogService.class.getName()));
 		
 		return log;
+	}
+	
+	protected static AlgorithmFactory getSaveService() {
+		ServiceReference[] refs;
+		try {
+			refs = context.getServiceReferences(AlgorithmFactory.class.getName(),
+					"(&("+Constants.SERVICE_PID+"=org.cishell.reference.gui.persistence.save.Save))");
+			if (refs != null && refs.length > 0) {
+				return (AlgorithmFactory) context.getService(refs[0]);
+			} else {
+				return null;
+			}
+		} catch (InvalidSyntaxException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	protected static CIShellContext getCIShellContext() {
+		return new LocalCIShellContext(context);
 	}
 }
