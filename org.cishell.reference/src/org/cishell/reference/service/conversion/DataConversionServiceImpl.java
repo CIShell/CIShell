@@ -53,7 +53,6 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
 	
     private BundleContext bContext;
     private CIShellContext ciContext;
-    
     private Map   dataTypeToVertex;
     private Graph graph;
     
@@ -62,9 +61,11 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
         this.ciContext = ciContext;
 
         String filter = "(&("+ALGORITHM_TYPE+"="+TYPE_CONVERTER+")" +
-			  "("+IN_DATA+"=*) " +
-	        "("+OUT_DATA+"=*)" +
-	        "(!("+REMOTE+"=*)))";
+                          "("+IN_DATA+"=*) " +
+                          "("+OUT_DATA+"=*)" +
+                          "(!("+REMOTE+"=*))" +
+                          "(!("+IN_DATA+"=file-ext:*))" + 
+                          "(!("+OUT_DATA+"=file-ext:*)))";
         
         try {
 			this.bContext.addServiceListener(this, filter);
@@ -81,13 +82,15 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
     private void assembleGraph() {
     	graph = new DirectedSparseGraph();
     	
-    	dataTypeToVertex      = new Hashtable();
+    	dataTypeToVertex = new Hashtable();
     	
         try {
             String filter = "(&("+ALGORITHM_TYPE+"="+TYPE_CONVERTER+")" +
             				  "("+IN_DATA+"=*) " +
                               "("+OUT_DATA+"=*)" +
-                              "(!("+REMOTE+"=*)))";
+                              "(!("+REMOTE+"=*))" +
+                              "(!("+IN_DATA+"=file-ext:*))" + 
+                              "(!("+OUT_DATA+"=file-ext:*)))";
 
             ServiceReference[] refs = bContext.getServiceReferences(
                     AlgorithmFactory.class.getName(), filter);
@@ -108,28 +111,75 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
     } 
     
     /**
-     * TODO: Only provides a direct conversion, need to improve
-     * 
      * @see org.cishell.service.conversion.DataConversionService#findConverters(java.lang.String, java.lang.String)
      */
     public Converter[] findConverters(String inFormat, String outFormat) {
-    	//saveGraph();
+        saveGraph();
 		if (inFormat != null && inFormat.length() > 0 &&
 			outFormat != null && outFormat.length() > 0) {
 			
-			return getConverters(inFormat, outFormat);
+            Converter[] converters = null;
+            
+            if (outFormat.startsWith("file-ext:")) {
+                converters = getConverters(inFormat, "file:*");
+                converters = addFinalStepConversions(converters, outFormat);
+            } else {
+                converters = getConverters(inFormat, outFormat);
+            }
+            
+			return converters;
 		}
 		return new Converter[0];		
+    }
+    
+    private Converter[] addFinalStepConversions(Converter[] converters, String outFormat) {
+        Collection newConverters = new HashSet();
+        
+        Set formats = new HashSet();
+        for (int i=0; i < converters.length; i++) {
+            String format = (String) converters[i].getProperties().get(OUT_DATA);
+            
+            if (!formats.contains(format)) {
+                String filter = "(&("+ALGORITHM_TYPE+"="+TYPE_CONVERTER+")" +
+                                  "(!("+REMOTE+"=*))" +
+                                  "("+IN_DATA+"="+format+")" + 
+                                  "("+OUT_DATA+"="+outFormat+"))";
+            
+                try {
+                    ServiceReference[] refs = bContext.getServiceReferences(
+                            AlgorithmFactory.class.getName(), filter);
+                    
+                    if (refs != null && refs.length > 0) {
+                        for (int j=0; j < refs.length; j++) {
+                            List chain = new ArrayList(Arrays.asList(
+                                    converters[i].getConverterChain()));
+                            chain.add(refs[i]);
+                            
+                            ServiceReference[] newChain = (ServiceReference[]) 
+                                chain.toArray(new ServiceReference[0]);
+                            
+                            newConverters.add(new ConverterImpl(bContext, ciContext, newChain));
+                        }
+                    
+                        formats.add(format);
+                    }
+                } catch (InvalidSyntaxException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        
+        return (Converter[]) newConverters.toArray(new Converter[0]);
     }
 
     private Converter[] getConverters(String inFormat, String outFormat) {
 		String inFilter = "(&(" + ALGORITHM_TYPE + "=" + TYPE_CONVERTER + ")"
 				+ "(" + IN_DATA + "=" + inFormat + ") " + "(" + OUT_DATA
-				+ "=*)" + "(!(" + REMOTE + "=*)))";
+				+ "=*)" + "(!("+IN_DATA+"=file-ext:*))" + "(!(" + REMOTE + "=*)))";
 
 		String outFilter = "(&(" + ALGORITHM_TYPE + "=" + TYPE_CONVERTER + ")"
 				+ "(" + IN_DATA + "=*) " + "(" + OUT_DATA + "=" + outFormat
-				+ ")" + "(!(" + REMOTE + "=*)))";
+				+ ")" + "(!("+OUT_DATA+"=file-ext:*))" + "(!(" + REMOTE + "=*)))";
 
 		try {
 			ServiceReference[] inRefs = bContext.getServiceReferences(
@@ -162,7 +212,6 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
 				return (Converter[]) converterList.toArray(new Converter[0]);
 			}
 		} catch (InvalidSyntaxException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return new Converter[0];
