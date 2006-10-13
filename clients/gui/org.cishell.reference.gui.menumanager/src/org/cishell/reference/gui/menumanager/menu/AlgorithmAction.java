@@ -153,17 +153,16 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, DataMa
             for (int i=0; i < classes.length; i++) {
                 if (classes[i].equals(DataValidator.class.getName())) {
                     DataValidator validator = (DataValidator) bContext.getService(ref);
-                    
-                    synchronized(this) {
-                        for (int j=0; j < data.length; j++) {
-                            if (converters[j] != null && converters[j].length > 0) {
-                                data[j] = converters[j][0].convert(data[j]);
-                                converters[j] = null;
-                            }
+                                  
+                    //FIXME: Could cause concurrency problems...
+                    for (int j=0; j < data.length; j++) {
+                        if (converters[j] != null && converters[j].length > 0) {
+                            data[j] = converters[j][0].convert(data[j]);
+                            converters[j] = null;
                         }
-                        
-                        valid = validator.validate(data);
                     }
+                    
+                    valid = validator.validate(data);
                 }
             }
         }
