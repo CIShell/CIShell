@@ -139,6 +139,10 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
         for (int i=0; i < converters.length; i++) {
             String format = (String) converters[i].getProperties().get(OUT_DATA);
             
+            //tmp
+            String inFormat = (String) converters[i].getProperties().get(IN_DATA);
+            System.out.println("Converter:"+converters.length+":"+ inFormat + "->" + format + "->" + outFormat);
+            
             if (!formats.contains(format)) {
                 String filter = "(&("+ALGORITHM_TYPE+"="+TYPE_CONVERTER+")" +
                                   "(!("+REMOTE+"=*))" +
@@ -153,7 +157,7 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
                         for (int j=0; j < refs.length; j++) {
                             List chain = new ArrayList(Arrays.asList(
                                     converters[i].getConverterChain()));
-                            chain.add(refs[i]);
+                            chain.add(refs[j]);
                             
                             ServiceReference[] newChain = (ServiceReference[]) 
                                 chain.toArray(new ServiceReference[0]);
@@ -171,16 +175,22 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
         
         return (Converter[]) newConverters.toArray(new Converter[0]);
     }
-
+    
     private Converter[] getConverters(String inFormat, String outFormat) {
 		String inFilter = "(&(" + ALGORITHM_TYPE + "=" + TYPE_CONVERTER + ")"
-				+ "(" + IN_DATA + "=" + inFormat + ") " + "(" + OUT_DATA
-				+ "=*)" + "(!("+IN_DATA+"=file-ext:*))" + "(!(" + REMOTE + "=*)))";
+				+ "("+IN_DATA+"="+inFormat+") " + "("+OUT_DATA+"=*)" + 
+                "(!("+IN_DATA+"=file-ext:*))" + "(!(" + REMOTE + "=*)))";
 
 		String outFilter = "(&(" + ALGORITHM_TYPE + "=" + TYPE_CONVERTER + ")"
-				+ "(" + IN_DATA + "=*) " + "(" + OUT_DATA + "=" + outFormat
-				+ ")" + "(!("+OUT_DATA+"=file-ext:*))" + "(!(" + REMOTE + "=*)))";
-
+				+ "("+IN_DATA+"=*) " + "("+OUT_DATA+"="+outFormat+")" 
+                + "(!(" + REMOTE + "=*)))";
+        
+        Collection converterList = new HashSet();
+        
+        //TODO: Check to see if inFormat matches the outFormat (for example:
+        //in=file:text/graphml out=file:* If so, need to add a null converter
+        //(w/ 0 sized servicereference array) to the converterList
+        
 		try {
 			ServiceReference[] inRefs = bContext.getServiceReferences(
 					AlgorithmFactory.class.getName(), inFilter);
@@ -199,7 +209,7 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
 							.getProperty(AlgorithmProperty.OUT_DATA));
 				}
 
-				Collection converterList = new HashSet();
+				
 				for (Iterator i = inFileTypeSet.iterator(); i.hasNext();) {
 					String srcDataType = (String) i.next();
 					for (Iterator j = outFileTypeSet.iterator(); j.hasNext();) {
@@ -209,12 +219,11 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
 							converterList.add(converter);
 					}
 				}
-				return (Converter[]) converterList.toArray(new Converter[0]);
 			}
 		} catch (InvalidSyntaxException e) {
 			e.printStackTrace();
 		}
-		return new Converter[0];
+		return (Converter[]) converterList.toArray(new Converter[0]);
 	}
     
     private Converter getConverter(String inType, String outType) {
