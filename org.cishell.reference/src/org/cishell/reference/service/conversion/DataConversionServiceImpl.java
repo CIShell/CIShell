@@ -230,6 +230,10 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
 		Vertex srcVertex = (Vertex)dataTypeToVertex.get(inType);
 		Vertex tgtVertex = (Vertex)dataTypeToVertex.get(outType);
 		
+		if (srcVertex.equals(tgtVertex)) {
+			return new ConverterImpl(bContext, ciContext, new ServiceReference[0]);
+		}
+		
 		if (srcVertex != null && tgtVertex != null) {
 			DijkstraShortestPath shortestPathAlg = new DijkstraShortestPath(graph);
 			List edgeList = shortestPathAlg.getPath(srcVertex, tgtVertex);
