@@ -115,7 +115,7 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
      * @see org.cishell.service.conversion.DataConversionService#findConverters(java.lang.String, java.lang.String)
      */
     public Converter[] findConverters(String inFormat, String outFormat) {
-        saveGraph();
+        //saveGraph();
 		if (inFormat != null && inFormat.length() > 0 &&
 			outFormat != null && outFormat.length() > 0) {
 			
@@ -141,8 +141,8 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
             String format = (String) converters[i].getProperties().get(OUT_DATA);
             
             //tmp
-            String inFormat = (String) converters[i].getProperties().get(IN_DATA);
-            System.out.println("Converter:"+converters.length+":"+ inFormat + "->" + format + "->" + outFormat);
+            //String inFormat = (String) converters[i].getProperties().get(IN_DATA);
+            //System.out.println("Converter:"+converters.length+":"+ inFormat + "->" + format + "->" + outFormat);
             
             if (!formats.contains(format)) {
                 String filter = "(&("+ALGORITHM_TYPE+"="+TYPE_CONVERTER+")" +
@@ -188,10 +188,9 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
         
         Collection converterList = new HashSet();
         
-        //TODO: Check to see if inFormat matches the outFormat (for example:
-        //in=file:text/graphml out=file:* If so, need to add a null converter
-        //(w/ 0 sized servicereference array) to the converterList
-        
+        //Check to see if inFormat matches the outFormat (for example:
+        //in=file:text/graphml out=file:* If so, then add a null converter
+        //to the converterList.
         if (outFormat.indexOf('*') != -1) {
         	String outFormatCopy = outFormat.replaceAll("[*]", ".*");
         	if (Pattern.matches(outFormatCopy, inFormat)) {
@@ -272,7 +271,7 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
     public Converter[] findConverters(Data data, String outFormat) {
         if (data == null) {
             if (NULL_DATA.equalsIgnoreCase(""+outFormat)) {
-                return new Converter[]{new ConverterImpl(bContext, ciContext, new ServiceReference[0])};
+                return new Converter[]{new NullConverter(""+outFormat)};
             } else {
                 return new Converter[0];
             }
