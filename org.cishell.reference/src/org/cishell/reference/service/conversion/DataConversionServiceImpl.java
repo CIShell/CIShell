@@ -24,6 +24,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.AlgorithmFactory;
@@ -191,6 +192,13 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
         //in=file:text/graphml out=file:* If so, need to add a null converter
         //(w/ 0 sized servicereference array) to the converterList
         
+        if (outFormat.indexOf('*') != -1) {
+        	String outFormatCopy = outFormat.replaceAll("[*]", ".*");
+        	if (Pattern.matches(outFormatCopy, inFormat)) {
+        		converterList.add(new NullConverter(inFormat));
+        	}
+        }	
+        
 		try {
 			ServiceReference[] inRefs = bContext.getServiceReferences(
 					AlgorithmFactory.class.getName(), inFilter);
@@ -229,10 +237,6 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
     private Converter getConverter(String inType, String outType) {
 		Vertex srcVertex = (Vertex)dataTypeToVertex.get(inType);
 		Vertex tgtVertex = (Vertex)dataTypeToVertex.get(outType);
-		
-		if (srcVertex.equals(tgtVertex)) {
-			return new ConverterImpl(bContext, ciContext, new ServiceReference[0]);
-		}
 		
 		if (srcVertex != null && tgtVertex != null) {
 			DijkstraShortestPath shortestPathAlg = new DijkstraShortestPath(graph);
