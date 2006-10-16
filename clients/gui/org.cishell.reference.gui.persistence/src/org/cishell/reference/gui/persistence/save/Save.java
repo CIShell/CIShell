@@ -8,6 +8,7 @@ import org.cishell.framework.data.Data;
 import org.cishell.service.conversion.Converter;
 import org.cishell.service.conversion.DataConversionService;
 import org.cishell.service.guibuilder.GUIBuilderService;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 
@@ -63,17 +64,30 @@ public class Save implements Algorithm {
     	}
     	else {
     		if (!parentShell.isDisposed()) {
-    			parentShell.getDisplay().syncExec(new Runnable() {
+    			guiRun(new Runnable() {
     				public void run() {
-    					SaveDataChooser sdc = new SaveDataChooser(data[0],
-    		    			                     			parentShell, converters,
-    		    			                     			"Save",
-    		    			                     			context);
-    					sdc.createContent(parentShell);
-    					sdc.open();
+                        if (converters.length == 1) {
+                            final FileSaver saver = new FileSaver(parentShell, context);
+                            saver.save(converters[0], data[0]);
+                        } else {
+                            SaveDataChooser sdc = new SaveDataChooser(data[0],
+                                    parentShell, converters,
+                                    "Save",
+                                    context);
+                            sdc.createContent(new Shell(parentShell));
+                            sdc.open(); 
+                        }
     				}});
     		}
     	}
         return null;
+    }
+    
+    private void guiRun(Runnable run) {
+        if (Thread.currentThread() == Display.getDefault().getThread()) {
+            run.run();
+        } else {
+            parentShell.getDisplay().syncExec(run);
+        }
     }
 }

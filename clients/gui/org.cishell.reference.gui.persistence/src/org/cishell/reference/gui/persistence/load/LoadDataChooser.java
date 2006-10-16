@@ -6,9 +6,14 @@
  */
 package org.cishell.reference.gui.persistence.load;
 
-import java.util.ArrayList;
 import java.io.File;
+import java.util.ArrayList;
 
+import org.cishell.framework.CIShellContext;
+import org.cishell.framework.algorithm.AlgorithmFactory;
+import org.cishell.framework.data.BasicData;
+import org.cishell.framework.data.Data;
+import org.cishell.reference.gui.common.AbstractDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
@@ -22,17 +27,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Shell;
-
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogService;
-
-import org.cishell.framework.CIShellContext;
-import org.cishell.framework.algorithm.AlgorithmFactory;
-import org.cishell.framework.data.BasicData;
-import org.cishell.framework.data.Data;
-
-import org.cishell.reference.gui.common.AbstractDialog;
 
 /**
  *
@@ -162,15 +159,25 @@ public class LoadDataChooser extends AbstractDialog {
     }    
     
     private void selectionMade(int selectedIndex) {
-    	
-		logger.log(LogService.LOG_INFO, "Loaded: "+theFile.getPath());
     	AlgorithmFactory persister =(AlgorithmFactory) bContext.getService(persisterArray[selectedIndex]);
-    	Data[] dm = new Data[]{new BasicData(theFile.getPath(),String.class.getName())};
-    	dm = persister.createAlgorithm(dm, null, ciContext).execute();
-    	for(int i = 0; i<dm.length; i++){
-    		returnList.add(dm[i]);
-    	}
-        close(true); 
+    	Data[] dm = null;
+        try {
+            dm = new Data[]{new BasicData(theFile.getPath(),String.class.getName())};
+            dm = persister.createAlgorithm(dm, null, ciContext).execute();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+        
+        if (dm != null) {
+            logger.log(LogService.LOG_INFO, "Loaded: "+theFile.getPath());
+            
+        	for(int i = 0; i<dm.length; i++){
+        		returnList.add(dm[i]);
+        	}
+            close(true); 
+        } else {
+            logger.log(LogService.LOG_ERROR, "Unable to load with selected loader");
+        }
     }
 
     public void createDialogButtons(Composite parent) {
