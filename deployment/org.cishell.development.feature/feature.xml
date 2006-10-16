@@ -2,7 +2,7 @@
 <feature
       id="org.cishell.development.feature"
       label="CIShell Algorithm Development Plug-In"
-      version="0.1.0.qualifier">
+      version="0.2.0.qualifier">
 
    <description url="http://cishell.org">
       The CIShell Algorithm Development Pack

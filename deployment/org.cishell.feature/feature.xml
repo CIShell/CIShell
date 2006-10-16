@@ -2,7 +2,7 @@
 <feature
       id="org.cishell.feature"
       label="CIShell Framework API Feature"
-      version="0.1.0.qualifier">
+      version="0.2.0.qualifier">
 
    <description url="http://cishell.org">
       CIShell Framework API
