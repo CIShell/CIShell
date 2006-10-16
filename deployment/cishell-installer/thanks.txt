@@ -1,7 +1,8 @@
 Installation of CIShell: Cyberinfrastructure Shell was successful!
 
 This release adds several algorithms and converters to give an idea of 
-what a filling of CIShell would be like.
+what a filling of CIShell would be like. Also, automatic multi-step
+data conversion has been implemented in this version.
 
 WARNING: This is an alpha release of CIShell. This means that not all 
 the functionality is there, there will be bugs, and that the final
