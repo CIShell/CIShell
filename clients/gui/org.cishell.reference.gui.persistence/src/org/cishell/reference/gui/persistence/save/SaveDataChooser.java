@@ -29,6 +29,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Shell;
+import org.osgi.framework.ServiceReference;
 
 /**
  * SaveDataChooser is a simple user interface to allow for selection
@@ -121,7 +122,17 @@ public class SaveDataChooser extends AbstractDialog {
 				Dictionary dict = converterArray[i].getProperties();
 
 				// get the name of the persister from the property map
-				String outData = (String) dict.get(AlgorithmProperty.LABEL);
+				String outData = null;
+                
+                ServiceReference[] refs = converterArray[i].getConverterChain();
+                if (refs != null && refs.length > 0) {
+                    outData = (String) refs[refs.length-1].getProperty(
+                            AlgorithmProperty.LABEL);
+                }
+                    
+                if (outData == null) {
+                    outData = (String) dict.get(AlgorithmProperty.LABEL);
+                }
 
 				// if someone was sloppy enough to not provide a name, then use
 				// the
