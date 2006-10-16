@@ -190,6 +190,11 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 		} else {
 			// otherwise find the associated DataModelGUIItem for the parent
 			parentItem = (DataGUIItem) dataToDataGUIItemMap.get(parent);
+            
+			//The parent may not be in the GUI. If its not, then use root item
+            if (parentItem == null) {
+                parentItem = rootItem;
+            }
 		}
 
 		// create the new DataModelGUIItem
