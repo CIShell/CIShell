@@ -67,7 +67,7 @@ public class Save implements Algorithm {
     				public void run() {
     					SaveDataChooser sdc = new SaveDataChooser(data[0],
     		    			                     			parentShell, converters,
-    		    			                     			"title",
+    		    			                     			"Save",
     		    			                     			context);
     					sdc.createContent(parentShell);
     					sdc.open();
