@@ -19,6 +19,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.log.LogService;
 
 /**
  * Persist the file to disk for the user
@@ -31,6 +32,7 @@ public class FileSaver {
     private Shell parent;
     
     private GUIBuilderService guiBuilder;
+    private LogService log;
 
 
     /**
@@ -42,6 +44,7 @@ public class FileSaver {
     public FileSaver(Shell parent, CIShellContext context){
         this.parent = parent;
         this.guiBuilder = (GUIBuilderService)context.getService(GUIBuilderService.class.getName());
+        this.log = (LogService) context.getService(LogService.class.getName());
     }       
 
     /**
@@ -134,9 +137,7 @@ public class FileSaver {
                     
                 done = true;
        
-                guiBuilder.showInformation("Data Saved", 
-                		"Data successfully saved to disk", 
-                		"Saved: " + selectedFile.getPath());
+                log.log(LogService.LOG_INFO, "Saved: " + selectedFile.getPath());
             } else {
                 done = true;
                 return false;
