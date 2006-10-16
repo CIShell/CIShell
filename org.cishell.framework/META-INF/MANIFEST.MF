@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: CIShell Framework API
 Bundle-SymbolicName: org.cishell.framework
-Bundle-Version: 0.1.0
+Bundle-Version: 0.2.0
 Bundle-Vendor: Bruce Herr
 Bundle-Localization: plugin
 Import-Package: org.osgi.framework,
