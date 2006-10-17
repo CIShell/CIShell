@@ -50,6 +50,9 @@ public class DataManagerServiceImpl implements DataManagerService {
      * @see edu.iu.iv.core.ModelManager#addData(java.lang.Object)
      */
     public void addData(Data model) {
+    	if(model == null){
+    		return;
+    	}
         String label = (String)model.getMetaData().get(DataProperty.LABEL);
         String type = (String)model.getMetaData().get(DataProperty.TYPE);
         
