@@ -484,10 +484,10 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 	 */
 	private class TreeItemEditorListener extends MouseAdapter implements
 			KeyListener {
-		private TreeEditor editor;
+		//private TreeEditor editor;
 
 		public TreeItemEditorListener(TreeEditor editor) {
-			this.editor = editor;
+			//this.editor = editor;
 		}
 
 		public void keyReleased(KeyEvent e) {
