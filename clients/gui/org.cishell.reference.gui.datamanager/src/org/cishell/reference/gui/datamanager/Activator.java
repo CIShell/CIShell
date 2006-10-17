@@ -36,7 +36,7 @@ public class Activator extends AbstractUIPlugin {
 	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
-		
+
 		Activator.context = context;		
 	}
 
@@ -59,8 +59,13 @@ public class Activator extends AbstractUIPlugin {
 	}
 	
 	protected static DataManagerService getDataManagerService() {
-		DataManagerService manager = (DataManagerService) context.getService(
-				context.getServiceReference(DataManagerService.class.getName()));
+		ServiceReference serviceReference = context.getServiceReference(DataManagerService.class.getName());
+		DataManagerService manager = null;
+		
+		if (serviceReference != null) {
+			manager = (DataManagerService) context.getService(serviceReference);
+			
+		}
 		
 		return manager;
 	}
@@ -86,6 +91,10 @@ public class Activator extends AbstractUIPlugin {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	protected static BundleContext getBundleContext() {
+		return context;
 	}
 
 	protected static CIShellContext getCIShellContext() {

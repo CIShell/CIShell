@@ -58,6 +58,8 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.part.ViewPart;
+import org.osgi.framework.BundleEvent;
+import org.osgi.framework.BundleListener;
 import org.osgi.service.log.LogService;
 
 /**
@@ -65,7 +67,7 @@ import org.osgi.service.log.LogService;
  * @author Bruce Herr (bh2@bh2.net)
  */
 public abstract class AbstractDataManagerView extends ViewPart implements
-		DataManagerListener {
+		DataManagerListener, BundleListener {
 	private String brandPluginID;
 
 	private DataManagerService manager;
@@ -165,10 +167,26 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 		tree.addMouseListener(editorListener);
 		tree.addKeyListener(editorListener);
 
-		// listen to IVC for models being added by plugins
-		manager.addDataManagerListener(this);
+		// listen to OSGi for models being added by plugins
+		if (manager != null) {
+			manager.addDataManagerListener(this);
+		}
+		else {
+			Activator.getBundleContext().addBundleListener(this);
+			manager = Activator.getDataManagerService();
+			if (manager != null) {
+				manager.addDataManagerListener(this);
+			}
+		}
 
 		getSite().setSelectionProvider(new DataModelSelectionProvider());
+	}
+	
+	public void bundleChanged(BundleEvent event) {
+		if (event.getType() == BundleEvent.STARTED) {
+			manager = Activator.getDataManagerService();
+			manager.addDataManagerListener(this);
+		}
 	}
 
 	/**
