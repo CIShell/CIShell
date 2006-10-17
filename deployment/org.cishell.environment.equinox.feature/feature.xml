@@ -37,163 +37,157 @@ Dr. Katy Borner (katy@indiana.edu)
    </url>
 
    <plugin
-         id="org.apache.xerces"
-         download-size="0"
-         install-size="0"
-         version="2.8.0.v200606131651"/>
-
-   <plugin
          id="com.ibm.icu"
          download-size="0"
          install-size="0"
-         version="3.4.5"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.core.commands"
          download-size="0"
          install-size="0"
-         version="3.2.0.I20060605-1400"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.core.contenttype"
          download-size="0"
          install-size="0"
-         version="3.2.0.v20060603"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.core.expressions"
          download-size="0"
          install-size="0"
-         version="3.2.1.r321_v20060721"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.core.jobs"
          download-size="0"
          install-size="0"
-         version="3.2.0.v20060603"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.core.runtime"
          download-size="0"
          install-size="0"
-         version="3.2.0.v20060603"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.core.runtime.compatibility.auth"
          download-size="0"
          install-size="0"
-         version="3.2.0.v20060601"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.core.runtime.compatibility.registry"
          download-size="0"
          install-size="0"
-         version="3.2.1.R32x_v20060907"
+         version="0.0.0"
          fragment="true"/>
 
    <plugin
          id="org.eclipse.equinox.common"
          download-size="0"
          install-size="0"
-         version="3.2.0.v20060603"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.equinox.ds"
          download-size="0"
          install-size="0"
-         version="1.0.0.qualifier"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.equinox.event"
          download-size="0"
          install-size="0"
-         version="1.0.0.v20060601a"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.equinox.log"
          download-size="0"
          install-size="0"
-         version="1.0.0.v20060601a"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.equinox.metatype"
          download-size="0"
          install-size="0"
-         version="1.0.0.v20060601a"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.equinox.preferences"
          download-size="0"
          install-size="0"
-         version="3.2.1.R32x_v20060717"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.equinox.registry"
          download-size="0"
          install-size="0"
-         version="3.2.1.R32x_v20060814"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.equinox.useradmin"
          download-size="0"
          install-size="0"
-         version="1.0.0.v20060601a"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.help"
          download-size="0"
          install-size="0"
-         version="3.2.1.R321_v20060920"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.jface"
          download-size="0"
          install-size="0"
-         version="3.2.1.M20060908-1000"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.osgi"
          download-size="0"
          install-size="0"
-         version="3.2.0.v20060601"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.osgi.services"
          download-size="0"
          install-size="0"
-         version="3.1.100.v20060601"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.osgi.util"
          download-size="0"
          install-size="0"
-         version="3.1.100.v20060601"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.swt"
          download-size="0"
          install-size="0"
-         version="3.2.1.v3235e"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
@@ -202,7 +196,7 @@ Dr. Katy Borner (katy@indiana.edu)
          ws="carbon"
          download-size="0"
          install-size="0"
-         version="3.2.0.v3232m"
+         version="0.0.0"
          fragment="true"
          unpack="false"/>
 
@@ -212,7 +206,7 @@ Dr. Katy Borner (katy@indiana.edu)
          ws="carbon"
          download-size="0"
          install-size="0"
-         version="3.2.0.I20060605-1400"
+         version="0.0.0"
          fragment="true"
          unpack="false"/>
 
@@ -223,7 +217,7 @@ Dr. Katy Borner (katy@indiana.edu)
          arch="ppc"
          download-size="0"
          install-size="0"
-         version="3.2.0.v3232m"
+         version="0.0.0"
          fragment="true"
          unpack="false"/>
 
@@ -234,7 +228,7 @@ Dr. Katy Borner (katy@indiana.edu)
          arch="x86"
          download-size="0"
          install-size="0"
-         version="3.2.1.v3235"
+         version="0.0.0"
          fragment="true"
          unpack="false"/>
 
@@ -245,7 +239,7 @@ Dr. Katy Borner (katy@indiana.edu)
          arch="x86_64"
          download-size="0"
          install-size="0"
-         version="3.2.0.v3232m"
+         version="0.0.0"
          fragment="true"
          unpack="false"/>
 
@@ -256,7 +250,7 @@ Dr. Katy Borner (katy@indiana.edu)
          arch="sparc"
          download-size="0"
          install-size="0"
-         version="3.2.0.v3232m"
+         version="0.0.0"
          fragment="true"
          unpack="false"/>
 
@@ -267,7 +261,7 @@ Dr. Katy Borner (katy@indiana.edu)
          arch="ppc"
          download-size="0"
          install-size="0"
-         version="3.2.0.v3232m"
+         version="0.0.0"
          fragment="true"
          unpack="false"/>
 
@@ -278,7 +272,7 @@ Dr. Katy Borner (katy@indiana.edu)
          arch="PA_RISC"
          download-size="0"
          install-size="0"
-         version="3.2.0.v3232m"
+         version="0.0.0"
          fragment="true"
          unpack="false"/>
 
@@ -289,7 +283,7 @@ Dr. Katy Borner (katy@indiana.edu)
          arch="x86"
          download-size="0"
          install-size="0"
-         version="3.2.0.v3232m"
+         version="0.0.0"
          fragment="true"
          unpack="false"/>
 
@@ -300,7 +294,7 @@ Dr. Katy Borner (katy@indiana.edu)
          arch="x86"
          download-size="0"
          install-size="0"
-         version="3.2.0.v3232m"
+         version="0.0.0"
          fragment="true"
          unpack="false"/>
 
@@ -308,7 +302,7 @@ Dr. Katy Borner (katy@indiana.edu)
          id="org.eclipse.ui"
          download-size="0"
          install-size="0"
-         version="3.2.1.M20060913-0800"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
@@ -316,7 +310,7 @@ Dr. Katy Borner (katy@indiana.edu)
          ws="carbon"
          download-size="0"
          install-size="0"
-         version="3.2.0.I20060605-1400"
+         version="0.0.0"
          fragment="true"
          unpack="false"/>
 
@@ -324,21 +318,21 @@ Dr. Katy Borner (katy@indiana.edu)
          id="org.eclipse.ui.workbench"
          download-size="0"
          install-size="0"
-         version="3.2.1.M20060906-0800"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.update.configurator"
          download-size="0"
          install-size="0"
-         version="3.2.1.v20092006"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.update.core"
          download-size="0"
          install-size="0"
-         version="3.2.1.v20092006"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
@@ -346,7 +340,7 @@ Dr. Katy Borner (katy@indiana.edu)
          os="linux"
          download-size="0"
          install-size="0"
-         version="3.2.0.v20060605"
+         version="0.0.0"
          fragment="true"
          unpack="false"/>
 
@@ -355,7 +349,7 @@ Dr. Katy Borner (katy@indiana.edu)
          os="win32"
          download-size="0"
          install-size="0"
-         version="3.2.0.v20060605"
+         version="0.0.0"
          fragment="true"
          unpack="false"/>
 
@@ -363,14 +357,14 @@ Dr. Katy Borner (katy@indiana.edu)
          id="org.eclipse.update.ui"
          download-size="0"
          install-size="0"
-         version="3.2.1.v20092006"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.ui.forms"
          download-size="0"
          install-size="0"
-         version="3.2.0.v20060602"
+         version="0.0.0"
          unpack="false"/>
 
 </feature>
