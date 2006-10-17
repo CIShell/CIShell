@@ -35,6 +35,7 @@ import org.cishell.framework.algorithm.AlgorithmProperty;
 import org.cishell.framework.data.BasicData;
 import org.cishell.framework.data.Data;
 import org.cishell.framework.data.DataProperty;
+import org.cishell.service.guibuilder.GUIBuilderService;
 import org.cishell.templates.Activator;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.log.LogService;
@@ -45,16 +46,21 @@ import org.osgi.service.log.LogService;
  */
 public class StaticExecutableRunner implements Algorithm {
     protected final String tempDir;
+    protected final GUIBuilderService guiBuilder;
     protected final Data[] data;
     protected Dictionary parameters;
     protected Properties props;
     protected CIShellContext ciContext;
+    
 
     public StaticExecutableRunner(BundleContext bContext, CIShellContext ciContext, Properties props, Dictionary parameters, Data[] data) throws IOException {
         this.ciContext = ciContext;
         this.props = props;
         this.parameters = parameters;
         this.data = data;
+        
+        guiBuilder = (GUIBuilderService)ciContext.getService(GUIBuilderService.class.getName());
+
         
         if (data == null) data = new Data[0];
         if (parameters == null) parameters = new Hashtable();
@@ -146,6 +152,14 @@ public class StaticExecutableRunner implements Algorithm {
         logStream(LogService.LOG_INFO, process.getInputStream());
         logStream(LogService.LOG_ERROR, process.getErrorStream());
         process.waitFor();
+        
+        //successfully ran?
+        if (process.exitValue() != 0) {
+        	//display the error message using gui builder
+   			guiBuilder.showError("Algorithm Could Not Finish Execution", "Sorry, the algorithm could not finish execution.", 
+   					"Please check the console window for the error log messages and report the bug.\n"
+   					+"Thank you.");
+        }
         
         //get the outputted files
         String[] afterFiles = dir.list();
