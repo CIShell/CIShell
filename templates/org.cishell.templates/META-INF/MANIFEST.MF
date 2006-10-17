@@ -8,6 +8,7 @@ X-AutoStart: true
 Import-Package: org.cishell.framework,
  org.cishell.framework.algorithm,
  org.cishell.framework.data,
+ org.cishell.service.guibuilder,
  org.osgi.framework;version="1.3.0",
  org.osgi.service.component;version="1.0.0",
  org.osgi.service.log;version="1.3.0",
