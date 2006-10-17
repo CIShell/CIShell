@@ -91,10 +91,12 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 	private Map dataToDataGUIItemMap;
 	
 	private AlgorithmFactory saveFactory;
+	private AlgorithmFactory viewFactory;
 
 	private DiscardListener discardListener;
 
 	private SaveListener saveListener;
+	private ViewListener viewListener;
 
 	public AbstractDataManagerView(String brandPluginID) {
 		manager = Activator.getDataManagerService();
@@ -102,8 +104,10 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 		dataToDataGUIItemMap = new HashMap();
 
 		if (manager == null) {
-			Activator.getLogService().log(LogService.LOG_ERROR,
-					"Data Manager Service unavailable!");
+			LogService log = Activator.getLogService();
+			if (log != null) {
+				log.log(LogService.LOG_ERROR, "Data Manager Service unavailable!");
+			}
 		}
 	}
 
@@ -133,14 +137,13 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 
 		MenuItem saveItem = new MenuItem(menu, SWT.PUSH);
 		saveItem.setText("Save");
-		this.saveFactory = Activator.getSaveService();
-		if (this.saveFactory != null) {
-			saveListener = new SaveListener();
-			saveItem.addListener(SWT.Selection, saveListener);
-		}
-		else {
-			saveItem.setEnabled(false);
-		}
+		saveListener = new SaveListener();
+		saveItem.addListener(SWT.Selection, saveListener);
+
+		MenuItem viewItem = new MenuItem(menu, SWT.PUSH);
+		viewItem.setText("View");
+		viewListener = new ViewListener();
+		viewItem.addListener(SWT.Selection, viewListener);
 
 		MenuItem renameItem = new MenuItem(menu, SWT.PUSH);
 		renameItem.setText("Rename");
@@ -185,7 +188,9 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 	public void bundleChanged(BundleEvent event) {
 		if (event.getType() == BundleEvent.STARTED) {
 			manager = Activator.getDataManagerService();
-			manager.addDataManagerListener(this);
+			if (manager != null) {
+				manager.addDataManagerListener(this);				
+			}
 		}
 	}
 
@@ -303,12 +308,36 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 	 * their is an available Persister for the given model
 	 */
 	private void updateContextMenu(Data model) {
-		// reset the enablement of the save context menu appropriately
-		// boolean saveEnabled = (model.getData() != null) &&
-		// !(IVC.getInstance().getPersistenceRegistry()
-		// .getSupportingPersisters(model.getData()).isEmpty());
-		boolean saveEnabled = false;
-		menu.getItem(0).setEnabled(saveEnabled);
+		saveFactory = enableMenuItemCheck(saveFactory,
+				"org.cishell.reference.gui.persistence.save.Save", model, 0);
+		viewFactory = enableMenuItemCheck(viewFactory,
+				"org.cishell.reference.gui.persistence.view.FileView", model, 1);
+	}
+	
+	private AlgorithmFactory enableMenuItemCheck(
+			AlgorithmFactory algorithmFactory, String service, Data model,
+			int menuNdx) {
+		boolean validSaveFactory = false;
+		if (algorithmFactory == null) {
+			algorithmFactory = Activator.getService(service);
+			if (algorithmFactory != null) {
+				validSaveFactory = true;
+			}
+		} else {
+			validSaveFactory = true;
+		}
+
+		boolean enabled = false;
+		if (validSaveFactory) {
+			Algorithm algorithm = algorithmFactory.createAlgorithm(
+					new Data[] { model }, new Hashtable(), Activator
+							.getCIShellContext());
+			if (algorithm != null) {
+				enabled = true;
+			}
+		}
+		menu.getItem(menuNdx).setEnabled(enabled);
+		return algorithmFactory;
 	}
 
 	/*
@@ -445,12 +474,25 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 
 	private class SaveListener implements Listener {
 		public void handleEvent(Event event) {
-			if (AbstractDataManagerView.this.saveFactory != null) {
-				TreeItem[] selection = AbstractDataManagerView.this.tree.getSelection();
-				Data data = ((DataGUIItem)selection[0].getData()).getModel();
-				Algorithm algorithm = AbstractDataManagerView.this.saveFactory.createAlgorithm(new Data[]{data}, 
-																							new Hashtable(), 
-																							Activator.getCIShellContext());
+			if (saveFactory != null) {
+				Data data[] = AbstractDataManagerView.this.manager
+						.getSelectedData();
+				Algorithm algorithm = saveFactory
+						.createAlgorithm(data, new Hashtable(), Activator
+								.getCIShellContext());
+				algorithm.execute();
+			}
+		}
+	}
+
+	private class ViewListener implements Listener {
+		public void handleEvent(Event event) {
+			if (viewFactory != null) {
+				Data data[] = AbstractDataManagerView.this.manager
+						.getSelectedData();
+				Algorithm algorithm = viewFactory
+						.createAlgorithm(data, new Hashtable(), Activator
+								.getCIShellContext());
 				algorithm.execute();
 			}
 		}

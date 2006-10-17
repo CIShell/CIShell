@@ -71,17 +71,23 @@ public class Activator extends AbstractUIPlugin {
 	}
 	
 	protected static LogService getLogService() {
-		LogService log = (LogService) context.getService(
+		ServiceReference serviceReference = context.getServiceReference(DataManagerService.class.getName());
+		LogService log = null;
+		
+		if (serviceReference != null) {
+			log = (LogService) context.getService(
 				context.getServiceReference(LogService.class.getName()));
+		}
 		
 		return log;
 	}
 	
-	protected static AlgorithmFactory getSaveService() {
+	protected static AlgorithmFactory getService(String service) {
 		ServiceReference[] refs;
 		try {
 			refs = context.getServiceReferences(AlgorithmFactory.class.getName(),
-					"(&("+Constants.SERVICE_PID+"=org.cishell.reference.gui.persistence.save.Save))");
+					"(&("+Constants.SERVICE_PID+"="+service+"))");
+					//"(&("+Constants.SERVICE_PID+"=org.cishell.reference.gui.persistence.save.Save))");
 			if (refs != null && refs.length > 0) {
 				return (AlgorithmFactory) context.getService(refs[0]);
 			} else {
