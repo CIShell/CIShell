@@ -49,6 +49,12 @@ import edu.uci.ics.jung.graph.impl.SparseVertex;
 import edu.uci.ics.jung.io.GraphMLFile;
 import edu.uci.ics.jung.utils.UserDataContainer;
 
+/**
+ * Builds converter chains from one data type to another
+ * 
+ * @author Bruce Herr, Ben Markines
+ *
+ */
 public class DataConversionServiceImpl implements DataConversionService, AlgorithmProperty, ServiceListener {
 	public final static String SERVICE_LIST = "SERVICE_LIST"; 
 	
@@ -57,6 +63,12 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
     private Map   dataTypeToVertex;
     private Graph graph;
     
+    /**
+     * Set up to listen for service requests and initial set up of the graph
+     * 
+     * @param bContext Current bundle context
+     * @param ciContext Current CIShell context
+     */
     public DataConversionServiceImpl(BundleContext bContext, CIShellContext ciContext) {
         this.bContext = bContext;
         this.ciContext = ciContext;
@@ -77,7 +89,7 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
     }
 
     /**
-     * Assemble the directed graph of converters
+     * Assemble the directed graph of converters.  Currently unweighted
      *
      */
     private void assembleGraph() {
@@ -110,9 +122,12 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
             throw new RuntimeException(e);
         }
     } 
-    
+
     /**
-     * @see org.cishell.service.conversion.DataConversionService#findConverters(java.lang.String, java.lang.String)
+     * Get the converter chains for incoming and outgoing format
+     * 
+     * @param inFormat The format to convert from
+     * @param outFormat The format to convert to
      */
     public Converter[] findConverters(String inFormat, String outFormat) {
         //saveGraph();
@@ -133,6 +148,14 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
 		return new Converter[0];		
     }
     
+    /**
+     * If the final format is of type file-ext, then append the final converter to the
+     * converter list
+     * 
+     * @param converters Current converter chain
+     * @param outFormat Final data type
+     * @return The edited converter chain
+     */
     private Converter[] addFinalStepConversions(Converter[] converters, String outFormat) {
         Collection newConverters = new HashSet();
         
@@ -177,6 +200,13 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
         return (Converter[]) newConverters.toArray(new Converter[0]);
     }
     
+    /**
+     * Build the converter chains
+     * @param inFormat The original data type
+     * @param outFormat The target data type
+     * @return Converter chains
+     * @see org.cishell.service.conversion.DataConversionService#findConverters(java.lang.String, java.lang.String)
+     */
     private Converter[] getConverters(String inFormat, String outFormat) {
 		String inFilter = "(&(" + ALGORITHM_TYPE + "=" + TYPE_CONVERTER + ")"
 				+ "("+IN_DATA+"="+inFormat+") " + "("+OUT_DATA+"=*)" + 
@@ -233,6 +263,12 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
 		return (Converter[]) converterList.toArray(new Converter[0]);
 	}
     
+    /**
+     * Get the shortest converter path.  This returns a single converter path
+     * @param inType The source data type
+     * @param outType The target data type
+     * @return Single converter path
+     */
     private Converter getConverter(String inType, String outType) {
 		Vertex srcVertex = (Vertex)dataTypeToVertex.get(inType);
 		Vertex tgtVertex = (Vertex)dataTypeToVertex.get(outType);
@@ -266,6 +302,10 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
     }
 
     /**
+     * Builds the converter chains using data as the source
+     * @param data The source data to convert from
+     * @param outFormat the final data type
+     * @return Converter chains
      * @see org.cishell.service.conversion.DataConversionService#findConverters(org.cishell.framework.data.Data, java.lang.String)
      */
     public Converter[] findConverters(Data data, String outFormat) {
@@ -291,13 +331,40 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
             while (iter.hasNext()) {
                 Class c = (Class) iter.next();
                 converters = findConverters(c.getName(), outFormat);
-                set.addAll(new HashSet(Arrays.asList(converters)));
+                //this is a bit of a hack to remove the duplicate converters
+                addUniqueConverters(set, converters);
+                //set.addAll(new HashSet(Arrays.asList(converters)));
             }
         }
                 
         return (Converter[]) set.toArray(new Converter[0]);
     }
     
+    /**
+     * Only add the unique converters to the 'Converter set'
+     * @param set The set of unique converters
+     * @param converters List of potential converters
+     */
+    private void addUniqueConverters(Set set, Converter[] converters) {
+		for (int i = 0; i < converters.length; ++i) {
+    		boolean uniqueConverter = true;
+    	    for (Iterator iter = set.iterator(); iter.hasNext();) {
+    			if (iter.next().equals(converters[i])) {
+    				uniqueConverter = false;
+    				break;
+    			}
+    		}
+    		if (uniqueConverter) {
+    			set.add(converters[i]);
+    		}
+    	}
+    }
+    
+    /**
+     * Get all the classes implemented and extended
+     * @param clazz The class to query
+     * @return Interfaces and base classes
+     */
     protected Collection getClassesFor(Class clazz) {
         Set classes = new HashSet();
         
@@ -321,6 +388,10 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
     }
     
     /**
+     * Convert the Data to a format
+     * @param inDM Data type to convert
+     * @param outFormat The data type to convert
+     * @return The final data type
      * @see org.cishell.service.conversion.DataConversionService#convert(org.cishell.framework.data.Data, java.lang.String)
      */
     public Data convert(Data inDM, String outFormat) {
@@ -338,7 +409,10 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
         return inDM;
     }
     
-    
+    /**
+     * Change service reference in the graph
+     * @param event The service that changed
+     */
 	public void serviceChanged(ServiceEvent event) {
 		ServiceReference inServiceRef = event.getServiceReference();
 		
@@ -357,6 +431,12 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
 		}
 	}
 	
+	/**
+	 * Remove a service reference in the graph
+	 * @param srcDataType The source data type of the serviceReference to remove
+	 * @param tgtDataType The target data type of the serviceReference to remove
+	 * @param serviceReference The serviceReference to remove
+	 */
 	private void removeServiceReference(String srcDataType, String tgtDataType, ServiceReference serviceReference) {
 		if (srcDataType != null && tgtDataType != null) {
 			Vertex srcVertex = (Vertex) dataTypeToVertex.get(srcDataType);
@@ -388,6 +468,12 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
 		}
 	}
 	
+	/**
+	 * Add service reference to the graph
+	 * @param srcDataType The source data type
+	 * @param tgtDataType The target data type
+	 * @param serviceReference The service reference to add
+	 */
 	private void addServiceReference(String srcDataType, String tgtDataType, ServiceReference serviceReference) {
 		if (srcDataType != null && srcDataType.length() > 0
 				&& tgtDataType != null && tgtDataType.length() > 0) {
@@ -412,6 +498,12 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
 		}
 	}
 	
+	/**
+	 * Get the vertex in the graph given a data type.  Creates a new vertex
+	 * if one does not exist
+	 * @param dataType Datatype representing the node
+	 * @return The vertex
+	 */
 	private Vertex getVertex(String dataType) {
 		Vertex vertex = (SparseVertex)dataTypeToVertex.get(dataType);
 		if (vertex== null) {
@@ -424,6 +516,10 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
 		return vertex;
 	}
 
+	/**
+	 * Save the current converter graph to the user's home directory
+	 *
+	 */
 	private void saveGraph() {
 		GraphMLFile writer = new GraphMLFile();
 		Graph g = (Graph)graph.copy();
