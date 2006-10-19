@@ -130,7 +130,7 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
      * @param outFormat The format to convert to
      */
     public Converter[] findConverters(String inFormat, String outFormat) {
-        //saveGraph();
+        saveGraph();
 		if (inFormat != null && inFormat.length() > 0 &&
 			outFormat != null && outFormat.length() > 0) {
 			
@@ -325,41 +325,18 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
             converters = findConverters(format, outFormat);
             set.addAll(new HashSet(Arrays.asList(converters)));
         } 
-        
         if (!(data.getData() instanceof File) && data.getData() != null) {            
             Iterator iter = getClassesFor(data.getData().getClass()).iterator();
             while (iter.hasNext()) {
                 Class c = (Class) iter.next();
                 converters = findConverters(c.getName(), outFormat);
-                //this is a bit of a hack to remove the duplicate converters
-                addUniqueConverters(set, converters);
-                //set.addAll(new HashSet(Arrays.asList(converters)));
+                set.addAll(new HashSet(Arrays.asList(converters)));
             }
         }
-                
+                        
         return (Converter[]) set.toArray(new Converter[0]);
     }
-    
-    /**
-     * Only add the unique converters to the 'Converter set'
-     * @param set The set of unique converters
-     * @param converters List of potential converters
-     */
-    private void addUniqueConverters(Set set, Converter[] converters) {
-		for (int i = 0; i < converters.length; ++i) {
-    		boolean uniqueConverter = true;
-    	    for (Iterator iter = set.iterator(); iter.hasNext();) {
-    			if (iter.next().equals(converters[i])) {
-    				uniqueConverter = false;
-    				break;
-    			}
-    		}
-    		if (uniqueConverter) {
-    			set.add(converters[i]);
-    		}
-    	}
-    }
-    
+        
     /**
      * Get all the classes implemented and extended
      * @param clazz The class to query
