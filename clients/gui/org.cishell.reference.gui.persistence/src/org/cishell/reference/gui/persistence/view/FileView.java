@@ -7,20 +7,18 @@ import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.util.Dictionary;
 
-import org.osgi.service.log.LogService;
-
-import org.eclipse.swt.program.Program;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.IWorkbenchWindow;
-
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
 import org.cishell.framework.data.Data;
+import org.cishell.service.conversion.Converter;
 import org.cishell.service.conversion.DataConversionService;
 import org.cishell.service.guibuilder.GUIBuilderService;
-import org.cishell.service.conversion.Converter;
+import org.eclipse.swt.program.Program;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
+import org.osgi.service.log.LogService;
 
 /* 
  * @author Weixia(Bonnie) Huang (huangb@indiana.edu)
@@ -32,8 +30,9 @@ public class FileView implements Algorithm {
     DataConversionService conversionManager;
     static GUIBuilderService guiBuilder;
     LogService logger;
+    Program program;
+    File tempFile;
      
-    
     public FileView(Data[] data, Dictionary parameters, CIShellContext context) {
         this.data = data;
         this.parameters = parameters;
@@ -67,11 +66,10 @@ public class FileView implements Algorithm {
     public Data[] execute() {
         boolean lastSaveSuccessful = false;
         String format;
-        File tempFile;
+        
         Display display;
         IWorkbenchWindow[] windows;
         final Shell parentShell;
-        
         
         windows = PlatformUI.getWorkbench().getWorkbenchWindows();
         if (windows.length == 0){
@@ -107,19 +105,26 @@ public class FileView implements Algorithm {
             		}
             	}
         	}
-            //display the file content
-            Program program = Program.findProgram("txt");
+            
+            
+            Display.getDefault().syncExec(new Runnable() {
+                public void run() {
+                    program = Program.findProgram("txt");
+                }});
+            
             if (program == null) {
             		guiBuilder.showError("No Text Viewer", 
     					"No valid text viewer for the .txt file. " +
     					"The file is located at: "+tempFile.getAbsolutePath(), 
     					"Unable to open default text viewer.  File is located at: "+
     					tempFile.getAbsolutePath());
-            		return null;
             }
             else {
             	if (lastSaveSuccessful == true) { 
-            		program.execute(tempFile.getAbsolutePath());
+                    Display.getDefault().syncExec(new Runnable() {
+                        public void run() {
+                            program.execute(tempFile.getAbsolutePath());
+                        }});
             	}
             }
 
