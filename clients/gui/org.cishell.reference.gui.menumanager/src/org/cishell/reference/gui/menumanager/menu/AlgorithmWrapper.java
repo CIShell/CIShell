@@ -60,6 +60,9 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty {
             
             AlgorithmFactory factory = (AlgorithmFactory) bContext.getService(ref);
             Algorithm alg = factory.createAlgorithm(data, parameters, ciContext);
+            
+            //TODO: Print input parameters/metadata here using log service
+            
             Data[] outData = alg.execute();
             
             if (outData != null) {
