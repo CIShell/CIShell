@@ -33,7 +33,7 @@ import org.osgi.service.metatype.MetaTypeProvider;
  * 
  * @author Bruce Herr (bh2@bh2.net)
  */
-public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProperty, Comparable {
+public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProperty {
     private ServiceReference[] refs;
     private BundleContext bContext;
     private Dictionary props;
@@ -121,6 +121,18 @@ public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProp
     public MetaTypeProvider createParameters(Data[] dm) {
         return null;
     }
+    
+    public int hashCode() {
+    	return toString().hashCode();
+    }
+    
+    public String toString() {
+    	String str ="";
+    	for (int j = 0; j < refs.length; ++j) {
+    		str += refs[j].getProperty(Constants.SERVICE_ID) + " " + refs[j].getProperty(Constants.SERVICE_PID) + "-> ";
+    	}
+    	return str;
+    }
 
     public boolean equals(Object o) {
     	boolean equals = false;
@@ -171,8 +183,4 @@ public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProp
             return dm;
         }
     }
-
-	public int compareTo(Object o) {
-		return equals(o) ? 0 : 1;
-	}   
 }
