@@ -111,6 +111,20 @@ public class StaticExecutableRunner implements Algorithm {
                     
                     String label = props.getProperty("outFile["+i+"].label", f.getName());
                     data[i].getMetaData().put(DataProperty.LABEL, label);
+                    
+                    String type = props.getProperty("outFile["+i+"].type", DataProperty.OTHER_TYPE);
+                    
+                    if (type.equalsIgnoreCase(DataProperty.MATRIX_TYPE)) {
+                        type = DataProperty.MATRIX_TYPE;
+                    } else if (type.equalsIgnoreCase(DataProperty.NETWORK_TYPE)) {
+                        type = DataProperty.NETWORK_TYPE;
+                    } else if (type.equalsIgnoreCase(DataProperty.TREE_TYPE)) {
+                        type = DataProperty.TREE_TYPE;
+                    } else {
+                        type = DataProperty.OTHER_TYPE;
+                    }
+                    
+                    data[i].getMetaData().put(DataProperty.TYPE, type);
                 }
             } else {
                 Iterator iter = nameToFileMap.values().iterator();
