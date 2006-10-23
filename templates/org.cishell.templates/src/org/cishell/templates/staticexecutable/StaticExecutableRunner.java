@@ -113,7 +113,7 @@ public class StaticExecutableRunner implements Algorithm {
                     data[i].getMetaData().put(DataProperty.LABEL, label);
                     
                     String type = props.getProperty("outFile["+i+"].type", DataProperty.OTHER_TYPE);
-                    
+                    type = type.trim();
                     if (type.equalsIgnoreCase(DataProperty.MATRIX_TYPE)) {
                         type = DataProperty.MATRIX_TYPE;
                     } else if (type.equalsIgnoreCase(DataProperty.NETWORK_TYPE)) {
@@ -123,7 +123,7 @@ public class StaticExecutableRunner implements Algorithm {
                     } else {
                         type = DataProperty.OTHER_TYPE;
                     }
-                    
+                                   
                     data[i].getMetaData().put(DataProperty.TYPE, type);
                 }
             } else {
