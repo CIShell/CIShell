@@ -18,7 +18,6 @@ import org.cishell.service.guibuilder.GUIBuilderService;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
-import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogService;
 
 /**
@@ -86,9 +85,7 @@ public class FileSaver {
      * @return Whether or not the save was successful
      */
     public boolean save(Converter converter, Data data) {
-    	ServiceReference[] serviceReferenceArray = converter.getConverterChain();
-    	String outDataStr = (String)serviceReferenceArray[serviceReferenceArray.length-1]
-    	                                              .getProperty(AlgorithmProperty.OUT_DATA);
+    	String outDataStr = (String)converter.getProperties().get(AlgorithmProperty.OUT_DATA);
 
     	String ext = outDataStr.substring(outDataStr.indexOf(':')+1);
         

@@ -2,9 +2,12 @@ package org.cishell.reference.gui.persistence.save;
 
 import java.io.File;
 import java.util.Dictionary;
+import java.util.Hashtable;
 
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
+import org.cishell.framework.algorithm.AlgorithmFactory;
+import org.cishell.framework.algorithm.AlgorithmProperty;
 import org.cishell.framework.data.Data;
 import org.cishell.service.conversion.Converter;
 import org.cishell.service.conversion.DataConversionService;
@@ -12,6 +15,7 @@ import org.cishell.service.guibuilder.GUIBuilderService;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
+import org.osgi.framework.ServiceReference;
 
 /**
  * Save algorithm for persisting a data object
@@ -62,15 +66,31 @@ public class Save implements Algorithm {
     				"No valid converters for data type: " + 
     				data[0].getData().getClass().getName(), 
     				"Please install a plugin that will save the data type to a file");
-    	}
-    	else {
+    	} else {
     		if (!parentShell.isDisposed()) {
     			guiRun(new Runnable() {
     				public void run() {
     					if (converters.length == 0) {
-    						//TODO: finish this
-    						//final FileSaver saver = new FileSaver(parentShell, context);
-                            //saver.save(null, data[0]);
+    						final FileSaver saver = new FileSaver(parentShell, context);
+                            saver.save(new Converter(){
+                                Dictionary props = new Hashtable();
+
+                                public Data convert(Data data) {
+                                    return data;
+                                }
+
+                                public AlgorithmFactory getAlgorithmFactory() {
+                                    return null;
+                                }
+
+                                public ServiceReference[] getConverterChain() {
+                                    return null;
+                                }
+
+                                public Dictionary getProperties() {
+                                    props.put(AlgorithmProperty.OUT_DATA, "file:*");
+                                    return props;
+                                }}, data[0]);
     					} else if (converters.length == 1) {
                             final FileSaver saver = new FileSaver(parentShell, context);
                             saver.save(converters[0], data[0]);
