@@ -26,8 +26,7 @@ public class Save implements Algorithm {
     Data[] data;
     Dictionary parameters;
     CIShellContext context;
-    
-    final Shell parentShell;
+    Shell parentShell;
     
     private GUIBuilderService guiBuilder;    
     private DataConversionService conversionManager;
@@ -44,8 +43,6 @@ public class Save implements Algorithm {
         this.parameters = parameters;
         this.context = context;
         
-        this.parentShell = PlatformUI.getWorkbench().getWorkbenchWindows()[0].getShell();
-
         this.conversionManager = (DataConversionService) context.getService(
         		DataConversionService.class.getName());
         
@@ -64,9 +61,11 @@ public class Save implements Algorithm {
     	if (converters.length < 1 && !(data[0].getData() instanceof File)) {
     		guiBuilder.showError("No Converters", 
     				"No valid converters for data type: " + 
-    				data[0].getData().getClass().getName(), 
+    				data[0].getFormat(), 
     				"Please install a plugin that will save the data type to a file");
     	} else {
+            parentShell = PlatformUI.getWorkbench().getWorkbenchWindows()[0].getShell();
+            
     		if (!parentShell.isDisposed()) {
     			guiRun(new Runnable() {
     				public void run() {

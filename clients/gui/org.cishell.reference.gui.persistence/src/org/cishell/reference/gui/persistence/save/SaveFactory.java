@@ -16,6 +16,10 @@ import org.osgi.service.metatype.MetaTypeProvider;
 
 /**
  * Create a Save object
+ * 
+ * TODO: Should also support if we can convert to file, but have
+ * no final file:X->file-ext:* converter.
+ * 
  * @author bmarkine
  *
  */
