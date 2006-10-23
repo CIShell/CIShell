@@ -1,5 +1,6 @@
 package org.cishell.reference.gui.persistence.save;
 
+import java.io.File;
 import java.util.Dictionary;
 
 import org.cishell.framework.CIShellContext;
@@ -56,7 +57,7 @@ public class Save implements Algorithm {
     	//This only checks the first Data in the array
     	final Converter[] converters = conversionManager.findConverters(data[0], "file-ext:*");
 
-    	if (converters.length < 1) {
+    	if (converters.length < 1 && !(data[0].getData() instanceof File)) {
     		guiBuilder.showError("No Converters", 
     				"No valid converters for data type: " + 
     				data[0].getData().getClass().getName(), 
@@ -66,7 +67,11 @@ public class Save implements Algorithm {
     		if (!parentShell.isDisposed()) {
     			guiRun(new Runnable() {
     				public void run() {
-                        if (converters.length == 1) {
+    					if (converters.length == 0) {
+    						//TODO: finish this
+    						//final FileSaver saver = new FileSaver(parentShell, context);
+                            //saver.save(null, data[0]);
+    					} else if (converters.length == 1) {
                             final FileSaver saver = new FileSaver(parentShell, context);
                             saver.save(converters[0], data[0]);
                         } else {
