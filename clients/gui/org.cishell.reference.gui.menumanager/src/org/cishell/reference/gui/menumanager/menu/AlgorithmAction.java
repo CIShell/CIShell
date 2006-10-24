@@ -149,10 +149,13 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, DataMa
         } else {
             originalData = null;
         }
+     
         
-        setEnabled(data != null && isValid());
+        setEnabled(data != null); //&& isValid());
     }
     
+    //This method will be disabled until we can find a better solution
+    //for extra validation beyond input/output checking
     private boolean isValid() {
         String valid = null;
         String[] classes = (String[]) ref.getProperty(Constants.OBJECTCLASS);
