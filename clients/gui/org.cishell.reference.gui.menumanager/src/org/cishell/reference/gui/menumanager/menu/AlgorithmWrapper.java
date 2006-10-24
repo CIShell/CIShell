@@ -13,7 +13,9 @@
  * ***************************************************************************/
 package org.cishell.reference.gui.menumanager.menu;
 
+import java.util.ArrayList;
 import java.util.Dictionary;
+import java.util.List;
 
 import org.cishell.app.service.datamanager.DataManagerService;
 import org.cishell.framework.CIShellContext;
@@ -21,6 +23,7 @@ import org.cishell.framework.algorithm.Algorithm;
 import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.algorithm.AlgorithmProperty;
 import org.cishell.framework.data.Data;
+import org.cishell.framework.data.DataProperty;
 import org.cishell.service.conversion.Converter;
 import org.cishell.service.guibuilder.GUIBuilderService;
 import org.osgi.framework.BundleContext;
@@ -31,16 +34,18 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty {
     protected ServiceReference ref;
     protected BundleContext bContext;
     protected CIShellContext ciContext;
+    protected Data[] originalData;
     protected Data[] data;
     protected Converter[][] converters;
     protected Dictionary parameters;
     
-    public AlgorithmWrapper(ServiceReference ref, BundleContext bContext, 
-            CIShellContext ciContext, Data[] data, Converter[][] converters,
-            Dictionary parameters) {
+    public AlgorithmWrapper(ServiceReference ref, BundleContext bContext,
+            CIShellContext ciContext, Data[] originalData, Data[] data,
+            Converter[][] converters, Dictionary parameters) {
         this.ref = ref;
         this.bContext = bContext;
         this.ciContext = ciContext;
+        this.originalData = originalData;
         this.data = data;
         this.converters = converters;
         this.parameters = parameters;
@@ -70,7 +75,18 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty {
                     bContext.getService(bContext.getServiceReference(
                             DataManagerService.class.getName()));
                 
+                doParentage(outData);
+                
+                List goodData = new ArrayList();
                 for (int i=0; i < outData.length; i++) {
+                    if (outData[i] != null) {
+                        goodData.add(outData[i]);
+                    }
+                }
+                
+                outData = (Data[]) goodData.toArray(new Data[0]);
+                
+                if (outData.length != 0) {
                     dataManager.setSelectedData(outData);
                 }
             }
@@ -84,6 +100,46 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty {
                     "\" had an error while executing.", e);
             
             return new Data[0];
+        }
+    }
+    
+    //only does anything if parentage=default so far...
+    protected void doParentage(Data[] outData) {
+        //make sure the parent set is the original Data and not the
+        //converted data...
+        if (outData != null && data != null && originalData != null 
+                && originalData.length == data.length) {
+            for (int i=0; i < outData.length; i++) {
+                Object parent = outData[i].getMetaData().get(DataProperty.PARENT);
+                
+                if (parent != null) {
+                    for (int j=0; j < data.length; i++) {
+                        if (parent == data[j]) {
+                            outData[i].getMetaData().put(DataProperty.PARENT, 
+                                    originalData[j]);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        
+        //check and act on parentage settings
+        String parentage = (String)ref.getProperty("parentage");
+        if (parentage != null) {
+            parentage = parentage.trim();
+            if (parentage.equalsIgnoreCase("default")) {
+                if (originalData != null && originalData.length > 0 && originalData[0] != null) {
+                    
+                    for (int i=0; i < outData.length; i++) {
+                        //if they don't have a parent set already then we set one
+                        if (outData[i] != null && 
+                                outData[i].getMetaData().get(DataProperty.PARENT) == null) {
+                            outData[i].getMetaData().put(DataProperty.PARENT, originalData[0]);
+                        }
+                    }
+                }
+            }
         }
     }
 }

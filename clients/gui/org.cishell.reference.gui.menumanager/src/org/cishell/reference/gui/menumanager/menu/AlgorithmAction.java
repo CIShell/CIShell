@@ -42,6 +42,7 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, DataMa
     protected BundleContext bContext;
     protected ServiceReference ref;
     protected Data[] data;
+    protected Data[] originalData;
     protected Converter[][] converters;
     
     public AlgorithmAction(ServiceReference ref, BundleContext bContext, CIShellContext ciContext) {
@@ -90,7 +91,7 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, DataMa
             }
             
             if (params != null) {
-                scheduler.schedule(new AlgorithmWrapper(ref, bContext, ciContext, data, converters, params), ref);
+                scheduler.schedule(new AlgorithmWrapper(ref, bContext, ciContext, originalData, data, converters, params), ref);
             }
         } catch (Throwable e) {
             e.printStackTrace();
@@ -142,6 +143,13 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, DataMa
                 }
             }
         }
+        
+        if (data != null) {
+            originalData = (Data[]) data.clone();
+        } else {
+            originalData = null;
+        }
+        
         setEnabled(data != null && isValid());
     }
     
@@ -157,6 +165,7 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, DataMa
                     //FIXME: Could cause concurrency problems...
                     for (int j=0; j < data.length; j++) {
                         if (converters[j] != null && converters[j].length > 0) {
+                            //does not work for large inputs...
                             data[j] = converters[j][0].convert(data[j]);
                             converters[j] = null;
                         }
