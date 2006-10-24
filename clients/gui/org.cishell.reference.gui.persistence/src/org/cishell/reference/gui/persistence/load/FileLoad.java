@@ -93,6 +93,7 @@ public class FileLoad implements Algorithm{
 	}
     
     final class DataUpdater implements Runnable{
+    	boolean loadFileSuccess = false;
     	IWorkbenchWindow window;
     	ArrayList returnList = new ArrayList();
     	
@@ -146,26 +147,58 @@ public class FileLoad implements Algorithm{
 		       					"Sorry, the file format: *."+fileExtension+" is not supported so far. \n"+
 		       					"Please send your requests to cishell-developers@lists.sourceforge.net. \n"
 		       					+"Thank you.");
-		           		return;
+		           		
 	        		}
 		       		
 	    			//<filename>[.<data model type>][.<index>]
 	    			// only one persister found, so load the model
-		       		if (serviceRefList.length == 1){
-	        			logger.log(LogService.LOG_INFO, "Loaded: "+file.getPath());
+		       		else if (serviceRefList.length == 1){	        			
 	        			AlgorithmFactory persister = (AlgorithmFactory)bContext.getService(serviceRefList[0]);
 	    	            Data[] dm = new Data[]{new BasicData(file.getPath(), String.class.getName()) };
 	    	            dm = persister.createAlgorithm(dm, null, ciContext).execute();
-	    	            for (int i=0; i<dm.length; i++)
-	    	            	returnList.add(dm[i]);
-		    			return;	
+	    	            if (dm != null){
+	    	            	loadFileSuccess = true;
+	    	            	logger.log(LogService.LOG_INFO, "Loaded: "+file.getPath());
+	    	            	for (int i=0; i<dm.length; i++)
+	    	            		returnList.add(dm[i]);
+	    	            }
+		    			
 		    			
 	        		}
 	  
 	        		// lots of persisters found, return the chooser
-		       		new LoadDataChooser("Load", file, window.getShell(), 
-	    							ciContext, bContext, serviceRefList, returnList).open();			
-	
+		       		else if (serviceRefList.length > 1){
+//		       			new LoadDataChooser("Load", file, window.getShell(), 
+//	    							ciContext, bContext, serviceRefList, returnList).open();
+		       			for (int index=0; index<serviceRefList.length; index++){
+		        			AlgorithmFactory persister = (AlgorithmFactory)bContext.getService(serviceRefList[index]);
+		        			Data[] dm = new Data[]{new BasicData(file.getPath(), String.class.getName()) };
+		    	            dm = persister.createAlgorithm(dm, null, ciContext).execute();
+		    	            if (dm != null ){
+		    	            	loadFileSuccess = true;
+		    	            	logger.log(LogService.LOG_INFO, "Loaded: "+file.getPath());
+		    	            	for (int i=0; i<dm.length; i++){
+			    	            	returnList.add(dm[i]);
+		    	            	}
+		    	            	break;
+		    	            }
+		       			}
+
+		       		}
+		       		if (serviceRefList != null){
+		       			if(serviceRefList.length >0 && !loadFileSuccess){
+		       			guiBuilder.showError("Can Not Load The File", 
+		       					"Sorry, it's very possible that you have a wrong file format," +
+		       					"since the file can not be loaded to the application.",
+		       					
+	       					"Please check Data Formats that this application can support at "+
+	       					"https://nwb.slis.indiana.edu/community/?n=Algorithms.HomePage." +
+	       					"And send your requests or report the problem to "+
+	       					"cishell-developers@lists.sourceforge.net. \n"+"Thank you.");
+		       			}
+		       		}
+		       		
+
 
 	        	}catch (Exception e){
 	        		e.printStackTrace();    	
