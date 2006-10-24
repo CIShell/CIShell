@@ -110,14 +110,16 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty {
         if (outData != null && data != null && originalData != null 
                 && originalData.length == data.length) {
             for (int i=0; i < outData.length; i++) {
-                Object parent = outData[i].getMetaData().get(DataProperty.PARENT);
-                
-                if (parent != null) {
-                    for (int j=0; j < data.length; i++) {
-                        if (parent == data[j]) {
-                            outData[i].getMetaData().put(DataProperty.PARENT, 
-                                    originalData[j]);
-                            break;
+                if (outData[i] != null) {
+                    Object parent = outData[i].getMetaData().get(DataProperty.PARENT);
+                    
+                    if (parent != null) {
+                        for (int j=0; j < data.length; i++) {
+                            if (parent == data[j]) {
+                                outData[i].getMetaData().put(DataProperty.PARENT, 
+                                        originalData[j]);
+                                break;
+                            }
                         }
                     }
                 }
