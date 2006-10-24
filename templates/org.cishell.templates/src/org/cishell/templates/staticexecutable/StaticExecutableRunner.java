@@ -86,7 +86,14 @@ public class StaticExecutableRunner implements Algorithm {
     }
     
     protected Data[] toData(File[] files) {
-        String[] formats = ((String)props.get(AlgorithmProperty.OUT_DATA)).split(",");
+        String outData = (String)props.get(AlgorithmProperty.OUT_DATA);
+        
+        //if out data is null then it returns no data
+        if ((""+outData).trim().equalsIgnoreCase(AlgorithmProperty.NULL_DATA)) {
+            return null;
+        }
+        
+        String[] formats = outData.split(",");
         
         Map nameToFileMap = new HashMap();
         for (int i=0; i < files.length; i++) {
