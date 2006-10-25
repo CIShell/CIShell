@@ -218,7 +218,9 @@ public class LogView extends ViewPart implements LogListener{
      */
     private void appendString(String message, Color color) {
         int index = message.indexOf("http://");
-
+        if (index == -1) {
+            index = message.indexOf("https://");
+        }
         if (index == -1) {
             index = message.indexOf("www.");
         }
