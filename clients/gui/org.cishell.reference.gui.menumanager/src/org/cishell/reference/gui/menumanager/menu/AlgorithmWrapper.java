@@ -15,6 +15,7 @@ package org.cishell.reference.gui.menumanager.menu;
 
 import java.util.ArrayList;
 import java.util.Dictionary;
+import java.util.Enumeration;
 import java.util.List;
 
 import org.cishell.app.service.datamanager.DataManagerService;
@@ -28,6 +29,7 @@ import org.cishell.service.conversion.Converter;
 import org.cishell.service.guibuilder.GUIBuilderService;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.log.LogService;
 
 
 public class AlgorithmWrapper implements Algorithm, AlgorithmProperty {
@@ -66,7 +68,16 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty {
             AlgorithmFactory factory = (AlgorithmFactory) bContext.getService(ref);
             Algorithm alg = factory.createAlgorithm(data, parameters, ciContext);
             
-            //TODO: Print input parameters/metadata here using log service
+            LogService logger = getLogService();
+            if (logger != null) {
+        		logger.log(LogService.LOG_INFO, "");
+        		logger.log(LogService.LOG_INFO, "Input Parameters Used:");
+            	for (Enumeration e = this.parameters.keys();
+            		 e.hasMoreElements();) {
+            		String key = (String)e.nextElement();
+            		logger.log(LogService.LOG_INFO, key + ": " + this.parameters.get(key));
+            	}
+            }
             
             Data[] outData = alg.execute();
             
@@ -144,4 +155,16 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty {
             }
         }
     }
+    
+	private LogService getLogService() {
+		ServiceReference serviceReference = bContext.getServiceReference(DataManagerService.class.getName());
+		LogService log = null;
+		
+		if (serviceReference != null) {
+			log = (LogService) bContext.getService(
+				bContext.getServiceReference(LogService.class.getName()));
+		}
+		
+		return log;
+	}
 }
