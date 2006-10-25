@@ -34,6 +34,7 @@ import org.eclipse.jface.action.Action;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.log.LogService;
 import org.osgi.service.metatype.MetaTypeProvider;
 
 
@@ -75,6 +76,36 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, DataMa
             Data[] data = this.data;
             Converter[][] converters = this.converters;
             
+            //Print out acknowledge info. Not sure this is the right place.
+            //But it seems working fine.
+
+            LogService logger = (LogService) ciContext.getService(LogService.class.getName());
+
+            String label = (String)ref.getProperty("label");
+            if (label != null)
+            	logger.log(LogService.LOG_INFO, label+" was selected.");
+            
+            String authors = (String)ref.getProperty("authors");
+            if (authors != null)
+            	logger.log(LogService.LOG_INFO, "Author(s): "+authors); 
+            String implementers = (String)ref.getProperty("implementers");
+            if (implementers != null)
+            	logger.log(LogService.LOG_INFO, "Implementer(s): "+implementers); 
+            String integrators = (String)ref.getProperty("integrators");
+            if (integrators != null)
+            	logger.log(LogService.LOG_INFO, "Integrator(s): "+integrators);
+            String reference = (String)ref.getProperty("reference");
+            String reference_url = (String)ref.getProperty("reference_url");
+            if (reference != null && reference_url != null )
+            	logger.log(LogService.LOG_INFO, "Reference: "+reference+
+            			" ( "+reference_url+" )"); 
+            else if (reference != null && reference_url == null )
+            	logger.log(LogService.LOG_INFO, "Reference: "+reference);                     
+            String docu = (String)ref.getProperty("docu");
+            if (docu != null)
+            	logger.log(LogService.LOG_INFO, "Docu: "+docu);     
+///////////////////////////            
+
             SchedulerService scheduler = (SchedulerService) 
                 bContext.getService(bContext.getServiceReference(
                         SchedulerService.class.getName()));
