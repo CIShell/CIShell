@@ -82,9 +82,10 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, DataMa
             LogService logger = (LogService) ciContext.getService(LogService.class.getName());
 
             String label = (String)ref.getProperty("label");
-            if (label != null)
+            if (label != null){
+            	logger.log(LogService.LOG_INFO, "..........");
             	logger.log(LogService.LOG_INFO, label+" was selected.");
-            
+            }
             String authors = (String)ref.getProperty("authors");
             if (authors != null)
             	logger.log(LogService.LOG_INFO, "Author(s): "+authors); 

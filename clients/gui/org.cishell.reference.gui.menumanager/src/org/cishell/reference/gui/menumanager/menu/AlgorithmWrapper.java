@@ -72,7 +72,7 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty {
             if (logger != null) {
 				if (!this.parameters.isEmpty()) {
 					logger.log(LogService.LOG_INFO, "");
-					logger.log(LogService.LOG_INFO, "Input Parameters Used:");
+					logger.log(LogService.LOG_INFO, "Input Parameters:");
 					for (Enumeration e = this.parameters.keys(); e
 							.hasMoreElements();) {
 						String key = (String) e.nextElement();
