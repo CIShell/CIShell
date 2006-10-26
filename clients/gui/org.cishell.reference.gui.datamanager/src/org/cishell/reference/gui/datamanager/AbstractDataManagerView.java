@@ -288,8 +288,8 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 					for (int i = 0; i < data.length; ++i) {
 						TreeItem[] treeItems = tree.getItems();
 						for (int j = 0; j < treeItems.length; ++j) {
-							if (treeItems[i].getData() == data[i]) {
-								itemSet.add(treeItems[i]);
+							if (treeItems[j].getData() == data[i]) {
+								itemSet.add(treeItems[j]);
 								break;
 							}
 						}
