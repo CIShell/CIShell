@@ -64,5 +64,11 @@ public interface DataProperty {
     public static String TREE_TYPE = "Tree";
     
     /** Says this data model is abstractly an unknown type */
-    public static String OTHER_TYPE = "Unknown";     
+    public static String OTHER_TYPE = "Unknown";  
+    
+    /** a plain text file */
+    public static String TEXT_TYPE = "Text";
+    
+    /** a file can be fed to xmgrace */
+    public static String GRACE_TYPE = "Grace";
 }
