@@ -58,7 +58,7 @@ public class SWTGui implements GUI, UpdateListener {
         
         ObjectClassDefinition ocd = provider.getObjectClassDefinition(id, null);
         shell.setText(ocd.getName());
-        
+                
         GridLayout gridLayout = new GridLayout();
         gridLayout.numColumns = 1;
         shell.setLayout(gridLayout);
@@ -92,16 +92,6 @@ public class SWTGui implements GUI, UpdateListener {
         gridData.grabExcessHorizontalSpace = false;
         buttonsGroup.setLayoutData(gridData);
 
-        Button cancel = new Button(buttonsGroup, SWT.NONE);
-        cancel.setText("Cancel");
-        cancel.setSize(40, 20);
-        cancel.setFont(defaultFont);
-        cancel.addSelectionListener(new SelectionAdapter() {
-                public void widgetSelected(SelectionEvent e) {                    
-                    close();
-                }
-            });
-
         okButton = new Button(buttonsGroup, SWT.PUSH);
         okButton.setText("OK");
         okButton.setSize(40, 20);
@@ -116,6 +106,17 @@ public class SWTGui implements GUI, UpdateListener {
                 }
             }
         });
+
+        Button cancel = new Button(buttonsGroup, SWT.NONE);
+        cancel.setText("Cancel");
+        cancel.setSize(40, 20);
+        cancel.setFont(defaultFont);
+        cancel.addSelectionListener(new SelectionAdapter() {
+                public void widgetSelected(SelectionEvent e) {                    
+                    close();
+                }
+            });
+
         
         shell.addDisposeListener(new DisposeListener() {
             public void widgetDisposed(DisposeEvent e) {
