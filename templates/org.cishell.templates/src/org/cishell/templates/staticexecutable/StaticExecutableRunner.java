@@ -127,6 +127,10 @@ public class StaticExecutableRunner implements Algorithm {
                         type = DataProperty.NETWORK_TYPE;
                     } else if (type.equalsIgnoreCase(DataProperty.TREE_TYPE)) {
                         type = DataProperty.TREE_TYPE;
+                    } else if(type.equalsIgnoreCase(DataProperty.TEXT_TYPE)){
+                    	type = DataProperty.TEXT_TYPE;
+                    } else if (type.equalsIgnoreCase(DataProperty.GRACE_TYPE)){
+                    	type = DataProperty.GRACE_TYPE;
                     } else {
                         type = DataProperty.OTHER_TYPE;
                     }
