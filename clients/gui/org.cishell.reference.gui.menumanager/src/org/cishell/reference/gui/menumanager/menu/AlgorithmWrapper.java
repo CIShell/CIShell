@@ -70,14 +70,17 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty {
             
             LogService logger = getLogService();
             if (logger != null) {
-        		logger.log(LogService.LOG_INFO, "");
-        		logger.log(LogService.LOG_INFO, "Input Parameters Used:");
-            	for (Enumeration e = this.parameters.keys();
-            		 e.hasMoreElements();) {
-            		String key = (String)e.nextElement();
-            		logger.log(LogService.LOG_INFO, key + ": " + this.parameters.get(key));
-            	}
-            }
+				if (!this.parameters.isEmpty()) {
+					logger.log(LogService.LOG_INFO, "");
+					logger.log(LogService.LOG_INFO, "Input Parameters Used:");
+					for (Enumeration e = this.parameters.keys(); e
+							.hasMoreElements();) {
+						String key = (String) e.nextElement();
+						logger.log(LogService.LOG_INFO, key + ": "
+								+ this.parameters.get(key));
+					}
+				}
+			}
             
             Data[] outData = alg.execute();
             
