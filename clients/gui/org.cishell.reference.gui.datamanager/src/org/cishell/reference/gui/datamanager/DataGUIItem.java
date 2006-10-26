@@ -36,6 +36,8 @@ public class DataGUIItem {
     private Image treeIcon;
     private Image networkIcon;
     private Image unknownIcon;
+    private Image textIcon;
+    private Image graceIcon;
     
     private Map typeToImageMapping;
     
@@ -60,12 +62,16 @@ public class DataGUIItem {
         treeIcon    = createImage("tree.png", this.brandPluginID);
         networkIcon = createImage("network.png", this.brandPluginID);
         unknownIcon = createImage("unknown.png", this.brandPluginID);
+        textIcon 	= createImage("text.png", this.brandPluginID);
+        graceIcon 	= createImage("grace.png", this.brandPluginID);
 
         typeToImageMapping = new HashMap();
         registerImage(DataProperty.OTHER_TYPE, unknownIcon);
         registerImage(DataProperty.MATRIX_TYPE, matrixIcon);
         registerImage(DataProperty.NETWORK_TYPE, networkIcon);
         registerImage(DataProperty.TREE_TYPE, treeIcon);
+        registerImage(DataProperty.TEXT_TYPE, textIcon);
+        registerImage(DataProperty.GRACE_TYPE, graceIcon);
     }
 
     /**
