@@ -16,7 +16,9 @@ package org.cishell.reference.gui.menumanager.menu;
 import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.cishell.app.service.datamanager.DataManagerService;
 import org.cishell.framework.CIShellContext;
@@ -28,8 +30,12 @@ import org.cishell.framework.data.DataProperty;
 import org.cishell.service.conversion.Converter;
 import org.cishell.service.guibuilder.GUIBuilderService;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogService;
+import org.osgi.service.metatype.AttributeDefinition;
+import org.osgi.service.metatype.MetaTypeProvider;
+import org.osgi.service.metatype.ObjectClassDefinition;
 
 
 public class AlgorithmWrapper implements Algorithm, AlgorithmProperty {
@@ -40,10 +46,13 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty {
     protected Data[] data;
     protected Converter[][] converters;
     protected Dictionary parameters;
+    protected Map idToLabelMap;
+    protected MetaTypeProvider provider;
     
     public AlgorithmWrapper(ServiceReference ref, BundleContext bContext,
             CIShellContext ciContext, Data[] originalData, Data[] data,
-            Converter[][] converters, Dictionary parameters) {
+            Converter[][] converters, MetaTypeProvider provider, 
+            Dictionary parameters) {
         this.ref = ref;
         this.bContext = bContext;
         this.ciContext = ciContext;
@@ -51,6 +60,8 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty {
         this.data = data;
         this.converters = converters;
         this.parameters = parameters;
+        this.provider = provider;
+        this.idToLabelMap = new HashMap();
     }
 
     /**
@@ -68,19 +79,7 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty {
             AlgorithmFactory factory = (AlgorithmFactory) bContext.getService(ref);
             Algorithm alg = factory.createAlgorithm(data, parameters, ciContext);
             
-            LogService logger = getLogService();
-            if (logger != null) {
-				if (!this.parameters.isEmpty()) {
-					logger.log(LogService.LOG_INFO, "");
-					logger.log(LogService.LOG_INFO, "Input Parameters:");
-					for (Enumeration e = this.parameters.keys(); e
-							.hasMoreElements();) {
-						String key = (String) e.nextElement();
-						logger.log(LogService.LOG_INFO, key + ": "
-								+ this.parameters.get(key));
-					}
-				}
-			}
+            printParameters();
             
             Data[] outData = alg.execute();
             
@@ -114,6 +113,49 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty {
                     "\" had an error while executing.", e);
             
             return new Data[0];
+        }
+    }
+    
+    protected void printParameters() {
+        LogService logger = getLogService();
+        setupIdToLabelMap();
+        
+        if (logger != null) {
+            if (!this.parameters.isEmpty()) {
+                logger.log(LogService.LOG_INFO, "");
+                logger.log(LogService.LOG_INFO, "Input Parameters:");
+                for (Enumeration e = this.parameters.keys(); e
+                        .hasMoreElements();) {
+                    String key = (String) e.nextElement();
+                    Object value = this.parameters.get(key);
+                    
+                    key = (String) idToLabelMap.get(key);
+                    
+                    logger.log(LogService.LOG_INFO, key+": "+value);
+                }
+            }
+        }
+    }
+    
+    protected void setupIdToLabelMap() {
+        if (provider != null) {
+            ObjectClassDefinition ocd = null;
+            try {
+                String pid = (String) ref.getProperty(Constants.SERVICE_PID);
+                ocd = provider.getObjectClassDefinition(pid, null);
+                
+                if (ocd != null) {
+                    AttributeDefinition[] attr = 
+                        ocd.getAttributeDefinitions(ObjectClassDefinition.ALL);
+                    
+                    for (int i=0; i < attr.length; i++) {
+                        String id = attr[i].getID();
+                        String label = attr[i].getName();
+                        
+                        idToLabelMap.put(id, label);
+                    }
+                }
+            } catch (IllegalArgumentException e) {}
         }
     }
     
