@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns/graphml"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns/graphml">
+<graph edgedefault="directed"  >
+<node id="1" label="file:text/xgmml+xml" />
+<node id="2" label="prefuse.data.Graph" />
+<node id="3" label="file:application/pajek" />
+<node id="4" label="edu.uci.ics.jung.graph.Graph" />
+<node id="5" label="edu.berkeley.guir.prefuse.graph.Graph" />
+<node id="6" label="file:text/graphml+xml" />
+<edge source="4" target="6" directed="true"/>
+<edge source="3" target="4" directed="true"/>
+<edge source="2" target="6" directed="true"/>
+<edge source="5" target="1" directed="true"/>
+<edge source="4" target="3" directed="true"/>
+<edge source="4" target="5" directed="true"/>
+<edge source="6" target="4" directed="true"/>
+<edge source="1" target="5" directed="true"/>
+<edge source="6" target="2" directed="true"/>
+</graph>
+</graphml>

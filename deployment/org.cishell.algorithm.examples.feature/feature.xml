@@ -2,7 +2,7 @@
 <feature
       id="org.cishell.algorithm.examples.feature"
       label="CIShell Sample Algorithms"
-      version="0.2.0.qualifier">
+      version="0.2.1">
 
    <description>
       Example algorithms for development and testing of CIShell.
@@ -202,5 +202,19 @@ Dr. Katy Borner (katy@indiana.edu)
          download-size="0"
          install-size="0"
          version="0.0.0"/>
+
+   <plugin
+         id="edu.iu.nwb.converter.nwb"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="edu.iu.nwb.converter.nwbgraphml"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
 
 </feature>
