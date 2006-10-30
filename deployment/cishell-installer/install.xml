@@ -107,6 +107,11 @@
 				targetdir="$INSTALL_PATH">
 				<include name="**/*" />
 			</fileset>
+			
+			<fileset dir=".."
+				targetdir="$INSTALL_PATH">
+				<include name="sampledata/**/*" />
+			</fileset>
 
 			<fileset dir="../cishell_win32" os="windows"
 				targetdir="$INSTALL_PATH">
