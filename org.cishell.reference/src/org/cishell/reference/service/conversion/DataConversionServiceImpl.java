@@ -129,7 +129,7 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
      * @param outFormat The format to convert to
      */
     public Converter[] findConverters(String inFormat, String outFormat) {
-        saveGraph();
+//      saveGraph();
 		if (inFormat != null && inFormat.length() > 0 &&
 			outFormat != null && outFormat.length() > 0) {
 			
