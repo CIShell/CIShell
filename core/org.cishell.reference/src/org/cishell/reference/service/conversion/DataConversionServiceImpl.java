@@ -72,6 +72,9 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
     public DataConversionServiceImpl(BundleContext bContext, CIShellContext ciContext) {
         this.bContext = bContext;
         this.ciContext = ciContext;
+        
+        this.graph = new DirectedSparseGraph();
+        this.dataTypeToVertex = new Hashtable();
 
         String filter = "(&("+ALGORITHM_TYPE+"="+TYPE_CONVERTER+")" +
                           "("+IN_DATA+"=*) " +
@@ -92,11 +95,7 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
      * Assemble the directed graph of converters.  Currently unweighted
      *
      */
-    private void assembleGraph() {
-    	graph = new DirectedSparseGraph();
-    	
-    	dataTypeToVertex = new Hashtable();
-    	
+    private void assembleGraph() {    	
         try {
             String filter = "(&("+ALGORITHM_TYPE+"="+TYPE_CONVERTER+")" +
             				  "("+IN_DATA+"=*) " +
