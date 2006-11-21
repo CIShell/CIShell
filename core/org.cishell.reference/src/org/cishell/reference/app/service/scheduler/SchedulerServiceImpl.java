@@ -411,11 +411,16 @@ class AlgSchedulerTask extends TimerTask implements SchedulerListener {
                         "State was not one of allowable states: " + state);
             }
         }
-        this._algMap.put(alg, new AlgorithmTask(alg, ref, time, this));
+        //this._algMap.put(alg, new AlgorithmTask(alg, ref, time, this));
+        new AlgorithmTask(alg, ref, time, this);
     }
 
     public synchronized final int getMaxSimultaneousAlgs() {
         return this._maxSimultaneousAlgs;
+    }
+    
+    public synchronized final void registerAlgorithmTask(Algorithm algorithm, AlgorithmTask algorithmTask) {
+        this._algMap.put(algorithm, algorithmTask);    	
     }
 
     /**
@@ -483,7 +488,7 @@ class AlgSchedulerTask extends TimerTask implements SchedulerListener {
 
     private volatile int _numRunning = 0;
     
-    public void algorithmScheduled(Algorithm algorithm, Calendar time) {
+    public synchronized void algorithmScheduled(Algorithm algorithm, Calendar time) {
         _schedulerListener.algorithmScheduled(algorithm, time);
     }
 
@@ -492,32 +497,32 @@ class AlgSchedulerTask extends TimerTask implements SchedulerListener {
         _schedulerListener.algorithmStarted(algorithm);
     }
 
-    public void algorithmError(Algorithm algorithm, Throwable error) {
-        purgeFinished();
+    public synchronized void algorithmError(Algorithm algorithm, Throwable error) {
         _numRunning--;
         _schedulerListener.algorithmError(algorithm, error);
+        purgeFinished();
     }
 
-    public void algorithmFinished(Algorithm algorithm, Data[] createdDM) {
-        purgeFinished();
+    public synchronized void algorithmFinished(Algorithm algorithm, Data[] createdDM) {
         _numRunning--;
         _schedulerListener.algorithmFinished(algorithm, createdDM);
+        purgeFinished();
     }
 
-    public void algorithmRescheduled(Algorithm algorithm, Calendar time) {
+    public synchronized void algorithmRescheduled(Algorithm algorithm, Calendar time) {
         _schedulerListener.algorithmRescheduled(algorithm, time);
         
     }
 
-    public void algorithmUnscheduled(Algorithm algorithm) {
+    public synchronized void algorithmUnscheduled(Algorithm algorithm) {
         _schedulerListener.algorithmUnscheduled(algorithm);
     }
 
-    public void schedulerCleared() {
+    public synchronized void schedulerCleared() {
         _schedulerListener.schedulerCleared();
     }
 
-    public void schedulerRunStateChanged(boolean isRunning) {
+    public synchronized void schedulerRunStateChanged(boolean isRunning) {
         _schedulerListener.schedulerRunStateChanged(isRunning);
     }
 }
@@ -609,11 +614,13 @@ class AlgorithmTask implements Runnable {
     private SchedulerListener _schedulerListener;
 
     public AlgorithmTask(Algorithm alg, ServiceReference ref, Calendar scheduledTime,
-            SchedulerListener listener) {
+            //SchedulerListener listener) {
+    		AlgSchedulerTask algSchedulerTask) {
         _alg = alg;
         _ref = ref;
         _scheduledTime = scheduledTime;
-        _schedulerListener = listener;
+        _schedulerListener = algSchedulerTask;
+        algSchedulerTask.registerAlgorithmTask(alg, this);
         _init();
     }
 
