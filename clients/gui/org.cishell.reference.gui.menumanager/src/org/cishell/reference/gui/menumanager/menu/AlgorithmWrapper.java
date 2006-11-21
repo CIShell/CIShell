@@ -25,6 +25,8 @@ import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
 import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.algorithm.AlgorithmProperty;
+import org.cishell.framework.algorithm.ProgressMonitor;
+import org.cishell.framework.algorithm.ProgressTrackable;
 import org.cishell.framework.data.Data;
 import org.cishell.framework.data.DataProperty;
 import org.cishell.service.conversion.Converter;
@@ -38,7 +40,7 @@ import org.osgi.service.metatype.MetaTypeProvider;
 import org.osgi.service.metatype.ObjectClassDefinition;
 
 
-public class AlgorithmWrapper implements Algorithm, AlgorithmProperty {
+public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressTrackable {
     protected ServiceReference ref;
     protected BundleContext bContext;
     protected CIShellContext ciContext;
@@ -48,6 +50,8 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty {
     protected Dictionary parameters;
     protected Map idToLabelMap;
     protected MetaTypeProvider provider;
+    protected ProgressMonitor progressMonitor;
+    protected Algorithm algorithm;
     
     public AlgorithmWrapper(ServiceReference ref, BundleContext bContext,
             CIShellContext ciContext, Data[] originalData, Data[] data,
@@ -62,6 +66,10 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty {
         this.parameters = parameters;
         this.provider = provider;
         this.idToLabelMap = new HashMap();
+        this.progressMonitor = null;
+        
+        AlgorithmFactory factory = (AlgorithmFactory) bContext.getService(ref);
+        algorithm = factory.createAlgorithm(data, parameters, ciContext);
     }
 
     /**
@@ -75,13 +83,14 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty {
                     converters[i] = null;
                 }
             }
-            
-            AlgorithmFactory factory = (AlgorithmFactory) bContext.getService(ref);
-            Algorithm alg = factory.createAlgorithm(data, parameters, ciContext);
-            
+                   
             printParameters();
             
-            Data[] outData = alg.execute();
+            if (progressMonitor != null && algorithm instanceof ProgressTrackable) {
+            	((ProgressTrackable)algorithm).setProgressMonitor(progressMonitor);
+            }
+            
+            Data[] outData = algorithm.execute();
             
             if (outData != null) {
                 DataManagerService dataManager = (DataManagerService) 
@@ -211,5 +220,18 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty {
 		}
 		
 		return log;
+	}
+
+	public ProgressMonitor getProgressMonitor() {
+		if (algorithm instanceof ProgressTrackable) {
+			return progressMonitor;
+		}
+		else {
+			return null;
+		}
+	}
+
+	public void setProgressMonitor(ProgressMonitor monitor) {
+		progressMonitor = monitor;
 	}
 }
