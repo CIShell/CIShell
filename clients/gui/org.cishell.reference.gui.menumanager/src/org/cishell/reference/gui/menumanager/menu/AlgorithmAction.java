@@ -122,7 +122,7 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, DataMa
         String reference_url = (String)ref.getProperty("reference_url");
         if (reference != null && reference_url != null )
             logger.log(LogService.LOG_INFO, "Reference: "+reference+
-                    " ( "+reference_url+" )"); 
+                    " ("+reference_url+")"); 
         else if (reference != null && reference_url == null )
             logger.log(LogService.LOG_INFO, "Reference: "+reference);                     
         String docu = (String)ref.getProperty("docu");
