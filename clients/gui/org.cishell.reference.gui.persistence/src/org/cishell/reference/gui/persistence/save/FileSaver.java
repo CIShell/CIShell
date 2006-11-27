@@ -100,7 +100,11 @@ public class FileSaver {
         }
         dialog.setFilterPath(currentDir.getPath());
         
-        dialog.setFilterExtensions(new String[]{"*." + ext});
+     
+        if (ext != null && !ext.equals("*")) {
+            dialog.setFilterExtensions(new String[]{"*." + ext});
+        }
+        
         dialog.setText("Choose File");
         
         String fileLabel = (String)data.getMetaData().get(DataProperty.LABEL);
@@ -119,7 +123,7 @@ public class FileSaver {
                 if (!isSaveFileValid(selectedFile))
                     continue;
                 if (ext != null && ext.length() != 0)
-                    if (!selectedFile.getPath().endsWith(ext))
+                    if (!selectedFile.getPath().endsWith(ext) && !ext.equals("*"))
                         selectedFile = new File(selectedFile.getPath()+'.'+ ext);
 
                 Data newData = converter.convert(data);
