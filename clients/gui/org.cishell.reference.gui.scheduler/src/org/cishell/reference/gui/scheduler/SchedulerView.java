@@ -28,13 +28,21 @@ import org.cishell.framework.algorithm.ProgressMonitor;
 import org.cishell.framework.algorithm.ProgressTrackable;
 import org.cishell.framework.data.Data;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
@@ -60,7 +68,7 @@ public class SchedulerView extends ViewPart implements SchedulerListener {
 	private Map  tableItemToAlgorithmMap;
 	private List algorithmDoneList;
 
-	//private static Composite parent;
+	private static Composite parent;
 	//private Button scheduleButton;
 	private Button removeButton;
 	private Button removeAutomatically;
@@ -108,7 +116,7 @@ public class SchedulerView extends ViewPart implements SchedulerListener {
      * @see org.eclipse.ui.part.WorkbenchPart#createPartControl(org.eclipse.swt.widgets.Composite)
      */
     public void createPartControl(Composite parent) {
-        //this.parent = parent;
+        this.parent = parent;
 
         Composite control = new Composite(parent, SWT.NONE);
         GridLayout layout = new GridLayout();
@@ -173,6 +181,7 @@ public class SchedulerView extends ViewPart implements SchedulerListener {
         removeAllCompleted.addSelectionListener(new SelectionAdapter() {
                 public void widgetSelected(SelectionEvent e) {
                     removeCompleted();
+                    refresh();
                 }
             });
         
@@ -216,10 +225,7 @@ public class SchedulerView extends ViewPart implements SchedulerListener {
             " queued items can be moved without rescheduling.");
         up.setEnabled(false);
         up.setImage(upImage);
-        
-        /*
         up.addSelectionListener(new UpButtonListener());
-        */
 
         down = new Button(upAndDown, SWT.PUSH);
         down.setToolTipText(
@@ -227,14 +233,12 @@ public class SchedulerView extends ViewPart implements SchedulerListener {
             " queued items can be moved without rescheduling.");
         down.setEnabled(false);
         down.setImage(downImage);
-        /*
         down.addSelectionListener(new DownButtonListener());
-        */
 
         // Create the table
         createTable(tableComposite);
         
-        table.addSelectionListener(new ContextMenuListener());
+        table.addSelectionListener(new TableListener());
 		//table.addMouseListener(new ContextMenuListener());
 
 		
@@ -282,45 +286,56 @@ public class SchedulerView extends ViewPart implements SchedulerListener {
 
 	public void algorithmError(Algorithm algorithm, Throwable error) {
 		SchedulerTableItem schedulerTableItem = (SchedulerTableItem)algorithmToGuiItemMap.get(algorithm);
-		schedulerTableItem.errorTableEntry();
+		schedulerTableItem.errorTableEntry(table.indexOf(schedulerTableItem.getTableItem()));
+		refresh();
 	}
 
 	public void algorithmFinished(Algorithm algorithm, Data[] createdData) {
 		SchedulerTableItem schedulerTableItem = (SchedulerTableItem)algorithmToGuiItemMap.get(algorithm);
 		if (schedulerTableItem != null) {
-			schedulerTableItem.finishTableEntry();
+			TableItem tableItem = schedulerTableItem.getTableItem();
+			tableItemToAlgorithmMap.remove(tableItem);
+			
+			schedulerTableItem.finishTableEntry(-1);
 			if (autoRemove) {
 				schedulerTableItem.remove();
 				algorithmToGuiItemMap.remove(algorithm);
 			} else {
+				 tableItem = schedulerTableItem.getTableItem();
+				tableItemToAlgorithmMap.put(tableItem, algorithm);
 				algorithmDoneList.add(algorithm);
 			}
 		}
+		refresh();
 	}
 
 	public void algorithmRescheduled(Algorithm algorithm, Calendar time) {
 		SchedulerTableItem schedulerTableItem = (SchedulerTableItem)algorithmToGuiItemMap.get(algorithm);
 		schedulerTableItem.reschedule(time);
-		
+		refresh();		
 	}
 
 	public void algorithmScheduled(Algorithm algorithm, Calendar cal) {
 		SchedulerTableItem schedulerTableItem = new SchedulerTableItem(schedulerService, algorithm, cal, table);
-		schedulerTableItem.createTableEntry();
+		schedulerTableItem.initTableEntry(0);
 		algorithmToGuiItemMap.put(algorithm, schedulerTableItem);
 		
 		TableItem tableItem = schedulerTableItem.getTableItem();
 		tableItemToAlgorithmMap.put(tableItem, algorithm);
+		
+		refresh();
 	}
 
 	public void algorithmStarted(Algorithm algorithm) {
 		SchedulerTableItem schedulerTableItem = (SchedulerTableItem)algorithmToGuiItemMap.get(algorithm);
 		schedulerTableItem.algorithmStarted();
+		refresh();
 	}
 
 	public void algorithmUnscheduled(Algorithm algorithm) {
 		SchedulerTableItem schedulerTableItem = (SchedulerTableItem)algorithmToGuiItemMap.get(algorithm);
 		schedulerTableItem.remove();
+		refresh();
 	}
 
 	public void schedulerCleared() {
@@ -330,6 +345,7 @@ public class SchedulerView extends ViewPart implements SchedulerListener {
     	}
     	algorithmToGuiItemMap.clear();
     	tableItemToAlgorithmMap.clear();
+		refresh();
 	}
 
 	public void schedulerRunStateChanged(boolean isRunning) {
@@ -340,6 +356,7 @@ public class SchedulerView extends ViewPart implements SchedulerListener {
 		else {
 			algorithmStateButton.setImage(playImage);			
 		}
+		refresh();
 	}
 	
     /*
@@ -395,18 +412,19 @@ public class SchedulerView extends ViewPart implements SchedulerListener {
 //            });
 //
 //        //key listener to allow you to remove items with the delete key
-//        table.addKeyListener(new KeyAdapter() {
-//                public void keyReleased(KeyEvent e) {
-//                    if (e.keyCode == SWT.DEL) {
-//                        removeSelection();
-//                    }
-//                }
-//            });
-//
-//        //listener for dragging of items up and down in the running queue
-//        ItemDragListener dragListener = new ItemDragListener();
-//        table.addMouseMoveListener(dragListener);
-//        table.addMouseListener(dragListener);
+        table.addKeyListener(new KeyAdapter() {
+                public void keyReleased(KeyEvent e) {
+                    if (e.keyCode == SWT.DEL) {
+                        removeSelection();
+                        refresh();
+                    }
+                }
+            });
+
+        //listener for dragging of items up and down in the running queue
+        ItemDragListener dragListener = new ItemDragListener();
+        table.addMouseMoveListener(dragListener);
+        table.addMouseListener(dragListener);
     }
     
     private void removeSelection() {
@@ -443,11 +461,12 @@ public class SchedulerView extends ViewPart implements SchedulerListener {
     	algorithmDoneList.clear();
     }
     
-    private void refresh() {
+    private void refresh() {		
     	for (Iterator i = algorithmToGuiItemMap.values().iterator(); i.hasNext();) {
 			SchedulerTableItem schedulerTableItem = (SchedulerTableItem)i.next();
 			schedulerTableItem.refresh();
     	}
+    	refreshUpAndDownButtons();
     }
     
     private boolean algorithmIsProgressTrackable(Algorithm algorithm) {
@@ -464,27 +483,106 @@ public class SchedulerView extends ViewPart implements SchedulerListener {
     private void setEnabledMenuItems(Algorithm algorithm) {
     	SchedulerTableItem schedulerTableItem = (SchedulerTableItem)algorithmToGuiItemMap.get(algorithm);
     	
-  		MenuItem menuItem = menu.getItem(CANCEL_INDEX);
-   		menuItem.setEnabled(schedulerTableItem.isCancellable());
+    	if (!schedulerTableItem.isRunning()) {
+    		for (int i = 0; i < menu.getItemCount(); ++i) {
+    			MenuItem menuItem = menu.getItem(i);
+    			menuItem.setEnabled(false);
+    		}
+    	}
+    	else {
+			MenuItem menuItem = menu.getItem(CANCEL_INDEX);
+			menuItem.setEnabled(schedulerTableItem.isCancellable());
 
-   		menuItem = menu.getItem(PAUSE_INDEX);
-   		menuItem.setEnabled(schedulerTableItem.isPauseable());
-   		menuItem = menu.getItem(START_INDEX);
-   		menuItem.setEnabled(schedulerTableItem.isPauseable());   		
+			if (schedulerTableItem.isPaused()) {
+				menuItem = menu.getItem(PAUSE_INDEX);
+				menuItem.setEnabled(schedulerTableItem.isPauseable());
+				menuItem = menu.getItem(START_INDEX);
+				menuItem.setEnabled(false);
+			} else {
+				menuItem = menu.getItem(PAUSE_INDEX);
+				menuItem.setEnabled(false);
+				menuItem = menu.getItem(START_INDEX);
+				menuItem.setEnabled(schedulerTableItem.isPauseable());
+			}
+		}
     }
+    
+    private void moveTableItems(int ndxToMove, int destNdx) {
+		TableItem item = table.getItem(ndxToMove);
+		if (item != null) {
+			Algorithm algorithm = (Algorithm) tableItemToAlgorithmMap
+					.get(item);
+			tableItemToAlgorithmMap.remove(item);
 
-    private class ContextMenuListener extends SelectionAdapter {
-		public void widgetSelected(SelectionEvent e) {
-			TableItem item   = table.getItem(table.getSelectionIndex());
-			if (item != null) {
-				Algorithm algorithm = (Algorithm)tableItemToAlgorithmMap.get(item);
-				if (algorithmIsProgressTrackable(algorithm)) {
-					setEnabledMenuItems(algorithm);
+			SchedulerTableItem schedulerTableItem = (SchedulerTableItem) algorithmToGuiItemMap
+					.get(algorithm);
+			schedulerTableItem.moveTableEntry(destNdx);
+			table.setSelection(destNdx);
+
+			TableItem tableItem = schedulerTableItem.getTableItem();
+			tableItemToAlgorithmMap.put(tableItem, algorithm);
+
+			refresh();
+		}    	
+    }
+    
+    private void refreshUpAndDownButtons() {
+		guiRun(new Runnable() {
+			public void run() {
+				if (table.getItemCount() > 1 && table.getSelectionCount() == 1) {
+					if (table.getSelectionIndex() > 0) {
+						up.setEnabled(true);
+					}
+					else {
+						up.setEnabled(false);							
+					}
+					if (table.getSelectionIndex() < table.getItemCount()-1) {
+						down.setEnabled(true);						
+					}
+					else {
+						down.setEnabled(false);							
+					}
 				}
 				else {
+					up.setEnabled(false);
+					down.setEnabled(false);
+				}
+			}
+		});    	
+    }
+    
+	private void guiRun(Runnable run) {
+		if (Thread.currentThread() == Display.getDefault().getThread()) {
+			run.run();
+		} else {
+			Display.getDefault().syncExec(run);
+		}
+	}
+
+    
+    private class TableListener extends SelectionAdapter {
+		public void widgetSelected(SelectionEvent e) {
+			TableItem[] items = table.getSelection();
+			for (int i = 0; i < items.length; ++i) {
+				TableItem item = items[i];
+				Algorithm algorithm = (Algorithm) tableItemToAlgorithmMap
+						.get(item);
+				if (algorithmIsProgressTrackable(algorithm)) {
+					removeButton.setEnabled(true);
+					setEnabledMenuItems(algorithm);
+				} else {
+					SchedulerTableItem schedulerTableItem = (SchedulerTableItem) algorithmToGuiItemMap
+							.get(algorithm);
+					if (schedulerTableItem.isDone()) {
+						removeButton.setEnabled(true);
+					} else {
+						removeButton.setEnabled(false);
+						break;
+					}
 					setEnabledMenuItems(algorithm);
 				}
 			}
+			refresh();
 		}
 	}
 
@@ -498,6 +596,7 @@ public class SchedulerView extends ViewPart implements SchedulerListener {
 					ProgressMonitor monitor = ((ProgressTrackable)algorithm).getProgressMonitor();
 					if (monitor != null) {
 						monitor.setPaused(true);
+						setEnabledMenuItems(algorithm);
 					}
 				}
 			}
@@ -515,6 +614,7 @@ public class SchedulerView extends ViewPart implements SchedulerListener {
 							.getProgressMonitor();
 					if (monitor != null) {
 						monitor.setCanceled(true);
+						setEnabledMenuItems(algorithm);
 					}
 				}
 			}
@@ -533,9 +633,99 @@ public class SchedulerView extends ViewPart implements SchedulerListener {
 							.getProgressMonitor();
 					if (monitor != null) {
 						monitor.setPaused(false);
+						setEnabledMenuItems(algorithm);
 					}
 				}
 			}
 		}
 	}
+	
+	private class UpButtonListener extends SelectionAdapter {
+		public void widgetSelected(SelectionEvent e) {
+			int tblNdx = table.getSelectionIndex();
+			if (tblNdx != -1) {
+				moveTableItems(tblNdx, tblNdx-1);
+//
+//				TableItem item = table.getItem(tblNdx);
+//				if (item != null && tblNdx > 0) {
+//					Algorithm algorithm = (Algorithm) tableItemToAlgorithmMap
+//							.get(item);
+//					tableItemToAlgorithmMap.remove(item);
+//					item.dispose();
+//
+//					SchedulerTableItem schedulerTableItem = (SchedulerTableItem) algorithmToGuiItemMap
+//							.get(algorithm);
+//					schedulerTableItem.createTableEntry(tblNdx-1);
+//					table.setSelection(tblNdx-1);
+//
+//					TableItem tableItem = schedulerTableItem.getTableItem();
+//					tableItemToAlgorithmMap.put(tableItem, algorithm);
+//
+//					refresh();
+//				}
+			}
+		}		
+	}
+	
+	private class DownButtonListener extends SelectionAdapter {
+		public void widgetSelected(SelectionEvent e) {
+			int tblNdx = table.getSelectionIndex();
+			if (tblNdx != -1) {
+				TableItem item = table.getItem(tblNdx);
+				if (item != null && tblNdx < table.getItemCount()-1) {
+					moveTableItems(tblNdx, tblNdx+1);
+				}
+			}
+		}		
+	}
+	
+    private class ItemDragListener extends MouseAdapter implements MouseMoveListener {
+        private boolean down = false;
+        private Algorithm movingAlgorithm;
+        private int movingIndex;
+        private int currentIndex;
+
+        //if the mouse is down (dragging), discover when it is dragged over
+        //a new table item and swap them if possible in the running queue
+        public void mouseMove(MouseEvent e) {
+            if (down && (movingAlgorithm != null)) {
+            	SchedulerTableItem schedulerTableItem = (SchedulerTableItem)algorithmToGuiItemMap.get(movingAlgorithm);
+            	TableItem movingTableItem = schedulerTableItem.getTableItem();
+            	
+                TableItem currentItem = table.getItem(new Point(e.x, e.y));
+
+                if (currentItem == null || movingTableItem.equals(currentItem)) {
+                  return;
+                }
+
+                movingIndex  = table.indexOf(movingTableItem);
+                currentIndex = table.indexOf(currentItem);
+                
+   				moveTableItems(movingIndex, currentIndex);
+            }
+        }
+
+        //reset the selected item and set the flag that the mouse is down
+        public void mouseDown(MouseEvent e) {
+            if (e.button == 1) {
+                down = true;
+
+                TableItem item = table.getItem(new Point(e.x, e.y));
+                if(item == null) return;
+                
+				movingAlgorithm = (Algorithm) tableItemToAlgorithmMap.get(item);
+            }
+        }
+
+        //unset the mouse down flag and clear the selected item
+        public void mouseUp(MouseEvent e) {
+            if (e.button == 1) {
+                down = false;
+                movingAlgorithm = null;
+
+                Cursor cursor = new Cursor(parent.getDisplay(), SWT.CURSOR_ARROW);
+                table.setCursor(cursor);
+            }
+        }
+    }
 }

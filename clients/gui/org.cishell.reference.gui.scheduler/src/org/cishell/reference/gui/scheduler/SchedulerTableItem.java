@@ -20,6 +20,7 @@ public class SchedulerTableItem {
 	private SchedulerService schedulerService;
 	private Algorithm algorithm;
 	private Calendar cal;
+	private String    algorithmLabel;
 	
 	private Table       table;
 	private TableItem   tableItem;
@@ -33,10 +34,10 @@ public class SchedulerTableItem {
     private String  workBeingDone;
     private boolean cancelRequested;
     private boolean pauseRequested;
+    private boolean done;
     
     private boolean isCancellable;
     private boolean isPauseable;
-    private boolean isWorkTrackable;
     
     private AlgorithmProgressMonitor algorithmProgressMonitor;
 
@@ -48,10 +49,16 @@ public class SchedulerTableItem {
     	this.table = table;
     	
     	this.cancelRequested = false;
+    	this.done            = false;
     	
     	this.isCancellable   = false;
     	this.isPauseable     = false;
-    	this.isWorkTrackable = false;
+    	
+		final ServiceReference serviceReference = schedulerService.getServiceReference(algorithm);
+		if (serviceReference != null) {
+			algorithmLabel = (String)serviceReference.getProperty(AlgorithmProperty.LABEL);
+		}
+
     	
     	if (algorithm instanceof ProgressTrackable) {
         	algorithmProgressMonitor = new AlgorithmProgressMonitor();
@@ -67,27 +74,70 @@ public class SchedulerTableItem {
     	pauseRequested = request;
     }
     
-    public void createTableEntry() {
-		final ServiceReference serviceReference = schedulerService.getServiceReference(algorithm);
-		if (serviceReference != null) {
-			final String label = (String)serviceReference.getProperty(AlgorithmProperty.LABEL);
-
+    public void initTableEntry(final int tblNdx) {
+		done = false;
+		guiRun(new Runnable() {
+			public void run() {
+				drawTableEntry(tblNdx, uncheckedImage, 0);
+			}
+		});
+	}
+    
+    public void finishTableEntry(final int tblNdx) {
+    	done = true;
+		if (!tableItem.isDisposed()) {
 			guiRun(new Runnable() {
 				public void run() {
-					tableItem = new TableItem(table, SWT.NONE);
-					tableItem.setImage(SchedulerView.COMPLETED_COLUMN, uncheckedImage);
-					tableItem.setText(SchedulerView.ALGORITHM_COLUMN, label);
-					setCalendar();
-					
-		            //progressBar = new ProgressBar(table, SWT.INDETERMINATE);
-		            progressBar = new ProgressBar(table, SWT.NONE);
-		            tableEditor = new TableEditor(table);
-		            tableEditor.grabHorizontal = tableEditor.grabVertical = true;
-		            tableEditor.setEditor(progressBar, tableItem, SchedulerView.PERCENT_COLUMN);
+					int currentTblNdx;
+					if (tblNdx == -1) {
+						currentTblNdx = table.indexOf(tableItem);
+					}
+					else {
+						currentTblNdx = tblNdx;
+					}
+					tableItem.dispose();
+					progressBar.dispose();
+					progressBar = new ProgressBar(table, SWT.NONE);
+					drawTableEntry(currentTblNdx, checkedImage, progressBar
+							.getMaximum());
 				}
 			});
 		}
     }
+    
+    public void moveTableEntry(final int tblNdx) {
+		guiRun(new Runnable() {
+			public void run() {
+				Image image            = tableItem.getImage(SchedulerView.COMPLETED_COLUMN);
+				int progressSelection  = progressBar.getSelection();
+				drawTableEntry(tblNdx, image, progressSelection);
+			}
+		});    	
+    }
+        
+    private void drawTableEntry(final int tblNdx, final Image image, final int progressBarStatus) {
+		guiRun(new Runnable() {
+			public void run() {
+				if (tableItem != null) {
+					tableItem.dispose();
+				}
+				tableItem = new TableItem(table, SWT.NONE, tblNdx);
+				tableItem.setImage(SchedulerView.COMPLETED_COLUMN, image);
+				tableItem.setText(SchedulerView.ALGORITHM_COLUMN, algorithmLabel);
+				setCalendar();
+
+				if (progressBar == null) {
+					progressBar = new ProgressBar(table, SWT.NONE);
+				}
+				progressBar.setSelection(progressBarStatus);
+				tableEditor = new TableEditor(table);
+				tableEditor.grabHorizontal = tableEditor.grabVertical = true;
+				tableEditor.setEditor(progressBar, tableItem,
+						SchedulerView.PERCENT_COLUMN);
+			}
+		});    	
+    }
+
     
     private void createIndeterminateProgressBar() {
 		if (!tableItem.isDisposed()) {
@@ -131,33 +181,9 @@ public class SchedulerTableItem {
 		this.cal = cal;
 		setCalendar();
 	}
-    
-    public void finishTableEntry() {
-		if (!tableItem.isDisposed()) {
-			guiRun(new Runnable() {
-				public void run() {
-					tableItem.setImage(SchedulerView.COMPLETED_COLUMN,
-							checkedImage);
-
-					progressBar.dispose();
-					progressBar = new ProgressBar(table, SWT.NONE);
-					progressBar.setSelection(progressBar.getMaximum());
-					tableEditor = new TableEditor(table);
-					tableEditor.grabHorizontal = tableEditor.grabVertical = true;
-					tableEditor.setEditor(progressBar, tableItem,
-							SchedulerView.PERCENT_COLUMN);
-				}
-			});
-		}
-    }
-    
-    public void errorTableEntry() {
-		guiRun(new Runnable() {
-			public void run() {
-				tableItem.setImage(SchedulerView.COMPLETED_COLUMN, errorImage);
-			}
-		});
-		finishTableEntry();
+        
+    public void errorTableEntry(int tblNdx) {
+		drawTableEntry(tblNdx, errorImage, progressBar.getSelection());
     }
     
     public void refresh() {
@@ -249,7 +275,26 @@ public class SchedulerTableItem {
     public boolean isWorkTrackable() {
     	return isWorkTrackable();
     }
-
+    
+    public boolean isPaused() {
+    	if (algorithmProgressMonitor.isPaused()) {
+    		return false;
+    	}
+    	else {
+    		return true;
+    	}
+    }
+    
+    public boolean isRunning() {
+    	if (cancelRequested || done) {
+    		return false;
+    	}
+    	return true;
+    }
+    
+    public boolean isDone() {
+    	return done;
+    }
 	
 	private class AlgorithmProgressMonitor implements ProgressMonitor {
 		private int totalWorkUnits;
@@ -259,7 +304,7 @@ public class SchedulerTableItem {
 		}
 
 		public void done() {
-			finishTableEntry();
+			finishTableEntry(-1);
 		}
 
 		public boolean isCanceled() {
@@ -275,10 +320,11 @@ public class SchedulerTableItem {
 		}
 
 		public void setPaused(boolean value) {
-			pauseRequested = value;
+			pauseRequested  = value;
 		}
 
 		public void start(int capabilities, int totalWorkUnits) {
+			
 			if ((capabilities & ProgressMonitor.CANCELLABLE) > 0){
 				isCancellable = true;
 			}
@@ -286,7 +332,6 @@ public class SchedulerTableItem {
 				isPauseable = true;
 			}
 			if ((capabilities & ProgressMonitor.WORK_TRACKABLE) > 0){
-				isWorkTrackable = true;
 				guiRun(new Runnable() {
 					public void run() {
 						progressBar.dispose();
