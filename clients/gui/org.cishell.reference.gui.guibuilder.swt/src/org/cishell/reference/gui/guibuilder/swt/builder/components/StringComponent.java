@@ -43,6 +43,7 @@ public class StringComponent extends AbstractComponent {
         
         GridData gd = new GridData(SWT.FILL,SWT.CENTER,true,false);
         gd.horizontalSpan = MAX_SPAN-1;
+        gd.minimumWidth = 100;
         text.setLayoutData(gd);
         
         text.addModifyListener(new ModifyListener() {
