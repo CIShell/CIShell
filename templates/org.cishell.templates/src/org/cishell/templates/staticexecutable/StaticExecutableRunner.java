@@ -241,6 +241,13 @@ public class StaticExecutableRunner implements Algorithm {
         for (int i=0; i < cmdarray.length; i++) {
             cmdarray[i] = substiteVars(cmdarray[i]);
         }
+        
+        //TODO: Expanded later to support .cmd and other extensions
+        if (!new File(algDir + cmdarray[0]).exists()) {
+        	if (new File(algDir + cmdarray[0] + ".bat").exists()) {
+        		cmdarray[0] = cmdarray[0]+".bat";
+        	}
+        }
         cmdarray[0] = algDir + cmdarray[0];
         
         return cmdarray;
