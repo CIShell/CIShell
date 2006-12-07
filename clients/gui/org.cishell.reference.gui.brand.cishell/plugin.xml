@@ -53,6 +53,16 @@
                 closeable = "false"                   
                 visible="true"/>
       </perspectiveExtension>
+
+      <perspectiveExtension targetID="org.cishell.reference.gui.workspace.Perspective">
+           <view id="org.cishell.reference.gui.scheduler.SchedulerView"
+                relative="org.cishell.reference.gui.log.LogView"
+                relationship="bottom"
+                ratio="1.00"
+                moveable = "true"
+                closeable = "true"
+                visible="true"/>
+      </perspectiveExtension>
 	</extension>
 	
 	<extension point="org.eclipse.ui.startup">
