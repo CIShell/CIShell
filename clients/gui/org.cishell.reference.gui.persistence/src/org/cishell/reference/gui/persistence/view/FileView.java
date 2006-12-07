@@ -96,8 +96,15 @@ public class FileView implements Algorithm {
             				data[i].getData().getClass().getName(), 
             				"Please install a plugin that will save the data type to a file");
             	}
+            	else if (converters.length == 1){
+             		//If length=1, use the unique path to save it directly 
+            		//and bring the text editor.
+            	    Data newData = converters[0].convert(data[i]);                    
+                    copy((File)newData.getData(), tempFile);     
+            		lastSaveSuccessful = true; 
+            	}
             	else {
-            		if (!parentShell.isDisposed()) {
+             		if (!parentShell.isDisposed()) {
             			DataViewer dataViewer = new DataViewer(parentShell, data[i], converters);
             			display.syncExec(dataViewer);
              			lastSaveSuccessful = dataViewer.isSaved;
