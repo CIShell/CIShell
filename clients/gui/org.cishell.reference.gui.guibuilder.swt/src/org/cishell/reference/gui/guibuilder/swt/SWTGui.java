@@ -125,6 +125,8 @@ public class SWTGui implements GUI, UpdateListener {
                 }
             }});
         
+        shell.setDefaultButton(okButton);
+        
         validate();
     }
     
