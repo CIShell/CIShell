@@ -5,9 +5,12 @@ import org.cishell.framework.LocalCIShellContext;
 import org.cishell.reference.gui.menumanager.menu.MenuAdapter;
 import org.cishell.reference.gui.workspace.CIShellApplication;
 import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.awt.SWT_AWT;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IStartup;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -48,11 +51,22 @@ public class Activator extends AbstractUIPlugin implements IStartup {
             windows = getWorkbench().getWorkbenchWindows();
         }
         
-        Shell shell = windows[0].getShell();
+        final Shell shell = windows[0].getShell();
         IMenuManager menuManager = CIShellApplication.getMenuManager();
         CIShellContext ciContext = new LocalCIShellContext(context);
         
         menuAdapter = new MenuAdapter(menuManager,shell,context,ciContext);
+        
+        try {
+        	//Fix to make swing based algorithms work on Macs
+	    	shell.getDisplay().syncExec(new Runnable(){
+				public void run() {
+					//This will simply initialize the SWT_AWT compatibility mode
+					SWT_AWT.new_Frame(new Shell(SWT.EMBEDDED));
+				}});
+        } catch (Exception e) {
+        	e.printStackTrace();
+        }
 	}
 
 	/**
