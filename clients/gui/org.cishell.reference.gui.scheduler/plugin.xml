@@ -8,6 +8,6 @@
        class="org.cishell.reference.gui.scheduler.SchedulerView"
        icon="icons/log_icon.gif"
        id="org.cishell.reference.gui.scheduler.SchedulerView"
-       name="Console"/>
+       name="Scheduler"/>
    </extension> 
 </plugin>
