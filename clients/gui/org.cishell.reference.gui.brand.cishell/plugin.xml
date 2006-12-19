@@ -56,7 +56,7 @@
 
       <perspectiveExtension targetID="org.cishell.reference.gui.workspace.Perspective">
            <view id="org.cishell.reference.gui.scheduler.SchedulerView"
-                relative="org.cishell.reference.gui.log.LogView"
+                relative="org.eclipse.ui.editors"
                 relationship="bottom"
                 ratio="1.00"
                 moveable = "true"
