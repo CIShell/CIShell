@@ -1,54 +1,66 @@
 package org.cishell.reference.gui.brand.cishell;
 
+import java.io.IOException;
+import java.util.Properties;
+
 import org.eclipse.ui.IStartup;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
+import org.osgi.service.log.LogService;
 
-/**
- * The activator class controls the plug-in life cycle
- */
 public class Activator extends AbstractUIPlugin implements IStartup {
+    private BundleContext bContext;
+    private boolean alreadyLogged;
 
 	// The plug-in ID
 	public static final String PLUGIN_ID = "org.cishell.reference.gui.brand.cishell";
-
-	// The shared instance
 	private static Activator plugin;
 	
-	/**
-	 * The constructor
-	 */
 	public Activator() {
 		plugin = this;
+        alreadyLogged = false;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
-	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
+        this.bContext = context;
+        
+        if (!alreadyLogged) {
+            earlyStartup();
+        }
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
-	 */
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
 		super.stop(context);
 	}
 
-	/**
-	 * Returns the shared instance
-	 *
-	 * @return the shared instance
-	 */
 	public static Activator getDefault() {
 		return plugin;
 	}
 
     public void earlyStartup() {
-        //TODO: Get log and print initial log blurb
+        if (bContext != null) {
+            String blurb = null;
+            Properties props = new Properties();
+
+            try {
+                props.load(bContext.getBundle().getEntry("/plugin.properties").openStream());                
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            
+            blurb = props.getProperty("blurb", null);
+            
+            ServiceReference ref = bContext.getServiceReference(LogService.class.getName());
+                
+            if (ref != null && blurb != null) {
+                alreadyLogged = true;
+                
+                LogService logger = (LogService)bContext.getService(ref);
+                logger.log(LogService.LOG_INFO, blurb);
+            }
+        }
     }
 }
