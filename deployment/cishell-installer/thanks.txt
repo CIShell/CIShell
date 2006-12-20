@@ -1,8 +1,8 @@
 Installation of CIShell: Cyberinfrastructure Shell was successful!
 
-This release adds full Max OSX support, a brand new algorithm Scheduler GUI,
+This release adds full Mac OSX support, a brand new algorithm Scheduler GUI,
 expanded windows executable support for batch files, some small GUI 
-improvements, new Visualizations and fixes to old ones, and many bug fixes.
+improvements, new visualizations and fixes to old ones, and many bug fixes.
 
 If you have any problems, please contact the CIShell development team at 
 cishell-developers@lists.sourceforge.net.
