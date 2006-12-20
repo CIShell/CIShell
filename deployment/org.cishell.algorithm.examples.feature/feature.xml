@@ -107,13 +107,6 @@ Dr. Katy Borner (katy@indiana.edu)
          unpack="false"/>
 
    <plugin
-         id="edu.iu.iv.preprocessing.directoryhierarchyreader"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="edu.iu.iv.search.p2p.bfs"
          download-size="0"
          install-size="0"
@@ -122,20 +115,6 @@ Dr. Katy Borner (katy@indiana.edu)
 
    <plugin
          id="edu.iu.iv.search.p2p.randomwalk"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="edu.iu.iv.treemap"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="edu.iu.iv.visualization.treeviz"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -163,21 +142,7 @@ Dr. Katy Borner (katy@indiana.edu)
          unpack="false"/>
 
    <plugin
-         id="edu.iu.nwb.converter.prefusegraphml"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="edu.iu.nwb.converter.prefusexgmml"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="edu.iu.nwb.visualization.forcedirectedlayout"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -212,6 +177,34 @@ Dr. Katy Borner (katy@indiana.edu)
 
    <plugin
          id="edu.iu.nwb.converter.nwbgraphml"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="edu.iu.nwb.converter.jungprefusebeta"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="edu.iu.nwb.visualization.prefuse.beta"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="edu.iu.nwb.preprocessing.prefuse.beta.directoryhierarchyreader"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="edu.iu.nwb.analysis.pathfindergraphnetworkscaling"
          download-size="0"
          install-size="0"
          version="0.0.0"
