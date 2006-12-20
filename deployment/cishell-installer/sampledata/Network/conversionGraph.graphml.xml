@@ -5,20 +5,21 @@ xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns/graphml">
 <node id="1" label="edu.berkeley.guir.prefuse.graph.Graph" />
 <node id="2" label="prefuse.data.Graph" />
 <node id="3" label="file:text/graphml+xml" />
-<node id="4" label="file:application/pajek" />
+<node id="4" label="edu.uci.ics.jung.graph.Graph" />
 <node id="5" label="file:text/xgmml+xml" />
-<node id="6" label="edu.uci.ics.jung.graph.Graph" />
+<node id="6" label="file:application/pajek" />
 <node id="7" label="file:text/nwb" />
+<edge source="4" target="1" directed="true"/>
 <edge source="1" target="5" directed="true"/>
+<edge source="3" target="4" directed="true"/>
 <edge source="3" target="7" directed="true"/>
 <edge source="4" target="6" directed="true"/>
-<edge source="6" target="1" directed="true"/>
-<edge source="2" target="3" directed="true"/>
-<edge source="6" target="4" directed="true"/>
+<edge source="4" target="3" directed="true"/>
+<edge source="1" target="4" directed="true"/>
+<edge source="2" target="4" directed="true"/>
 <edge source="5" target="1" directed="true"/>
-<edge source="6" target="3" directed="true"/>
+<edge source="4" target="2" directed="true"/>
+<edge source="6" target="4" directed="true"/>
 <edge source="7" target="3" directed="true"/>
-<edge source="3" target="6" directed="true"/>
-<edge source="3" target="2" directed="true"/>
 </graph>
 </graphml>
