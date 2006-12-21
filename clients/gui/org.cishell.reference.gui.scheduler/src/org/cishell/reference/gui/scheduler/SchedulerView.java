@@ -568,46 +568,35 @@ public class SchedulerView extends ViewPart implements SchedulerListener {
      * @param algorithm
      */
     private void setEnabledMenuItems(Algorithm algorithm) {
-    	SchedulerTableItem schedulerTableItem = (SchedulerTableItem)algorithmToGuiItemMap.get(algorithm);
-    	
-    	//if (!schedulerTableItem.isRunning()) {
-    		for (int i = 0; i < menu.getItemCount(); ++i) {
-    			MenuItem menuItem = menu.getItem(i);
-    			menuItem.setEnabled(false);
-    		}
-    	//}
-    	//else {
-    		if (schedulerTableItem.isRunning() && schedulerTableItem.isCancellable()) {
-    			MenuItem menuItem = menu.getItem(CANCEL_INDEX);
-    			menuItem.setEnabled(true);    			
-    		//}
-    		//else {
-    		//	MenuItem menuItem = menu.getItem(CANCEL_INDEX);
-    		//	menuItem.setEnabled(false);    			    			
-    		}
+		SchedulerTableItem schedulerTableItem = (SchedulerTableItem) algorithmToGuiItemMap
+				.get(algorithm);
 
-			if (schedulerTableItem.isPauseable()) {
-				if (schedulerTableItem.isPaused()) {
-					//MenuItem menuItem = menu.getItem(PAUSE_INDEX);
-					//menuItem.setEnabled(false);					
-					MenuItem menuItem = menu.getItem(RESUME_INDEX);
-					menuItem.setEnabled(true);
-				} else {
-					MenuItem menuItem = menu.getItem(PAUSE_INDEX);
-					menuItem.setEnabled(true);
-					//menuItem = menu.getItem(RESUME_INDEX);
-					//menuItem.setEnabled(false);
-				}
+		for (int i = 0; i < menu.getItemCount(); ++i) {
+			MenuItem menuItem = menu.getItem(i);
+			menuItem.setEnabled(false);
+		}
+		if (schedulerTableItem.isRunning()
+				&& schedulerTableItem.isCancellable()) {
+			MenuItem menuItem = menu.getItem(CANCEL_INDEX);
+			menuItem.setEnabled(true);
+		}
+
+		if (schedulerTableItem.isPausable()) {
+			if (schedulerTableItem.isPaused()) {
+				MenuItem menuItem = menu.getItem(RESUME_INDEX);
+				menuItem.setEnabled(true);
+			} else {
+				MenuItem menuItem = menu.getItem(PAUSE_INDEX);
+				menuItem.setEnabled(true);
 			}
-			//else {
-			//	MenuItem menuItem = menu.getItem(PAUSE_INDEX);
-			//	menuItem.setEnabled(false);
-			//	menuItem = menu.getItem(RESUME_INDEX);
-			//	menuItem.setEnabled(false);				
-			//}
-		//}
-    }
+		}
+	}
     
+    /**
+     * Moves a table item to another slot
+     * @param ndxToMove Original table item to move
+     * @param destNdx Destination of table item
+     */
     private void moveTableItems(int ndxToMove, int destNdx) {
 		TableItem item = table.getItem(ndxToMove);
 		if (item != null) {
@@ -627,6 +616,11 @@ public class SchedulerView extends ViewPart implements SchedulerListener {
 		}    	
     }
     
+    /**
+     * Refreshes the up and down buttons depending on the items selected and location
+     * in the table
+     *
+     */
     private void refreshUpAndDownButtons() {
 		guiRun(new Runnable() {
 			public void run() {
@@ -652,6 +646,10 @@ public class SchedulerView extends ViewPart implements SchedulerListener {
 		});    	
     }
     
+    /**
+     * Insures that the current thread is the UI thread
+     * @param run Thread to sync with
+     */
 	private void guiRun(Runnable run) {
 		if (Thread.currentThread() == Display.getDefault().getThread()) {
 			run.run();
@@ -660,12 +658,19 @@ public class SchedulerView extends ViewPart implements SchedulerListener {
 		}
 	}
 	
+	/**
+	 * When the view is disposed, this will persist the current items
+	 * it manages, and removes itself from the monitor
+	 */
 	public void dispose() {
 		schedulerContentModel.persistObject(this.getClass().getName(), algorithmToGuiItemMap);
 		schedulerContentModel.deregister(this);
 	}
 
-    
+    /**
+     * Any interaction to the table will be checked for enabling and
+     * disabling items in the table.
+     */
     private class TableListener extends SelectionAdapter {
 		public void widgetSelected(SelectionEvent e) {
 			TableItem[] items = table.getSelection();
@@ -693,6 +698,9 @@ public class SchedulerView extends ViewPart implements SchedulerListener {
 	}
 
     
+    /**
+     * Pauses an algorithm if it is pausable
+     */
 	private class PauseListener implements Listener {
 		public void handleEvent(Event event) {
 			TableItem item   = table.getItem(table.getSelectionIndex());
@@ -709,6 +717,11 @@ public class SchedulerView extends ViewPart implements SchedulerListener {
 		}
 	}
 
+	/**
+	 * Cancels an algorithm if it is cancellable
+	 * @author bmarkine
+	 *
+	 */
 	private class CancelListener implements Listener {
 		public void handleEvent(Event event) {
 			TableItem item   = table.getItem(table.getSelectionIndex());
@@ -727,8 +740,10 @@ public class SchedulerView extends ViewPart implements SchedulerListener {
 		}
 	}
 	
-	private class StartListener implements Listener {
-		
+	/**
+	 * Starts an algorithm to start
+	 */
+	private class StartListener implements Listener {		
 		public void handleEvent(Event event) {
 			TableItem item   = table.getItem(table.getSelectionIndex());
 			if (item != null) {
@@ -746,6 +761,9 @@ public class SchedulerView extends ViewPart implements SchedulerListener {
 		}
 	}
 	
+	/**
+	 * Moves a table item up on the table
+	 */
 	private class UpButtonListener extends SelectionAdapter {
 		public void widgetSelected(SelectionEvent e) {
 			int tblNdx = table.getSelectionIndex();
@@ -755,6 +773,10 @@ public class SchedulerView extends ViewPart implements SchedulerListener {
 		}		
 	}
 	
+	/**
+	 * Moves a table item down on the table
+	 *
+	 */
 	private class DownButtonListener extends SelectionAdapter {
 		public void widgetSelected(SelectionEvent e) {
 			int tblNdx = table.getSelectionIndex();
@@ -767,6 +789,9 @@ public class SchedulerView extends ViewPart implements SchedulerListener {
 		}		
 	}
 	
+	/**
+	 * Listens for mouse dragging to move the items around the table
+	 */
     private class ItemDragListener extends MouseAdapter implements MouseMoveListener {
         private boolean down = false;
         private Algorithm movingAlgorithm;

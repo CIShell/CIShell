@@ -13,6 +13,10 @@ import org.eclipse.swt.widgets.ProgressBar;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 
+/**
+ * Controls a single item in the table per algorithm, and monitors the algorithm
+ * if it is monitorable.
+ */
 public class SchedulerTableItem {
 	private Algorithm algorithm;
 	private Calendar  cal;
@@ -41,7 +45,14 @@ public class SchedulerTableItem {
     
     private AlgorithmProgressMonitor algorithmProgressMonitor;
 
-    public SchedulerTableItem(	String algorithmLabel, Algorithm algorithm,	Calendar cal) {
+    /**
+     * Initializes flags and records the current algorithm to monitor
+     * 
+     * @param algorithmLabel
+     * @param algorithm
+     * @param cal
+     */
+    public SchedulerTableItem(String algorithmLabel, Algorithm algorithm, Calendar cal) {
     	this.algorithm = algorithm;
     	this.cal = cal;
     	
@@ -64,14 +75,28 @@ public class SchedulerTableItem {
     	}
     }
     
+    /**
+     * Request a cancel for the running algorithm
+     * @param request Cancel request
+     */
     public void requestCancel(boolean request) {
     	cancelRequested = request;
     }
     
+    /**
+     * Request the algorithm to pause
+     * @param request Pause request
+     */
     public void requestPause(boolean request) {
     	pauseRequested = request;
     }
     
+    /**
+     * Initialize the table entry with the parent table and location
+     * in the table
+     * @param table The parent table
+     * @param tblNdx The entry number to insert the table
+     */
     public void initTableEntry(final Table table, final int tblNdx) {
 		guiRun(new Runnable() {
 			public void run() {
@@ -80,6 +105,10 @@ public class SchedulerTableItem {
 		});
 	}
     
+    /**
+     * Mark the algorithm as finished
+     * @param table The parent table
+     */
     public void finishTableEntry(final Table table) {
     	done = true;
 
@@ -96,16 +125,27 @@ public class SchedulerTableItem {
 		}
     }
     
+    /**
+     * Moves this entry to the provided index
+     * @param table The parent table
+     * @param tblNdx The target index into the table
+     */
     public void moveTableEntry(final Table table, final int tblNdx) {
 		guiRun(new Runnable() {
 			public void run() {
-				//Image image        = tableItem.getImage(SchedulerView.COMPLETED_COLUMN);
 				progressSelection  = progressBar.getSelection();
 				drawTableEntry(table, tblNdx);
 			}
 		});    	
     }
-        
+    
+    /**
+     * Draws a table entry with the current state provided
+     * the parent table and index of the new entry
+     * 
+     * @param table Parent table
+     * @param tblNdx Index into the table
+     */
     private void drawTableEntry(final Table table, final int tblNdx) {
 		guiRun(new Runnable() {
 			public void run() {
@@ -128,19 +168,15 @@ public class SchedulerTableItem {
 				setCalendar();
 
 				if (started) {
-					//if (progressBar == null || progressBar.isDisposed()) {
 					if (progressBar != null)
 						progressBar.dispose();
-						if (isWorkTrackable || done) {
-							progressBar = new ProgressBar(table, SWT.NONE);
-							progressBar.setSelection(progressSelection);
-						} else {
-							progressBar = new ProgressBar(table,
-									SWT.INDETERMINATE);
-						}
-					//}
-				}
-				else {
+					if (isWorkTrackable || done) {
+						progressBar = new ProgressBar(table, SWT.NONE);
+						progressBar.setSelection(progressSelection);
+					} else {
+						progressBar = new ProgressBar(table, SWT.INDETERMINATE);
+					}
+				} else {
 					progressBar = new ProgressBar(table, SWT.NONE);
 				}
 				tableEditor = new TableEditor(table);
@@ -151,6 +187,9 @@ public class SchedulerTableItem {
 		});    	
     }
     
+    /**
+     * Sets the calendar entry for the current table.
+     */
     private void setCalendar() {
 		guiRun(new Runnable() {
 			public void run() {
@@ -162,22 +201,39 @@ public class SchedulerTableItem {
 		});
 	}
     
+    /**
+     * Notification of the start of the algorithm
+     * 
+     * @param table The parent table
+     */
     public void algorithmStarted(Table table) {
     	done    = false;
     	started = true;
     	drawTableEntry(table, table.indexOf(tableItem));
     }
     
+    /**
+     * Notification of rescheduling of the algorithm
+     * @param cal The rescheduled time
+     */
     public void reschedule(Calendar cal) {
 		this.cal = cal;
 		setCalendar();
 	}
-        
+
+    /**
+     * Notification of an error during algorithm execution
+     * @param table Parent table
+     */
     public void errorTableEntry(Table table) {
     	encounteredError = true;
 		drawTableEntry(table, table.indexOf(tableItem));
     }
     
+    /**
+     * Refresh the table item
+     *
+     */
     public void refresh() {
 		guiRun(new Runnable() {
 			public void run() {
@@ -191,6 +247,10 @@ public class SchedulerTableItem {
 		});
 	}
     
+    /**
+     * Removes the current table item
+     *
+     */
     public void remove() {
 		guiRun(new Runnable() {
 			public void run() {
@@ -200,12 +260,17 @@ public class SchedulerTableItem {
 		});
 	}
     
+    /**
+     * Returns the current table item
+     * @return current table item
+     */
     public TableItem getTableItem() {
     	return tableItem;
     }
     
-    /*
-     * return a properly formatted date from the given Calendar
+    /**
+     * A properly formatted date from the given Calendar
+     * @return formatted calendar
      */
     private String getDateString(Calendar time) {
         String month = (time.get(Calendar.MONTH) + 1) + "";
@@ -223,8 +288,9 @@ public class SchedulerTableItem {
         return month + "/" + day + "/" + year;
     }
 
-    /*
-     * return a properly formatted time from the given Calendar
+    /**
+     * A properly formatted time from the given Calendar
+     * @return formatted calendar
      */
     private String getTimeString(Calendar time) {
         String minute = time.get(Calendar.MINUTE) + "";
@@ -252,6 +318,10 @@ public class SchedulerTableItem {
         return hour + ":" + minute + ":" + second + " " + amPmString;
     }
     
+    /**
+     * Insures that the current thread is sync'd with the UI thread
+     * @param run
+     */
 	private void guiRun(Runnable run) {
 		if (Thread.currentThread() == Display.getDefault().getThread()) {
 			run.run();
@@ -260,20 +330,38 @@ public class SchedulerTableItem {
 		}
 	}
 	
+	/**
+	 * Whether or not the current algorithm is cancellable, if the algorithm
+	 * is done, it will return false.
+	 * @return cancellable state
+	 */
     public boolean isCancellable() {
     	if (done) return false;
     	return isCancellable;
     }
     
-    public boolean isPauseable() {
+    /**
+     * Whether or not the current algorithm is pausable, if the algorithm
+     * is done, it will return false.
+     * @return Pausable state
+     */
+    public boolean isPausable() {
     	if (done) return false;
     	return isPauseable;
     }
     
+    /**
+     * Whether or not the current algorithm is work trackable
+     * @return Trackable state
+     */
     public boolean isWorkTrackable() {
     	return isWorkTrackable();
     }
     
+    /**
+     * Whether or not the current algorithm is paused
+     * @return Paused state
+     */
     public boolean isPaused() {
     	if (algorithmProgressMonitor.isPaused() && !done) {
     		return true;
@@ -283,6 +371,11 @@ public class SchedulerTableItem {
     	}
     }
     
+    /**
+     * Whether or not the current algorithm is running
+     * 
+     * @return Running state
+     */
     public boolean isRunning() {
     	if (cancelRequested) {
     		return false;
@@ -290,14 +383,19 @@ public class SchedulerTableItem {
     	return true;
     }
     
+    /**
+     * The algorithm done state
+     * @return Done state
+     */
     public boolean isDone() {
     	return done;
     }
     
-    public Algorithm getAlgorithm() {
-    	return this.algorithm;
-    }
-	
+
+    /**
+     * Monitors an algorithm 
+     *
+     */
 	private class AlgorithmProgressMonitor implements ProgressMonitor {
 		private int totalWorkUnits;
 

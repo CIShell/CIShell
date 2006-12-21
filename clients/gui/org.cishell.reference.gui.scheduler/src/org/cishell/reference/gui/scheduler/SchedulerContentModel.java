@@ -12,6 +12,9 @@ import org.cishell.framework.algorithm.Algorithm;
 import org.cishell.framework.data.Data;
 
 
+/**
+ * Listens for notification from the scheduler and notifies all registered objects
+ */
 public class SchedulerContentModel implements SchedulerListener {
     private static final SchedulerContentModel INSTANCE = new SchedulerContentModel();
     
