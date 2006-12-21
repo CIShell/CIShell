@@ -7,23 +7,24 @@
  * http://www.apache.org/licenses/LICENSE-2.0.html
  * 
  * Created on Aug 21, 2006 at Indiana University.
+ * Changed on Dec 19, 2006 at Indiana University
  * 
  * Contributors:
- * 	   Weixia(Bonnie) Huang, Bruce Herr
+ * 	   Weixia(Bonnie) Huang, Bruce Herr, Ben Markines
  *     School of Library and Information Science, Indiana University 
  * ***************************************************************************/
 package org.cishell.reference.gui.scheduler;
 
-import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.cishell.app.service.scheduler.SchedulerListener;
-import org.cishell.app.service.scheduler.SchedulerService;
 import org.cishell.framework.algorithm.Algorithm;
+import org.cishell.framework.algorithm.AlgorithmProperty;
 import org.cishell.framework.algorithm.ProgressMonitor;
 import org.cishell.framework.algorithm.ProgressTrackable;
 import org.cishell.framework.data.Data;
@@ -51,25 +52,31 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.part.ViewPart;
+import org.osgi.framework.ServiceReference;
 
 
 /**
+ * Creates and maintains the overall GUI for the scheduler.  Controls the
+ * table and controls (moving, removing, etc.).
+ * 
  * @author Ben Markines (bmarkine@cs.indiana.edu)
  */
 public class SchedulerView extends ViewPart implements SchedulerListener {
+    private static SchedulerView schedulerView;
+    public static final String ID_VIEW = "org.cishell.reference.gui.scheduler.SchedulerView";
+    
     private static Image upImage 		= Activator.createImage("up.gif");
     private static Image downImage 		= Activator.createImage("down.gif");
-    private static Image playImage 		= Activator.createImage("play.jpeg");
-    private static Image pauseImage 	= Activator.createImage("pause.jpeg");
+    private static Image playImage 		= Activator.createImage("play.png");
+    private static Image pauseImage 	= Activator.createImage("pause.png");
+    
 
-	private SchedulerService schedulerService;
+    private SchedulerContentModel schedulerContentModel;
 	
 	private Map  algorithmToGuiItemMap;
 	private Map  tableItemToAlgorithmMap;
-	private List algorithmDoneList;
 
 	private static Composite parent;
-	//private Button scheduleButton;
 	private Button removeButton;
 	private Button removeAutomatically;
 	private Button up;
@@ -77,15 +84,15 @@ public class SchedulerView extends ViewPart implements SchedulerListener {
 	
 	private Menu menu;
 	
-	private Button algorithmStateButton;
-	private boolean isActive;
+	private Button pauseStateButton;
+	private Button playStateButton;
 	
 	private Table table;
 	private boolean autoRemove;
 
-	public static final int PAUSE_INDEX  = 0;
-	public static final int CANCEL_INDEX = 1;
-	public static final int START_INDEX  = 2;
+	public static final int RESUME_INDEX  = 0;
+	public static final int PAUSE_INDEX  = 1;
+	public static final int CANCEL_INDEX = 2;
 	
 	private PauseListener  pauseListener;
 	private CancelListener cancelListener;
@@ -99,65 +106,45 @@ public class SchedulerView extends ViewPart implements SchedulerListener {
     
 
     /**
-     * Constructor
+     * Registers itself to a model, and creates the map from algorithm to 
+     * GUI item.
      */
     public SchedulerView() {
-		schedulerService = Activator.getSchedulerService();
-		if (schedulerService != null) {
-			schedulerService.addSchedulerListener(this);
-		}
-		algorithmToGuiItemMap   = new Hashtable();
-		tableItemToAlgorithmMap = new Hashtable();
-		algorithmDoneList = new ArrayList();
-		isActive = true;
+    	schedulerContentModel = SchedulerContentModel.getInstance();
+    	
+    	schedulerContentModel.register(this);
+    	algorithmToGuiItemMap = (Map)schedulerContentModel.getPersistedObject(this.getClass().getName());
+    	if (algorithmToGuiItemMap == null) {
+    		algorithmToGuiItemMap = Collections.synchronizedMap(new Hashtable());
+    	}
+    	else {
+    		algorithmToGuiItemMap = Collections.synchronizedMap(algorithmToGuiItemMap);    		
+    	}
+		schedulerView = this;
+    }
+    
+    /**
+     * Get the current scheduler view
+     * @return The scheduler view
+     */
+    public static SchedulerView getDefault() {
+    	return schedulerView;
     }
 
     /**
-     * @see org.eclipse.ui.part.WorkbenchPart#createPartControl(org.eclipse.swt.widgets.Composite)
-     */
+     * Creates buttons, table, and registers listeners
+     * 
+	 * @see org.eclipse.ui.part.WorkbenchPart#createPartControl(org.eclipse.swt.widgets.Composite)
+	 * @param parent The SWT parent
+	 */
     public void createPartControl(Composite parent) {
         this.parent = parent;
 
         Composite control = new Composite(parent, SWT.NONE);
         GridLayout layout = new GridLayout();
         layout.numColumns = 4;
-
         control.setLayout(layout);
 
-        //create the buttons
-        //scheduleButton = new Button(control, SWT.PUSH);
-        //scheduleButton.setText("Schedule...");
-        //scheduleButton.setToolTipText(
-        //    "Reschedule the selected item to another " + "date/time");
-        //scheduleButton.setEnabled(false);
-        /*
-        scheduleButton.addSelectionListener(new SelectionAdapter() {
-                public void widgetSelected(SelectionEvent e) {
-                    //this button is only enabled if a single selection is made
-                    SchedulerItem item = currentSelection[0];
-                    SchedulerDialog dialog = new SchedulerDialog();
-                    Algorithm algorithm = item.getAlgorithm();
-                    IVC.getInstance().getScheduler().block(algorithm);
-
-                    boolean success = dialog.open();
-
-                    if (success) {
-                        Calendar date = dialog.getDate();
-                        boolean rescheduled = IVC.getInstance().getScheduler()
-                                                 .reschedule(algorithm, date);
-
-                        if (rescheduled) {
-                            //a new item is created on reschedule, get rid of the old one
-                            //first set the name, this is a bit of a hack right now..
-                            model.getMostRecentAddition().setName(item.getName());
-                            model.remove(item);
-                        }
-                    }
-
-                    IVC.getInstance().getScheduler().unblock(algorithm);
-                }
-            });
-        */
         removeButton = new Button(control, SWT.PUSH);
         removeButton.setText("Remove From List");
         removeButton.setEnabled(true);
@@ -168,6 +155,7 @@ public class SchedulerView extends ViewPart implements SchedulerListener {
                 }
             });
 
+        
         removeAutomatically = new Button(control, SWT.CHECK);
         removeAutomatically.setText("Remove completed automatically");
         removeAutomatically.addSelectionListener(new SelectionAdapter() {	
@@ -179,31 +167,42 @@ public class SchedulerView extends ViewPart implements SchedulerListener {
         Button removeAllCompleted = new Button(control, SWT.PUSH);
         removeAllCompleted.setText("Remove all completed");
         removeAllCompleted.addSelectionListener(new SelectionAdapter() {
-                public void widgetSelected(SelectionEvent e) {
-                    removeCompleted();
-                    refresh();
-                }
-            });
+			public void widgetSelected(SelectionEvent e) {
+				removeCompleted();
+				refresh();
+			}
+		});
         
-//      algorithmStateButton = new Button(control, SWT.PUSH);
-//		algorithmStateButton.setImage(pauseImage);
-//		algorithmStateButton.addSelectionListener(new SelectionAdapter() {
-//            public void widgetSelected(SelectionEvent e) {
-//            	if (isActive) {
-//                    schedulerService.setRunning(false);
-//            	}
-//            	else {
-//                    schedulerService.setRunning(true);
-//            	}
-//            }
-//		});
+		playStateButton = new Button(control, SWT.PUSH);
+		playStateButton.setImage(playImage);
+		playStateButton.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				//schedulerService.setRunning(true);
+				schedulerContentModel.schedulerRunStateChanged(true);
+			}
+		});
 
+		pauseStateButton = new Button(control, SWT.PUSH);
+		pauseStateButton.setImage(pauseImage);
+		pauseStateButton.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				//schedulerService.setRunning(false);
+				schedulerContentModel.schedulerRunStateChanged(false);
+			}
+		});
 		
-        GridData removeAllCompletedData = new GridData();
-        removeAllCompletedData.horizontalAlignment = SWT.RIGHT;
+		if (schedulerContentModel.isRunning()) {
+			playStateButton.setEnabled(false);
+		}
+		else {
+			pauseStateButton.setEnabled(false);
+		}
+
+		GridData removeAllCompletedData = new GridData();
+		removeAllCompletedData.horizontalAlignment = SWT.RIGHT;
         removeAllCompleted.setLayoutData(removeAllCompletedData);
 
-        //composite for up and down  buttons and table
+        // composite for up and down buttons for table entries
         Composite tableComposite = new Composite(control, SWT.NONE);
         GridLayout tableCompositeLayout = new GridLayout();
         tableCompositeLayout.numColumns = 2;
@@ -237,14 +236,18 @@ public class SchedulerView extends ViewPart implements SchedulerListener {
 
         // Create the table
         createTable(tableComposite);
+        createTableEntries(table);
         
         table.addSelectionListener(new TableListener());
-		//table.addMouseListener(new ContextMenuListener());
-
 		
 		//Set right click menu
 		menu = new Menu(table);
 		menu.setVisible(false);
+
+		MenuItem startItem = new MenuItem(menu, SWT.PUSH);
+		startItem.setText("resume");
+		startListener = new StartListener();
+		startItem.addListener(SWT.Selection, startListener);
 
 		MenuItem pauseItem = new MenuItem(menu, SWT.PUSH);
 		pauseItem.setText("pause");
@@ -256,27 +259,10 @@ public class SchedulerView extends ViewPart implements SchedulerListener {
 		cancelListener = new CancelListener();
 		cancelItem.addListener(SWT.Selection, cancelListener);
 
-		MenuItem startItem = new MenuItem(menu, SWT.PUSH);
-		startItem.setText("start");
-		startListener = new StartListener();
-		startItem.addListener(SWT.Selection, startListener);
-
 		table.setMenu(menu);
         
         GridData gridData = new GridData(GridData.FILL_BOTH);
         table.setLayoutData(gridData);
-        
-        /*    
-        IMenuManager menu = IVCApplication.getMenuManager();
-        IContributionItem item = menu.findUsingPath("tools/scheduler");
-        if(item != null){
-            final IAction action = ((ActionContributionItem) item).getAction();
-            action.setChecked(true);
-        }
-
-        //initialize based on data in the model
-        refreshView();
-        */  
     }
 
 	public void setFocus() {
@@ -284,84 +270,169 @@ public class SchedulerView extends ViewPart implements SchedulerListener {
 		
 	}
 
-	public void algorithmError(Algorithm algorithm, Throwable error) {
-		SchedulerTableItem schedulerTableItem = (SchedulerTableItem)algorithmToGuiItemMap.get(algorithm);
-		schedulerTableItem.errorTableEntry(table.indexOf(schedulerTableItem.getTableItem()));
+	/**
+	 * Notifies the corresponding table item of the offending algorithm
+	 * @param algorithm The algorithm that errored
+	 * @param error The throwable object
+	 */
+	public void algorithmError(final Algorithm algorithm, Throwable error) {
+		guiRun(new Runnable() {
+			public void run() {
+				SchedulerTableItem schedulerTableItem = (SchedulerTableItem)algorithmToGuiItemMap.get(algorithm);
+				if (schedulerTableItem != null)
+					schedulerTableItem.errorTableEntry(table);
+			}
+		});
 		refresh();
 	}
 
+	/**
+	 * Notifies the corresponding table entry when an algorithm has completed
+	 * its' task
+	 * 
+	 * @param algorithm The finished task
+	 * @param createData List of data objects created
+	 */
 	public void algorithmFinished(Algorithm algorithm, Data[] createdData) {
 		SchedulerTableItem schedulerTableItem = (SchedulerTableItem)algorithmToGuiItemMap.get(algorithm);
 		if (schedulerTableItem != null) {
-			TableItem tableItem = schedulerTableItem.getTableItem();
-			tableItemToAlgorithmMap.remove(tableItem);
-			
-			schedulerTableItem.finishTableEntry(-1);
+			schedulerTableItem.finishTableEntry(table);
+			tableItemToAlgorithmMap.put(schedulerTableItem.getTableItem(), algorithm);
 			if (autoRemove) {
 				schedulerTableItem.remove();
+				TableItem tableItem = schedulerTableItem.getTableItem();
+				tableItemToAlgorithmMap.remove(tableItem);
 				algorithmToGuiItemMap.remove(algorithm);
-			} else {
-				 tableItem = schedulerTableItem.getTableItem();
-				tableItemToAlgorithmMap.put(tableItem, algorithm);
-				algorithmDoneList.add(algorithm);
-			}
+			} 
 		}
 		refresh();
 	}
 
+	/**
+	 * Notifies the corresponding table item of an algorithm being rescheduled
+	 * @param algorithm The task that is rescheduled
+	 * @param time The rescheduled time
+	 */
 	public void algorithmRescheduled(Algorithm algorithm, Calendar time) {
 		SchedulerTableItem schedulerTableItem = (SchedulerTableItem)algorithmToGuiItemMap.get(algorithm);
-		schedulerTableItem.reschedule(time);
+		if (schedulerTableItem != null)
+			schedulerTableItem.reschedule(time);
 		refresh();		
 	}
 
-	public void algorithmScheduled(Algorithm algorithm, Calendar cal) {
-		SchedulerTableItem schedulerTableItem = new SchedulerTableItem(schedulerService, algorithm, cal, table);
-		schedulerTableItem.initTableEntry(0);
-		algorithmToGuiItemMap.put(algorithm, schedulerTableItem);
-		
-		TableItem tableItem = schedulerTableItem.getTableItem();
-		tableItemToAlgorithmMap.put(tableItem, algorithm);
+	/**
+	 * Creates a table item for the the algorithm, and adds an entry to the 
+	 * appropriate maps.
+	 * @param algorithm The task that is to execute
+	 * @param cal When the task will begin execution
+	 */
+	public void algorithmScheduled(final Algorithm algorithm, final Calendar cal) {
+		final Table table = this.table;
+		guiRun(new Runnable() {
+			public void run() {
+				ServiceReference serviceReference = Activator
+						.getSchedulerService().getServiceReference(algorithm);
+				String algorithmLabel = "";
+				if (serviceReference != null) {
+					algorithmLabel = (String) serviceReference
+							.getProperty(AlgorithmProperty.LABEL);
+				}
+
+				SchedulerTableItem schedulerTableItem = new SchedulerTableItem(
+						algorithmLabel, algorithm, cal);
+				schedulerTableItem.initTableEntry(table, 0);
+				algorithmToGuiItemMap.put(algorithm, schedulerTableItem);
+
+				TableItem tableItem = schedulerTableItem.getTableItem();
+				tableItemToAlgorithmMap.put(tableItem, algorithm);
+			}
+		});
 		
 		refresh();
 	}
-
-	public void algorithmStarted(Algorithm algorithm) {
-		SchedulerTableItem schedulerTableItem = (SchedulerTableItem)algorithmToGuiItemMap.get(algorithm);
-		schedulerTableItem.algorithmStarted();
+	
+	/**
+	 * Notifies the corresponding table item that an algorithm has started
+	 * @param algorithm The task that is started
+	 */
+	public void algorithmStarted(final Algorithm algorithm) {
+		guiRun(new Runnable() {
+			public void run() {
+				SchedulerTableItem schedulerTableItem = (SchedulerTableItem) algorithmToGuiItemMap
+						.get(algorithm);
+				schedulerTableItem.algorithmStarted(table);
+				TableItem tableItem = schedulerTableItem.getTableItem();
+				tableItemToAlgorithmMap.put(tableItem, algorithm);
+			}
+		});
 		refresh();
 	}
 
+	/**
+	 * Notifies the corresponding table item that an algorithm became unscheduled
+	 * @param algorithm The task that became unscheduled
+	 */
 	public void algorithmUnscheduled(Algorithm algorithm) {
 		SchedulerTableItem schedulerTableItem = (SchedulerTableItem)algorithmToGuiItemMap.get(algorithm);
 		schedulerTableItem.remove();
 		refresh();
 	}
 
+	/**
+	 * Clear the current scheduler of all jobs
+	 */
 	public void schedulerCleared() {
-    	for (Iterator i = algorithmToGuiItemMap.values().iterator(); i.hasNext();) {
-			SchedulerTableItem schedulerTableItem = (SchedulerTableItem)i.next();
+		for (Iterator i = algorithmToGuiItemMap.values().iterator(); i
+				.hasNext();) {
+			SchedulerTableItem schedulerTableItem = (SchedulerTableItem) i
+					.next();
 			schedulerTableItem.remove();
-    	}
-    	algorithmToGuiItemMap.clear();
-    	tableItemToAlgorithmMap.clear();
+		}
+		algorithmToGuiItemMap.clear();
+		tableItemToAlgorithmMap.clear();
 		refresh();
 	}
 
+	/**
+	 * Notification of the state of the scheduler has changed
+	 * @param isRunning Flag determining if the scheduler is running
+	 */
 	public void schedulerRunStateChanged(boolean isRunning) {
-		isActive = isRunning;
-		if (isActive) {
-			algorithmStateButton.setImage(pauseImage);			
+		if (isRunning) {
+			pauseStateButton.setEnabled(true);
+			playStateButton.setEnabled(false);
 		}
 		else {
-			algorithmStateButton.setImage(playImage);			
+			playStateButton.setEnabled(true);
+			pauseStateButton.setEnabled(false);			
 		}
 		refresh();
 	}
-	
-    /*
-     * Create the Table control
-     */
+
+	/**
+	 * This will create the table entries if there are any in the map
+	 * @param table The parent table to create the entries
+	 */
+    private void createTableEntries(Table table) {
+		Set keys = algorithmToGuiItemMap.keySet();
+
+		tableItemToAlgorithmMap = Collections.synchronizedMap(new Hashtable());
+
+		for (Iterator i = keys.iterator(); i.hasNext();) {
+			Algorithm algorithm = (Algorithm) i.next();
+			SchedulerTableItem schedulerTableItem = (SchedulerTableItem) algorithmToGuiItemMap
+					.get(algorithm);
+			schedulerTableItem.initTableEntry(table, 0);
+
+			TableItem tableItem = schedulerTableItem.getTableItem();
+			tableItemToAlgorithmMap.put(tableItem, algorithm);
+		}
+	}
+    
+    /**
+	 * Create the Table control
+	 * @param parent The parent of the Table
+	 */
     private void createTable(Composite parent) {
         int style = SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL |
             SWT.FULL_SELECTION;
@@ -395,23 +466,6 @@ public class SchedulerView extends ViewPart implements SchedulerListener {
         column.setText("% Complete");
         column.setWidth(120);
 
-//        //selection listener to keep currentSelection variable up to date
-//        table.addSelectionListener(new SelectionAdapter() {
-//                public void widgetSelected(SelectionEvent e) {
-//                    TableItem[] selection = table.getSelection();
-//                    currentSelection = new SchedulerItem[selection.length];
-//
-//                    for (int i = 0; i < selection.length; i++) {
-//                        SchedulerItem item = SchedulerItem.getSchedulerItem(selection[i]);
-//                        currentSelection[i] = item;
-//                    }
-//
-//                    updateUpAndDown();
-//                    refreshButtons();
-//                }
-//            });
-//
-//        //key listener to allow you to remove items with the delete key
         table.addKeyListener(new KeyAdapter() {
                 public void keyReleased(KeyEvent e) {
                     if (e.keyCode == SWT.DEL) {
@@ -427,48 +481,77 @@ public class SchedulerView extends ViewPart implements SchedulerListener {
         table.addMouseListener(dragListener);
     }
     
+    /**
+     * Remove all of the table items that are selected
+     */
     private void removeSelection() {
-    	TableItem[] tableItems = table.getSelection();
-    	
-    	for (int i = 0; i < tableItems.length; ++i) {
-    		for (Iterator j = algorithmToGuiItemMap.keySet().iterator(); j.hasNext();) {
-    			Algorithm algorithm = (Algorithm)j.next();
-    			SchedulerTableItem schedulerTableItem = 
-    				(SchedulerTableItem)algorithmToGuiItemMap.get(algorithm);
-    			if (tableItems[i].equals(schedulerTableItem.getTableItem())) {
-    				if (algorithmIsProgressTrackable(algorithm)) {
-    					ProgressMonitor monitor = ((ProgressTrackable)algorithm).getProgressMonitor();
-    					monitor.setCanceled(true);
-    				}
-   					schedulerTableItem.remove();
-   					algorithmToGuiItemMap.remove(algorithm);
-    				break;
-    			}
-    		}
-    	}
-    }
-    
-    private void removeCompleted() {
-    	for (Iterator i = algorithmDoneList.iterator(); i.hasNext();) {
-    		Object pid = i.next();
-			SchedulerTableItem schedulerTableItem = 
-				(SchedulerTableItem)algorithmToGuiItemMap.get(pid);
-			if (schedulerTableItem != null) {
-				schedulerTableItem.remove();
-				algorithmToGuiItemMap.remove(pid);
+		TableItem[] tableItems = table.getSelection();
+		for (int i = 0; i < tableItems.length; ++i) {
+			for (Iterator j = algorithmToGuiItemMap.keySet().iterator(); j
+					.hasNext();) {
+				Algorithm algorithm = (Algorithm) j.next();
+				SchedulerTableItem schedulerTableItem = (SchedulerTableItem) algorithmToGuiItemMap
+						.get(algorithm);
+				if (tableItems[i].equals(schedulerTableItem.getTableItem())) {
+					if (algorithmIsProgressTrackable(algorithm)) {
+						ProgressMonitor monitor = ((ProgressTrackable) algorithm)
+								.getProgressMonitor();
+						monitor.setCanceled(true);
+					}
+					schedulerTableItem.remove();
+					algorithmToGuiItemMap.remove(algorithm);
+					break;
+				}
 			}
-    	}
-    	algorithmDoneList.clear();
-    }
+		}
+	}
+
+    /**
+     * Removes the elements that have completed
+     *
+     */
+    private void removeCompleted() {
+		for (Iterator i = algorithmToGuiItemMap.values().iterator(); i
+				.hasNext();) {
+			SchedulerTableItem schedulerTableItem = (SchedulerTableItem) i
+					.next();
+			if (schedulerTableItem.isDone()) {
+				i.remove();
+				schedulerTableItem.remove();
+			}
+		}
+	}
     
-    private void refresh() {		
-    	for (Iterator i = algorithmToGuiItemMap.values().iterator(); i.hasNext();) {
-			SchedulerTableItem schedulerTableItem = (SchedulerTableItem)i.next();
+    /**
+     * Cleans the tableItemToAlgorithmMap of disposed items.  Refreshes
+     * each active table item.  Refreshes the up and down buttons.
+     *
+     */
+    private void refresh() {
+		for (Iterator i = tableItemToAlgorithmMap.keySet().iterator(); i
+				.hasNext();) {
+			final TableItem tableItem = (TableItem) i.next();
+			if (tableItem.isDisposed()) {
+				i.remove();
+			}
+		}
+
+		for (Iterator i = algorithmToGuiItemMap.values().iterator(); i
+				.hasNext();) {
+			SchedulerTableItem schedulerTableItem = (SchedulerTableItem) i
+					.next();
 			schedulerTableItem.refresh();
-    	}
-    	refreshUpAndDownButtons();
-    }
+		}
+		refreshUpAndDownButtons();
+	}
     
+    /**
+     * Check whether or not the algorithm implements the interface
+     * ProgressTrackable
+     * 
+     * @param algorithm The algorithm to interrogate
+     * @return Whether or not the algorithm is trackable
+     */
     private boolean algorithmIsProgressTrackable(Algorithm algorithm) {
 		if (algorithm != null) {
 			ProgressMonitor monitor = ((ProgressTrackable) algorithm)
@@ -480,31 +563,49 @@ public class SchedulerView extends ViewPart implements SchedulerListener {
 		return false;
 	}
     
+    /**
+     * Given an 
+     * @param algorithm
+     */
     private void setEnabledMenuItems(Algorithm algorithm) {
     	SchedulerTableItem schedulerTableItem = (SchedulerTableItem)algorithmToGuiItemMap.get(algorithm);
     	
-    	if (!schedulerTableItem.isRunning()) {
+    	//if (!schedulerTableItem.isRunning()) {
     		for (int i = 0; i < menu.getItemCount(); ++i) {
     			MenuItem menuItem = menu.getItem(i);
     			menuItem.setEnabled(false);
     		}
-    	}
-    	else {
-			MenuItem menuItem = menu.getItem(CANCEL_INDEX);
-			menuItem.setEnabled(schedulerTableItem.isCancellable());
+    	//}
+    	//else {
+    		if (schedulerTableItem.isRunning() && schedulerTableItem.isCancellable()) {
+    			MenuItem menuItem = menu.getItem(CANCEL_INDEX);
+    			menuItem.setEnabled(true);    			
+    		//}
+    		//else {
+    		//	MenuItem menuItem = menu.getItem(CANCEL_INDEX);
+    		//	menuItem.setEnabled(false);    			    			
+    		}
 
-			if (schedulerTableItem.isPaused()) {
-				menuItem = menu.getItem(PAUSE_INDEX);
-				menuItem.setEnabled(schedulerTableItem.isPauseable());
-				menuItem = menu.getItem(START_INDEX);
-				menuItem.setEnabled(false);
-			} else {
-				menuItem = menu.getItem(PAUSE_INDEX);
-				menuItem.setEnabled(false);
-				menuItem = menu.getItem(START_INDEX);
-				menuItem.setEnabled(schedulerTableItem.isPauseable());
+			if (schedulerTableItem.isPauseable()) {
+				if (schedulerTableItem.isPaused()) {
+					//MenuItem menuItem = menu.getItem(PAUSE_INDEX);
+					//menuItem.setEnabled(false);					
+					MenuItem menuItem = menu.getItem(RESUME_INDEX);
+					menuItem.setEnabled(true);
+				} else {
+					MenuItem menuItem = menu.getItem(PAUSE_INDEX);
+					menuItem.setEnabled(true);
+					//menuItem = menu.getItem(RESUME_INDEX);
+					//menuItem.setEnabled(false);
+				}
 			}
-		}
+			//else {
+			//	MenuItem menuItem = menu.getItem(PAUSE_INDEX);
+			//	menuItem.setEnabled(false);
+			//	menuItem = menu.getItem(RESUME_INDEX);
+			//	menuItem.setEnabled(false);				
+			//}
+		//}
     }
     
     private void moveTableItems(int ndxToMove, int destNdx) {
@@ -516,7 +617,7 @@ public class SchedulerView extends ViewPart implements SchedulerListener {
 
 			SchedulerTableItem schedulerTableItem = (SchedulerTableItem) algorithmToGuiItemMap
 					.get(algorithm);
-			schedulerTableItem.moveTableEntry(destNdx);
+			schedulerTableItem.moveTableEntry(table, destNdx);
 			table.setSelection(destNdx);
 
 			TableItem tableItem = schedulerTableItem.getTableItem();
@@ -558,6 +659,11 @@ public class SchedulerView extends ViewPart implements SchedulerListener {
 			Display.getDefault().syncExec(run);
 		}
 	}
+	
+	public void dispose() {
+		schedulerContentModel.persistObject(this.getClass().getName(), algorithmToGuiItemMap);
+		schedulerContentModel.deregister(this);
+	}
 
     
     private class TableListener extends SelectionAdapter {
@@ -567,17 +673,17 @@ public class SchedulerView extends ViewPart implements SchedulerListener {
 				TableItem item = items[i];
 				Algorithm algorithm = (Algorithm) tableItemToAlgorithmMap
 						.get(item);
-				if (algorithmIsProgressTrackable(algorithm)) {
-					removeButton.setEnabled(true);
-					setEnabledMenuItems(algorithm);
-				} else {
-					SchedulerTableItem schedulerTableItem = (SchedulerTableItem) algorithmToGuiItemMap
-							.get(algorithm);
-					if (schedulerTableItem.isDone()) {
+				if (algorithm != null) {
+					if (algorithmIsProgressTrackable(algorithm)) {
 						removeButton.setEnabled(true);
 					} else {
-						removeButton.setEnabled(false);
-						break;
+						SchedulerTableItem schedulerTableItem = (SchedulerTableItem) algorithmToGuiItemMap
+								.get(algorithm);
+						if (schedulerTableItem.isDone()) {
+							removeButton.setEnabled(true);
+						} else {
+							removeButton.setEnabled(false);
+						}
 					}
 					setEnabledMenuItems(algorithm);
 				}
@@ -645,24 +751,6 @@ public class SchedulerView extends ViewPart implements SchedulerListener {
 			int tblNdx = table.getSelectionIndex();
 			if (tblNdx != -1) {
 				moveTableItems(tblNdx, tblNdx-1);
-//
-//				TableItem item = table.getItem(tblNdx);
-//				if (item != null && tblNdx > 0) {
-//					Algorithm algorithm = (Algorithm) tableItemToAlgorithmMap
-//							.get(item);
-//					tableItemToAlgorithmMap.remove(item);
-//					item.dispose();
-//
-//					SchedulerTableItem schedulerTableItem = (SchedulerTableItem) algorithmToGuiItemMap
-//							.get(algorithm);
-//					schedulerTableItem.createTableEntry(tblNdx-1);
-//					table.setSelection(tblNdx-1);
-//
-//					TableItem tableItem = schedulerTableItem.getTableItem();
-//					tableItemToAlgorithmMap.put(tableItem, algorithm);
-//
-//					refresh();
-//				}
 			}
 		}		
 	}
@@ -707,11 +795,11 @@ public class SchedulerView extends ViewPart implements SchedulerListener {
 
         //reset the selected item and set the flag that the mouse is down
         public void mouseDown(MouseEvent e) {
+            TableItem item = table.getItem(new Point(e.x, e.y));
+            if(item == null) return;
+
             if (e.button == 1) {
                 down = true;
-
-                TableItem item = table.getItem(new Point(e.x, e.y));
-                if(item == null) return;
                 
 				movingAlgorithm = (Algorithm) tableItemToAlgorithmMap.get(item);
             }

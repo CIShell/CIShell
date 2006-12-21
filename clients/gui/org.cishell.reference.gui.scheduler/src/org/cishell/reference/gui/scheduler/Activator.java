@@ -3,19 +3,29 @@ package org.cishell.reference.gui.scheduler;
 import java.io.File;
 
 import org.cishell.app.service.scheduler.SchedulerService;
+import org.cishell.reference.gui.workspace.CIShellApplication;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IStartup;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
+
 /**
  * The activator class controls the plug-in life cycle
  */
-public class Activator extends AbstractUIPlugin {
+public class Activator extends AbstractUIPlugin implements IStartup {
 	public static final String PLUGIN_ID = "org.cishell.reference.gui.scheduler";
 	private static Activator plugin;
 	private static BundleContext context;
+	private boolean waitForBundleContext;
 	
 	public Activator() {
 		plugin = this;
@@ -23,7 +33,10 @@ public class Activator extends AbstractUIPlugin {
 
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
-		Activator.context = context; 
+		Activator.context = context;
+		if (waitForBundleContext) {
+			earlyStartup();
+		}
 	}
 
 	public void stop(BundleContext context) throws Exception {
@@ -61,4 +74,49 @@ public class Activator extends AbstractUIPlugin {
             return null;
         }            
     }
+
+	public void earlyStartup() {
+		if (context != null) {
+			Display.getDefault().asyncExec(new Runnable() {
+				public void run() {
+					Action scheduler = new SchedulerAction();
+					IMenuManager manager = CIShellApplication.getMenuManager();
+					manager = manager.findMenuUsingPath("tools");
+					manager.appendToGroup("start", scheduler);
+					SchedulerView view = SchedulerView.getDefault();
+					boolean visible = view != null
+							&& PlatformUI.getWorkbench()
+									.getActiveWorkbenchWindow().getActivePage()
+									.isPartVisible(view);
+					scheduler.setChecked(visible);
+					CIShellApplication.getMenuManager().update(true);
+				}
+			});
+			waitForBundleContext = false;
+		}
+		else {
+			waitForBundleContext = true;
+		}
+	}
+	
+    private class SchedulerAction extends Action {
+        public SchedulerAction(){
+            super("Scheduler", IAction.AS_CHECK_BOX);
+            setId("scheduler");
+        }
+        
+        public void run(){
+            if(this.isChecked()){
+	            try {
+                    PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(SchedulerView.ID_VIEW);
+                } catch (PartInitException e) {
+                    e.printStackTrace();
+                }
+            }
+            else{
+                PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().hideView(SchedulerView.getDefault());
+            }
+        }	    
+    }
+
 }
