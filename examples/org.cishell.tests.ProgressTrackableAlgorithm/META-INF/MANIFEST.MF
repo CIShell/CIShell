@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: My algorithm tester
 Bundle-SymbolicName: org.my.algorithm.test
-Bundle-Version: 0.0.1
+Bundle-Version: 0.3.0
 Bundle-ClassPath: .
 Bundle-Localization: plugin
 Import-Package: org.cishell.framework,
