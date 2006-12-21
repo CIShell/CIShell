@@ -223,6 +223,7 @@ public class SchedulerServiceImpl implements SchedulerService {
 
     public void setRunning(boolean isRunning) {
         _algSchedulerTask.setRunning(isRunning);
+        _schedulerListenerInformer.schedulerRunStateChanged(isRunning);
     }
 }
 
@@ -312,6 +313,7 @@ class SchedulerListenerInformer implements SchedulerListener {
 class AlgSchedulerTask extends TimerTask implements SchedulerListener {
 
     private Map _algMap;
+    private Map _algServiceMap;
     private volatile boolean _running = true;
 
     // Default allow as many as needed
@@ -349,6 +351,7 @@ class AlgSchedulerTask extends TimerTask implements SchedulerListener {
 
     public AlgSchedulerTask(SchedulerListener listener) {
         _algMap = Collections.synchronizedMap(new HashMap());
+        _algServiceMap = new HashMap();
         setSchedulerListener(listener);
     }
 
@@ -356,13 +359,8 @@ class AlgSchedulerTask extends TimerTask implements SchedulerListener {
         _schedulerListener = listener;
     }
     
-    public synchronized final ServiceReference getServiceReference(Algorithm algorithm) {
-        AlgorithmTask task = (AlgorithmTask)_algMap.get(algorithm);
-        if (task != null) {
-            return task.getServiceReference();
-        } else {
-            return null;
-        }
+    public final ServiceReference getServiceReference(Algorithm algorithm) {
+    	return (ServiceReference) _algServiceMap.get(algorithm);
     }
     
     public synchronized final Calendar getScheduledTime(Algorithm algorithm) {
@@ -420,6 +418,7 @@ class AlgSchedulerTask extends TimerTask implements SchedulerListener {
     }
     
     public synchronized final void registerAlgorithmTask(Algorithm algorithm, AlgorithmTask algorithmTask) {
+    	this._algServiceMap.put(algorithm, algorithmTask.getServiceReference());
         this._algMap.put(algorithm, algorithmTask);    	
     }
 
@@ -445,8 +444,10 @@ class AlgSchedulerTask extends TimerTask implements SchedulerListener {
             while (iter.hasNext()) {
                 Map.Entry entry = (Map.Entry) iter.next();
                 AlgorithmTask task = (AlgorithmTask) entry.getValue();
-                if (task.getState() == STATE.STOPPED)
+                if (task.getState() == STATE.STOPPED) {
                     iter.remove();
+                    _algServiceMap.remove(entry.getKey());
+                }
             }
         }
     }
