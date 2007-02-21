@@ -79,23 +79,14 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, DataMa
             SchedulerService scheduler = (SchedulerService) 
                 bContext.getService(bContext.getServiceReference(
                         SchedulerService.class.getName()));
-            GUIBuilderService builder = (GUIBuilderService)
-                ciContext.getService(GUIBuilderService.class.getName());
             
-            AlgorithmFactory factory = (AlgorithmFactory) bContext.getService(ref);
-            MetaTypeProvider provider = factory.createParameters(null);
-            String pid = (String)ref.getProperty(Constants.SERVICE_PID); 
 
             printAlgorithmInformation();
             
-            Dictionary params = new Hashtable();
-            if (provider != null) {
-                params = builder.createGUIandWait(pid, provider);
-            }
             
-            if (params != null) {
-                scheduler.schedule(new AlgorithmWrapper(ref, bContext, ciContext, originalData, data, converters, provider, params), ref);
-            }
+            
+            
+           scheduler.schedule(new AlgorithmWrapper(ref, bContext, ciContext, originalData, data, converters), ref);
         } catch (Throwable e) {
             e.printStackTrace();
         }

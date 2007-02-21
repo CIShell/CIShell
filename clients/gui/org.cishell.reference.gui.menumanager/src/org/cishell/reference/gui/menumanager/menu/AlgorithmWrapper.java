@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
@@ -55,21 +56,18 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
     
     public AlgorithmWrapper(ServiceReference ref, BundleContext bContext,
             CIShellContext ciContext, Data[] originalData, Data[] data,
-            Converter[][] converters, MetaTypeProvider provider, 
-            Dictionary parameters) {
+            Converter[][] converters) {
         this.ref = ref;
         this.bContext = bContext;
         this.ciContext = ciContext;
         this.originalData = originalData;
         this.data = data;
         this.converters = converters;
-        this.parameters = parameters;
-        this.provider = provider;
+
         this.idToLabelMap = new HashMap();
         this.progressMonitor = null;
         
-        AlgorithmFactory factory = (AlgorithmFactory) bContext.getService(ref);
-        algorithm = factory.createAlgorithm(data, parameters, ciContext);
+        
     }
 
     /**
@@ -83,7 +81,25 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
                     converters[i] = null;
                 }
             }
-                   
+            
+            GUIBuilderService builder = (GUIBuilderService)
+            ciContext.getService(GUIBuilderService.class.getName());
+        
+            AlgorithmFactory factory = (AlgorithmFactory) bContext.getService(ref);
+            this.provider = factory.createParameters(data);
+            String pid = (String)ref.getProperty(Constants.SERVICE_PID);
+            
+            this.parameters = new Hashtable();
+            if (provider != null) {
+                this.parameters = builder.createGUIandWait(pid, provider);
+            }
+            
+            if(this.parameters == null) {
+            	return new Data[0];
+            }
+            
+            algorithm = factory.createAlgorithm(data, parameters, ciContext);
+            
             printParameters();
             
             if (progressMonitor != null && algorithm instanceof ProgressTrackable) {
