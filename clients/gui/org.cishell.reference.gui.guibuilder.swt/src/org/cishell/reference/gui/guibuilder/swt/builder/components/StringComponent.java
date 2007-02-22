@@ -18,9 +18,13 @@ import org.cishell.reference.gui.guibuilder.swt.builder.StringConverter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Text;
 
 /**
@@ -29,6 +33,8 @@ import org.eclipse.swt.widgets.Text;
  */
 public class StringComponent extends AbstractComponent {
     protected Text text;
+    protected Combo combo;
+    protected String[] optionValues;
     
     public StringComponent() {
         this(false, 1);
@@ -39,34 +45,71 @@ public class StringComponent extends AbstractComponent {
     }
     
     public Control createGUI(Composite parent, int style) {
-        text = new Text(parent, style | SWT.BORDER);
+    	
+    	GridData gd = new GridData(SWT.FILL,SWT.CENTER,true,false);
+		gd.horizontalSpan = MAX_SPAN-1;
+		gd.minimumWidth = 100;
+		
+    	optionValues = attr.getOptionValues();
+		if(optionValues != null) {
+    		combo = new Combo(parent, style | SWT.DROP_DOWN | SWT.READ_ONLY);
+    		
+    		String[] optionLabels = attr.getOptionLabels();
+    		if(optionLabels == null) {
+    			combo.setItems(optionValues);
+    		} else {
+    			combo.setItems(optionLabels);
+    		}
+    		
+    		combo.select(0);
+    		
+    		combo.setLayoutData(gd);
+    		
+    		combo.addSelectionListener(new SelectionAdapter() {
+    			public void widgetSelected(SelectionEvent event) {
+    				update();
+    			}
+    		});
+    		
+    		return combo;
+    	} else {
+    		text = new Text(parent, style | SWT.BORDER);
+    		text.setLayoutData(gd);
         
-        GridData gd = new GridData(SWT.FILL,SWT.CENTER,true,false);
-        gd.horizontalSpan = MAX_SPAN-1;
-        gd.minimumWidth = 100;
-        text.setLayoutData(gd);
+    		text.addModifyListener(new ModifyListener() {
+    			public void modifyText(ModifyEvent e) {
+    				update();
+    			}
+    		}); 
         
-        text.addModifyListener(new ModifyListener() {
-            public void modifyText(ModifyEvent e) {
-                update();
-            }
-        }); 
-        
-        return text;
+    		return text;
+    	}
     }
 
     public Object getValue() {
-        Object value = StringConverter.getInstance().stringToObject(attr, text.getText());
+    	Object value;
+    	if(combo == null) {
+    		value = StringConverter.getInstance().stringToObject(attr, text.getText());
+    	} else {
+    		value = StringConverter.getInstance().stringToObject(attr, getListValue());
+    	}
         
         return value;
     }
 
-    public String validate() {
+    private String getListValue() {
+    	return optionValues[combo.getSelectionIndex()];
+	}
+
+	public String validate() {
         if (getValue() == null) {
             return "Invalid basic value";
         }
-        
-        return attr.validate(text.getText());
+        if(combo == null) {
+        	return attr.validate(text.getText());
+        } else {
+        	return attr.validate(getListValue());
+        }
     }
 
     public void setValue(Object value) {
