@@ -66,12 +66,12 @@ public class StaticExecutableAlgorithmFactory implements AlgorithmFactory {
     }
     
     private class StaticExecutableAlgorithm implements Algorithm {
-        private static final String ALGORITHM = "ALGORITHM/";
-		private static final String ALGORITHM_MACOSX_PPC = ALGORITHM + "macosx.ppc/";
-		private static final String MACOSX = "macosx";
-		private static final String ALGORITHM_WIN32 = ALGORITHM + "/win32/";
-		private static final String WIN32 = "win32";
-		private static final String ALGORITHM_DEFAULT = ALGORITHM + "/default/";
+        private String ALGORITHM;
+		private String ALGORITHM_MACOSX_PPC;
+		private String MACOSX;
+		private String ALGORITHM_WIN32;
+		private String WIN32;
+		private String ALGORITHM_DEFAULT;
 		Data[] data;
         Dictionary parameters;
         CIShellContext context;
@@ -80,6 +80,14 @@ public class StaticExecutableAlgorithmFactory implements AlgorithmFactory {
             this.data = data;
             this.parameters = parameters;
             this.context = context;
+            
+            ALGORITHM = algName + "/";
+            ALGORITHM_MACOSX_PPC = ALGORITHM + "macosx.ppc/";
+    		MACOSX = "macosx";
+    		ALGORITHM_WIN32 = ALGORITHM + "/win32/";
+    		WIN32 = "win32";
+    		ALGORITHM_DEFAULT = ALGORITHM + "/default/";
+            
         }
 
         public Data[] execute() {
@@ -141,24 +149,6 @@ public class StaticExecutableAlgorithmFactory implements AlgorithmFactory {
             if(entries.contains(platform_path)) {
             	path = platform_path;
             }
-            
-            
-            
-            /*while (e != null && e.hasMoreElements()) {
-                String path = (String)entryPath;
-                
-                if (path.endsWith("/")) {
-                    if (path.endsWith("default/")) {
-                        copyDir(dir, path);
-                    } else if (path.endsWith(os+"."+arch+"/") ||
-                               (path.endsWith("win32/") && os.equals("win32")) || (path.endsWith("macosx.ppc/") && os.equals("macosx") && arch.equals("x86"))) {
-                        copyDir(dir, path);
-                        foundExecutable = true;
-                    }
-                } else {
-                    //copyFile(dir, path);
-                }
-            }*/
             
             if (path == null) {
                 throw new RuntimeException("Unable to find compatible executable");
