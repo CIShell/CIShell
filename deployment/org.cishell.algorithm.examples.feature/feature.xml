@@ -2,7 +2,7 @@
 <feature
       id="org.cishell.algorithm.examples.feature"
       label="CIShell Sample Algorithms"
-      version="0.3.0">
+      version="0.4.0">
 
    <description>
       Example algorithms for development and testing of CIShell.
@@ -121,13 +121,6 @@ Dr. Katy Borner (katy@indiana.edu)
          unpack="false"/>
 
    <plugin
-         id="edu.iu.nwb.converter.junggraphml"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="edu.iu.nwb.converter.jungpajeknet"
          download-size="0"
          install-size="0"
@@ -205,6 +198,27 @@ Dr. Katy Borner (katy@indiana.edu)
 
    <plugin
          id="edu.iu.nwb.analysis.pathfindergraphnetworkscaling"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="edu.iu.nwb.converter.prefusegraphml"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="edu.iu.nwb.converter.prefusetreeml"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="edu.iu.nwb.converter.treegraph"
          download-size="0"
          install-size="0"
          version="0.0.0"

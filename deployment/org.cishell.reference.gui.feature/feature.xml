@@ -2,7 +2,7 @@
 <feature
       id="org.cishell.reference.gui.feature"
       label="CIShell Reference GUI"
-      version="0.3.0">
+      version="0.4.0">
 
    <description url="http://cishell.org">
       CIShell Reference GUI
