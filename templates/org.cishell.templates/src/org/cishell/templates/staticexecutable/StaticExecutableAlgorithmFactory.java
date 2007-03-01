@@ -22,7 +22,9 @@ import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
 import java.util.Dictionary;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.Properties;
+import java.util.Set;
 
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
@@ -64,7 +66,13 @@ public class StaticExecutableAlgorithmFactory implements AlgorithmFactory {
     }
     
     private class StaticExecutableAlgorithm implements Algorithm {
-        Data[] data;
+        private static final String ALGORITHM = "ALGORITHM/";
+		private static final String ALGORITHM_MACOSX_PPC = ALGORITHM + "macosx.ppc/";
+		private static final String MACOSX = "macosx";
+		private static final String ALGORITHM_WIN32 = ALGORITHM + "/win32/";
+		private static final String WIN32 = "win32";
+		private static final String ALGORITHM_DEFAULT = ALGORITHM + "/default/";
+		Data[] data;
         Dictionary parameters;
         CIShellContext context;
         
@@ -97,6 +105,16 @@ public class StaticExecutableAlgorithmFactory implements AlgorithmFactory {
         private void copyFiles(File dir) throws IOException {
             Enumeration e = bContext.getBundle().getEntryPaths("/"+algName);
             
+            Set entries = new HashSet();
+            
+			while(e != null && e.hasMoreElements()) {
+				String entryPath = (String) e.nextElement();
+				System.err.println(entryPath);
+				if(entryPath.endsWith("/")) {
+					entries.add(entryPath);
+				}
+			}
+            
             dir = new File(dir.getPath() + File.separator + algName);
             dir.mkdirs();
             
@@ -104,24 +122,48 @@ public class StaticExecutableAlgorithmFactory implements AlgorithmFactory {
             String arch = bContext.getProperty("osgi.arch");
             boolean foundExecutable = false;
             
-            while (e != null && e.hasMoreElements()) {
-                String path = (String)e.nextElement();
+            String path = null;
+            
+            //take the default, if there
+            if(entries.contains(ALGORITHM_DEFAULT)) {
+            	path = ALGORITHM_DEFAULT;
+            }
+            
+            //but override with platform idiosyncracies
+            if(os.equals(WIN32) && entries.contains(ALGORITHM_WIN32)) {
+            	path = ALGORITHM_WIN32;
+            } else if(os.equals(MACOSX) && entries.contains(ALGORITHM_MACOSX_PPC)) {
+            	path = ALGORITHM_MACOSX_PPC;
+            }
+            
+            String platform_path = ALGORITHM + os + "." + arch + "/";
+			//and always override anything with an exact match
+            if(entries.contains(platform_path)) {
+            	path = platform_path;
+            }
+            
+            
+            
+            /*while (e != null && e.hasMoreElements()) {
+                String path = (String)entryPath;
                 
                 if (path.endsWith("/")) {
                     if (path.endsWith("default/")) {
                         copyDir(dir, path);
                     } else if (path.endsWith(os+"."+arch+"/") ||
-                               path.endsWith("win32/") && os.equals("win32")) {
+                               (path.endsWith("win32/") && os.equals("win32")) || (path.endsWith("macosx.ppc/") && os.equals("macosx") && arch.equals("x86"))) {
                         copyDir(dir, path);
                         foundExecutable = true;
                     }
                 } else {
                     //copyFile(dir, path);
                 }
-            }
+            }*/
             
-            if (!foundExecutable) {
+            if (path == null) {
                 throw new RuntimeException("Unable to find compatible executable");
+            } else {
+            	copyDir(dir, path);
             }
         }
         
