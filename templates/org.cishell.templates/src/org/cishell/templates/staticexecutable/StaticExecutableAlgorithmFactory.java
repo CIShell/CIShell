@@ -134,7 +134,8 @@ public class StaticExecutableAlgorithmFactory implements AlgorithmFactory {
             
             //take the default, if there
             if(entries.contains(ALGORITHM_DEFAULT)) {
-            	path = ALGORITHM_DEFAULT;
+            	String default_path = ALGORITHM_DEFAULT;
+            	copyDir(dir, default_path);
             }
             
             //but override with platform idiosyncracies
