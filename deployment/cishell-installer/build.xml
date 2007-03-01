@@ -12,7 +12,7 @@
 <project name='CIShell Installer' default='compile' basedir='.'>
 
 	<!--  Properties -->
-	<property name="version" value="0.3.0"/>
+	<property name="version" value="0.4.0"/>
 	<property name="full.xml" value="install.xml"/>
 	<property name="min.xml" value="install.xml"/>
 	<property name="full.jar" value="cishell-installer_${version}.jar"/>

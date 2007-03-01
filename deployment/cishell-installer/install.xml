@@ -16,7 +16,7 @@
 	<info>
 		<appname>CIShell: Cyberinfrastructure Shell</appname>
 		<appsubpath>cishell</appsubpath>
-		<appversion>0.3.0</appversion>
+		<appversion>0.4.0</appversion>
 		<authors>
 			<author name="Bruce Herr" email="bh2@bh2.net" />
 			<author name="Weixia Huang" email="huangb@indiana.edu" />

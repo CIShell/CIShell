@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <graphml xmlns="http://graphml.graphdrawing.org/xmlns/graphml"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
 xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns/graphml">
-<graph edgedefault="directed"  >
+<graph edgedefault="directed" >
 <node id="1" label="edu.berkeley.guir.prefuse.graph.Graph" />
 <node id="2" label="prefuse.data.Graph" />
 <node id="3" label="file:text/graphml+xml" />
