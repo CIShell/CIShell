@@ -117,7 +117,7 @@ public class StaticExecutableAlgorithmFactory implements AlgorithmFactory {
             
 			while(e != null && e.hasMoreElements()) {
 				String entryPath = (String) e.nextElement();
-				System.err.println(entryPath);
+
 				if(entryPath.endsWith("/")) {
 					entries.add(entryPath);
 				}
@@ -128,7 +128,6 @@ public class StaticExecutableAlgorithmFactory implements AlgorithmFactory {
             
             String os = bContext.getProperty("osgi.os");
             String arch = bContext.getProperty("osgi.arch");
-            boolean foundExecutable = false;
             
             String path = null;
             
