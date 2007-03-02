@@ -84,9 +84,9 @@ public class StaticExecutableAlgorithmFactory implements AlgorithmFactory {
             ALGORITHM = algName + "/";
             ALGORITHM_MACOSX_PPC = ALGORITHM + "macosx.ppc/";
     		MACOSX = "macosx";
-    		ALGORITHM_WIN32 = ALGORITHM + "/win32/";
+    		ALGORITHM_WIN32 = ALGORITHM + "win32/";
     		WIN32 = "win32";
-    		ALGORITHM_DEFAULT = ALGORITHM + "/default/";
+    		ALGORITHM_DEFAULT = ALGORITHM + "default/";
             
         }
 
