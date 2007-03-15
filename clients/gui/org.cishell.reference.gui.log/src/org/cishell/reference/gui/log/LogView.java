@@ -228,7 +228,10 @@ public class LogView extends ViewPart implements LogListener{
         if (index > -1) {
             String url = message.substring(index);
 
-            if (url.indexOf(" ") > -1) {
+            if (url.indexOf(") ") > -1) {
+                url = url.substring(0, url.indexOf(") "));
+            }
+            else if (url.indexOf(" ") > -1) {
                 url = url.substring(0, url.indexOf(" "));
             }
 
