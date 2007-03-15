@@ -93,32 +93,34 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, DataMa
     }
     
     private void printAlgorithmInformation() {
+        //adjust to log the whole acknowledgement in one block
         LogService logger = (LogService) ciContext.getService(LogService.class.getName());
-
+        StringBuffer acknowledgement = new StringBuffer();
         String label = (String)ref.getProperty("label");
         if (label != null){
-            logger.log(LogService.LOG_INFO, "..........");
-            logger.log(LogService.LOG_INFO, label+" was selected.");
+        	acknowledgement.append("..........\n"+
+            					label+" was selected.\n\n");
         }
         String authors = (String)ref.getProperty("authors");
         if (authors != null)
-            logger.log(LogService.LOG_INFO, "Author(s): "+authors); 
+        	acknowledgement.append("Author(s): "+authors+"\n"); 
         String implementers = (String)ref.getProperty("implementers");
         if (implementers != null)
-            logger.log(LogService.LOG_INFO, "Implementer(s): "+implementers); 
+        	acknowledgement.append("Implementer(s): "+implementers+"\n");    
         String integrators = (String)ref.getProperty("integrators");
         if (integrators != null)
-            logger.log(LogService.LOG_INFO, "Integrator(s): "+integrators);
+            acknowledgement.append("Integrator(s): "+integrators+"\n");
         String reference = (String)ref.getProperty("reference");
-        String reference_url = (String)ref.getProperty("reference_url");
+        String reference_url = (String)ref.getProperty("reference_url");            
         if (reference != null && reference_url != null )
-            logger.log(LogService.LOG_INFO, "Reference: "+reference+
-                    " ("+reference_url+")"); 
+            acknowledgement.append("Reference: "+reference+
+                    " ("+reference_url+")\n"); 
         else if (reference != null && reference_url == null )
-            logger.log(LogService.LOG_INFO, "Reference: "+reference);                     
+        	acknowledgement.append("Reference: "+reference+"\n");                     
         String docu = (String)ref.getProperty("docu");
         if (docu != null)
-            logger.log(LogService.LOG_INFO, "Docu: "+docu);    
+        	acknowledgement.append("Docu: "+docu);
+        logger.log(LogService.LOG_INFO, acknowledgement.toString());    
         
     }
     
