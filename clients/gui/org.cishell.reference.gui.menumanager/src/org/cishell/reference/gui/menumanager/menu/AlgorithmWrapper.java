@@ -147,17 +147,19 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
         
         if (logger != null) {
             if (!this.parameters.isEmpty()) {
-                logger.log(LogService.LOG_INFO, "");
-                logger.log(LogService.LOG_INFO, "Input Parameters:");
+            	//adjust to log all input parameters in one block
+            	StringBuffer inputParams = new StringBuffer("\n"+"Input Parameters:");
+                
                 for (Enumeration e = this.parameters.keys(); e
                         .hasMoreElements();) {
                     String key = (String) e.nextElement();
                     Object value = this.parameters.get(key);
                     
                     key = (String) idToLabelMap.get(key);
+                    inputParams.append("\n"+key+": "+value);                   
                     
-                    logger.log(LogService.LOG_INFO, key+": "+value);
                 }
+                logger.log(LogService.LOG_INFO, inputParams.toString());
             }
         }
     }
