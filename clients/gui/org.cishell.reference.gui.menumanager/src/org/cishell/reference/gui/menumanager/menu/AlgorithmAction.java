@@ -15,27 +15,22 @@ package org.cishell.reference.gui.menumanager.menu;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Dictionary;
-import java.util.Hashtable;
 import java.util.List;
 
 import org.cishell.app.service.datamanager.DataManagerListener;
 import org.cishell.app.service.datamanager.DataManagerService;
 import org.cishell.app.service.scheduler.SchedulerService;
 import org.cishell.framework.CIShellContext;
-import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.algorithm.AlgorithmProperty;
-import org.cishell.framework.algorithm.DataValidator;
+//import org.cishell.framework.algorithm.DataValidator;
 import org.cishell.framework.data.Data;
 import org.cishell.service.conversion.Converter;
 import org.cishell.service.conversion.DataConversionService;
-import org.cishell.service.guibuilder.GUIBuilderService;
 import org.eclipse.jface.action.Action;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.Constants;
+//import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogService;
-import org.osgi.service.metatype.MetaTypeProvider;
 
 
 public class AlgorithmAction extends Action implements AlgorithmProperty, DataManagerListener {
@@ -182,7 +177,7 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, DataMa
     
     //This method will be disabled until we can find a better solution
     //for extra validation beyond input/output checking
-    private boolean isValid() {
+/*    private boolean isValid() {
         String valid = null;
         String[] classes = (String[]) ref.getProperty(Constants.OBJECTCLASS);
         
@@ -207,7 +202,7 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, DataMa
         
         return valid == null || valid.length() == 0;
     }
-    
+*/    
     private boolean isAsignableFrom(String type, Data datum) {
         Object data = datum.getData();
         boolean assignable = false;

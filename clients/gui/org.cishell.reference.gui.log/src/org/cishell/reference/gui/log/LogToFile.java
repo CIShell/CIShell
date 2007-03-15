@@ -4,7 +4,6 @@ import java.io.File;
 
 import org.osgi.service.log.LogEntry;
 import org.osgi.service.log.LogListener;
-import org.osgi.service.log.LogService;
 
 import java.util.Calendar;
 import java.util.logging.FileHandler;
@@ -14,7 +13,7 @@ import java.util.logging.SimpleFormatter;
 import java.io.IOException;
 
 /**
- * This is a basic implementation. It write log records to files
+ * This is a basic implementation. It writes log records to files
  * @author Weixia(Bonnie) Huang (huangb@indiana.edu)
  */
 public class LogToFile implements LogListener {
