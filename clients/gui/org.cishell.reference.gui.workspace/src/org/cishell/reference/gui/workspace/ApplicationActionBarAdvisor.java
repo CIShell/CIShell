@@ -1,10 +1,7 @@
 package org.cishell.reference.gui.workspace;
 
-import org.eclipse.jface.action.GroupMarker;
+
 import org.eclipse.jface.action.IMenuManager;
-import org.eclipse.jface.action.MenuManager;
-import org.eclipse.jface.action.Separator;
-import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.actions.ActionFactory.IWorkbenchAction;
@@ -22,7 +19,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	// them in the fill methods. This ensures that the actions aren't recreated
 	// when fillActionBars is called with FILL_PROXY.
 	private IWorkbenchAction exitAction;
-    private IWorkbenchAction aboutAction;    
+    private IWorkbenchAction aboutAction;   
 
 	public ApplicationActionBarAdvisor(IActionBarConfigurer configurer) {
 		super(configurer);
@@ -39,52 +36,12 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		register(exitAction);
         
         aboutAction = ActionFactory.ABOUT.create(window);
-        register(aboutAction);
+        register(aboutAction);        
 	}
 
 	protected void fillMenuBar(IMenuManager menuBar) {
         CIShellApplication.setMenuManager(menuBar);
-        
-		MenuManager fileMenu = createMenu("&File", 
-                IWorkbenchActionConstants.M_FILE);
-        MenuManager helpMenu = createMenu("&Help", 
-                IWorkbenchActionConstants.M_HELP);
 
-		menuBar.add(fileMenu);
-        
-        //Pre-adding menus so they show up in this order...
-        createAndAddMenu(menuBar, "Preprocessing", "preprocessing");
-        createAndAddMenu(menuBar, "Modeling", "modeling");
-        createAndAddMenu(menuBar, "Analysis", "analysis");
-        createAndAddMenu(menuBar, "Visualization", "visualization");
-        createAndAddMenu(menuBar, "Converters", "converters");
-        createAndAddMenu(menuBar, "Toolkits", "toolkits");
-        createAndAddMenu(menuBar, "Tools", "tools");
-        
-        menuBar.add(new GroupMarker("start"));
-        menuBar.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
-        menuBar.add(new GroupMarker("end"));
-        menuBar.add(helpMenu);
-        
-		//File menu items
-        fileMenu.add(exitAction);
-       
-        //Help menu items
-        helpMenu.add(new Separator());
-        helpMenu.add(aboutAction);
 	}
     
-    private void createAndAddMenu(IMenuManager menuBar, String text, String id) {
-        MenuManager menu = createMenu(text, id);
-        menuBar.add(menu);
-    }
-    
-    private MenuManager createMenu(String text, String id) {
-        MenuManager menu = new MenuManager(text, id);
-        menu.add(new GroupMarker("start"));
-        menu.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
-        menu.add(new GroupMarker("end"));
-        
-        return menu;
-    }
 }
