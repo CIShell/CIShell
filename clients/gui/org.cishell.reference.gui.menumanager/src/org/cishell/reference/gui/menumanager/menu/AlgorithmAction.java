@@ -55,7 +55,26 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, DataMa
         
         dataManager.addDataManagerListener(this);
         dataSelected(dataManager.getSelectedData());
+        
     }
+    
+    public AlgorithmAction(String label, ServiceReference ref, BundleContext bContext, CIShellContext ciContext) {
+        this.ref = ref;
+        this.ciContext = ciContext;
+        this.bContext = bContext;
+        
+        setText(label);
+        setToolTipText((String)ref.getProperty(AlgorithmProperty.DESCRIPTION));
+        
+        DataManagerService dataManager = (DataManagerService) 
+            bContext.getService(bContext.getServiceReference(
+                    DataManagerService.class.getName()));
+        
+        dataManager.addDataManagerListener(this);
+        dataSelected(dataManager.getSelectedData());
+    }
+   
+    
     
     public void run() {
         //hmm... should probably change this.. maybe use the scheduler...
@@ -225,4 +244,8 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, DataMa
     public void dataAdded(Data data, String label) {}
     public void dataLabelChanged(Data data, String label) {}
     public void dataRemoved(Data data) {}
+    
+    public ServiceReference getServiceReference(){
+    	return ref;
+    }
 }
