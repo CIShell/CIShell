@@ -77,7 +77,6 @@ public class MenuAdapter implements AlgorithmProperty {
     private Map pidToServiceReferenceMap;
     private Map pidToServiceReferenceMapCopy;
     private Document dom;
-    private static File DirForDefaultMenuXMLFile;
     private static String DEFAULT_MENU_FILE_NAME = "default_menu.xml";
     
     /*
@@ -307,12 +306,9 @@ public class MenuAdapter implements AlgorithmProperty {
 			DocumentBuilder db = dbf.newDocumentBuilder();
 			
 			//parse using builder to get DOM representation of the XML file
-	        if (DirForDefaultMenuXMLFile == null) {
-	        	DirForDefaultMenuXMLFile = new File(System.getProperty("user.dir") + File.separator + "configuration");                
-	        }
-	        String fullpath=DirForDefaultMenuXMLFile.getPath()+File.separator+DEFAULT_MENU_FILE_NAME;
+	        String fullpath=System.getProperty("osgi.configuration.area") + DEFAULT_MENU_FILE_NAME;
 //	        System.out.println(">>parse file: "+fullpath);
-			dom = db.parse(fullpath);			
+	        dom = db.parse(fullpath);			
 
 		}catch(ParserConfigurationException pce) {
 			pce.printStackTrace();
