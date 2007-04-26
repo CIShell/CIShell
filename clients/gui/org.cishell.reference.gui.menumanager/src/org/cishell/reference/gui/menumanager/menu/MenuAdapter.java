@@ -13,15 +13,27 @@
  * ***************************************************************************/
 package org.cishell.reference.gui.menumanager.menu;
 
+//Java
 import java.util.HashMap;
 import java.util.Map;
 import java.io.File;
 import java.io.IOException;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
+//CIShell
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.algorithm.AlgorithmProperty;
+
+//Eclipse
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IContributionItem;
@@ -34,6 +46,8 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.actions.ActionFactory.IWorkbenchAction;
+
+//OSGi
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
@@ -42,14 +56,6 @@ import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogService;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 /*
  * Bonnie's comments:
@@ -86,6 +92,7 @@ public class MenuAdapter implements AlgorithmProperty {
     private static String PRESERVED_BREAK = "break";
     private static String PRESERVED_EXIT = "Exit";
     private static String PRESERVED_SERVICE_PID="service.pid";
+    private static String PRESERVED = "preserved";
     
 
 
@@ -112,7 +119,7 @@ public class MenuAdapter implements AlgorithmProperty {
             createMenuFromXML();
             processLeftServiceBundles();
             Display.getDefault().asyncExec(updateAction);
-            
+     
 //          initializeMenu();
         } catch (InvalidSyntaxException e) {
             getLog().log(LogService.LOG_ERROR, "Invalid Syntax", e);
@@ -136,7 +143,7 @@ public class MenuAdapter implements AlgorithmProperty {
         		}
         		else{       
         			String pid = (String)refs[i].getProperty(PRESERVED_SERVICE_PID);
-        			System.out.println("pid="+pid);
+//        			System.out.println("pid="+pid);
         			pidToServiceReferenceMap.put(pid.toLowerCase().trim(), refs[i]);
         			pidToServiceReferenceMapCopy.put(pid.toLowerCase().trim(), refs[i]);
         		}
@@ -163,30 +170,38 @@ public class MenuAdapter implements AlgorithmProperty {
 			}
 		}    	
     }  
+    
     private void processTopMenu (Element topMenuNode){    	
-    	MenuManager topMenuBar;
-    	
+    	MenuManager topMenuBar;    	
+
     	//First create and add topMenuBar to the menuBar
     	String topMenuName = topMenuNode.getAttribute(ATTR_NAME);    
-       	if (topMenuName.equalsIgnoreCase("file"))
-    		topMenuBar= createMenu("&File", IWorkbenchActionConstants.M_FILE);
+       	if (topMenuName.equalsIgnoreCase("file")){
+    		topMenuBar= new MenuManager("&File", IWorkbenchActionConstants.M_FILE);    		
+       	}
     	else if (topMenuName.equalsIgnoreCase("help")){
-    		topMenuBar= createMenu("&Help", 
+    		topMenuBar= new MenuManager("&Help", 
                     IWorkbenchActionConstants.M_HELP);
-    		//allow to append new top leve menu before "Help"
+    		//allow to append new top level menu before "Help"
     		menuBar.add(new GroupMarker(START_GROUP));
             menuBar.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
             menuBar.add(new GroupMarker(END_GROUP));
             
+            //allow to append new sub menu under "Help" and before "/Help/About"
+    		topMenuBar.add(new GroupMarker(START_GROUP));
+            topMenuBar.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
+            topMenuBar.add(new GroupMarker(END_GROUP));           
+
             IWorkbenchAction aboutAction = ActionFactory.ABOUT.create(window);
             topMenuBar.add(new Separator());
-            topMenuBar.add(aboutAction);            
+            topMenuBar.add(aboutAction);         
+            
     	}
-    	else 
-    		topMenuBar= createMenu(topMenuName, topMenuName.toLowerCase());
+    	else {
+    		topMenuBar= new MenuManager(topMenuName, topMenuName.toLowerCase());    	
+    	}	
     	
-    	menuBar.add(topMenuBar);
-    	
+       	menuBar.add(topMenuBar);
     	//Second process submenu
     	processSubMenu(topMenuNode, topMenuBar);
     }
@@ -207,7 +222,8 @@ public class MenuAdapter implements AlgorithmProperty {
 					continue;
 				
 				String menu_type = el.getAttribute(ATTR_TYPE);
-				if (menu_type == null || menu_type.length()==0){
+				String pid=el.getAttribute(ATTR_PID);
+				if ((menu_type == null || menu_type.length()==0)&& pid !=null){
 					processAMenuNode(el, parentMenuBar);
 				}				
 				else if (menu_type.equalsIgnoreCase(PRESERVED_GROUP)){
@@ -221,16 +237,17 @@ public class MenuAdapter implements AlgorithmProperty {
 					//such as double separators, a separator at the top or bottom					
 					parentMenuBar.add(new Separator());
 				}
-				else if (menu_type.equalsIgnoreCase("preserved")){
+				else if (menu_type.equalsIgnoreCase(PRESERVED)){
 					String menuName = el.getAttribute(ATTR_NAME);
 					if(menuName.equalsIgnoreCase(PRESERVED_EXIT) ){
-					  //allow to add more menu before "Exit"	
+					  //allow to add more menu before "File/Exit"	
 					  if(parentMenuBar.getId().equalsIgnoreCase(IWorkbenchActionConstants.M_FILE)){
 						parentMenuBar.add(new GroupMarker(START_GROUP));
 						parentMenuBar.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
 						parentMenuBar.add(new GroupMarker(END_GROUP));
 					  }
 					  IWorkbenchAction exitAction = ActionFactory.QUIT.create(window);
+					  parentMenuBar.add(new Separator());
 					  parentMenuBar.add(exitAction);						
 					}
 				}
@@ -244,7 +261,9 @@ public class MenuAdapter implements AlgorithmProperty {
 				parentMenuBar.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
 				parentMenuBar.add(new GroupMarker(END_GROUP));
 			}
-    	}  	
+			
+    	} 
+ 	
     }
 
     /*
@@ -315,11 +334,10 @@ public class MenuAdapter implements AlgorithmProperty {
     			ServiceReference ref= (ServiceReference) 
     						pidToServiceReferenceMap.get((String)keys[i]);
     			makeMenuItem(ref);
-    		}
-    		
-    	}
-    		
+    		}    		
+    	}    		
     }
+    
 /*
     private void initializeMenu() throws InvalidSyntaxException{   
         ServiceReference[] refs = bContext.getAllServiceReferences(
@@ -338,7 +356,7 @@ public class MenuAdapter implements AlgorithmProperty {
         public void serviceChanged(ServiceEvent event) {
             switch (event.getType()) {
             case ServiceEvent.REGISTERED:
-            	System.out.println(">>>receive ServiceEvent.Registered");
+//            	System.out.println(">>>receive ServiceEvent.Registered");
                 makeMenuItem(event.getServiceReference());
                 break;
             case ServiceEvent.UNREGISTERING:
