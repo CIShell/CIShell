@@ -10,7 +10,6 @@ import org.eclipse.swt.awt.SWT_AWT;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IStartup;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -55,7 +54,7 @@ public class Activator extends AbstractUIPlugin implements IStartup {
         IMenuManager menuManager = CIShellApplication.getMenuManager();
         CIShellContext ciContext = new LocalCIShellContext(context);
         
-        menuAdapter = new MenuAdapter(menuManager,shell,context,ciContext);
+        menuAdapter = new MenuAdapter(menuManager,shell,context,ciContext, windows[0]);
         
         try {
         	//Fix to make swing based algorithms work on Macs
