@@ -16,7 +16,6 @@ package org.cishell.reference.gui.menumanager.menu;
 //Java
 import java.util.HashMap;
 import java.util.Map;
-import java.io.File;
 import java.io.IOException;
 
 import javax.xml.parsers.DocumentBuilder;
