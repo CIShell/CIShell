@@ -185,7 +185,14 @@ public class FileLoad implements Algorithm{
 		       			}
 
 		       		}
-		       		if (serviceRefList != null){
+		       		/*
+		       		 * Bonnie: I commented out the following functions since when
+		       		 * the application failed to load an nwb file, etc, the reader
+		       		 * has report the error. It does not need this second error display.
+		       		 * But maybe not all file readers will generate the error display if
+		       		 * a failure occurs...
+		       		 */
+/*		       		if (serviceRefList != null){
 		       			if(serviceRefList.length >0 && !loadFileSuccess){
 		       			guiBuilder.showError("Can Not Load The File", 
 		       					"Sorry, it's very possible that you have a wrong file format," +
@@ -196,8 +203,9 @@ public class FileLoad implements Algorithm{
 	       					"And send your requests or report the problem to "+
 	       					"cishell-developers@lists.sourceforge.net. \n"+"Thank you.");
 		       			}
+
 		       		}
-		       		
+*/		       		
 
 
 	        	}catch (Exception e){
