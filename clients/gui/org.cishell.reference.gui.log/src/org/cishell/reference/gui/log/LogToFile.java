@@ -15,6 +15,7 @@ import java.io.IOException;
 /**
  * This is a basic implementation. It writes log records to files
  * @author Weixia(Bonnie) Huang (huangb@indiana.edu)
+ * @author Felix Terkhorn (terkhorn@gmail.com)
  */
 public class LogToFile implements LogListener {
 	//default log directory
@@ -56,15 +57,39 @@ public class LogToFile implements LogListener {
     			logger.addHandler(handler);
     		}
         } catch (IOException e) {
+        	e.printStackTrace();
         }
 
     }
 	
     public void logged(final LogEntry entry) {
     	String message = entry.getMessage();
+    	int osgiLogLevel = entry.getLevel();
+    	Level javaLogLevel;
+
+    	// Correspondence between OSGI log levels and Java.util.logging log levels:
+    	// JAVA				OSGI
+    	// ----				----
+    	// SEVERE=1000		LOG_ERROR=1
+    	// WARNING=900		LOG_WARNING=2
+    	// INFO=800			LOG_INFO=3
+    	// FINEST=300		LOG_DEBUG=4
+    	
+    	if (osgiLogLevel == 1) { // OSGI level = LOG_ERROR
+    		javaLogLevel = Level.SEVERE;
+    	} else if (osgiLogLevel == 2) {  // OSGI level = LOG_WARNING
+    		javaLogLevel = Level.WARNING;
+    	} else if (osgiLogLevel == 3) {  // OSGI level = LOG_INFO
+    		javaLogLevel = Level.INFO;
+    	} else if (osgiLogLevel == 4) {  // OSGI level = LOG_DEBUG
+    		javaLogLevel = Level.FINEST;
+    	} else { // if these don't match, set it to INFO
+    		     // maybe not the best way to do this
+    		javaLogLevel = Level.INFO;
+    	}
     	
     	if (goodMessage(message)){
-    		logger.log(Level.INFO, message+"\n");
+    		logger.log(javaLogLevel, message+"\n");
     	}
     }
     
