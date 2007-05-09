@@ -66,7 +66,7 @@ public class LogToFile implements LogListener {
     	String message = entry.getMessage();
     	int osgiLogLevel = entry.getLevel();
     	Level javaLogLevel;
-
+/*
     	// Correspondence between OSGI log levels and Java.util.logging log levels:
     	// JAVA				OSGI
     	// ----				----
@@ -74,7 +74,7 @@ public class LogToFile implements LogListener {
     	// WARNING=900		LOG_WARNING=2
     	// INFO=800			LOG_INFO=3
     	// FINEST=300		LOG_DEBUG=4
-    	
+  */  	
     	if (osgiLogLevel == 1) { // OSGI level = LOG_ERROR
     		javaLogLevel = Level.SEVERE;
     	} else if (osgiLogLevel == 2) {  // OSGI level = LOG_WARNING
