@@ -55,6 +55,7 @@ public class LogToFile implements LogListener {
     			// Add to the desired logger
     			logger = Logger.getLogger("edu.iu.iv.logger");
     			logger.addHandler(handler);
+    			logger.setUseParentHandlers(false); // Edited by Felix Terkhorn.  terkhorn@gmail.com May-9-2007
     		}
         } catch (IOException e) {
         	e.printStackTrace();
@@ -86,10 +87,10 @@ public class LogToFile implements LogListener {
     	} else { // if these don't match, set it to INFO
     		     // maybe not the best way to do this
     		javaLogLevel = Level.INFO;
-    	}
+    	}  // edited by Felix Terkhorn.  terkhorn@gmail.com   May-9-2007
     	
     	if (goodMessage(message)){
-    		logger.log(javaLogLevel, message+"\n");
+    		logger.log(javaLogLevel, message+"\n"); // stdout printing happens here, despite having 1 handler only
     	}
     }
     
