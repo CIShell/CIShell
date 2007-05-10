@@ -165,11 +165,7 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 		editor.horizontalAlignment = SWT.LEFT;
 		editor.grabHorizontal = true;
 		editor.minimumWidth = 50;
-		TreeItemEditorListener editorListener = new TreeItemEditorListener(
-				editor);
-		tree.addMouseListener(editorListener);
-		tree.addKeyListener(editorListener);
-
+		
 		// listen to OSGi for models being added by plugins
 		if (manager != null) {
 			manager.addDataManagerListener(this);
@@ -229,7 +225,7 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 		// that
 		// it can be used in the future if it has a child
 		dataToDataGUIItemMap.put(data, item);
-
+		
 		// update the ModelManager with the new selection
 		final Set selection = new HashSet();
 		selection.add(data);
@@ -397,6 +393,7 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 				if (!updatingTreeItem) {
 					//updateText(newEditor.getText(), item);
 					manager.setLabel(((DataGUIItem)item.getData()).getModel(), newEditor.getText());
+					// FELIX.  This is not > stupidness.
 				}
 			}
 		});
@@ -422,25 +419,34 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 	 */
 	private void updateText(String newLabel, TreeItem item) {
 		updatingTreeItem = true;
-
+       /*
+		if (newLabel.contains(">")) {
+			System.out.println("We have a >\n");
+		}
+	   */
 		if (newLabel.startsWith(">"))
 			newLabel = newLabel.substring(1);
+			//System.out.println("The newLabel is "+newLabel);
+		    // This isn't being picked up
+		
+		//if (isValid(newLabel)) {
+		editor.getItem().setText(newLabel);
 
-		if (isValid(newLabel)) {
-			editor.getItem().setText(newLabel);
-
-			DataGUIItem treeItem = (DataGUIItem) item.getData();
-			Data model = treeItem.getModel();
-			model.getMetaData().put(DataProperty.LABEL, newLabel);
-			viewer.refresh();
-			newEditor.dispose();
-		} else {
+		DataGUIItem treeItem = (DataGUIItem) item.getData();
+		Data model = treeItem.getModel();
+		model.getMetaData().put(DataProperty.LABEL, newLabel);
+		viewer.refresh();
+		newEditor.dispose();
+		
+		// removed Error checking below for "invalid data model names" at Russell's request
+		// Felix Terkhorn May 9 2007
+		/*} else {
 			String message = "Invalid data model name. The following characters"
 					+ " are not allowed:\n\n"
 					+ "`~!@#$%^&*()+=[{]}\\|;:'\",<>/?";
 			Activator.getLogService().log(LogService.LOG_WARNING, message);
 			handleInput();
-		}
+		}*/
 
 		updatingTreeItem = false;
 	}
