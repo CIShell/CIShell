@@ -22,15 +22,18 @@ import org.cishell.app.service.datamanager.DataManagerService;
 import org.cishell.app.service.scheduler.SchedulerService;
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.AlgorithmProperty;
-//import org.cishell.framework.algorithm.DataValidator;
 import org.cishell.framework.data.Data;
 import org.cishell.service.conversion.Converter;
 import org.cishell.service.conversion.DataConversionService;
 import org.eclipse.jface.action.Action;
 import org.osgi.framework.BundleContext;
-//import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogService;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 
 public class AlgorithmAction extends Action implements AlgorithmProperty, DataManagerListener {
@@ -248,4 +251,6 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, DataMa
     public ServiceReference getServiceReference(){
     	return ref;
     }
+    
+   
 }

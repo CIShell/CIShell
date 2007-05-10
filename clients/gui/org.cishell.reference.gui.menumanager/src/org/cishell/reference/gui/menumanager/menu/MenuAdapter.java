@@ -14,25 +14,17 @@
 package org.cishell.reference.gui.menumanager.menu;
 
 //Java
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.io.IOException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
-
-//CIShell
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.algorithm.AlgorithmProperty;
-
-//Eclipse
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IContributionItem;
@@ -41,12 +33,10 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchActionConstants;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.actions.ActionFactory.IWorkbenchAction;
-
-//OSGi
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
@@ -54,6 +44,12 @@ import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogService;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 
 /*
@@ -170,36 +166,26 @@ public class MenuAdapter implements AlgorithmProperty {
     }  
     
     private void processTopMenu (Element topMenuNode){    	
-    	MenuManager topMenuBar;    	
+    	MenuManager topMenuBar = null;    	
 
-    	//First create and add topMenuBar to the menuBar
-    	String topMenuName = topMenuNode.getAttribute(ATTR_NAME);    
-       	if (topMenuName.equalsIgnoreCase("file")){
-    		topMenuBar= new MenuManager("&File", IWorkbenchActionConstants.M_FILE);    		
-       	}
-    	else if (topMenuName.equalsIgnoreCase("help")){
-    		topMenuBar= new MenuManager("&Help", 
-                    IWorkbenchActionConstants.M_HELP);
-    		//allow to append new top level menu before "Help"
-    		menuBar.add(new GroupMarker(START_GROUP));
-            menuBar.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
-            menuBar.add(new GroupMarker(END_GROUP));
-            
-            //allow to append new sub menu under "Help" and before "/Help/About"
-    		topMenuBar.add(new GroupMarker(START_GROUP));
-            topMenuBar.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
-            topMenuBar.add(new GroupMarker(END_GROUP));           
-
-            IWorkbenchAction aboutAction = ActionFactory.ABOUT.create(window);
-            topMenuBar.add(new Separator());
-            topMenuBar.add(aboutAction);         
-            
-    	}
-    	else {
-    		topMenuBar= new MenuManager(topMenuName, topMenuName.toLowerCase());    	
-    	}	
+    
+    	/*	
+    	 * The File and Help menus are created in ApplicationActionBarAdvisor.java
+    	 * This function now parses the XML file and appends the new menus/menu items to the correct group
+    	 * We first check to see if the menu already exists in our MenuBar. If it does, we modify the already
+    	 * existing menu. If not, then we create a new Menu.
+    	 * 
+    	 * Modified by: Tim Kelley
+    	 * Date: May 8-9, 2007
+    	 * Additional code at: org.cishell.reference.gui.workspace.ApplicationActionBarAdvisor.java
+    	 */
     	
-       	menuBar.add(topMenuBar);
+    	String topMenuName = topMenuNode.getAttribute(ATTR_NAME);
+    	if((topMenuBar = (MenuManager)menuBar.findUsingPath(topMenuName)) == null){  		//Check to see if menu exists
+    		topMenuBar= new MenuManager(topMenuName, topMenuName.toLowerCase());    		//Create a new menu if it doesn't
+    		menuBar.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, topMenuBar);
+    	}
+    	
     	//Second process submenu
     	processSubMenu(topMenuNode, topMenuBar);
     }
@@ -270,7 +256,7 @@ public class MenuAdapter implements AlgorithmProperty {
     private void processAMenuNode(Element menuNode, MenuManager parentMenuBar ){
  		String menuName = menuNode.getAttribute(ATTR_NAME);
 		String pid = menuNode.getAttribute(ATTR_PID);
-//		System.out.println(">>>pid="+pid);
+		//System.out.println(">>>pid="+pid);
 		if (pid == null || pid.length()==0){
 			//check if the name is one of the preserved one
 			//if so add the default action
@@ -299,7 +285,7 @@ public class MenuAdapter implements AlgorithmProperty {
     private void parseXmlFile(){
 		//get the factory
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-		
+		dbf.setCoalescing(true);
 		try {			
 			//Using factory get an instance of document builder
 			DocumentBuilder db = dbf.newDocumentBuilder();
@@ -307,7 +293,8 @@ public class MenuAdapter implements AlgorithmProperty {
 			//parse using builder to get DOM representation of the XML file
 	        String fullpath=System.getProperty("osgi.configuration.area") + DEFAULT_MENU_FILE_NAME;
 //	        System.out.println(">>parse file: "+fullpath);
-	        dom = db.parse(fullpath);			
+	        dom = db.parse(fullpath);	
+	    // printElementAttributes(dom);
 
 		}catch(ParserConfigurationException pce) {
 			pce.printStackTrace();
@@ -367,7 +354,7 @@ public class MenuAdapter implements AlgorithmProperty {
     private void makeMenuItem(ServiceReference ref) {
         String path = (String)ref.getProperty(MENU_PATH);
         String[] items = (path == null) ? null : path.split("/");
-        
+        IMenuManager menu = null;
         if (items != null && items.length > 1) {
             AlgorithmAction action = new AlgorithmAction(ref, bContext, ciContext);
             action.setId(getItemID(ref));
@@ -376,28 +363,35 @@ public class MenuAdapter implements AlgorithmProperty {
             String group = items[items.length-1];
             
             for (int i=0; i < items.length-1; i++) {
-                IMenuManager menu = targetMenu.findMenuUsingPath(items[i]);
-                
+            
+                menu = targetMenu.findMenuUsingPath(items[i]);
+ 
                 if (menu == null && items[i] != null) {
                     menu = targetMenu.findMenuUsingPath(items[i].toLowerCase());
+                  
                 }
                 
                 if (menu == null) {
+                	
                     menu = createMenu(items[i],items[i]);
                     targetMenu.appendToGroup(ADDITIONS_GROUP, menu);
                 }
                 
                 targetMenu = menu;
+                
+               
             }
             
             group = items[items.length-1];
             IContributionItem groupItem = targetMenu.find(group);
+            
             if (groupItem == null) {
                 groupItem = new GroupMarker(group);
                 targetMenu.appendToGroup(ADDITIONS_GROUP, groupItem);
             }
             
             targetMenu.appendToGroup(group, action);
+            targetMenu.appendToGroup(group, new Separator());
             algorithmToItemMap.put(getItemID(ref), action);
             itemToParentMap.put(action, targetMenu);
             
@@ -489,4 +483,40 @@ public class MenuAdapter implements AlgorithmProperty {
     private LogService getLog() {
         return (LogService) ciContext.getService(LogService.class.getName());
     }   
+    /*
+     * printElementAttributes takes in a xml document, gets the nodes, then prints the attributes.
+     * Copied from Java Tutorial on XML Parsing by Tim Kelley for debugging purposes.
+     */
+    static void printElementAttributes(Document doc)
+    {
+       NodeList nl = doc.getElementsByTagName("*");
+       Element e;
+       Node n;
+       NamedNodeMap nnm;
+     
+       String attrname;
+       String attrval;
+       int i, len;
+     
+       len = nl.getLength();
+
+       for (int j=0; j < len; j++)
+       {
+          e = (Element)nl.item(j);
+          System.err.println(e.getTagName() + ":");
+          nnm = e.getAttributes();
+     
+          if (nnm != null)
+          {
+             for (i=0; i<nnm.getLength(); i++)
+             {
+                n = nnm.item(i);
+                attrname = n.getNodeName();
+                attrval = n.getNodeValue();
+                System.err.print(" " + attrname + " = " + attrval);
+             }
+          }
+          System.err.println();
+       }
+    }
 }
