@@ -13,6 +13,7 @@
  * ***************************************************************************/
 package org.cishell.reference.gui.datamanager;
 
+import java.io.IOException;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -27,6 +28,9 @@ import org.cishell.framework.algorithm.Algorithm;
 import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.data.Data;
 import org.cishell.framework.data.DataProperty;
+import org.cishell.reference.gui.workspace.CIShellApplication;
+import org.eclipse.jface.action.ActionContributionItem;
+import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -56,8 +60,12 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.part.ViewPart;
+import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundleListener;
+import org.osgi.framework.Constants;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogService;
 
 /**
@@ -112,6 +120,12 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 		}
 	}
 
+	private String getItemID(ServiceReference ref) {
+    	return ref.getProperty("PID:" + Constants.SERVICE_PID) + "-SID:" + 
+                                ref.getProperty(Constants.SERVICE_ID);
+    }
+    
+	
 	/**
 	 * @see org.eclipse.ui.part.WorkbenchPart#createPartControl(org.eclipse.swt.widgets.Composite)
 	 */
@@ -145,12 +159,11 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 		viewItem.setText("View");
 		viewListener = new ViewListener();
 		viewItem.addListener(SWT.Selection, viewListener);
-
-		MenuItem viewWithItem = new MenuItem(menu, SWT.PUSH);
+			
+		MenuItem viewWithItem = new MenuItem(menu, SWT.PUSH);			
 		viewWithItem.setText("View as...");
 		viewWithListener = new ViewWithListener();
-		viewWithItem.addListener(SWT.Selection, viewWithListener);
-		
+		viewWithItem.addListener(SWT.Selection, viewWithListener);		
 		
 		MenuItem renameItem = new MenuItem(menu, SWT.PUSH);
 		renameItem.setText("Rename");
@@ -493,13 +506,20 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 
 	private class ViewWithListener implements Listener {
 		public void handleEvent(Event event) {
-			if (viewWithFactory != null) {
-				Data data[] = AbstractDataManagerView.this.manager
-						.getSelectedData();
-				Algorithm algorithm = viewWithFactory
-						.createAlgorithm(data, new Hashtable(), Activator
-								.getCIShellContext());
-				algorithm.execute();
+			IMenuManager topLevelMenu = CIShellApplication.getMenuManager();
+			IMenuManager fileMenu = topLevelMenu.findMenuUsingPath("File");
+			BundleContext bContext = Activator.getBundleContext();
+			
+			try {
+				ServiceReference[] ref = bContext.getAllServiceReferences(AlgorithmFactory.class.getName(), 
+						"(service.pid=org.cishell.reference.gui.persistence.viewwith.FileViewWith)");
+				
+				if (ref != null && ref.length > 0) {
+					ActionContributionItem action = (ActionContributionItem)fileMenu.find(getItemID(ref[0]));
+					action.getAction().run();
+				}
+			} catch (InvalidSyntaxException e) {
+				e.printStackTrace();
 			}
 		}
 	}
