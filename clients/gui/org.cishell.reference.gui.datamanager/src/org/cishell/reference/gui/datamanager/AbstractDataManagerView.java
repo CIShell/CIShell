@@ -20,7 +20,6 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-import java.util.StringTokenizer;
 
 import org.cishell.app.service.datamanager.DataManagerListener;
 import org.cishell.app.service.datamanager.DataManagerService;
@@ -41,7 +40,6 @@ import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -92,11 +90,14 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 	
 	private AlgorithmFactory saveFactory;
 	private AlgorithmFactory viewFactory;
+	private AlgorithmFactory viewWithFactory;
+	
 
 	private DiscardListener discardListener;
 
 	private SaveListener saveListener;
 	private ViewListener viewListener;
+	private ViewWithListener viewWithListener;
 
 	public AbstractDataManagerView(String brandPluginID) {
 		manager = Activator.getDataManagerService();
@@ -145,6 +146,12 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 		viewListener = new ViewListener();
 		viewItem.addListener(SWT.Selection, viewListener);
 
+		MenuItem viewWithItem = new MenuItem(menu, SWT.PUSH);
+		viewWithItem.setText("View as...");
+		viewWithListener = new ViewWithListener();
+		viewWithItem.addListener(SWT.Selection, viewWithListener);
+		
+		
 		MenuItem renameItem = new MenuItem(menu, SWT.PUSH);
 		renameItem.setText("Rename");
 		renameItem.addListener(SWT.Selection, new Listener() {
@@ -308,6 +315,8 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 				"org.cishell.reference.gui.persistence.save.Save", model, 0);
 		viewFactory = enableMenuItemCheck(viewFactory,
 				"org.cishell.reference.gui.persistence.view.FileView", model, 1);
+		viewWithFactory = enableMenuItemCheck(viewWithFactory,
+				"org.cishell.reference.gui.persistence.viewwith.FileViewWith", model, 2);
 	}
 	
 	private AlgorithmFactory enableMenuItemCheck(
@@ -318,12 +327,13 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 			algorithmFactory = Activator.getService(service);
 			if (algorithmFactory != null) {
 				validSaveFactory = true;
-			}
+			} 
 		} else {
 			validSaveFactory = true;
 		}
 
 		boolean enabled = false;
+		
 		if (validSaveFactory) {
 			Algorithm algorithm = algorithmFactory.createAlgorithm(
 					new Data[] { model }, new Hashtable(), Activator
@@ -419,17 +429,11 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 	 */
 	private void updateText(String newLabel, TreeItem item) {
 		updatingTreeItem = true;
-       /*
-		if (newLabel.contains(">")) {
-			System.out.println("We have a >\n");
-		}
-	   */
+     
 		if (newLabel.startsWith(">"))
 			newLabel = newLabel.substring(1);
-			//System.out.println("The newLabel is "+newLabel);
-		    // This isn't being picked up
 		
-		//if (isValid(newLabel)) {
+	
 		editor.getItem().setText(newLabel);
 
 		DataGUIItem treeItem = (DataGUIItem) item.getData();
@@ -438,25 +442,8 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 		viewer.refresh();
 		newEditor.dispose();
 		
-		// removed Error checking below for "invalid data model names" at Russell's request
-		// Felix Terkhorn May 9 2007
-		/*} else {
-			String message = "Invalid data model name. The following characters"
-					+ " are not allowed:\n\n"
-					+ "`~!@#$%^&*()+=[{]}\\|;:'\",<>/?";
-			Activator.getLogService().log(LogService.LOG_WARNING, message);
-			handleInput();
-		}*/
-
+	
 		updatingTreeItem = false;
-	}
-
-	// not valid chars: `~!@#$%^&*()+=[{]}\|;:'",<>/?
-	private boolean isValid(String label) {
-		StringTokenizer st = new StringTokenizer(" " + label + " ",
-				"`~!@#$%^&*()+=[{]}\\|;:'\",<>/?");
-
-		return st.countTokens() == 1;
 	}
 
 	/*
@@ -504,6 +491,19 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 		}
 	}
 
+	private class ViewWithListener implements Listener {
+		public void handleEvent(Event event) {
+			if (viewWithFactory != null) {
+				Data data[] = AbstractDataManagerView.this.manager
+						.getSelectedData();
+				Algorithm algorithm = viewWithFactory
+						.createAlgorithm(data, new Hashtable(), Activator
+								.getCIShellContext());
+				algorithm.execute();
+			}
+		}
+	}
+	
 	private class DiscardListener implements Listener {
 		public void handleEvent(Event event) {
 			TreeItem[] selection = AbstractDataManagerView.this.tree
@@ -523,35 +523,6 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 
 			manager.setSelectedData(new Data[0]);
 			viewer.refresh();
-		}
-	}
-
-	/*
-	 * Listens for double clicks or Enter presses on a TreeItem to cause that
-	 * item to become editable to rename it.
-	 */
-	private class TreeItemEditorListener extends MouseAdapter implements
-			KeyListener {
-		//private TreeEditor editor;
-
-		public TreeItemEditorListener(TreeEditor editor) {
-			//this.editor = editor;
-		}
-
-		public void keyReleased(KeyEvent e) {
-			if ((e.keyCode == SWT.CR) && !updatingTreeItem) {
-				handleInput();
-			}
-		}
-
-		public void mouseDoubleClick(MouseEvent e) {
-			handleInput();
-		}
-
-		public void keyPressed(KeyEvent e) {
-		}
-		
-		public void mouseDown(MouseEvent e) {
 		}
 	}
 
