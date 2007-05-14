@@ -31,6 +31,7 @@ public class FileView implements Algorithm {
     static GUIBuilderService guiBuilder;
     LogService logger;
     Program program;
+ //   Program programTwo;
     File tempFile;
      
     public FileView(Data[] data, Dictionary parameters, CIShellContext context) {
@@ -118,7 +119,19 @@ public class FileView implements Algorithm {
                 public void run() {
                     program = Program.findProgram("txt");
                 }});
+            /*
+            Display.getDefault().syncExec(new Runnable() {
+                public void run() {
+                    programTwo = Program.findProgram("doc");
+                }});
             
+            if (programTwo == null) {
+            	System.out.println("***\nYO!\nNo doc viewer\n");
+            } else {
+            	System.out.println("!!!\nHEY!\nDoc viewer found\n");
+            	
+            }
+            */
             if (program == null) {
             		guiBuilder.showError("No Text Viewer", 
     					"No valid text viewer for the .txt file. " +
