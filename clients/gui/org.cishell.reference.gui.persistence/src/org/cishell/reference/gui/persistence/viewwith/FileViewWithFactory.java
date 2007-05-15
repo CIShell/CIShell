@@ -31,16 +31,11 @@ public class FileViewWithFactory implements AlgorithmFactory {
     Program programDoc;
     Program programHtml;
 	private MetaTypeProvider provider;
-//  private MetaTypeInformation originalProvider;  // taken from PrefuseBetaAlgorithmFactory
-//	private String pid; // taken from PrefuseBetaAlgFactory
 
     protected void activate(ComponentContext ctxt) {
         //You may delete all references to metatype service if 
         //your algorithm does not require parameters and return
         //null in the createParameters() method
-       //MetaTypeService mts = (MetaTypeService)ctxt.locateService("MTS");
-       //provider = mts.getMetaTypeInformation(ctxt.getBundleContext().getBundle());
-       // bruce says these should be commented out...
     }
     protected void deactivate(ComponentContext ctxt) {
         provider = null;
@@ -50,41 +45,11 @@ public class FileViewWithFactory implements AlgorithmFactory {
         return new FileViewWith(data, parameters, context);
     }
     
-	
-   private String[] createKeyArray() {
-		String[] keys = new String[1];
-		keys[0] = "Viewer";
-		/*
-		for(int ii = 1; ii <= schema.getColumnCount(); ii++) {
-			keys[ii] = schema.getColumnName(ii - 1);
-			System.out.println("keys["+ii+"] = " + schema.getColumnName(ii - 1) + "; ");
-		}
-		*/
-	
-		return keys;
-	}
-   
     public MetaTypeProvider createParameters(Data[] data) {
-    	//ObjectClassDefinition oldDefinition = provider.getObjectClassDefinition(this.pid, null);
-    	// read the API for creating on ObjectClassDefinition
-    	// and create a basic one ...
- //   	BasicObjectClassDefinition oldDefinition = new ObjectClassDefinition();
     	
 		BasicObjectClassDefinition definition;
-		//try {
-			definition = new BasicObjectClassDefinition("fileViewWithDefinition", "Application viewer type", "Please choose an application viewer to read this file.\nThe application associated with the chosen extension will be called.", null);
-		//} catch (IOException e) {
-			//definition = new BasicObjectClassDefinition("fileViewWithDef", "fileViewWithName", "This is an OCD for fileViewWith", null);
-		//}
-		
-//		String[] dialogAttributesArray = createKeyArray();
-		
-			
-		Display display;	
-		
-		
-	    display = PlatformUI.getWorkbench().getDisplay();
-
+		definition = new BasicObjectClassDefinition("fileViewWithDefinition", "Application viewer type", "Please choose an application viewer to read this file.", null);
+					
         Display.getDefault().syncExec(new Runnable() {
             public void run() {
                 programTxt = Program.findProgram("txt");
@@ -98,28 +63,46 @@ public class FileViewWithFactory implements AlgorithmFactory {
         Display.getDefault().syncExec(new Runnable() {
             public void run() {
                 programHtml = Program.findProgram("htm");
+                
             }});
 	    
 		System.err.println(definition.getID());
 		
 		String[] defValStringArray = null; //doesn't actually work yet...
-		String[] myOptionLabels = new String[] {"TXT","DOC","HTML"};
-		String[] myOptionValues = new String[] {"txt","doc","html"};
+		//String[] myOptionLabels = new String[] {programTxt.getName(),programDoc.getName(),programHtml.getName()};
+		//String[] myOptionValues = new String[] {"txt","doc","html"};
 		
-		if (programTxt == null) {
-			myOptionLabels[0] = "";
+		int possiblePrograms = 0;
+		int counter = 0;
+		if (programTxt != null) {
+			possiblePrograms++;
 		}
-		if (programDoc == null) {
-			myOptionLabels[1] = "";
+		if (programDoc != null) {
+			possiblePrograms++;
 		}
-		if (programHtml == null) {
-			myOptionLabels[2] = "";
+		if (programHtml != null) {
+			possiblePrograms++;
 		}
+		
+		String[] myOptionLabels = new String[possiblePrograms];
+		String[] myOptionValues = new String[possiblePrograms];
+	
+		if (programTxt != null) {
+			myOptionLabels[counter] = programTxt.getName();
+			myOptionValues[counter++] = "txt";
+		}
+		if (programDoc != null) {
+			myOptionLabels[counter] = programDoc.getName();
+			myOptionValues[counter++] = "doc";
+		}
+		if (programHtml != null) {
+			myOptionLabels[counter] = programHtml.getName();
+			myOptionValues[counter++] = "html";
+		}
+		
+		
 		AttributeDefinition ad = new BasicAttributeDefinition("viewWith", "View file as", "Type of viewer", AttributeDefinition.STRING /*string*/, 0, defValStringArray/*String[] defaultValue*/, null /*validator*/, myOptionLabels, myOptionValues);
 		definition.addAttributeDefinition(ObjectClassDefinition.REQUIRED, ad);
-		
-		AttributeDefinition[] definitions = definition.getAttributeDefinitions(ObjectClassDefinition.ALL);
-		
 
 		MetaTypeProvider provider = new BasicMetaTypeProvider(definition);
         return provider;
