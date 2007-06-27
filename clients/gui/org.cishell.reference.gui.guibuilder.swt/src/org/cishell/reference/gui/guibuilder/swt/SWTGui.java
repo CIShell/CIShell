@@ -68,7 +68,7 @@ public class SWTGui implements GUI, UpdateListener {
         //stuff to display a message
         String message = ocd.getDescription();
         if(message != null && !message.equals("")){
-            Label msg = new Label(shell, SWT.CENTER);
+            Label msg = new Label(shell, SWT.WRAP);
             msg.setText(message);
             
             GridData labelData = new GridData();
