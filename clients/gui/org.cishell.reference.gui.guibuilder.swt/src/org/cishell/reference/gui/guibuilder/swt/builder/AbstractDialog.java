@@ -264,10 +264,6 @@ public abstract class AbstractDialog extends Dialog {
         if ((description != null) && !description.equals("")) {
             desc.setText(description);
         }
-        
-        GridData data = new GridData(GridData.FILL_BOTH | GridData.VERTICAL_ALIGN_CENTER);
-        data.widthHint = 300;
-        desc.setLayoutData(data);
     }
 
     /*
@@ -319,10 +315,14 @@ public abstract class AbstractDialog extends Dialog {
                         detailsText.setText("");
                         details.setText("Details >>");
                         data.heightHint = 0;
+                        data.grabExcessHorizontalSpace = false;
+                        data.grabExcessVerticalSpace = false;
                     } else {
-                        detailsText.setText(detailsString);
+                        detailsText.setText(detailsString);               
                         details.setText("Details <<");
                         data.heightHint = DETAILS_HEIGHT;
+                        data.grabExcessHorizontalSpace = true;
+                        data.grabExcessVerticalSpace = true;
                     }
                     
                     detailsText.setLayoutData(data);
@@ -345,12 +345,9 @@ public abstract class AbstractDialog extends Dialog {
         detailsText.setEditable(false);
         detailsText.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
         
-        GridData data = new GridData(GridData.HORIZONTAL_ALIGN_CENTER);
-        data.grabExcessHorizontalSpace = true;
-        data.horizontalSpan = 2;
-        data.grabExcessVerticalSpace = false;
+        GridData data = new GridData(GridData.FILL_BOTH | 
+        		GridData.GRAB_VERTICAL | GridData.GRAB_HORIZONTAL);
         data.widthHint = 400;
-        data.heightHint = 0;
         
         detailsText.setLayoutData(data);
         detailsText.setVisible(false);
