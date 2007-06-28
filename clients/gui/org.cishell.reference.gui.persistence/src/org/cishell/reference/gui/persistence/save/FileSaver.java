@@ -108,11 +108,15 @@ public class FileSaver {
         dialog.setText("Choose File");
         
         String fileLabel = (String)data.getMetaData().get(DataProperty.LABEL);
-        if (fileLabel == null) {
-        	dialog.setFileName("*." + ext);
-        } else {
-        	dialog.setFileName(fileLabel + '.' + ext);        	
-        }
+        String suggestedFileName = getFileName(fileLabel);
+        dialog.setFileName(suggestedFileName + "." + ext);
+//        String fileLabel = (String)data.getMetaData().get(DataProperty.LABEL);
+//        
+//        if (fileLabel == null) {
+//        	dialog.setFileName("*." + ext);
+//        } else {
+//        	dialog.setFileName(fileLabel + '.' + ext);        	
+//        }
 
         boolean done = false;
         
@@ -172,5 +176,17 @@ public class FileSaver {
     		guiBuilder.showError("Copy Error", "IOException during copy", ioe.getMessage());
             return false;
     	}
+    }
+    
+    private String getFileName(String fileLabel) {
+    	int descriptionEndIndex = fileLabel.lastIndexOf(":");
+    	int filePathEndIndex = fileLabel.lastIndexOf(File.separator);
+    	int extensionBeginIndex = fileLabel.indexOf(".");
+    	
+    	int startIndex = Math.max(descriptionEndIndex, filePathEndIndex) + 1;
+    	int endIndex = Math.min(extensionBeginIndex, fileLabel.length());
+    	
+    	String fileName = fileLabel.substring(startIndex, endIndex);
+    	return fileName;
     }
 }
