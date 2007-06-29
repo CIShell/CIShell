@@ -108,10 +108,9 @@ public class FileSaver {
         dialog.setText("Choose File");
         
         String fileLabel = (String)data.getMetaData().get(DataProperty.LABEL);
-        String suggestedFileName = getFileName(fileLabel);
+       String suggestedFileName = getFileName(fileLabel);
         dialog.setFileName(suggestedFileName + "." + ext);
-//        String fileLabel = (String)data.getMetaData().get(DataProperty.LABEL);
-//        
+        
 //        if (fileLabel == null) {
 //        	dialog.setFileName("*." + ext);
 //        } else {
@@ -179,14 +178,36 @@ public class FileSaver {
     }
     
     private String getFileName(String fileLabel) {
+    	
+    	//index variables will be -1 if index is not found.
     	int descriptionEndIndex = fileLabel.lastIndexOf(":");
     	int filePathEndIndex = fileLabel.lastIndexOf(File.separator);
-    	int extensionBeginIndex = fileLabel.indexOf(".");
-    	
+
+    	//doesn't matter if either variable is -1, since startIndex will be 
+    	//zero and none of the string will be cut off the front.
     	int startIndex = Math.max(descriptionEndIndex, filePathEndIndex) + 1;
-    	int endIndex = Math.min(extensionBeginIndex, fileLabel.length());
     	
-    	String fileName = fileLabel.substring(startIndex, endIndex);
+    	String fileNameWithExtension = fileLabel.substring(startIndex);
+    	
+    	
+    	//find the first character of the file name extension.
+    	int extensionBeginIndex = fileNameWithExtension.indexOf(".");
+    	
+    	int endIndex;
+    	
+    	if (extensionBeginIndex != -1) {
+    		//we found a period in the file name.
+    		endIndex = extensionBeginIndex; //cut off everything after 
+    		//first period.
+    	} else {
+    		//we didn't find an extension on the file name.
+    		endIndex = fileLabel.length(); // don't cut any off the end.
+    	}
+    	endIndex = Math.min(extensionBeginIndex, fileLabel.length());
+    	
+    	String fileNameWithoutExtension = fileNameWithExtension.substring(0, endIndex);
+   	
+    	String fileName = fileNameWithoutExtension;
     	return fileName;
     }
 }
