@@ -41,6 +41,8 @@ import org.osgi.service.metatype.ObjectClassDefinition;
  * @author Bruce Herr (bh2@bh2.net)
  */
 public class SWTGui implements GUI, UpdateListener {    
+	public static final int TEXT_WRAP_LENGTH = 350;
+	
     private Shell shell;
     private SWTGuiComposite composite;
     private SelectionListener listener;
@@ -70,12 +72,15 @@ public class SWTGui implements GUI, UpdateListener {
         if(message != null && !message.equals("")){
             Label msg = new Label(shell, SWT.WRAP);
             msg.setText(message);
-            msg.pack();
-            msg.update();
-            
+            msg.pack(true);
             GridData labelData = new GridData();
-            labelData.horizontalAlignment =  SWT.FILL;      
+            labelData.horizontalAlignment = GridData.CENTER;
             labelData.grabExcessHorizontalSpace = true;
+            System.out.println(msg.getSize().x);
+            if (msg.getSize().x > TEXT_WRAP_LENGTH) {
+            	System.out.println(msg.getSize().x);
+            	labelData.widthHint = TEXT_WRAP_LENGTH;
+            }
             msg.setLayoutData(labelData);
         }
 
