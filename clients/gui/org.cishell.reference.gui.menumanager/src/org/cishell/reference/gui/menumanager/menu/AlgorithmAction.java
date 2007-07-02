@@ -116,7 +116,7 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, DataMa
         String label = (String)ref.getProperty("label");
         if (label != null){
         	acknowledgement.append("..........\n"+
-            					label+" was selected.\n\n");
+            					label+" was selected.\n");
         }
         String authors = (String)ref.getProperty("authors");
         if (authors != null)
@@ -136,8 +136,9 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, DataMa
         	acknowledgement.append("Reference: "+reference+"\n");                     
         String docu = (String)ref.getProperty("docu");
         if (docu != null)
-        	acknowledgement.append("Docu: "+docu);
-        logger.log(LogService.LOG_INFO, acknowledgement.toString());    
+        	acknowledgement.append("Docu: "+docu+"\n");
+        if(acknowledgement.length()>1)
+        	logger.log(LogService.LOG_INFO, acknowledgement.toString());    
         
     }
     
