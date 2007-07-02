@@ -188,7 +188,8 @@ public class LogView extends ViewPart implements LogListener{
 					if (goodMessage(message)) {
                         //not all messages end w/ a new line, but they
                         //need to to print properly
-                        message += "\n";
+						if (!message.endsWith("\n"))
+							message += "\n";
                         
 						appendString(message, (Color) colorMapping.get(""+entry.getLevel()));						
 					}
