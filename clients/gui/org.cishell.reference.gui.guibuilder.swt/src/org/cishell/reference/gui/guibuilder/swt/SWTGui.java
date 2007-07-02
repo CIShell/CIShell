@@ -70,9 +70,12 @@ public class SWTGui implements GUI, UpdateListener {
         if(message != null && !message.equals("")){
             Label msg = new Label(shell, SWT.WRAP);
             msg.setText(message);
+            msg.pack();
+            msg.update();
             
             GridData labelData = new GridData();
-            labelData.horizontalAlignment = SWT.CENTER;            
+            labelData.horizontalAlignment =  SWT.FILL;      
+            labelData.grabExcessHorizontalSpace = true;
             msg.setLayoutData(labelData);
         }
 
