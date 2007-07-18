@@ -17,7 +17,6 @@ import org.osgi.service.metatype.MetaTypeService;
  *
  */
 
-//TODO: cleanup
 
 public class JythonAlgorithmFactory implements AlgorithmFactory {
     private BundleContext myBundleContext;
@@ -43,8 +42,6 @@ public class JythonAlgorithmFactory implements AlgorithmFactory {
     		CIShellContext context) {
     	return new JythonRunnerAlgorithm(data, parameters, context,
     			properties, myBundle);
- 
-    	
     }
     
     public MetaTypeProvider createParameters(Data[] data) {
