@@ -30,6 +30,16 @@
       <wizard
             canFinishEarly="false"
             category="cishell"
+            class="org.cishell.templates.wizards.jython.NewJythonAlgorithmWizard"
+            hasPages="true"
+            icon="icons/cishell.ico"
+            id="org.cishell.templates.wizards.jython.NewJythonAlgorithmWizard"
+            name="Jython-based algorithm"
+            preferredPerspectives="org.eclipse.jdt.ui.JavaPerspective"
+            project="true"/>
+      <wizard
+            canFinishEarly="false"
+            category="cishell"
             class="org.cishell.templates.wizards.dataset.NewDatasetWizard"
             hasPages="true"
             icon="icons/cishell.ico"
