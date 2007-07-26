@@ -3,6 +3,7 @@ package org.cishell.testing.convertertester.core.converter.graph;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.framework.ServiceReference;
 
@@ -17,11 +18,12 @@ public class ConverterGraph {
 	public ConverterGraph(ServiceReference[] converters){
 		this.converters = converters;
 		inDataToAlgorithm = new HashMap<String, ArrayList<ServiceReference>>();
-		fileExtensionTestConverters = new HashMap<String, ArrayList<ConverterPath>>();
-		fileExtensionCompareConverters = new HashMap<String, ConverterPath>();
+		fileExtensionTestConverters = new ConcurrentHashMap<String, ArrayList<ConverterPath>>();
+		fileExtensionCompareConverters = new ConcurrentHashMap<String, ConverterPath>();
 		
 		associateAlgorithms(this.converters, this.inDataToAlgorithm);
 		createConverterPaths(this.inDataToAlgorithm, this.fileExtensionTestConverters, this.fileExtensionCompareConverters);
+		//System.out.println("And here");
 	}
 
 	private void associateAlgorithms(ServiceReference[] sr, Map<String, ArrayList<ServiceReference>> hm){
@@ -48,77 +50,140 @@ public class ConverterGraph {
 				ConverterPath test = new ConverterPath();
 				//ConverterPath 
 				test.setInData(s);
-				createPaths(algorithms, testPaths, comparePaths, test, s);
+				//createPaths(algorithms, testPaths, comparePaths, test, s);
+				createPaths(algorithms.get(s), test, s);
+				//System.out.println("I've got here");
 			}
 		}
 	}
 	
-	private void createPaths(Map<String,ArrayList<ServiceReference>> algorithms, Map<String, ArrayList<ConverterPath>> testPaths,
-			Map<String, ConverterPath> comparePaths, ConverterPath path, String dataType){
-		/*
+	private ConverterPath createPaths(ArrayList<ServiceReference> algorithms, ConverterPath path, String dataType){
+		ArrayList<ServiceReference> refs = removeReferences(algorithms, path);
+		
+			addCompareCycle(path);
+		
 		if(path.getInData().equals(path.getOutData())){
-			if(testPaths.get(path.getInData()) == null){
-				ArrayList<ConverterPath> paths = new ArrayList<ConverterPath>();
-				paths.add(new ConverterPath(path));
-				testPaths.put(path.getInData(), paths);
-				System.out.println(path);
-			}
-			else{
-				testPaths.get(path.getInData()).add(new ConverterPath(path));
-				System.out.println(path);
-			}
-		}*/
-		try{
-		ArrayList<ServiceReference> algs = new ArrayList<ServiceReference>(algorithms.get(dataType));
-		
-		algs.removeAll(path.getPath());
-		for(ServiceReference sr : algs){
-			//for(ServiceReference sr: algs){
-				System.out.println(sr.getProperty("service.pid"));
-			//}
+			addTestCycle(path);
+			return path;
+		}
+		while(!refs.isEmpty()){
 			ConverterPath p = new ConverterPath(path);
-			System.out.println();
-			if(p.addAlgoritm(sr)){
-				algs.remove(sr);
-				createPaths(algorithms, testPaths,comparePaths,p,p.getOutData());
-			}
-			
-			else{
-				if(testPaths.get(path.getInData()) == null){
-					ArrayList<ConverterPath> paths = new ArrayList<ConverterPath>();
-					paths.add(p);
-					testPaths.put(path.getInData(), paths);
-					System.out.println(p);
-				}
-				else{
-					testPaths.get(path.getInData()).add(p);
-					System.out.println(p);
-				}
-				algs.remove(sr);
-			}
-		}
-		}catch(NullPointerException npe){
-			npe.printStackTrace();
-		}
-		}
+			p.addAlgoritm(refs.get(0));
+			refs.remove(0);
+			createPaths(this.inDataToAlgorithm.get(p.getOutData()), p, p.getOutData());
 		
+		}
+		return null;		
+	}
+	
+	private void addTestCycle(ConverterPath cp){
+		String firstOutData, lastInData;
+		firstOutData = cp.getPath().get(0).getProperty("out_data").toString();
+		lastInData = cp.getPath().get(cp.getPath().size()-1).getProperty("in_data").toString();
+		if(firstOutData.equals(lastInData)){
+			addPath(cp);
+		}
+	}
+	
+	private void addCompareCycle(ConverterPath cp){
+		if(cp.getOutData() != null){
+		if(cp.getOutData().equals(ConverterGraph.testOutData)){
+			String key = cp.getInData() + " " + cp.getPath().get(0).getProperty("out_data").toString();
+		if(this.fileExtensionCompareConverters.get(key) == null){
+
+			System.out.println("Adding a new Comparison Path:\n" + cp);
+			this.fileExtensionCompareConverters.put(key, new ConverterPath(cp));
+		}
+		else {
+			int pathSize = this.fileExtensionCompareConverters.get(key).getPath().size();
+			if(pathSize > cp.getPath().size()){
+				ConverterPath oldPath = this.fileExtensionCompareConverters.get(key);
+				System.out.println("Replacing Comparision Path:\n" + oldPath + "with\n"
+						+ cp);
+				this.fileExtensionCompareConverters.put(key, new ConverterPath(cp));
+			}
+		}
+		}
+		}
+	}
+	
+	private static ArrayList<ServiceReference> removeReferences(ArrayList<ServiceReference> al, ConverterPath cp){
+		ArrayList<ServiceReference> srs = new ArrayList<ServiceReference>(al);
+		srs.removeAll(cp.getPath());
+		ArrayList<ServiceReference> forbidden = new ArrayList<ServiceReference>();
+		for(ServiceReference sr: srs){
+			String ss = sr.getProperty("out_data").toString();
+			if(ss.startsWith("file-ext") && (!ss.equals(cp.getInData()))){
+				System.out.println(sr.getProperty("service.pid") + " yes");
+				forbidden.add(sr);
+			}
+		}
+		srs.removeAll(forbidden);
+		return srs;
+	}
+	
+	private void addPath(ConverterPath p){
+		if(this.fileExtensionTestConverters.get(p.getInData()) == null){
+			System.out.println("Adding a new path");
+			ArrayList<ConverterPath> paths = new ArrayList<ConverterPath>();
+			paths.add(p);
+			this.fileExtensionTestConverters.put(p.getInData(), paths);
+			System.out.println("Successfully Added");
+		}
+		else{
+			System.out.println("Adding a path");
+			this.fileExtensionTestConverters.get(p.getInData()).add(p);
+			System.out.println("Successfully Added");
+		}
+	}
+		
+	
+	public String printTestConverterPath(String s){
+		StringBuffer sb = new StringBuffer();
+			for(ConverterPath cp : this.fileExtensionTestConverters.get(s)){
+				sb.append(cp.toString());
+			}
+			sb.trimToSize();
+		return sb.toString();
+	}
+	
+	public String printTestConverterPaths(){
+		StringBuffer sb = new StringBuffer();
+		for(String s : this.fileExtensionTestConverters.keySet()){
+			sb.append(printTestConverterPath(s));
+		}
+		sb.trimToSize();
+		return sb.toString();
+	}
+	
+	
+	public String printComparisonConverterPath(String s){
+		return this.fileExtensionCompareConverters.get(s).toString();
+	}
+	
+	public String printComparisonConverterPaths(){
+		StringBuffer sb = new StringBuffer();
+		for(String s: this.fileExtensionCompareConverters.keySet()){
+			sb.append(printComparisonConverterPath(s));
+		}
+		sb.trimToSize();
+		return sb.toString();
+	}
 	
 	
 	public String toString(){
-		String str = "";
+		StringBuffer str = new StringBuffer();
 		for(String s : this.inDataToAlgorithm.keySet()){
-			str += s + "\n";
+			str.append(s + "\n");
 			for(ServiceReference sr : this.inDataToAlgorithm.get(s)){
-				str += "\t" + sr.getProperty("service.pid") + "\n";
+				str.append("\t" + sr.getProperty("service.pid") + "\n");
 			}
 		}
-		
-		for(String s : this.fileExtensionTestConverters.keySet()){
-			for(ConverterPath cp : this.fileExtensionTestConverters.get(s)){
-				str += cp.toString();
-			}
-		}
-		
-		return str;
+		str.append("Test Paths:\n");
+		str.append(printTestConverterPaths());
+		str.append("Comparison Paths:\n");
+		str.append(printComparisonConverterPaths());
+		str.trimToSize();
+		return str.toString();
 	}
 }
