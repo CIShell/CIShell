@@ -204,17 +204,17 @@ public class ConverterGraph {
 		return str.toString();
 	}
 	
-	public ServiceReference[] getTestPath(String s){
-		return (ServiceReference[])((ArrayList)this.fileExtensionTestConverters.get(s)).toArray();
+	public ConverterPath[] getTestPath(String s){
+		return (ConverterPath[])((ArrayList)this.fileExtensionTestConverters.get(s)).toArray();
 	}
 	
-	public ServiceReference[][] getTestPaths(){
+	public ConverterPath[][] getTestPaths(){
 		String[] fileExtensions = (String[])this.fileExtensionTestConverters.keySet().toArray();
 		ArrayList graphs = new ArrayList();
 		for(int i = 0; i < fileExtensions.length; i++){
 			graphs.add(getTestPath(fileExtensions[i]));
 		}
-		return (ServiceReference[][])graphs.toArray();
+		return (ConverterPath[][])graphs.toArray();
 	}
 	
 	public ConverterPath getComparePath(String s){
