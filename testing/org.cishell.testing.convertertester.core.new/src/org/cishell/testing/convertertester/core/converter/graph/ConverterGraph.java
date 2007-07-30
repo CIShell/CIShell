@@ -221,12 +221,12 @@ public class ConverterGraph {
 		return (ConverterPath)this.fileExtensionCompareConverters.get(s);
 	}
 	
-	public ServiceReference[] getComparePaths(){
+	public ConverterPath[] getComparePaths(){
 		String[] fileExtensions = (String[])this.fileExtensionCompareConverters.keySet().toArray();
 		ArrayList graphs = new ArrayList();
 		for(int i = 0; i < fileExtensions.length; i++){
 			graphs.add(getComparePath(fileExtensions[i]));
 		}
-		return (ServiceReference[])graphs.toArray();
+		return (ConverterPath[])graphs.toArray();
 	}
 }
