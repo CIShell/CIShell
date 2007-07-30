@@ -200,4 +200,18 @@ public class ConverterGraph {
 		str.trimToSize();
 		return str.toString();
 	}
+	
+	public ArrayList getCompareGraph(String s){
+		return (ArrayList)this.fileExtensionCompareConverters.get(s);
+	}
+	
+	public ArrayList getCompareGraphs(){
+		String[] fileExtensions = (String[])this.fileExtensionCompareConverters.keySet().toArray();
+		ArrayList graphs = new ArrayList();
+		for(int i = 0; i < fileExtensions.length; i++){
+			graphs.add(getCompareGraph(fileExtensions[i]));
+		}
+		return graphs;
+	}
+	
 }
