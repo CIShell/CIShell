@@ -9,6 +9,7 @@ import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.algorithm.AlgorithmProperty;
 import org.cishell.service.conversion.Converter;
 import org.cishell.service.conversion.DataConversionService;
+import org.cishell.testing.convertertester.core.converter.graph.ConverterGraph;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceEvent;
@@ -58,7 +59,8 @@ public final static String SERVICE_LIST = "SERVICE_LIST";
 
             ServiceReference[] refs = bContext.getServiceReferences(
                     AlgorithmFactory.class.getName(), filter);
-            
+            ConverterGraph g = new ConverterGraph(refs);
+            System.out.println(g);
             if (refs != null) {
 				for (int i = 0; i < refs.length; ++i) {
 					//System.out.println(refs[i]);

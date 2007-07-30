@@ -8,17 +8,17 @@ import org.osgi.framework.ServiceReference;
 public class ConverterPath {
 	String in_data;
 	String out_data = null;
-	ArrayList<ServiceReference> path;
+	ArrayList path;
 	
 	public ConverterPath(){
-		path = new ArrayList<ServiceReference>();
+		path = new ArrayList();
 	}
 	
 	public ConverterPath(ConverterPath p){
 		in_data = p.getInData();
 		out_data = p.getOutData();
 		
-		this.path = new ArrayList<ServiceReference>(p.getPath());
+		this.path = new ArrayList(p.getPath());
 		
 	}
 	
@@ -52,14 +52,15 @@ public class ConverterPath {
 		return this.out_data;
 	}
 	
-	public List<ServiceReference> getPath(){
+	public List getPath(){
 		return this.path;
 	}
 	
 	public String toString(){
 		String val = this.in_data +" -->\n";
 		
-		for(ServiceReference sr : this.path){
+		for(int i = 0; i < this.path.size(); i++){
+			ServiceReference sr = (ServiceReference)this.path.get(i);
 			val += "\t" + sr.getProperty("service.pid") + "\n";
 		}
 		val += "--> " + this.out_data + "\n";
