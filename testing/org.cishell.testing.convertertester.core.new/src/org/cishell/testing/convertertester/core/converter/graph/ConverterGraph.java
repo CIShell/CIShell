@@ -43,7 +43,8 @@ public class ConverterGraph {
 	
 	private void createConverterPaths(Map algorithms, Map testPaths,
 			Map comparePaths){
-		String[] keySet = (String[])algorithms.keySet().toArray();
+		String[] keySet = new String[algorithms.keySet().size()];
+		keySet = (String[])algorithms.keySet().toArray(keySet);
 		for(int i = 0; i < keySet.length; i++){
 			String s = keySet[i];
 			if(s.startsWith("file-ext")){
@@ -155,7 +156,8 @@ public class ConverterGraph {
 	
 	public String printTestConverterPaths(){
 		StringBuffer sb = new StringBuffer();
-		String[] keySet = (String[])this.fileExtensionTestConverters.keySet().toArray();
+		String[] keySet = new String[this.fileExtensionTestConverters.keySet().size()];
+		keySet =	(String[])this.fileExtensionTestConverters.keySet().toArray(keySet);
 		for(int i = 0; i < keySet.length; i++){
 			String s = keySet[i];
 			sb.append(printTestConverterPath(s));
@@ -183,7 +185,8 @@ public class ConverterGraph {
 	
 	public String toString(){
 		StringBuffer str = new StringBuffer();
-		String[] keySet = (String[])this.inDataToAlgorithm.keySet().toArray();
+		String[] keySet = new String[this.inDataToAlgorithm.keySet().size()];
+			keySet = (String[])this.inDataToAlgorithm.keySet().toArray(keySet);
 		for(int i = 0; i < keySet.length; i++){
 			String s = keySet[i];
 			str.append(s + "\n");
@@ -201,29 +204,29 @@ public class ConverterGraph {
 		return str.toString();
 	}
 	
-	public ArrayList getTestPath(String s){
-		return (ArrayList)this.fileExtensionTestConverters.get(s);
+	public ServiceReference[] getTestPath(String s){
+		return (ServiceReference[])((ArrayList)this.fileExtensionTestConverters.get(s)).toArray();
 	}
 	
-	public ArrayList getTestPaths(){
+	public ServiceReference[][] getTestPaths(){
 		String[] fileExtensions = (String[])this.fileExtensionTestConverters.keySet().toArray();
 		ArrayList graphs = new ArrayList();
 		for(int i = 0; i < fileExtensions.length; i++){
 			graphs.add(getTestPath(fileExtensions[i]));
 		}
-		return graphs;
+		return (ServiceReference[][])graphs.toArray();
 	}
 	
 	public ConverterPath getComparePath(String s){
 		return (ConverterPath)this.fileExtensionCompareConverters.get(s);
 	}
 	
-	public ArrayList getComparePaths(){
+	public ServiceReference[] getComparePaths(){
 		String[] fileExtensions = (String[])this.fileExtensionCompareConverters.keySet().toArray();
 		ArrayList graphs = new ArrayList();
 		for(int i = 0; i < fileExtensions.length; i++){
 			graphs.add(getComparePath(fileExtensions[i]));
 		}
-		return graphs;
+		return (ServiceReference[])graphs.toArray();
 	}
 }
