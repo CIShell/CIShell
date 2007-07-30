@@ -201,8 +201,21 @@ public class ConverterGraph {
 		return str.toString();
 	}
 	
-	public ArrayList getCompareGraph(String s){
-		return (ArrayList)this.fileExtensionCompareConverters.get(s);
+	public ArrayList getTestGraph(String s){
+		return (ArrayList)this.fileExtensionTestConverters.get(s);
+	}
+	
+	public ArrayList getTestGraphs(){
+		String[] fileExtensions = (String[])this.fileExtensionTestConverters.keySet().toArray();
+		ArrayList graphs = new ArrayList();
+		for(int i = 0; i < fileExtensions.length; i++){
+			graphs.add(getTestGraph(fileExtensions[i]));
+		}
+		return graphs;
+	}
+	
+	public ConverterPath getCompareGraph(String s){
+		return (ConverterPath)this.fileExtensionCompareConverters.get(s);
 	}
 	
 	public ArrayList getCompareGraphs(){
@@ -213,5 +226,4 @@ public class ConverterGraph {
 		}
 		return graphs;
 	}
-	
 }

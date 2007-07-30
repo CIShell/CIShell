@@ -56,6 +56,10 @@ public class ConverterPath {
 		return this.path;
 	}
 	
+	public ServiceReference[] pathAsArray(){
+		return (ServiceReference[])this.path.toArray();
+	}
+	
 	public String toString(){
 		String val = this.in_data +" -->\n";
 		
