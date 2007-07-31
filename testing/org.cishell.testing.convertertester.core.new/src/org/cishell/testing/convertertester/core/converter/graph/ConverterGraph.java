@@ -1,8 +1,13 @@
 package org.cishell.testing.convertertester.core.converter.graph;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.framework.ServiceReference;
@@ -94,16 +99,16 @@ public class ConverterGraph {
 			String key = cp.getInData() + " " + ((ServiceReference)cp.getPath().get(0)).getProperty("out_data").toString();
 		if(this.fileExtensionCompareConverters.get(key) == null){
 
-			System.out.println("Adding a new Comparison Path:\n" + cp);
+		//	System.out.println("Adding a new Comparison Path:\n" + cp);
 			this.fileExtensionCompareConverters.put(key, new ConverterPath(cp));
 		}
 		else {
 			ConverterPath tempPath = (ConverterPath)this.fileExtensionCompareConverters.get(key);
 			int pathSize = tempPath.getPath().size();
 			if(pathSize > cp.getPath().size()){
-				ConverterPath oldPath = (ConverterPath)this.fileExtensionCompareConverters.get(key);
-				System.out.println("Replacing Comparision Path:\n" + oldPath + "with\n"
-						+ cp);
+				//ConverterPath oldPath = (ConverterPath)this.fileExtensionCompareConverters.get(key);
+				//System.out.println("Replacing Comparision Path:\n" + oldPath + "with\n"
+				//		+ cp);
 				this.fileExtensionCompareConverters.put(key, new ConverterPath(cp));
 			}
 		}
@@ -119,7 +124,7 @@ public class ConverterGraph {
 			ServiceReference sr = (ServiceReference)srs.get(i);
 			String ss = sr.getProperty("out_data").toString();
 			if(ss.startsWith("file-ext") && (!ss.equals(cp.getInData()))){
-				System.out.println(sr.getProperty("service.pid") + " yes");
+				//System.out.println(sr.getProperty("service.pid") + " yes");
 				forbidden.add(sr);
 			}
 		}
@@ -129,16 +134,16 @@ public class ConverterGraph {
 	
 	private void addPath(ConverterPath p){
 		if(this.fileExtensionTestConverters.get(p.getInData()) == null){
-			System.out.println("Adding a new path");
+			//System.out.println("Adding a new path");
 			ArrayList paths = new ArrayList();
 			paths.add(p);
 			this.fileExtensionTestConverters.put(p.getInData(), paths);
-			System.out.println("Successfully Added");
+			//System.out.println("Successfully Added");
 		}
 		else{
-			System.out.println("Adding a path");
+			//System.out.println("Adding a path");
 			((ArrayList)this.fileExtensionTestConverters.get(p.getInData())).add(p);
-			System.out.println("Successfully Added");
+			//System.out.println("Successfully Added");
 		}
 	}
 		
@@ -173,7 +178,8 @@ public class ConverterGraph {
 	
 	public String printComparisonConverterPaths(){
 		StringBuffer sb = new StringBuffer();
-		String[] keySet = (String[])this.fileExtensionTestConverters.keySet().toArray();
+		String[] keySet = new String[this.fileExtensionTestConverters.keySet().size()];
+			keySet = (String[])this.fileExtensionTestConverters.keySet().toArray(keySet);
 		for(int i = 0; i < keySet.length; i++){
 			String s = keySet[i];
 			sb.append(printTestConverterPath(s));
@@ -228,5 +234,130 @@ public class ConverterGraph {
 			graphs.add(getComparePath(fileExtensions[i]));
 		}
 		return (ConverterPath[])graphs.toArray();
+	}
+	
+	public File asNWB(){
+		File f = getTempFile();
+		Map nodes = assembleNodesSet();
+		TreeSet output = assembleEdges(nodes);
+		try{
+		FileWriter out = new FileWriter(f);
+		BufferedWriter bw = new BufferedWriter(out);
+		
+		writeNodes(bw,nodes);
+		
+		}
+		catch(IOException ex){
+			System.out.println("Blurt!");
+		}
+		return f;
+	}
+	
+	private void writeNodeHeader(BufferedWriter bw, int numNodes) throws IOException{
+		bw.flush();
+		bw.write("*Nodes " + numNodes);
+	
+	}
+	
+	private void writeNodes(BufferedWriter bw, Map nodes) throws IOException{
+		System.out.println("*Nodes " + nodes.size());
+		writeNodeHeader(bw, nodes.size());
+		String[] keySet = new String[nodes.keySet().size()];
+		keySet = (String[])nodes.keySet().toArray(keySet);
+		
+		for(int i = 0; i < keySet.length; i++){
+			bw.flush();
+			bw.write(nodes.get(keySet[i]) + " " + keySet[i]);
+		}
+		
+	}
+	
+	private void writeEdgeHeader(BufferedWriter bw, int numEdges) throws IOException{
+		bw.flush();
+		bw.write("*DirectedEdges " + numEdges);
+	}
+	
+		
+	private void writeEdges(BufferedWriter bw, TreeSet edges) throws IOException{
+		System.out.println("*DirectedEdges " + edges.size());
+		writeEdgeHeader(bw,edges.size());
+		
+		String[] edgeArray = new String[edges.size()];
+		edgeArray = (String[])edges.toArray(edgeArray);
+		
+		for(int i = 0; i < edgeArray.length; i++){
+			System.out.println(edgeArray[i]);
+			bw.flush();
+			bw.write(edgeArray[i]);
+		}
+	}
+	
+	private Map assembleNodesSet(){
+		
+		Map nodesToInt = new ConcurrentHashMap();
+		
+		//create a set of all the in_data, out_data, and algorithm names
+		String[] keySet = new String[this.inDataToAlgorithm.keySet().size()];
+		keySet = (String[])this.inDataToAlgorithm.keySet().toArray(keySet);
+		TreeSet nodeNames = new TreeSet();
+		for(int i = 0; i < keySet.length; i++){
+			String s = keySet[i];
+			nodeNames.add(s);
+			ArrayList paths = (ArrayList)this.inDataToAlgorithm.get(s);
+			ServiceReference[] references =  new ServiceReference[paths.size()];
+			references = (ServiceReference[])paths.toArray(references);
+			
+			for(int j = 0; j < references.length; j++){	
+				nodeNames.add(s);
+			}
+		}
+		
+		String[] names = new String[nodeNames.size()];
+		names = (String[])nodeNames.toArray(names);
+		
+		for(int i = 0; i < names.length; i++){
+			nodesToInt.put(names[i], new Integer(i+1));
+		}
+		
+		return nodesToInt;
+	}
+	
+	private TreeSet assembleEdges(Map m){
+		TreeSet edges = new TreeSet();
+		String[] keySet = new String[m.size()];
+		keySet = (String[])m.keySet().toArray(keySet);
+		for(int i = 0; i < keySet.length; i++){
+			String s = keySet[i];
+			
+			ArrayList paths = (ArrayList)this.inDataToAlgorithm.get(s);
+			ServiceReference[] references =  new ServiceReference[paths.size()];
+			references = (ServiceReference[])paths.toArray(references);
+			
+			for(int j = 0; j < references.length; j++){
+				String output = m.get(s).toString() + " ";
+				output += m.get(references[j].getProperty("service.pid")).toString();
+				edges.add(output);
+			}
+			
+		}
+		return edges;
+	}
+	
+	private File getTempFile(){
+		File tempFile;
+
+		String tempPath = System.getProperty("java.io.tmpdir");
+		File tempDir = new File(tempPath+File.separator+"temp");
+		if(!tempDir.exists())
+			tempDir.mkdir();
+		try{
+			tempFile = File.createTempFile("NWB-Session-", ".nwb", tempDir);
+
+		}catch (IOException e){
+			
+			tempFile = new File (tempPath+File.separator+"nwbTemp"+File.separator+"temp.nwb");
+
+		}
+		return tempFile;
 	}
 }
