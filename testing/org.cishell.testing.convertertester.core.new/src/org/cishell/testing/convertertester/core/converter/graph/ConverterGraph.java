@@ -28,7 +28,7 @@ public class ConverterGraph {
 		
 		associateAlgorithms(this.converters, this.inDataToAlgorithm);
 		createConverterPaths(this.inDataToAlgorithm, this.fileExtensionTestConverters, this.fileExtensionCompareConverters);
-		//System.out.println("And here");
+	
 	}
 
 	private void associateAlgorithms(ServiceReference[] sr, Map hm){
@@ -56,11 +56,11 @@ public class ConverterGraph {
 				
 				
 				ConverterPath test = new ConverterPath();
-				//ConverterPath 
+			
 				test.setInData(s);
-				//createPaths(algorithms, testPaths, comparePaths, test, s);
+			
 				createPaths((ArrayList)algorithms.get(s), test, s);
-				//System.out.println("I've got here");
+				
 			}
 		}
 	}
@@ -99,16 +99,14 @@ public class ConverterGraph {
 			String key = cp.getInData() + " " + ((ServiceReference)cp.getPath().get(0)).getProperty("out_data").toString();
 		if(this.fileExtensionCompareConverters.get(key) == null){
 
-		//	System.out.println("Adding a new Comparison Path:\n" + cp);
+		
 			this.fileExtensionCompareConverters.put(key, new ConverterPath(cp));
 		}
 		else {
 			ConverterPath tempPath = (ConverterPath)this.fileExtensionCompareConverters.get(key);
 			int pathSize = tempPath.getPath().size();
 			if(pathSize > cp.getPath().size()){
-				//ConverterPath oldPath = (ConverterPath)this.fileExtensionCompareConverters.get(key);
-				//System.out.println("Replacing Comparision Path:\n" + oldPath + "with\n"
-				//		+ cp);
+				
 				this.fileExtensionCompareConverters.put(key, new ConverterPath(cp));
 			}
 		}
@@ -124,7 +122,7 @@ public class ConverterGraph {
 			ServiceReference sr = (ServiceReference)srs.get(i);
 			String ss = sr.getProperty("out_data").toString();
 			if(ss.startsWith("file-ext") && (!ss.equals(cp.getInData()))){
-				//System.out.println(sr.getProperty("service.pid") + " yes");
+				
 				forbidden.add(sr);
 			}
 		}
@@ -134,16 +132,16 @@ public class ConverterGraph {
 	
 	private void addPath(ConverterPath p){
 		if(this.fileExtensionTestConverters.get(p.getInData()) == null){
-			//System.out.println("Adding a new path");
+		
 			ArrayList paths = new ArrayList();
 			paths.add(p);
 			this.fileExtensionTestConverters.put(p.getInData(), paths);
-			//System.out.println("Successfully Added");
+		
 		}
 		else{
-			//System.out.println("Adding a path");
+			
 			((ArrayList)this.fileExtensionTestConverters.get(p.getInData())).add(p);
-			//System.out.println("Successfully Added");
+			
 		}
 	}
 		
