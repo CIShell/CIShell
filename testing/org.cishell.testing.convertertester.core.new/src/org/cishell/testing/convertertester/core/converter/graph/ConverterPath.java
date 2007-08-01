@@ -56,8 +56,8 @@ public class ConverterPath {
 		return this.path;
 	}
 	
-	public ServiceReference[] pathAsArray(){
-		return (ServiceReference[])this.path.toArray();
+	public ServiceReference[] getPathAsArray(){
+		return (ServiceReference[])this.path.toArray(new ServiceReference[0]);
 	}
 	
 	public String toString(){

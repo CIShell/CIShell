@@ -211,16 +211,17 @@ public class ConverterGraph {
 	}
 	
 	public ConverterPath[] getTestPath(String s){
-		return (ConverterPath[])((ArrayList)this.fileExtensionTestConverters.get(s)).toArray();
+		return (ConverterPath[])((ArrayList)this.fileExtensionTestConverters.get(s)).toArray(new ConverterPath[0]);
 	}
 	
 	public ConverterPath[][] getTestPaths(){
-		String[] fileExtensions = (String[])this.fileExtensionTestConverters.keySet().toArray();
+		String[] fileExtensions = (String[])this.fileExtensionTestConverters.keySet().toArray(new String[0]);
 		ArrayList graphs = new ArrayList();
 		for(int i = 0; i < fileExtensions.length; i++){
 			graphs.add(getTestPath(fileExtensions[i]));
 		}
-		return (ConverterPath[][])graphs.toArray();
+		//this line may be busted
+		return (ConverterPath[][])graphs.toArray(new ConverterPath[0][]);
 	}
 	
 	public ConverterPath getComparePath(String s){
@@ -228,12 +229,12 @@ public class ConverterGraph {
 	}
 	
 	public ConverterPath[] getComparePaths(){
-		String[] fileExtensions = (String[])this.fileExtensionCompareConverters.keySet().toArray();
+		String[] fileExtensions = (String[])this.fileExtensionCompareConverters.keySet().toArray(new String[0]);
 		ArrayList graphs = new ArrayList();
 		for(int i = 0; i < fileExtensions.length; i++){
 			graphs.add(getComparePath(fileExtensions[i]));
 		}
-		return (ConverterPath[])graphs.toArray();
+		return (ConverterPath[])graphs.toArray(new ConverterPath[0]);
 	}
 	
 	public File asNWB(){
