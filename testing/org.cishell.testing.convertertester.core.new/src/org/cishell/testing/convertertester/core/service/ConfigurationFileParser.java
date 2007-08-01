@@ -60,37 +60,37 @@ public class ConfigurationFileParser {
 		try{
 			reader = new BufferedReader(new FileReader(f));
 
-			//System.out.println("Beginning to parse.");
+		
 
 			while((line = reader.readLine()) != null){
 
 				if(!line.trim().equals("")){
 
-				//System.out.println("Parsing line: " + lineNum + " " + line);
+				
 				if(line.startsWith(ConfigurationFileConstants.TEST_GRAPHS)){
 					line = line.replace(ConfigurationFileConstants.TEST_GRAPHS, "");
-					//System.out.println(line);
+					
 					this.processFileList = true;
 					this.processComparisonConvertersList = false;
 					this.processTestConvertersList = false;	
 				}
 				if(line.startsWith(ConfigurationFileConstants.COMPARISON_CONVERTERS)){
 					line = line.replace(ConfigurationFileConstants.COMPARISON_CONVERTERS, "");
-					//System.out.println(line);
+				
 					this.processFileList = false;
 					this.processComparisonConvertersList = true;
 					this.processTestConvertersList = false;
 				}
 				if(line.startsWith(ConfigurationFileConstants.TEST_CONVERTERS)){
 					line = line.replace(ConfigurationFileConstants.TEST_CONVERTERS, "");
-					//System.out.println(line);
+					
 					this.processFileList = false;
 					this.processComparisonConvertersList = false;
 					this.processTestConvertersList = true;
 				}
 				if(line.startsWith(ConfigurationFileConstants.NODE_ID_CHANGE)){
 					line = line.replace(ConfigurationFileConstants.NODE_ID_CHANGE, "");
-					//System.out.println(line );
+					
 					this.nodeIDChange = new Boolean(line.toLowerCase()).booleanValue();
 					this.processFileList = false;
 					this.processComparisonConvertersList = false;
@@ -98,7 +98,7 @@ public class ConfigurationFileParser {
 				}
 				if(line.startsWith(ConfigurationFileConstants.EXTENSION)){
 					line = line.replace(ConfigurationFileConstants.EXTENSION, "");
-					//System.out.println(line );
+					
 					this.extension = line;
 					this.processFileList = false;
 					this.processComparisonConvertersList = false;
@@ -115,7 +115,7 @@ public class ConfigurationFileParser {
 				}
 				}
 				lineNum++;
-				//System.out.println("Next line");
+			
 			}
 		}
 		catch(FileNotFoundException fnfe){
@@ -124,7 +124,7 @@ public class ConfigurationFileParser {
 		catch(IOException iex){
 			System.out.println(iex);
 		}
-		//System.out.println("Finished parsing");
+		
 	}
 
 	private String[] processLine(String s){
