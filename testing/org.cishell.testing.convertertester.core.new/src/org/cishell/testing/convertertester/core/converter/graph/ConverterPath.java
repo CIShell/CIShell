@@ -32,13 +32,13 @@ public class ConverterPath {
 	
 	public boolean addAlgoritm(ServiceReference sr){
 		boolean val = true;
-		//System.out.println(this.in_data + " " + this.out_data);
+		
 		if(path.contains(sr)){
 			System.out.println("Path already contains " + sr.getProperty("service.pid"));
-			//this.setOutData(sr.getProperty("out_data").toString());
+			
 			return false;
 		}
-		//System.out.println("Adding: " + sr.getProperty("service.pid"));
+		
 		path.add(sr);
 		this.setOutData(sr.getProperty("out_data").toString());
 		return val;
