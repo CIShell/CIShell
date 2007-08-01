@@ -19,23 +19,19 @@ import org.osgi.framework.ServiceReference;
 
 
 public class ConverterLoaderImpl implements AlgorithmProperty, DataConversionService, ServiceListener{
-	//private Converter[] testConverters;  //to store the chain of converters we want to test.
-	//private Converter[] toGraphObjectConverters; //to store the chain of converters to convert the files to prefuse or jung Graph objects.
-	//private BundleContext bContext;
+
 public final static String SERVICE_LIST = "SERVICE_LIST"; 
 	private Map converterList;
     private BundleContext bContext;
    private CIShellContext ciContext;
-   // private Map   dataTypeToVertex;
-   // private Graph graph;
+ 
     
     public ConverterLoaderImpl(BundleContext bContext, CIShellContext cContext){
     	this.ciContext = cContext;
     	this.bContext = bContext;
         converterList = new Hashtable();
         
-        //this.graph = new DirectedSparseGraph();
-       // this.dataTypeToVertex = new Hashtable();
+     
 
         String filter = "(&("+ALGORITHM_TYPE+"="+TYPE_CONVERTER+"))";
         //printConverters(bContext);
@@ -51,28 +47,18 @@ public final static String SERVICE_LIST = "SERVICE_LIST";
     private void assembleGraph() {    	
         try {
             String filter = "(&("+ALGORITHM_TYPE+"="+TYPE_CONVERTER+"))";// +
-            				 /* "("+IN_DATA+"=*) " +
-                              "("+OUT_DATA+"=*)" +
-                              "(!("+REMOTE+"=*))" +
-                              "(!("+IN_DATA+"=file-ext:*))" + 
-                              "(!("+OUT_DATA+"=file-ext:*)))";*/
+            				
 
             ServiceReference[] refs = bContext.getServiceReferences(
                     AlgorithmFactory.class.getName(), filter);
             ConverterGraph g = new ConverterGraph(refs);
             g.asNWB();
-           // System.out.println("Blah!");
-           // System.out.println(g);
+      
             if (refs != null) {
 				for (int i = 0; i < refs.length; ++i) {
-					//System.out.println(refs[i]);
+					
 					this.converterList.put(refs[i].getProperty("service.pid").toString(), refs[i]);
-					/*String inData = (String) refs[i]
-							.getProperty(AlgorithmProperty.IN_DATA);
-					String outData = (String) refs[i]
-							.getProperty(AlgorithmProperty.OUT_DATA);
-
-					addServiceReference(inData, outData, refs[i]);*/
+					
 				}
 			}
         } catch (InvalidSyntaxException e) {
@@ -81,79 +67,13 @@ public final static String SERVICE_LIST = "SERVICE_LIST";
     } 
 
     
-   /* private void addServiceReference(String srcDataType, String tgtDataType, ServiceReference serviceReference) {
-		if (srcDataType != null && srcDataType.length() > 0
-				&& tgtDataType != null && tgtDataType.length() > 0) {
-			Vertex srcVertex = getVertex(srcDataType);
-			Vertex tgtVertex = getVertex(tgtDataType);
-			removeServiceReference(srcDataType, tgtDataType, serviceReference);
-			this.converterList.put(serviceReference.getProperty("service.pid").toString(), serviceReference);
-			Edge directedEdge = srcVertex.findEdge(tgtVertex);
-			if (directedEdge == null) {
-				directedEdge = new DirectedSparseEdge(srcVertex, tgtVertex);
-				graph.addEdge(directedEdge);
-			}
-
-			AbstractList serviceList = (AbstractList) directedEdge.getUserDatum(SERVICE_LIST);
-			if (serviceList == null) {
-				serviceList = new ArrayList();
-				serviceList.add(serviceReference);
-			}
-			directedEdge.setUserDatum(SERVICE_LIST, serviceList,
-					new UserDataContainer.CopyAction.Shared());
-		}
-	}*/
-    
-   /* private Vertex getVertex(String dataType) {
-		Vertex vertex = (SparseVertex)dataTypeToVertex.get(dataType);
-		if (vertex== null) {
-			vertex = new SparseVertex();
-			vertex.addUserDatum("label", dataType,
-								new UserDataContainer.CopyAction.Shared());
-			graph.addVertex(vertex);
-			dataTypeToVertex.put(dataType, vertex);
-		}
-		return vertex;
-	}
-    
-    private void removeServiceReference(String srcDataType, String tgtDataType, ServiceReference serviceReference) {
-		if (srcDataType != null && tgtDataType != null) {
-			Vertex srcVertex = (Vertex) dataTypeToVertex.get(srcDataType);
-			Vertex tgtVertex = (Vertex) dataTypeToVertex.get(tgtDataType);
-			String pid = (String) serviceReference
-					.getProperty(Constants.SERVICE_PID);
-
-			if (srcVertex != null && tgtVertex != null) {
-				Edge edge = srcVertex.findEdge(tgtVertex);
-				if (edge != null) {
-					AbstractList serviceList = (AbstractList) edge
-							.getUserDatum(SERVICE_LIST);
-					for (Iterator iterator = serviceList.iterator(); iterator
-							.hasNext();) {
-						ServiceReference currentServiceReference = (ServiceReference) iterator
-								.next();
-						String currentPid = (String) currentServiceReference
-								.getProperty(Constants.SERVICE_PID);
-
-						if (pid.equals(currentPid)) {
-							iterator.remove();
-						}
-					}
-					if (serviceList.isEmpty()) {
-						graph.removeEdge(edge);
-					}
-				}
-			}
-		}
-	}*/
+   
     
 	
 	public void serviceChanged(ServiceEvent event) {
 		ServiceReference inServiceRef = event.getServiceReference();
 		
-		/*String inDataType = (String)inServiceRef.getProperty(AlgorithmProperty.IN_DATA);
-		String outDataType = (String)inServiceRef.getProperty(AlgorithmProperty.OUT_DATA);*/
-
+		
 		if (event.getType() ==  ServiceEvent.MODIFIED) {
 			this.converterList.put(inServiceRef.getProperty("service.pid").toString(), inServiceRef);
 		}
@@ -167,15 +87,7 @@ public final static String SERVICE_LIST = "SERVICE_LIST";
 		}
 	}
 
-/*	public Data convert(Data data, String outFormat) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
-	public Converter[] findConverters(Data data, String outFormat) {
-		// TODO Auto-generated method stub
-		return null;
-	}*/
 
 	public Converter[] findConverters(String inFormat, String outFormat, int maxHops, String maxComplexity) {
 		// TODO Auto-generated method stub
