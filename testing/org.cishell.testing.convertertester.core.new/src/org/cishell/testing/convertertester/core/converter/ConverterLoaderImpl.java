@@ -59,7 +59,8 @@ public final static String SERVICE_LIST = "SERVICE_LIST";
 
             ServiceReference[] refs = bContext.getServiceReferences(
                     AlgorithmFactory.class.getName(), filter);
-           // ConverterGraph g = new ConverterGraph(refs);
+            ConverterGraph g = new ConverterGraph(refs);
+            g.asNWB();
            // System.out.println("Blah!");
            // System.out.println(g);
             if (refs != null) {

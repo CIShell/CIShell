@@ -245,7 +245,7 @@ public class ConverterGraph {
 		BufferedWriter bw = new BufferedWriter(out);
 		
 		writeNodes(bw,nodes);
-		
+		writeEdges(bw,output);
 		}
 		catch(IOException ex){
 			System.out.println("Blurt!");
@@ -255,26 +255,25 @@ public class ConverterGraph {
 	
 	private void writeNodeHeader(BufferedWriter bw, int numNodes) throws IOException{
 		bw.flush();
-		bw.write("*Nodes " + numNodes);
+		bw.write("*Nodes " + numNodes + "\nid*int label*string\n");
 	
 	}
 	
 	private void writeNodes(BufferedWriter bw, Map nodes) throws IOException{
-		System.out.println("*Nodes " + nodes.size());
+		System.out.println("*Nodes " + nodes.size() + "\n");
 		writeNodeHeader(bw, nodes.size());
 		String[] keySet = new String[nodes.keySet().size()];
 		keySet = (String[])nodes.keySet().toArray(keySet);
-		
 		for(int i = 0; i < keySet.length; i++){
 			bw.flush();
-			bw.write(nodes.get(keySet[i]) + " " + keySet[i]);
+			bw.write(nodes.get(keySet[i]) + " \"" + keySet[i]+"\"\n");
 		}
 		
 	}
 	
 	private void writeEdgeHeader(BufferedWriter bw, int numEdges) throws IOException{
 		bw.flush();
-		bw.write("*DirectedEdges " + numEdges);
+		bw.write("*DirectedEdges " + numEdges + "\nsource*int target*int\n");
 	}
 	
 		
@@ -288,7 +287,7 @@ public class ConverterGraph {
 		for(int i = 0; i < edgeArray.length; i++){
 			System.out.println(edgeArray[i]);
 			bw.flush();
-			bw.write(edgeArray[i]);
+			bw.write(edgeArray[i]+"\n");
 		}
 	}
 	
@@ -307,8 +306,9 @@ public class ConverterGraph {
 			ServiceReference[] references =  new ServiceReference[paths.size()];
 			references = (ServiceReference[])paths.toArray(references);
 			
-			for(int j = 0; j < references.length; j++){	
-				nodeNames.add(s);
+			for(int j = 0; j < references.length; j++){
+				ServiceReference r = references[j];
+				nodeNames.add(r.getProperty("service.pid").toString());
 			}
 		}
 		
@@ -316,6 +316,7 @@ public class ConverterGraph {
 		names = (String[])nodeNames.toArray(names);
 		
 		for(int i = 0; i < names.length; i++){
+			System.out.println(names[i] + " " + (i+1));
 			nodesToInt.put(names[i], new Integer(i+1));
 		}
 		
@@ -328,15 +329,22 @@ public class ConverterGraph {
 		keySet = (String[])m.keySet().toArray(keySet);
 		for(int i = 0; i < keySet.length; i++){
 			String s = keySet[i];
-			
+			System.out.println(keySet[i]);
 			ArrayList paths = (ArrayList)this.inDataToAlgorithm.get(s);
+			if(paths != null){
 			ServiceReference[] references =  new ServiceReference[paths.size()];
 			references = (ServiceReference[])paths.toArray(references);
 			
 			for(int j = 0; j < references.length; j++){
-				String output = m.get(s).toString() + " ";
-				output += m.get(references[j].getProperty("service.pid")).toString();
-				edges.add(output);
+				String output1 = m.get(s).toString() + " ";
+				String output2 = references[j].getProperty("service.pid").toString();
+				output1 += m.get(output2).toString();
+				output2 = m.get(output2).toString() + " " + m.get(references[j].getProperty("out_data")).toString(); 
+				System.out.println(output1);
+				System.out.println(output2);
+				edges.add(output1);
+				edges.add(output2);
+			}
 			}
 			
 		}
