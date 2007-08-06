@@ -15,53 +15,74 @@ import org.osgi.service.log.LogService;
 
 public class TestFileKeeper {
 
+	//TODO: How should we expose this to the user?
 	public static final String DEFAULT_ROOT_DIR = "workspace/org.cishell."
 			+ "testing.convertertester.core.new/src/org/cishell/testing/"
 			+ "convertertester/core/test_files/";
 
 	public static final String CONF_FILE_NAME = "filetypes.conf";
-	
-	public static final Pattern LINE_FORMAT = 
-		Pattern.compile("^file:[^=]*?=[^=]*$"); 
-	
-	private Map formatToDir = new HashMap();
+
+	public static final Pattern LINE_FORMAT = Pattern
+			.compile("^file:[^=]*?=[^=]*$");
+
+	private Map formatToTestFileNames = new HashMap();
+
 	private LogService log;
-	
+
 	public TestFileKeeper(String rootDir, LogService log) {
 		this.log = log;
-		
+		loadTestFileNames(rootDir);
+	}
+
+	public void loadTestFileNames(String rootDir) {
 		String line;
 		BufferedReader reader = null;
+
 		try {
-			String filePath = System.getProperty("user.home") +  "/" + 
-			rootDir + CONF_FILE_NAME;
+			//open config file that maps formats to test file directories
+
+			String filePath = System.getProperty("user.home") + "/" + rootDir
+					+ CONF_FILE_NAME;
 			reader = new BufferedReader(new FileReader(filePath));
+
+			//map formats to test files found in specified directories
+
+			//for each file format...
 			while ((line = reader.readLine()) != null) {
-				
 				Matcher matcher = LINE_FORMAT.matcher(line);
+
 				if (matcher.matches()) {
+
+					//get the file format and directory name from config file.
+
 					String[] splitLine = line.split("=");
-					
+
 					String fileFormat = splitLine[0];
-					String dir        = splitLine[1];
+					String dir = splitLine[1];
+
+					String testFileDirPath = System.getProperty("user.home")
+							+ "/" + rootDir + dir;
+
+					//use directory name to get names of test files inside it.
+					String[] testFileNames = 
+						getVisibleFileNames(testFileDirPath);
 					
-					String testFilePath = System.getProperty("user.home") + 
-					"/" + rootDir + dir;
+					//associate the file format with the names of test files.
+					this.formatToTestFileNames.put(fileFormat, testFileNames);
 					
-					formatToDir.put(fileFormat, testFilePath);
 				} else {
-					this.log.log(LogService.LOG_ERROR, "the line '" + line +
-							"' is not formatted correctly");
+					this.log.log(LogService.LOG_ERROR, "the line '" + line
+							+ "' is not formatted correctly");
 				}
 			}
 		} catch (IOException e) {
-			this.log.log(LogService.LOG_ERROR, "Incorrect directory for " +
-					"test file specified", e);
+			this.log.log(LogService.LOG_ERROR, "Incorrect directory for "
+					+ "test file specified", e);
 			e.printStackTrace();
 		} finally {
-			if (reader != null) { 
+			if (reader != null) {
 				try {
-				reader.close();
+					reader.close();
 				} catch (IOException e) {
 					this.log.log(LogService.LOG_ERROR, "Cannot close reader.",
 							e);
@@ -69,29 +90,37 @@ public class TestFileKeeper {
 			}
 		}
 	}
-	
-	//TODO: maybe make it cache the files instead of getting them every time?
+
 	public String[] getTestFilePaths(String format) {
 		
-		List results = new ArrayList();
-
-		String testFileDirPath = (String) this.formatToDir.get(format);
-		if (testFileDirPath == null) {
-			this.log.log(LogService.LOG_ERROR, "Could not load directory " +
-					"for files of format " + format);
+		String[] testFileNames = (String[]) this.formatToTestFileNames
+				.get(format);
+		if (testFileNames == null) {
+			this.log.log(LogService.LOG_ERROR, "Could not load directory "
+					+ "for files of format " + format);
 			return new String[0];
 		}
-		File testFileDir = new File(testFileDirPath);
-		File[] dirContents = testFileDir.listFiles();
 
+		return testFileNames;
+	}
+	
+	private String[] getVisibleFileNames(String dirName) {
+		List results = new ArrayList();
+		
+		File dir = new File(dirName);
+		
+		File[] dirContents = dir.listFiles();
 		for (int ii = 0; ii < dirContents.length; ii++) {
-			if (! dirContents[ii].isHidden()) {
+
+			if (!dirContents[ii].isHidden()) {
 				try {
-			String fullTestFilePath = dirContents[ii].getCanonicalPath();
-			results.add(fullTestFilePath);
+					String testFilePath = dirContents[ii]
+							.getCanonicalPath();
+					results.add(testFilePath);
 				} catch (IOException e) {
-					this.log.log(LogService.LOG_ERROR, "Could not open " +
-							"file " + dirContents[ii], e);
+					this.log.log(LogService.LOG_ERROR,
+							"Could not open " + "file "
+									+ dirContents[ii], e);
 				}
 			}
 		}
