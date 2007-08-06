@@ -30,7 +30,7 @@ public class ConverterPath {
 		this.out_data = s;
 	}
 	
-	public boolean addAlgoritm(ServiceReference sr){
+	public boolean addAlgorithm(ServiceReference sr){
 		boolean val = true;
 		
 		if(path.contains(sr)){

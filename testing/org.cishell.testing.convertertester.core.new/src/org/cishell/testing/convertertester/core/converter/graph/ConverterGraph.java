@@ -76,7 +76,7 @@ public class ConverterGraph {
 		}
 		while(!refs.isEmpty()){
 			ConverterPath p = new ConverterPath(path);
-			p.addAlgoritm((ServiceReference)refs.get(0));
+			p.addAlgorithm((ServiceReference)refs.get(0));
 			refs.remove(0);
 			createPaths((ArrayList)this.inDataToAlgorithm.get(p.getOutData()), p, p.getOutData());
 		
