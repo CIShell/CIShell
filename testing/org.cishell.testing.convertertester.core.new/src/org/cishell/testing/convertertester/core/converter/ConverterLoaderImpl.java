@@ -62,7 +62,8 @@ public final static String SERVICE_LIST = "SERVICE_LIST";
             }
             System.out.println(length + " " + g.getTestPaths().length);
             
-          //  System.out.println(g);*/
+          //  System.out.println(g);
+           * 
 */            if (refs != null) {
 				for (int i = 0; i < refs.length; ++i) {
 					
