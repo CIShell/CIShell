@@ -51,8 +51,19 @@ public final static String SERVICE_LIST = "SERVICE_LIST";
 
             ServiceReference[] refs = bContext.getServiceReferences(
                     AlgorithmFactory.class.getName(), filter);
+           /* ConverterGraph g = new ConverterGraph(refs);
+            System.out.println(g.printComparisonConverterPaths() + "\n" +
+            		g.getComparePaths().length + "\n" + g.printTestConverterPaths() + "\n");
+            int length = 0;
+            for(int i = 0; i < g.getTestPaths().length; i++){
+            	for(int j = 0; j < g.getTestPaths()[i].length; j++){
+            		length++;
+            	}
+            }
+            System.out.println(length + " " + g.getTestPaths().length);
             
-            if (refs != null) {
+          //  System.out.println(g);*/
+*/            if (refs != null) {
 				for (int i = 0; i < refs.length; ++i) {
 					
 					this.converterList.put(refs[i].getProperty("service.pid").toString(), refs[i]);
