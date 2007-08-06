@@ -121,6 +121,7 @@ public class ConverterTester {
 			System.out.println("Converting " + f.getCanonicalPath());
 			Data inData = new BasicData(f.getCanonicalPath(),"");
 			Data dm = cnv.convert(inData);
+			
 
 
 			if(dm != null){
