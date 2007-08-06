@@ -209,9 +209,8 @@ public class DefaultTestRunner implements TestRunner {
 			BasicData result = new BasicData(filePath, format);
 			return new Data[] { result };
 		} catch (IOException e) {
-			System.out.println(e);
-			e.printStackTrace();
-
+			this.log.log(LogService.LOG_ERROR, "Could not get file path " +
+					"from file " + actualFile, e);
 			return null;
 		}
 
