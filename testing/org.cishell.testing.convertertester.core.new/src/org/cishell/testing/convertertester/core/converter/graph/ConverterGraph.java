@@ -190,7 +190,7 @@ public class ConverterGraph {
 			keySet = (String[])this.fileExtensionCompareConverters.keySet().toArray(keySet);
 		for(int i = 0; i < keySet.length; i++){
 			String s = keySet[i];
-			System.out.println(s);
+			//System.out.println(s);
 			sb.append(printComparisonConverterPath(s));
 		}
 		sb.trimToSize();
