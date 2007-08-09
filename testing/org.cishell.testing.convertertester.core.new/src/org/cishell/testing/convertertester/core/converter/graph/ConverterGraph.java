@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
@@ -66,6 +67,7 @@ public class ConverterGraph {
 				
 			}
 		}
+	
 	}
 	
 	private ConverterPath createPaths(ArrayList algorithms, ConverterPath path, String dataType){
@@ -91,6 +93,7 @@ public class ConverterGraph {
 		String firstOutData, lastInData;
 		firstOutData = ((ServiceReference)cp.getPath().get(0)).getProperty("out_data").toString();
 		lastInData = ((ServiceReference)cp.getPath().get(cp.getPath().size()-1)).getProperty("in_data").toString();
+		//System.out.println(firstOutData + " " + lastInData);
 		if(firstOutData.equals(lastInData)){
 			addTestPath(cp);
 		}
@@ -100,6 +103,7 @@ public class ConverterGraph {
 		if(cp.getOutData() != null){
 		if(cp.getOutData().equals(ConverterGraph.testOutData)){
 			String key = cp.getInData() + " " + ((ServiceReference)cp.getPath().get(0)).getProperty("out_data").toString();
+			//System.out.println(key);
 		if(this.fileExtensionCompareConverters.get(key) == null){
 
 		
@@ -134,16 +138,19 @@ public class ConverterGraph {
 	}
 	
 	private void addTestPath(ConverterPath p){
-		if(this.fileExtensionTestConverters.get(p.getInData()) == null){
+		String key = p.getInData();
+		key += " ";
+		key +=  ((ServiceReference)p.getPath().get(0)).getProperty("out_data").toString();
+		if(this.fileExtensionTestConverters.get(key) == null){
 		
 			ArrayList paths = new ArrayList();
 			paths.add(p);
-			this.fileExtensionTestConverters.put(p.getInData(), paths);
+			this.fileExtensionTestConverters.put(key, paths);
 		
 		}
 		else{
 			
-			((ArrayList)this.fileExtensionTestConverters.get((p.getInData()))).add(p);
+			((ArrayList)this.fileExtensionTestConverters.get(key)).add(p);
 			
 		}
 	}
@@ -154,7 +161,7 @@ public class ConverterGraph {
 		ArrayList al = (ArrayList)this.fileExtensionTestConverters.get(s);
 			for(int i = 0; i < al.size(); i++){
 				ConverterPath cp = (ConverterPath)al.get(i);
-				sb.append(s + cp.toString());
+				sb.append(cp.toString());
 			}
 			sb.trimToSize();
 		return sb.toString();
@@ -179,11 +186,12 @@ public class ConverterGraph {
 	
 	public String printComparisonConverterPaths(){
 		StringBuffer sb = new StringBuffer();
-		String[] keySet = new String[this.fileExtensionTestConverters.keySet().size()];
-			keySet = (String[])this.fileExtensionTestConverters.keySet().toArray(keySet);
+		String[] keySet = new String[this.fileExtensionCompareConverters.keySet().size()];
+			keySet = (String[])this.fileExtensionCompareConverters.keySet().toArray(keySet);
 		for(int i = 0; i < keySet.length; i++){
 			String s = keySet[i];
-			sb.append(printTestConverterPath(s));
+			System.out.println(s);
+			sb.append(printComparisonConverterPath(s));
 		}
 		sb.trimToSize();
 		return sb.toString();
@@ -229,6 +237,7 @@ public class ConverterGraph {
 		return (ConverterPath)this.fileExtensionCompareConverters.get(s);
 	}
 	
+	
 	public ConverterPath[] getComparePaths(){
 		String[] fileExtensions = (String[])this.fileExtensionCompareConverters.keySet().toArray(new String[0]);
 		ArrayList graphs = new ArrayList();
@@ -236,6 +245,14 @@ public class ConverterGraph {
 			graphs.add(getComparePath(fileExtensions[i]));
 		}
 		return (ConverterPath[])graphs.toArray(new ConverterPath[0]);
+	}
+	
+	public Map getCompareMap(){
+		return this.fileExtensionCompareConverters;
+	}
+	
+	public Map getTestMap(){
+		return this.fileExtensionTestConverters;
 	}
 	
 	public File asNWB(){
