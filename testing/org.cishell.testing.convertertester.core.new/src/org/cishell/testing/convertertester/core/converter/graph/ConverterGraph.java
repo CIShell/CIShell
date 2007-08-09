@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
 public class ConverterGraph {
@@ -18,10 +19,12 @@ public class ConverterGraph {
 	Map fileExtensionTestConverters;
 	Map fileExtensionCompareConverters;
 	ServiceReference[] converters;
+	BundleContext bContext;
 	private static final String testOutData = "prefuse.data.Graph";
 	
-	public ConverterGraph(ServiceReference[] converters){
+	public ConverterGraph(ServiceReference[] converters, BundleContext bContext){
 		this.converters = converters;
+		this.bContext = bContext;
 		inDataToAlgorithm = new HashMap();//<String, ArrayList<ServiceReference>>();
 		fileExtensionTestConverters = new ConcurrentHashMap();//<String, ArrayList<ConverterPath>>();
 		fileExtensionCompareConverters = new ConcurrentHashMap();//<String, ConverterPath>();
@@ -55,7 +58,7 @@ public class ConverterGraph {
 			if(s.startsWith("file-ext")){
 				
 				
-				ConverterPath test = new ConverterPath();
+				ConverterPath test = new ConverterPath(this.bContext);
 			
 				test.setInData(s);
 			
@@ -75,7 +78,7 @@ public class ConverterGraph {
 			return path;
 		}
 		while(!refs.isEmpty()){
-			ConverterPath p = new ConverterPath(path);
+			ConverterPath p = new ConverterPath(path, this.bContext);
 			p.addAlgorithm((ServiceReference)refs.get(0));
 			refs.remove(0);
 			createPaths((ArrayList)this.inDataToAlgorithm.get(p.getOutData()), p, p.getOutData());
@@ -100,14 +103,14 @@ public class ConverterGraph {
 		if(this.fileExtensionCompareConverters.get(key) == null){
 
 		
-			this.fileExtensionCompareConverters.put(key, new ConverterPath(cp));
+			this.fileExtensionCompareConverters.put(key, new ConverterPath(cp, this.bContext));
 		}
 		else {
 			ConverterPath tempPath = (ConverterPath)this.fileExtensionCompareConverters.get(key);
 			int pathSize = tempPath.getPath().size();
 			if(pathSize > cp.getPath().size()){
 				
-				this.fileExtensionCompareConverters.put(key, new ConverterPath(cp));
+				this.fileExtensionCompareConverters.put(key, new ConverterPath(cp, this.bContext));
 			}
 		}
 		}
