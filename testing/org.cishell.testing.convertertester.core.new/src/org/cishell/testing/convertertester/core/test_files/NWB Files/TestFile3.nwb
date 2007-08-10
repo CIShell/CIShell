@@ -1,4 +1,5 @@
 *Nodes
+id*int	label*string
 541	"SLP"
 542	"wg"
 543	"WG"
