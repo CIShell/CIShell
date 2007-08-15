@@ -5,9 +5,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 
+import org.cishell.testing.convertertester.core.tester2.reportgen.ReportGenerator;
 import org.cishell.testing.convertertester.core.tester2.reportgen.reports.FilePassReport;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.FilePassResult;
-import org.cishell.testing.convertertester.core.tester2.reportgen.results.TestResult;
 
 public class FilePassSubGenerator {
 	
@@ -17,7 +17,7 @@ public class FilePassSubGenerator {
 	public void generateSubreport(FilePassResult fpr) {
 		FileOutputStream reportOutStream = null;
 		try {
-			File reportFile = new File(fpr.getName());
+			File reportFile = new File(ReportGenerator.TEMP_DIR + fpr.getName());
 			reportOutStream = new FileOutputStream(reportFile);
 			PrintStream report = new PrintStream(reportOutStream);
 			

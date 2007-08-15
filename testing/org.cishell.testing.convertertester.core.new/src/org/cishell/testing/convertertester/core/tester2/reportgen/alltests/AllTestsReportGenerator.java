@@ -27,12 +27,15 @@ public class AllTestsReportGenerator implements ReportGenerator {
 	public AllTestsReportGenerator(LogService log) {
 		this.log = log;
 		this.testResultSubGen = new TestReportSubGenerator();
+		
+		//TODO: Make this not a huge hack
+		new File(TEMP_DIR).mkdir();
 	}
 
 	public void generateReport(AllTestsResult atr) {
 		FileOutputStream reportOutStream = null;
 		try {
-			File reportFile = new File(TEMP_FILE_PATH);
+			File reportFile = new File(TEMP_DIR + TEMP_FILE_PATH);
 			reportOutStream = new FileOutputStream(reportFile);
 			PrintStream report = new PrintStream(reportOutStream);
 			

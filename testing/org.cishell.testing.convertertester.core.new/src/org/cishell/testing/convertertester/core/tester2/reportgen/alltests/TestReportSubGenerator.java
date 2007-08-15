@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.cishell.testing.convertertester.core.converter.graph.ConverterPath;
+import org.cishell.testing.convertertester.core.tester2.reportgen.ReportGenerator;
 import org.cishell.testing.convertertester.core.tester2.reportgen.reports.FilePassReport;
 import org.cishell.testing.convertertester.core.tester2.reportgen.reports.TestReport;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.FilePassResult;
@@ -27,7 +28,7 @@ public class TestReportSubGenerator {
 	public void generateSubreport(TestResult tr) {
 		FileOutputStream reportOutStream = null;
 		try {
-			File reportFile = new File(tr.getName());
+			File reportFile = new File(ReportGenerator.TEMP_DIR + tr.getName());
 			reportOutStream = new FileOutputStream(reportFile);
 			PrintStream report = new PrintStream(reportOutStream);
 			
@@ -144,6 +145,6 @@ public class TestReportSubGenerator {
 	
 	private void namePass(String prefix, FilePassResult fp, TestResult parent,
 			int index) {
-		fp.setName(prefix + " Pass " + index + " of " + fp);
+		fp.setName(prefix + " Pass " + index + " of " + parent.getName() + " . ");
 	}
 }

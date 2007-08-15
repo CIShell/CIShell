@@ -51,9 +51,17 @@ public class ConverterTesterAlgorithm implements Algorithm, AlgorithmProperty {
         
         this.log = (LogService) cContext.getService(
 				LogService.class.getName());
+        
     }
 
     public Data[] execute() {
+    	
+    	this.log.log(LogService.LOG_WARNING, "-------NOTICE-------" + "\n" + 	
+    			"The Converter Tester will take " +
+    			"approximately 30 seconds to run all the tests, and around " +
+    			"20 seconds to display all the results. Thank you for " +
+    			"waiting :)" + "\n" +
+    	"-----END NOTICE-----");
     	
     	Data[] returnDM;
 
@@ -107,8 +115,6 @@ public class ConverterTesterAlgorithm implements Algorithm, AlgorithmProperty {
     	}    	
     	
     	public void run (){
-    	
-//    	    	FileDialog dialog = new FileDialog(window.getShell(), SWT.OPEN);
 //		        if (currentDir == null) {
 //		            currentDir = new File(System.getProperty("user.dir") + File.separator + "sampledata");
 //                    

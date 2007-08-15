@@ -36,7 +36,8 @@ public class AllConvsReportGenerator implements ReportGenerator {
 		
 		FileOutputStream reportOutStream = null;
 		try {
-			File reportFile = new File(TEMP_FILE_PATH);
+			new File(TEMP_DIR);
+			File reportFile = new File(TEMP_DIR + TEMP_FILE_PATH);
 			reportOutStream = new FileOutputStream(reportFile);
 			PrintStream report = new PrintStream(reportOutStream);
 			

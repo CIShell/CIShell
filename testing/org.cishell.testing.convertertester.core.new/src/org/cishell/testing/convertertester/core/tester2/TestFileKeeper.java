@@ -16,9 +16,16 @@ import org.osgi.service.log.LogService;
 public class TestFileKeeper {
 
 	//TODO: How should we expose this to the user?
-	public static final String DEFAULT_ROOT_DIR = "workspace/org.cishell."
-			+ "testing.convertertester.core.new/src/org/cishell/testing/"
-			+ "convertertester/core/test_files/";
+	static {
+		String fs = File.separator;
+		
+		 DEFAULT_ROOT_DIR = "workspace" + fs + "org.cishell."
+				+ "testing.convertertester.core.new" + fs + "src" + fs + 
+				"org" + fs + "cishell" + fs + "testing" + fs +
+				"convertertester" + fs + "core" + fs + "test_files" + fs;
+	}
+	
+	public static final String DEFAULT_ROOT_DIR;
 
 	public static final String CONF_FILE_NAME = "filetypes.conf";
 

@@ -19,7 +19,7 @@ public class GraphReportGenerator implements ReportGenerator {
 	private ConvResultMaker convGen = new ConvResultMaker();
 	private LogService log;
 	
-	private File annotatedNWBGraph = new File("annotated-converter-graph.nwb");
+	private File annotatedNWBGraph = new File(TEMP_DIR + "annotated-converter-graph.nwb");
 	
 	private String NODE_LINE = "^\\d+? \".*?\"$";
 	

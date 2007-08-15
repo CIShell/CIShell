@@ -7,11 +7,10 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.cishell.testing.convertertester.core.tester2.reportgen.ReportGenerator;
 import org.cishell.testing.convertertester.core.tester2.reportgen.reports.ConvReport;
 import org.cishell.testing.convertertester.core.tester2.reportgen.reports.TestReport;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.ConvResult;
-import org.cishell.testing.convertertester.core.tester2.reportgen.results.FilePassResult;
-import org.cishell.testing.convertertester.core.tester2.reportgen.results.TestResult;
 import org.osgi.framework.ServiceReference;
 
 public class ConvReportSubGenerator {
@@ -25,7 +24,7 @@ public class ConvReportSubGenerator {
 			ConvResult convResult = cr;
 			ServiceReference conv = convResult.getRef();
 
-			File reportFile = new File(cr.getName());
+			File reportFile = new File(ReportGenerator.TEMP_DIR + cr.getName());
 			reportOutStream = new FileOutputStream(reportFile);
 
 			PrintStream report = new PrintStream(reportOutStream);
