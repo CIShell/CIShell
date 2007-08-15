@@ -5,7 +5,7 @@
 544	"en"
 545	"EN"
 546	"hh"
-547	"HH"      0.987    0.5 0.5    box r 3.5         x_fact 7		s_size 1  lc red font "Arial Black" lphi 5 lr 3
+547	"HH"      0.987    0.5 0.5    box r 3.5         x_fact 7		s_size 1  lc red lphi 5 lr 3
 549	"PTC"
 550	"ph"
 551	"SMO" 

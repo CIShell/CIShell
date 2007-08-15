@@ -6,12 +6,11 @@
 545	"EN"
 546	"hh"
 547	"HH"
-548	"ptc" 0.987 ellipse 0.5 0.7
+548	"ptc" 0.987 0.5 0.7
 549	"PTC"
 550	"ph"
 551	"SMO"
 552	"ci"
-//I thought I would add a comment here.
 553	"CI"
 554	"CIA"
 555	"CIR"

@@ -1,21 +1,21 @@
 package org.cishell.testing.convertertester.core.tester2;
 
 import org.cishell.framework.CIShellContext;
-import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.data.Data;
+import org.cishell.testing.convertertester.core.converter.graph.ConverterPath;
 import org.cishell.testing.convertertester.core.tester2.graphcomparison.NewGraphComparer;
 
 public class TestConfigData {
 
 	private NewGraphComparer comparer;
-	private AlgorithmFactory[] testConverters;
-	private AlgorithmFactory[] comparisonConverters;
+	private ConverterPath testConverters;
+	private ConverterPath comparisonConverters;
 	private CIShellContext context;
 	private Data[][] testFileData;
 	
 	public TestConfigData(NewGraphComparer comparer,
-			AlgorithmFactory[] testConverters,
-			AlgorithmFactory[] comparisonConverters,
+			ConverterPath testConverters,
+			ConverterPath comparisonConverters,
 			CIShellContext context,
 			Data[][] testFileData) {
 		this.comparer = comparer;
@@ -29,7 +29,7 @@ public class TestConfigData {
 		return this.comparer;
 	}
 
-	public AlgorithmFactory[] getComparisonConverters() {
+	public ConverterPath getComparisonConverters() {
 		return this.comparisonConverters;
 	}
 
@@ -37,7 +37,7 @@ public class TestConfigData {
 		return this.context;
 	}
 
-	public AlgorithmFactory[] getTestConverters() {
+	public ConverterPath getTestConverters() {
 		return this.testConverters;
 	}
 

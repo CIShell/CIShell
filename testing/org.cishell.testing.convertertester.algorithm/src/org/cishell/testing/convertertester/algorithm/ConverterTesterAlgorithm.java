@@ -11,14 +11,18 @@ import org.cishell.framework.algorithm.AlgorithmProperty;
 import org.cishell.framework.data.BasicData;
 import org.cishell.framework.data.Data;
 import org.cishell.framework.data.DataProperty;
+import org.cishell.testing.convertertester.core.converter.graph.ConverterGraph;
 import org.cishell.testing.convertertester.core.tester2.ConverterTester2;
-import org.cishell.testing.convertertester.core.tester2.reportgen.ConverterReportGenerator;
-import org.cishell.testing.convertertester.core.tester2.reportgen.OverviewReportGenerator;
 import org.cishell.testing.convertertester.core.tester2.reportgen.ReportGenerator;
-import org.cishell.testing.convertertester.core.tester2.reportgen.SampleResultReportGenerator;
-import org.eclipse.swt.SWT;
+import org.cishell.testing.convertertester.core.tester2.reportgen.allconvs.AllConvsReportGenerator;
+import org.cishell.testing.convertertester.core.tester2.reportgen.alltests.AllTestsReportGenerator;
+import org.cishell.testing.convertertester.core.tester2.reportgen.convgraph.GraphReportGenerator;
+import org.cishell.testing.convertertester.core.tester2.reportgen.reports.AllConvsReport;
+import org.cishell.testing.convertertester.core.tester2.reportgen.reports.AllTestsReport;
+import org.cishell.testing.convertertester.core.tester2.reportgen.reports.ConvReport;
+import org.cishell.testing.convertertester.core.tester2.reportgen.reports.FilePassReport;
+import org.cishell.testing.convertertester.core.tester2.reportgen.reports.TestReport;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.osgi.framework.BundleContext;
@@ -36,7 +40,7 @@ public class ConverterTesterAlgorithm implements Algorithm, AlgorithmProperty {
     private Dictionary parameters;
     private CIShellContext cContext;
     private BundleContext bContext;
-    private LogService logger;
+    private LogService log;
     
     public ConverterTesterAlgorithm(Data[] data, Dictionary parameters,
     		CIShellContext cContext, BundleContext bContext ) {
@@ -45,7 +49,7 @@ public class ConverterTesterAlgorithm implements Algorithm, AlgorithmProperty {
         this.cContext = cContext;
         this.bContext = bContext;
         
-        this.logger = (LogService) cContext.getService(
+        this.log = (LogService) cContext.getService(
 				LogService.class.getName());
     }
 
@@ -59,7 +63,7 @@ public class ConverterTesterAlgorithm implements Algorithm, AlgorithmProperty {
     	}
     
     	Display display = PlatformUI.getWorkbench().getDisplay();
-    	DataUpdater dataUpdater = new DataUpdater (windows[0]);
+    	DataUpdater dataUpdater = new DataUpdater (windows[0], this.log);
     	
     	if (Thread.currentThread() != display.getThread()) {
     		display.syncExec(dataUpdater);
@@ -95,59 +99,84 @@ public class ConverterTesterAlgorithm implements Algorithm, AlgorithmProperty {
     	boolean loadFileSuccess = false;
     	IWorkbenchWindow window;
     	ArrayList returnList = new ArrayList();
+    	LogService log;
     	
-    	DataUpdater (IWorkbenchWindow window){
+    	DataUpdater (IWorkbenchWindow window, LogService log){
+    		this.log = log;
     		this.window = window;    		
     	}    	
     	
     	public void run (){
     	
-    	    	FileDialog dialog = new FileDialog(window.getShell(), SWT.OPEN);
-		        if (currentDir == null) {
-		            currentDir = new File(System.getProperty("user.dir") + File.separator + "sampledata");
-                    
-                    if (!currentDir.exists()) {
-                        currentDir = new File(System.getProperty("user.home") + File.separator + "anything");
-                    } else {
-                        currentDir = new File(System.getProperty("user.dir") + File.separator + "sampledata" + File.separator + "anything");
-                    }
-		        }
-		        dialog.setFilterPath(currentDir.getPath());
-		        dialog.setText("Select a File: Too bad we aren't using it, haha!");
-		        String fileName = dialog.open();
-		        if (fileName == null) {
-		        	return;
-		        }
+//    	    	FileDialog dialog = new FileDialog(window.getShell(), SWT.OPEN);
+//		        if (currentDir == null) {
+//		            currentDir = new File(System.getProperty("user.dir") + File.separator + "sampledata");
+//                    
+//                    if (!currentDir.exists()) {
+//                        currentDir = new File(System.getProperty("user.home") + File.separator + "anything");
+//                    } else {
+//                        currentDir = new File(System.getProperty("user.dir") + File.separator + "sampledata" + File.separator + "anything");
+//                    }
+//		        }
+//		        dialog.setFilterPath(currentDir.getPath());
+//		        dialog.setText("Select a File: Too bad we aren't using it, haha!");
+//		        String fileName = dialog.open();
+//		        if (fileName == null) {
+//		        	return;
+//		        }
 		   		
 		   		try {
-		   			ConverterTester2 ct = new ConverterTester2(logger);
+		   			ConverterTester2 ct = new ConverterTester2(log);
 		   			ServiceReference[] refs = getServiceReferences();
-					OverviewReportGenerator overviewGen = 
-						new OverviewReportGenerator();
-					SampleResultReportGenerator sampleGen =
-						new SampleResultReportGenerator(10, 5);
-		   			ConverterReportGenerator convGen = 
-		   				new ConverterReportGenerator();
-					
-		   			ct.execute(refs, cContext, bContext, logger,
-		   					new ReportGenerator[] {overviewGen, sampleGen, convGen});
 		   			
-		   			File overviewReport = overviewGen.getReport();	
-		   			BasicData overviewReportData = 
-		   				createReportData(overviewReport, "Overview");
-		   			returnList.add(overviewReportData);
+		   			ConverterGraph converterGraph = new ConverterGraph(refs, bContext, log);
 		   			
+		   			File nwbGraph = converterGraph.asNWB();
 		   			
-		   			File sampleReport   = sampleGen.getReport();
-		   			BasicData sampleReportData = 
-		   				createReportData(sampleReport, "Sample Test Results");	
-		   			returnList.add(sampleReportData);
+		   			AllTestsReportGenerator allGen     = new AllTestsReportGenerator(this.log);
+		   			AllConvsReportGenerator allConvGen = new AllConvsReportGenerator(this.log);
+		   			GraphReportGenerator    graphGen   = new GraphReportGenerator(nwbGraph, this.log);
 		   			
-
-		   			File convReport = convGen.getReport();
-		   			BasicData convReportData = 
-		   				createReportData(convReport, "Basic Converter Results");
-		   			returnList.add(convReportData);
+		   			ct.execute(converterGraph, new ReportGenerator[] {allGen, allConvGen, graphGen}, cContext, bContext);
+		   			
+		   			AllTestsReport allReport = allGen.getAllTestsReport();
+		   			File allReportFile = allReport.getAllTestsReport();
+		   			Data allReportData = createReportData(allReportFile,
+		   					allReport.getName() , null);
+		   			addReturn(allReportData);
+		   			
+		   			TestReport[] sTestReports = allReport.getSuccessfulTestReports();
+		   			addFilePasses(sTestReports, allReportData);
+		   			
+		   			TestReport[] ppTestReports = allReport.getPartialSuccessTestReports();
+		   			addFilePasses(ppTestReports, allReportData);
+		   			
+		   			TestReport[] fTestReports = allReport.getFailedTestReports();
+		   			addFilePasses(fTestReports, allReportData);
+		   			
+		   			//all conv report
+		   			
+		   			AllConvsReport allConvReport = allConvGen.getAllConvsReport();
+		   			File allConvReportFile = allConvReport.getReport();
+		   			Data allConvReportData = createReportData(allConvReportFile, allConvReport.getName(),
+		   					null);
+		   			addReturn(allConvReportData);
+		   			
+		   			ConvReport[] convReports = allConvReport.getConverterReports();
+		   			for (int ii = 0; ii < convReports.length; ii++) {
+		   				ConvReport convReport = convReports[ii];
+		   				File convReportFile = convReport.getReport();
+		   				Data convReportData = createReportData(convReportFile, convReport.getName(), allConvReportData);
+		   				addReturn(convReportData);
+		   				
+		   				TestReport[] trs = convReport.getTestReports();
+		   				addFilePasses(trs, convReportData);
+		   			}
+		   			
+		   			File graphReportFile = graphGen.getGraphReport();
+		   			Data graphReport = createReportData(graphReportFile, "Annotated Graph Report", null,
+		   					"file:text/nwb", DataProperty.NETWORK_TYPE);
+		   			addReturn(graphReport);
 		   			
 		   		} catch (Exception e) {
 		   			System.out.println("Why oh why am I catching type Exception?");
@@ -155,15 +184,59 @@ public class ConverterTesterAlgorithm implements Algorithm, AlgorithmProperty {
 		   			e.printStackTrace();
 		   		}
     }
-   }
-    
-    private BasicData createReportData(Object report, String label) {
-			BasicData reportData = new BasicData(report, "file:text/plain");
+    	
+        private void addReturn(Data report) {
+        	this.returnList.add(report);
+        }
+        
+        
+        private void addFilePasses(TestReport[] testReports, Data allReportData) {
+    			for (int ii = 0; ii < testReports.length; ii++) {
+    				TestReport tr = testReports[ii];
+    				File testReportFile = tr.getTestReport();
+    				System.out.println("In algorithm, file pass name is : " + tr.getName());
+    				System.out.println("In algorithm FILE name is : " + testReportFile.getName());
+    				Data testReportData = createReportData(testReportFile,
+    						tr.getName(), allReportData);
+    				addReturn(testReportData);
+    				
+    				FilePassReport[] sFilePassReports = tr.getSuccessfulFilePassReports();
+    				for (int kk = 0; kk < sFilePassReports.length; kk++) {
+    					FilePassReport fp = sFilePassReports[kk];
+    					File fpFile = fp.getFilePassReport();
+    					Data fpData = createReportData(fpFile, fp.getName(),
+    							testReportData);
+    					addReturn(fpData);
+    				}
+    				
+    				FilePassReport[] fFilePassReports = tr.getFailedFilePassReports();	
+    				for (int kk = 0; kk < fFilePassReports.length; kk++) {
+    					FilePassReport fp = fFilePassReports[kk];
+    					File fpFile = fp.getFilePassReport();
+    					Data fpData = createReportData(fpFile, fp.getName(),
+    							testReportData);
+    					addReturn(fpData);
+    				}
+    			}
+        }
+        
+        private Data createReportData(Object report, String label, Data parent, String format, String type) {
+        	Data reportData = new BasicData(report, format);
 			Dictionary metadata = reportData.getMetaData();
 			metadata.put(DataProperty.LABEL, label);
-			metadata.put(DataProperty.TYPE, DataProperty.TEXT_TYPE);		
+			metadata.put(DataProperty.TYPE, type);
+			if (parent != null) {
+				metadata.put(DataProperty.PARENT, parent);
+			}
 			return reportData;
-    }
+        }
+        
+        private Data createReportData(Object report, String label, Data parent) {
+        	return createReportData(report, label, parent, "file:text/plain", DataProperty.TEXT_TYPE);
+        }
+   }
+    
+  
     
     private ServiceReference[] getServiceReferences() {
 		  String filter = "(&("+ALGORITHM_TYPE+"="+TYPE_CONVERTER+"))";// +
@@ -179,5 +252,8 @@ public class ConverterTesterAlgorithm implements Algorithm, AlgorithmProperty {
 			  return null;
 		  }
 	}
+ 
+    
+
     
 }

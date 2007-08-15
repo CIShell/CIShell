@@ -15,6 +15,7 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.log.LogService;
 
 
 
@@ -23,12 +24,14 @@ public class ConverterLoaderImpl implements AlgorithmProperty, DataConversionSer
 public final static String SERVICE_LIST = "SERVICE_LIST"; 
 	private Map converterList;
     private BundleContext bContext;
+    private LogService log;
    private CIShellContext ciContext;
  
     
-    public ConverterLoaderImpl(BundleContext bContext, CIShellContext cContext){
+    public ConverterLoaderImpl(BundleContext bContext, CIShellContext cContext, LogService log){
     	this.ciContext = cContext;
     	this.bContext = bContext;
+    	this.log = log;
         converterList = new Hashtable();
         
      
@@ -51,20 +54,8 @@ public final static String SERVICE_LIST = "SERVICE_LIST";
 
             ServiceReference[] refs = bContext.getServiceReferences(
                     AlgorithmFactory.class.getName(), filter);
-          //  ConverterGraph g = new ConverterGraph(refs);
-           // System.out.println(g.printComparisonConverterPaths());
-           /* System.out.println(g.printComparisonConverterPaths() + "\n" +
-            		g.getComparePaths().length + "\n" + g.printTestConverterPaths() + "\n");
-            int length = 0;
-            for(int i = 0; i < g.getTestPaths().length; i++){
-            	for(int j = 0; j < g.getTestPaths()[i].length; j++){
-            		length++;
-            	}
-            }
-            System.out.println(length + " " + g.getTestPaths().length);
-            */
-           // System.out.println(g);
-            
+            ConverterGraph g = new ConverterGraph(refs, bContext, this.log);
+
             if (refs != null) {
 				for (int i = 0; i < refs.length; ++i) {
 					

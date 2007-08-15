@@ -1,5 +1,5 @@
 *Vertices
-541	"SLP Friend" ellipse 0.987 0.5
+541	"SLP Friend" 0.987 0.5 ellipse 
 542	"wg"
 543	"WG"
 544	"en"
@@ -11,7 +11,6 @@
 550	"ph"
 551	"SMO"
 552	"ci"
-//I thought I would add a comment here.
 553	"CI"
 554	"CIA"
 555	"CIR"

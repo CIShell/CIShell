@@ -34,7 +34,11 @@ public class TestFileKeeper {
 		loadTestFileNames(rootDir);
 	}
 
+	public void loadTestFileNames() {
+		loadTestFileNames(TestFileKeeper.DEFAULT_ROOT_DIR);
+	}
 	public void loadTestFileNames(String rootDir) {
+		
 		String line;
 		BufferedReader reader = null;
 
@@ -104,23 +108,23 @@ public class TestFileKeeper {
 		return testFileNames;
 	}
 	
-	private String[] getVisibleFileNames(String dirName) {
+	private String[] getVisibleFileNames(String dirName) {	
 		List results = new ArrayList();
 		
 		File dir = new File(dirName);
 		
 		File[] dirContents = dir.listFiles();
 		for (int ii = 0; ii < dirContents.length; ii++) {
-
-			if (!dirContents[ii].isHidden()) {
+			File fileInDir = dirContents[ii];
+			if (! fileInDir.isHidden()) {
 				try {
-					String testFilePath = dirContents[ii]
+					String testFilePath = fileInDir
 							.getCanonicalPath();
 					results.add(testFilePath);
 				} catch (IOException e) {
 					this.log.log(LogService.LOG_ERROR,
 							"Could not open " + "file "
-									+ dirContents[ii], e);
+									+ fileInDir, e);
 				}
 			}
 		}

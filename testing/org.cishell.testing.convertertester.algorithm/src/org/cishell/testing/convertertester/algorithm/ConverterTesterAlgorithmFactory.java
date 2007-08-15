@@ -32,6 +32,6 @@ public class ConverterTesterAlgorithmFactory implements AlgorithmFactory {
         return new ConverterTesterAlgorithm(data, parameters, context, bContext);
     }
     public MetaTypeProvider createParameters(Data[] data) {
-        return provider;
+        return null;
     }
 }

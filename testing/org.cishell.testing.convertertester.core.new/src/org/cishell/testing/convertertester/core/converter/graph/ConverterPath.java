@@ -7,18 +7,25 @@ import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.algorithm.AlgorithmProperty;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.log.LogService;
 
 public class ConverterPath implements AlgorithmProperty {
-	private String in_data;
-	private String out_data = null;
-	private ArrayList path;
+	
 	private BundleContext bContext;
+	private LogService log;
+	private String in_data = null;
+	private String out_data = null;
 	
-	boolean algPathCached = false;
-	ArrayList algPath;
+	private ArrayList path;
 	
-	public ConverterPath(BundleContext bContext){
+	private boolean algPathCached = false;
+	private ArrayList algPath;
+	
+	
+	public ConverterPath(BundleContext bContext, LogService log){
 		this.bContext = bContext;
+		this.log = log;
+		
 		path = new ArrayList();
 	}
 	
@@ -67,6 +74,17 @@ public class ConverterPath implements AlgorithmProperty {
 	public String getOutData(){
 
 		return this.out_data;
+	}
+	
+	public String getAcceptedFileFormat() {
+		if (size() > 0) {
+			return (String) getRef(0).getProperty(AlgorithmProperty.OUT_DATA);
+		} else {
+			this.log.log(LogService.LOG_ERROR, "Converter Path cannot " +
+					"determine accepted file format if there are no " + 
+					"converters inside it. Returning null String.");
+			return "";
+		}
 	}
 	
 	public List getPath(){
@@ -138,7 +156,7 @@ public class ConverterPath implements AlgorithmProperty {
 		
 		List thisConvPathCopy = new ArrayList(thisConvPath);
 		thisConvPathCopy.addAll(otherConvPath);
-		ConverterPath combinedPath = new ConverterPath(this.bContext);
+		ConverterPath combinedPath = new ConverterPath(this.bContext, this.log);
 		
 		List combinedConvPath = thisConvPathCopy;
 		for (int ii = 0; ii < combinedConvPath.size(); ii++) {
@@ -153,6 +171,10 @@ public class ConverterPath implements AlgorithmProperty {
 	public int size() {
 
 		return this.path.size();
+	}
+	
+	public String getConverterName(int index) {
+		return (String) getRef(index).getProperty("service.pid");
 	}
 
 	
@@ -173,5 +195,4 @@ public class ConverterPath implements AlgorithmProperty {
 		
 		this.algPathCached = false;
 	}
-
 }

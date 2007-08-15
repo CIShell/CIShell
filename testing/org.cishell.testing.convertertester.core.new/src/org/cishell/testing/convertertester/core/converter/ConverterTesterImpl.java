@@ -117,7 +117,7 @@ public class ConverterTesterImpl implements Converter, AlgorithmFactory, Algorit
                 
                 if (factory != null) {
                     Algorithm alg = factory.createAlgorithm(dm, parameters, context);
-                    System.out.println("Entering: " + refs[i].getProperty(Constants.SERVICE_PID)+ "-->");
+//                    System.out.println("Entering: " + refs[i].getProperty(Constants.SERVICE_PID)+ "-->");
                     dm = alg.execute();
                     if(dm == null){
                     	throw new RuntimeException("Error after " + refs[i].getProperty(Constants.SERVICE_PID));

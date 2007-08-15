@@ -6,13 +6,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.log.LogService;
 
 public class ConverterGraph {
 	prefuse.data.Graph converterGraph;
@@ -21,11 +21,13 @@ public class ConverterGraph {
 	Map fileExtensionCompareConverters;
 	ServiceReference[] converters;
 	BundleContext bContext;
+	private LogService log;
 	private static final String testOutData = "prefuse.data.Graph";
 	
-	public ConverterGraph(ServiceReference[] converters, BundleContext bContext){
+	public ConverterGraph(ServiceReference[] converters, BundleContext bContext, LogService log){
 		this.converters = converters;
 		this.bContext = bContext;
+		this.log = log;
 		inDataToAlgorithm = new HashMap();//<String, ArrayList<ServiceReference>>();
 		fileExtensionTestConverters = new ConcurrentHashMap();//<String, ArrayList<ConverterPath>>();
 		fileExtensionCompareConverters = new ConcurrentHashMap();//<String, ConverterPath>();
@@ -59,7 +61,7 @@ public class ConverterGraph {
 			if(s.startsWith("file-ext")){
 				
 				
-				ConverterPath test = new ConverterPath(this.bContext);
+				ConverterPath test = new ConverterPath(this.bContext, this.log);
 			
 				test.setInData(s);
 			
@@ -93,7 +95,6 @@ public class ConverterGraph {
 		String firstOutData, lastInData;
 		firstOutData = ((ServiceReference)cp.getPath().get(0)).getProperty("out_data").toString();
 		lastInData = ((ServiceReference)cp.getPath().get(cp.getPath().size()-1)).getProperty("in_data").toString();
-		//System.out.println(firstOutData + " " + lastInData);
 		if(firstOutData.equals(lastInData)){
 			addTestPath(cp);
 		}
@@ -255,7 +256,7 @@ public class ConverterGraph {
 		return this.fileExtensionTestConverters;
 	}
 	
-	public File asNWB(){
+	public File asNWB() {
 		File f = getTempFile();
 		Map nodes = assembleNodesSet();
 		TreeSet output = assembleEdges(nodes);

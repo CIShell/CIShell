@@ -18,6 +18,7 @@ import org.cishell.testing.convertertester.core.service.ConfigurationFileParser;
 import org.cishell.testing.convertertester.core.tester.graphcomparison.DefaultGraphComparer;
 import org.cishell.testing.convertertester.core.tester.graphcomparison.GraphComparer;
 import org.osgi.framework.BundleContext;
+import org.osgi.service.log.LogService;
 
 import prefuse.data.Graph;
 
@@ -27,6 +28,7 @@ public class ConverterTester {
 	private ConverterLoaderImpl cli;
 	private Converter comparisonConverters;
 	private GraphComparer dgc;
+	private LogService log;
 	//private Map<String, Exception> fileErrors;
 	private static final String tempDir = "converterTesterTemp";
 	private File temporaryStorage;
@@ -34,9 +36,10 @@ public class ConverterTester {
 	//string, comparisonresult
 	private Map results;
 	
-	public ConverterTester(BundleContext b, CIShellContext c){
+	public ConverterTester(BundleContext b, CIShellContext c, LogService log){
 		this.cContext = c;
-		cli = new ConverterLoaderImpl(b, this.cContext);
+		this.log = log;
+		cli = new ConverterLoaderImpl(b, this.cContext, this.log);
 		cfp = new ConfigurationFileParser();
 	}
 	
@@ -50,7 +53,7 @@ public class ConverterTester {
 
 	public ConverterTester(BundleContext b, CIShellContext c, File configFile) throws Exception{
 		cContext = c;
-		cli = new ConverterLoaderImpl(b, cContext);
+		cli = new ConverterLoaderImpl(b, cContext, this.log);
 		cfp = new ConfigurationFileParser(configFile);
 		testConverters = cli.getConverter(cfp.getTestConverters());
 		comparisonConverters = cli.getConverter(cfp.getComparisonConverters());
@@ -60,7 +63,7 @@ public class ConverterTester {
 
 	public ConverterTester(BundleContext b, CIShellContext c, String configFileName) throws Exception {
 		cContext = c;
-		cli = new ConverterLoaderImpl(b,cContext);
+		cli = new ConverterLoaderImpl(b,cContext, this.log);
 		cfp = new ConfigurationFileParser(new File(configFileName));
 		testConverters = cli.getConverter(cfp.getTestConverters());
 		comparisonConverters = cli.getConverter(cfp.getComparisonConverters());

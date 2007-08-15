@@ -7,15 +7,17 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.cishell.framework.algorithm.AlgorithmFactory;
-import org.cishell.testing.convertertester.core.tester2.TestResult;
-import org.cishell.testing.convertertester.core.tester2.filepassresults.ComparePhaseFailure;
-import org.cishell.testing.convertertester.core.tester2.filepassresults.ConvertPhaseFailure;
-import org.cishell.testing.convertertester.core.tester2.filepassresults.FilePassResult;
-import org.cishell.testing.convertertester.core.tester2.filepassresults.FilePassSuccess;
-import org.cishell.testing.convertertester.core.tester2.reportgen.results.ConvBasedResult;
-import org.cishell.testing.convertertester.core.tester2.reportgen.results.ConvFilePassFailure;
-import org.cishell.testing.convertertester.core.tester2.reportgen.results.ConvFilePassSuccess;
+import org.cishell.testing.convertertester.core.converter.graph.ConverterPath;
+import org.cishell.testing.convertertester.core.tester2.reportgen.results.AllTestsResult;
+import org.cishell.testing.convertertester.core.tester2.reportgen.results.ConvResult;
+import org.cishell.testing.convertertester.core.tester2.reportgen.results.FilePassResult;
+import org.cishell.testing.convertertester.core.tester2.reportgen.results.TestResult;
+import org.cishell.testing.convertertester.core.tester2.reportgen.results.converter.ConvFilePassFailure;
+import org.cishell.testing.convertertester.core.tester2.reportgen.results.converter.ConvFilePassSuccess;
+import org.cishell.testing.convertertester.core.tester2.reportgen.results.filepass.ComparePhaseFailure;
+import org.cishell.testing.convertertester.core.tester2.reportgen.results.filepass.ConvertPhaseFailure;
+import org.cishell.testing.convertertester.core.tester2.reportgen.results.filepass.FilePassSuccess;
+import org.osgi.framework.ServiceReference;
 
 /**
  * 
@@ -23,7 +25,7 @@ import org.cishell.testing.convertertester.core.tester2.reportgen.results.ConvFi
  *
  * 
  */
-public class ConvResultGenerator {
+public class ConvResultMaker {
 	
 	/**
 	 * Takes an array of ConverterTester results that are organized by test, 
@@ -34,15 +36,45 @@ public class ConvResultGenerator {
 	 * @param trs The results of testing the converters, organized by test
 	 * @return the results of testing the converters, organized by converter
 	 */
-	public ConvBasedResult[] generate(TestResult[] trs) {
+	public ConvResult[] generate(AllTestsResult atr) {
+		TestResult[] trs = atr.getTestResults();
+		
 		//maps convert testers to their test result data.
 		Map resultHolder = new HashMap();
 		 
-		resultHolder =  markTrusted(trs, resultHolder);
+		resultHolder = addTests(trs, resultHolder);
+		resultHolder = markTrusted(trs, resultHolder);
 		resultHolder = createConverterResults(trs, resultHolder);
 		 
-		ConvBasedResult[] results = extractResults(resultHolder);
+		ConvResult[] results = extractResults(resultHolder);
 		return results;
+	}
+	
+	/**
+	 * 
+	 * For each test result, go through each of the converters involved
+	 * in the tests, letting each converter know which tests they are
+	 * involved in.
+	 * 
+	 * @param trs the test results
+	 * @param rh the result holder, without converters knowing which tests
+	 * they are used in
+	 * @return the result holder, with converters that know which tests
+	 * they are used in
+	 */
+	private Map addTests(TestResult[] trs, Map rh) {
+		for (int ii = 0; ii < trs.length; ii++) {
+			TestResult tr = trs[ii];
+			
+			ConverterPath convPath = tr.getAllConverters();
+			
+			for (int jj = 0; jj < convPath.size(); jj++) {
+				ConvResult ctr = getResult(rh, convPath.getRef(jj));
+				ctr.addTest(tr);
+			}
+		}
+		
+		return rh;
 	}
 	
 	/**
@@ -74,10 +106,9 @@ public class ConvResultGenerator {
 			
 			if (trusted && fprs.length > 0) {
 				//mark all converters involved as trusted.
-				FilePassResult anyFpr = fprs[0];
-				AlgorithmFactory[] allConvs = anyFpr.getAllConverters();
-				for (int kk = 0; kk < allConvs.length; kk++) {
-					ConvBasedResult ctr = getResult(rh, allConvs[kk]);
+				ConverterPath allConvs = tr.getAllConverters();
+				for (int kk = 0; kk < allConvs.size(); kk++) {
+					ConvResult ctr = getResult(rh, allConvs.getRef(kk));
 					ctr.setTrusted(true);
 				}
 			}
@@ -126,54 +157,62 @@ public class ConvResultGenerator {
      * results, which now holds all the trust and success/failure info
 	 * @return the converter results
 	 */
-	private ConvBasedResult[] extractResults(Map rh) {
+	private ConvResult[] extractResults(Map rh) {
 		Collection values = rh.values();
-		ConvBasedResult[] results = 
-			(ConvBasedResult[]) values.toArray(new ConvBasedResult[0]);
+		ConvResult[] results = 
+			(ConvResult[]) values.toArray(new ConvResult[0]);
 		return results;
 	}
 	
 	private void createPassResult(FilePassSuccess fprSuccess,  Map rh) {
-		AlgorithmFactory[] allConvs = fprSuccess.getAllConverters();
-		for (int kk = 0; kk < allConvs.length; kk++) {
-			ConvBasedResult ctr = getResult(rh,allConvs[kk]);
-			ctr.addPass(new ConvFilePassSuccess(fprSuccess));
+		ConverterPath allConvs = 
+			fprSuccess.getParent().getAllConverters();
+		
+		for (int kk = 0; kk < allConvs.size(); kk++) {
+			ConvResult ctr = getResult(rh,allConvs.getRef(kk));
+			ctr.addPass(fprSuccess);
 		}
 	}
 	
 	private void createPassResult(ConvertPhaseFailure fprFailure,  Map rh) {
-		AlgorithmFactory[] testConvAlgs = fprFailure.getTestConverters();
-		AlgorithmFactory[] compareConvAlgs = fprFailure
-				.getComparisonConverters();
+		TestResult parent = fprFailure.getParent();
 		
-		AlgorithmFactory failedConv = fprFailure.getFailedConverter();
+		ConverterPath testConvs = parent.getTestConverters();
+		
+		ConverterPath compareConvs = parent.getComparisonConverters();
+		
+		String failedConvName = fprFailure.getFailedConverter();
 		
 		List possiblyResponsible = new ArrayList();		
 		List involvedButNotResponsible = new ArrayList();
 		
-		for (int kk = 0; kk < testConvAlgs.length; kk++) {
-			AlgorithmFactory testConvAlg = testConvAlgs[kk];
+		for (int kk = 0; kk < testConvs.size(); kk++) {
+			ServiceReference testConvRef = testConvs.getRef(kk);
 			
 			
-			ConvBasedResult ctr = getResult(rh, testConvAlg);
+			ConvResult ctr = getResult(rh, testConvRef);
+			
 			involvedButNotResponsible.add(ctr);
 			if (! ctr.isTrusted()) {
 				possiblyResponsible.add(ctr);
 			
 			}
 			
+			String currentConvName = (String) testConvRef.getProperty("service.pid");
+			
 			if (fprFailure.getPhase().equals(ConvertPhaseFailure.TEST_PHASE) &&
-					failedConv == testConvAlg) {
+					failedConvName.equals(currentConvName)) {
 				//reached where the converters broke
+				System.out.println("Reached the end in test phase");
 			 break;	
 			}
 		}
 		
 		if (fprFailure.getPhase().equals(ConvertPhaseFailure.COMPARISON_PHASE)) {
-			for (int kk = 0; kk < compareConvAlgs.length; kk++) {
-				AlgorithmFactory compareConvAlg = testConvAlgs[kk];
+			for (int kk = 0; kk < compareConvs.size(); kk++) {
+				ServiceReference compareConvRef = testConvs.getRef(kk);
 				
-				ConvBasedResult ctr = getResult(rh, compareConvAlg);
+				ConvResult ctr = getResult(rh, compareConvRef);
 				if (ctr.isTrusted()) {
 					involvedButNotResponsible.add(ctr);
 					
@@ -181,8 +220,10 @@ public class ConvResultGenerator {
 					possiblyResponsible.add(ctr);
 				}
 				
-				if (failedConv == compareConvAlg) {
+				String currentConvName = (String) compareConvRef.getProperty("service.pid");
+				if (failedConvName.equals(currentConvName)) {
 					//reached where the converters broke
+					System.out.println("Reached the end in compare phase");
 				 break;	
 				}
 			}
@@ -192,46 +233,60 @@ public class ConvResultGenerator {
 		
 		Iterator iter = possiblyResponsible.iterator();
 		while (iter.hasNext()) {
-			ConvBasedResult ctr = (ConvBasedResult) iter.next();
-			ctr.addPass(new ConvFilePassFailure(fprFailure, chanceEachResponsible));
+			ConvResult ctr = (ConvResult) iter.next();
+			ctr.addPass(fprFailure, chanceEachResponsible);
 		}
 		
 		Iterator iter2 = involvedButNotResponsible.iterator();
 		while (iter.hasNext()) {
-			ConvBasedResult ctr = (ConvBasedResult) iter2.next();
+			ConvResult ctr = (ConvResult) iter2.next();
 			//TODO: May want to give these a slight chance of being responsible.
-			ctr.addPass(new ConvFilePassFailure(fprFailure, 0.0f));
+			ctr.addPass(fprFailure, 0.0f);
 		}
 		
 	}
 	
 	private void createPassResult(ComparePhaseFailure fprFailure,  Map rh) {
-		AlgorithmFactory[] allConvs = fprFailure
-		.getTestConverters();
-
+		ConverterPath allConvs = fprFailure
+		.getParent().getTestConverters();
 		
-		//all are possibly responsible.
+		List trustedConvs    = new ArrayList();
+		List nonTrustedConvs = new ArrayList();
+		for (int ii = 0; ii < allConvs.size(); ii++) {
+			ConvResult ctr = getResult(rh, allConvs.getRef(ii));
+			
+			if (! ctr.isTrusted()) {
+				nonTrustedConvs.add(ctr);
+			} else {
+				trustedConvs.add(ctr);
+			}
+		}
 		
-		float chanceEachResponsible = 1.0f / allConvs.length;
-		for (int kk = 0; kk < allConvs.length; kk++) {
-			ConvBasedResult ctr = getResult(rh, allConvs[kk]);
-			ctr.addPass(new ConvFilePassFailure(fprFailure, chanceEachResponsible));
+		float chanceEachResponsible = 1.0f / nonTrustedConvs.size();
+		for (int ii = 0; ii < nonTrustedConvs.size(); ii++) {
+			ConvResult ctr = (ConvResult) nonTrustedConvs.get(ii);
+				ctr.addPass(fprFailure, chanceEachResponsible);
+		}
+		
+		for (int ii = 0; ii < trustedConvs.size(); ii++) {
+			ConvResult ctr = (ConvResult) trustedConvs.get(ii);
+				ctr.addPass(fprFailure, 0.0f);
 		}
 	}
 	
-	private ConvBasedResult getResult(Map rh, AlgorithmFactory conv) {
-		ConvBasedResult newResult;
+	private ConvResult getResult(Map rh, ServiceReference conv) {
+		ConvResult newResult;
 		
 		Object currentTestResult = rh.get(conv);
 		
 		//check if we have recorded a converter result for this converter yet.
 		if (currentTestResult == null) {
 			//we have not yet created a converter result. Make a new one.
-			newResult = new ConvBasedResult(conv);
+			newResult = new ConvResult(conv);
 			rh.put(conv, newResult);
 		} else {
 			//We have created a converter result. Return it.
-			newResult = (ConvBasedResult) currentTestResult;
+			newResult = (ConvResult) currentTestResult;
 		}
 		
 		return newResult;

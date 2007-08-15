@@ -2,33 +2,31 @@ package org.cishell.testing.convertertester.core.tester2;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.cishell.framework.CIShellContext;
-import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.algorithm.AlgorithmProperty;
 import org.cishell.framework.data.BasicData;
 import org.cishell.framework.data.Data;
+import org.cishell.framework.data.DataProperty;
 import org.cishell.testing.convertertester.core.converter.graph.ConverterGraph;
 import org.cishell.testing.convertertester.core.converter.graph.ConverterPath;
-import org.cishell.testing.convertertester.core.tester2.filepassresults.FilePassResult;
 import org.cishell.testing.convertertester.core.tester2.graphcomparison.IdsNotPreservedComparer;
 import org.cishell.testing.convertertester.core.tester2.graphcomparison.IdsPreservedComparer;
 import org.cishell.testing.convertertester.core.tester2.graphcomparison.LossyComparer;
 import org.cishell.testing.convertertester.core.tester2.graphcomparison.NewGraphComparer;
 import org.cishell.testing.convertertester.core.tester2.reportgen.ReportGenerator;
+import org.cishell.testing.convertertester.core.tester2.reportgen.results.AllTestsResult;
+import org.cishell.testing.convertertester.core.tester2.reportgen.results.FilePassResult;
+import org.cishell.testing.convertertester.core.tester2.reportgen.results.TestResult;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogService;
 
 /**
- * Test Suites are arrays of test paths, where each test path starts
- * from the same file format.
- * 
- * Compare Paths are paths of converters that convert from the original file
- * format to the in-memory comparison format. For each test suite there
- * is a single corresponding compare path.
- * 
  * @author mwlinnem
  *
  */
@@ -39,7 +37,6 @@ public class ConverterTester2 implements AlgorithmProperty {
 	private TestFileKeeper testFileKeeper;
 	private TestRunner testRunner;
 	
-	
 	public ConverterTester2(LogService log) {
 		this.log = log;
 		this.testFileKeeper = 
@@ -47,71 +44,80 @@ public class ConverterTester2 implements AlgorithmProperty {
 		this.testRunner = new DefaultTestRunner(log);
 	}
 	
-	
 	/**
 	 * Tests the provided converters, and passes the results of those tests to
 	 * the report generators. Report Generators are side-effected, which takes
 	 * the place of a return value.
-	 * 
-	 * @param converterRefs the converters to be tested
+	 * @param reportGenerators process the test results.
 	 * @param cContext the CIShell Context
 	 * @param bContext the Bundle Context
-	 * @param log The log written to should an error occur (other than the 
-	 * errors resulting from the converters, which are included in the test
-	 * results)
-	 * @param reportGenerators process the test results.
 	 */
-	public void execute(ServiceReference[] converterRefs,
+	public void execute(
+			ConverterGraph converterGraph,
+			ReportGenerator[] reportGenerators,
 			CIShellContext cContext,
-			BundleContext bContext,
-			LogService log, 
-			ReportGenerator[] reportGenerators) {
+			BundleContext bContext) {
 		
-		this.log = log;
+		//run the tests
 		
-		//generate test paths
+		TestResult[] rawResults = 
+			runAllTests(converterGraph, cContext, bContext);
+		AllTestsResult allTestsResult = new AllTestsResult(rawResults);
 		
-		ConverterGraph converterGraph = new ConverterGraph(converterRefs);
-		
-		ConverterPath[][] testSuites = converterGraph.getTestPaths();
-		ConverterPath[] comparePaths = converterGraph.getComparePaths();
-			
-		//run tests on test paths
-		
-		TestResult[] results = runTests(testSuites, comparePaths, 
-				cContext, bContext);
-		
-		//generate reports based on test results
+		//feed test results to the report generators
 		
 		for (int ii = 0; ii < reportGenerators.length; ii++) {
 			ReportGenerator reportGenerator = reportGenerators[ii];
 			
-			reportGenerator.generateReport(results);
+			reportGenerator.generateReport(allTestsResult);
 		}
 	}
 	
-	
-	public TestResult[] runTests(ConverterPath[][] testSuites,
-			ConverterPath[] comparePaths, CIShellContext cContext,
-			BundleContext bContext) {
+	public TestResult[] runAllTests(ConverterGraph convGraph,
+			CIShellContext cContext, BundleContext bContext) {
+		
+		
+		
+		Map fileFormatToTestConvs = convGraph.getTestMap();
+		Map fileFormatToCompareConvs = convGraph.getCompareMap();
 		
 		List testResults = new ArrayList();
 		
-		for (int ii = 0; ii < testSuites.length; ii++) {
-			ConverterPath[] testSuite = testSuites[ii];
-			ConverterPath testSuiteComparePath = comparePaths[ii];
+		Set fileFormats = fileFormatToTestConvs.keySet();
+		
+		/*
+		 * for each file format, get the corresponding test converter paths
+		 * and comparison converter path.
+		 */
+		
+		Iterator iter = fileFormats.iterator();
+		while(iter.hasNext()) {
+			String fileFormat = (String) iter.next();
 			
-			for (int jj = 0; jj < testSuite.length; jj++) {
-				ConverterPath testPath = testSuite[jj];
+			ArrayList testConvList = 
+				(ArrayList) fileFormatToTestConvs.get(fileFormat);
+			
+			ConverterPath[] testConvs  =
+				(ConverterPath[]) testConvList.toArray(new ConverterPath[0]);
+			
+			ConverterPath compareConv = 
+				(ConverterPath) fileFormatToCompareConvs.get(fileFormat); 
+			
+			/*
+			 * For each test converter, use that test converter and
+			 * the corresponding comparison converter to run a test.
+			 */
+			
+			for (int kk = 0; kk < testConvs.length; kk++) {
+				ConverterPath testConv = testConvs[kk];
 				
-				TestResult testResult = runATest(testPath,
-						testSuiteComparePath, cContext, bContext);
+				TestResult testResult = 
+					runATest(testConv, compareConv, cContext, bContext);
 				
 				if (testResult != null) {
 					testResults.add(testResult);
 				}
 			}
-			
 		}
 		
 		return (TestResult[]) testResults.toArray(new TestResult[0]);
@@ -119,57 +125,34 @@ public class ConverterTester2 implements AlgorithmProperty {
 	
 	
 	private TestResult runATest(ConverterPath testConvs,
-			ConverterPath comparisonConvs, CIShellContext cContext,
+			ConverterPath compareConvs, CIShellContext cContext,
 			BundleContext bContext) {
 		
-		ServiceReference[] testConvRefs = testConvs.getPathAsArray();
-		ServiceReference[] compareConvRefs = comparisonConvs.getPathAsArray();
+		//get test file data corresponding to the format these converters accept.
 		
-		AlgorithmFactory[] testConvAlgs = extractAlgorithms(
-				testConvRefs, bContext);
-		AlgorithmFactory[] compareConvAlgs = extractAlgorithms(
-				compareConvRefs, bContext);
-		
-		if (testConvRefs.length <= 0) {
-			System.out.println("Must have at least one test converter..");
-			return null;
-		}	
-		
-		//get test files corresponding to the format these converters accept.
-		
-		String fileFormat = 
-			(String) testConvRefs[0].getProperty(AlgorithmProperty.OUT_DATA);
+		String fileFormat = testConvs.getAcceptedFileFormat();
 		String[] testFilePaths = testFileKeeper.getTestFilePaths(fileFormat);
-		Data[][] fileData = wrapInData(testFilePaths, fileFormat);
+		Data[][] testFileData = wrapInData(testFilePaths, fileFormat);
 		
 		//determine how we will compare the graphs
 		
-		boolean areLossy = areLossy(testConvRefs) && areLossy(compareConvRefs);
-		boolean preserveIds = false; //TODO: determine this somehow
-		NewGraphComparer comparer = getComparer(areLossy, preserveIds);
+		boolean isLossy = testConvs.isLossy() && compareConvs.isLossy();
+		boolean preserveIDs = testConvs.preservesIDs() &&
+			compareConvs.preservesIDs();
+		
+		NewGraphComparer comparer = getComparer(isLossy, preserveIDs);
         
 		//pack all the data relevant to the test into a single object.
-        TestConfigData testData = new TestConfigData(comparer, testConvAlgs,
-        		compareConvAlgs, cContext, fileData);
+        TestConfigData testBasicData = new TestConfigData(comparer, testConvs,
+        		compareConvs, cContext, testFileData);
         
         //run the test
-        FilePassResult[] results = this.testRunner.runTest(testData);     
+        FilePassResult[] results = this.testRunner.runTest(testBasicData);     
         
         //return the results of the test
-        return new TestResult(results);    
+        return new TestResult(results, testConvs, compareConvs);    
 	}
-	
-	
-	private AlgorithmFactory[] extractAlgorithms(ServiceReference[] convRefs,
-			BundleContext bContext) {
-		AlgorithmFactory[] results = new AlgorithmFactory[convRefs.length];
-		for (int ii = 0; ii < convRefs.length; ii++) {
-			results[ii] = (AlgorithmFactory) bContext.getService(convRefs[ii]);
-		}
-		return results;
-	}
-	
-	
+		
 	private Data[][] wrapInData(String[] testFilePaths, String format) {
 		
 		Data[][] results = new Data[testFilePaths.length][1];
@@ -178,25 +161,13 @@ public class ConverterTester2 implements AlgorithmProperty {
 			
 			results[ii] = 
 				new Data[] {new BasicData(new File(filePath), format)};
+			
+			Dictionary metadata = results[ii][0].getMetaData();
+			metadata.put(DataProperty.LABEL, filePath);
 		}
 		
 		return results;
 	}
-	
-	
-	private boolean areLossy(ServiceReference[] refs) {
-		
-		String lossiness = LOSSLESS;
-        for (int i=0; i < refs.length; i++) {
-            if (LOSSY.equals(refs[i].getProperty(CONVERSION))) {
-                lossiness = LOSSY;
-            }
-        } 
-        
-        boolean result = lossiness.equals(LOSSY);
-        return result;
-	}
-	
 	
 	private NewGraphComparer getComparer(boolean areLossy,
 			boolean idsPreserved) {
@@ -209,6 +180,5 @@ public class ConverterTester2 implements AlgorithmProperty {
 			return new IdsPreservedComparer();
 		}
 	}
-	
 	
 }
