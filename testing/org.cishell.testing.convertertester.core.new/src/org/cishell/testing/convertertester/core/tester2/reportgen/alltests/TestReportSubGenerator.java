@@ -43,11 +43,11 @@ public class TestReportSubGenerator {
 			float percentSuccessful = tr.getNumFilePassSuccesses() / tr.getNumFilePasses();
 			
 //			name them all
-			FilePassResult[] allFPs = tr.getFilePassResults();
-			for (int ii = 0; ii < allFPs.length; ii++) {
-				FilePassResult fp = allFPs[ii];			
-				fp.setName("Pass " + ii + " of " + tr.getName() + " . ");
-			}
+//			FilePassResult[] allFPs = tr.getFilePassResults();
+//			for (int ii = 0; ii < allFPs.length; ii++) {
+//				FilePassResult fp = allFPs[ii];			
+//				fp.setName("Pass " + ii + " of " + tr.getName() + " . ");
+//			}
 			
 			report.println("");
 			report.println("---------------");
@@ -77,6 +77,7 @@ public class TestReportSubGenerator {
 			report.println("Successful File Passes...");
 			for (int ii = 0; ii < successfulFPs.length; ii++) {
 				FilePassResult successfulFP = successfulFPs[ii];
+				namePass("Successful", successfulFP, tr, ii);
 				report.println("  " + successfulFP.getName() + successfulFP.getShortSummary());
 			}
 			report.println("");
@@ -85,6 +86,7 @@ public class TestReportSubGenerator {
 			report.println("Failed File Passes...");
 			for (int ii = 0; ii < failedFPs.length; ii++) {
 				FilePassResult failedFP = failedFPs[ii];
+				namePass("Failed", failedFP, tr, ii);
 				report.println("  " + failedFP.getName() + failedFP.getShortSummary());
 			}
 			report.println("");
@@ -138,5 +140,10 @@ public class TestReportSubGenerator {
 			System.out.println("Unable to close a test report stream");
 			e2.printStackTrace();
 		}
+	}
+	
+	private void namePass(String prefix, FilePassResult fp, TestResult parent,
+			int index) {
+		fp.setName(prefix + " Pass " + index + " of " + fp);
 	}
 }
