@@ -106,7 +106,7 @@ public class ConvResultMaker {
 			
 			if (trusted && fprs.length > 0) {
 				//mark all converters involved as trusted.
-				ConverterPath allConvs = tr.getAllConverters();
+				ConverterPath allConvs = tr.getTestConverters();
 				for (int kk = 0; kk < allConvs.size(); kk++) {
 					ConvResult ctr = getResult(rh, allConvs.getRef(kk));
 					ctr.setTrusted(true);

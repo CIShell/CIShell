@@ -17,10 +17,12 @@ import org.cishell.testing.convertertester.core.tester2.reportgen.ReportGenerato
 import org.cishell.testing.convertertester.core.tester2.reportgen.allconvs.AllConvsReportGenerator;
 import org.cishell.testing.convertertester.core.tester2.reportgen.alltests.AllTestsReportGenerator;
 import org.cishell.testing.convertertester.core.tester2.reportgen.convgraph.GraphReportGenerator;
+import org.cishell.testing.convertertester.core.tester2.reportgen.readme.ReadMeReportGenerator;
 import org.cishell.testing.convertertester.core.tester2.reportgen.reports.AllConvsReport;
 import org.cishell.testing.convertertester.core.tester2.reportgen.reports.AllTestsReport;
 import org.cishell.testing.convertertester.core.tester2.reportgen.reports.ConvReport;
 import org.cishell.testing.convertertester.core.tester2.reportgen.reports.FilePassReport;
+import org.cishell.testing.convertertester.core.tester2.reportgen.reports.ReadMeReport;
 import org.cishell.testing.convertertester.core.tester2.reportgen.reports.TestReport;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -142,9 +144,18 @@ public class ConverterTesterAlgorithm implements Algorithm, AlgorithmProperty {
 		   			AllTestsReportGenerator allGen     = new AllTestsReportGenerator(this.log);
 		   			AllConvsReportGenerator allConvGen = new AllConvsReportGenerator(this.log);
 		   			GraphReportGenerator    graphGen   = new GraphReportGenerator(nwbGraph, this.log);
+		   			ReadMeReportGenerator   readmeGen  = new ReadMeReportGenerator();
 		   			
-		   			ct.execute(converterGraph, new ReportGenerator[] {allGen, allConvGen, graphGen}, cContext, bContext);
+		   			ct.execute(converterGraph, new ReportGenerator[] {allGen, allConvGen, graphGen, readmeGen}, cContext, bContext);
 		   			
+		   			//		   		readme report
+		   			ReadMeReport readmeReport = readmeGen.getReadMe();
+		   			File readmeFile = readmeReport.getReportFile();
+		   			Data readMeData = createReportData(readmeFile,
+		   					readmeReport.getName(), null);
+		   			addReturn(readMeData);
+		   			
+		   			//all tests report
 		   			AllTestsReport allReport = allGen.getAllTestsReport();
 		   			File allReportFile = allReport.getAllTestsReport();
 		   			Data allReportData = createReportData(allReportFile,
@@ -183,6 +194,8 @@ public class ConverterTesterAlgorithm implements Algorithm, AlgorithmProperty {
 		   			Data graphReport = createReportData(graphReportFile, "Annotated Graph Report", null,
 		   					"file:text/nwb", DataProperty.NETWORK_TYPE);
 		   			addReturn(graphReport);
+		   			
+		   			
 		   			
 		   		} catch (Exception e) {
 		   			System.out.println("Why oh why am I catching type Exception?");
