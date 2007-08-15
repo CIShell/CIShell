@@ -14,7 +14,7 @@ public class ReadMeReportGenerator implements ReportGenerator {
 	
 	public void generateReport(AllTestsResult atr) {
 		//TODO: TOTAL HACK, CHANCE AS SOON AS POSSIBLE
-		String readmePath = (System.getProperty("user.home") + "/" + 
+		String readmePath = (System.getProperty("user.home") + File.separator + 
 				TestFileKeeper.DEFAULT_ROOT_DIR + "ReportREADME.txt");
 		System.out.println("ReadMe path is: " + readmePath);
 		File readmeFile = new File(readmePath);

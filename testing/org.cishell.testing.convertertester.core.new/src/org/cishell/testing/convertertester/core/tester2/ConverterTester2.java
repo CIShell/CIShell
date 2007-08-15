@@ -38,6 +38,10 @@ public class ConverterTester2 implements AlgorithmProperty {
 	private TestRunner testRunner;
 	
 	public ConverterTester2(LogService log) {
+		
+		//TODO: Make this not a huge hack
+		new File(ReportGenerator.TEMP_DIR).mkdir();
+		
 		this.log = log;
 		this.testFileKeeper = 
 			new TestFileKeeper(TestFileKeeper.DEFAULT_ROOT_DIR, log);

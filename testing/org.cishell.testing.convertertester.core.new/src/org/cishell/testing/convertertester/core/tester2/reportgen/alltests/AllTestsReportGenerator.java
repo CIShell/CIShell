@@ -27,9 +27,6 @@ public class AllTestsReportGenerator implements ReportGenerator {
 	public AllTestsReportGenerator(LogService log) {
 		this.log = log;
 		this.testResultSubGen = new TestReportSubGenerator();
-		
-		//TODO: Make this not a huge hack
-		new File(TEMP_DIR).mkdir();
 	}
 
 	public void generateReport(AllTestsResult atr) {

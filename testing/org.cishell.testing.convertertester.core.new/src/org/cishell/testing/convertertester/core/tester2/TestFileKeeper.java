@@ -52,7 +52,7 @@ public class TestFileKeeper {
 		try {
 			//open config file that maps formats to test file directories
 
-			String filePath = System.getProperty("user.home") + "/" + rootDir
+			String filePath = System.getProperty("user.home") + File.separator + rootDir
 					+ CONF_FILE_NAME;
 			reader = new BufferedReader(new FileReader(filePath));
 
