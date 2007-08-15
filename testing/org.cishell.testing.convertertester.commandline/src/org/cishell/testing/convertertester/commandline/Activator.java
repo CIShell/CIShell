@@ -9,8 +9,6 @@ import org.cishell.framework.LocalCIShellContext;
 import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.algorithm.AlgorithmProperty;
 import org.cishell.testing.convertertester.core.tester2.ConverterTester2;
-import org.cishell.testing.convertertester.core.tester2.reportgen.OverviewReportGenerator;
-import org.cishell.testing.convertertester.core.tester2.reportgen.ReportGenerator;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
@@ -91,8 +89,9 @@ public class Activator implements BundleActivator, AlgorithmProperty {
 		try {
 			ServiceReference[] refs = getServiceReferences();
 			ct = new ConverterTester2(this.logger);
-			ReportGenerator overview = new OverviewReportGenerator();
-			ct.execute(refs, c, b, logger, new ReportGenerator[] {overview});
+			System.out.println("NOT YET READY FOR USE.");
+//			ReportGenerator overview = new OverviewReportGenerator();
+//			ct.execute(new ReportGenerator[] {overview}, logger, c, b);
 			System.out.println(ct);
 		} catch (Exception ex) {
 			System.out.println("Failed to create " + "ConverterTester\n\n");
