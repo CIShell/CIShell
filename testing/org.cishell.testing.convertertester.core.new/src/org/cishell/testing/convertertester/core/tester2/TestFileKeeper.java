@@ -19,10 +19,25 @@ public class TestFileKeeper {
 	static {
 		String fs = File.separator;
 		
-		 DEFAULT_ROOT_DIR = "workspace" + fs + "org.cishell."
+//Replaced by Bonnie		
+/*		 DEFAULT_ROOT_DIR = "My Documents"+fs+"workspace" + fs + "org.cishell."
 				+ "testing.convertertester.core.new" + fs + "src" + fs + 
 				"org" + fs + "cishell" + fs + "testing" + fs +
 				"convertertester" + fs + "core" + fs + "test_files" + fs;
+*/
+		File currentDir = null;
+        currentDir = new File(System.getProperty("user.dir") + File.separator + "converter_test_files");
+            
+            if (currentDir.exists()) {  
+             	DEFAULT_ROOT_DIR = currentDir.getPath()+fs;            	
+            }
+            else{
+            	System.err.println(">>>Error, didn't find test_files directory.");
+            	DEFAULT_ROOT_DIR = null;
+            }
+            	
+        
+
 	}
 	
 	public static final String DEFAULT_ROOT_DIR;
@@ -51,9 +66,11 @@ public class TestFileKeeper {
 
 		try {
 			//open config file that maps formats to test file directories
-
-			String filePath = System.getProperty("user.home") + File.separator + rootDir
-					+ CONF_FILE_NAME;
+			
+// Replaced by Bonnie
+//			String filePath = System.getProperty("user.home") + File.separator + rootDir
+//					+ CONF_FILE_NAME;
+			String filePath = rootDir + CONF_FILE_NAME;
 			reader = new BufferedReader(new FileReader(filePath));
 
 			//map formats to test files found in specified directories
@@ -71,9 +88,12 @@ public class TestFileKeeper {
 					String fileFormat = splitLine[0];
 					String dir = splitLine[1];
 
-					String testFileDirPath = System.getProperty("user.home")
-							+ "/" + rootDir + dir;
-
+//	Replaced by Bonnie
+//					String testFileDirPath = System.getProperty("user.home")
+//							+ "/" + rootDir + dir;
+					
+					String testFileDirPath =rootDir + dir;
+					
 					//use directory name to get names of test files inside it.
 					String[] testFileNames = 
 						getVisibleFileNames(testFileDirPath);
