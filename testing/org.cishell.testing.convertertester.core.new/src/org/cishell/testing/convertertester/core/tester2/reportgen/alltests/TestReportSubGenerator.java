@@ -43,13 +43,6 @@ public class TestReportSubGenerator {
 			
 			float percentSuccessful = tr.getNumFilePassSuccesses() / tr.getNumFilePasses();
 			
-//			name them all
-//			FilePassResult[] allFPs = tr.getFilePassResults();
-//			for (int ii = 0; ii < allFPs.length; ii++) {
-//				FilePassResult fp = allFPs[ii];			
-//				fp.setName("Pass " + ii + " of " + tr.getName() + " . ");
-//			}
-			
 			report.println("");
 			report.println("---------------");
 			report.println("");
@@ -79,7 +72,8 @@ public class TestReportSubGenerator {
 			for (int ii = 0; ii < successfulFPs.length; ii++) {
 				FilePassResult successfulFP = successfulFPs[ii];
 				namePass("Successful", successfulFP, tr, ii);
-				report.println("  " + successfulFP.getName() + successfulFP.getShortSummary());
+				report.println(successfulFP.getName() + successfulFP.getShortSummary());
+				filePassSubGen.writeReport(report, successfulFP);
 			}
 			report.println("");
 			
@@ -88,7 +82,10 @@ public class TestReportSubGenerator {
 			for (int ii = 0; ii < failedFPs.length; ii++) {
 				FilePassResult failedFP = failedFPs[ii];
 				namePass("Failed", failedFP, tr, ii);
-				report.println("  " + failedFP.getName() + failedFP.getShortSummary());
+				report.println("--------");
+				report.println(failedFP.getName() + failedFP.getShortSummary());
+				filePassSubGen.writeReport(report, failedFP);
+				report.println("");
 			}
 			report.println("");
 			
@@ -115,8 +112,10 @@ public class TestReportSubGenerator {
 //			String summary = "%" + percentSuccessful + " Successful";
 			String summary = "";
 			this.testReport = new TestReport(reportFile, tr.getName(),
-				(FilePassReport[]) successfulFPReports.toArray(new FilePassReport[0]),
-				(FilePassReport[]) failedFPReports.toArray(new FilePassReport[0]),
+					new FilePassReport[0],
+					new FilePassReport[0],
+//				(FilePassReport[]) successfulFPReports.toArray(new FilePassReport[0]),
+//				(FilePassReport[]) failedFPReports.toArray(new FilePassReport[0]),
 				summary);
 					
 			

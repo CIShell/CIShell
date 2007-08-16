@@ -27,27 +27,15 @@ public class FilePassSubGenerator {
 			
 			boolean succeeded = fpr.succeeded();
 			
-			String summary = null;
 			if (succeeded) {
-				summary = "Succeeded";
-				report.println(summary);
+				report.println("Succeeded");
 			} else {
-				summary = "Failed";
-				report.println(summary);
+				report.println("Failed");
 			}
 			
-			report.println("");
-			report.println("File used   : " + fpr.getOriginalFileLabel());
+			writeReport(report, fpr);
 			
-			if (! fpr.getExplanation().trim().equals("")) {
-				report.println("Explanation :" + fpr.getExplanation());
-			}
-			
-			report.println("");
-			
-			report.flush();
-			
-			
+			String summary = "";
 			this.filePassReport = new FilePassReport(reportFile, fpr.getName(),
 					summary);
 			
@@ -59,11 +47,27 @@ public class FilePassSubGenerator {
 			closeStream(reportOutStream);
 		}
 		
+
+
 		
 	}
 	
 	public FilePassReport getFilePassReport() {
 		return this.filePassReport;
+	}
+	
+	public void writeReport(PrintStream report, FilePassResult fpr) {
+		
+		report.println("");
+		report.println("File used   : " + fpr.getOriginalFileLabel());
+		
+		if (! fpr.getExplanation().trim().equals("")) {
+			report.println("Explanation :" + fpr.getExplanation());
+		}
+		
+		report.println("");
+		
+		report.flush();
 	}
 	
 	private void closeStream(FileOutputStream stream) {
