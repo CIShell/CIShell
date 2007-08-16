@@ -11,6 +11,7 @@ import org.cishell.testing.convertertester.core.tester2.reportgen.ReportGenerato
 import org.cishell.testing.convertertester.core.tester2.reportgen.reports.ConvReport;
 import org.cishell.testing.convertertester.core.tester2.reportgen.reports.TestReport;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.ConvResult;
+import org.cishell.testing.convertertester.core.tester2.reportgen.results.TestResult;
 import org.osgi.framework.ServiceReference;
 
 public class ConvReportSubGenerator {
@@ -52,6 +53,14 @@ public class ConvReportSubGenerator {
 
 			report.println("");
 
+			report.println("Involved in the following tests...");
+			TestResult[] involvedTests = cr.getTests();
+			for (int ii = 0; ii < involvedTests.length; ii++) {
+				TestResult tr = involvedTests[ii];
+				report.println("  " + tr.getFullName());
+			}
+			report.println("");
+			
 			String[] failureExps = cr.getUniqueFailureExplanations();
 			if (failureExps.length > 0) {
 				report.println("Unique Failure Explanations...");
@@ -81,7 +90,6 @@ public class ConvReportSubGenerator {
 					.getName(), summary);
 			report.println("");
 			report.flush();
-
 			reportOutStream.close();
 		} catch (IOException e) {
 			System.out.println("Unable to generate a converter report.");

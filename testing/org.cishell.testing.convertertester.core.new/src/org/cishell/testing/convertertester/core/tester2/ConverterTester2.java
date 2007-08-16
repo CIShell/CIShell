@@ -94,6 +94,8 @@ public class ConverterTester2 implements AlgorithmProperty {
 		 * and comparison converter path.
 		 */
 		
+		int numTestsSoFar = 0;
+		
 		Iterator iter = fileFormats.iterator();
 		while(iter.hasNext()) {
 			String fileFormat = (String) iter.next();
@@ -113,10 +115,12 @@ public class ConverterTester2 implements AlgorithmProperty {
 			 */
 			
 			for (int kk = 0; kk < testConvs.length; kk++) {
+				numTestsSoFar++;
 				ConverterPath testConv = testConvs[kk];
 				
 				TestResult testResult = 
-					runATest(testConv, compareConv, cContext, bContext);
+					runATest(testConv, compareConv, cContext, bContext,
+							numTestsSoFar);
 				
 				if (testResult != null) {
 					testResults.add(testResult);
@@ -130,7 +134,7 @@ public class ConverterTester2 implements AlgorithmProperty {
 	
 	private TestResult runATest(ConverterPath testConvs,
 			ConverterPath compareConvs, CIShellContext cContext,
-			BundleContext bContext) {
+			BundleContext bContext, int numTestsSoFar) {
 		
 		//get test file data corresponding to the format these converters accept.
 		
@@ -154,7 +158,8 @@ public class ConverterTester2 implements AlgorithmProperty {
         FilePassResult[] results = this.testRunner.runTest(testBasicData);     
         
         //return the results of the test
-        return new TestResult(results, testConvs, compareConvs);    
+        String testName = "Test " + numTestsSoFar;
+        return new TestResult(results, testConvs, compareConvs, testName);    
 	}
 		
 	private Data[][] wrapInData(String[] testFilePaths, String format) {

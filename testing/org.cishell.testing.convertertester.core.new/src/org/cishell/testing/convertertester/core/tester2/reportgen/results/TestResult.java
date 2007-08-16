@@ -24,10 +24,12 @@ public class TestResult {
 	private boolean cachedSuccesses = false;
 	private boolean[] successes;
 	
-	public TestResult(FilePassResult[] fprs, ConverterPath testConvs, ConverterPath compareConvs) {
+	public TestResult(FilePassResult[] fprs, ConverterPath testConvs,
+			ConverterPath compareConvs, String name) {
 		this.fprs = fprs;
 		this.testConvs = testConvs;
 		this.compareConvs = compareConvs;
+		this.name = name;
 		
 		this.successes = new boolean[fprs.length];
 		
@@ -60,13 +62,13 @@ public class TestResult {
 		return fprs;
 	}
 	
-	public String getShortSummary() {
+	public String getSummary() {
 		if (allSucceeded()) {
-			return "Success";
+			return "Successful";
 		} else if (someSucceeded()) {
-			return "Partial Success";
+			return "Partially Successful";
 		} else {
-			return "Failure";
+			return "Failed";
 		}
 	}
 	
@@ -90,12 +92,12 @@ public class TestResult {
 		return this.fprs.length;
 	}
 	
-	public void setName(String name) {
-		this.name = name;
-	}
-	
 	public String getName() {
 		return this.name;
+	}
+	
+	public String getFullName() {
+		return getSummary() + " " + getName();
 	}
 	
 	public String getFormat() {
