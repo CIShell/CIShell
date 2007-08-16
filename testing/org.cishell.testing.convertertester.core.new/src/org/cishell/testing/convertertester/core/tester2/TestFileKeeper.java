@@ -25,23 +25,9 @@ public class TestFileKeeper {
 				"org" + fs + "cishell" + fs + "testing" + fs +
 				"convertertester" + fs + "core" + fs + "test_files" + fs;
 */
-		File currentDir = null;
-        currentDir = new File(System.getProperty("user.dir") + fs + "converter_test_files");
-            
-        if (!currentDir.exists()) {
-                currentDir = new File(System.getProperty("user.home") + fs + "anything");
-        } else {
-                currentDir = new File(System.getProperty("user.dir") + fs + "converter_test_files" + File.separator + "anything");
-        }
-                      
-        if (currentDir.exists()) {  
-           	DEFAULT_ROOT_DIR = currentDir.getPath()+fs;            	
-        }
-        else{
-          	System.err.println(">>>Error, didn't find test_files directory.");
-           	DEFAULT_ROOT_DIR = null;
-        }        
+        System.out.println("osgi.install.area:"+System.getProperty("osgi.install.area"));
 
+        DEFAULT_ROOT_DIR = System.getProperty("osgi.install.area").replace("file:","") + fs + "converter_test_files" + fs;
 	}
 	
 	public static final String DEFAULT_ROOT_DIR;
