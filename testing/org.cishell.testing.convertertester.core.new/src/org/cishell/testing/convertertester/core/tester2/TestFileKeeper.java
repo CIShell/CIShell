@@ -18,16 +18,9 @@ public class TestFileKeeper {
 	//TODO: How should we expose this to the user?
 	static {
 		String fs = File.separator;
-		
-//Replaced by Bonnie		
-/*		 DEFAULT_ROOT_DIR = "My Documents"+fs+"workspace" + fs + "org.cishell."
-				+ "testing.convertertester.core.new" + fs + "src" + fs + 
-				"org" + fs + "cishell" + fs + "testing" + fs +
-				"convertertester" + fs + "core" + fs + "test_files" + fs;
-*/
-        System.out.println("osgi.install.area:"+System.getProperty("osgi.install.area"));
-
-        DEFAULT_ROOT_DIR = System.getProperty("osgi.install.area").replace("file:","") + fs + "converter_test_files" + fs;
+        DEFAULT_ROOT_DIR = 
+        	System.getProperty("osgi.install.area").
+        	replace("file:","") + "converter_test_files" + fs;
 	}
 	
 	public static final String DEFAULT_ROOT_DIR;
