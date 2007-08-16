@@ -13,19 +13,13 @@ import org.osgi.service.metatype.MetaTypeService;
 
 
 public class ConverterTesterAlgorithmFactory implements AlgorithmFactory {
-    private MetaTypeProvider provider;
     private BundleContext bContext;
 
     protected void activate(ComponentContext ctxt) {
-        //You may delete all references to metatype service if 
-        //your algorithm does not require parameters and return
-        //null in the createParameters() method
-        MetaTypeService mts = (MetaTypeService)ctxt.locateService("MTS");
-        this.bContext = ctxt.getBundleContext();
-        provider = mts.getMetaTypeInformation(this.bContext.getBundle());       
+        this.bContext = ctxt.getBundleContext();;       
     }
+    
     protected void deactivate(ComponentContext ctxt) {
-        provider = null;
     }
 
     public Algorithm createAlgorithm(Data[] data, Dictionary parameters, CIShellContext context) {
