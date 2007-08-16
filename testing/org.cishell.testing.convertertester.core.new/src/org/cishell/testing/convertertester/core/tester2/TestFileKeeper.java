@@ -26,17 +26,21 @@ public class TestFileKeeper {
 				"convertertester" + fs + "core" + fs + "test_files" + fs;
 */
 		File currentDir = null;
-        currentDir = new File(System.getProperty("user.dir") + File.separator + "converter_test_files");
+        currentDir = new File(System.getProperty("user.dir") + fs + "converter_test_files");
             
-            if (currentDir.exists()) {  
-             	DEFAULT_ROOT_DIR = currentDir.getPath()+fs;            	
-            }
-            else{
-            	System.err.println(">>>Error, didn't find test_files directory.");
-            	DEFAULT_ROOT_DIR = null;
-            }
-            	
-        
+        if (!currentDir.exists()) {
+                currentDir = new File(System.getProperty("user.home") + fs + "anything");
+        } else {
+                currentDir = new File(System.getProperty("user.dir") + fs + "converter_test_files" + File.separator + "anything");
+        }
+                      
+        if (currentDir.exists()) {  
+           	DEFAULT_ROOT_DIR = currentDir.getPath()+fs;            	
+        }
+        else{
+          	System.err.println(">>>Error, didn't find test_files directory.");
+           	DEFAULT_ROOT_DIR = null;
+        }        
 
 	}
 	
