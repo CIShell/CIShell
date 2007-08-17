@@ -30,6 +30,7 @@ public class DataManagerServiceImpl implements DataManagerService {
     private Map modelToLabelMap;
     private Map labelToModelMap; 
     private Map substringToNumberMap;
+    private Map labelToNumOccurrences;
     private Set models;
     private Set selectedModels;
     
@@ -42,6 +43,7 @@ public class DataManagerServiceImpl implements DataManagerService {
         modelToLabelMap = new HashMap();
         labelToModelMap = new HashMap();
         substringToNumberMap = new HashMap();
+        labelToNumOccurrences = new HashMap();
         models = new HashSet();
         listeners = new HashSet();
     }
@@ -107,42 +109,102 @@ public class DataManagerServiceImpl implements DataManagerService {
         models.add(model);
     }
     
+    /**
+     * Ensures that the label is unique by comparing it to the labels
+     * currently in the data manager. If the label is unique, simply
+     * return it. Otherwise add a numeric suffix indicating which
+     * occurrence of the label it is (Starting at 2, going up).
+     * @param label The label we are examining for uniqueness
+     * @return A unique version of the provided label.
+     */
     private String findUniqueLabel(String label) {
-        int lastIndex = label.length() - 1;
-        boolean foundNumber = false;
         
-        while (lastIndex > 0 && Character.isDigit(label.charAt(lastIndex))) {
-            foundNumber = true;
-            lastIndex--;
-        }
-        
-        String newLabel = label.substring(0,lastIndex + 1);
-        if (newLabel.charAt(newLabel.length()-1) != ' ') {
-            newLabel = newLabel + ".";
-        }
-        
-        
-        Integer oldNumber = (Integer) substringToNumberMap.get(newLabel);
-        if (oldNumber != null) {
-            oldNumber = new Integer(oldNumber.intValue() + 1);
-        } else {
-            oldNumber = new Integer(1);
-        }
-        
-        substringToNumberMap.put(newLabel,oldNumber);
-        
-        if (foundNumber) {
-            int oldNum = oldNumber.intValue();
-            int number = Integer.parseInt(label.substring(lastIndex+1));
-            
-            if (number < oldNum && getModelForLabel(newLabel + number) == null) {
-                return newLabel + number;
-            }
-        } 
-        
-        newLabel = newLabel + oldNumber;
-        
-        return newLabel;
+    	Integer numOccurences = (Integer) labelToNumOccurrences.get(label);
+    	
+    	if (numOccurences == null) {
+    		//the label is unique
+    		labelToNumOccurrences.put(label, new Integer(1));
+    		return label;
+    		
+    	} else {
+    		//the label is not unique
+    		int numOccurrencesVal = numOccurences.intValue();
+    		
+    		int newNumOccurrencesVal = numOccurrencesVal + 1;
+    		
+    		String newLabel = label + "." + newNumOccurrencesVal;
+    		
+    		/*
+    		 * In the rare case that someone sneaky sticks in a label that is
+    		 *  identical to our newly generated 'unique' label, keep 
+    		 *  incrementing the value of the suffix until it makes the new 
+    		 *  label unique.
+    		 */
+    		while (getModelForLabel(newLabel) != null) {
+    			newNumOccurrencesVal++;
+    			newLabel = label + "." + newNumOccurrencesVal;
+    		}
+    		
+    		/*
+    		 * remember how many occurrences of the original label we have.
+    		 */
+    		labelToNumOccurrences.put(label,
+    				new Integer(newNumOccurrencesVal));
+    		
+    		/*
+    		 * also, remember that we now have a new label which might be
+    		 * duplicated. For example, if we had whatever.xml and 
+    		 * whatever.xml.2, if someone tried to add a new label
+    		 * whatever.xml we would return whatever.xml.3, BUT if 
+    		 * someone tried to add whatever.xml.2, we would return
+    		 * whatever.xml.2.2 (the second version of the second version
+    		 * of whatever.xml). Maybe not the best way to do this, but
+    		 * it makes sense.
+    		 */
+    		labelToNumOccurrences.put(newLabel, new Integer(1));
+    		
+    		return newLabel;
+    	}
+    	
+//    	int lastIndex = label.length() - 1;
+//        boolean foundNumber = false;
+//        
+//        //set last index to the index before any trailing digits
+//        while (lastIndex > 0 && Character.isDigit(label.charAt(lastIndex))) {
+//            foundNumber = true;
+//            lastIndex--;
+//        }
+//        
+//        //set newLabel to the old label, minus the numbers at the end
+//        String newLabel = label.substring(0,lastIndex + 1);
+//        
+//        //if the last character in the new label is blank, add a dot.
+//        if (newLabel.charAt(newLabel.length()-1) != ' ') {
+//            newLabel = newLabel + ".";
+//        }
+//        Integer newNumber;
+//        Integer oldNumber = (Integer) substringToNumberMap.get(newLabel);
+//        
+//        if (oldNumber != null) {
+//            newNumber = new Integer(oldNumber.intValue() + 1);
+//        } else {
+//            newNumber = new Integer(1);
+//        }
+//        
+//        substringToNumberMap.put(newLabel,newNumber);
+//        
+//        if (foundNumber) {
+//            int newNumVal = newNumber.intValue();
+//            int numOnLabel = Integer.parseInt(label.substring(lastIndex+1));
+//            
+//            if (numOnLabel < newNumVal && getModelForLabel(newLabel + numOnLabel) == null) {
+//                return newLabel + numOnLabel;
+//            }
+//        } 
+//        
+//        newLabel = newLabel + newNumber;
+//        
+//        return newLabel;
     }
 
 
