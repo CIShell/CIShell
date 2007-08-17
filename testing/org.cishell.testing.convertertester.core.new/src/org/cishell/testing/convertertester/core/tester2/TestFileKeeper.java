@@ -15,7 +15,6 @@ import org.osgi.service.log.LogService;
 
 public class TestFileKeeper {
 
-	//TODO: How should we expose this to the user?
 	static {
 		String fs = File.separator;
         DEFAULT_ROOT_DIR = 

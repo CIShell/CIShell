@@ -110,16 +110,6 @@ public class TestReportSubGenerator {
 			}
 			
 //			String summary = "%" + percentSuccessful + " Successful";
-			String reportNamePrefix = "";
-			if (tr.allSucceeded()) {
-				reportNamePrefix = "Successful";
-			} else if (tr.someSucceeded()) {
-				reportNamePrefix = "Partially Successful";
-			} else {
-				reportNamePrefix = "Failed";
-			}
-			
-
 			String summary = "";
 			this.testReport = new TestReport(reportFile, tr.getFullName(),
 					new FilePassReport[0],
