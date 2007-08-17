@@ -69,21 +69,24 @@ public class TestReportSubGenerator {
 			report.println("");
 			FilePassResult[] successfulFPs = tr.getFilePassSuccesses();
 			report.println("Successful File Passes...");
+			report.println("");
 			for (int ii = 0; ii < successfulFPs.length; ii++) {
 				FilePassResult successfulFP = successfulFPs[ii];
 				namePass("Successful", successfulFP, tr, ii);
-				report.println(successfulFP.getName() + successfulFP.getShortSummary());
+				report.println(successfulFP.getName() +
+						" - " + successfulFP.getShortSummary());
 				filePassSubGen.writeReport(report, successfulFP);
 			}
 			report.println("");
 			
 			FilePassResult[] failedFPs = tr.getFilePassFailures();
 			report.println("Failed File Passes...");
+			report.println("");
 			for (int ii = 0; ii < failedFPs.length; ii++) {
 				FilePassResult failedFP = failedFPs[ii];
 				namePass("Failed", failedFP, tr, ii);
-				report.println("--------");
-				report.println(failedFP.getName() + failedFP.getShortSummary());
+				report.println(failedFP.getName() 
+						+  " - " + failedFP.getShortSummary());
 				filePassSubGen.writeReport(report, failedFP);
 				report.println("");
 			}
@@ -144,6 +147,7 @@ public class TestReportSubGenerator {
 	
 	private void namePass(String prefix, FilePassResult fp, TestResult parent,
 			int index) {
-		fp.setName(prefix + " Pass " + index + " of " + parent.getName() + " . ");
+		fp.setName("Pass " + index);
+//		fp.setName(prefix + " Pass " + index + " of " + parent.getName() + " . ");
 	}
 }

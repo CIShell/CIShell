@@ -151,8 +151,7 @@ public class DefaultTestRunner implements TestRunner {
 				}
 			}
 		} catch (Throwable t) {
-			ConvFailureInfo failInfo = new ConvFailureInfo(t.toString()
-					+ getStackTrace(t),
+			ConvFailureInfo failInfo = new ConvFailureInfo(getStackTrace(t),
 					currentConverterAlg.getClass().toString());
 			ConvertResult result = new ConvertResult(failInfo);
 			return result;

@@ -97,7 +97,7 @@ public class TestResult {
 	}
 	
 	public String getFullName() {
-		return getSummary() + " " + getName();
+		return getName() + " - " + getSummary();
 	}
 	
 	public String getFormat() {

@@ -62,7 +62,7 @@ public class FilePassSubGenerator {
 		report.println("File used   : " + fpr.getOriginalFileLabel());
 		
 		if (! fpr.getExplanation().trim().equals("")) {
-			report.println("Explanation :" + fpr.getExplanation());
+			report.println("Explanation... \n" + fpr.getExplanation());
 		}
 		
 		report.println("");
