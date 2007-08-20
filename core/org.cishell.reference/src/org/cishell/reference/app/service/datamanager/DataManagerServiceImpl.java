@@ -29,7 +29,6 @@ import org.cishell.framework.data.DataProperty;
 public class DataManagerServiceImpl implements DataManagerService {
     private Map modelToLabelMap;
     private Map labelToModelMap; 
-    private Map substringToNumberMap;
     private Map labelToNumOccurrences;
     private Set models;
     private Set selectedModels;
@@ -42,7 +41,6 @@ public class DataManagerServiceImpl implements DataManagerService {
     public DataManagerServiceImpl() {
         modelToLabelMap = new HashMap();
         labelToModelMap = new HashMap();
-        substringToNumberMap = new HashMap();
         labelToNumOccurrences = new HashMap();
         models = new HashSet();
         listeners = new HashSet();
@@ -213,6 +211,7 @@ public class DataManagerServiceImpl implements DataManagerService {
         
         labelToModelMap.remove(label);
         modelToLabelMap.remove(model);
+        labelToNumOccurrences.remove(label);
         models.remove(model);
         
         for (Iterator iter=listeners.iterator(); iter.hasNext();) {
