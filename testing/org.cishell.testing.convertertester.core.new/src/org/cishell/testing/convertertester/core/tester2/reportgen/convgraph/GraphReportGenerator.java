@@ -77,13 +77,13 @@ public class GraphReportGenerator implements ReportGenerator {
 			}
 			
 		} catch (IOException e) {
-			System.out.println("Unable to generate Graph Report.");
-			e.printStackTrace();
+			this.log.log(LogService.LOG_ERROR,
+					"Unable to generate Graph Report.", e);
 			try {		
 				if (reader != null) reader.close();
 				} catch (IOException e2) {
-					System.out.println("Unable to close graph report stream");
-					e2.printStackTrace();
+					this.log.log(LogService.LOG_ERROR,
+							"Unable to close graph report stream", e);
 				}
 		} finally {
 			try {
@@ -95,7 +95,9 @@ public class GraphReportGenerator implements ReportGenerator {
 				writer.close();
 			}
 			} catch (IOException e) {
-				System.out.println("Unable to close either graph report reader or writer.");
+				this.log.log(LogService.LOG_ERROR, 
+						"Unable to close either graph report reader or " +
+						"writer.", e);
 				e.printStackTrace();
 			}
 		}

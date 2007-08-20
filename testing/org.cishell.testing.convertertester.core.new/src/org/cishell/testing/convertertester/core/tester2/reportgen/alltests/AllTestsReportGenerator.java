@@ -26,7 +26,8 @@ public class AllTestsReportGenerator implements ReportGenerator {
 	
 	public AllTestsReportGenerator(LogService log) {
 		this.log = log;
-		this.testResultSubGen = new TestReportSubGenerator();
+		
+		this.testResultSubGen = new TestReportSubGenerator(this.log);
 	}
 
 	public void generateReport(AllTestsResult atr) {
@@ -117,8 +118,8 @@ public class AllTestsReportGenerator implements ReportGenerator {
 				(TestReport[]) failedTRReports.toArray(new TestReport[0]),
 				summary);
 		} catch (IOException e) {
-			System.out.println("Unable to generate all tests report.");
-			e.printStackTrace();	
+			this.log.log(LogService.LOG_ERROR,
+					"Unable to generate all tests report.", e);	
 			closeStream(reportOutStream);
 		} finally {
 			closeStream(reportOutStream);
@@ -135,8 +136,8 @@ public class AllTestsReportGenerator implements ReportGenerator {
 				stream.close();
 			}
 		} catch (IOException e2) {
-			System.out.println("Unable to close all tests report stream");
-			e2.printStackTrace();
+			this.log.log(LogService.LOG_ERROR,
+					"Unable to close all tests report stream", e2);
 		}
 	}
 

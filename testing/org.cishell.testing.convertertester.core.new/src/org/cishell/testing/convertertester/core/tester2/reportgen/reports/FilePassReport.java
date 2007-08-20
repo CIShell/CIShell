@@ -10,7 +10,6 @@ public class FilePassReport implements Report {
 	private String summary;
 	
 	public FilePassReport (File filePassReport, String name, String summary) {
-		System.out.println("File pass report constructor, name is :" + name);
 		this.filePassReport = filePassReport;
 		this.name = name;
 		this.summary = summary;
@@ -21,7 +20,6 @@ public class FilePassReport implements Report {
 	}
 	
 	public String getName() {
-		System.out.println("Returning name " + this.name);
 		return this.name;
 	}
 	

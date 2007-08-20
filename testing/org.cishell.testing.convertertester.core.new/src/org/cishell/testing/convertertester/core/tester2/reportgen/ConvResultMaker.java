@@ -203,7 +203,6 @@ public class ConvResultMaker {
 			if (fprFailure.getPhase().equals(ConvertPhaseFailure.TEST_PHASE) &&
 					failedConvName.equals(currentConvName)) {
 				//reached where the converters broke
-				System.out.println("Reached the end in test phase");
 			 break;	
 			}
 		}

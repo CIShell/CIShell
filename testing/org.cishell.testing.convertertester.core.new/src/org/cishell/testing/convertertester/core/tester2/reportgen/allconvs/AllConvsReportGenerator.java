@@ -19,7 +19,7 @@ public class AllConvsReportGenerator implements ReportGenerator {
 
 	public static final String TEMP_FILE_PATH = "All-Converters-Report2.txt";
 
-	private ConvReportSubGenerator convSubGen = new ConvReportSubGenerator();
+	private ConvReportSubGenerator convSubGen;
 	
 	private AllConvsReport allConvsReport = null;
 	
@@ -27,6 +27,8 @@ public class AllConvsReportGenerator implements ReportGenerator {
 	
 	public AllConvsReportGenerator(LogService log) {
 		this.log = log;
+		
+		this.convSubGen = new ConvReportSubGenerator(this.log);
 	}
 	
 	public void generateReport(AllTestsResult atr) {
@@ -121,14 +123,12 @@ public class AllConvsReportGenerator implements ReportGenerator {
 			
 			reportOutStream.close();
 		} catch (IOException e) {
-			System.out.println("Unable to generate all converters report.");
-			e.printStackTrace();
+			
+			this.log.log(LogService.LOG_ERROR, "Unable to generate all converters report.", e);
 			try {		
 				if (reportOutStream != null) reportOutStream.close();
 				} catch (IOException e2) {
-					System.out.println("Unable to close all convertersreport" +
-							" stream");
-					e2.printStackTrace();
+					this.log.log(LogService.LOG_ERROR, "Unable to generate all converters report.", e);
 				}
 		}
 	}

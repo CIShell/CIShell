@@ -9,12 +9,18 @@ import org.cishell.testing.convertertester.core.tester2.reportgen.ReportGenerato
 import org.cishell.testing.convertertester.core.tester2.reportgen.reports.FilePassReport;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.FilePassResult;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.filepass.ConvertPhaseFailure;
+import org.osgi.service.log.LogService;
 
 public class FilePassSubGenerator {
 	
 	private FilePassReport filePassReport;
-
-
+	
+	private LogService log;
+	
+	public FilePassSubGenerator(LogService log) {
+		this.log = log;
+	}
+	
 	public void generateSubreport(FilePassResult fpr) {
 		FileOutputStream reportOutStream = null;
 		try {
@@ -41,8 +47,8 @@ public class FilePassSubGenerator {
 					summary);
 			
 		} catch (IOException e) {
-			System.out.println("Unable to generate file pass report.");
-			e.printStackTrace();	
+			this.log.log(LogService.LOG_ERROR, 
+					"Unable to generate file pass report.", e);
 			closeStream(reportOutStream);
 		} finally {
 			closeStream(reportOutStream);
@@ -95,8 +101,8 @@ public class FilePassSubGenerator {
 			if (stream != null)
 				stream.close();
 		} catch (IOException e2) {
-			System.out.println("Unable to close file pass report stream");
-			e2.printStackTrace();
+			this.log.log(LogService.LOG_ERROR, 
+					"Unable to close file pass report stream", e2);
 		}
 	}
 }

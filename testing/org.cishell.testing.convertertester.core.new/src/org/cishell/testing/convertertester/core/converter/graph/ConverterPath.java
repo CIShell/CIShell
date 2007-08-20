@@ -54,7 +54,7 @@ public class ConverterPath implements AlgorithmProperty {
 		boolean val = true;
 		
 		if(path.contains(sr)){
-			System.out.println("Path already contains " + sr.getProperty("service.pid"));
+//			System.out.println("Path already contains " + sr.getProperty("service.pid"));
 			
 			return false;
 		}

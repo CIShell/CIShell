@@ -280,7 +280,6 @@ public class ConverterGraph {
 	}
 	
 	private void writeNodes(BufferedWriter bw, Map nodes) throws IOException{
-		System.out.println("*Nodes " + nodes.size() + "\n");
 		writeNodeHeader(bw, nodes.size());
 		String[] keySet = new String[nodes.keySet().size()];
 		keySet = (String[])nodes.keySet().toArray(keySet);
@@ -298,14 +297,12 @@ public class ConverterGraph {
 	
 		
 	private void writeEdges(BufferedWriter bw, TreeSet edges) throws IOException{
-		System.out.println("*DirectedEdges " + edges.size());
 		writeEdgeHeader(bw,edges.size());
 		
 		String[] edgeArray = new String[edges.size()];
 		edgeArray = (String[])edges.toArray(edgeArray);
 		
 		for(int i = 0; i < edgeArray.length; i++){
-			System.out.println(edgeArray[i]);
 			bw.flush();
 			bw.write(edgeArray[i]+"\n");
 		}

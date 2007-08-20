@@ -13,11 +13,18 @@ import org.cishell.testing.convertertester.core.tester2.reportgen.reports.TestRe
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.ConvResult;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.TestResult;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.log.LogService;
 
 public class ConvReportSubGenerator {
 
 	private ConvReport convReport = null;
-
+	
+	private LogService log;
+	
+	public ConvReportSubGenerator(LogService log) {
+		this.log = log;
+	}
+	
 	public void generate(ConvResult cr) {
 
 		FileOutputStream reportOutStream = null;
@@ -92,15 +99,12 @@ public class ConvReportSubGenerator {
 			report.flush();
 			reportOutStream.close();
 		} catch (IOException e) {
-			System.out.println("Unable to generate a converter report.");
-			e.printStackTrace();
+			this.log.log(LogService.LOG_ERROR, "Unable to generate a converter report.", e);
 			try {
 				if (reportOutStream != null)
 					reportOutStream.close();
 			} catch (IOException e2) {
-				System.out.println("Unable to close a converter report" +
-						" stream");
-				e2.printStackTrace();
+				this.log.log(LogService.LOG_ERROR, "Unable to close a converter report", e);
 			}
 	}
 	}

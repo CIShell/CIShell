@@ -14,6 +14,7 @@ import org.cishell.testing.convertertester.core.tester2.reportgen.reports.TestRe
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.FilePassResult;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.TestResult;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.log.LogService;
 
 public class TestReportSubGenerator {
 
@@ -21,8 +22,12 @@ public class TestReportSubGenerator {
 
 	private FilePassSubGenerator filePassSubGen;
 	
-	public TestReportSubGenerator() {
-		this.filePassSubGen = new FilePassSubGenerator();
+	private LogService log;
+	
+	public TestReportSubGenerator(LogService log) {
+		this.log = log;
+		
+		this.filePassSubGen = new FilePassSubGenerator(this.log);
 	}
 
 	public void generateSubreport(TestResult tr) {
@@ -123,8 +128,8 @@ public class TestReportSubGenerator {
 					
 			
 		} catch (IOException e) {
-			System.out.println("Unable to generate a test report.");
-			e.printStackTrace();	
+			this.log.log(LogService.LOG_ERROR, 
+					"Unable to generate a test report.", e);
 			closeStream(reportOutStream);
 		} finally {
 			closeStream(reportOutStream);
@@ -140,8 +145,8 @@ public class TestReportSubGenerator {
 			if (stream != null)
 				stream.close();
 		} catch (IOException e2) {
-			System.out.println("Unable to close a test report stream");
-			e2.printStackTrace();
+			this.log.log(LogService.LOG_ERROR,
+					"Unable to close a test report stream", e2);
 		}
 	}
 	

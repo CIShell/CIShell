@@ -17,8 +17,8 @@ public class ReadMeReportGenerator implements ReportGenerator {
 	 * load a file with the report text inside it, and return it as is.
 	 */
 	public void generateReport(AllTestsResult atr) {
-		String readmePath = TestFileKeeper.DEFAULT_ROOT_DIR + "ReportREADME.txt";
-		System.out.println("ReadMe path is: " + readmePath);
+		String readmePath = TestFileKeeper.DEFAULT_ROOT_DIR +
+			"ReportREADME.txt";
 		File readmeFile = new File(readmePath);
 
 		this.readme = new ReadMeReport(readmeFile, "README", "");
