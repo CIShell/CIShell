@@ -15,6 +15,8 @@ import org.cishell.framework.data.BasicData;
 import org.cishell.framework.data.Data;
 import org.cishell.testing.convertertester.core.converter.graph.ConverterPath;
 import org.cishell.testing.convertertester.core.tester.graphcomparison.ComparisonResult;
+import org.cishell.testing.convertertester.core.tester2.fakelogger.LogEntry;
+import org.cishell.testing.convertertester.core.tester2.fakelogger.FakeLogCIShellContext;
 import org.cishell.testing.convertertester.core.tester2.graphcomparison.NewGraphComparer;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.FilePassResult;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.converter.ConvFailureInfo;
@@ -120,32 +122,47 @@ public class DefaultTestRunner implements TestRunner {
 		Data[] currentData = getFilePathData(startData);
 		AlgorithmFactory[] converterAlgs = converters.getPathAsAlgorithms();
 		
+		/*
+		 * rig up fake CISHellContext so we can get ahold of
+		 * errors sent to logger.
+		 */ 		
+		FakeLogCIShellContext fakeCContext = 
+			new FakeLogCIShellContext(testData.getContext());
+		
 		AlgorithmFactory currentConverterAlg = converterAlgs[0];
 		try {
 			for (int ii = 0; ii < converterAlgs.length; ii++) {
 				currentConverterAlg = converterAlgs[ii];
+				
 				Algorithm currentAlgorithm = 
 					currentConverterAlg.createAlgorithm(currentData,
-							new Hashtable(), testData.getContext());
+							new Hashtable(), fakeCContext);
 				currentData = currentAlgorithm.execute();
 
-				if (currentData == null) {
+				/*
+				 * There are two ways that converters generally fail.
+				 * 1) They throw an exception that propagates out into
+				 * this method, where we catch it.
+				 * 2) They catch their own exception, send it to the logger,
+				 * and return null.
+				 */
+				if (currentData == null || currentData[0].getData() == null) {
 					String converterName = converters.getConverterName(ii);
+					
+					String explanation = "Result data is null. \n";
+					
+					
+					if (fakeCContext.hasLogEntries()) {
+						String logText = extractLogText(fakeCContext);
+						explanation += "Error log contains the following: \n" +
+							logText;
+					} else {
+						explanation += "No errors logged. Cause unknown. \n";
+					}
+					
 					ConvFailureInfo failInfo = new ConvFailureInfo(
-							"Result data is null. " +
-							"Check NWB GUI Console for specific error.",
-							converterName);
-					ConvertResult result = new ConvertResult(failInfo);
-					return result;
-				}
-
-				Data currentDataImpl = (Data) currentData[0];
-				if (currentDataImpl.getData() == null) {
-					String converterName = converters.getConverterName(ii);
-					ConvFailureInfo failInfo = new ConvFailureInfo(
-							"Contents of result data is null. " +
-							"Check NWB GUI Console for specific error.",
-							converterName);
+							explanation, converterName);
+					
 					ConvertResult result = new ConvertResult(failInfo);
 					return result;
 				}
@@ -218,4 +235,23 @@ public class DefaultTestRunner implements TestRunner {
 		}
 
 	}
-}
+	
+	private String extractLogText(FakeLogCIShellContext fakeLogContext) {
+		LogEntry[] entries = fakeLogContext.getLogEntries();
+		
+		String logText = "";
+		
+		for (int ii = 0; ii < entries.length; ii++) {
+			LogEntry entry = entries[ii];
+			
+			Throwable e    = entry.getThrowable();
+			String message = entry.getMessage();
+			
+			logText += message + "\n";
+			logText += getStackTrace(e) + "\n";
+			logText += "\n";
+		}
+		
+		return logText;
+	}
+} 
