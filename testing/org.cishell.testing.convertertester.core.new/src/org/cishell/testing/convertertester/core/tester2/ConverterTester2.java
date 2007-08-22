@@ -158,8 +158,7 @@ public class ConverterTester2 implements AlgorithmProperty {
         FilePassResult[] results = this.testRunner.runTest(testBasicData);     
         
         //return the results of the test
-        String testName = "Test " + numTestsSoFar;
-        return new TestResult(results, testConvs, compareConvs, testName);    
+        return new TestResult(results, testConvs, compareConvs, numTestsSoFar);    
 	}
 		
 	private Data[][] wrapInData(String[] testFilePaths, String format) {

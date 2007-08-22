@@ -94,22 +94,37 @@ public class AllConvsReportGenerator implements ReportGenerator {
 			report.println("Trusted Converters...");
 			for (int ii = 0; ii < trustedConvs.size(); ii++) {
 				ConvResult cr = (ConvResult) trustedConvs.get(ii);
+				
+				//add this converters name to all convs report
 				report.println("  " + cr.getNameNoPackage());
+				
+				//generate corresponding sub-report
+				this.convSubGen.generate(cr);
+				ConvReport convReport = this.convSubGen.getConvReport();
+				convReportsList.add(convReport);
 			}
 			report.println("");
 			
 			report.println("Non-Trusted Converters...");
 			for (int ii = 0; ii < nonTrustedConvs.size(); ii++) {
 				ConvResult cr = (ConvResult) nonTrustedConvs.get(ii);
+				
+				//add this converters name to all convs report
 				report.println("  " + cr.getNameNoPackage());
+				
+				//generate corresponding sub-report
+				this.convSubGen.generate(cr);
+				ConvReport convReport = this.convSubGen.getConvReport();
+				convReportsList.add(convReport);
+				
 			}
 			report.println("");
 			
-			for (int ii = 0; ii < convResults.length; ii++) {
-				this.convSubGen.generate(convResults[ii]);
-				ConvReport convReport = this.convSubGen.getConvReport();
-				convReportsList.add(convReport);
-			}
+//			for (int ii = 0; ii < convResults.length; ii++) {
+//				this.convSubGen.generate(convResults[ii]);
+//				ConvReport convReport = this.convSubGen.getConvReport();
+//				convReportsList.add(convReport);
+//			}
 			
 //			String summary = "%" + avgChanceCorrect * 100 + " Correct";
 			String summary = "";

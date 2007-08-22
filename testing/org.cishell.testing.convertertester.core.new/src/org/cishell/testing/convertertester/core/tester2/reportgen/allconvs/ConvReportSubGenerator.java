@@ -61,7 +61,7 @@ public class ConvReportSubGenerator {
 			report.println("");
 
 			report.println("Involved in the following tests...");
-			TestResult[] involvedTests = cr.getTests();
+			TestResult[] involvedTests = cr.getTestsBySuccess();
 			for (int ii = 0; ii < involvedTests.length; ii++) {
 				TestResult tr = involvedTests[ii];
 				report.println("  " + tr.getNameWithSuccess());

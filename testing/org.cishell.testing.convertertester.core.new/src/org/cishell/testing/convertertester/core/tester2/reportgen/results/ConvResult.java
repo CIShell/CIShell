@@ -1,10 +1,9 @@
 package org.cishell.testing.convertertester.core.tester2.reportgen.results;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.filepass.FilePassFailure;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.filepass.FilePassSuccess;
@@ -18,7 +17,7 @@ public class ConvResult {
 	private List failFilePasses = new ArrayList();
 	private List successFilePasses = new ArrayList();
 	private List uniqueFailureExplanations = new ArrayList();
-	private Set tests      = new HashSet();
+	private List tests      = new ArrayList();
 	
 	private boolean isTrusted;
 	
@@ -56,7 +55,9 @@ public class ConvResult {
 	}
 	
 	public void addTest(TestResult tr) {
-		this.tests.add(tr);
+		if (! tests.contains(tr)) {
+			this.tests.add(tr);
+		}
 	}
 	
 	/**
@@ -95,6 +96,12 @@ public class ConvResult {
 	}
 	
 	public TestResult[] getTests() {
+		Collections.sort(this.tests);
+		return (TestResult[]) this.tests.toArray(new TestResult[0]);
+	}
+	
+	public TestResult[] getTestsBySuccess() {
+		Collections.sort(this.tests, TestResult.getCompareBySuccess());
 		return (TestResult[]) this.tests.toArray(new TestResult[0]);
 	}
 	
