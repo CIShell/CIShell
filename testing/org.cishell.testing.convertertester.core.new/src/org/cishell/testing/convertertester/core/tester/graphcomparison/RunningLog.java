@@ -12,6 +12,10 @@ public class RunningLog {
 		log += s +"\n";
 	}
 	
+	public void prepend(String s) {
+		log = s + "\n" + log;
+	}
+	
 	public String getLog() {
 		return log;
 	}

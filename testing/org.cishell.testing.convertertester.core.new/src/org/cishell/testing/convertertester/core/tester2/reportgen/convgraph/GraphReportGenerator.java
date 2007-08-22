@@ -51,7 +51,7 @@ public class GraphReportGenerator implements ReportGenerator {
 					boolean wroteAttributes = false;
 					for (int ii = 0; ii < convs.length ; ii++) {
 						ConvResult cr = convs[ii];
-						if (cr.getName().equals(convName)) {
+						if (cr.getNameWithPackage().equals(convName)) {
 							int trusted;
 							
 							if (cr.isTrusted()) {

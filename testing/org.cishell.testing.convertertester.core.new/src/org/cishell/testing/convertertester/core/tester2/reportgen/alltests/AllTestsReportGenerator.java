@@ -58,7 +58,7 @@ public class AllTestsReportGenerator implements ReportGenerator {
 			report.println("Completely Passed Tests...");
 			for (int ii = 0; ii < passedTRs.length; ii++) {
 				TestResult passedTR = passedTRs[ii];
-				report.println("  " + passedTR.getFullName());
+				report.println("  " + passedTR.getNameWithSuccess());
 			}
 			report.println("");
 			
@@ -66,7 +66,7 @@ public class AllTestsReportGenerator implements ReportGenerator {
 			report.println("Partially Passed Tests...");
 			for (int ii = 0; ii < pPassedTRs.length; ii++) {
 				TestResult pPassedTR = pPassedTRs[ii];
-				report.println("  " + pPassedTR.getFullName());
+				report.println("  " + pPassedTR.getNameWithSuccess());
 			}
 			
 			report.println("");
@@ -75,7 +75,7 @@ public class AllTestsReportGenerator implements ReportGenerator {
 			TestResult[] failedTRs = atr.getFailedTestResults();
 			for (int ii = 0; ii < failedTRs.length; ii++) {
 				TestResult failedTR = failedTRs[ii];
-				report.println("  " + failedTR.getFullName());
+				report.println("  " + failedTR.getNameWithSuccess());
 			}
 			report.println("");
 			

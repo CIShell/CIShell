@@ -36,7 +36,17 @@ public class GraphUtil {
 	}
 	
 	public static Table getSorted(Table t) {
-		Sort tSort = new Sort(getColumnNames(t));
+		return getSortedByColumns(t, getColumnNames(t));
+	}
+	
+	public static Table getSortedByColumns(Table t, String[] columnNames) {
+		for (int ii = 0; ii < columnNames.length; ii++) {
+			String columnName = columnNames[ii];
+			if (t.getColumn(columnName) == null) {
+				System.out.println("WTF, cannot find column " + columnName);
+			}
+		}
+		Sort tSort = new Sort(columnNames);
 		Table sortedTable = t.select(ExpressionParser.predicate("TRUE"),
 				tSort);
 		return sortedTable;

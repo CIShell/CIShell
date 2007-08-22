@@ -99,7 +99,8 @@ public class DefaultTestRunner implements TestRunner {
 					origGraph, resultGraph);
 
 			if (!graphComparisonPhaseResult.comparisonSucceeded()) {
-				String explanation = graphComparisonPhaseResult.getLog();
+				String explanation =
+					graphComparisonPhaseResult.getLog();
 				ComparePhaseFailure failure = new ComparePhaseFailure(
 						originalFileData,
 						explanation);

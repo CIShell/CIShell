@@ -96,7 +96,7 @@ public class TestResult {
 		return this.name;
 	}
 	
-	public String getFullName() {
+	public String getNameWithSuccess() {
 		return getName() + " - " + getSummary();
 	}
 	

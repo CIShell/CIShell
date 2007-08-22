@@ -15,17 +15,19 @@ public class SimpleGraphComparer implements NewGraphComparer {
 		this.log = new RunningLog();
 		
 		if (g1 == null || g2 == null) {
-			return new ComparisonResult(false, "At least one of the provided" +
-					" graphs was null.", log);
+			log.prepend("At least one of the provided graphs was null");
+			return new ComparisonResult(false, log);
 		}
 		//basic tests	
 		if (! isSameDirectedness(g1, g2)) {
-			return new ComparisonResult(false, "Directedness not of the " +
-					"same type.", log);
+			log.prepend("Directedness not of the same type");
+			return new ComparisonResult(false, log);
 		} else if (! isEqualNodeCount(g1, g2)) {
-			return new ComparisonResult(false, "Node counts not equal.", log);
+			log.prepend("Node counts not equal.");
+			return new ComparisonResult(false, log);
 		} else if (! isEqualEdgeCount(g1, g2)) {
-			return new ComparisonResult(false, "Edge counts not equal.", log);
+			log.prepend("Edge counts not equal");
+			return new ComparisonResult(false, log);
 		}
 		
 		//all tests succeeded.

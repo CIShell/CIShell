@@ -32,7 +32,7 @@ public class ConvReportSubGenerator {
 			ConvResult convResult = cr;
 			ServiceReference conv = convResult.getRef();
 
-			File reportFile = new File(ReportGenerator.TEMP_DIR + cr.getName());
+			File reportFile = new File(ReportGenerator.TEMP_DIR + cr.getNameWithPackage());
 			reportOutStream = new FileOutputStream(reportFile);
 
 			PrintStream report = new PrintStream(reportOutStream);
@@ -40,7 +40,7 @@ public class ConvReportSubGenerator {
 			report.println("Converter Report");
 			report.println("--------------------------------------");
 			report.println("");
-			report.println(conv.getProperty("service.pid"));
+			report.println(cr.getNameWithPackage());
 			report.println("");
 			if (convResult.isTrusted()) {
 				report.println("Trusted");
@@ -64,7 +64,7 @@ public class ConvReportSubGenerator {
 			TestResult[] involvedTests = cr.getTests();
 			for (int ii = 0; ii < involvedTests.length; ii++) {
 				TestResult tr = involvedTests[ii];
-				report.println("  " + tr.getFullName());
+				report.println("  " + tr.getNameWithSuccess());
 			}
 			report.println("");
 			
@@ -89,12 +89,10 @@ public class ConvReportSubGenerator {
 
 			TestReport[] testReports = (TestReport[]) testReportsList
 					.toArray(new TestReport[0]);
-			System.out.println("Converter " + cr.getName()
-					+ " is associate with " + testReports.length + " tests");
 			
 			String summary = "";
 			this.convReport = new ConvReport(reportFile, new TestReport[0], cr
-					.getName(), summary);
+					.getNameNoPackageWithTrust(), summary);
 			report.println("");
 			report.flush();
 			reportOutStream.close();

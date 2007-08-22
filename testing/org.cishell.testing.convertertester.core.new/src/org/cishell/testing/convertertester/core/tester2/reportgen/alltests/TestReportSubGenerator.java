@@ -13,6 +13,7 @@ import org.cishell.testing.convertertester.core.tester2.reportgen.reports.FilePa
 import org.cishell.testing.convertertester.core.tester2.reportgen.reports.TestReport;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.FilePassResult;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.TestResult;
+import org.cishell.testing.convertertester.core.tester2.util.ConvUtil;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogService;
 
@@ -57,7 +58,8 @@ public class TestReportSubGenerator {
 			for (int ii = 0; ii < testConvs.size(); ii++) {
 				ServiceReference ref = testConvs.getRef(ii);
 				String name = ref.getProperty("service.pid").toString();
-				report.println("  " + name);
+				String nameWithoutPackage = ConvUtil.removePackagePrefix(name);
+				report.println("  " + nameWithoutPackage);
 			}
 			report.println("");
 			
@@ -66,7 +68,8 @@ public class TestReportSubGenerator {
 			for (int ii = 0; ii < compareConvs.size(); ii++) {
 				ServiceReference ref = compareConvs.getRef(ii);
 				String name = ref.getProperty("service.pid").toString();
-				report.println("  " + name);
+				String nameWithoutPackage = ConvUtil.removePackagePrefix(name);
+				report.println("  " + nameWithoutPackage);
 			}
 			
 			report.println("");
@@ -119,7 +122,7 @@ public class TestReportSubGenerator {
 			
 //			String summary = "%" + percentSuccessful + " Successful";
 			String summary = "";
-			this.testReport = new TestReport(reportFile, tr.getFullName(),
+			this.testReport = new TestReport(reportFile, tr.getNameWithSuccess(),
 					new FilePassReport[0],
 					new FilePassReport[0],
 //				(FilePassReport[]) successfulFPReports.toArray(new FilePassReport[0]),

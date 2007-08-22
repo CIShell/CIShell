@@ -222,7 +222,6 @@ public class ConvResultMaker {
 				String currentConvName = (String) compareConvRef.getProperty("service.pid");
 				if (failedConvName.equals(currentConvName)) {
 					//reached where the converters broke
-					System.out.println("Reached the end in compare phase");
 				 break;	
 				}
 			}

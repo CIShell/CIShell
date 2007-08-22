@@ -94,14 +94,14 @@ public class AllConvsReportGenerator implements ReportGenerator {
 			report.println("Trusted Converters...");
 			for (int ii = 0; ii < trustedConvs.size(); ii++) {
 				ConvResult cr = (ConvResult) trustedConvs.get(ii);
-				report.println("  " + cr.getName());
+				report.println("  " + cr.getNameNoPackage());
 			}
 			report.println("");
 			
 			report.println("Non-Trusted Converters...");
 			for (int ii = 0; ii < nonTrustedConvs.size(); ii++) {
 				ConvResult cr = (ConvResult) nonTrustedConvs.get(ii);
-				report.println("  " + cr.getName());
+				report.println("  " + cr.getNameNoPackage());
 			}
 			report.println("");
 			

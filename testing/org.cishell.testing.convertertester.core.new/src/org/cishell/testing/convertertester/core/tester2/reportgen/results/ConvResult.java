@@ -8,8 +8,8 @@ import java.util.Set;
 
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.filepass.FilePassFailure;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.filepass.FilePassSuccess;
+import org.cishell.testing.convertertester.core.tester2.util.ConvUtil;
 import org.osgi.framework.ServiceReference;
-
 
 public class ConvResult {
 	
@@ -59,8 +59,39 @@ public class ConvResult {
 		this.tests.add(tr);
 	}
 	
-	public String getName() {
+	/**
+	 * Returns the full unique name of the converter, including the package 
+	 * it is found in.
+	 * @return full unique name
+	 */
+	public String getNameWithPackage() {
 		return (String) this.getRef().getProperty("service.pid");
+	}
+	
+	/**
+	 * Returns a shortened version of the name, which does not contain the
+	 * package. This name is not guaranteed to be unique, but is easier
+	 * for humans to read.
+	 * @return The shortened name
+	 */
+	public String getNameNoPackage() {
+		return ConvUtil.removePackagePrefix(getNameWithPackage());
+	}
+	
+	/**
+	 * Returns the shortened name, with either "Trusted" or "Not Trusted"
+	 * prepended to the front.
+	 * @return The shortened name with trust information.
+	 */
+	public String getNameNoPackageWithTrust() {
+		String nameNoPackageWithTrust =  " - " + getNameNoPackage() ;
+		if (isTrusted()) {
+			nameNoPackageWithTrust = "Trusted" + nameNoPackageWithTrust;
+		} else {
+			nameNoPackageWithTrust = "Not Trusted" + nameNoPackageWithTrust;
+		}
+		
+		return nameNoPackageWithTrust;
 	}
 	
 	public TestResult[] getTests() {

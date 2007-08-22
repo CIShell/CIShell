@@ -24,51 +24,55 @@ public class DefaultGraphComparer implements GraphComparer {
 		log = new RunningLog();
 		
 		if (g1 == null || g2 == null) {
-			return new ComparisonResult(false, "At least one of the provided" +
-					" graphs was null.", log);
+			log.prepend("At least one of the provided graphs was null");
+			return new ComparisonResult(false, log);
 		}
 		//basic tests	
 		if (! isSameDirectedness(g1, g2)) {
-			return new ComparisonResult(false, "Directedness not of the " +
-					"same type.", log);
+			log.prepend("Directedness not of the same type");
+			return new ComparisonResult(false, log);
 		} else if (! isEqualNodeCount(g1, g2)) {
-			return new ComparisonResult(false, "Node counts not equal.", log);
+			log.prepend("Node counts not equal.");
+			return new ComparisonResult(false, log);
 		} else if (! isEqualEdgeCount(g1, g2)) {
-			return new ComparisonResult(false, "Edge counts not equal.", log);
+			log.prepend("Edge counts not equal.");
+			return new ComparisonResult(false, log);
 		}
 		
 		//complex tests		
 		if (idsPreserved) {
 			//tests for when graph IDs are preserved across the conversion	
 			if (! areEqual(g1, g2,  true))  {
-				return new ComparisonResult(false, "Graphs do not have the " +
-				"same contents.", log);	
+				log.prepend("Graphs do not have the same contents.");
+				return new ComparisonResult(false, log);	
 				
 			}
 		} else {
 			//tests for when graph IDs are NOT preserved across the conversion
-			if (! nodeDegreeFrequenciesEqual(g1, g2))
-				return new ComparisonResult(false, "The number of nodes" +
-						"with a certain number of edges is not the same in" +
-						"both graphs.", log);		
-			
+			if (! nodeDegreeFrequenciesEqual(g1, g2)) {
+				log.prepend("The number of nodes with a certain number of " +
+						"edges is not the same in both graphs");
+				return new ComparisonResult(false, log);		
+			}
 			/*
 			 * TODO: we could really use a graph isomorphism comparison right
 			 * here. nodeDegreeFrequencies will catch some errors, but lets
 			 * a lot through.
 			 */	
 			
-			if (! haveSameNodeAttributes(g1, g2))
-				return new ComparisonResult(false, "Node attributes are not " +
-						"the same in both graphs.", log);
+			if (! haveSameNodeAttributes(g1, g2)) {
+				log.prepend("Node attributes are not the same in both graphs");
+				return new ComparisonResult(false, log);
+			}
 			
 			if (! haveSameEdgeAttributes(g1, g2)) 
-				return new ComparisonResult(false, "Edge attributes are not " +
-						"the same in both graphs.", log);
+				log.prepend("Edge attributes are not the same in both graphs");
+				return new ComparisonResult(false, log);
 		}
 		
 		//all tests passed
-		return new ComparisonResult(true, "All tests succeeded.", log);
+		log.prepend("All tests succeeded.");
+		return new ComparisonResult(true, log);
 	}
 	
 	private boolean isSameDirectedness(Graph g1, Graph g2) {
