@@ -109,14 +109,11 @@ public class AllTestsReportGenerator implements ReportGenerator {
 				failedTRReports.add(testReport);
 			}
 			
-//			String summary = "%" + percentCompletelyPassed * 100 + " Completely Passed";
-			String summary = "";
 			this.allTestsReport = new AllTestsReport(reportFile,
 				"All Test Reports",
 				(TestReport[]) passedTRReports.toArray(new TestReport[0]),
 				(TestReport[]) pPassedTRReports.toArray(new TestReport[0]),
-				(TestReport[]) failedTRReports.toArray(new TestReport[0]),
-				summary);
+				(TestReport[]) failedTRReports.toArray(new TestReport[0]));
 		} catch (IOException e) {
 			this.log.log(LogService.LOG_ERROR,
 					"Unable to generate all tests report.", e);	

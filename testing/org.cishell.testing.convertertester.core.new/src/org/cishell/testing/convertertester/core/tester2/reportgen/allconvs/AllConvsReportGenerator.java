@@ -126,13 +126,11 @@ public class AllConvsReportGenerator implements ReportGenerator {
 //				convReportsList.add(convReport);
 //			}
 			
-//			String summary = "%" + avgChanceCorrect * 100 + " Correct";
-			String summary = "";
 			ConvReport[] convReports = 
 				(ConvReport[]) convReportsList.toArray(new ConvReport[0]);
 			this.allConvsReport = 
 				new AllConvsReport(reportFile, convReports,
-						"All Converters Report", summary);
+						"All Converters Report");
 			
 			report.flush();
 			

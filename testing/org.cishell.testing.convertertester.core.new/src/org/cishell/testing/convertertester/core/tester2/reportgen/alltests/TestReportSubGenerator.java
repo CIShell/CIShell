@@ -119,15 +119,10 @@ public class TestReportSubGenerator {
 				
 				failedFPReports.add(filePassReport);
 			}
-			
-//			String summary = "%" + percentSuccessful + " Successful";
-			String summary = "";
+			//TODO: remove file pass reports
 			this.testReport = new TestReport(reportFile, tr.getNameWithSuccess(),
 					new FilePassReport[0],
-					new FilePassReport[0],
-//				(FilePassReport[]) successfulFPReports.toArray(new FilePassReport[0]),
-//				(FilePassReport[]) failedFPReports.toArray(new FilePassReport[0]),
-				summary);
+					new FilePassReport[0]);
 					
 			
 		} catch (IOException e) {

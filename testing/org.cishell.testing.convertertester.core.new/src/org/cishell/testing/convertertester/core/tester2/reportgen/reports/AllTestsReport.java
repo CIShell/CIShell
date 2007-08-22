@@ -11,19 +11,16 @@ public class AllTestsReport implements Report {
 	private TestReport[] failedTestReports;
 	
 	private String name;
-	private String summary;
 	
 	public AllTestsReport(File allTestsReport, String name,
 			TestReport[] successfulTestReports,
 			TestReport[] partialSuccessTestReports,
-			TestReport[] failedTestReports,
-			String summary) {
+			TestReport[] failedTestReports) {
 		this.allTestsReport = allTestsReport;
 		this.name = name;
 		this.successfulTestReports = successfulTestReports;
 		this.partialSuccessTestReports = partialSuccessTestReports;
 		this.failedTestReports = failedTestReports;
-		this.summary = summary;
 	}
 	
 	public File getAllTestsReport() {
@@ -44,9 +41,5 @@ public class AllTestsReport implements Report {
 	
 	public String getName() {
 		return this.name;
-	}
-	
-	public String getShortSummary() {
-		return this.summary;
 	}
 }

@@ -7,12 +7,10 @@ public class FilePassReport implements Report {
 	private File filePassReport;
 	
 	private String name; 
-	private String summary;
 	
-	public FilePassReport (File filePassReport, String name, String summary) {
+	public FilePassReport (File filePassReport, String name) {
 		this.filePassReport = filePassReport;
 		this.name = name;
-		this.summary = summary;
 	}
 	
 	public File getFilePassReport() {
@@ -21,9 +19,5 @@ public class FilePassReport implements Report {
 	
 	public String getName() {
 		return this.name;
-	}
-	
-	public String getShortSummary() {
-		return this.summary;
 	}
 }

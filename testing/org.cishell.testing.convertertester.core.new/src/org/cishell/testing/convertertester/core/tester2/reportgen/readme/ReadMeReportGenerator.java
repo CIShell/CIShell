@@ -21,7 +21,7 @@ public class ReadMeReportGenerator implements ReportGenerator {
 			"ReportREADME.txt";
 		File readmeFile = new File(readmePath);
 
-		this.readme = new ReadMeReport(readmeFile, "README", "");
+		this.readme = new ReadMeReport(readmeFile, "README");
 	}
 	
 	public ReadMeReport getReadMe() {

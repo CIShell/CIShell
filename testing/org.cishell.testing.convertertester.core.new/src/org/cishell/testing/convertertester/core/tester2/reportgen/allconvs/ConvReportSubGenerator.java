@@ -90,9 +90,8 @@ public class ConvReportSubGenerator {
 			TestReport[] testReports = (TestReport[]) testReportsList
 					.toArray(new TestReport[0]);
 			
-			String summary = "";
 			this.convReport = new ConvReport(reportFile, new TestReport[0], cr
-					.getNameNoPackageWithTrust(), summary);
+					.getNameNoPackageWithTrust());
 			report.println("");
 			report.flush();
 			reportOutStream.close();

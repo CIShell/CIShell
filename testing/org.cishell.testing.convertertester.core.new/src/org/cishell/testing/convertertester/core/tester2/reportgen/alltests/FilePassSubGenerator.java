@@ -42,9 +42,7 @@ public class FilePassSubGenerator {
 			
 			writeReport(report, fpr);
 			
-			String summary = "";
-			this.filePassReport = new FilePassReport(reportFile, fpr.getName(),
-					summary);
+			this.filePassReport = new FilePassReport(reportFile, fpr.getName());
 			
 		} catch (IOException e) {
 			this.log.log(LogService.LOG_ERROR, 

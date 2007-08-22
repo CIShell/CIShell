@@ -10,15 +10,13 @@ public class TestReport implements Report{
 	private FilePassReport[] failedFilePassReports;
 	
 	private String name;
-	private String summary;
 	
 	public TestReport(File testReport, String name, FilePassReport[] successfulFilePassReports,
-			FilePassReport[] failedFilePassReports, String summary) {
+			FilePassReport[] failedFilePassReports) {
 		this.testReport     = testReport;
 		this.name = name;
 		this.successfulFilePassReports = successfulFilePassReports;
 		this.failedFilePassReports = failedFilePassReports;
-		this.summary = summary;
 	}
 	
 	public File getTestReport() {
@@ -35,9 +33,5 @@ public class TestReport implements Report{
 	
 	public String getName() {
 		return this.name;
-	}
-	
-	public String getShortSummary() {
-		return this.summary;
 	}
 }
