@@ -11,11 +11,11 @@ import org.cishell.framework.algorithm.AlgorithmProperty;
 import org.cishell.framework.data.BasicData;
 import org.cishell.framework.data.Data;
 import org.cishell.framework.data.DataProperty;
-import org.cishell.testing.convertertester.core.converter.graph.ConverterGraph;
 import org.cishell.testing.convertertester.core.tester2.ConverterTester2;
 import org.cishell.testing.convertertester.core.tester2.reportgen.ReportGenerator;
 import org.cishell.testing.convertertester.core.tester2.reportgen.allconvs.AllConvsReportGenerator;
 import org.cishell.testing.convertertester.core.tester2.reportgen.alltests.AllTestsReportGenerator;
+import org.cishell.testing.convertertester.core.tester2.reportgen.convgraph.AnnotatedGraphReportGenerator;
 import org.cishell.testing.convertertester.core.tester2.reportgen.convgraph.GraphReportGenerator;
 import org.cishell.testing.convertertester.core.tester2.reportgen.readme.ReadMeReportGenerator;
 import org.cishell.testing.convertertester.core.tester2.reportgen.reports.AllConvsReport;
@@ -35,7 +35,8 @@ import org.osgi.service.log.LogService;
 //TODO: Maybe let the user specify which converters he/she wants to test, or other things
 //TODO: Make it progress-trackable
 
-public class ConverterTesterAlgorithm implements Algorithm, AlgorithmProperty {
+public class ConverterTesterAlgorithm implements Algorithm,
+	AlgorithmProperty {
 
     private CIShellContext cContext;
     private BundleContext bContext;
@@ -62,7 +63,8 @@ public class ConverterTesterAlgorithm implements Algorithm, AlgorithmProperty {
     	
     	Data[] returnDM;
 
-    	final IWorkbenchWindow[] windows = PlatformUI.getWorkbench().getWorkbenchWindows();
+    	final IWorkbenchWindow[] windows = 
+    		PlatformUI.getWorkbench().getWorkbenchWindows();
     	if (windows.length == 0) {
     		return null;
     	}
@@ -111,16 +113,26 @@ public class ConverterTesterAlgorithm implements Algorithm, AlgorithmProperty {
 		   			
 		   			//initialize all the report generators
 		   			
-		   			AllTestsReportGenerator allGen     = new AllTestsReportGenerator(this.log);
-		   			AllConvsReportGenerator allConvGen = new AllConvsReportGenerator(this.log);
-		   			GraphReportGenerator    graphGen   = new GraphReportGenerator(this.log);
-		   			ReadMeReportGenerator   readmeGen  = new ReadMeReportGenerator();
+		   			AllTestsReportGenerator       allGen     = 
+		   				new AllTestsReportGenerator(this.log);
+		   			AllConvsReportGenerator       allConvGen = 
+		   				new AllConvsReportGenerator(this.log);
+		   			GraphReportGenerator origGraphGen        =
+		   				new GraphReportGenerator(this.log);
+		   			AnnotatedGraphReportGenerator graphGen   = 
+		   				new AnnotatedGraphReportGenerator(this.log);
+		   			ReadMeReportGenerator         readmeGen  = 
+		   				new ReadMeReportGenerator(this.log);
 		   			
-		   			//execute the tests, and provide the results to the report generators
+		   			/*
+		   			 * execute the tests, and provide the results to the 
+		   			 * report generators
+		   			 */
 		   			ConverterTester2 ct = new ConverterTester2(log);
 		   			ct.execute(convRefs,
 		   					new ReportGenerator[] 
-		   					   {allGen, allConvGen, graphGen, readmeGen},
+		   					   {allGen, allConvGen, graphGen, origGraphGen,
+		   					readmeGen},
 		   					cContext, bContext);
 		   			/*
 		   			 * report generators have now been supplied with the test
@@ -143,29 +155,38 @@ public class ConverterTesterAlgorithm implements Algorithm, AlgorithmProperty {
 		   					allReport.getName() , null);
 		   			addReturn(allReportData);
 		   			
-		   			TestReport[] sTestReports = allReport.getSuccessfulTestReports();
+		   			TestReport[] sTestReports = 
+		   				allReport.getSuccessfulTestReports();
 		   			addFilePasses(sTestReports, allReportData);
 		   			
-		   			TestReport[] ppTestReports = allReport.getPartialSuccessTestReports();
+		   			TestReport[] ppTestReports = 
+		   				allReport.getPartialSuccessTestReports();
 		   			addFilePasses(ppTestReports, allReportData);
 		   			
-		   			TestReport[] fTestReports = allReport.getFailedTestReports();
+		   			TestReport[] fTestReports = 
+		   				allReport.getFailedTestReports();
 		   			addFilePasses(fTestReports, allReportData);
 		   			
 		   			//return all converters report
 		   			
-		   			AllConvsReport allConvReport = allConvGen.getAllConvsReport();
+		   			AllConvsReport allConvReport = 
+		   				allConvGen.getAllConvsReport();
 		   			File allConvReportFile = allConvReport.getReport();
-		   			Data allConvReportData = createReportData(allConvReportFile, allConvReport.getName(),
+		   			Data allConvReportData = 
+		   				createReportData(allConvReportFile,
+		   						allConvReport.getName(),
 		   					null);
 		   			addReturn(allConvReportData);
 		   			
 		   				//return each converter report
-		   			ConvReport[] convReports = allConvReport.getConverterReports();
+		   			ConvReport[] convReports = 
+		   				allConvReport.getConverterReports();
 		   			for (int ii = 0; ii < convReports.length; ii++) {
 		   				ConvReport convReport = convReports[ii];
 		   				File convReportFile = convReport.getReport();
-		   				Data convReportData = createReportData(convReportFile, convReport.getName(), allConvReportData);
+		   				Data convReportData =
+		   					createReportData(convReportFile,
+		   							convReport.getName(), allConvReportData);
 		   				addReturn(convReportData);
 		   				
 		   				TestReport[] trs = convReport.getTestReports();
@@ -175,11 +196,23 @@ public class ConverterTesterAlgorithm implements Algorithm, AlgorithmProperty {
 		   			//return annotated graph report
 		   			
 		   			File graphReportFile = graphGen.getGraphReport();
-		   			Data graphReport = createReportData(graphReportFile, "Annotated Graph Report", null,
+		   			Data graphReport = createReportData(graphReportFile,
+		   					"Annotated Converter Graph", null,
 		   					"file:text/nwb", DataProperty.NETWORK_TYPE);
 		   			addReturn(graphReport);
+		   			
+		   			//return original graph report
+		   			
+		   			File origGraphReportFile = origGraphGen.getGraphReport();
+		   			Data origGraphReport = createReportData(
+		   					origGraphReportFile,
+		   					"Original Converter Graph", null,
+		   					"file:text/nwb", DataProperty.NETWORK_TYPE);
+		   			addReturn(origGraphReport);
+		   			
     		} catch (Exception e) {
-    			this.log.log(LogService.LOG_ERROR, "Converter Tester Failed.", e);
+    			this.log.log(LogService.LOG_ERROR, "Converter Tester Failed.",
+    					e);
     			e.printStackTrace();
     		}
     }
@@ -195,20 +228,20 @@ public class ConverterTesterAlgorithm implements Algorithm, AlgorithmProperty {
         
         /**
          * Returns file pass reports associated with tests or converters.
-         * @param testReports reports to be returned as children or test or converter
+         * @param testReports reports to be returned as children or test or 
+         * converter
          * @param parent the parent of the file pass
          */
         private void addFilePasses(TestReport[] testReports, Data parent) {
     			for (int ii = 0; ii < testReports.length; ii++) {
     				TestReport tr = testReports[ii];
     				File testReportFile = tr.getTestReport();
-//    				System.out.println("In algorithm, file pass name is : " + tr.getName());
-//    				System.out.println("In algorithm FILE name is : " + testReportFile.getName());
     				Data testReportData = createReportData(testReportFile,
     						tr.getName(), parent);
     				addReturn(testReportData);
     				
-    				FilePassReport[] sFilePassReports = tr.getSuccessfulFilePassReports();
+    				FilePassReport[] sFilePassReports =
+    					tr.getSuccessfulFilePassReports();
     				for (int kk = 0; kk < sFilePassReports.length; kk++) {
     					FilePassReport fp = sFilePassReports[kk];
     					File fpFile = fp.getFilePassReport();
@@ -217,7 +250,8 @@ public class ConverterTesterAlgorithm implements Algorithm, AlgorithmProperty {
     					addReturn(fpData);
     				}
     				
-    				FilePassReport[] fFilePassReports = tr.getFailedFilePassReports();	
+    				FilePassReport[] fFilePassReports = 
+    					tr.getFailedFilePassReports();	
     				for (int kk = 0; kk < fFilePassReports.length; kk++) {
     					FilePassReport fp = fFilePassReports[kk];
     					File fpFile = fp.getFilePassReport();
@@ -233,14 +267,16 @@ public class ConverterTesterAlgorithm implements Algorithm, AlgorithmProperty {
          * returned from the algorithm.
          * 
          * @param report the report to be turned into data
-         * @param label how the report will be labeled in the data manager window
+         * @param label how the report will be labeled in the data manager 
+         * window
          * @param parent which report this report will hang from 
          * (null if it is not a child of any report)
          * @param format The file format or class name of the report
          * @param type whether the report is a network or text file
          * @return the report encapsulated in data, ready to be returned.
          */
-        private Data createReportData(Object report, String label, Data parent, String format, String type) {
+        private Data createReportData(Object report, String label,
+        		Data parent, String format, String type) {
         	Data reportData = new BasicData(report, format);
 			Dictionary metadata = reportData.getMetaData();
 			metadata.put(DataProperty.LABEL, label);
@@ -252,22 +288,26 @@ public class ConverterTesterAlgorithm implements Algorithm, AlgorithmProperty {
         }
         
         /**
-         * Alternate version of createReportData that assumes the report is a plain text file
+         * Alternate version of createReportData that assumes the report
+         *  is a plain text file
          * @param report the report to be turned into data
-         * @param label how the report will be labeled in the data manager window
+         * @param label how the report will be labeled in the data manager
+         *  window
          * @param parent which report this report will hang from 
          * (null if it is not a child of any report)
          * @return the report encapsulated in data, ready to be returned.
          */
-        private Data createReportData(Object report, String label, Data parent) {
-        	return createReportData(report, label, parent, "file:text/plain", DataProperty.TEXT_TYPE);
+        private Data createReportData(Object report, String label,
+        		Data parent) {
+        	return createReportData(report, label, parent, "file:text/plain",
+        			DataProperty.TEXT_TYPE);
         }
    }
     
   
     
     private ServiceReference[] getConverterReferences() {
-		  String filter = "(&("+ALGORITHM_TYPE+"="+TYPE_CONVERTER+"))";// +
+		  String filter = "(&("+ALGORITHM_TYPE+"="+TYPE_CONVERTER+"))";
 
 		  try {
 		  ServiceReference[] refs = bContext.getServiceReferences(

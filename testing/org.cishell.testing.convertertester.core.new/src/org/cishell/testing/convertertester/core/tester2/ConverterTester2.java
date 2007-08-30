@@ -79,9 +79,6 @@ public class ConverterTester2 implements AlgorithmProperty {
 		TestResult[] rawResults = 
 			runAllTests(converterGraph, cContext, bContext);
 		
-		System.out.println("Num Test Results coming out of runAllTests" +
-				": " + rawResults.length);
-		
 		AllTestsResult allTestsResult = new AllTestsResult(rawResults);
 		
 		//analyze the test results to extract more useful info
