@@ -106,8 +106,6 @@ public class ConvReportSubGenerator {
 				report.println("Consult the Annotated Graph Report for details on why this");
 				report.println("may not be testable.");
 			}
-
-			List testReportsList = new ArrayList();
 			
 			this.convReport = new ConvReport(reportFile, new TestReport[0], cr
 					.getShortNameWithTrust());
