@@ -52,13 +52,13 @@ public class ConverterTesterAlgorithm implements Algorithm, AlgorithmProperty {
     }
 
     public Data[] execute() {
-    	
     	this.log.log(LogService.LOG_INFO, 
-    			"-------NOTICE-------" +                       "\n" + 	
+    			                                               "\r\n" +
+    			"-------NOTICE-------" +                       "\r\n" + 	
     			"The Converter Tester will take " +
-    			"approximately 30 seconds to run all the tests. \n" +
-    			"Thank you for waiting :)" +                   "\n" +
-    			"-----END NOTICE-----");
+    			"approximately 30 seconds to run all the tests. \r\n" +
+    			"Thank you for waiting :)" +                   "\r\n" +
+    			"-----END NOTICE-----                           \r\n");
     	
     	Data[] returnDM;
 
@@ -107,22 +107,18 @@ public class ConverterTesterAlgorithm implements Algorithm, AlgorithmProperty {
     				//get all the converters
 		   			ServiceReference[] convRefs = getConverterReferences();
 		   			
-		   			//generate converter paths inside converter graph, for use in executing the test
-		   			ConverterGraph converterGraph = new ConverterGraph(convRefs, bContext, log);
-		   			
-		   			//extract converter graph in nwb file format.
-		   			File nwbGraph = converterGraph.asNWB();
+
 		   			
 		   			//initialize all the report generators
 		   			
 		   			AllTestsReportGenerator allGen     = new AllTestsReportGenerator(this.log);
 		   			AllConvsReportGenerator allConvGen = new AllConvsReportGenerator(this.log);
-		   			GraphReportGenerator    graphGen   = new GraphReportGenerator(nwbGraph, this.log);
+		   			GraphReportGenerator    graphGen   = new GraphReportGenerator(this.log);
 		   			ReadMeReportGenerator   readmeGen  = new ReadMeReportGenerator();
 		   			
 		   			//execute the tests, and provide the results to the report generators
 		   			ConverterTester2 ct = new ConverterTester2(log);
-		   			ct.execute(converterGraph,
+		   			ct.execute(convRefs,
 		   					new ReportGenerator[] 
 		   					   {allGen, allConvGen, graphGen, readmeGen},
 		   					cContext, bContext);
@@ -184,6 +180,7 @@ public class ConverterTesterAlgorithm implements Algorithm, AlgorithmProperty {
 		   			addReturn(graphReport);
     		} catch (Exception e) {
     			this.log.log(LogService.LOG_ERROR, "Converter Tester Failed.", e);
+    			e.printStackTrace();
     		}
     }
     	
