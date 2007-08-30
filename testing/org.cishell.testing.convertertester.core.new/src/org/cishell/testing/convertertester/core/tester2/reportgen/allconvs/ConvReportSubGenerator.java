@@ -55,8 +55,8 @@ public class ConvReportSubGenerator {
 				report.println("# of files passed through :"
 						+ convResult.getNumFilePasses());
 				report.println("");
-				report.println("% Passed                  : "
-						+ convResult.getPercentPassed());
+//				report.println("% Passed                  : "
+//						+ convResult.getPercentPassed());
 				report.println("% Chance of Flaw          : "
 						+ convResult.getChanceOfFlaw());
 
