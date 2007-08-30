@@ -2,6 +2,7 @@ package org.cishell.testing.convertertester.core.tester2.reportgen.results;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -239,6 +240,10 @@ public class ConvResult {
 	
 	public float getChanceOfFlaw() {
 		return 1.0f - this.chanceCorrect; 
+	}
+	
+	public Comparator getCompareFaultsByLikelihood() {
+		return ChanceAtFault.COMPARE_BY_LIKELIHOOD;
 	}
 	
 	private boolean containsChanceAtFaultWithExpln(List chanceAtFaultList,

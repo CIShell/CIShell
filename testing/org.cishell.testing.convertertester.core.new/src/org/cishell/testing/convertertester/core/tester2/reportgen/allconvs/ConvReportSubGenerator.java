@@ -4,8 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
 import org.cishell.testing.convertertester.core.converter.graph.Converter;
 import org.cishell.testing.convertertester.core.tester2.reportgen.ReportGenerator;
@@ -72,8 +71,11 @@ public class ConvReportSubGenerator {
 
 				ChanceAtFault[] failureExplns = cr
 						.getUniqueExplnChanceAtFaults();
+				Arrays.sort(failureExplns, cr.getCompareFaultsByLikelihood());
+				
 				if (failureExplns.length > 0) {
-					report.println("Unique Failure Explanations...");
+					report.println("Unique Failure Explanations " +
+							"(sorted by likelihood)...");
 
 					for (int ii = 0; ii < failureExplns.length; ii++) {
 						ChanceAtFault failureExp = failureExplns[ii];
@@ -107,18 +109,21 @@ public class ConvReportSubGenerator {
 				report.println("may not be testable.");
 			}
 			
-			this.convReport = new ConvReport(reportFile, new TestReport[0], cr
-					.getShortNameWithTrust());
+			this.convReport = new ConvReport(reportFile, new TestReport[0],
+					cr.getShortNameWithTrust());
+			
 			report.println("");
 			report.flush();
 			reportOutStream.close();
 		} catch (IOException e) {
-			this.log.log(LogService.LOG_ERROR, "Unable to generate a converter report.", e);
+			this.log.log(LogService.LOG_ERROR,
+					"Unable to generate a converter report.", e);
 			try {
 				if (reportOutStream != null)
 					reportOutStream.close();
 			} catch (IOException e2) {
-				this.log.log(LogService.LOG_ERROR, "Unable to close a converter report", e);
+				this.log.log(LogService.LOG_ERROR,
+						"Unable to close a converter report", e);
 			}
 	}
 	}

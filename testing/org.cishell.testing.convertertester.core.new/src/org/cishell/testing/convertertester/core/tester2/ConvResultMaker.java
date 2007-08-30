@@ -1,9 +1,9 @@
-package org.cishell.testing.convertertester.core.tester2.reportgen;
+package org.cishell.testing.convertertester.core.tester2;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -17,7 +17,6 @@ import org.cishell.testing.convertertester.core.tester2.reportgen.results.AllTes
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.ConvResult;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.FilePassResult;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.TestResult;
-import org.cishell.testing.convertertester.core.tester2.reportgen.results.filepass.FilePassSuccess;
 
 public class ConvResultMaker {
 	
@@ -54,7 +53,7 @@ public class ConvResultMaker {
 	private static Converter[] determineWhichAreTrusted(AllTestsResult atr) {
 			TestResult[] trs =  atr.getTestResults();
 			
-			List trustedConverters = new ArrayList();
+			Set trustedConverters = new HashSet();
 			for (int ii = 0; ii < trs.length; ii++) {
 				TestResult tr = trs[ii];
 				FilePassResult[] fprs = tr.getFilePassResults();

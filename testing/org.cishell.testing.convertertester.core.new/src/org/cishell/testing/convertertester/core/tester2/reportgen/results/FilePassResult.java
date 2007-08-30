@@ -1,6 +1,7 @@
 package org.cishell.testing.convertertester.core.tester2.reportgen.results;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -12,6 +13,8 @@ import org.cishell.testing.convertertester.core.tester2.reportgen.results.filepa
 
 public abstract class FilePassResult {
 	
+	
+	public static final Comparator COMPARE_BY_SUCCESS = new CompareBySuccess();
 	
 	public static final String DEFAULT_NAME = "Default File Pass Name";
 	
@@ -185,5 +188,46 @@ public abstract class FilePassResult {
 	
 	public void addChanceAtFault(ChanceAtFault chanceAtFault) {
 		this.chanceAtFaults.add(chanceAtFault);
+	}
+	
+	
+private static class CompareBySuccess implements Comparator {
+		
+		/**
+		 * Compare first by success, where
+		 * completely successful > partially successful > complet failure,
+		 * and then alphabetize (the natural order of test results) 
+		 * for cases where they both have the same success type.
+		 */
+		public int compare(Object o1, Object o2) {
+			if (o1 instanceof TestResult && o2 instanceof TestResult) {
+				TestResult tr1 = (TestResult) o1;
+				TestResult tr2 = (TestResult) o2;
+				
+				int success1 = getSuccessRating(tr1);
+				int success2 = getSuccessRating(tr2);
+				
+				if (success1 != success2) {
+					return success2 - success1;
+				} else {
+					return tr1.compareTo(tr2);
+				}
+				
+			} else {
+				throw new IllegalArgumentException("Can only " +
+						"compare test results");
+			}
+			
+		}
+		
+		private int getSuccessRating(TestResult tr) {
+			if (tr.allSucceeded()) {
+				return 2;
+			} else if (tr.someSucceeded()) {
+				return 1;
+			} else {
+				return 0;
+			}
+		}
 	}
 }

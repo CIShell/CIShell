@@ -20,7 +20,6 @@ import org.cishell.testing.convertertester.core.tester2.graphcomparison.IdsNotPr
 import org.cishell.testing.convertertester.core.tester2.graphcomparison.IdsPreservedComparer;
 import org.cishell.testing.convertertester.core.tester2.graphcomparison.LossyComparer;
 import org.cishell.testing.convertertester.core.tester2.graphcomparison.NewGraphComparer;
-import org.cishell.testing.convertertester.core.tester2.reportgen.ConvResultMaker;
 import org.cishell.testing.convertertester.core.tester2.reportgen.ReportGenerator;
 import org.cishell.testing.convertertester.core.tester2.reportgen.faultanalysis.ChanceAtFaultHeuristic;
 import org.cishell.testing.convertertester.core.tester2.reportgen.faultanalysis.FullTrustHeuristic;

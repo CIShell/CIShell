@@ -266,51 +266,6 @@ public class TestResult implements Comparable {
 	}
 	
 	public static Comparator getCompareBySuccess() {
-		return new CompareBySuccess();
-	}
-	
-	private static class CompareBySuccess implements Comparator {
-		
-		/**
-		 * Compare first by success, where
-		 * completely successful > partially successful > complet failure,
-		 * and then alphabetize (the natural order of test results) 
-		 * for cases where they both have the same success type.
-		 */
-		public int compare(Object o1, Object o2) {
-			if (o1 instanceof TestResult && o2 instanceof TestResult) {
-				TestResult tr1 = (TestResult) o1;
-				TestResult tr2 = (TestResult) o2;
-				
-				int success1 = getSuccessRating(tr1);
-				int success2 = getSuccessRating(tr2);
-				
-				if (success1 != success2) {
-					return success2 - success1;
-				} else {
-					return tr1.compareTo(tr2);
-				}
-				
-			} else {
-				throw new IllegalArgumentException("Can only " +
-						"compare test results");
-			}
-			
-		}
-		
-		private int getSuccessRating(TestResult tr) {
-			if (tr.allSucceeded()) {
-				return 2;
-			} else if (tr.someSucceeded()) {
-				return 1;
-			} else {
-				return 0;
-			}
-		}
-	}
-	
-	
-
-	
-	
+		return FilePassResult.COMPARE_BY_SUCCESS;
+	}	
 }
