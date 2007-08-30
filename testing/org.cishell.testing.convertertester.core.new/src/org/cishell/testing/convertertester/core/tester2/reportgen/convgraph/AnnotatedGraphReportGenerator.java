@@ -14,7 +14,7 @@ import org.cishell.testing.convertertester.core.tester2.reportgen.results.AllTes
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.ConvResult;
 import org.osgi.service.log.LogService;
 
-public class GraphReportGenerator implements ReportGenerator {
+public class AnnotatedGraphReportGenerator implements ReportGenerator {
 
 	private ConvResultMaker convGen = new ConvResultMaker();
 	private LogService log;
@@ -23,7 +23,7 @@ public class GraphReportGenerator implements ReportGenerator {
 	
 	private String NODE_LINE = "^\\d+? \".*?\"$";
 	
-	public GraphReportGenerator(LogService log) {
+	public AnnotatedGraphReportGenerator(LogService log) {
 		this.log = log;
 	}
 	
