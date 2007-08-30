@@ -37,7 +37,7 @@ public class TestReportSubGenerator {
 			reportOutStream = new FileOutputStream(reportFile);
 			PrintStream report = new PrintStream(reportOutStream);
 			
-			report.println("Test Result Report");
+			report.println("Test " + tr.getTestNum() + " Result Report");
 			report.println("-----------------------------------------------");
 			report.println("");
 			
