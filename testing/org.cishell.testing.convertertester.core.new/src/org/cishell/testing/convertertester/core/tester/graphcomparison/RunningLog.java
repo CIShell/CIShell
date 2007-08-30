@@ -9,11 +9,11 @@ public class RunningLog {
 	 * @param s the text to be added to the log.
 	 */
 	public void append(String s) {
-		log += s +"\n";
+		log += s +"\r\n";
 	}
 	
 	public void prepend(String s) {
-		log = s + "\n" + log;
+		log = s + "\r\n" + log;
 	}
 	
 	public String getLog() {

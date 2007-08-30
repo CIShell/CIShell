@@ -151,7 +151,6 @@ public abstract class ComplexGraphComparer extends SimpleGraphComparer {
 			}
 			
 			if (! foundMatch) {
-				log.append("Tables do not have the same columns");
 				log.append("One table has the column '" + 
 						t2.getColumnName(ii) + "', while the other does " +
 						"not.");

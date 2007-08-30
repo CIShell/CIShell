@@ -7,10 +7,10 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.cishell.testing.convertertester.core.tester2.reportgen.ConvResultMaker;
 import org.cishell.testing.convertertester.core.tester2.reportgen.ReportGenerator;
 import org.cishell.testing.convertertester.core.tester2.reportgen.reports.AllConvsReport;
 import org.cishell.testing.convertertester.core.tester2.reportgen.reports.ConvReport;
+import org.cishell.testing.convertertester.core.tester2.reportgen.results.AllConvsResult;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.AllTestsResult;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.ConvResult;
 import org.osgi.service.log.LogService;
@@ -31,10 +31,11 @@ public class AllConvsReportGenerator implements ReportGenerator {
 		this.convSubGen = new ConvReportSubGenerator(this.log);
 	}
 	
-	public void generateReport(AllTestsResult atr) {
+	public void generateReport(AllTestsResult atr,
+							   AllConvsResult acr,
+							   File nwbConvGraph) {
 		
-		ConvResultMaker convGen = new ConvResultMaker();
-		ConvResult[] convResults = convGen.generate(atr);
+		ConvResult[] convResults = acr.getConvResults();
 		
 		FileOutputStream reportOutStream = null;
 		try {
@@ -46,17 +47,24 @@ public class AllConvsReportGenerator implements ReportGenerator {
 			report.println("---------------------------------------------");
 			report.println(""                                             );
 			
-			float passedPercentTotal = convResults[0].getPercentPassed();
-			for (int ii = 1; ii < convResults.length; ii++) {
+			float passedPercentTotal = 0;
+			for (int ii = 0; ii < convResults.length; ii++) {
+				if (convResults[ii].wasTested()) {
 				passedPercentTotal += convResults[ii].getPercentPassed(); 
+				}
 			}
-			float avgPercentPassed = passedPercentTotal / convResults.length;
-			float chanceCorrectTotal = convResults[0].getChanceCorrect();
-			for (int ii = 1; ii < convResults.length; ii++) {
-				chanceCorrectTotal += convResults[ii].getChanceCorrect(); 
+			float avgPercentPassed = 
+				passedPercentTotal / convResults.length;
+			
+			
+			float chanceCorrectTotal = 0;
+			for (int ii = 0; ii < convResults.length; ii++) {
+				if (convResults[ii].wasTested()) {
+					chanceCorrectTotal += convResults[ii].getChanceCorrect(); 
+				}
 			}
-
-			float avgChanceCorrect = chanceCorrectTotal / convResults.length;
+			float avgChanceCorrect = 
+				chanceCorrectTotal / ((float) convResults.length);
 
 			List convReportsList = new ArrayList();
 
@@ -96,7 +104,7 @@ public class AllConvsReportGenerator implements ReportGenerator {
 				ConvResult cr = (ConvResult) trustedConvs.get(ii);
 				
 				//add this converters name to all convs report
-				report.println("  " + cr.getNameNoPackage());
+				report.println("  " + cr.getShortName());
 				
 				//generate corresponding sub-report
 				this.convSubGen.generate(cr);
@@ -110,7 +118,7 @@ public class AllConvsReportGenerator implements ReportGenerator {
 				ConvResult cr = (ConvResult) nonTrustedConvs.get(ii);
 				
 				//add this converters name to all convs report
-				report.println("  " + cr.getNameNoPackage());
+				report.println("  " + cr.getShortName());
 				
 				//generate corresponding sub-report
 				this.convSubGen.generate(cr);

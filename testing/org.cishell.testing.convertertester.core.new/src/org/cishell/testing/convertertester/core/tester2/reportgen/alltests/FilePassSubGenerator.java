@@ -8,7 +8,7 @@ import java.io.PrintStream;
 import org.cishell.testing.convertertester.core.tester2.reportgen.ReportGenerator;
 import org.cishell.testing.convertertester.core.tester2.reportgen.reports.FilePassReport;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.FilePassResult;
-import org.cishell.testing.convertertester.core.tester2.reportgen.results.filepass.ConvertPhaseFailure;
+import org.cishell.testing.convertertester.core.tester2.reportgen.results.filepass.PassPhase;
 import org.osgi.service.log.LogService;
 
 public class FilePassSubGenerator {
@@ -66,27 +66,9 @@ public class FilePassSubGenerator {
 		report.println("");
 		report.println("File used   : " + fpr.getOriginalFileLabel());
 		
-		String resultType = fpr.getType();
-		if (resultType.equals(FilePassResult.SUCCESS)) {
-			//nothing else to be done
-		} else if (resultType.equals(FilePassResult.CONVERT_FAILURE)) {
-			ConvertPhaseFailure convertFailFpr = (ConvertPhaseFailure) fpr;
-			
-			report.println("");
-			if (convertFailFpr.getPhase().equals(ConvertPhaseFailure.TEST_PHASE)) {
-				report.println("Failed in test converters");
-				report.println("at : " + convertFailFpr.getFailedConverter());
-			} else { //failed during comparison conversion phase
-				report.println("Failed in comparison converters"); 
-		report.println("at : " + convertFailFpr.getFailedConverter());
-			}			
-		} else if (resultType.equals(FilePassResult.COMPARE_FAILURE)) {
-			report.println("Failed while comparing original and result files.");
-		}
-		
 		report.println("");
 		if (! fpr.getExplanation().trim().equals("")) {
-			report.println("Explanation... \n" + fpr.getExplanation());
+			report.println("Explanation... \r\n" + fpr.getExplanation());
 		}
 		
 		report.println("");

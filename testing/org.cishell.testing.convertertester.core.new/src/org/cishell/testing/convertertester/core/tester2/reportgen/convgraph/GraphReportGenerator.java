@@ -9,13 +9,13 @@ import java.io.IOException;
 
 import org.cishell.testing.convertertester.core.tester2.reportgen.ConvResultMaker;
 import org.cishell.testing.convertertester.core.tester2.reportgen.ReportGenerator;
+import org.cishell.testing.convertertester.core.tester2.reportgen.results.AllConvsResult;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.AllTestsResult;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.ConvResult;
 import org.osgi.service.log.LogService;
 
 public class GraphReportGenerator implements ReportGenerator {
 
-	private File nwbGraph;
 	private ConvResultMaker convGen = new ConvResultMaker();
 	private LogService log;
 	
@@ -23,18 +23,19 @@ public class GraphReportGenerator implements ReportGenerator {
 	
 	private String NODE_LINE = "^\\d+? \".*?\"$";
 	
-	public GraphReportGenerator(File nwbGraph, LogService log) {
+	public GraphReportGenerator(LogService log) {
 		this.log = log;
-		this.nwbGraph = nwbGraph;
 	}
 	
-	public void generateReport(AllTestsResult atr) {
-		ConvResult[] convs = convGen.generate(atr);
+	public void generateReport(AllTestsResult atr,
+							   AllConvsResult acr,
+							   File nwbConvGraph) {
+		ConvResult[] convs = acr.getConvResults();
 		
 		BufferedReader reader = null;
 		BufferedWriter writer = null;
 		try {
-			reader = new BufferedReader( new FileReader(this.nwbGraph));
+			reader = new BufferedReader( new FileReader(nwbConvGraph));
 			writer = new BufferedWriter( new FileWriter(this.annotatedNWBGraph));
 			
 			String line = null;
@@ -42,7 +43,7 @@ public class GraphReportGenerator implements ReportGenerator {
 				line = line.trim();
 				
 				if (line.startsWith("id*int")) {
-					writer.write(line + " isTrusted*int chanceCorrect*float isConverter*int \n");
+					writer.write(line + " isTrusted*int chanceCorrect*float isConverter*int \r\n");
 				} else if (line.matches(NODE_LINE)) {
 					String[] parts = line.split(" ");
 					String rawConvName = parts[1];
@@ -51,7 +52,7 @@ public class GraphReportGenerator implements ReportGenerator {
 					boolean wroteAttributes = false;
 					for (int ii = 0; ii < convs.length ; ii++) {
 						ConvResult cr = convs[ii];
-						if (cr.getNameWithPackage().equals(convName)) {
+						if (cr.getUniqueName().equals(convName)) {
 							int trusted;
 							
 							if (cr.isTrusted()) {
@@ -61,18 +62,18 @@ public class GraphReportGenerator implements ReportGenerator {
 							}
 							
 							writer.write(line + " " + trusted + " " + 
-									cr.getChanceCorrect() + " 1 " + "\n");
+									cr.getChanceCorrect() + " 1 " + "\r\n");
 							wroteAttributes = true;
 							break;
 						}
 					}
 					
 					if (! wroteAttributes) {
-						writer.write(line + " 1 1.0 0" + "\n");
+						writer.write(line + " 1 1.0 0" + "\r\n");
 					}
 					
 				} else {
-					writer.write(line + "\n");
+					writer.write(line + "\r\n");
 				}
 			}
 			

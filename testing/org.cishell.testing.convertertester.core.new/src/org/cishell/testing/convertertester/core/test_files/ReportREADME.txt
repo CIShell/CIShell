@@ -5,22 +5,6 @@ until I get motivated to do this thing all over again.
 There are three major reports: All Tests Report,
  All Converters Report, and Annotated Graph Report.
 
-Bug Notes: The following problems (as well as others)
-are known, and should be corrected.
-
-1. Data Manager is unable to collapse trees of
- data by default.
- 
-2. Some annoying converters output their
-exceptions to the logger directly instead
-of returning them. We need to redirect this
-information into the reports.
-
-3. CIShell sometimes goofs with the numbering
-of the reports, and either changes the last
-digit or adds ".1" to the end of everything.
-
-
 ALL TESTS REPORT
 
 All Tests Report provides results test by test. 

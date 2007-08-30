@@ -7,12 +7,13 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.cishell.testing.convertertester.core.converter.graph.Converter;
 import org.cishell.testing.convertertester.core.tester2.reportgen.ReportGenerator;
+import org.cishell.testing.convertertester.core.tester2.reportgen.faultanalysis.ChanceAtFault;
 import org.cishell.testing.convertertester.core.tester2.reportgen.reports.ConvReport;
 import org.cishell.testing.convertertester.core.tester2.reportgen.reports.TestReport;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.ConvResult;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.TestResult;
-import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogService;
 
 public class ConvReportSubGenerator {
@@ -30,9 +31,9 @@ public class ConvReportSubGenerator {
 		FileOutputStream reportOutStream = null;
 		try {
 			ConvResult convResult = cr;
-			ServiceReference conv = convResult.getRef();
+			Converter conv = convResult.getConverter();
 
-			File reportFile = new File(ReportGenerator.TEMP_DIR + cr.getNameWithPackage());
+			File reportFile = new File(ReportGenerator.TEMP_DIR + cr.getUniqueName());
 			reportOutStream = new FileOutputStream(reportFile);
 
 			PrintStream report = new PrintStream(reportOutStream);
@@ -40,7 +41,7 @@ public class ConvReportSubGenerator {
 			report.println("Converter Report");
 			report.println("--------------------------------------");
 			report.println("");
-			report.println(cr.getNameWithPackage());
+			report.println(cr.getUniqueName());
 			report.println("");
 			if (convResult.isTrusted()) {
 				report.println("Trusted");
@@ -50,48 +51,66 @@ public class ConvReportSubGenerator {
 			}
 			report.println("");
 			
-			report.println("# of files passed through :"
-					+ convResult.getNumFilePasses());
-			report.println("");
-			report.println("% Passed                  : "
-					+ convResult.getPercentPassed());
-			report.println("% Chance of Flaw          : "
-					+ convResult.getChanceOfFlaw());
+			if (cr.wasTested()) {
+				report.println("# of files passed through :"
+						+ convResult.getNumFilePasses());
+				report.println("");
+				report.println("% Passed                  : "
+						+ convResult.getPercentPassed());
+				report.println("% Chance of Flaw          : "
+						+ convResult.getChanceOfFlaw());
 
-			report.println("");
+				report.println("");
 
-			report.println("Involved in the following tests...");
-			TestResult[] involvedTests = cr.getTestsBySuccess();
-			for (int ii = 0; ii < involvedTests.length; ii++) {
-				TestResult tr = involvedTests[ii];
-				report.println("  " + tr.getNameWithSuccess());
-			}
-			report.println("");
-			
-			String[] failureExps = cr.getUniqueFailureExplanations();
-			if (failureExps.length > 0) {
-				report.println("Unique Failure Explanations...");
+				report.println("Involved in the following tests...");
+				TestResult[] involvedTests = cr.getTestsBySuccess();
+				for (int ii = 0; ii < involvedTests.length; ii++) {
+					TestResult tr = involvedTests[ii];
+					report.println("  " + tr.getNameWithSuccess());
+				}
+				report.println("");
 
-				for (int ii = 0; ii < failureExps.length; ii++) {
-					String failureExp = failureExps[ii];
+				ChanceAtFault[] failureExplns = cr
+						.getUniqueExplnChanceAtFaults();
+				if (failureExplns.length > 0) {
+					report.println("Unique Failure Explanations...");
 
-					report.println("");
-					report.println(failureExp);
-					report.println("----------");
+					for (int ii = 0; ii < failureExplns.length; ii++) {
+						ChanceAtFault failureExp = failureExplns[ii];
 
+						String explanation = failureExp.getExplanation();
+						float chanceAtFault = failureExp.getChanceAtFault();
+
+						report.println("");
+						report.println(explanation);
+						report.println("");
+						report.println("Chance this converter is responsible: "
+								+ chanceAtFault);
+						report.println("----------");
+
+					}
+
+				} else {
+					report.println("Not involved in any file pass failures");
 				}
 
 			} else {
-				report.println("Not involved in any file pass failures");
+				report.println("Converter was not able to be tested.");
+				report.println("");
+				report.println("This is most likely because we were unable to create a");
+				report.println("valid test path involving this converter. Valid test");
+				report.println("paths are paths through the converter graph that start at");
+				report.println("a file format, go through some converters, return back to");
+				report.println("that same file format, and can then be somehow converted");
+				report.println("to the in-memory graph comparison format (prefuse.graph)");
+				report.println("Consult the Annotated Graph Report for details on why this");
+				report.println("may not be testable.");
 			}
 
 			List testReportsList = new ArrayList();
-
-			TestReport[] testReports = (TestReport[]) testReportsList
-					.toArray(new TestReport[0]);
 			
 			this.convReport = new ConvReport(reportFile, new TestReport[0], cr
-					.getNameNoPackageWithTrust());
+					.getShortNameWithTrust());
 			report.println("");
 			report.flush();
 			reportOutStream.close();

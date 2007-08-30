@@ -7,14 +7,13 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.cishell.testing.convertertester.core.converter.graph.Converter;
 import org.cishell.testing.convertertester.core.converter.graph.ConverterPath;
 import org.cishell.testing.convertertester.core.tester2.reportgen.ReportGenerator;
 import org.cishell.testing.convertertester.core.tester2.reportgen.reports.FilePassReport;
 import org.cishell.testing.convertertester.core.tester2.reportgen.reports.TestReport;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.FilePassResult;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.TestResult;
-import org.cishell.testing.convertertester.core.tester2.util.ConvUtil;
-import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogService;
 
 public class TestReportSubGenerator {
@@ -56,20 +55,18 @@ public class TestReportSubGenerator {
 			report.println("Test Converters...");
 			ConverterPath testConvs = tr.getTestConverters();
 			for (int ii = 0; ii < testConvs.size(); ii++) {
-				ServiceReference ref = testConvs.getRef(ii);
-				String name = ref.getProperty("service.pid").toString();
-				String nameWithoutPackage = ConvUtil.removePackagePrefix(name);
-				report.println("  " + nameWithoutPackage);
+				Converter conv = testConvs.get(ii);
+				String shortName = conv.getShortName();
+				report.println("  " + shortName);
 			}
 			report.println("");
 			
 			report.println("Comparison Converters...");
 			ConverterPath compareConvs = tr.getComparisonConverters();
 			for (int ii = 0; ii < compareConvs.size(); ii++) {
-				ServiceReference ref = compareConvs.getRef(ii);
-				String name = ref.getProperty("service.pid").toString();
-				String nameWithoutPackage = ConvUtil.removePackagePrefix(name);
-				report.println("  " + nameWithoutPackage);
+				Converter conv = compareConvs.get(ii);
+				String shortName = conv.getShortName();
+				report.println("  " + shortName);
 			}
 			
 			report.println("");
@@ -80,9 +77,7 @@ public class TestReportSubGenerator {
 			report.println("");
 			for (int ii = 0; ii < successfulFPs.length; ii++) {
 				FilePassResult successfulFP = successfulFPs[ii];
-				namePass("Successful", successfulFP, tr, ii);
-				report.println(successfulFP.getName() +
-						" - " + successfulFP.getShortSummary());
+				report.println(successfulFP.getNameWithPhaseExpln());
 				filePassSubGen.writeReport(report, successfulFP);
 			}
 			report.println("");
@@ -92,9 +87,7 @@ public class TestReportSubGenerator {
 			report.println("");
 			for (int ii = 0; ii < failedFPs.length; ii++) {
 				FilePassResult failedFP = failedFPs[ii];
-				namePass("Failed", failedFP, tr, ii);
-				report.println(failedFP.getName() 
-						+  " - " + failedFP.getShortSummary());
+				report.println(failedFP.getNameWithPhaseExpln());
 				filePassSubGen.writeReport(report, failedFP);
 				report.println("");
 			}
@@ -146,11 +139,5 @@ public class TestReportSubGenerator {
 			this.log.log(LogService.LOG_ERROR,
 					"Unable to close a test report stream", e2);
 		}
-	}
-	
-	private void namePass(String prefix, FilePassResult fp, TestResult parent,
-			int index) {
-		fp.setName("Pass " + index);
-//		fp.setName(prefix + " Pass " + index + " of " + parent.getName() + " . ");
 	}
 }

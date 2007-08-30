@@ -186,8 +186,8 @@ public class ConverterTester {
 	public String toString(){
 		String output = "";
 		output += cfp.toString();
-		output += testConverters.toString()+"\n";
-		output += comparisonConverters.toString()+"\n";
+		output += testConverters.toString()+"\r\n";
+		output += comparisonConverters.toString()+"\r\n";
 		return output;
 	}
 	
@@ -220,7 +220,7 @@ public class ConverterTester {
     		return true;
     	}
     	catch (IOException ioe) {
-    		System.out.println("Copy Error: IOException during copy\n" + ioe.getMessage());
+    		System.out.println("Copy Error: IOException during copy\r\n" + ioe.getMessage());
             return false;
     	}
     }

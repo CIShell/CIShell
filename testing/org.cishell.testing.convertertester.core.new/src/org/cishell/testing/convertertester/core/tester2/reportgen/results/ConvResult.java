@@ -4,88 +4,181 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
+import org.cishell.testing.convertertester.core.converter.graph.Converter;
+import org.cishell.testing.convertertester.core.tester2.reportgen.faultanalysis.ChanceAtFault;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.filepass.FilePassFailure;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.filepass.FilePassSuccess;
-import org.cishell.testing.convertertester.core.tester2.util.ConvUtil;
-import org.osgi.framework.ServiceReference;
 
 public class ConvResult {
 	
-	private ServiceReference conv;
+	//original instance variables
 	
-	private List failFilePasses = new ArrayList();
-	private List successFilePasses = new ArrayList();
-	private List uniqueFailureExplanations = new ArrayList();
-	private List tests      = new ArrayList();
-	
+	private Converter conv;
 	private boolean isTrusted;
+	private Map involvedTestsAndPasses;
 	
-	private float chanceCorrect = 1.0f;
+	//derived instance variables
 	
-	public ConvResult(ServiceReference conv) {
+	private List involvedTests;
+	private List involvedPasses;
+	private List succeededInvolvedPasses;
+	private List failedInvolvedPasses;
+	private float percentPassed;
+	private List chanceAtFaults;
+	private List uniqueExplnChanceAtFaults;
+	private float chanceCorrect;
+	
+	public ConvResult(Converter conv, boolean isTrusted,
+			Map involvedTestsAndPasses) {
 		this.conv = conv;
-		this.isTrusted = false;
+		this.isTrusted = isTrusted;
+		this.involvedTestsAndPasses = involvedTestsAndPasses;
+		
+		
+		initializeDerivedVariables();
 	}
 	
-	public void setTrusted(boolean isTrusted) {
-		this.isTrusted = isTrusted;
+	private void initializeDerivedVariables() {
+		initializeInvolvedTests();
+		initializeInvolvedPasses();
+		initializeSucceededAndFailedInvolvedPasses();
+		initializePercentPassed();
+		initializeChanceAtFaults();
+		initializeChanceCorrect();
+	}
+	
+	private void initializeInvolvedTests() {
+		Set involvedTestSet = involvedTestsAndPasses.keySet();
+		this.involvedTests = new ArrayList(involvedTestSet);
+		System.out.println(conv.getUniqueName() + 
+				"is involved in " + involvedTests.size() + " tests");
+	}
+	
+	private void initializeInvolvedPasses() {
+		this.involvedPasses = new ArrayList();
+		
+		Iterator iter = involvedTests.iterator();
+		while (iter.hasNext()) {
+			TestResult tr = (TestResult) iter.next();
+			
+			List passes = (List) involvedTestsAndPasses.get(tr);
+			
+			involvedPasses.addAll(passes);
+		}
+		
+		System.out.println(conv.getUniqueName() + 
+				"is involved in " + involvedPasses.size() + " passes");
+	}
+	
+	private void initializeSucceededAndFailedInvolvedPasses() {
+		this.succeededInvolvedPasses = new ArrayList();
+		this.failedInvolvedPasses = new ArrayList();
+		
+		Iterator iter = this.involvedPasses.iterator();
+		while (iter.hasNext()) {
+			FilePassResult fpr = (FilePassResult) iter.next();
+			
+			if (fpr.succeeded()) {
+				this.succeededInvolvedPasses.add(fpr);
+			} else {
+				this.failedInvolvedPasses.add(fpr);
+			}
+		}
+		
+		System.out.println(conv.getUniqueName() + 
+				" is involved in " + succeededInvolvedPasses.size() + " successful passes");
+		System.out.println(conv.getUniqueName() + 
+				" is involved in " + failedInvolvedPasses.size() + " failed passes");
+	}
+	
+	private void initializePercentPassed() {
+		int succeededPasses = this.succeededInvolvedPasses.size();
+		int totalPasses = this.involvedPasses.size();
+		
+		if (totalPasses > 0) {
+			this.percentPassed = ((float) succeededPasses) / ((float) totalPasses);
+		} else {
+			//solves division by zero issue.
+			this.percentPassed = 0;
+		}
+	}
+	
+	private void initializeChanceAtFaults() {
+		this.chanceAtFaults = new ArrayList();
+		this.uniqueExplnChanceAtFaults = new ArrayList();
+		
+		Iterator iter = this.failedInvolvedPasses.iterator();
+		while (iter.hasNext()) {
+			FilePassFailure failFP = (FilePassFailure) iter.next();
+			
+			ChanceAtFault chanceAtFault = 
+				failFP.getChanceAtFaultFor(this.conv);
+			
+			//add to list for all involved chance at faults
+			this.chanceAtFaults.add(chanceAtFault);
+			
+			/*
+			 * potentially add to list for chance at faults with unique
+			 *  explanations.
+			 */
+			
+			String explanation = chanceAtFault.getExplanation();
+			
+			boolean unique = 
+				! containsChanceAtFaultWithExpln(
+						this.uniqueExplnChanceAtFaults, explanation);
+			
+			if (unique) {
+				this.uniqueExplnChanceAtFaults.add(chanceAtFault);
+			}
+		}
+	}
+	
+	private void initializeChanceCorrect() {
+		float chanceCorrectSoFar = 1.0f;
+		
+		Iterator iter = this.uniqueExplnChanceAtFaults.iterator();
+		while (iter.hasNext()) {
+			ChanceAtFault uniqueExplnCAF = (ChanceAtFault) iter.next();
+			
+			float chanceCorrectForThisError = 
+				uniqueExplnCAF.getChanceNotAtFault();
+			
+			chanceCorrectSoFar *= chanceCorrectForThisError;
+		}
+		
+		float finalChanceCorrect = chanceCorrectSoFar;
+		
+		this.chanceCorrect = finalChanceCorrect;
+	}
+	
+	
+	
+	public Converter getConverter() {
+		return this.conv;
 	}
 	
 	public boolean isTrusted() {
 		return this.isTrusted;
 	}
-	
-	public float getChanceOfFlaw() {
-		return 1.0f - this.chanceCorrect; 
-	}
-	
+
 	public int getNumFilePasses() {
-		return this.failFilePasses.size() + 
-			this.successFilePasses.size();
+		return involvedPasses.size();
 	}
 	
-	public float getChanceCorrect() {
-		return this.chanceCorrect;
+	public String getUniqueName() {
+		return this.conv.getUniqueName();
 	}
 	
-	public float getPercentPassed() {
-		float totalFilePasses = successFilePasses.size() + failFilePasses.size();
-		return successFilePasses.size() / totalFilePasses;
+	public String getShortName() {
+		return this.conv.getShortName();
 	}
 	
-	public void addTest(TestResult tr) {
-		if (! tests.contains(tr)) {
-			this.tests.add(tr);
-		}
-	}
-	
-	/**
-	 * Returns the full unique name of the converter, including the package 
-	 * it is found in.
-	 * @return full unique name
-	 */
-	public String getNameWithPackage() {
-		return (String) this.getRef().getProperty("service.pid");
-	}
-	
-	/**
-	 * Returns a shortened version of the name, which does not contain the
-	 * package. This name is not guaranteed to be unique, but is easier
-	 * for humans to read.
-	 * @return The shortened name
-	 */
-	public String getNameNoPackage() {
-		return ConvUtil.removePackagePrefix(getNameWithPackage());
-	}
-	
-	/**
-	 * Returns the shortened name, with either "Trusted" or "Not Trusted"
-	 * prepended to the front.
-	 * @return The shortened name with trust information.
-	 */
-	public String getNameNoPackageWithTrust() {
-		String nameNoPackageWithTrust =  " - " + getNameNoPackage() ;
+	public String getShortNameWithTrust() {
+		String nameNoPackageWithTrust =  " - " + getShortName() ;
 		if (isTrusted()) {
 			nameNoPackageWithTrust = "Trusted" + nameNoPackageWithTrust;
 		} else {
@@ -95,70 +188,70 @@ public class ConvResult {
 		return nameNoPackageWithTrust;
 	}
 	
-	public TestResult[] getTests() {
-		Collections.sort(this.tests);
-		return (TestResult[]) this.tests.toArray(new TestResult[0]);
+	public boolean wasTested() {
+		return this.involvedPasses.size() > 0;
 	}
 	
-	public TestResult[] getTestsBySuccess() {
-		Collections.sort(this.tests, TestResult.getCompareBySuccess());
-		return (TestResult[]) this.tests.toArray(new TestResult[0]);
-	}
-	
-	public void addPass(FilePassSuccess fp) {
-		this.successFilePasses.add(fp);
-	}
-	
-	public String [] getUniqueFailureExplanations() {
-		return (String[]) this.uniqueFailureExplanations.toArray(new String[0]);
-	}
-	
-	public void addPass(FilePassFailure fp, float chanceAtFault) {
-		if (isUniqueFailure(fp)) {
-			adjustTotalChanceAtFault(chanceAtFault);
-			this.uniqueFailureExplanations.add(fp.getExplanation());
-		}
-		this.failFilePasses.add(fp);
-		
+	public FilePassResult[] getFilePasses() {
+
+		return (FilePassResult[]) 
+			this.involvedPasses.toArray(new FilePassResult[0]);
 	}
 	
 	public FilePassSuccess[] getSuccessFilePasses() {
-		return (FilePassSuccess[]) this.successFilePasses.toArray(new FilePassSuccess[0]);
+		return (FilePassSuccess[]) 
+			this.succeededInvolvedPasses.toArray(new FilePassSuccess[0]);
 	}
 	
 	public FilePassFailure[] getFailFilePasses() {
-		return (FilePassFailure[]) this.failFilePasses.toArray(new FilePassFailure[0]);
+		return (FilePassFailure[]) 
+			this.failedInvolvedPasses.toArray(new FilePassFailure[0]);
 	}
-	public FilePassResult[] getFilePasses() {
-		List allFilePasses = new ArrayList();
-		allFilePasses.addAll(this.successFilePasses);
-		allFilePasses.addAll(this.failFilePasses);
-		return (FilePassResult[]) allFilePasses.toArray(new FilePassResult[0]);
+
+	
+	public TestResult[] getTests() {
+		Collections.sort(this.involvedTests);
+		return (TestResult[]) this.involvedTests.toArray(new TestResult[0]);
 	}
 	
-	public ServiceReference getRef() {
-		return this.conv;
+	public TestResult[] getTestsBySuccess() {
+		Collections.sort(this.involvedTests, TestResult.getCompareBySuccess());
+		return (TestResult[]) this.involvedTests.toArray(new TestResult[0]);
 	}
 	
-	private void adjustTotalChanceAtFault(float chanceAtFault) {
-		if (this.chanceCorrect == 1.0f) {
-			this.chanceCorrect = 1.0f - chanceAtFault;
-		} else {
-			this.chanceCorrect = this.chanceCorrect * (1.0f - chanceAtFault);
-		
-		}
+	public ChanceAtFault[] getAllChanceAtFaults() {
+		return (ChanceAtFault[])
+			this.chanceAtFaults.toArray(new ChanceAtFault[0]);
 	}
 	
-	private boolean isUniqueFailure(FilePassFailure fp) {
-		Iterator iter = this.uniqueFailureExplanations.iterator();
+	public ChanceAtFault[] getUniqueExplnChanceAtFaults() {
+		return (ChanceAtFault[])
+			this.uniqueExplnChanceAtFaults.toArray(new ChanceAtFault[0]);
+	}
+	
+	public float getPercentPassed() {
+		return this.percentPassed;
+	}
+	
+	public float getChanceCorrect() {
+		return this.chanceCorrect;
+	}
+	
+	public float getChanceOfFlaw() {
+		return 1.0f - this.chanceCorrect; 
+	}
+	
+	private boolean containsChanceAtFaultWithExpln(List chanceAtFaultList,
+			String explanation) {
+		Iterator iter = chanceAtFaultList.iterator();
 		while (iter.hasNext()) {
-			String failureExplanation = (String) iter.next();
+			ChanceAtFault caf = (ChanceAtFault) iter.next();
 			
-			if (failureExplanation.equals(fp.getExplanation())) {
-				return false;
+			if (explanation.equals(caf.getExplanation())) {
+				return true;
 			}
 		}
 		
-		return true;
- 	}
+		return false;
+	}
 }

@@ -22,8 +22,8 @@ public class ComparisonResult {
 		if (comparisonSucceeded()) {
 			return "Success!";
 		} else {
-			return "Failure: " + "\n" +
-			       "Log:"     + "\n" +
+			return "Failure: " + "\r\n" +
+			       "Log:"     + "\r\n" +
 			        log;
 		}
 	}

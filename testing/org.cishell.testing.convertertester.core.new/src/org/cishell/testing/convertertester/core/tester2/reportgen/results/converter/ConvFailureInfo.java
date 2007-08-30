@@ -1,13 +1,13 @@
 package org.cishell.testing.convertertester.core.tester2.reportgen.results.converter;
 
-import org.cishell.framework.algorithm.AlgorithmFactory;
+import org.cishell.testing.convertertester.core.converter.graph.Converter;
 
 public class ConvFailureInfo {
 	
-	private String failedConverter;
+	private Converter failedConverter;
 	private String explanation;
 	
-	public ConvFailureInfo(String explanation, String failedConverter) {
+	public ConvFailureInfo(String explanation, Converter failedConverter) {
 		this.explanation = explanation;
 		this.failedConverter = failedConverter;
 	}
@@ -16,7 +16,7 @@ public class ConvFailureInfo {
 		return this.explanation;
 	}
 	
-	public String getFailedConverter() {
+	public Converter getFailedConverter() {
 		return this.failedConverter;
 	}
 }

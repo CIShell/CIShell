@@ -9,20 +9,19 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
-import org.cishell.framework.algorithm.Algorithm;
-import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.data.BasicData;
 import org.cishell.framework.data.Data;
+import org.cishell.testing.convertertester.core.converter.graph.Converter;
 import org.cishell.testing.convertertester.core.converter.graph.ConverterPath;
 import org.cishell.testing.convertertester.core.tester.graphcomparison.ComparisonResult;
-import org.cishell.testing.convertertester.core.tester2.fakelogger.LogEntry;
 import org.cishell.testing.convertertester.core.tester2.fakelogger.FakeLogCIShellContext;
+import org.cishell.testing.convertertester.core.tester2.fakelogger.LogEntry;
 import org.cishell.testing.convertertester.core.tester2.graphcomparison.NewGraphComparer;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.FilePassResult;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.converter.ConvFailureInfo;
-import org.cishell.testing.convertertester.core.tester2.reportgen.results.filepass.ComparePhaseFailure;
-import org.cishell.testing.convertertester.core.tester2.reportgen.results.filepass.ConvertPhaseFailure;
+import org.cishell.testing.convertertester.core.tester2.reportgen.results.filepass.FilePassFailure;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.filepass.FilePassSuccess;
+import org.cishell.testing.convertertester.core.tester2.reportgen.results.filepass.PassPhase;
 import org.osgi.service.log.LogService;
 
 import prefuse.data.Graph;
@@ -53,46 +52,46 @@ public class DefaultTestRunner implements TestRunner {
 					testConverters, testData);
 
 			if (!testPhaseResult.succeeded()) {
-				ConvertPhaseFailure failure = new ConvertPhaseFailure(
-						originalFileData, testPhaseResult.getFailInfo(),
-						ConvertPhaseFailure.TEST_PHASE);
+				FilePassFailure failure = createFailResult(originalFileData, 
+						PassPhase.TEST_CONV_PHASE,
+						testPhaseResult.getFailInfo());
 				testResults.add(failure);
 				continue;
 			}
 			Data[] resultFileData = testPhaseResult.getResult();
 
-			// comparison conversion phase
+			// comparison conversion (for original file) phase
 
-			ConvertResult comparisonPhaseResult1 = convert(originalFileData,
+			ConvertResult comparePhaseOrigResult = convert(originalFileData,
 					comparisonConverters, testData);
 
-			if (!comparisonPhaseResult1.succeeded()) {
-				ConvertPhaseFailure failure = new ConvertPhaseFailure(
-						originalFileData,
-						comparisonPhaseResult1.getFailInfo(),
-						ConvertPhaseFailure.TEST_PHASE);
+			if (!comparePhaseOrigResult.succeeded()) {
+				FilePassFailure failure = createFailResult(originalFileData, 
+						PassPhase.COMPARE_CONV_ORIG_PHASE,
+						comparePhaseOrigResult.getFailInfo());
 				testResults.add(failure);
 				continue;
 			}
-			Data[] originalInMemory = comparisonPhaseResult1.getResult();
+			Data[] originalInMemory = comparePhaseOrigResult.getResult();
 
-			ConvertResult comparisonPhaseResult2 = convert(resultFileData,
+			//comparison conversion (for result file) phase
+			
+			ConvertResult comparePhaseResultResult = convert(resultFileData,
 					comparisonConverters, testData);
 
-			if (!comparisonPhaseResult2.succeeded()) {
-				ConvertPhaseFailure failure = new ConvertPhaseFailure(
-						originalFileData, 
-						comparisonPhaseResult2.getFailInfo(),
-						ConvertPhaseFailure.COMPARISON_PHASE);
+			if (!comparePhaseResultResult.succeeded()) {
+				FilePassFailure failure = createFailResult(originalFileData, 
+						PassPhase.COMPARE_CONV_RESULT_PHASE,
+						comparePhaseResultResult.getFailInfo());
 				testResults.add(failure);
 				continue;
 			}
-			Data[] resultInMemory = comparisonPhaseResult2.getResult();
+			Data[] resultInMemory = comparePhaseResultResult.getResult();
 
 			// graph comparison phase
 
-			Graph origGraph = (Graph) resultInMemory[0].getData();
 			Graph resultGraph = (Graph) originalInMemory[0].getData();
+			Graph origGraph = (Graph) resultInMemory[0].getData();
 
 			NewGraphComparer comparer = testData.getComparer();
 			ComparisonResult graphComparisonPhaseResult = comparer.compare(
@@ -101,14 +100,15 @@ public class DefaultTestRunner implements TestRunner {
 			if (!graphComparisonPhaseResult.comparisonSucceeded()) {
 				String explanation =
 					graphComparisonPhaseResult.getLog();
-				ComparePhaseFailure failure = new ComparePhaseFailure(
-						originalFileData,
-						explanation);
+				FilePassFailure failure = createFailResult(originalFileData, 
+						explanation, PassPhase.COMPARE_CONV_RESULT_PHASE,
+						null);
 				testResults.add(failure);
 				continue;
 			}
 
-			FilePassSuccess success = new FilePassSuccess(originalFileData);
+			FilePassSuccess success = new FilePassSuccess(originalFileData,
+					"");
 			testResults.add(success);
 		}
 
@@ -121,7 +121,6 @@ public class DefaultTestRunner implements TestRunner {
 			ConverterPath converters, TestConfigData testData) {
 
 		Data[] currentData = getFilePathData(startData);
-		AlgorithmFactory[] converterAlgs = converters.getPathAsAlgorithms();
 		
 		/*
 		 * rig up fake CISHellContext so we can get ahold of
@@ -130,15 +129,16 @@ public class DefaultTestRunner implements TestRunner {
 		FakeLogCIShellContext fakeCContext = 
 			new FakeLogCIShellContext(testData.getContext());
 		
-		AlgorithmFactory currentConverterAlg = converterAlgs[0];
+		Converter currentConverter = converters.get(0);
 		try {
-			for (int ii = 0; ii < converterAlgs.length; ii++) {
-				currentConverterAlg = converterAlgs[ii];
+			for (int ii = 0; ii < converters.size(); ii++) {
+				currentConverter = converters.get(ii);
 				
-				Algorithm currentAlgorithm = 
-					currentConverterAlg.createAlgorithm(currentData,
-							new Hashtable(), fakeCContext);
-				currentData = currentAlgorithm.execute();
+				//no parameters used
+				Hashtable parameters = new Hashtable();
+				
+				currentData = currentConverter.execute(currentData,
+						parameters, fakeCContext);
 
 				/*
 				 * There are two ways that converters generally fail.
@@ -148,21 +148,21 @@ public class DefaultTestRunner implements TestRunner {
 				 * and return null.
 				 */
 				if (currentData == null || currentData[0].getData() == null) {
-					String converterName = converters.getConverterName(ii);
+					Converter converter = converters.get(ii);
 					
-					String explanation = "Result data is null. \n";
+					String explanation = "Result of conversion was null. \r\n";
 					
 					
 					if (fakeCContext.hasLogEntries()) {
 						String logText = extractLogText(fakeCContext);
-						explanation += "Error log contains the following: \n" +
+						explanation += "Error log contains the following: \r\n" +
 							logText;
 					} else {
-						explanation += "No errors logged. Cause unknown. \n";
+						explanation += "No errors logged. Cause unknown. \r\n";
 					}
 					
 					ConvFailureInfo failInfo = new ConvFailureInfo(
-							explanation, converterName);
+							explanation, converter);
 					
 					ConvertResult result = new ConvertResult(failInfo);
 					return result;
@@ -170,7 +170,7 @@ public class DefaultTestRunner implements TestRunner {
 			}
 		} catch (Throwable t) {
 			ConvFailureInfo failInfo = new ConvFailureInfo(getStackTrace(t),
-					currentConverterAlg.getClass().toString());
+					currentConverter);
 			ConvertResult result = new ConvertResult(failInfo);
 			return result;
 		}
@@ -178,6 +178,20 @@ public class DefaultTestRunner implements TestRunner {
 		Data[] resultData = currentData;
 		ConvertResult result = new ConvertResult(resultData);
 		return result;
+	}
+	
+	private FilePassFailure createFailResult(Data[] origData,
+			String explanation, PassPhase lastReachedPhase,
+			Converter failedConverter) {
+		FilePassFailure failure = new FilePassFailure(origData, explanation,
+				lastReachedPhase, failedConverter);
+		return failure;
+	}
+	
+	private FilePassFailure createFailResult(Data[] origData,
+			PassPhase lastReachedPhase, ConvFailureInfo failInfo) {
+		return createFailResult(origData, failInfo.getExplanation(), 
+				lastReachedPhase, failInfo.getFailedConverter());
 	}
 
 	private class ConvertResult {
@@ -248,9 +262,9 @@ public class DefaultTestRunner implements TestRunner {
 			Throwable e    = entry.getThrowable();
 			String message = entry.getMessage();
 			
-			logText += message + "\n";
-			logText += getStackTrace(e) + "\n";
-			logText += "\n";
+			logText += message + "\r\n";
+			logText += getStackTrace(e) + "\r\n";
+			logText += "\r\n";
 		}
 		
 		return logText;

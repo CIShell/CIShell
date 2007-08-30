@@ -10,6 +10,7 @@ import java.util.List;
 import org.cishell.testing.convertertester.core.tester2.reportgen.ReportGenerator;
 import org.cishell.testing.convertertester.core.tester2.reportgen.reports.AllTestsReport;
 import org.cishell.testing.convertertester.core.tester2.reportgen.reports.TestReport;
+import org.cishell.testing.convertertester.core.tester2.reportgen.results.AllConvsResult;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.AllTestsResult;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.TestResult;
 import org.osgi.service.log.LogService;
@@ -30,7 +31,9 @@ public class AllTestsReportGenerator implements ReportGenerator {
 		this.testResultSubGen = new TestReportSubGenerator(this.log);
 	}
 
-	public void generateReport(AllTestsResult atr) {
+	public void generateReport(AllTestsResult atr,
+							   AllConvsResult acr,
+							   File nwbConvGraph) {
 		FileOutputStream reportOutStream = null;
 		try {
 			File reportFile = new File(TEMP_DIR + TEMP_FILE_PATH);
@@ -50,9 +53,6 @@ public class AllTestsReportGenerator implements ReportGenerator {
 			report.println("  Total                    : " + 
 					atr.getNumTests());
 			report.println("");
-
-			float percentCompletelyPassed =
-				atr.getNumTestsPassed() / (atr.getNumTests());
 			
 			TestResult[] passedTRs = atr.getPassedTestResults();
 			report.println("Completely Passed Tests...");

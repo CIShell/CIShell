@@ -193,7 +193,7 @@ public class ConfigurationFileParser {
 		if(!f.isHidden()){
 			if(f.isDirectory()){
 				output += "Directory: ";
-				output += f.getName()+ "\n";
+				output += f.getName()+ "\r\n";
 				File[] files = f.listFiles();
 				for (int ii = 0; ii < files.length; ii++){
 					File ff = files[ii];
@@ -201,7 +201,7 @@ public class ConfigurationFileParser {
 				}
 			}
 			else{
-				output += "\t" + f.getName() + "\n";
+				output += "\t" + f.getName() + "\r\n";
 			}
 		}
 		return output;
@@ -209,29 +209,29 @@ public class ConfigurationFileParser {
 
 	public String toString(){
 		String output = "";
-		output += "Files to test:\n";
+		output += "Files to test:\r\n";
 		Iterator iter0 = this.comparisonFiles.iterator();
 		while (iter0.hasNext()){
 			File f = (File) iter0.next();
 			output += asString(f,"");
 		}
 
-		output += "\nConverters to test:\n";
+		output += "\r\nConverters to test:\r\n";
 		Iterator iter1 = this.testConverters.iterator();
 		while (iter1.hasNext()){
 			String s = (String) iter1.next();
-			output += s + "\n";
+			output += s + "\r\n";
 		}
 
-		output += "\nConverters used to Compare files:\n";
+		output += "\r\nConverters used to Compare files:\r\n";
 
 		Iterator ii2 = this.comparisonConverters.iterator();
 		while (ii2.hasNext()){
 			String s = (String) ii2.next();
-			output += s +"\n";
+			output += s +"\r\n";
 		}
 
-		output += "\nNode IDs are expected to change: " + this.nodeIDChange + "\n";
+		output += "\r\nNode IDs are expected to change: " + this.nodeIDChange + "\r\n";
 
 		return output;
 	}

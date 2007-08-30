@@ -3,7 +3,6 @@ package org.cishell.testing.convertertester.core.converter.graph;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.algorithm.AlgorithmProperty;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -16,11 +15,7 @@ public class ConverterPath implements AlgorithmProperty {
 	private String in_data = null;
 	private String out_data = null;
 	
-	private ArrayList path;
-	
-	private boolean algPathCached = false;
-	private ArrayList algPath;
-	
+	private List path;
 	
 	public ConverterPath(BundleContext bContext, LogService log){
 		this.bContext = bContext;
@@ -49,20 +44,16 @@ public class ConverterPath implements AlgorithmProperty {
 		this.out_data = s;
 	}
 	
-	public boolean addAlgorithm(ServiceReference sr){
+	public boolean add(Converter c){
 
 		boolean val = true;
 		
-		if(path.contains(sr)){
-//			System.out.println("Path already contains " + sr.getProperty("service.pid"));
-			
+		if(path.contains(c)){	
 			return false;
 		}
 		
-
-		path.add(sr);
-		invalidateAlgPath();
-		this.setOutData(sr.getProperty("out_data").toString());
+		path.add(c);
+		this.setOutData(c.getOutData());
 		return val;
 	}
 	
@@ -92,48 +83,50 @@ public class ConverterPath implements AlgorithmProperty {
 		return this.path;
 	}
 	
+	//inclusive
+	public List getPathUpTo(Converter upToConv) {
+		int convIndex = -1;
+		for (int ii = 0; ii < this.path.size(); ii++) {
+			Converter aConvInPath = get(ii);
+			
+			if (aConvInPath.equals(upToConv)) {
+				convIndex = ii;
+				break;
+			}
+		}
+		
+		if (convIndex != -1) {
+			return this.path.subList(0, convIndex + 1);
+		} else {
+			throw new IllegalArgumentException("Attempted to get a " + 
+					"subsection of a path up until a converter " + 
+					"that does not exist in the original path");
+		}
+	}
+	
+	public Converter get(int index) {
+		return (Converter) this.path.get(index);
+	}
+	
 	public ServiceReference getRef(int index) {
 
-		return (ServiceReference) this.path.get(index);
+		Converter c = (Converter) this.path.get(index);
+		ServiceReference ref = c.getRef();
+		return ref;
 	}
 	
-	public AlgorithmFactory getAlg(int index) {
+	public Converter[] getPathAsArray(){
 
-		if (! algPathCached) cacheAlgPath();
-		return (AlgorithmFactory) this.algPath.get(index);
-	}
-	
-	public ServiceReference[] getPathAsArray(){
-
-		return (ServiceReference[])this.path.toArray(new ServiceReference[0]);
-	}
-	
-	public AlgorithmFactory[] getPathAsAlgorithms(){
-
-		if (! algPathCached) cacheAlgPath();
-		
-		return (AlgorithmFactory[]) this.algPath.toArray(new AlgorithmFactory[0]);
-	}
-	
-	public String toString(){
-
-		String val = this.in_data +" -->\n";
-		
-		for(int i = 0; i < this.path.size(); i++){
-			ServiceReference sr = (ServiceReference)this.path.get(i);
-			val += "\t" + sr.getProperty("service.pid") + "\n";
-		}
-		val += "--> " + this.out_data + "\n";
-		return val;
+		return (Converter[]) this.path.toArray(new Converter[0]);
 	}
 	
 	public boolean isLossy() {
 
 		String lossiness = LOSSLESS;
         for (int i = 0; i < this.path.size(); i++) {
-        	ServiceReference sr = (ServiceReference) this.path.get(i);
+        	Converter c = (Converter) this.path.get(i);
         	
-            if (LOSSY.equals(sr.getProperty(CONVERSION))) {
+            if (c.isLossy()) {
                 lossiness = LOSSY;
             }
         } 
@@ -148,51 +141,12 @@ public class ConverterPath implements AlgorithmProperty {
 		return false;
 	}
 	
-	
-	public ConverterPath appendNonMutating(ConverterPath otherPath) {
-		
-		List thisConvPath = this.path;
-		List otherConvPath = otherPath.getPath();
-		
-		List thisConvPathCopy = new ArrayList(thisConvPath);
-		thisConvPathCopy.addAll(otherConvPath);
-		ConverterPath combinedPath = new ConverterPath(this.bContext, this.log);
-		
-		List combinedConvPath = thisConvPathCopy;
-		for (int ii = 0; ii < combinedConvPath.size(); ii++) {
-			ServiceReference sr = (ServiceReference) combinedConvPath.get(ii);
-			
-			combinedPath.addAlgorithm(sr);
-		}
-		
-		return combinedPath;
-	}
-	
 	public int size() {
 
 		return this.path.size();
 	}
 	
 	public String getConverterName(int index) {
-		return (String) getRef(index).getProperty("service.pid");
-	}
-
-	
-	private void cacheAlgPath() {
-		this.algPath = new ArrayList();
-		
-		for (int i = 0; i < this.path.size(); i++){
-			ServiceReference sr  = (ServiceReference)this.path.get(i);
-			
-			AlgorithmFactory alg = (AlgorithmFactory) this.bContext.getService(sr);
-			this.algPath.add(alg);
-		}
-		
-		this.algPathCached = true;
-	}
-	
-	private void invalidateAlgPath() {
-		
-		this.algPathCached = false;
+		return (String) get(index).getUniqueName();
 	}
 }

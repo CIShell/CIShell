@@ -13,17 +13,23 @@ import org.cishell.framework.algorithm.AlgorithmProperty;
 import org.cishell.framework.data.BasicData;
 import org.cishell.framework.data.Data;
 import org.cishell.framework.data.DataProperty;
+import org.cishell.testing.convertertester.core.converter.graph.Converter;
 import org.cishell.testing.convertertester.core.converter.graph.ConverterGraph;
 import org.cishell.testing.convertertester.core.converter.graph.ConverterPath;
 import org.cishell.testing.convertertester.core.tester2.graphcomparison.IdsNotPreservedComparer;
 import org.cishell.testing.convertertester.core.tester2.graphcomparison.IdsPreservedComparer;
 import org.cishell.testing.convertertester.core.tester2.graphcomparison.LossyComparer;
 import org.cishell.testing.convertertester.core.tester2.graphcomparison.NewGraphComparer;
+import org.cishell.testing.convertertester.core.tester2.reportgen.ConvResultMaker;
 import org.cishell.testing.convertertester.core.tester2.reportgen.ReportGenerator;
+import org.cishell.testing.convertertester.core.tester2.reportgen.faultanalysis.ChanceAtFaultHeuristic;
+import org.cishell.testing.convertertester.core.tester2.reportgen.faultanalysis.FullTrustHeuristic;
+import org.cishell.testing.convertertester.core.tester2.reportgen.results.AllConvsResult;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.AllTestsResult;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.FilePassResult;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.TestResult;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogService;
 
 /**
@@ -52,28 +58,48 @@ public class ConverterTester2 implements AlgorithmProperty {
 	 * Tests the provided converters, and passes the results of those tests to
 	 * the report generators. Report Generators are side-effected, which takes
 	 * the place of a return value.
+	 * @param converterRefs service reference for all the converters.
 	 * @param reportGenerators process the test results.
 	 * @param cContext the CIShell Context
 	 * @param bContext the Bundle Context
 	 */
 	public void execute(
-			ConverterGraph converterGraph,
+			ServiceReference[] converterRefs,
 			ReportGenerator[] reportGenerators,
 			CIShellContext cContext,
 			BundleContext bContext) {
+		
+		//generate all the converter paths
+		
+		ConverterGraph converterGraph = new ConverterGraph(converterRefs,
+				bContext, this.log);
 		
 		//run the tests
 		
 		TestResult[] rawResults = 
 			runAllTests(converterGraph, cContext, bContext);
+		
+		System.out.println("Num Test Results coming out of runAllTests" +
+				": " + rawResults.length);
+		
 		AllTestsResult allTestsResult = new AllTestsResult(rawResults);
+		
+		//analyze the test results to extract more useful info
+		
+		Converter[] allConverters = converterGraph.getAllConverters();
+		
+		ChanceAtFaultHeuristic faultHeuristic = new FullTrustHeuristic();
+		AllConvsResult allConvertersResult = 
+			ConvResultMaker.generate(allTestsResult, allConverters,
+					faultHeuristic);
 		
 		//feed test results to the report generators
 		
 		for (int ii = 0; ii < reportGenerators.length; ii++) {
 			ReportGenerator reportGenerator = reportGenerators[ii];
 			
-			reportGenerator.generateReport(allTestsResult);
+			reportGenerator.generateReport(allTestsResult,
+					allConvertersResult, converterGraph.asNWB());
 		}
 	}
 	
@@ -89,6 +115,8 @@ public class ConverterTester2 implements AlgorithmProperty {
 		
 		Set fileFormats = fileFormatToTestConvs.keySet();
 		
+		System.out.println("Number of file formats provided by convGraph : " +
+				fileFormats.size());
 		/*
 		 * for each file format, get the corresponding test converter paths
 		 * and comparison converter path.
@@ -105,6 +133,9 @@ public class ConverterTester2 implements AlgorithmProperty {
 			
 			ConverterPath[] testConvs  =
 				(ConverterPath[]) testConvList.toArray(new ConverterPath[0]);
+			
+			System.out.println("Test converters for this file format : " +
+					testConvs.length);
 			
 			ConverterPath compareConv = 
 				(ConverterPath) fileFormatToCompareConvs.get(fileFormat); 

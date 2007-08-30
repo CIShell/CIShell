@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
@@ -19,35 +20,47 @@ public class ConverterGraph {
 	Map inDataToAlgorithm;
 	Map fileExtensionTestConverters;
 	Map fileExtensionCompareConverters;
-	ServiceReference[] converters;
+	Converter[] converters;
 	BundleContext bContext;
 	private LogService log;
 	private static final String testOutData = "prefuse.data.Graph";
 	
-	public ConverterGraph(ServiceReference[] converters, BundleContext bContext, LogService log){
-		this.converters = converters;
+	public ConverterGraph(ServiceReference[] converterRefs, BundleContext bContext, LogService log) {
 		this.bContext = bContext;
 		this.log = log;
-		inDataToAlgorithm = new HashMap();//<String, ArrayList<ServiceReference>>();
-		fileExtensionTestConverters = new ConcurrentHashMap();//<String, ArrayList<ConverterPath>>();
+		
+		this.converters = createConverters(converterRefs);
+		
+		inDataToAlgorithm = new HashMap();//<String, List<Convertere>>();
+		fileExtensionTestConverters = new ConcurrentHashMap();//<String, List<ConverterPath>>();
 		fileExtensionCompareConverters = new ConcurrentHashMap();//<String, ConverterPath>();
 		
 		associateAlgorithms(this.converters, this.inDataToAlgorithm);
 		createConverterPaths(this.inDataToAlgorithm, this.fileExtensionTestConverters, this.fileExtensionCompareConverters);
 	
 	}
+	
+	private Converter[] createConverters(ServiceReference[] convRefs) {
+		List converters = new ArrayList();
+		
+		for (int ii = 0; ii < convRefs.length; ii++) {
+			converters.add(new Converter(this.bContext, convRefs[ii]));
+		}
+		
+		return (Converter[]) converters.toArray(new Converter[0]);
+	}
 
-	private void associateAlgorithms(ServiceReference[] sr, Map hm){
-		for(int i = 0; i < sr.length; i++){
-			ServiceReference srv = sr[i];
-			String s = srv.getProperty("in_data").toString();
+	private void associateAlgorithms(Converter[] cs, Map hm){
+		for (int i = 0; i < cs.length; i++){
+			Converter c = cs[i];
+			String s = c.getInData();
 			if(hm.get(s) == null){
-				ArrayList al = new ArrayList();
-				al.add(srv);
-				hm.put(s, al);
+				List l = new ArrayList();
+				l.add(c);
+				hm.put(s, l);
 			}
 			else{
-				((ArrayList)hm.get(s)).add(srv);
+				((List)hm.get(s)).add(c);
 			}
 		}
 	}
@@ -65,15 +78,15 @@ public class ConverterGraph {
 			
 				test.setInData(s);
 			
-				createPaths((ArrayList)algorithms.get(s), test, s);
+				createPaths((List)algorithms.get(s), test, s);
 				
 			}
 		}
 	
 	}
 	
-	private ConverterPath createPaths(ArrayList algorithms, ConverterPath path, String dataType){
-		ArrayList refs = removeReferences(algorithms, path);
+	private ConverterPath createPaths(List algorithms, ConverterPath path, String dataType){
+		List cs = removeReferences(algorithms, path);
 		
 			addCompareCycle(path);
 		
@@ -81,11 +94,11 @@ public class ConverterGraph {
 			addTestCycle(path);
 			return path;
 		}
-		while(!refs.isEmpty()){
+		while(!cs.isEmpty()){
 			ConverterPath p = new ConverterPath(path, this.bContext);
-			p.addAlgorithm((ServiceReference)refs.get(0));
-			refs.remove(0);
-			createPaths((ArrayList)this.inDataToAlgorithm.get(p.getOutData()), p, p.getOutData());
+			p.add((Converter) cs.get(0));
+			cs.remove(0);
+			createPaths((List)this.inDataToAlgorithm.get(p.getOutData()), p, p.getOutData());
 		
 		}
 		return null;		
@@ -93,8 +106,8 @@ public class ConverterGraph {
 	
 	private void addTestCycle(ConverterPath cp){
 		String firstOutData, lastInData;
-		firstOutData = ((ServiceReference)cp.getPath().get(0)).getProperty("out_data").toString();
-		lastInData = ((ServiceReference)cp.getPath().get(cp.getPath().size()-1)).getProperty("in_data").toString();
+		firstOutData = ((Converter) cp.getPath().get(0)).getOutData();
+		lastInData = ((Converter)cp.getPath().get(cp.getPath().size()-1)).getInData();
 		if(firstOutData.equals(lastInData)){
 			addTestPath(cp);
 		}
@@ -103,7 +116,7 @@ public class ConverterGraph {
 	private void addCompareCycle(ConverterPath cp){
 		if(cp.getOutData() != null){
 		if(cp.getOutData().equals(ConverterGraph.testOutData)){
-			String key = cp.getInData() + " " + ((ServiceReference)cp.getPath().get(0)).getProperty("out_data").toString();
+			String key = cp.getInData() + " " + ((Converter) cp.getPath().get(0)).getOutData();
 			//System.out.println(key);
 		if(this.fileExtensionCompareConverters.get(key) == null){
 
@@ -122,36 +135,36 @@ public class ConverterGraph {
 		}
 	}
 	
-	private static ArrayList removeReferences(ArrayList al, ConverterPath cp){
-		ArrayList srs = new ArrayList(al);
-		srs.removeAll(cp.getPath());
-		ArrayList forbidden = new ArrayList();
-		for(int i = 0; i < srs.size(); i++){
-			ServiceReference sr = (ServiceReference)srs.get(i);
-			String ss = sr.getProperty("out_data").toString();
-			if(ss.startsWith("file-ext") && (!ss.equals(cp.getInData()))){
+	private static List removeReferences(List al, ConverterPath cp){
+		List cs = new ArrayList(al);
+		cs.removeAll(cp.getPath());
+		List forbidden = new ArrayList();
+		for(int i = 0; i < cs.size(); i++){
+			Converter c = (Converter) cs.get(i);
+			String outData = c.getOutData();
+			if(outData.startsWith("file-ext") && (!outData.equals(cp.getInData()))){
 				
-				forbidden.add(sr);
+				forbidden.add(c);
 			}
 		}
-		srs.removeAll(forbidden);
-		return srs;
+		cs.removeAll(forbidden);
+		return cs;
 	}
 	
 	private void addTestPath(ConverterPath p){
 		String key = p.getInData();
 		key += " ";
-		key +=  ((ServiceReference)p.getPath().get(0)).getProperty("out_data").toString();
+		key +=  ((Converter)p.getPath().get(0)).getOutData();
 		if(this.fileExtensionTestConverters.get(key) == null){
 		
-			ArrayList paths = new ArrayList();
+			List paths = new ArrayList();
 			paths.add(p);
 			this.fileExtensionTestConverters.put(key, paths);
 		
 		}
 		else{
 			
-			((ArrayList)this.fileExtensionTestConverters.get(key)).add(p);
+			((List)this.fileExtensionTestConverters.get(key)).add(p);
 			
 		}
 	}
@@ -159,7 +172,7 @@ public class ConverterGraph {
 	
 	public String printTestConverterPath(String s){
 		StringBuffer sb = new StringBuffer();
-		ArrayList al = (ArrayList)this.fileExtensionTestConverters.get(s);
+		List al = (List)this.fileExtensionTestConverters.get(s);
 			for(int i = 0; i < al.size(); i++){
 				ConverterPath cp = (ConverterPath)al.get(i);
 				sb.append(cp.toString());
@@ -205,23 +218,23 @@ public class ConverterGraph {
 			keySet = (String[])this.inDataToAlgorithm.keySet().toArray(keySet);
 		for(int i = 0; i < keySet.length; i++){
 			String s = keySet[i];
-			str.append(s + "\n");
-			ArrayList al = (ArrayList)this.inDataToAlgorithm.get(s);
+			str.append(s + "\r\n");
+			List al = (List)this.inDataToAlgorithm.get(s);
 			for(int j = 0; j < al.size(); j++){
-				ServiceReference sr = (ServiceReference)al.get(j);
-				str.append("\t" + sr.getProperty("service.pid") + "\n");
+				Converter c = (Converter)al.get(j);
+				str.append("\t" + c.getUniqueName() + "\r\n");
 			}
 		}
-		str.append("Test Paths:\n");
+		str.append("Test Paths:\r\n");
 		str.append(printTestConverterPaths());
-		str.append("Comparison Paths:\n");
+		str.append("Comparison Paths:\r\n");
 		str.append(printComparisonConverterPaths());
 		str.trimToSize();
 		return str.toString();
 	}
 	
 	public ConverterPath[] getTestPath(String s){
-		return (ConverterPath[])((ArrayList)this.fileExtensionTestConverters.get(s)).toArray(new ConverterPath[0]);
+		return (ConverterPath[])((List)this.fileExtensionTestConverters.get(s)).toArray(new ConverterPath[0]);
 	}
 	
 	public ConverterPath[][] getTestPaths(){
@@ -241,7 +254,7 @@ public class ConverterGraph {
 	
 	public ConverterPath[] getComparePaths(){
 		String[] fileExtensions = (String[])this.fileExtensionCompareConverters.keySet().toArray(new String[0]);
-		ArrayList graphs = new ArrayList();
+		List graphs = new ArrayList();
 		for(int i = 0; i < fileExtensions.length; i++){
 			graphs.add(getComparePath(fileExtensions[i]));
 		}
@@ -254,6 +267,10 @@ public class ConverterGraph {
 	
 	public Map getTestMap(){
 		return this.fileExtensionTestConverters;
+	}
+	
+	public Converter[] getAllConverters() {
+		return this.converters;
 	}
 	
 	public File asNWB() {
@@ -275,7 +292,7 @@ public class ConverterGraph {
 	
 	private void writeNodeHeader(BufferedWriter bw, int numNodes) throws IOException{
 		bw.flush();
-		bw.write("*Nodes " + numNodes + "\nid*int label*string\n");
+		bw.write("*Nodes " + numNodes + "\r\nid*int label*string\r\n");
 	
 	}
 	
@@ -285,14 +302,14 @@ public class ConverterGraph {
 		keySet = (String[])nodes.keySet().toArray(keySet);
 		for(int i = 0; i < keySet.length; i++){
 			bw.flush();
-			bw.write(nodes.get(keySet[i]) + " \"" + keySet[i]+"\"\n");
+			bw.write(nodes.get(keySet[i]) + " \"" + keySet[i]+"\"\r\n");
 		}
 		
 	}
 	
 	private void writeEdgeHeader(BufferedWriter bw, int numEdges) throws IOException{
 		bw.flush();
-		bw.write("*DirectedEdges " + numEdges + "\nsource*int target*int\n");
+		bw.write("*DirectedEdges " + numEdges + "\r\nsource*int target*int\r\n");
 	}
 	
 		
@@ -304,7 +321,7 @@ public class ConverterGraph {
 		
 		for(int i = 0; i < edgeArray.length; i++){
 			bw.flush();
-			bw.write(edgeArray[i]+"\n");
+			bw.write(edgeArray[i]+"\r\n");
 		}
 	}
 	
@@ -319,13 +336,13 @@ public class ConverterGraph {
 		for(int i = 0; i < keySet.length; i++){
 			String s = keySet[i];
 			nodeNames.add(s);
-			ArrayList paths = (ArrayList)this.inDataToAlgorithm.get(s);
-			ServiceReference[] references =  new ServiceReference[paths.size()];
-			references = (ServiceReference[])paths.toArray(references);
+			List paths = (List)this.inDataToAlgorithm.get(s);
+			Converter[] convs =  new Converter[paths.size()];
+			convs = (Converter[])paths.toArray(convs);
 			
-			for(int j = 0; j < references.length; j++){
-				ServiceReference r = references[j];
-				nodeNames.add(r.getProperty("service.pid").toString());
+			for(int j = 0; j < convs.length; j++){
+				Converter c = convs[j];
+				nodeNames.add(c.getUniqueName());
 			}
 		}
 		
@@ -333,7 +350,6 @@ public class ConverterGraph {
 		names = (String[])nodeNames.toArray(names);
 		
 		for(int i = 0; i < names.length; i++){
-			System.out.println(names[i] + " " + (i+1));
 			nodesToInt.put(names[i], new Integer(i+1));
 		}
 		
@@ -346,19 +362,16 @@ public class ConverterGraph {
 		keySet = (String[])m.keySet().toArray(keySet);
 		for(int i = 0; i < keySet.length; i++){
 			String s = keySet[i];
-			System.out.println(keySet[i]);
-			ArrayList paths = (ArrayList)this.inDataToAlgorithm.get(s);
+			List paths = (List)this.inDataToAlgorithm.get(s);
 			if(paths != null){
-			ServiceReference[] references =  new ServiceReference[paths.size()];
-			references = (ServiceReference[])paths.toArray(references);
+			Converter[] convs =  new Converter[paths.size()];
+			convs = (Converter[])paths.toArray(convs);
 			
-			for(int j = 0; j < references.length; j++){
+			for(int j = 0; j < convs.length; j++){
 				String output1 = m.get(s).toString() + " ";
-				String output2 = references[j].getProperty("service.pid").toString();
+				String output2 = convs[j].getUniqueName();
 				output1 += m.get(output2).toString();
-				output2 = m.get(output2).toString() + " " + m.get(references[j].getProperty("out_data")).toString(); 
-				System.out.println(output1);
-				System.out.println(output2);
+				output2 = m.get(output2).toString() + " " + m.get(convs[j].getOutData());
 				edges.add(output1);
 				edges.add(output2);
 			}
