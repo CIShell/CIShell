@@ -14,11 +14,13 @@ import org.cishell.framework.data.DataProperty;
 import org.cishell.testing.convertertester.core.tester2.ConverterTester2;
 import org.cishell.testing.convertertester.core.tester2.reportgen.ReportGenerator;
 import org.cishell.testing.convertertester.core.tester2.reportgen.allconvs.AllConvsReportGenerator;
+import org.cishell.testing.convertertester.core.tester2.reportgen.allerrors.AllErrorReportGenerator;
 import org.cishell.testing.convertertester.core.tester2.reportgen.alltests.AllTestsReportGenerator;
 import org.cishell.testing.convertertester.core.tester2.reportgen.convgraph.AnnotatedGraphReportGenerator;
 import org.cishell.testing.convertertester.core.tester2.reportgen.convgraph.GraphReportGenerator;
 import org.cishell.testing.convertertester.core.tester2.reportgen.readme.ReadMeReportGenerator;
 import org.cishell.testing.convertertester.core.tester2.reportgen.reports.AllConvsReport;
+import org.cishell.testing.convertertester.core.tester2.reportgen.reports.AllErrorReport;
 import org.cishell.testing.convertertester.core.tester2.reportgen.reports.AllTestsReport;
 import org.cishell.testing.convertertester.core.tester2.reportgen.reports.ConvReport;
 import org.cishell.testing.convertertester.core.tester2.reportgen.reports.FilePassReport;
@@ -117,6 +119,8 @@ public class ConverterTesterAlgorithm implements Algorithm,
 		   				new AllTestsReportGenerator(this.log);
 		   			AllConvsReportGenerator       allConvGen = 
 		   				new AllConvsReportGenerator(this.log);
+		   			AllErrorReportGenerator      allErrGen  =
+		   				new AllErrorReportGenerator(this.log);
 		   			GraphReportGenerator origGraphGen        =
 		   				new GraphReportGenerator(this.log);
 		   			AnnotatedGraphReportGenerator graphGen   = 
@@ -131,8 +135,8 @@ public class ConverterTesterAlgorithm implements Algorithm,
 		   			ConverterTester2 ct = new ConverterTester2(log);
 		   			ct.execute(convRefs,
 		   					new ReportGenerator[] 
-		   					   {allGen, allConvGen, graphGen, origGraphGen,
-		   					readmeGen},
+		   					   {allGen, allConvGen, allErrGen,
+		   					graphGen, origGraphGen, readmeGen},
 		   					cContext, bContext);
 		   			/*
 		   			 * report generators have now been supplied with the test
@@ -178,7 +182,6 @@ public class ConverterTesterAlgorithm implements Algorithm,
 		   					null);
 		   			addReturn(allConvReportData);
 		   			
-		   				//return each converter report
 		   			ConvReport[] convReports = 
 		   				allConvReport.getConverterReports();
 		   			for (int ii = 0; ii < convReports.length; ii++) {
@@ -192,6 +195,15 @@ public class ConverterTesterAlgorithm implements Algorithm,
 		   				TestReport[] trs = convReport.getTestReports();
 		   				addFilePasses(trs, convReportData);
 		   			}
+		   			
+		   			//return all errors report
+		   			
+		   			AllErrorReport allErrorReport = 
+		   				allErrGen.getAllErrorsReport();
+		   			File allErrReportFile = allErrorReport.getReportFile();
+		   			Data allErrReport = createReportData(allErrReportFile,
+		   					allErrorReport.getName(), null);
+		   			addReturn(allErrReport);
 		   			
 		   			//return annotated graph report
 		   			
