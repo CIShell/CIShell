@@ -151,26 +151,6 @@ public class ConverterTesterAlgorithm implements Algorithm,
 		   					readmeReport.getName(), null);
 		   			addReturn(readMeData);
 		   			
-		   			//return all tests report
-		   			
-		   			AllTestsReport allReport = allGen.getAllTestsReport();
-		   			File allReportFile = allReport.getAllTestsReport();
-		   			Data allReportData = createReportData(allReportFile,
-		   					allReport.getName() , null);
-		   			addReturn(allReportData);
-		   			
-		   			TestReport[] sTestReports = 
-		   				allReport.getSuccessfulTestReports();
-		   			addFilePasses(sTestReports, allReportData);
-		   			
-		   			TestReport[] ppTestReports = 
-		   				allReport.getPartialSuccessTestReports();
-		   			addFilePasses(ppTestReports, allReportData);
-		   			
-		   			TestReport[] fTestReports = 
-		   				allReport.getFailedTestReports();
-		   			addFilePasses(fTestReports, allReportData);
-		   			
 		   			//return all converters report
 		   			
 		   			AllConvsReport allConvReport = 
@@ -196,6 +176,26 @@ public class ConverterTesterAlgorithm implements Algorithm,
 		   				addFilePasses(trs, convReportData);
 		   			}
 		   			
+		   			//return all tests report
+		   			
+		   			AllTestsReport allReport = allGen.getAllTestsReport();
+		   			File allReportFile = allReport.getAllTestsReport();
+		   			Data allReportData = createReportData(allReportFile,
+		   					allReport.getName() , null);
+		   			addReturn(allReportData);
+		   			
+		   			TestReport[] sTestReports = 
+		   				allReport.getSuccessfulTestReports();
+		   			addFilePasses(sTestReports, allReportData);
+		   			
+		   			TestReport[] ppTestReports = 
+		   				allReport.getPartialSuccessTestReports();
+		   			addFilePasses(ppTestReports, allReportData);
+		   			
+		   			TestReport[] fTestReports = 
+		   				allReport.getFailedTestReports();
+		   			addFilePasses(fTestReports, allReportData);
+		   			
 		   			//return all errors report
 		   			
 		   			AllErrorReport allErrorReport = 
@@ -204,6 +204,7 @@ public class ConverterTesterAlgorithm implements Algorithm,
 		   			Data allErrReport = createReportData(allErrReportFile,
 		   					allErrorReport.getName(), null);
 		   			addReturn(allErrReport);
+		   			
 		   			
 		   			//return annotated graph report
 		   			
