@@ -263,7 +263,9 @@ public class DefaultTestRunner implements TestRunner {
 			String message = entry.getMessage();
 			
 			logText += message + "\r\n";
+			if (e != null) {
 			logText += getStackTrace(e) + "\r\n";
+			}
 			logText += "\r\n";
 		}
 		
