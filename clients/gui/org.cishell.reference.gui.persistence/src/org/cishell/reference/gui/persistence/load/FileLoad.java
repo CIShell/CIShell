@@ -128,7 +128,7 @@ public class FileLoad implements Algorithm{
                     currentDir = new File(file.getParent() + File.separator + "anything");
                 }
                 
-		   		String fileExtension = getFileExtension(file);
+		   		String fileExtension = getFileExtension(file).toLowerCase();
 	       		String filter = "(&(type=converter)(in_data=file-ext:"+fileExtension+"))";
 		        try {
 
