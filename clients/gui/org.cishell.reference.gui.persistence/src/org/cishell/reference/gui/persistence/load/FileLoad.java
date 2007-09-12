@@ -105,13 +105,16 @@ public class FileLoad implements Algorithm{
     	
     	    	FileDialog dialog = new FileDialog(window.getShell(), SWT.OPEN);
 		        if (currentDir == null) {
-		            currentDir = new File(System.getProperty("user.dir") + File.separator + "sampledata");
+		        	currentDir = new File(System.getProperty("osgi.install.area").replace("file:","")
+		            		+ "sampledata"+File.separator+"Network");
                     
                     if (!currentDir.exists()) {
-                        currentDir = new File(System.getProperty("user.home") + File.separator + "anything");
-                    } else {
-                        currentDir = new File(System.getProperty("user.dir") + File.separator + "sampledata" + File.separator + "anything");
-                    }
+                    	currentDir = new File(System.getProperty("osgi.install.area").replace("file:","")
+    		            		+ "sampledata" +File.separator+"Network"+ File.separator + "anything");
+                    } 
+//                    else {
+//                        currentDir = new File(System.getProperty("user.dir") + File.separator + "sampledata" + File.separator + "anything");
+//                    }
 		        }
 		        dialog.setFilterPath(currentDir.getPath());
 		        dialog.setText("Select a File");
