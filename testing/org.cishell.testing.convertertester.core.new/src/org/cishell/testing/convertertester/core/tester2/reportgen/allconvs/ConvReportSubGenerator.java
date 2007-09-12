@@ -13,6 +13,7 @@ import org.cishell.testing.convertertester.core.tester2.reportgen.reports.ConvRe
 import org.cishell.testing.convertertester.core.tester2.reportgen.reports.TestReport;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.ConvResult;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.TestResult;
+import org.cishell.testing.convertertester.core.tester2.util.FormatUtil;
 import org.osgi.service.log.LogService;
 
 public class ConvReportSubGenerator {
@@ -55,9 +56,9 @@ public class ConvReportSubGenerator {
 						+ convResult.getNumFilePasses());
 				report.println("");
 //				report.println("% Passed                  : "
-//						+ convResult.getPercentPassed());
+//						+ FormatUtil.formatToPercent(convResult.getPercentPassed()));
 				report.println("% Chance of Flaw          : "
-						+ convResult.getChanceOfFlaw());
+						+ FormatUtil.formatToPercent(convResult.getChanceOfFlaw()));
 
 				report.println("");
 
@@ -87,7 +88,7 @@ public class ConvReportSubGenerator {
 						report.println(explanation);
 						report.println("");
 						report.println("Chance this converter is responsible: "
-								+ chanceAtFault);
+								+ FormatUtil.formatToPercent(chanceAtFault));
 						report.println("----------");
 
 					}

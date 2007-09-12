@@ -68,6 +68,11 @@ public class FilePassSubGenerator {
 		
 		report.println("");
 		if (! fpr.getExplanation().trim().equals("")) {
+			
+			if (fpr.failedWhileConverting()) {
+				report.println("Failed at " + fpr.getFailedConverter());
+			}
+			
 			report.println("Explanation... \r\n" + fpr.getExplanation());
 		}
 		

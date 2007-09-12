@@ -15,14 +15,13 @@ import java.util.Set;
 import org.cishell.testing.convertertester.core.converter.graph.Converter;
 import org.cishell.testing.convertertester.core.tester2.reportgen.ReportGenerator;
 import org.cishell.testing.convertertester.core.tester2.reportgen.faultanalysis.ChanceAtFault;
-import org.cishell.testing.convertertester.core.tester2.reportgen.reports.AllConvsReport;
 import org.cishell.testing.convertertester.core.tester2.reportgen.reports.AllErrorReport;
-import org.cishell.testing.convertertester.core.tester2.reportgen.reports.ConvReport;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.AllConvsResult;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.AllTestsResult;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.ConvResult;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.FilePassResult;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.TestResult;
+import org.cishell.testing.convertertester.core.tester2.util.FormatUtil;
 import org.osgi.service.log.LogService;
 
 public class AllErrorReportGenerator implements ReportGenerator {
@@ -87,6 +86,7 @@ public class AllErrorReportGenerator implements ReportGenerator {
 						FilePassResult pass = (FilePassResult) passIter.next();
 						
 						report.println("  " + pass.getName());
+						report.println("  " + pass.getOriginalFileShortLabel());
 						
 						List cafs = (List) passToCafs.get(pass);
 						
@@ -101,7 +101,7 @@ public class AllErrorReportGenerator implements ReportGenerator {
 							if (associatedCaf.getChanceAtFault() > 0.0f) {
 							report.println("    " + 
 									involvedConv.getShortName() + " (%" +
-									associatedCaf.getChanceAtFault() + 
+									FormatUtil.formatToPercent(associatedCaf.getChanceAtFault()) + 
 									" Chance At Fault)");
 							} else {
 								report.println("    " + 

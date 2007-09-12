@@ -1,5 +1,6 @@
 package org.cishell.testing.convertertester.core.tester2.reportgen.results;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -53,6 +54,24 @@ public abstract class FilePassResult {
 		boolean result = lastReachedPhase == PassPhase.SUCCEEDED_PHASE;
 		return result;
 	}
+	
+	public boolean failedWhileConverting() {
+		
+		boolean result = 
+		(this.getLastReachedPhase().equals(PassPhase.TEST_CONV_PHASE) ||
+		this.getLastReachedPhase().equals(PassPhase.COMPARE_CONV_ORIG_PHASE) ||
+		this.getLastReachedPhase().equals(PassPhase.COMPARE_CONV_RESULT_PHASE));
+		
+		return result;
+	}
+	
+	public boolean failedWhileComparingGraphs() {
+		
+		boolean result = 
+			(this.getLastReachedPhase().equals(PassPhase.GRAPH_COMPARE_PHASE));
+		
+		return result;
+	}
 
 	public PassPhase getLastReachedPhase() {
 		return this.lastReachedPhase;
@@ -66,7 +85,7 @@ public abstract class FilePassResult {
 	 * Will return null if either this file pass did not fail,
 	 * or it did not fail due to a converter error (failed during
 	 * graph comparison)
-	 * @return
+	 * @return the failed converter, or null
 	 */
 	public Converter getFailedConverter() {
 		return this.failedConverter;
@@ -78,6 +97,15 @@ public abstract class FilePassResult {
 	
 	public String getOriginalFileLabel() {
 		return (String) getOriginalData()[0].getMetaData().get(DataProperty.LABEL);
+	}
+	
+	public String getOriginalFileShortLabel() {
+		String label = getOriginalFileLabel();
+		
+		int lastSeparatorIndex = label.lastIndexOf(File.separator);
+		
+		String shortLabel = label.substring(lastSeparatorIndex + 1);
+		return shortLabel;
 	}
 	
 	public String getFileFormat() {

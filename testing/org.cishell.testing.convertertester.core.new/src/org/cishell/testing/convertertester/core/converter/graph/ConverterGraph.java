@@ -6,8 +6,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -17,7 +20,9 @@ import org.osgi.service.log.LogService;
 
 public class ConverterGraph {
 	private prefuse.data.Graph converterGraph;
+	private Set dataFormats;
 	private Map inDataToConverters;
+	private Map outDataToConverters;
 	private Map fileExtensionTestConverters;
 	private Map fileExtensionCompareConverters;
 	private Converter[] converters;
@@ -33,13 +38,18 @@ public class ConverterGraph {
 		this.converters = createConverters(converterRefs);
 		
 		inDataToConverters = 
-			new HashMap();//<String, List<Convertere>>();
+			new HashMap();//<String, List<Converter>>();
+		outDataToConverters = 
+			new HashMap();//<String, List<Converter>>();
+		dataFormats = 
+			new HashSet();//<String>
 		fileExtensionTestConverters = 
 			new ConcurrentHashMap();//<String, List<ConverterPath>>();
 		fileExtensionCompareConverters = 
 			new ConcurrentHashMap();//<String, ConverterPath>();
 		
-		associateConverters(this.converters, this.inDataToConverters);
+		deriveDataFormats(this.converters, this.dataFormats);
+		associateConverters(this.converters, this.inDataToConverters, this.outDataToConverters);
 		createConverterPaths(this.inDataToConverters, this.fileExtensionTestConverters, this.fileExtensionCompareConverters);
 	
 	}
@@ -54,20 +64,28 @@ public class ConverterGraph {
 		return (Converter[]) converters.toArray(new Converter[0]);
 	}
 
-	private void associateConverters(Converter[] cs, Map hm){
+	private void deriveDataFormats(Converter[] cs, Set dataFormats) {
+		for (int ii = 0; ii < cs.length; ii++) {
+			Converter c = cs[ii];
+			
+			String inDataFormat = c.getInData();
+			dataFormats.add(inDataFormat);
+					
+			String outDataFormat = c.getOutData();
+			dataFormats.add(outDataFormat);
+		}
+	}
+	
+	private void associateConverters(Converter[] cs,
+			Map inDataToConvs, Map outDataToConvs){
 		for (int i = 0; i < cs.length; i++){
 			Converter c = cs[i];
 			
-			String s = c.getInData();
+			String inDataFormat = c.getInData();
+			addValueToListAssociatedWithKey(inDataToConvs, inDataFormat, c);
 			
-			if(hm.get(s) == null){
-				List l = new ArrayList();
-				l.add(c);
-				hm.put(s, l);
-			}
-			else{
-				((List)hm.get(s)).add(c);
-			}
+			String outDataFormat = c.getOutData();
+			addValueToListAssociatedWithKey(outDataToConvs, outDataFormat, c);
 		}
 	}
 	
@@ -142,7 +160,14 @@ public class ConverterGraph {
 	}
 	
 	private static List removeReferences(List al, ConverterPath cp){
-		List cs = new ArrayList(al);
+		List cs; 
+		
+		if (al != null) {
+			cs = new ArrayList(al);
+		} else {
+			cs = new ArrayList(); 
+		}
+		
 		cs.removeAll(cp.getPath());
 		List forbidden = new ArrayList();
 		for(int i = 0; i < cs.size(); i++){
@@ -345,25 +370,32 @@ public class ConverterGraph {
 		
 		Map nodesToInt = new ConcurrentHashMap();
 	
-		String[] inDatas = new String[this.inDataToConverters.keySet().size()];
-		inDatas = (String[])this.inDataToConverters.keySet().toArray(inDatas);
-		
 		TreeSet nodeNameList = new TreeSet();
 		
-		//for each unique in_data...
-		for(int i = 0; i < inDatas.length; i++){
-			String inData = inDatas[i];
+		//for each unique data format
+		Iterator formatIter = this.dataFormats.iterator();
+		while (formatIter.hasNext()) {
+			String dataFormat = (String) formatIter.next();
 			
-			//add the in_data string to our list of node names
-			nodeNameList.add(inData);
+			//add the data format string to our list of node names
+			nodeNameList.add(dataFormat);
 			
-			List convsList = (List)this.inDataToConverters.get(inData);
-			Converter[] convs =  new Converter[convsList.size()];
-			convs = (Converter[])convsList.toArray(convs);
+			List inConvs = (List)this.inDataToConverters.get(dataFormat);
+			List outConvs = (List) this.outDataToConverters.get(dataFormat);
 			
-			//for each converter associated with each in_data...
-			for(int j = 0; j < convs.length; j++){
-				Converter c = convs[j];
+			Set convs = new HashSet();
+			
+			if (inConvs != null) {
+				convs.addAll(inConvs);
+			}
+			if (outConvs != null) {
+				convs.addAll(outConvs);
+			}
+			
+			Iterator convIter = convs.iterator();
+			//for each converter that inputs or outputs this data format...
+			while (convIter.hasNext()) {
+				Converter c = (Converter) convIter.next();
 				//add the name of the converter to our list of node names
 				nodeNameList.add(c.getShortName());
 			}
@@ -412,7 +444,7 @@ public class ConverterGraph {
 					Converter c = convs[j];
 					String convName = c.getShortName();
 					String convsOutputFormatName = c.getOutData();
-					
+					System.out.println("Converters output format is " + convsOutputFormatName);
 					String nodeNumber = nodeNameToInt.get(nodeName).toString();
 					String convNumber = nodeNameToInt.get(convName).toString();
 					String convsOutputNodeNumber = 
@@ -455,5 +487,17 @@ public class ConverterGraph {
 
 		}
 		return tempFile;
+	}
+	
+	private void addValueToListAssociatedWithKey(Map m, Object key, Object value) {
+		
+		if(m.get(key) == null){
+			List listOfValues = new ArrayList();
+			listOfValues.add(value);
+			m.put(key, listOfValues);
+		}
+		else{
+			((List)m.get(key)).add(value);
+		}
 	}
 }

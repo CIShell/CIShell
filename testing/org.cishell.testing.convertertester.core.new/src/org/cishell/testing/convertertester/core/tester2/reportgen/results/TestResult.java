@@ -39,7 +39,12 @@ public class TestResult implements Comparable {
 		
 		this.successes = new boolean[fprs.length];
 		
-		this.format = fprs[0].getFileFormat();
+		if (fprs.length > 0) {
+			this.format = fprs[0].getFileFormat();
+		} else {
+			this.format = "Unable to determine format for a test that has " +
+					"no file passes";
+		}
 		
 		for (int ii = 0; ii < fprs.length; ii++) {
 			FilePassResult fpr = fprs[ii];

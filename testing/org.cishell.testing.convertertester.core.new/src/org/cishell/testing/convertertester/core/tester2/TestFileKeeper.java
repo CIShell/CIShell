@@ -122,6 +122,8 @@ public class TestFileKeeper {
 		
 		File dir = new File(dirName);
 		
+		System.out.println("Looking in dir " + dirName);
+		
 		File[] dirContents = dir.listFiles();
 		for (int ii = 0; ii < dirContents.length; ii++) {
 			File fileInDir = dirContents[ii];

@@ -13,6 +13,7 @@ import org.cishell.testing.convertertester.core.tester2.reportgen.reports.ConvRe
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.AllConvsResult;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.AllTestsResult;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.ConvResult;
+import org.cishell.testing.convertertester.core.tester2.util.FormatUtil;
 import org.osgi.service.log.LogService;
 
 public class AllConvsReportGenerator implements ReportGenerator {
@@ -92,9 +93,9 @@ public class AllConvsReportGenerator implements ReportGenerator {
 			report.println("");
 			
 			report.println("  Average chance each converter is correct : " + 
-					avgChanceCorrect);
+					FormatUtil.formatToPercent(avgChanceCorrect));
 			report.println("  Average % successful file passes         : " + 
-					avgPercentPassed);
+					FormatUtil.formatToPercent(avgPercentPassed));
 
 			
 			report.println("");

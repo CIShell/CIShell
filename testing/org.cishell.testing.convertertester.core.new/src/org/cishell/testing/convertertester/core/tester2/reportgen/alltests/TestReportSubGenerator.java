@@ -46,7 +46,12 @@ public class TestReportSubGenerator {
 			report.println("  # Failed File Passes    : " + tr.getNumFilePassFailures());
 			report.println("  Total                   : " + tr.getNumFilePasses());
 			
-			float percentSuccessful = tr.getNumFilePassSuccesses() / tr.getNumFilePasses();
+			float percentSuccessful;
+			if (tr.getNumFilePasses() > 0) {
+				percentSuccessful = tr.getNumFilePassSuccesses() / tr.getNumFilePasses();
+			} else {
+				percentSuccessful = 0;
+			}
 			
 			report.println("");
 			report.println("---------------");
