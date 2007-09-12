@@ -127,7 +127,7 @@ public class TestFileKeeper {
 		File[] dirContents = dir.listFiles();
 		for (int ii = 0; ii < dirContents.length; ii++) {
 			File fileInDir = dirContents[ii];
-			if (! fileInDir.isHidden()) {
+			if (! fileInDir.isHidden() && !fileInDir.isDirectory()) {
 				try {
 					String testFilePath = fileInDir
 							.getCanonicalPath();
