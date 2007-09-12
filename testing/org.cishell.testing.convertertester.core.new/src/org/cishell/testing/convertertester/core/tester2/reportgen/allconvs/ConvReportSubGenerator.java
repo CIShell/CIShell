@@ -12,6 +12,7 @@ import org.cishell.testing.convertertester.core.tester2.reportgen.faultanalysis.
 import org.cishell.testing.convertertester.core.tester2.reportgen.reports.ConvReport;
 import org.cishell.testing.convertertester.core.tester2.reportgen.reports.TestReport;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.ConvResult;
+import org.cishell.testing.convertertester.core.tester2.reportgen.results.FilePassResult;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.TestResult;
 import org.cishell.testing.convertertester.core.tester2.util.FormatUtil;
 import org.osgi.service.log.LogService;
@@ -80,10 +81,17 @@ public class ConvReportSubGenerator {
 
 					for (int ii = 0; ii < failureExplns.length; ii++) {
 						ChanceAtFault failureExp = failureExplns[ii];
-
+						FilePassResult filePass = failureExp.getFailedFilePass();
+						
+						if (filePass.failedWhileConverting()) {
+							report.println("While converting " + 
+									filePass.getOriginalFileShortLabel() + 
+									"...");
+						}
+						
 						String explanation = failureExp.getExplanation();
 						float chanceAtFault = failureExp.getChanceAtFault();
-
+						
 						report.println("");
 						report.println(explanation);
 						report.println("");
