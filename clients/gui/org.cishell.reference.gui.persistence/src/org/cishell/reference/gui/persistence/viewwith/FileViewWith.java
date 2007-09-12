@@ -209,7 +209,7 @@ public class FileViewWith implements Algorithm {
 		
 		public void run() {
     		// lots of persisters found, return the chooser
-			ViewWithDataChooser vdc = new ViewWithDataChooser("View as...", theFile, shell, 
+			ViewWithDataChooser vdc = new ViewWithDataChooser("View As...", theFile, shell, 
        				    theData, theConverters, context);
 			vdc.open();
 			isSaved = vdc.isSaved();
