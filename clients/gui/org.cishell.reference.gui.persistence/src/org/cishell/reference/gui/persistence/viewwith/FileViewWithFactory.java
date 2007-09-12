@@ -48,7 +48,7 @@ public class FileViewWithFactory implements AlgorithmFactory {
     public MetaTypeProvider createParameters(Data[] data) {
     	
 		BasicObjectClassDefinition definition;
-		definition = new BasicObjectClassDefinition("fileViewWithDefinition", "Application viewer type", "Please choose an application viewer to read this file.", null);
+		definition = new BasicObjectClassDefinition("fileViewWithDefinition", "Application Viewer Type", "Please choose an application viewer to read this file.", null);
 					
         Display.getDefault().syncExec(new Runnable() {
             public void run() {
@@ -74,30 +74,29 @@ public class FileViewWithFactory implements AlgorithmFactory {
 		
 		int possiblePrograms = 0;
 		int counter = 0;
-		if (programTxt != null) {
+		if (programHtml != null) {
 			possiblePrograms++;
 		}
 		if (programDoc != null) {
 			possiblePrograms++;
 		}
-		if (programHtml != null) {
+		if (programTxt != null) {
 			possiblePrograms++;
 		}
 		
 		String[] myOptionLabels = new String[possiblePrograms];
 		String[] myOptionValues = new String[possiblePrograms];
-	
-		if (programTxt != null) {
-			myOptionLabels[counter] = programTxt.getName();
-			myOptionValues[counter++] = "txt";
+		if (programHtml != null) {
+			myOptionLabels[counter] = programHtml.getName();
+			myOptionValues[counter++] = "html";
 		}
 		if (programDoc != null) {
 			myOptionLabels[counter] = programDoc.getName();
 			myOptionValues[counter++] = "doc";
 		}
-		if (programHtml != null) {
-			myOptionLabels[counter] = programHtml.getName();
-			myOptionValues[counter++] = "html";
+		if (programTxt != null) {
+			myOptionLabels[counter] = programTxt.getName();
+			myOptionValues[counter++] = "txt";
 		}
 		
 		
