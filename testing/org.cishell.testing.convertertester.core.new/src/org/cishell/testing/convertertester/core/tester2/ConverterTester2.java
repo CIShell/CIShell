@@ -22,7 +22,7 @@ import org.cishell.testing.convertertester.core.tester2.graphcomparison.LossyCom
 import org.cishell.testing.convertertester.core.tester2.graphcomparison.NewGraphComparer;
 import org.cishell.testing.convertertester.core.tester2.reportgen.ReportGenerator;
 import org.cishell.testing.convertertester.core.tester2.reportgen.faultanalysis.ChanceAtFaultHeuristic;
-import org.cishell.testing.convertertester.core.tester2.reportgen.faultanalysis.FullTrustHeuristic;
+import org.cishell.testing.convertertester.core.tester2.reportgen.faultanalysis.WeightedFullTrustHeuristic;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.AllConvsResult;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.AllTestsResult;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.FilePassResult;
@@ -84,7 +84,8 @@ public class ConverterTester2 implements AlgorithmProperty {
 		
 		Converter[] allConverters = converterGraph.getAllConverters();
 		
-		ChanceAtFaultHeuristic faultHeuristic = new FullTrustHeuristic();
+		ChanceAtFaultHeuristic faultHeuristic = 
+			new WeightedFullTrustHeuristic();
 		AllConvsResult allConvertersResult = 
 			ConvResultMaker.generate(allTestsResult, allConverters,
 					faultHeuristic);

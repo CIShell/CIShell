@@ -33,7 +33,7 @@ public class FullTrustHeuristic implements ChanceAtFaultHeuristic {
 		for (int ii = 0; ii < involvedCs.length; ii++) {
 			uniqueInvolvedCs.add(involvedCs[ii]);
 		}
-		//eliminate converters that are not trusted
+		//eliminate converters that are trusted
 		
 		List uniqueUntrustedCs = new ArrayList();
 		Iterator iter = uniqueInvolvedCs.iterator();
@@ -58,10 +58,10 @@ public class FullTrustHeuristic implements ChanceAtFaultHeuristic {
 			ChanceAtFault chanceAtFault = null;
 			if (uniqueUntrustedCs.contains(c)) {
 				chanceAtFault = 
-					new ChanceAtFault((FilePassFailure) failFP, c, chanceEachAtFault);
+					new ChanceAtFault(failFP, c, chanceEachAtFault);
 			} else {
 				chanceAtFault = 
-					new ChanceAtFault((FilePassFailure) failFP, c, 0.0f);
+					new ChanceAtFault(failFP, c, 0.0f);
 			}
 			
 			chanceAtFaultList.add(chanceAtFault);

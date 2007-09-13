@@ -88,11 +88,6 @@ public class ConvResult {
 				this.failedInvolvedPasses.add(fpr);
 			}
 		}
-		
-		System.out.println(conv.getUniqueName() + 
-				" is involved in " + succeededInvolvedPasses.size() + " successful passes");
-		System.out.println(conv.getUniqueName() + 
-				" is involved in " + failedInvolvedPasses.size() + " failed passes");
 	}
 	
 	private void initializePercentPassed() {

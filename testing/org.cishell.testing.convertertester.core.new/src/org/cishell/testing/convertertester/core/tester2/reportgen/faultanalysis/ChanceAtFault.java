@@ -3,6 +3,7 @@ package org.cishell.testing.convertertester.core.tester2.reportgen.faultanalysis
 import java.util.Comparator;
 
 import org.cishell.testing.convertertester.core.converter.graph.Converter;
+import org.cishell.testing.convertertester.core.tester2.reportgen.results.FilePassResult;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.filepass.FilePassFailure;
 
 public class ChanceAtFault {
@@ -10,11 +11,11 @@ public class ChanceAtFault {
 	public static final Comparator COMPARE_BY_LIKELIHOOD = 
 		new CompareByLikelihood();
 	
-	private FilePassFailure failedFP;
+	private FilePassResult failedFP;
 	private Converter c;
 	private float chanceAtFault;
 	
-	public ChanceAtFault(FilePassFailure failedFP, Converter c, float chanceAtFault) {
+	public ChanceAtFault(FilePassResult failedFP, Converter c, float chanceAtFault) {
 		this.failedFP = failedFP;
 		this.c = c;
 		this.chanceAtFault = chanceAtFault;
@@ -32,7 +33,7 @@ public class ChanceAtFault {
 		return this.c;
 	}
 	
-	public FilePassFailure getFailedFilePass() {
+	public FilePassResult getFailedFilePass() {
 		return this.failedFP;
 	}
 	
