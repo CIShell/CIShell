@@ -14,6 +14,9 @@ import java.util.Set;
 
 import org.cishell.testing.convertertester.core.converter.graph.Converter;
 import org.cishell.testing.convertertester.core.tester2.reportgen.ReportGenerator;
+import org.cishell.testing.convertertester.core.tester2.reportgen.allerrors.analyzer.DefaultErrorSourceAnalyzer;
+import org.cishell.testing.convertertester.core.tester2.reportgen.allerrors.analyzer.ErrorSource;
+import org.cishell.testing.convertertester.core.tester2.reportgen.allerrors.analyzer.ErrorSourceAnalyzer;
 import org.cishell.testing.convertertester.core.tester2.reportgen.faultanalysis.ChanceAtFault;
 import org.cishell.testing.convertertester.core.tester2.reportgen.reports.AllErrorReport;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.AllConvsResult;
@@ -30,6 +33,8 @@ public class AllErrorReportGenerator implements ReportGenerator {
 	private LogService log;
 	
 	private AllErrorReport allErrorsReport;
+	private ErrorSourceAnalyzer errSourceAnalyzer = 
+		new DefaultErrorSourceAnalyzer();
 	
 	public AllErrorReportGenerator(LogService log) {
 		this.log = log;
@@ -69,6 +74,48 @@ public class AllErrorReportGenerator implements ReportGenerator {
 				List CafsWithSameExpln = (List) explnToCafs.get(expln);
 				Map testToPassesToCafs = 
 					categorizeByTestAndPass(CafsWithSameExpln);
+				
+				ErrorSource[] errSources = 
+					this.errSourceAnalyzer.analyze(testToPassesToCafs);
+				
+				report.println("--Error Source Analysis Summary--");
+				
+				for (int jj = 0; jj < errSources.length; jj++) {
+					ErrorSource errSource = errSources[jj];
+					
+					report.println("");
+					
+					ChanceAtFault[] overallCafs = errSource.getCulprits();
+					
+					if (overallCafs.length > 0) {
+					report.println(errSource.getComment());
+					
+					Arrays.sort(overallCafs,
+							ChanceAtFault.COMPARE_BY_LIKELIHOOD);
+					
+					for (int kk = 0; kk < overallCafs.length; kk++) {
+						ChanceAtFault caf = overallCafs[kk];
+						
+						report.println(caf.getConverter() + " (%" +
+									FormatUtil.
+										formatToPercent(
+												caf.getChanceAtFault()) + 
+									" Chance At Fault)");
+					}
+					
+					report.println("");
+					
+					} else {
+						report.println("There is no converter common to all "  +
+								"failed file passes with this error.");
+						report.println("This most likely means that there is " +
+								"more than one source that returns this error" +
+								" message.");
+						report.println("");
+					}
+				}
+				report.println("--All Error Sources--");
+				
 				Set tests = testToPassesToCafs.keySet();
 				
 				Iterator testIter = tests.iterator();
