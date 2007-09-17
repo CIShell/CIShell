@@ -169,9 +169,11 @@ public class ConvResult {
 		return this.conv.getShortName();
 	}
 	
-	public String getShortNameWithTrust() {
+	public String getShortNameWithStatus() {
 		String nameNoPackageWithTrust =  " - " + getShortName() ;
-		if (isTrusted()) {
+		if (! wasTested()) {
+			nameNoPackageWithTrust = "Not Tested" + nameNoPackageWithTrust;
+		} else if (isTrusted()) {
 			nameNoPackageWithTrust = "Trusted" + nameNoPackageWithTrust;
 		} else {
 			nameNoPackageWithTrust = "Not Trusted" + nameNoPackageWithTrust;

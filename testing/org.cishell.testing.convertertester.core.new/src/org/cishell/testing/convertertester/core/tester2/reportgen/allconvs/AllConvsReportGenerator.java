@@ -105,13 +105,15 @@ public class AllConvsReportGenerator implements ReportGenerator {
 			for (int ii = 0; ii < trustedConvs.size(); ii++) {
 				ConvResult cr = (ConvResult) trustedConvs.get(ii);
 				
-				//add this converters name to all convs report
-				report.println("  " + cr.getShortName());
+				if (cr.wasTested()) {
+					//add this converters name to all convs report
+					report.println("  " + cr.getShortName());
 				
-				//generate corresponding sub-report
-				this.convSubGen.generate(cr);
-				ConvReport convReport = this.convSubGen.getConvReport();
-				convReportsList.add(convReport);
+					//generate corresponding sub-report
+					this.convSubGen.generate(cr);
+					ConvReport convReport = this.convSubGen.getConvReport();
+					convReportsList.add(convReport);
+				}
 			}
 			report.println("");
 			
@@ -119,14 +121,30 @@ public class AllConvsReportGenerator implements ReportGenerator {
 			for (int ii = 0; ii < nonTrustedConvs.size(); ii++) {
 				ConvResult cr = (ConvResult) nonTrustedConvs.get(ii);
 				
-				//add this converters name to all convs report
-				report.println("  " + cr.getShortName());
+				if (cr.wasTested()) {
+					//add this converters name to all convs report
+					report.println("  " + cr.getShortName());
 				
-				//generate corresponding sub-report
-				this.convSubGen.generate(cr);
-				ConvReport convReport = this.convSubGen.getConvReport();
-				convReportsList.add(convReport);
+					//generate corresponding sub-report
+					this.convSubGen.generate(cr);
+					ConvReport convReport = this.convSubGen.getConvReport();
+					convReportsList.add(convReport);
+				}
+			}
+			
+			report.println("");
+			
+			report.println("Untested Converters...");
+			for (int ii = 0; ii < convResults.length; ii++) {
+				ConvResult cr = convResults[ii];
 				
+				if (! cr.wasTested()) {
+					report.println("  " + cr.getShortName());
+					
+					this.convSubGen.generate(cr);
+					ConvReport convReport = this.convSubGen.getConvReport();
+					convReportsList.add(convReport);
+				}
 			}
 			report.println("");
 			
