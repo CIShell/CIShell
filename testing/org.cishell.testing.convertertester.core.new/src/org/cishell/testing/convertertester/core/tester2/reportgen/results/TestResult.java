@@ -128,6 +128,12 @@ public class TestResult implements Comparable {
 		return this.compareConvs;
 	}
 	
+	/**
+	 * Returns all the converters in order of conversion.
+	 * (Some converters may appear twice if they appear twice in
+	 * the conversion path).
+	 * @return
+	 */
 	public Converter[] getAllConverters() {
 		Converter[] allConvsArray = 
 			new Converter[this.testConvs.getPath().size() + this.compareConvs.getPath().size()];
@@ -185,10 +191,11 @@ public class TestResult implements Comparable {
 			
 			List allTestConvs = this.testConvs.getPath();
 			
-			int cIndex = this.testConvs.getPath().indexOf(c);
+			int cIndex = this.compareConvs.getPath().indexOf(c);
 			
 			List someCompareConvs =
 				this.compareConvs.getPath().subList(0, cIndex + 1);
+			
 			
 			List allTestAndSomeCompareConvs = new ArrayList();
 			allTestAndSomeCompareConvs.addAll(allTestConvs);

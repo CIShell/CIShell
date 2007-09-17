@@ -112,8 +112,6 @@ public class ConverterTester2 implements AlgorithmProperty {
 		
 		Set fileFormats = fileFormatToTestConvs.keySet();
 		
-		System.out.println("Number of file formats provided by convGraph : " +
-				fileFormats.size());
 		/*
 		 * for each file format, get the corresponding test converter paths
 		 * and comparison converter path.
@@ -130,9 +128,6 @@ public class ConverterTester2 implements AlgorithmProperty {
 			
 			ConverterPath[] testConvs  =
 				(ConverterPath[]) testConvList.toArray(new ConverterPath[0]);
-			
-			System.out.println("Test converters for this file format : " +
-					testConvs.length);
 			
 			ConverterPath compareConv = 
 				(ConverterPath) fileFormatToCompareConvs.get(fileFormat); 

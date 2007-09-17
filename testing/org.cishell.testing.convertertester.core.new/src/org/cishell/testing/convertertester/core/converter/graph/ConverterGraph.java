@@ -444,7 +444,6 @@ public class ConverterGraph {
 					Converter c = convs[j];
 					String convName = c.getShortName();
 					String convsOutputFormatName = c.getOutData();
-					System.out.println("Converters output format is " + convsOutputFormatName);
 					String nodeNumber = nodeNameToInt.get(nodeName).toString();
 					String convNumber = nodeNameToInt.get(convName).toString();
 					String convsOutputNodeNumber = 

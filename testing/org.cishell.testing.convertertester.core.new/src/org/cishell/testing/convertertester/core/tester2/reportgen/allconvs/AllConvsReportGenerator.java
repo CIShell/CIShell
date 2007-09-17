@@ -57,13 +57,14 @@ public class AllConvsReportGenerator implements ReportGenerator {
 			float avgPercentPassed = 
 				passedPercentTotal / convResults.length;
 			
-			
-			float chanceCorrectTotal = 0;
+			float chanceCorrectTotal = 0.0f;
 			for (int ii = 0; ii < convResults.length; ii++) {
-				if (convResults[ii].wasTested()) {
+				if (convResults[ii].wasTested()) {			
 					chanceCorrectTotal += convResults[ii].getChanceCorrect(); 
 				}
 			}
+			
+			
 			float avgChanceCorrect = 
 				chanceCorrectTotal / ((float) convResults.length);
 

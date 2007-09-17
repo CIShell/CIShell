@@ -25,8 +25,6 @@ public class ConvResultMaker {
 		
 		Converter[] trustedConvs  = determineWhichAreTrusted(atr); 
 		
-		System.out.println("*** # Trusted Convs: " + trustedConvs.length);
-		
 		Map convToTestsToPasses   = associateConvsWithTestsAndPasses(atr,
 												allConvs, trustedConvs,
 												faultHeuristic);

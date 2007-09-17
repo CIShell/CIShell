@@ -92,8 +92,13 @@ public class WeightedFullTrustHeuristic implements ChanceAtFaultHeuristic{
 				faultScore = TRUSTED_FAULT_SCORE;
 			}
 			
-			float normalizedFaultScore =
-				faultScore.floatValue() / totalFaultScore;
+			float normalizedFaultScore;
+			if (totalFaultScore != 0.0f) {
+				normalizedFaultScore =
+					faultScore.floatValue() / totalFaultScore;
+			} else {
+				normalizedFaultScore = 0.0f;
+			}
 			
 			ChanceAtFault resultCAF = new ChanceAtFault(failFP, involvedC,
 					normalizedFaultScore);

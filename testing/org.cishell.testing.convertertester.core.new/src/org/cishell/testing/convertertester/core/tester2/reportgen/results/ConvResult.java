@@ -54,8 +54,6 @@ public class ConvResult {
 	private void initializeInvolvedTests() {
 		Set involvedTestSet = involvedTestsAndPasses.keySet();
 		this.involvedTests = new ArrayList(involvedTestSet);
-		System.out.println(conv.getUniqueName() + 
-				"is involved in " + involvedTests.size() + " tests");
 	}
 	
 	private void initializeInvolvedPasses() {
@@ -69,9 +67,6 @@ public class ConvResult {
 			
 			involvedPasses.addAll(passes);
 		}
-		
-		System.out.println(conv.getUniqueName() + 
-				"is involved in " + involvedPasses.size() + " passes");
 	}
 	
 	private void initializeSucceededAndFailedInvolvedPasses() {
@@ -144,6 +139,7 @@ public class ConvResult {
 				uniqueExplnCAF.getChanceNotAtFault();
 			
 			chanceCorrectSoFar *= chanceCorrectForThisError;
+			
 		}
 		
 		float finalChanceCorrect = chanceCorrectSoFar;

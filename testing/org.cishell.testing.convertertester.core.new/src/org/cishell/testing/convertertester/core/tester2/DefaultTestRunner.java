@@ -42,20 +42,10 @@ public class DefaultTestRunner implements TestRunner {
 				.getComparisonConverters();
 
 		List testResults = new ArrayList();
-		
-//		System.out.println("Running test with the following converters...");
-//		System.out.println("Test converters");
-//		for (int ii = 0; ii < testConverters.size(); ii++) {
-//			System.out.println(testConverters.get(ii).getShortName());
-//		}
-//		System.out.println("Comparison Converters");
-//		for (int ii = 0 ; ii < comparisonConverters.size(); ii++) {
-//			System.out.println(comparisonConverters.get(ii).getShortName());
-//		}
 
 		for (int ii = 0; ii < testFileData.length; ii++) {
 			Data[] originalFileData = testFileData[ii];
-			//System.out.println("Beginning test phase for file " + ii);
+			
 			// test conversion phase
 
 			ConvertResult testPhaseResult = convert(originalFileData,
@@ -69,8 +59,7 @@ public class DefaultTestRunner implements TestRunner {
 				continue;
 			}
 			Data[] resultFileData = testPhaseResult.getResult();
-
-			//System.out.println("Passed test phase for file " + ii);
+			
 			// comparison conversion (for original file) phase
 
 			ConvertResult comparePhaseOrigResult = convert(originalFileData,
@@ -112,7 +101,7 @@ public class DefaultTestRunner implements TestRunner {
 				String explanation =
 					graphComparisonPhaseResult.getLog();
 				FilePassFailure failure = createFailResult(originalFileData, 
-						explanation, PassPhase.COMPARE_CONV_RESULT_PHASE,
+						explanation, PassPhase.GRAPH_COMPARE_PHASE,
 						null);
 				testResults.add(failure);
 				continue;
