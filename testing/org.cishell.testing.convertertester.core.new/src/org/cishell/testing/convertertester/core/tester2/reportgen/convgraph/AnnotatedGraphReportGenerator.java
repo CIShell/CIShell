@@ -12,6 +12,7 @@ import org.cishell.testing.convertertester.core.tester2.reportgen.ReportGenerato
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.AllConvsResult;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.AllTestsResult;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.ConvResult;
+import org.cishell.testing.convertertester.core.tester2.util.FormatUtil;
 import org.osgi.service.log.LogService;
 
 public class AnnotatedGraphReportGenerator implements ReportGenerator {
@@ -47,12 +48,13 @@ public class AnnotatedGraphReportGenerator implements ReportGenerator {
 				} else if (line.matches(NODE_LINE)) {
 					String[] parts = line.split(" ");
 					String rawConvName = parts[1];
+					//raw names are now short names
 					String convName = rawConvName.replaceAll("\"", "");
 					
 					boolean wroteAttributes = false;
 					for (int ii = 0; ii < convs.length ; ii++) {
 						ConvResult cr = convs[ii];
-						if (cr.getUniqueName().equals(convName)) {
+						if (cr.getShortName().equals(convName)) {
 							int trusted;
 							
 							if (cr.isTrusted()) {
@@ -61,15 +63,17 @@ public class AnnotatedGraphReportGenerator implements ReportGenerator {
 								trusted = 0;
 							}
 							
-							writer.write(line + " " + trusted + " " + 
-									cr.getChanceCorrect() + " 1 " + "\r\n");
+							writer.write(line + " " + trusted 
+								+ " " + 
+								FormatUtil.formatToPercent(cr.getChanceCorrect())
+								+ " 1 " + "\r\n");
 							wroteAttributes = true;
 							break;
 						}
 					}
 					
 					if (! wroteAttributes) {
-						writer.write(line + " 1 1.0 0" + "\r\n");
+						writer.write(line + " 1 100.0 0" + "\r\n");
 					}
 					
 				} else {
