@@ -114,6 +114,10 @@ public class ConvReportSubGenerator {
 				report.println("a file format, go through some converters, return back to");
 				report.println("that same file format, and can then be somehow converted");
 				report.println("to the in-memory graph comparison format (prefuse.graph)");
+				report.println("It is also possible that all the file passes that would");
+				report.println("eventually pass through this converter are failing before");
+				report.println("they reach this converter.");
+				report.println("");
 				report.println("Consult the Annotated Graph Report for details on why this");
 				report.println("may not be testable.");
 			}
