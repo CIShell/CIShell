@@ -328,8 +328,9 @@ public class ConverterTesterAlgorithm implements Algorithm,
 		  
 		  return refs;
 		  } catch (InvalidSyntaxException e) {
-			  System.out.println("OOPS!");
-			  System.out.println(e);
+			  this.log.log(LogService.LOG_ERROR, "Invalid syntax '" + filter +
+					  "' for filtering service references. Attempted to " +
+					  "obtain all converter references.", e);
 			  return null;
 		  }
 	}
