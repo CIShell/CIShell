@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.cishell.testing.convertertester.core.tester2.reportgen.ReportGenerator;
@@ -37,6 +38,7 @@ public class AllConvsReportGenerator implements ReportGenerator {
 							   File nwbConvGraph) {
 		
 		ConvResult[] convResults = acr.getConvResults();
+		Arrays.sort(convResults, ConvResult.COMPARE_BY_CORRECTNESS);
 		
 		FileOutputStream reportOutStream = null;
 		try {
@@ -111,8 +113,6 @@ public class AllConvsReportGenerator implements ReportGenerator {
 				
 					//generate corresponding sub-report
 					this.convSubGen.generate(cr);
-					ConvReport convReport = this.convSubGen.getConvReport();
-					convReportsList.add(convReport);
 				}
 			}
 			report.println("");
@@ -127,8 +127,6 @@ public class AllConvsReportGenerator implements ReportGenerator {
 				
 					//generate corresponding sub-report
 					this.convSubGen.generate(cr);
-					ConvReport convReport = this.convSubGen.getConvReport();
-					convReportsList.add(convReport);
 				}
 			}
 			
@@ -142,20 +140,19 @@ public class AllConvsReportGenerator implements ReportGenerator {
 					report.println("  " + cr.getShortName());
 					
 					this.convSubGen.generate(cr);
-					ConvReport convReport = this.convSubGen.getConvReport();
-					convReportsList.add(convReport);
 				}
 			}
 			report.println("");
 			
-//			for (int ii = 0; ii < convResults.length; ii++) {
-//				this.convSubGen.generate(convResults[ii]);
-//				ConvReport convReport = this.convSubGen.getConvReport();
-//				convReportsList.add(convReport);
-//			}
+			for (int ii = 0; ii < convResults.length; ii++) {
+				this.convSubGen.generate(convResults[ii]);
+				ConvReport convReport = this.convSubGen.getConvReport();
+				convReportsList.add(convReport);
+			}
 			
 			ConvReport[] convReports = 
 				(ConvReport[]) convReportsList.toArray(new ConvReport[0]);
+					
 			this.allConvsReport = 
 				new AllConvsReport(reportFile, convReports,
 						"All Converters Report");

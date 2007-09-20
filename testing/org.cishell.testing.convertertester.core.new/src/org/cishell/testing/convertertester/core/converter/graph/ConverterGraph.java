@@ -48,10 +48,13 @@ public class ConverterGraph {
 		fileExtensionCompareConverters = 
 			new ConcurrentHashMap();//<String, ConverterPath>();
 		
+		System.out.println("Deriving data formats...");
 		deriveDataFormats(this.converters, this.dataFormats);
+		System.out.println("Associating Converters...");
 		associateConverters(this.converters, this.inDataToConverters, this.outDataToConverters);
+		System.out.println("Creating converter paths...");
 		createConverterPaths(this.inDataToConverters, this.fileExtensionTestConverters, this.fileExtensionCompareConverters);
-	
+		System.out.println("Done creating converter paths...");
 	}
 	
 	private Converter[] createConverters(ServiceReference[] convRefs) {
@@ -82,50 +85,67 @@ public class ConverterGraph {
 			Converter c = cs[i];
 			
 			String inDataFormat = c.getInData();
-			addValueToListAssociatedWithKey(inDataToConvs, inDataFormat, c);
+			addUniqueValueToListAssociatedWithKey(
+					inDataToConvs, inDataFormat, c);
 			
 			String outDataFormat = c.getOutData();
-			addValueToListAssociatedWithKey(outDataToConvs, outDataFormat, c);
+			addUniqueValueToListAssociatedWithKey(
+					outDataToConvs, outDataFormat, c);
 		}
 	}
 	
-	private void createConverterPaths(Map algorithms, Map testPaths,
-			Map comparePaths){
-		String[] keySet = new String[algorithms.keySet().size()];
-		keySet = (String[])algorithms.keySet().toArray(keySet);
-		for(int i = 0; i < keySet.length; i++){
-			String s = keySet[i];
-			if(s.startsWith("file-ext")){
+	private void createConverterPaths(Map inDataToConverters,
+			Map fileExtToTestConverters, Map fileExtToCompareConverters){
+		String[] inDataFormats = new String[inDataToConverters.keySet().size()];
+		
+		inDataFormats = 
+			(String[])inDataToConverters.keySet().toArray(inDataFormats);
+		
+		for(int i = 0; i < inDataFormats.length; i++){
+			String inDataFormat = inDataFormats[i];
+			if(inDataFormat.startsWith("file-ext")){
 				
-				
+				System.out.println("Creating paths for format: " + inDataFormat);
 				ConverterPath test = new ConverterPath(this.bContext, this.log);
 			
-				test.setInData(s);
+				test.setInData(inDataFormat);
 			
-				createPaths((List)algorithms.get(s), test, s);
+				createPaths((List)inDataToConverters.get(inDataFormat),
+						test);
 				
 			}
 		}
 	
 	}
 	
-	private ConverterPath createPaths(List algorithms, ConverterPath path, String dataType){
-		List cs = removeReferences(algorithms, path);
+	private void createPaths(List allConvsForFormat, ConverterPath currentPath) {
+		List nextConvs = removeReferences(allConvsForFormat, currentPath);
 		
-			addCompareCycle(path);
+		addCompareCycle(currentPath);
 		
-		if(path.getInData().equals(path.getOutData())){
-			addTestCycle(path);
-			return path;
+		if(currentPath.getInData().equals(currentPath.getOutData())){
+			//base case
+			addTestCycle(currentPath);
+			System.out.println("**--Path Completed--**");
+			List path = currentPath.getPath();
+			System.out.println("Path is...");
+			for (int ii = 0; ii < path.size(); ii++) {
+				Converter c = (Converter) path.get(ii);
+				System.out.println("  " + c.getShortName());
+			}
+			System.out.println("(End Path)");
+			return;
 		}
-		while(!cs.isEmpty()){
-			ConverterPath p = new ConverterPath(path, this.bContext);
-			p.add((Converter) cs.get(0));
-			cs.remove(0);
-			createPaths((List)this.inDataToConverters.get(p.getOutData()), p, p.getOutData());
+		while(!nextConvs.isEmpty()){
+			ConverterPath newPath = new ConverterPath(currentPath, this.bContext);
+			Converter nextConv = (Converter) nextConvs.get(0);
+			System.out.println("Adding " + nextConv.getShortName());
+			newPath.add(nextConv);
+			nextConvs.remove(0);
+			createPaths((List)this.inDataToConverters.get(newPath.getOutData()), newPath);
 		
 		}
-		return null;		
+		return;		
 	}
 	
 	private void addTestCycle(ConverterPath cp){
@@ -159,21 +179,35 @@ public class ConverterGraph {
 		}
 	}
 	
-	private static List removeReferences(List al, ConverterPath cp){
+	private static List removeReferences(List allConvsForFormat,
+			ConverterPath currentPath){
 		List cs; 
 		
-		if (al != null) {
-			cs = new ArrayList(al);
+		if (allConvsForFormat != null) {
+			cs = new ArrayList(allConvsForFormat);
 		} else {
 			cs = new ArrayList(); 
 		}
+		System.out.println("Current path is....");
+		for (int ii = 0; ii < currentPath.size(); ii++) {
+			System.out.println(currentPath.get(ii).getShortName());
+		}
 		
-		cs.removeAll(cp.getPath());
+		System.out.println("^^^^ cs prior to removing loop causing convs");
+		for (int ii = 0; ii < cs.size(); ii++) {
+			System.out.println(((Converter) cs.get(ii)).getShortName());
+		}
+		cs.removeAll(currentPath.getPath());
+		System.out.println("^^^^ cs after removing loop causing convs");
+		for (int ii = 0; ii < cs.size(); ii++) {
+			System.out.println(((Converter) cs.get(ii)).getShortName());
+		}
+		//do we really want to be removing these?
 		List forbidden = new ArrayList();
 		for(int i = 0; i < cs.size(); i++){
 			Converter c = (Converter) cs.get(i);
 			String outData = c.getOutData();
-			if(outData.startsWith("file-ext") && (!outData.equals(cp.getInData()))){
+			if(outData.startsWith("file-ext") && (!outData.equals(currentPath.getInData()))){
 				
 				forbidden.add(c);
 			}
@@ -496,7 +530,23 @@ public class ConverterGraph {
 			m.put(key, listOfValues);
 		}
 		else{
-			((List)m.get(key)).add(value);
+			List values = (List) m.get(key);
+			values.add(value);
+		}
+	}
+	
+	private void addUniqueValueToListAssociatedWithKey(Map m, Object key, Object value) {
+		
+		if(m.get(key) == null){
+			List listOfValues = new ArrayList();
+			listOfValues.add(value);
+			m.put(key, listOfValues);
+		}
+		else{
+			List values = (List) m.get(key);
+			if (! values.contains(value)) {
+				values.add(value);
+			}
 		}
 	}
 }

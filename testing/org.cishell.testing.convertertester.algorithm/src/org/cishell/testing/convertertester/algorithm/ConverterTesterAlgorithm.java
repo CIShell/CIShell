@@ -11,6 +11,7 @@ import org.cishell.framework.algorithm.AlgorithmProperty;
 import org.cishell.framework.data.BasicData;
 import org.cishell.framework.data.Data;
 import org.cishell.framework.data.DataProperty;
+import org.cishell.testing.convertertester.algorithm.pathfilter.ConvAndHopFilter;
 import org.cishell.testing.convertertester.core.tester2.ConverterTester2;
 import org.cishell.testing.convertertester.core.tester2.reportgen.ReportGenerator;
 import org.cishell.testing.convertertester.core.tester2.reportgen.allconvs.AllConvsReportGenerator;
@@ -44,6 +45,10 @@ public class ConverterTesterAlgorithm implements Algorithm,
     private BundleContext bContext;
     private LogService log;
     
+    private boolean testAllConvs;
+    private String selectedConvName;
+    private int numHops;
+    
     public ConverterTesterAlgorithm(Data[] data, Dictionary parameters,
     		CIShellContext cContext, BundleContext bContext ) {
         this.cContext = cContext;
@@ -52,6 +57,14 @@ public class ConverterTesterAlgorithm implements Algorithm,
         this.log = (LogService) cContext.getService(
 				LogService.class.getName());
         
+        
+        this.testAllConvs = ((Boolean) parameters.get(
+        		ConverterTesterAlgorithmFactory.TEST_ALL_CONVS_PARAM_ID)).booleanValue();
+        this.selectedConvName = ((String) parameters.get(
+        		ConverterTesterAlgorithmFactory.SELECTED_CONVERTER_PARAM_ID));
+        this.numHops = ((Integer) parameters.get(
+        		ConverterTesterAlgorithmFactory.NUM_HOPS_PARAM_ID)).intValue();
+        
     }
 
     public Data[] execute() {
@@ -59,7 +72,7 @@ public class ConverterTesterAlgorithm implements Algorithm,
     			                                               "\r\n" +
     			"-------NOTICE-------" +                       "\r\n" + 	
     			"The Converter Tester will take " +
-    			"approximately 30 seconds to run all the tests. \r\n" +
+    			"some time to run all the tests. \r\n" +
     			"Thank you for waiting :)" +                   "\r\n" +
     			"-----END NOTICE-----                           \r\n");
     	
@@ -108,8 +121,11 @@ public class ConverterTesterAlgorithm implements Algorithm,
     	public void run () {
     		
     		try {
+    			System.out.println("getting converter references....");
     				//get all the converters
-		   			ServiceReference[] convRefs = getConverterReferences();
+		   			ServiceReference[] convRefs = 
+		   				ConverterTesterAlgorithmUtil.
+		   				getConverterReferences(bContext);
 		   			
 
 		   			
@@ -132,16 +148,31 @@ public class ConverterTesterAlgorithm implements Algorithm,
 		   			 * execute the tests, and provide the results to the 
 		   			 * report generators
 		   			 */
+		   			
+		   			System.out.println("Executing tests...");
+		   			
 		   			ConverterTester2 ct = new ConverterTester2(log);
-		   			ct.execute(convRefs,
-		   					new ReportGenerator[] 
-		   					   {allGen, allConvGen, allErrGen,
-		   					graphGen, origGraphGen, readmeGen},
-		   					cContext, bContext);
+		   	
+		   			if (testAllConvs) {
+		   				ct.execute(convRefs,
+			   					new ReportGenerator[] 
+			   					   {allGen, allConvGen, allErrGen,
+			   					graphGen, origGraphGen, readmeGen},
+			   					cContext, bContext);
+		   			} else {
+		   				ct.execute(convRefs,
+			   					new ReportGenerator[] 
+			   					   {allGen, allConvGen, allErrGen,
+			   					graphGen, origGraphGen, readmeGen},
+			   					cContext, bContext,
+			   					new ConvAndHopFilter(selectedConvName, numHops));
+		   			}
 		   			/*
 		   			 * report generators have now been supplied with the test
 		   			 * results, and their reports can now be extracted.
 		   			 */
+		   			
+		   			System.out.println("Returning reports...");
 		   			
 		   			//return readme report
 		   			
@@ -319,23 +350,5 @@ public class ConverterTesterAlgorithm implements Algorithm,
     
   
     
-    private ServiceReference[] getConverterReferences() {
-		  String filter = "(&("+ALGORITHM_TYPE+"="+TYPE_CONVERTER+"))";
-
-		  try {
-		  ServiceReference[] refs = bContext.getServiceReferences(
-				  AlgorithmFactory.class.getName(), filter);
-		  
-		  return refs;
-		  } catch (InvalidSyntaxException e) {
-			  this.log.log(LogService.LOG_ERROR, "Invalid syntax '" + filter +
-					  "' for filtering service references. Attempted to " +
-					  "obtain all converter references.", e);
-			  return null;
-		  }
-	}
- 
-    
-
     
 }

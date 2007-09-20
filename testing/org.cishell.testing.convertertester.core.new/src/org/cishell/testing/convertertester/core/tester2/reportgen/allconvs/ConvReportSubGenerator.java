@@ -123,7 +123,7 @@ public class ConvReportSubGenerator {
 			}
 			
 			this.convReport = new ConvReport(reportFile, new TestReport[0],
-					cr.getShortNameWithStatus());
+					cr.getShortNameWithCorrectness());
 			
 			report.println("");
 			report.flush();

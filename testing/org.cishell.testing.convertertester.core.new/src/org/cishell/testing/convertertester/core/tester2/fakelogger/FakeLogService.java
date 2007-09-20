@@ -20,7 +20,7 @@ public class FakeLogService implements LogService {
 	}
 	
 	public void log(int level, String message) {
-		if (level == LOG_ERROR) {
+		if (level == LOG_ERROR | level == LOG_WARNING) {
 			this.logMessages.add(new LogEntry(message));
 		} else {
 			this.realLog.log(level, message);
@@ -28,7 +28,7 @@ public class FakeLogService implements LogService {
 	}
 
 	public void log(int level, String message, Throwable exception) {
-		if (level == LOG_ERROR) {
+		if (level == LOG_ERROR | level == LOG_WARNING) {
 			this.logMessages.add(new LogEntry(message, exception));
 		} else {
 			this.realLog.log(level, message, exception);
@@ -36,7 +36,7 @@ public class FakeLogService implements LogService {
 	}
 
 	public void log(ServiceReference sr, int level, String message) {
-		if (level == LOG_ERROR) {
+		if (level == LOG_ERROR | level == LOG_WARNING) {
 			this.logMessages.add(new LogEntry(message));
 		} else {
 			this.realLog.log(sr, level, message);
@@ -45,7 +45,7 @@ public class FakeLogService implements LogService {
 
 	public void log(ServiceReference sr, int level, String message,
 			Throwable exception) {
-		if (level == LOG_ERROR) {
+		if (level == LOG_ERROR | level == LOG_WARNING) {
 			this.logMessages.add(new LogEntry(message, exception));
 		} else {
 			this.realLog.log(sr, level, message, exception);

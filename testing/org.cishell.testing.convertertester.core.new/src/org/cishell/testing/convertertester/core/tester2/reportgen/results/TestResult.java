@@ -135,8 +135,14 @@ public class TestResult implements Comparable {
 	 * @return
 	 */
 	public Converter[] getAllConverters() {
+		List testConvsPath = this.testConvs.getPath();
+		List compareConvsPath = this.compareConvs.getPath();
+		
+		int testConvsPathSize = testConvsPath.size();
+		int compareConvsPathSize = compareConvsPath.size();
+		
 		Converter[] allConvsArray = 
-			new Converter[this.testConvs.getPath().size() + this.compareConvs.getPath().size()];
+			new Converter[testConvsPathSize + compareConvsPathSize];
 		
 		Converter[] testConvsArray = 
 			(Converter[]) testConvs.getPath().toArray(new Converter[0]);

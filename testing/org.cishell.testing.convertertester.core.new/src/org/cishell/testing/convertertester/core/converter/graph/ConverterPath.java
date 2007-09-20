@@ -127,6 +127,7 @@ public class ConverterPath implements AlgorithmProperty {
         	Converter c = (Converter) this.path.get(i);
         	
             if (c.isLossy()) {
+            	System.out.println("FOUND A LOSSY CONVERTER!");
                 lossiness = LOSSY;
             }
         } 
@@ -144,6 +145,19 @@ public class ConverterPath implements AlgorithmProperty {
 	public int size() {
 
 		return this.path.size();
+	}
+	
+	public boolean containsConverterNamed(String convName) {
+		for (int ii = 0; ii < this.path.size(); ii++) {
+			Converter conv = (Converter) this.path.get(ii);
+			
+			if (conv.getShortName().equals(convName) ||
+					conv.getUniqueName().equals(convName)) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	public String getConverterName(int index) {

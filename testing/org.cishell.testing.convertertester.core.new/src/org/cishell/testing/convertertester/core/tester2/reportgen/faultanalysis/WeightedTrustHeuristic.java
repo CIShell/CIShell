@@ -20,11 +20,14 @@ import org.cishell.testing.convertertester.core.tester2.reportgen.results.FilePa
  * failures in conversion, and increases chance at fault for converters
  * involved more than once in the conversion path
  */
-public class WeightedFullTrustHeuristic implements ChanceAtFaultHeuristic{
+public class WeightedTrustHeuristic implements ChanceAtFaultHeuristic{
 
-	public static final Float TRUSTED_FAULT_SCORE = new Float(0);
 	public static final Float DEFAULT_FAULT_SCORE = new Float(1);
-	public static final Float FAILED_CONV_FAULT_SCORE = new Float(2);
+
+	public static final float TRUSTED_CONV_PENALTY_REDUCTION = .1f;
+	
+	public static final float FAILED_CONV_PENALTY = 3.0f;
+	public static final float REPEAT_PENALTY = .5f;
 	
 	public ChanceAtFault[] determine(FilePassResult failFP,
 			Converter[] involvedCs,
@@ -32,70 +35,71 @@ public class WeightedFullTrustHeuristic implements ChanceAtFaultHeuristic{
 		
 		List trustedCList = Arrays.asList(trustedCs);
 		
-		//eliminate converters that are trusted
-		
-		List unTrustedCs = new ArrayList();
-		for (int ii = 0; ii < involvedCs.length; ii++) {
-			Converter c = involvedCs[ii];
-			
-			if (! trustedCList.contains(c)) {
-				unTrustedCs.add(c);
-			}
-		}
-		
-		//assign fault scores to each untrusted converter
+		//assign fault scores to each converter
 		
 		Map convToFaultScore = new HashMap();
 		
-		float totalFaultScore = 0.0f;
-		for (int ii = 0; ii < unTrustedCs.size(); ii++) {
-			Converter untrustedC = (Converter) unTrustedCs.get(ii);
+		for (int ii = 0; ii < involvedCs.length; ii++) {
+			Converter involvedC = (Converter) involvedCs[ii];
 			
-			Float oldFaultScore = (Float) convToFaultScore.get(untrustedC);
+			Float oldFaultScore = (Float) convToFaultScore.get(involvedC);
 			Float newFaultScore;
 			if (oldFaultScore == null) {
 				//first occurrence of this converter
 				
-				if (! isConvThatFailed(untrustedC, failFP)) {
-					newFaultScore = DEFAULT_FAULT_SCORE;
-				} else {
-					newFaultScore = FAILED_CONV_FAULT_SCORE;
+				newFaultScore = DEFAULT_FAULT_SCORE;
+				if (isConvThatFailed(involvedC, failFP)) {
+					newFaultScore = new Float(newFaultScore.floatValue() *
+							FAILED_CONV_PENALTY);
 				}
 				
 			} else {
 				//converter has occurred before
 				
 				newFaultScore = new Float(oldFaultScore.floatValue() + 
-						DEFAULT_FAULT_SCORE.floatValue());
+						DEFAULT_FAULT_SCORE.floatValue() * REPEAT_PENALTY);
 			}
 			
-			convToFaultScore.put(untrustedC, newFaultScore);
-			totalFaultScore += newFaultScore.floatValue();
+			convToFaultScore.put(involvedC, newFaultScore);
+	
 		}
 		
-		//return chance each converter is at fault, based on fault scores.
+
 		
+		//reduce fault scores of trusted converters
+		
+		float faultScoresTotal = 0.0f;
+		
+		Set convs = convToFaultScore.keySet();
+		Iterator convIter = convs.iterator();
+		while (convIter.hasNext()) {
+			Converter convInvolved = (Converter) convIter.next();
+			Float convFaultScore = 
+				(Float) convToFaultScore.get(convInvolved);
+			
+			if (trustedCList.contains(convInvolved)) {
+				convFaultScore = new Float(convFaultScore.floatValue() *
+						TRUSTED_CONV_PENALTY_REDUCTION);
+			}
+			
+			convToFaultScore.put(convInvolved, convFaultScore);
+			faultScoresTotal += convFaultScore.floatValue();
+		}
 		
 		List resultCAFList = new ArrayList();
 		
 		
-		
+		//return chance each converter is at fault, based on fault scores.
 		
 		for (int ii = 0; ii < involvedCs.length; ii++) {
 			Converter involvedC = involvedCs[ii];
 			
 			Float faultScore = (Float) convToFaultScore.get(involvedC);
-			//if there is no associated score...
-			if (faultScore == null) {
-				//this converter must have been removed because it was
-				//trusted, so give it the fault score for trusted converters.
-				faultScore = TRUSTED_FAULT_SCORE;
-			}
 			
 			float normalizedFaultScore;
-			if (totalFaultScore != 0.0f) {
+			if (faultScoresTotal != 0.0f) {
 				normalizedFaultScore =
-					faultScore.floatValue() / totalFaultScore;
+					faultScore.floatValue() / faultScoresTotal;
 			} else {
 				normalizedFaultScore = 0.0f;
 			}

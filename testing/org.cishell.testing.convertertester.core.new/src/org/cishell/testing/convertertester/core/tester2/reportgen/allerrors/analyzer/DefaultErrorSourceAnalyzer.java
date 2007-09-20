@@ -114,8 +114,24 @@ public class DefaultErrorSourceAnalyzer implements ErrorSourceAnalyzer {
 				normalizedCafs.add(normPC);
 			}
 			
-			return (ChanceAtFault[]) 
-				normalizedCafs.toArray(new ChanceAtFault[0]);
+			ChanceAtFault[] uniqueNormalizedCafs = 
+				removeDuplicateConverters(normalizedCafs);
+			
+			return uniqueNormalizedCafs;
 		}
+	}
+	
+	private ChanceAtFault[] removeDuplicateConverters(List cafs) {
+		List newCafs = new ArrayList();
+		List newCafConvs = new ArrayList();
+		for (int ii = 0; ii < cafs.size(); ii++) {
+			ChanceAtFault caf  = (ChanceAtFault) cafs.get(ii);
+			if (! newCafConvs.contains(caf.getConverter())) {
+				newCafs.add(caf);
+				newCafConvs.add(caf.getConverter());
+			}
+		}
+		
+		return (ChanceAtFault[]) newCafs.toArray(new ChanceAtFault[0]);
 	}
 }

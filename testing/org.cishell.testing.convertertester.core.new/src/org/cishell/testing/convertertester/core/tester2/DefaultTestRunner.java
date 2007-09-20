@@ -129,7 +129,7 @@ public class DefaultTestRunner implements TestRunner {
 		FakeLogCIShellContext fakeCContext = 
 			new FakeLogCIShellContext(testData.getContext());
 		
-		Converter currentConverter = converters.get(0);
+		Converter currentConverter = null;
 		try {
 			for (int ii = 0; ii < converters.size(); ii++) {
 				//System.out.println("Going into converter " + ii);

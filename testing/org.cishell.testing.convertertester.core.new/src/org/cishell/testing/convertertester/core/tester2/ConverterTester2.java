@@ -20,9 +20,10 @@ import org.cishell.testing.convertertester.core.tester2.graphcomparison.IdsNotPr
 import org.cishell.testing.convertertester.core.tester2.graphcomparison.IdsPreservedComparer;
 import org.cishell.testing.convertertester.core.tester2.graphcomparison.LossyComparer;
 import org.cishell.testing.convertertester.core.tester2.graphcomparison.NewGraphComparer;
+import org.cishell.testing.convertertester.core.tester2.pathfilter.PathFilter;
 import org.cishell.testing.convertertester.core.tester2.reportgen.ReportGenerator;
 import org.cishell.testing.convertertester.core.tester2.reportgen.faultanalysis.ChanceAtFaultHeuristic;
-import org.cishell.testing.convertertester.core.tester2.reportgen.faultanalysis.WeightedFullTrustHeuristic;
+import org.cishell.testing.convertertester.core.tester2.reportgen.faultanalysis.ErrorProximityHeuristic;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.AllConvsResult;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.AllTestsResult;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.FilePassResult;
@@ -53,6 +54,15 @@ public class ConverterTester2 implements AlgorithmProperty {
 		this.testRunner = new DefaultTestRunner(log);
 	}
 	
+	public void execute(
+			ServiceReference[] converterRefs,
+			ReportGenerator[] reportGenerators,
+			CIShellContext cContext,
+			BundleContext bContext) {
+		execute(converterRefs, reportGenerators, cContext, bContext,
+				new AcceptAllFilter());
+	}
+	
 	/**
 	 * Tests the provided converters, and passes the results of those tests to
 	 * the report generators. Report Generators are side-effected, which takes
@@ -66,17 +76,20 @@ public class ConverterTester2 implements AlgorithmProperty {
 			ServiceReference[] converterRefs,
 			ReportGenerator[] reportGenerators,
 			CIShellContext cContext,
-			BundleContext bContext) {
+			BundleContext bContext,
+			PathFilter testPathFilter) {
 		
 		//generate all the converter paths
 		
+		System.out.println("Generating converter graph paths etc...");
 		ConverterGraph converterGraph = new ConverterGraph(converterRefs,
 				bContext, this.log);
 		
 		//run the tests
 		
+		System.out.println("Running actual tests...");
 		TestResult[] rawResults = 
-			runAllTests(converterGraph, cContext, bContext);
+			runAllTests(converterGraph, testPathFilter, cContext, bContext);
 		
 		AllTestsResult allTestsResult = new AllTestsResult(rawResults);
 		
@@ -84,8 +97,9 @@ public class ConverterTester2 implements AlgorithmProperty {
 		
 		Converter[] allConverters = converterGraph.getAllConverters();
 		
+		System.out.println("Running conv result maker...");
 		ChanceAtFaultHeuristic faultHeuristic = 
-			new WeightedFullTrustHeuristic();
+			new ErrorProximityHeuristic();
 		AllConvsResult allConvertersResult = 
 			ConvResultMaker.generate(allTestsResult, allConverters,
 					faultHeuristic);
@@ -100,8 +114,11 @@ public class ConverterTester2 implements AlgorithmProperty {
 		}
 	}
 	
-	public TestResult[] runAllTests(ConverterGraph convGraph,
-			CIShellContext cContext, BundleContext bContext) {
+	public TestResult[] runAllTests(
+			ConverterGraph convGraph,
+			PathFilter testPathFilter, 
+			CIShellContext cContext,
+			BundleContext bContext) {
 		
 		
 		
@@ -129,6 +146,9 @@ public class ConverterTester2 implements AlgorithmProperty {
 			ConverterPath[] testConvs  =
 				(ConverterPath[]) testConvList.toArray(new ConverterPath[0]);
 			
+			ConverterPath[] filteredTestConvs = 
+				testPathFilter.filter(testConvs);
+			
 			ConverterPath compareConv = 
 				(ConverterPath) fileFormatToCompareConvs.get(fileFormat); 
 			
@@ -136,17 +156,19 @@ public class ConverterTester2 implements AlgorithmProperty {
 			 * For each test converter, use that test converter and
 			 * the corresponding comparison converter to run a test.
 			 */
-			
-			for (int kk = 0; kk < testConvs.length; kk++) {
-				numTestsSoFar++;
-				ConverterPath testConv = testConvs[kk];
-				
-				TestResult testResult = 
-					runATest(testConv, compareConv, cContext, bContext,
-							numTestsSoFar);
-				
-				if (testResult != null) {
-					testResults.add(testResult);
+			if (filteredTestConvs != null &&
+					compareConv != null) {
+				for (int kk = 0; kk < filteredTestConvs.length; kk++) {
+					numTestsSoFar++;
+					ConverterPath testConv = filteredTestConvs[kk];
+					
+					TestResult testResult = 
+						runATest(testConv, compareConv, cContext, bContext,
+								numTestsSoFar);
+					
+					if (testResult != null) {
+						testResults.add(testResult);
+					}
 				}
 			}
 		}
@@ -167,7 +189,7 @@ public class ConverterTester2 implements AlgorithmProperty {
 		
 		//determine how we will compare the graphs
 		
-		boolean isLossy = testConvs.isLossy() && compareConvs.isLossy();
+		boolean isLossy = testConvs.isLossy() || compareConvs.isLossy();
 		boolean preserveIDs = testConvs.preservesIDs() &&
 			compareConvs.preservesIDs();
 		
@@ -181,7 +203,8 @@ public class ConverterTester2 implements AlgorithmProperty {
         FilePassResult[] results = this.testRunner.runTest(testBasicData);     
         
         //return the results of the test
-        return new TestResult(results, testConvs, compareConvs, numTestsSoFar);    
+        return new TestResult(results, testConvs, compareConvs,
+        		numTestsSoFar);    
 	}
 		
 	private Data[][] wrapInData(String[] testFilePaths, String format) {
@@ -210,6 +233,14 @@ public class ConverterTester2 implements AlgorithmProperty {
 		} else {
 			return new IdsPreservedComparer();
 		}
+	}
+	
+	private class AcceptAllFilter implements PathFilter {
+
+		public ConverterPath[] filter(ConverterPath[] testPaths) {
+			return testPaths;
+		}
+		
 	}
 	
 }

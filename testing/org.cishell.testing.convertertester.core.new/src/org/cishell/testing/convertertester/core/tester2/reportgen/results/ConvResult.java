@@ -12,8 +12,14 @@ import org.cishell.testing.convertertester.core.converter.graph.Converter;
 import org.cishell.testing.convertertester.core.tester2.reportgen.faultanalysis.ChanceAtFault;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.filepass.FilePassFailure;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.filepass.FilePassSuccess;
+import org.cishell.testing.convertertester.core.tester2.util.FormatUtil;
 
 public class ConvResult {
+	
+	public static final float NON_TESTED_CHANCE_CORRECT = 0.5f;
+	
+	public static final Comparator COMPARE_BY_CORRECTNESS = 
+		new CompareByCorrectness();
 	
 	//original instance variables
 	
@@ -129,22 +135,26 @@ public class ConvResult {
 	}
 	
 	private void initializeChanceCorrect() {
-		float chanceCorrectSoFar = 1.0f;
+		if (wasTested()) {
+			float chanceCorrectSoFar = 1.0f;
 		
-		Iterator iter = this.uniqueExplnChanceAtFaults.iterator();
-		while (iter.hasNext()) {
-			ChanceAtFault uniqueExplnCAF = (ChanceAtFault) iter.next();
+			Iterator iter = this.uniqueExplnChanceAtFaults.iterator();
+			while (iter.hasNext()) {
+				ChanceAtFault uniqueExplnCAF = (ChanceAtFault) iter.next();
 			
-			float chanceCorrectForThisError = 
-				uniqueExplnCAF.getChanceNotAtFault();
+				float chanceCorrectForThisError = 
+					uniqueExplnCAF.getChanceNotAtFault();
 			
-			chanceCorrectSoFar *= chanceCorrectForThisError;
+				chanceCorrectSoFar *= chanceCorrectForThisError;
 			
-		}
+			}
 		
-		float finalChanceCorrect = chanceCorrectSoFar;
+			float finalChanceCorrect = chanceCorrectSoFar;
 		
-		this.chanceCorrect = finalChanceCorrect;
+			this.chanceCorrect = finalChanceCorrect;
+			} else {
+				this.chanceCorrect = NON_TESTED_CHANCE_CORRECT;
+			}
 	}
 	
 	
@@ -180,6 +190,17 @@ public class ConvResult {
 		}
 		
 		return nameNoPackageWithTrust;
+	}
+	
+	public String getShortNameWithCorrectness() {
+		String nameNoPackageWithCorrectness = getShortName();
+		if (wasTested()) {
+			nameNoPackageWithCorrectness += " - " +
+			 "(%" + FormatUtil.formatToPercent(getChanceCorrect()) + ")";
+		} else {
+			nameNoPackageWithCorrectness += "(Not Tested)";
+		}
+		return nameNoPackageWithCorrectness;
 	}
 	
 	public boolean wasTested() {
@@ -251,5 +272,38 @@ public class ConvResult {
 		}
 		
 		return false;
+	}
+	
+private static class CompareByCorrectness implements Comparator {
+		
+		public int compare(Object o1, Object o2) {
+			if (o1 instanceof ConvResult && o2 instanceof ConvResult) {
+				ConvResult cr1 = (ConvResult) o1;
+				ConvResult cr2 = (ConvResult) o2;
+				
+				//tested come before non-tested
+				
+				if (cr2.wasTested() && (! cr1.wasTested())) {
+					return 1;
+				} else if ((! cr2.wasTested() && cr1.wasTested())) {
+					return -1;
+				} else if ((! cr2.wasTested()) & (! cr1.wasTested())) {
+					return 0;
+				}
+				
+				//if both are tested, higher chance of correctness before lower.
+				
+				if (cr2.getChanceCorrect() > cr1.getChanceCorrect()) {
+					return 1;
+				} else if (cr2.getChanceCorrect() < cr1.getChanceCorrect()) {
+					return -1;					
+				} else {
+					return 0;
+				}		
+			} else {
+				throw new IllegalArgumentException("Can only " +
+						"compare conv results");
+			}
+		}
 	}
 }

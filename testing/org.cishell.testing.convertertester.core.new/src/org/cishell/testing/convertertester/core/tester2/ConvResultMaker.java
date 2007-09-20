@@ -20,6 +20,11 @@ import org.cishell.testing.convertertester.core.tester2.reportgen.results.TestRe
 
 public class ConvResultMaker {
 	
+	//must succeed at least 3 times in the file pass
+	private static int MINIMUM_SUCCESSES_TO_BE_TRUSTED = 3;
+	//must be tested by at least 2/3rds of file passes in test 
+	private static float MINIMUM_PERCENT_FILE_PASSES_REACHED_TO_BE_TRUSTED = .8f;
+	
 	public static AllConvsResult generate(AllTestsResult atr,
 			Converter[] allConvs, ChanceAtFaultHeuristic faultHeuristic) {
 		
@@ -56,26 +61,67 @@ public class ConvResultMaker {
 				TestResult tr = trs[ii];
 				FilePassResult[] fprs = tr.getFilePassResults();
 				
-				//check if all file passes were successes
 				
-				boolean trusted = true;
+				//determine which converters always succeeded.
+				
+				int FAILED = -1;
+				int NEVER_TESTED = 0;
+				
+				int[] trusted = new int[tr.getAllConverters().length];
 				for (int jj = 0; jj < fprs.length; jj++) {
 					FilePassResult fpr = fprs[jj];
-					if (! fpr.succeeded()) {
-						//not all were successes
-						trusted = false;
-						break;
-					}
-				} 
-				
-				if (trusted && fprs.length > 0) {
-					//mark all converters involved as trusted.
 					
-					ConverterPath testConvs = tr.getTestConverters();
-					for (int kk = 0; kk < testConvs.size(); kk++) {
-						Converter conv = testConvs.get(kk);
-						trustedConverters.add(conv);
+					if (fpr.succeeded()) {
+						for (int kk = 0; kk < trusted.length; kk++) {
+							if (trusted[kk] != FAILED) {
+								trusted[kk] += 1;
+							}
+						}
+					} else if (fpr.failedWhileComparingGraphs()) {
+						for (int kk = 0; kk < trusted.length; kk++) {
+							trusted[kk] = FAILED;
+						}
+					} else if (fpr.failedWhileConverting()) {
+						Converter[] convsInvolved = fpr.getConvertersInvolved();
+						for (int kk = 0; kk < convsInvolved.length; kk++) {
+							trusted[kk] = FAILED;
+						}
 					}
+					
+				}
+				
+				Converter[] allConvs = tr.getAllConverters();
+				ConverterPath testConvs = tr.getTestConverters();
+				if (fprs.length > 0) {
+					//mark trusted converters.
+					
+					
+					for (int kk = 0; kk < testConvs.size(); kk++) {
+						Converter c = testConvs.get(kk);
+						float percentFilePassesThisConvParticipatedIn = 
+							trusted[kk] / (float) fprs.length;
+						if (trusted[kk] >= MINIMUM_SUCCESSES_TO_BE_TRUSTED &&
+								percentFilePassesThisConvParticipatedIn >=
+						MINIMUM_PERCENT_FILE_PASSES_REACHED_TO_BE_TRUSTED) {
+						trustedConverters.add(c);
+						}
+					}
+//					ConverterPath testConvs = tr.getAllConverters();
+//					for (int kk = 0; kk < testConvs.length; kk++) {
+//						Converter conv = testConvs[kk];
+//						if (trusted[kk] == ALWAYS_SUCCEEDED) {
+//							trustedConverters.add(conv);
+//						}
+//					}
+					
+//					//technically I wouldn't trust the comparison
+//					//converters here, but I'm adding this because
+//					//it makes the results easier to understand.
+//					ConverterPath compareConvs = tr.getComparisonConverters();
+//					for (int kk = 0; kk < compareConvs.size(); kk++) {
+//						Converter conv = compareConvs.get(kk);
+//						trustedConverters.add(conv);
+//					}
 				}
 			}
 			
