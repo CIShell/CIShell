@@ -102,22 +102,25 @@ public class DefaultErrorSourceAnalyzer implements ErrorSourceAnalyzer {
 				totalChanceAtFaults += pc.getChanceAtFault();
 			}
 			
-			List normalizedCafs = new ArrayList();
-			for (int ii = 0; ii < pcs.size(); ii++) {
-				ChanceAtFault pc = (ChanceAtFault) pcs.get(ii);
+			ChanceAtFault[] uniqueCafs = 
+				removeDuplicateConverters(this.pcs);
+			
+			List uniqueNormalizedCafs = new ArrayList();
+			for (int ii = 0; ii < uniqueCafs.length; ii++) {
+				ChanceAtFault pc = uniqueCafs[ii];
 				
 				ChanceAtFault normPC = new ChanceAtFault(
 						pc.getFailedFilePass(),
 						pc.getConverter(),
 						pc.getChanceAtFault() / totalChanceAtFaults);
 				
-				normalizedCafs.add(normPC);
+				uniqueNormalizedCafs.add(normPC);
 			}
 			
-			ChanceAtFault[] uniqueNormalizedCafs = 
-				removeDuplicateConverters(normalizedCafs);
+
 			
-			return uniqueNormalizedCafs;
+			return (ChanceAtFault[]) 
+				uniqueNormalizedCafs.toArray(new ChanceAtFault[0]);
 		}
 	}
 	
