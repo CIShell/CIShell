@@ -110,9 +110,6 @@ public class AllConvsReportGenerator implements ReportGenerator {
 				if (cr.wasTested()) {
 					//add this converters name to all convs report
 					report.println("  " + cr.getShortName());
-				
-					//generate corresponding sub-report
-					this.convSubGen.generate(cr);
 				}
 			}
 			report.println("");
@@ -124,9 +121,6 @@ public class AllConvsReportGenerator implements ReportGenerator {
 				if (cr.wasTested()) {
 					//add this converters name to all convs report
 					report.println("  " + cr.getShortName());
-				
-					//generate corresponding sub-report
-					this.convSubGen.generate(cr);
 				}
 			}
 			
@@ -138,16 +132,16 @@ public class AllConvsReportGenerator implements ReportGenerator {
 				
 				if (! cr.wasTested()) {
 					report.println("  " + cr.getShortName());
-					
-					this.convSubGen.generate(cr);
 				}
 			}
 			report.println("");
 			
 			for (int ii = 0; ii < convResults.length; ii++) {
-				this.convSubGen.generate(convResults[ii]);
+				if (convResults[ii].wasTested()) {
+					this.convSubGen.generate(convResults[ii]);
 				ConvReport convReport = this.convSubGen.getConvReport();
 				convReportsList.add(convReport);
+				}
 			}
 			
 			ConvReport[] convReports = 
