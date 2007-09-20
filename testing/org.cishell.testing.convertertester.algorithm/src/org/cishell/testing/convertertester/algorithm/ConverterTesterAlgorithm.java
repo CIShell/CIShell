@@ -6,12 +6,12 @@ import java.util.Dictionary;
 
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
-import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.algorithm.AlgorithmProperty;
 import org.cishell.framework.data.BasicData;
 import org.cishell.framework.data.Data;
 import org.cishell.framework.data.DataProperty;
 import org.cishell.testing.convertertester.algorithm.pathfilter.ConvAndHopFilter;
+import org.cishell.testing.convertertester.algorithm.pathfilter.HopFilter;
 import org.cishell.testing.convertertester.core.tester2.ConverterTester2;
 import org.cishell.testing.convertertester.core.tester2.reportgen.ReportGenerator;
 import org.cishell.testing.convertertester.core.tester2.reportgen.allconvs.AllConvsReportGenerator;
@@ -31,7 +31,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogService;
 
@@ -158,7 +157,8 @@ public class ConverterTesterAlgorithm implements Algorithm,
 			   					new ReportGenerator[] 
 			   					   {allGen, allConvGen, allErrGen,
 			   					graphGen, origGraphGen, readmeGen},
-			   					cContext, bContext);
+			   					cContext, bContext,
+			   					new HopFilter(numHops));
 		   			} else {
 		   				ct.execute(convRefs,
 			   					new ReportGenerator[] 

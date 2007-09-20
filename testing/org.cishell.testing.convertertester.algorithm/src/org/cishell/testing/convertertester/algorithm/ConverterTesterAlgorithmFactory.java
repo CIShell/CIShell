@@ -72,18 +72,21 @@ public class ConverterTesterAlgorithmFactory implements AlgorithmFactory {
 						AttributeDefinition.STRING,
 						converterNames,
 						converterNames));
+		
+		 definition.addAttributeDefinition(ObjectClassDefinition.REQUIRED,
+					new BasicAttributeDefinition(TEST_ALL_CONVS_PARAM_ID,
+							"Test All Converters?",
+							"Should we test all the converters or just the one selected?",
+							AttributeDefinition.BOOLEAN));
 			
 	    definition.addAttributeDefinition(ObjectClassDefinition.REQUIRED,
 							new BasicAttributeDefinition(NUM_HOPS_PARAM_ID,
 									"Max Test Path Length",
 									"What is the maximum length a test path should have to be included",
-									AttributeDefinition.INTEGER));
+									AttributeDefinition.INTEGER,
+									"6"));
 	    
-	    definition.addAttributeDefinition(ObjectClassDefinition.REQUIRED,
-				new BasicAttributeDefinition(TEST_ALL_CONVS_PARAM_ID,
-						"Test All Converters?",
-						"Should we test all the converters or just the one selected?",
-						AttributeDefinition.BOOLEAN));
+	   
 			
 		MetaTypeProvider provider = new BasicMetaTypeProvider(definition);
 		return provider;

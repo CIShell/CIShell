@@ -80,14 +80,12 @@ public class ConverterTester2 implements AlgorithmProperty {
 			PathFilter testPathFilter) {
 		
 		//generate all the converter paths
-		
-		System.out.println("Generating converter graph paths etc...");
+	
 		ConverterGraph converterGraph = new ConverterGraph(converterRefs,
 				bContext, this.log);
 		
 		//run the tests
-		
-		System.out.println("Running actual tests...");
+	
 		TestResult[] rawResults = 
 			runAllTests(converterGraph, testPathFilter, cContext, bContext);
 		
@@ -97,7 +95,6 @@ public class ConverterTester2 implements AlgorithmProperty {
 		
 		Converter[] allConverters = converterGraph.getAllConverters();
 		
-		System.out.println("Running conv result maker...");
 		ChanceAtFaultHeuristic faultHeuristic = 
 			new ErrorProximityHeuristic();
 		AllConvsResult allConvertersResult = 

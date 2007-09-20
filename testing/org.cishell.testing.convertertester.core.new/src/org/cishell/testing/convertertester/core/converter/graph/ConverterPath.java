@@ -127,7 +127,6 @@ public class ConverterPath implements AlgorithmProperty {
         	Converter c = (Converter) this.path.get(i);
         	
             if (c.isLossy()) {
-            	System.out.println("FOUND A LOSSY CONVERTER!");
                 lossiness = LOSSY;
             }
         } 

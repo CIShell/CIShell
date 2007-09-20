@@ -132,7 +132,6 @@ public class DefaultTestRunner implements TestRunner {
 		Converter currentConverter = null;
 		try {
 			for (int ii = 0; ii < converters.size(); ii++) {
-				//System.out.println("Going into converter " + ii);
 				currentConverter = converters.get(ii);
 				
 				//no parameters used
