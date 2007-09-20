@@ -68,13 +68,13 @@ public class ConverterTesterAlgorithm implements Algorithm,
     }
 
     public Data[] execute() {
-    	this.log.log(LogService.LOG_INFO, 
-    			                                               "\r\n" +
-    			"-------NOTICE-------" +                       "\r\n" + 	
-    			"The Converter Tester will take " +
-    			"some time to run all the tests. \r\n" +
-    			"Thank you for waiting :)" +                   "\r\n" +
-    			"-----END NOTICE-----                           \r\n");
+//    	this.log.log(LogService.LOG_INFO, 
+//    			                                               "\r\n" +
+//    			"-------NOTICE-------" +                       "\r\n" + 	
+//    			"The Converter Tester will take " +
+//    			"some time to run all the tests. \r\n" +
+//    			"Thank you for waiting :)" +                   "\r\n" +
+//    			"-----END NOTICE-----                           \r\n");
     	
     	Data[] returnDM;
 
