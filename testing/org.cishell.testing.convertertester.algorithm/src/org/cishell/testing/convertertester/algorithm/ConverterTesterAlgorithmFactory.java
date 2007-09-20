@@ -52,6 +52,8 @@ public class ConverterTesterAlgorithmFactory implements AlgorithmFactory {
     			ConverterTesterAlgorithmUtil.
     			getConverterReferences(bContext));
     	
+    	Arrays.sort(converterNames);
+    	
     	
 
 		ObjectClassDefinition oldDefinition = originalProvider.getObjectClassDefinition(this.pid, null);
