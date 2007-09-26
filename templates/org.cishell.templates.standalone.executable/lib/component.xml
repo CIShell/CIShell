@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="${component.id}" immediate="false">
+	<implementation class="org.cishell.templates.staticexecutable.StaticExecutableAlgorithmFactory"/>
+	<properties entry="${service.properties}"/>
+	<property name="Algorithm-Directory" value="${alg.dir}"/>
+	<reference name="LOG" interface="org.osgi.service.log.LogService"/>
+	<reference name="MTS" interface="org.osgi.service.metatype.MetaTypeService"/>
+	
+	<service>
+		<provide interface=
+			"org.cishell.framework.algorithm.AlgorithmFactory"/>
+	</service>
+</component>

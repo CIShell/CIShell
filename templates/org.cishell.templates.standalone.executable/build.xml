@@ -1,0 +1,56 @@
+<!-- This file in almost all cases will not need edited -->
+<project name="Static Executable Integration Template" basedir="." default="compile">
+	<property file="manifest.properties"/>
+
+	<property name="repository.dir" value="${basedir}"/>
+	<property name="build.dir" value="${repository.dir}/build"/>
+	<property name="lib.dir" value="${repository.dir}/lib"/>
+	<property name="out.dir" value="${build.dir}/out"/>
+	<property name="global.properties" value="${repository.dir}/manifest.properties"/>
+	<property name="gui.file" value="${repository.dir}/gui.xml"/>
+	<property name="dest.gui.file" value="${out.dir}/OSGI-INF/metatype/METADATA.XML"/>
+	<property name="l10n.dir" value="${repository.dir}/l10n" />
+	<property name="dest.l10n.dir" value="${out.dir}/OSGI-INF/l10n"/>
+	<property name="template.file" value="${lib.dir}/component.xml"/>
+
+	<target name="compile" depends="copy.files" 
+		    description="Compile an OSGi Bundle of the Static Executable">
+
+		<createManifest basedir="${out.dir}" 
+			            baseproperties="${global.properties}"
+						template="${template.file}"/>
+
+		<copy file="${gui.file}" tofile="${dest.gui.file}" failonerror="false"/>
+
+		<copy todir="${dest.l10n.dir}">
+			<fileset dir="${l10n.dir}"/>
+		</copy>
+
+		<jar destfile="${build.dir}/${Bundle-SymbolicName}_${Bundle-Version}.jar"
+		     basedir="${out.dir}" manifest="${out.dir}/META-INF/MANIFEST.MF"/>
+	</target>
+
+	<target name="copy.files" description="Copying files" depends="tasks.init">
+		<copy todir="${out.dir}">
+			<fileset dir="${repository.dir}">
+				<include name="**/*"/>
+				<exclude name="${lib.dir},${build.dir},${l10n.dir}"/>
+				<exclude name="l10n/**/*"/>
+				<exclude name="build/**/*"/>
+				<exclude name="lib/**/*"/>
+				<exclude name="src/**/*"/>
+				<exclude name="*"/>
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="tasks.init" description="Initialize TaskDefinitions">
+		<taskdef name="createManifest" 
+		 classname="org.cishell.templates.staticexecutable.StaticExecutableIntegrationTask"
+		 classpath="${lib.dir}/cishell_templates.jar"/>
+	</target>
+
+	<target name="clean" description="Clean build directory">
+		<delete dir="${build.dir}"/>
+	</target>
+</project>
