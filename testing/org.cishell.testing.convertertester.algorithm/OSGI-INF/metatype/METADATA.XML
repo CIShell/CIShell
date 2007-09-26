@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metatype:MetaData xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.0.0">
+	<OCD name="Converter Tester Algorithm" id="org.cishell.testing.convertertester.algorithm.ConverterTesterAlgorithm.OCD">
+	<AD name="Number of nodes" description="Enter number of nodes in the network, must be &gt; 0" id="networkSize" type="Integer" default="2" min="1"/>
+	</OCD>
+	<Designate pid="org.cishell.testing.convertertester.algorithm.ConverterTesterAlgorithm">
+		<Object ocdref="org.cishell.testing.convertertester.algorithm.ConverterTesterAlgorithm.OCD" />
+	</Designate>
+</metatype:MetaData>
+
