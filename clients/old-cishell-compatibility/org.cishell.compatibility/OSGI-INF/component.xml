@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="org.cishell.compatibility" immediate="true">
+	<implementation class="org.cishell.compatibility.Activator"/>
+	<reference name="LOG" interface="org.osgi.service.log.LogService"/>
+	<reference name="DataConversion" interface="org.cishell.service.conversion.DataConversionService"/>
+	<reference name="Scheduler" interface="org.cishell.app.service.scheduler.SchedulerService"/>
+</component>
