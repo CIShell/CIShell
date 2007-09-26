@@ -1,0 +1,19 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: ksoap-osgi
+Bundle-SymbolicName: org.knopflerfish.bundle.ksoap_osgi
+Bundle-Version: 2.0.0
+Bundle-UUID: org.knopflerfish:ksoap-osgi:2.0.0
+Bundle-Category: service
+Bundle-Localization: plugin
+Bundle-Description: kSOAP Server
+Bundle-Vendor: Knopflerfish/Apache
+Bundle-APIVendor: Knopflerfish
+Bundle-DocURL: http://www.knopflerfish.org/remote_howto.html
+Bundle-ContactAddress: http://www.knopflerfish.org
+Bundle-ClassPath: .
+DynamicImport-Package: *
+Bundle-SubversionURL: https://www.knopflerfish.org/svn/knopflerfish.org/trunk/osgi/bundles_opt/soap/
+Bundle-Activator: org.knopflerfish.bundle.ksoap.Activator
+Export-Package: org.knopflerfish.service.ksoap
+Import-Package: javax.servlet, javax.servlet.http, org.ksoap2, org.ksoap2.serialization, org.ksoap2.servlet, org.ksoap2.transport, org.osgi.framework, org.osgi.service.http, org.osgi.service.log;version="1.3.0", org.osgi.util.tracker;version="1.3.1"

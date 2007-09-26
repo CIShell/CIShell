@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Jython Library
+Bundle-SymbolicName: jythonlib
+Bundle-Version: 2.2.1
+Bundle-ClassPath: jython.jar
+Bundle-Vendor: jython.org
+Bundle-Localization: plugin
+Export-Package: com.ziclix.python.sql,com.ziclix.python.sql.connect,com.ziclix.python.sql.handler,com.ziclix.python.sql.pipe,com.ziclix.python.sql.pipe.csv,com.ziclix.python.sql.pipe.db,com.ziclix.python.sql.procedure,com.ziclix.python.sql.resource,com.ziclix.python.sql.util,javatests,jxxload_help,org.apache.oro.text.regex,org.python.compiler,org.python.core,org.python.modules,org.python.modules.sets,org.python.modules.sre,org.python.parser,org.python.parser.ast,org.python.rmi,org.python.util
