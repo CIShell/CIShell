@@ -161,7 +161,7 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 		viewItem.addListener(SWT.Selection, viewListener);
 			
 		MenuItem viewWithItem = new MenuItem(menu, SWT.PUSH);			
-		viewWithItem.setText("View as...");
+		viewWithItem.setText("View With...");
 		viewWithListener = new ViewWithListener();
 		viewWithItem.addListener(SWT.Selection, viewWithListener);		
 		
