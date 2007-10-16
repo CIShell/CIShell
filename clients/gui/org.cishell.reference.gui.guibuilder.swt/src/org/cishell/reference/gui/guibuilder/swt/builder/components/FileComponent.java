@@ -26,6 +26,7 @@ import org.eclipse.swt.widgets.FileDialog;
 
 public class FileComponent extends StringComponent {
     protected Button browse;
+    private static Object currentValue;
 
     public FileComponent() {
         this(false, 2);        
@@ -38,7 +39,7 @@ public class FileComponent extends StringComponent {
     public Control createGUI(Composite parent, int style) {
         super.createGUI(parent, style); //creates the text component
         
-        Object data = text.getLayoutData();        
+        Object data = text.getLayoutData();
         if (data != null && data instanceof GridData) {
             GridData gd = (GridData) data;
             gd.horizontalSpan--; //make room for the browse button
@@ -46,10 +47,12 @@ public class FileComponent extends StringComponent {
         
         browse = new Button(parent, SWT.PUSH);
         browse.setText("Browse");
+        //when click "Browse", here is the listener
         browse.addSelectionListener(new SelectionAdapter() {
             public void widgetSelected(SelectionEvent e) {
                 String fileName = getFile(text.getText());
-
+                //remember this new file/directory selection
+                currentValue = fileName;
                 if (fileName != null) {
                     text.setText(fileName);
                     update();
@@ -97,7 +100,17 @@ public class FileComponent extends StringComponent {
     
     public void setValue(Object value) {
         if (value != null && value.toString().equals(getKeyword())) {
-            value = System.getProperty("user.home");
+
+//          value = System.getProperty("user.home");  
+        	
+        	//by default, point to NWB or CIShell application installation directory
+	        if (currentValue == null) {
+	        	value = System.getProperty("osgi.install.area").replace("file:/","");	            		
+                currentValue = value;                
+            }
+	        else
+	        	value = currentValue;          	
+           	
         }
         
         super.setValue(value);
