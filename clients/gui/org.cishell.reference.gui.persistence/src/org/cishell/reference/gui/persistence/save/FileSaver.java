@@ -203,7 +203,6 @@ public class FileSaver {
     		//we didn't find an extension on the file name.
     		endIndex = fileLabel.length(); // don't cut any off the end.
     	}
-    	endIndex = Math.min(extensionBeginIndex, fileLabel.length());
     	
     	String fileNameWithoutExtension = fileNameWithExtension.substring(0, endIndex);
    	
