@@ -168,9 +168,9 @@ public class StaticExecutableAlgorithmFactory implements AlgorithmFactory {
                 if (path.endsWith("/")) {
                     String dirName = getName(path);
                     
-                    dir = new File(dir.getPath() + File.separator + dirName);
-                    dir.mkdirs();
-                    copyDir(dir, path);
+                    File subDirectory = new File(dir.getPath() + File.separator + dirName);
+                    subDirectory.mkdirs();
+                    copyDir(subDirectory, path);
                 } else {
                     copyFile(dir, path);
                 }
