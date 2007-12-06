@@ -32,6 +32,7 @@ import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.data.Data;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
+import org.osgi.service.log.LogService;
 import org.osgi.service.metatype.MetaTypeProvider;
 import org.osgi.service.metatype.MetaTypeService;
 
@@ -75,11 +76,13 @@ public class StaticExecutableAlgorithmFactory implements AlgorithmFactory {
 		Data[] data;
         Dictionary parameters;
         CIShellContext context;
+        LogService logger;
         
         public StaticExecutableAlgorithm(Data[] data, Dictionary parameters, CIShellContext context) {
             this.data = data;
             this.parameters = parameters;
             this.context = context;
+            logger = (LogService)context.getService(LogService.class.getName());
             
             ALGORITHM = algName + "/";
             ALGORITHM_MACOSX_PPC = ALGORITHM + "macosx.ppc/";
@@ -117,7 +120,7 @@ public class StaticExecutableAlgorithmFactory implements AlgorithmFactory {
             
 			while(e != null && e.hasMoreElements()) {
 				String entryPath = (String) e.nextElement();
-
+				//logger.log(LogService.LOG_DEBUG, "entry: " + entryPath + "\n\n");
 				if(entryPath.endsWith("/")) {
 					entries.add(entryPath);
 				}
@@ -134,7 +137,9 @@ public class StaticExecutableAlgorithmFactory implements AlgorithmFactory {
             //take the default, if there
             if(entries.contains(ALGORITHM_DEFAULT)) {
             	String default_path = ALGORITHM_DEFAULT;
-            	copyDir(dir, default_path);
+            	//logger.log(LogService.LOG_DEBUG, "base path: "+default_path+
+            	//		"\n\t"+dir.getAbsolutePath() + "\n\n");
+            	copyDir(dir, default_path, 0);
             }
             
             //but override with platform idiosyncracies
@@ -153,14 +158,16 @@ public class StaticExecutableAlgorithmFactory implements AlgorithmFactory {
             if (path == null) {
                 throw new RuntimeException("Unable to find compatible executable");
             } else {
-            	copyDir(dir, path);
+            	//logger.log(LogService.LOG_DEBUG, "base path: "+path+
+            	//		"\n\t"+dir.getAbsolutePath() + "\n\n");
+            	copyDir(dir, path, 0);
             }
         }
         
-        private void copyDir(File dir, String dirPath) throws IOException {
+        private void copyDir(File dir, String dirPath, int depth) throws IOException {
             Enumeration e = bContext.getBundle().getEntryPaths(dirPath);
             
-            dirPath = dirPath.replace('/', File.separatorChar);
+            //dirPath = dirPath.replace('/', File.separatorChar);
             
             while (e != null && e.hasMoreElements()) {
                 String path = (String)e.nextElement();
@@ -170,7 +177,9 @@ public class StaticExecutableAlgorithmFactory implements AlgorithmFactory {
                     
                     File subDirectory = new File(dir.getPath() + File.separator + dirName);
                     subDirectory.mkdirs();
-                    copyDir(subDirectory, path);
+                    //logger.log(LogService.LOG_DEBUG, "path: " + depth + " "+path+
+                	//		"\n\t"+subDirectory.getAbsolutePath() + "\n\n");
+                    copyDir(subDirectory, path, depth + 1);
                 } else {
                     copyFile(dir, path);
                 }
@@ -180,7 +189,7 @@ public class StaticExecutableAlgorithmFactory implements AlgorithmFactory {
         private void copyFile(File dir, String path) throws IOException {
             URL entry = bContext.getBundle().getEntry(path);
             
-            path = path.replace('/', File.separatorChar);
+            //path = path.replace('/', File.separatorChar);
             String file = getName(path);
             FileOutputStream outStream = new FileOutputStream(dir.getPath() + File.separator + file);
             
@@ -193,11 +202,11 @@ public class StaticExecutableAlgorithmFactory implements AlgorithmFactory {
         }
         
         private String getName(String path) {
-            if (path.lastIndexOf(File.separator) == path.length()-1) {
+            if (path.lastIndexOf('/') == path.length()-1) {
                 path = path.substring(0, path.length()-1);
             }
             
-            path = path.substring(path.lastIndexOf(File.separatorChar)+1, 
+            path = path.substring(path.lastIndexOf('/')+1, 
                     path.length());
             
             return path;
