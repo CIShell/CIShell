@@ -1,0 +1,27 @@
+Signature-Version: 1.0
+SHA1-Digest-Manifest-Main-Attributes: r1K5yDf95vJr9xPD+Pxkm9514M0=
+Created-By: 1.5.0 (IBM Corporation)
+SHA1-Digest-Manifest: 3rqa0vn32RZAIuylQ0ulwfHTGbc=
+
+Name: plugin.properties
+SHA1-Digest: Zaw7uO7zpW7wuwB/nDJnNTM2YyA=
+
+Name: about.html
+SHA1-Digest: MgRwV8Hwg8W/nULPs16TAo9krvQ=
+
+Name: plugin.xml
+SHA1-Digest: +yj6Qjxn1R1jExP4Zcr3gfUGND4=
+
+Name: src/org.mortbay.jetty_5.1.11.v200706111724/about.html
+SHA1-Digest: WLQO0LpmNVu25ECQQ9FoTTRzyac=
+
+Name: src/org.mortbay.jetty_5.1.11.v200706111724/about_files/LICENSE.t
+ xt
+SHA1-Digest: gaEib2vEgv1gOqf3QgbSX0KVVuo=
+
+Name: src/org.mortbay.jetty_5.1.11.v200706111724/src.zip
+SHA1-Digest: ZgwUPZf+fRlUMfM6nkVaotqNBeY=
+
+Name: META-INF/eclipse.inf
+SHA1-Digest: SAqY+5ITAL0mkdYeijlSRhyIaZk=
+

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.eclipse.wst.xml_core.feature"
+      label="%featureName"
+      version="2.0.1.v200709110650-787BE_1CYQCCz-CvRQLQSV"
+      provider-name="%providerName">
+
+   <description>
+      %description
+   </description>
+
+   <copyright>
+      %copyright
+   </copyright>
+
+   <license url="%licenseURL">
+      %license
+   </license>
+
+   <url>
+      <update label="%updateSiteName" url="http://download.eclipse.org/webtools/updates/"/>
+   </url>
+
+   <requires>
+      <import plugin="org.eclipse.osgi"/>
+      <import plugin="org.apache.xml.resolver"/>
+      <import plugin="org.eclipse.wst.xml.core" version="1.1.0" match="equivalent"/>
+      <import plugin="org.eclipse.wst.sse.core" version="1.1.0" match="equivalent"/>
+      <import plugin="org.apache.xerces" version="2.8.0" match="compatible"/>
+      <import plugin="org.eclipse.core.runtime" version="3.2.0" match="compatible"/>
+      <import plugin="org.eclipse.core.resources" version="3.2.0" match="compatible"/>
+      <import plugin="org.eclipse.wst.common.uriresolver" version="1.1.0" match="equivalent"/>
+      <import plugin="org.eclipse.wst.validation" version="1.1.0" match="equivalent"/>
+      <import plugin="org.eclipse.wst.common.core" version="1.1.0" match="equivalent"/>
+      <import plugin="com.ibm.icu" version="3.4.4" match="compatible"/>
+      <import plugin="org.eclipse.emf.ecore" version="2.2.0" match="compatible"/>
+      <import plugin="org.eclipse.jface.text" version="3.2.0" match="compatible"/>
+      <import plugin="org.eclipse.ui" version="3.2.0" match="compatible"/>
+      <import plugin="org.eclipse.xsd" version="2.2.0" match="compatible"/>
+      <import plugin="org.eclipse.text" version="3.2.0" match="compatible"/>
+      <import plugin="org.eclipse.core.filebuffers" version="3.2.0" match="compatible"/>
+      <import plugin="org.eclipse.emf.common" version="2.2.0" match="compatible"/>
+   </requires>
+
+   <plugin
+         id="org.apache.xml.resolver"
+         download-size="71"
+         install-size="71"
+         version="1.1.0.v200705310020"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.xerces"
+         download-size="1200"
+         install-size="1200"
+         version="2.8.0.v200705301630"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.wst.standard.schemas"
+         download-size="0"
+         install-size="0"
+         version="1.0.1.v200705302225"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.wst.xml.core"
+         download-size="0"
+         install-size="0"
+         version="1.1.201.v200709201331"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.wst.dtd.core"
+         download-size="0"
+         install-size="0"
+         version="1.1.101.v200705302225"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.wst.xsd.core"
+         download-size="0"
+         install-size="0"
+         version="1.1.201.v200707172046"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.wst.sse.core"
+         download-size="0"
+         install-size="0"
+         version="1.1.202.v200709061102"
+         unpack="false"/>
+
+</feature>
