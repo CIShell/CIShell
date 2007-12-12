@@ -2,7 +2,7 @@
 <feature
       id="org.cishell.reference.feature"
       label="CIShell Reference Bundles"
-      version="0.7.0">
+      version="0.4.0">
 
    <description url="http://cishell.org">
       CIShell Reference Bundles
@@ -83,7 +83,19 @@ Dr. Katy Borner (katy@indiana.edu)
          version="0.0.0"/>
 
    <plugin
+         id="org.prefuse.lib"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+   <plugin
          id="org.cishell.templates.jythonrunner"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+   <plugin
+         id="jythonlib"
          download-size="0"
          install-size="0"
          version="0.0.0"/>
