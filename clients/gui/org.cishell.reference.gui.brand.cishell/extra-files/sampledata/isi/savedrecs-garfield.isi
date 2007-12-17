@@ -1,0 +1,4488 @@
+FN ISI Export Format
+VR 1.0
+PT J
+AU Garfield, E
+AF Garfield, Eugene
+TI The evolution of the Science Citation Index
+SO INTERNATIONAL MICROBIOLOGY
+LA English
+DT Article
+DE y
+ID IMPACT; JOURNALS
+C1 Thomson Sci ISI Philadelphia, Philadelphia, PA USA.
+RP Garfield, E, Thomson Sci ISI Philadelphia, Philadelphia, PA USA.
+EM garfield@codex.cis.upenn.edu
+CR BENSMAN SJ, 1998, LIBR RESOUR TECH SER, V42, P147
+   BRODMAN E, 1944, B MED LIB ASS, V32, P479
+   GARFIELD E, 1955, SCIENCE, V122, P108
+   GARFIELD E, 1972, SCIENCE, V178, P471
+   GARFIELD E, 1976, RATION BETWEEN CONTE, V2, P419
+   GARFIELD E, 1998, LONGTERM VS SHORTTER, V12, P10
+   GARFIELD E, 1998, LONGTERM VS SHORTTER, V12, P12
+   GONZALEZ L, 2006, J AM SOC INFOR SCI T, V58, P252
+   HOEFFEL C, 1998, ALLERGY, V53, P1225
+   LOCK S, 1989, CBE VIEWS, V12, P57
+   PUDOVKIN AI, 2002, J AM SOC INF SCI TEC, V53, P1113
+   PUDOVKIN AI, 2004, P ASIST ANNU, V41, P507
+NR 12
+TC 0
+PU VIGUERA EDITORES, S L
+PI BARCELONA
+PA PLAZA TETUAN, 7, BARCELONA, E-08010, SPAIN
+SN 1139-6709
+J9 INT MICROBIOL
+JI Int. Microbiol.
+PD MAR
+PY 2007
+VL 10
+IS 1
+BP 65
+EP 69
+PG 5
+SC Biotechnology & Applied Microbiology; Microbiology
+GA 156FS
+UT ISI:000245634100010
+ER
+
+PT S
+AU Marion, LS
+   Garfield, E
+   Hargens, LL
+   Lievrouw, LA
+   White, HD
+   Wilson, CS
+TI Social network analysis and citation network analysis: Complementary
+   approaches to the study of scientific communication (SIG MET)
+SO ASIST 2003: PROCEEDINGS OF THE 66TH ASIST ANNUAL  MEETING, VOL 40, 2003
+SE PROCEEDINGS OF THE ASIST ANNUAL MEETING
+LA English
+DT Article
+AB The study of networks is gaining prominence in many disciplines as well
+   as in the popular press. Information scientists, however, have studied
+   networks for decades. This session will explore the potential of using
+   citation network analysis and social network analysis to provide
+   structural assessments of scientific communication. Panelists will
+   discuss their research and highlight the advantages and challenges of
+   using these methods to derive a comprehensive portrait of the diffusion
+   of scientific knowledge.
+C1 Drexel Univ, Coll Informat Sci & Technol, Philadelphia, PA 19104 USA.
+   ISI, Philadelphia, PA 19104 USA.
+   Univ Washington, Dept Sociol, Seattle, WA 98195 USA.
+   Univ Calif Los Angeles, Dept Informat Studies, Los Angeles, CA 90095 USA.
+   Univ New S Wales, Sch Informat Syst Technol & Management, Sydney, NSW 2052, Australia.
+RP Marion, LS, Drexel Univ, Coll Informat Sci & Technol, Philadelphia, PA
+   19104 USA.
+EM Linda.Marion@drexel.edu
+   Garfield@codex.cis.upenn.edu
+   hargens@u.washington.edu
+   llievrou@ucla.edu
+   whitehd@drexel.edu
+   c.wilson@unsw.edu.au
+CR LIEVROUW LA, 1987, SOC NETWORKS, V9, P217
+   SANDSTROM PE, 1998, THESIS INDIANA U
+   WELLMAN B, 1988, SOCIAL STRUCTURES NE
+   WHITE HD, 2002, DOES CITATION REFLEC
+NR 4
+TC 0
+PU INFORMATION TODAY INC
+PI MEDFORD
+PA 143 OLD MARLTON PIKE, MEDFORD, NJ 08055 USA
+SN 0044-7870
+J9 P ASIST ANNU MEET
+PY 2003
+VL 40
+BP 486
+EP 487
+PG 2
+SC Computer Science, Information Systems; Information Science & Library
+   Science
+GA BBZ20
+UT ISI:000228354100086
+ER
+
+PT J
+AU Moed, HF
+   Garfield, E
+TI In basic science the percentage of 'authoritative' references decreases
+   as bibliographies become shorter
+SO SCIENTOMETRICS
+LA English
+DT Article
+ID CITATION
+AB The empirical question addressed in this contribution is: How does the
+   relative frequency at which authors in a research field cite
+   'authoritative' documents in the reference lists in their papers vary
+   with the number of references such papers contain? 'Authoritative'
+   documents are defined as those that are among the ten percent most
+   frequently cited items in a research field. It is assumed that authors
+   who write papers with relatively short reference lists are more
+   selective in what they cite than authors who compile long reference
+   lists. Thus, by comparing in a research field the fraction of
+   references of a particular type in short reference lists to that in
+   longer lists, one can obtain an indication of the importance of that
+   type. Our analysis suggests that in basic science fields such as
+   physics or molecular biology the percentage of 'authoritative'
+   references decreases as bibliographies become shorter. In other words,
+   when basic scientists are selective in referencing behavior, references
+   to 'authoritative' documents are dropped more readily than other types.
+   The implications of this empirical finding for the debate on normative
+   versus constructive citation theories are discussed.
+C1 Leiden Univ, Ctr Sci & Technol Studies, NL-2300 RB Leiden, Netherlands.
+   Inst Sci Informat, Philadelphia, PA 19104 USA.
+RP Moed, HF, Leiden Univ, Ctr Sci & Technol Studies, POB 9555, NL-2300 RB
+   Leiden, Netherlands.
+EM moed@cwts.leidenuniv.nl
+CR ABT HA, 2002, J AM SOC INF SCI TEC, V53, P1106
+   GARFIELD E, 1985, ESSAYS INFORMATION S, V8, P403
+   GILBERT GN, 1977, SOC STUD SCI, V7, P113
+   MERTON RK, 1988, ISIS, V79, P606
+   ROUSSEAU R, 1998, SCIENTOMETRICS, V43, P63
+   ZUCKERMAN H, 1987, SCIENTOMETRICS, V12, P329
+NR 6
+TC 5
+PU KLUWER ACADEMIC PUBL
+PI DORDRECHT
+PA VAN GODEWIJCKSTRAAT 30, 3311 GZ DORDRECHT, NETHERLANDS
+SN 0138-9130
+J9 SCIENTOMETRICS
+JI Scientometrics
+PY 2004
+VL 60
+IS 3
+BP 295
+EP 303
+PG 9
+SC Computer Science, Interdisciplinary Applications; Information Science &
+   Library Science
+GA 835QY
+UT ISI:000222501800004
+ER
+
+PT J
+AU Garfield, E
+TI Historiographic mapping of knowledge domains literature
+SO JOURNAL OF INFORMATION SCIENCE
+LA English
+DT Article
+DE mapping; knowledge domains; small world concept; DNA structure;
+   citation analysis; historiography; information visualization; software;
+   HistCite
+ID SCIENTIFIC DISCOVERY
+AB To better understand the topic of this colloquium, we have created a
+   series of databases related to knowledge domains (dynamic systems
+   [small world/Milgram], information visualization [Tufte], co-citation
+   [Small], bibliographic coupling [Kessler], and scientometrics
+   [Scientometrics]). I have used a software package called HistCite(TM)
+   which generates chronological maps of subject (topical) collections
+   resulting from searches of the ISI Web of Science(R) or ISI citation
+   indexes (SCI, SSCI, and/or AHCI) on CD-ROM. When a marked list is
+   created on WoS, an export file is created which contains all cited
+   references for each source document captured. These bibliographic
+   collections, saved as ASCII files, are processed by HistCite in order
+   to generate chronological and other tables as well as historiographs
+   which highlight the most-cited works in and outside the collection.
+   HistCite also includes a module for detecting and editing errors or
+   variations in cited references as well as a vocabulary analyzer which
+   generates both ranked word lists and word pairs used in the collection.
+   Ideally the system will be used to help the searcher quickly identify
+   the most significant work on a topic and trace its year-by-year
+   historical development. In addition to the collections mentioned above,
+   historiographs based on collections of papers that cite the
+   Watson-Crick 1953 classic paper identifying the helical structure of
+   DNA were created. Both year-by-year as well as month-by-month displays
+   of papers from 1953 to 1958 were necessary to highlight the publication
+   activity of those years.
+C1 ISI, Philadelphia, PA 19104 USA.
+RP Garfield, E, ISI, 3501 Market St, Philadelphia, PA 19104 USA.
+EM garfield@codex.cis.upenn.edu
+CR 2003, BIOIT WORLD, V2, P28
+   ASIMOV A, 1963, GENETIC CODE
+   AVERY OT, 1944, J EXP MED, V79, P137
+   GARFIELD E, 1964, UNPUB USE CITATION D
+   GARFIELD E, 2001, COMPUTATIONAL LINGUI
+   GARFIELD E, 2002, P ASIST ANNU, V39, P14
+   GARFIELD E, 2003, J AM SOC INF SCI TEC, V54, P400
+   GARNER R, 1967, COMPUTER ORIENTED GR
+   HERSHEY AD, 1953, J GEN PHYSIOL, V36, P777
+   HUMMON NP, 1989, SOC NETWORKS, V11, P39
+   LEDERBERG J, 1972, NATURE, V239, P234
+   LEDERBERG J, 1995, ANN NY ACAD SCI, V758, P176
+   STENT GS, 1972, SCI AM, V227, P84
+   STENT GS, 1995, ANN NY ACAD SCI, V758, P25
+   STENT GS, 2002, PREMATURITY SCI DISC, P22
+   STRASSER BJ, 2003, NATURE, V42, P803
+   WATSON JD, 1953, NATURE, V171, P737
+   ZUCKERMAN H, 1986, NATURE, V324, P629
+NR 18
+TC 8
+PU SAGE PUBLICATIONS LTD
+PI LONDON
+PA 1 OLIVERS YARD, 55 CITY ROAD, LONDON EC1Y 1SP, ENGLAND
+SN 0165-5515
+J9 J INFORM SCI
+JI J. Inf. Sci.
+PY 2004
+VL 30
+IS 2
+BP 119
+EP 145
+PG 27
+SC Computer Science, Information Systems; Information Science & Library
+   Science
+GA 818WL
+UT ISI:000221275100003
+ER
+
+PT J
+AU Garfield, E
+   Pudovkin, AI
+   Istomin, VS
+TI Mapping the output of topical searches in the Web of Knowledge and the
+   case of Watson-Crick
+SO INFORMATION TECHNOLOGY AND LIBRARIES
+LA English
+DT Article
+ID SCIENCE
+AB HistCite(TM) is a system that generates chronological maps of subject
+   (topical) collections resulting from searches of the Institute for
+   Scientific Information Web of Science (WoS) or Science Citation Index,
+   Social Sciences Citation Index, and Arts and Humanities Citation Index
+   on CD-ROM. WoS export files are created in which all cited references
+   for source documents are captured. These bibliographic collections are
+   processed by HistCite, which generates chronological tables as well as
+   historiographs that highlight the most-cited works in and outside the
+   collection. Articles citing the 1953 primordial Watson-Crick paper on
+   the structure of DNA will be used as a demonstration. Real-time dynamic
+   genealogical historiographs will be shown. HistCite also includes a
+   module for detecting and editing errors or variations in cited
+   references. Export Files of five thousand or more records are processed
+   in minutes on a PC. Ideally the system will be used to help the
+   searcher quickly identify the most significant work on a topic and
+   enable the searcher to trace its year-by-year historical development.
+C1 Thomson ISI, Philadelphia, PA USA.
+   Russian Acad Sci, Inst Marine Biol, Vladivostok, Russia.
+   Washington State Univ, Ctr Teaching Learning & Technol, Pullman, WA 99164 USA.
+RP Garfield, E, Thomson ISI, Philadelphia, PA USA.
+EM garfield@codex.cis.upenn.edu
+   aipud@online.ru
+   vi@mail.wsu.edu
+CR ESSAYS INFORMATION S, V9, P324
+   2003, BIO IT WORLD, V2, P28
+   AVERY OT, 1944, J EXP MED, V79, P137
+   CAWKELL AE, 1989, CURR CONTENTS, V44, P4
+   CAWKELL AE, 2000, WEB KNOWLEDGE FESTSC, P177
+   GARFIELD E, 1964, AF49 I SCI INF
+   GARFIELD E, 1969, P 3 INT C MED LIBR A, P187
+   GARFIELD E, 1971, CURR CONTENTS, V15, M25
+   GARFIELD E, 1992, CURR CONTENTS, V23, P5
+   GARFIELD E, 2003, J AM SOC INF SCI TEC, V54, P400
+   SMALL H, 1985, J INFORM SCI, V11, P147
+   SMALL H, 1985, SCIENTOMETRICS, V8, P321
+   SMALL H, 1994, SCIENTOMETRICS, V30, P229
+   WATSON JD, 1953, NATURE, V171, P737
+NR 14
+TC 4
+PU AMER LIBRARY ASSOC
+PI CHICAGO
+PA 50 E HURON ST, CHICAGO, IL 60611 USA
+SN 0730-9295
+J9 INFORM TECHNOL LIBR
+JI Inf. Technol. Libr.
+PD DEC
+PY 2003
+VL 22
+IS 4
+BP 183
+EP 187
+PG 5
+SC Computer Science, Information Systems; Information Science & Library
+   Science
+GA 765GK
+UT ISI:000188258600008
+ER
+
+PT J
+AU Garfield, E
+   Pudovkin, AI
+TI From materials science to nano-ceramics: Citation analysis identifies
+   the key journals and players
+SO JOURNAL OF CERAMIC PROCESSING RESEARCH
+LA English
+DT Article
+DE nano-ceramics; Science citation index; Ctation analysis; Web of
+   science; ISI
+ID BIOLOGY JOURNALS
+AB The Science Citation Index was designed primarily to help the scientist
+   or engineer retrieve relevant literature on specific topics. This
+   database is now on-line as part of ISIs Web of Science and covers over
+   thirty million papers containing nearly a half-billion cited
+   references. For each source paper included, backward and foreward links
+   are provided to the cited and citing papers. ISI also publishes
+   additional databases such as the Journal Citation Reports and Journal
+   Performance Indicators which can provide qualitative and quantitative
+   information on thousands of journals, including impact factors. Using
+   these files and a variety of bibliometric techniques we demonstrate how
+   to identify the core journals of materials science, ceramics, and
+   nanoceramics. Other ISI resources such as ISI Essential Science
+   Indicators identify the leading countries, institutions, and authors of
+   materials science. The output of a WoS search is used to analyze over
+   10,000 papers on nano-crystals and nano-ceramics. We have identified
+   dozens of highly-cited papers, which are visualized as a series of
+   historiographs; and topological maps These HistCite, maps and tables
+   demonstrate the chronological development of the field [1].
+C1 ISI, Philadelphia, PA 19104 USA.
+   Russian Acad Sci, Inst Marine Biol, Vladivostok 690041, Russia.
+RP Garfield, E, ISI, 3501 Market St, Philadelphia, PA 19104 USA.
+CR 2003, SCI WATCH, V14, P1
+   DAUGHTON CG, 2002, SCIENTIST, V16, P12
+   GARFIELD E, 1980, CURR CONTENTS, V35, P5
+   GARFIELD E, 1994, J MAT ED, V16, P327
+   GARFIELD E, 2002, SCIENTIST, V16, P6
+   GINSBURG I, 2001, SCIENTIST, V15, P51
+   LAWRENCE S, 2001, NATURE, V411, P521
+   MABE M, 2001, SCIENTOMETRICS, V51, P147
+   MABE M, 2003, SERIALS, V16, P491
+   PUDOVKIN AI, 1992, BIOL MORYA-VLAD, P83
+   PUDOVKIN AI, 1993, MARINE ECOLOGY PROGR, V100, P207
+   PUDOVKIN AI, 1995, SCIENTOMETRICS, V32, P227
+   PUDOVKIN AI, 2002, J AM SOC INF SCI TEC, V53, P1113
+NR 13
+TC 0
+PU KOREAN ASSOC CRYSTAL GROWTH, INC
+PI SEOUL
+PA SUNGDONG POST OFFICE, P O BOX 27, SEOUL 133-600, SOUTH KOREA
+SN 1229-9162
+J9 J CERAM PROCESS RES
+JI J. Ceram. Process. Res.
+PY 2003
+VL 4
+IS 4
+BP 155
+EP 167
+PG 13
+SC Materials Science, Ceramics
+GA 759BE
+UT ISI:000187717300001
+ER
+
+PT J
+AU Garfield, E
+   Pudovkin, AI
+   Istomin, VS
+TI Why do we need algorithmic historiography?
+SO JOURNAL OF THE AMERICAN SOCIETY FOR INFORMATION SCIENCE AND TECHNOLOGY
+LA English
+DT Article
+AB This article discusses the rationale for creating historiographs of
+   scholarly topics using a new program called HistCite(TM), which
+   produces a variety of analyses to aid the historian identify key events
+   (papers), people (authors), and journals in a field. By creating a
+   genealogic profile of the evolution, the program aids the scholar in
+   evaluating the paradigm involved.
+C1 Inst Sci Informat, Philadelphia, PA 19104 USA.
+   Russian Acad Sci, Inst Marine Biol, Vladivostok 690041, Russia.
+   Washington State Univ, Ctr Teaching Learning & Technol, Pullman, WA 99164 USA.
+RP Garfield, E, Inst Sci Informat, 3501 Market St, Philadelphia, PA 19104
+   USA.
+CR GARFIELD E, 1964, USE CITATION DATA WR
+   GARFIELD E, 2001, LAZ LECT HELD CONJ P
+   GARFIELD E, 2002, P ASIST ANNU, V39, P14
+   KESSLER MM, 1963, AM DOC, V14, P10
+   LANDER ES, 2001, NATURE, V409, P860
+   LOWRY OH, 1951, J BIOL CHEM, V193, P265
+   VENTER JC, 2001, SCIENCE, V291, P1304
+NR 7
+TC 9
+PU JOHN WILEY & SONS INC
+PI HOBOKEN
+PA 111 RIVER ST, HOBOKEN, NJ 07030 USA
+SN 1532-2882
+J9 J AM SOC INF SCI TECHNOL
+JI J. Am. Soc. Inf. Sci. Technol.
+PD MAR
+PY 2003
+VL 54
+IS 5
+BP 400
+EP 412
+PG 13
+SC Computer Science, Information Systems; Information Science & Library
+   Science
+GA 649ZR
+UT ISI:000181238300007
+ER
+
+PT S
+AU Garfield, E
+   Pudovkin, AI
+   Istomin, VS
+TI Algorithmic citation-linked historiography - Mapping the literature of
+   science
+SO ASIST 2002: PROCEEDINGS OF THE 65TH ASIST ANNUAL MEETING, VOL 39, 2002
+SE PROCEEDINGS OF THE ASIST ANNUAL MEETING
+LA English
+DT Article
+AB There is a large literature on mapping and visualizing the scholarly
+   literature (White McCain, 1997; Buter & Noyons, 2001). However, none of
+   these methods have been used to create historical displays of works on
+   a given subject. The authors have developed a process and software
+   called HistCite for generating chronological maps of collections
+   resulting from searching the ISI Web of Science (WOS), SCI/SSCI/AHCI on
+   CD-ROM or SciSearch on Dialog. Export files are created in which all
+   cited references for source documents are captured. These files are
+   processed by HistCite to generate tables of the most-cited works. Real
+   time demonstrations of several topics such as bibliographic-coupling,
+   co-citation analysis, gene flow, etc. will be provided. The HistCite
+   software includes an expert system for detecting and editing errors or
+   variations in cited references. Export Files of 1,000 or more records
+   are processed in minutes on a PC. Ideally the system will be used to
+   help the searcher quickly identify the most significant work on a topic
+   and trace its year-by-year development.
+C1 ISI, Philadelphia, PA 19104 USA.
+   Russian Acad Sci, Inst Marine Biol, Vladivostok 690041, Russia.
+   Washington State Univ, Ctr Teaching Learning & Technol, Pullman, WA 99164 USA.
+RP Garfield, E, ISI, 3501 Market St, Philadelphia, PA 19104 USA.
+CR BUTER RK, 2001, SCIENTOMETRICS, V51, P55
+   CAWKELL AE, 1989, ESSAYS INFORMATION S, V12, P4
+   CAWKELL AE, 2000, WEB KNOWLEDGE FESTSC, P177
+   GARFIELD E, 1964, USE CITATION DATA WR
+   GARFIELD E, 1971, ESSAYS INFORMATION S, V1, P158
+   GARFIELD E, 1988, ESSAYS INFORMATION S, V9, P324
+   GARFIELD E, 1992, ESSAYS INFORMATION S, V15, P75
+   GARFIELD E, 2001, S HON C BORK U PITTS
+   LAWRENCE S, 1999, COMPUTER, V32, P67
+   SMALL H, 1985, J INFORM SCI, V11, P147
+   SMALL H, 1985, SCIENTOMETRICS, V8, P321
+   SMALL H, 1994, SCIENTOMETRICS, V30, P229
+   WHITE HD, 1997, ANNU REV INFORM SCI, V32, P99
+NR 13
+TC 2
+PU INFORMATION TODAY INC
+PI MEDFORD
+PA 143 OLD MARLTON PIKE, MEDFORD, NJ 08055 USA
+SN 0044-7870
+J9 P ASIST ANNU MEET
+PY 2002
+VL 39
+BP 14
+EP 24
+PG 11
+SC Computer Science, Information Systems; Information Science & Library
+   Science
+GA BV87V
+UT ISI:000180277800002
+ER
+
+PT S
+AU Harmon, G
+   Garfield, E
+   Paris, G
+   Marchionini, G
+   Fagan, J
+TI Bioinformatics in information science education
+SO ASIST 2002: PROCEEDINGS OF THE 65TH ASIST ANNUAL MEETING, VOL 39, 2002
+SE PROCEEDINGS OF THE ASIST ANNUAL MEETING
+LA English
+DT Article
+AB To support the introduction of bioinformatics education into
+   information science curricula, panel members and other participants
+   will attempt to define briefly the nature and scope of bioinformatics
+   and its significance for information science education. Discussions
+   will also explore emerging opportunities for program graduates in
+   bioinformatics research, professional practice, and enterprise.
+C1 Univ Texas, Grad Sch Lib & Informat Sci, Austin, TX 78712 USA.
+   Inst Sci Informat, Philadelphia, PA 19104 USA.
+   Oncol Business Unit, Novartis Inst Biomed Res, Summit, NJ 07901 USA.
+   Univ N Carolina, Sch Informat & Lib Sci, Chapel Hill, NC 27559 USA.
+   So Illinois Univ, Morris Lib, Carbondale, IL 62901 USA.
+RP Harmon, G, Univ Texas, Grad Sch Lib & Informat Sci, Austin, TX 78712
+   USA.
+CR ARMOUR PG, 2001, COMMUN ACM, V44, P13
+   BATES MJ, 1999, J AM SOC INFORM SCI, V50, P1043
+   COLE NJ, 1996, J DOC, V52, P51
+   LEE C, 1999, BIOINFORMATICS INTER
+NR 4
+TC 0
+PU INFORMATION TODAY INC
+PI MEDFORD
+PA 143 OLD MARLTON PIKE, MEDFORD, NJ 08055 USA
+SN 0044-7870
+J9 P ASIST ANNU MEET
+PY 2002
+VL 39
+BP 490
+EP 491
+PG 2
+SC Computer Science, Information Systems; Information Science & Library
+   Science
+GA BV87V
+UT ISI:000180277800076
+ER
+
+PT J
+AU Abt, HA
+   Garfield, E
+TI Is the relationship between numbers of references and paper lengths the
+   same for all sciences?
+SO JOURNAL OF THE AMERICAN SOCIETY FOR INFORMATION SCIENCE AND TECHNOLOGY
+LA English
+DT Article
+ID CITATIONS
+AB In each of 41 research journals in the physical, life, and social
+   sciences there is a linear relationship between the average number of
+   references and the normalized paper lengths. For most of the journals
+   in a given field, the relationship is the same within statistical
+   errors. For papers of average lengths in different sciences the average
+   number of references is the same within +/-17%. Because papers of
+   average lengths in various sciences have the same number of references,
+   we conclude that the citation counts to them can be inter-compared
+   within that accuracy. However, review journals are different: after
+   scanning 18 review journals we found that those papers average twice
+   the number of references as research papers of the same lengths.
+C1 Kitt Peak Natl Observ, Tucson, AZ 85726 USA.
+   Inst Sci Informat, Philadelphia, PA 19104 USA.
+RP Abt, HA, Kitt Peak Natl Observ, Box 26732, Tucson, AZ 85726 USA.
+CR ABT HA, 1984, PUBL ASTRON SOC PAC, V96, P746
+   ABT HA, 1987, PUBL ASTRON SOC PAC, V99, P1329
+   ABT HA, 1998, NATURE, V395, P756
+   ABT HA, 2000, SCIENTOMETRICS, V49, P443
+   AYRES I, 2000, J LEGAL STUD 2, V29, P427
+   DIMITROFF A, 1992, B MED LIBR ASSOC, V80, P340
+   SEGLEN PO, 1992, REPRESENTATIONS SCI, P240
+   SENGUPTA IN, 1986, SCIENTOMETRICS, V10, P235
+NR 8
+TC 3
+PU JOHN WILEY & SONS INC
+PI HOBOKEN
+PA 111 RIVER ST, HOBOKEN, NJ 07030 USA
+SN 1532-2882
+J9 J AM SOC INF SCI TECHNOL
+JI J. Am. Soc. Inf. Sci. Technol.
+PD NOV
+PY 2002
+VL 53
+IS 13
+BP 1106
+EP 1112
+PG 7
+SC Computer Science, Information Systems; Information Science & Library
+   Science
+GA 607DP
+UT ISI:000178776600004
+ER
+
+PT J
+AU Pudovkin, AI
+   Garfield, E
+TI Algorithmic procedure for finding semantically related journals
+SO JOURNAL OF THE AMERICAN SOCIETY FOR INFORMATION SCIENCE AND TECHNOLOGY
+LA English
+DT Article
+ID CITATION RELATIONSHIPS; SCIENTIFIC JOURNALS; BIOLOGY JOURNALS;
+   SELF-CITATION
+AB Using citations, papers and references as parameters a relatedness
+   factor (RF) is computed for a series of journals. Sorting these
+   journals by the RF produces a list of journals most closely related to
+   a specified starting journal. The method appears to select a set of
+   journals that are semantically most similar to the target journal. The
+   algorithmic procedure is illustrated for the journal Genetics.
+   Inter-journal citation data needed to calculate the RF were obtained
+   from the 1996 ISI Journal Citation Reports on CD-ROM(C). Out of the
+   thousands of candidate journals in JCR(C), 30 have been selected. Some
+   of them are different from the journals in the JCR category for
+   genetics and heredity. The new procedure is unique in that it takes
+   varying journal sizes into account.
+C1 Russian Acad Sci, Far E Branch, Inst Marine Biol, Vladivostok, Russia.
+   Inst Informat Sci, ISItm, Philadelphia, PA 19104 USA.
+RP Pudovkin, AI, Russian Acad Sci, Far E Branch, Inst Marine Biol,
+   Vladivostok, Russia.
+CR CARPENTER MP, 1973, J AM SOC INFORM SCI, V24, P425
+   COZZENS SE, 1993, SCI TECHNOLOGY POLIC, P219
+   EGGHE L, 1999, SCIENTOMETRICS, V45, P217
+   EGGHE L, 2000, J AM SOC INFORM SCI, V51, P1123
+   GARFIELD E, 1975, NO GROWTH LIB CITATI, V2, P300
+   GARFIELD E, 1988, J CITATION STUDIES, V9, P9
+   GARFIELD E, 1996, SCIENTIST, V10, P13
+   LEYDESDORFF L, 1994, SCIENTOMETRICS, V31, P59
+   NARIN F, 1972, J AM SOC INFORM SCI, V23, P323
+   NARIN F, 2000, WEB KNOWLEDGE FESTSC, P337
+   PUDOVKIN AI, 1992, BIOL MORYA-VLAD, P83
+   PUDOVKIN AI, 1993, MARINE ECOLOGY PROGR, V100, P207
+   PUDOVKIN AI, 1995, SCIENTOMETRICS, V32, P227
+   ROUSSEAU R, 1999, SCIENTOMETRICS, V44, P521
+   SHAMA G, 2000, SCIENTOMETRICS, V49, P289
+NR 15
+TC 17
+PU JOHN WILEY & SONS INC
+PI HOBOKEN
+PA 111 RIVER ST, HOBOKEN, NJ 07030 USA
+SN 1532-2882
+J9 J AM SOC INF SCI TECHNOL
+JI J. Am. Soc. Inf. Sci. Technol.
+PD NOV
+PY 2002
+VL 53
+IS 13
+BP 1113
+EP 1119
+PG 7
+SC Computer Science, Information Systems; Information Science & Library
+   Science
+GA 607DP
+UT ISI:000178776600005
+ER
+
+PT J
+AU Garfield, E
+TI Recollections of Irving H. Sher 1924-1996: Polymath/information
+   scientist extraordinaire
+SO JOURNAL OF THE AMERICAN SOCIETY FOR INFORMATION SCIENCE AND TECHNOLOGY
+LA English
+DT Article
+ID CITATION
+AB Over a 35-year period, Irving H. Sher played a critical role in the
+   development and implementation of the Science Citation Index (R) and
+   other ISI (R) products. Trained as a biochemist, statistician, and
+   linguist, Sher brought a unique combination of talents to ISI as
+   Director of Quality Control and Director of Research and Development.
+   His talents as a teacher and mentor evoked loyalty. He was a
+   particularly inventive but self-taught programmer. In addition to the
+   SCI,(R) Social Sciences Citation Index,(R) and Arts and Humanities
+   Citation Index,(R) Sher was involved with the development of the first
+   commercial SDI system, the Automatic Subject Citation Alert, now called
+   Research Alert,(R) and Request-A-Print Cards. Together we developed the
+   journal impact factor and the Journal Citation Reports.(R) Sher was
+   also the inventor of the SYSTABAR System of coding references and
+   Sherhand. He was involved in key reports on citation-based
+   historiography, forecasting Nobel prizes, and served as a referee for
+   JASIS over a 20-year period.
+C1 Inst Sci Informat, Scientist, Philadelphia, PA 19104 USA.
+RP Garfield, E, Inst Sci Informat, Scientist, 3501 Market St,
+   Philadelphia, PA 19104 USA.
+CR 1970, NATURE, V228, P698
+   ASIMOV I, 1963, GENETIC CODE
+   BACHRACH CA, 1978, MED INFORM, V3, P237
+   GARFIELD E, 1955, SCIENCE, V122, P108
+   GARFIELD E, 1964, USE CITATION DATA WR
+   GARFIELD E, 1967, J CHEM DOCUMENTATION, V7, P147
+   GARFIELD E, 1967, J LIBRARY HISTORY, V2, P235
+   GARFIELD E, 1968, CURR CONTENTS, V2, P5
+   GARFIELD E, 1969, CURR CONTENTS, V6, P4
+   GARFIELD E, 1970, NATURE, V227, P669
+   GARFIELD E, 1972, CURR CONTENTS, V36, P5
+   GARFIELD E, 1975, CURR CONTENTS, P5
+   GARFIELD E, 1976, J AM SOC INFORM SCI, V27, P288
+   GARFIELD E, 1977, CURR CONTENTS, P5
+   GARFIELD E, 1983, CURRENT CONTENTS, V26, P5
+   GARFIELD E, 1985, CURR CONTENTS, V43, P3
+   GARFIELD E, 1998, C HIST HER SCI INF S
+   GUTTERMAN L, 1967, WISDOM SARNOFF WORLD
+   KOENIG MED, 1977, B ATOM SCI, V23, P16
+   LAWRENCE S, 1999, COMPUTER, V32, P67
+   LEONHARDT J, 2000, NY TIMES        0728
+   MERTON RK, 1968, SOCIAL THEORY SOCIAL, P27
+   SHER IH, 1966, RES PROGRAM EFFECTIV, P135
+   TUKEY JW, 1962, J CHEM DOCUMENTATION, V2, P34
+NR 24
+TC 0
+PU JOHN WILEY & SONS INC
+PI NEW YORK
+PA 605 THIRD AVE, NEW YORK, NY 10158-0012 USA
+SN 1532-2882
+J9 J AM SOC INF SCI TECHNOL
+JI J. Am. Soc. Inf. Sci. Technol.
+PD DEC
+PY 2001
+VL 52
+IS 14
+BP 1197
+EP 1202
+PG 6
+SC Computer Science, Information Systems; Information Science & Library
+   Science
+GA 497HU
+UT ISI:000172450000002
+ER
+
+PT J
+AU Garfield, E
+TI From laboratory to information explosions ... the evolution of chemical
+   information services at ISI
+SO JOURNAL OF INFORMATION SCIENCE
+LA English
+DT Article
+AB The experience in locating and coding the steroid literature for the US
+   Patent Office led to a variety of chemically-based services dealing
+   with new compounds and intermediates, as well as graphical presentation
+   of chemical formulas and reactions. The Index Chemicus Registry System
+   was the first to use the Wiswesser line notation, which became a
+   standard in the pharmaceutical field. This eventually led to Current
+   Chemical Reactions Database and Reaction Citation Index.This paper
+   presents an autobiographical account of Eugene Garfield's involvement
+   in chemical information systems. It traces his personal evolution from
+   laboratory chemist transformed into an information scientist who
+   combined his knowledge of structural linguistics and information
+   technology into an algorithmic system for identifying molecular
+   formulas in the literature.
+   Recognizing the shortcomings of traditional abstracting and indexing
+   systems like Index Medicus and Chemical Abstracts, he launched Current
+   Contents, Index Chemicus and Science Citation Index, which were
+   designed to provide timely, weekly and highly specific retrieval of
+   chemical information.
+   The experience in locating and coding the steroid literature for the US
+   Patent Office led to a variety of chemically-based services dealing
+   with new compounds and intermediates, as well as graphical presentation
+   of chemical formulas and reactions.
+   The Index Chemicus Registry System was the first to use the Wiswesser
+   line notation, which became a standard in the pharmaceutical field.
+   This eventually led to Current Chemical Reactions Database and Reaction
+   Citation Index.
+C1 Inst Sci Informat, Philadelphia, PA 19104 USA.
+RP Garfield, E, Inst Sci Informat, 3501 Market St, Philadelphia, PA 19104
+   USA.
+CR ANTONY A, 1980, J CHEM INF COMP SCI, V20, P101
+   BANIK GM, 1994, AM CHEM SOC 208 M 1
+   BATZIG JH, 1975, ABSTR PAP AM CHEM S, P34
+   BERNHARD SA, 1954, J AM CHEM SOC, V76, P991
+   CLARK M, 1997, AM CHEM SOC 214 M 1
+   CLARK M, 1999, J CHEM INF COMP SCI, V39, P635
+   COULSON HJ, 1980, AM CHEM SOC 180 M AU
+   DOU H, 1988, ED INFORM, V6, P91
+   ELIAS AW, 1968, J CHEM DOC, V8, P74
+   FOSTER GA, 1979, AM CHEM SOC 178 M SE
+   GARFIELD E, 1955, SCIENCE, V122, P108
+   GARFIELD E, 1956, CHEM B, V43, P11
+   GARFIELD E, 1957, J PATENT OFFICE SOC, V39, P583
+   GARFIELD E, 1960, CHEM LIT, V12, P7
+   GARFIELD E, 1961, INDEX CHEM 1 CUMULAT, P1
+   GARFIELD E, 1961, NATURE, V192, P192
+   GARFIELD E, 1964, AM CHEM SOC 148 M SE
+   GARFIELD E, 1967, AM BEHAV SCI, V10, P29
+   GARFIELD E, 1967, CHEM ENG NEWS, V45, P6
+   GARFIELD E, 1967, J CHEM DOCUMENTATION, V7, P147
+   GARFIELD E, 1970, J CHEM DOC, V10, P54
+   GARFIELD E, 1971, CURRENT CONTENT 0804
+   GARFIELD E, 1972, AM CHEM SOC 164 M HE
+   GARFIELD E, 1973, NATURE, V242, P307
+   GARFIELD E, 1975, CURR CONTENTS, P5
+   GARFIELD E, 1979, AM CHEM SOC 177 M AP
+   GARFIELD E, 1979, CURRENT CONTENTS, V45, P5
+   GARFIELD E, 1980, CURR CONTENTS, V35, P5
+   GARFIELD E, 1984, CURRENT CONTENTS, V27, P3
+   GARFIELD E, 1987, CURR CONTENTS, V7, P3
+   GARFIELD E, 1987, CURR CONTENTS, V7, P3
+   GARFIELD E, 1998, C HIST HER SCI INF S
+   GRANITO CE, 1971, J CHEM DOC, V11, P251
+   GRANITO CE, 1972, AM CHEM SOC 164 M AU, P2
+   GRANITO CE, 1972, AM CHEM SOC 164 M AU, P20
+   GRANITO CE, 1972, J CHEM DOC, V12, P190
+   GRANITO CE, 1973, ABSTR PAP AM CHEM S, P19
+   GRANITO CE, 1973, J CHEM DOC, V13, P72
+   GRANITO CE, 1973, NATURWISSENSCHAFTEN, V60, P189
+   GRANITO CE, 1974, AM CHEM SOC 168 M SE
+   GRANITO CE, 1979, AM CHEM SOC 117 M AP, P48
+   KABACK SM, 1999, AM CHEM SOC 218 M 1
+   KEMP N, 1999, J CHEM INFORMATION C, V38, P644
+   LAWLOR B, 1982, AM CHEM SOC 183 M
+   LAWLOR HA, 1976, AM CHEM SOC 172 M SE, P25
+   LEGGATE P, 1973, J CHEM DOC, V13, P192
+   LYNCH MF, 1974, J DOC, V30, P445
+   MEYER D, 1986, AM CLIN PROD REV, V5, P16
+   NOTESS GR, 1996, DATABASE, V19, P75
+   REVESZ GS, 1969, J CHEM DOC, V9, P106
+   REVESZ GS, 1976, AM CHEM SOC 172 M SE, P22
+   SARKISIAN J, 1984, AM CHEM SOC 188 M AU
+   WIPKE WT, 1990, TETRAHEDRON COMPUT M, V3, P83
+NR 53
+TC 1
+PU BOWKER-SAUR
+PI E GRINSTEAD
+PA WINDSOR COURT, EAST GRINSTEAD HOUSE, E GRINSTEAD RH19 1XA, W SUSSEX,
+   ENGLAND
+SN 0165-5515
+J9 J INFORM SCI
+JI J. Inf. Sci.
+PY 2001
+VL 27
+IS 2
+BP 119
+EP 125
+PG 7
+SC Computer Science, Information Systems; Information Science & Library
+   Science
+GA 487EV
+UT ISI:000171861400008
+ER
+
+PT J
+AU Garfield, E
+TI A retrospective and prospective view of information retrieval and
+   artificial intelligence in the 21st century
+SO JOURNAL OF THE AMERICAN SOCIETY FOR INFORMATION SCIENCE AND TECHNOLOGY
+LA English
+DT Article
+ID SCIENTIFIC DISCOVERY
+C1 ISI, Publisher, The Scientist, Philadelphia, PA 19104 USA.
+RP Garfield, E, ISI, Publisher, The Scientist, 3501 Market St,
+   Philadelphia, PA 19104 USA.
+CR CARUSO D, 1997, NY TIMES        0324, C5
+   GARFIELD E, IN PRESS SCIENTIST
+   GARFIELD E, 1961, J CHEM DOC, V1, P70
+   GARFIELD E, 1962, CURRENT CONTENTS, V1
+   GARFIELD E, 1963, 6 ANN SESS MED WRIT
+   GARFIELD E, 1965, STAT ASS METHODS MEC, P189
+   GARFIELD E, 1966, KARGER GAZETTE  0305, V13, P2
+   GARFIELD E, 1967, AM BEHAV SCI, V10, P29
+   GARFIELD E, 1969, CURRENT CONTENTS, V3
+   GARFIELD E, 1977, CURR CONTENTS, P5
+   GARFIELD E, 1979, CURRENT CONTENTS, V45, P5
+   GARFIELD E, 1990, CURR CONTENTS, V33, P5
+   GARFIELD E, 1990, CURRENT CONTENT 0212, P3
+   GARFIELD E, 1993, J AM SOC INFORM SCI, V44, P298
+   GARFIELD E, 1997, NY TIMES        0414
+   GARFIELD E, 1999, SCIENTIST, V13, P14
+   GLEICK J, 1997, NY TIMES MAGAZI 0323, P32
+   LAWRENCE S, 1999, COMPUTER, V32, P67
+   LENHOFF HM, 2000, SCIENTIST, V14, P35
+   OCNNOR J, 1965, J ACM, V12, P490
+   ROTH D, 1999, COMMUNICATION
+   SCHMID R, 1984, TAXON, V33, P636
+   SMALL H, 1978, SOC STUD SCI, V8, P317
+   SONG F, 1999, MED INFORM INTERNET, V24, P223
+   SWANSON DR, 1997, ARTIF INTELL, V91, P183
+   SWANSON DR, 1999, LIBR TRENDS, V48, P48
+   WATTERS PA, 1999, INTERNET RES, V9, P153
+NR 27
+TC 1
+PU JOHN WILEY & SONS INC
+PI NEW YORK
+PA 605 THIRD AVE, NEW YORK, NY 10158-0012 USA
+SN 1532-2882
+J9 J AM SOC INF SCI TECHNOL
+JI J. Am. Soc. Inf. Sci. Technol.
+PD JAN
+PY 2001
+VL 52
+IS 1
+BP 18
+EP 21
+PG 4
+SC Computer Science, Information Systems; Information Science & Library
+   Science
+GA 404KX
+UT ISI:000167097900004
+ER
+
+PT J
+AU Garfield, E
+TI Use of Journal Citation Reports and Journal Performance Indicators in
+   measuring short and long term journal impact
+SO CROATIAN MEDICAL JOURNAL
+LA English
+DT Article
+DE bibliometrics; citation analysis; impact factor; journal article;
+   library science; medical informatics; medical literature analysis and
+   retrieval system
+AB The impact factor has become the subject of widespread controversy. It
+   has gradually developed to mean both journal and author impact. The
+   emphasis on impact factors obscures the main purpose of bibliographic
+   databases created at the Institute for Scientific Information. I will
+   here show how two of these databases, Journal Citation Reports and the
+   Journal Performance Indicators, can be used to study scientific
+   journals and the articles they publish, as well as the evolution of
+   scientific fields.
+C1 Inst Sci Informat, Philadelphia, PA 19104 USA.
+RP Garfield, E, The Scientist, 3501 Market St, Philadelphia, PA 19104 USA.
+CR BENSMAN SJ, 1998, LIBR RESOUR TECH SER, V42, P147
+   BROADY A, 1995, LANCET, V346, P1300
+   BRODMAN E, 1960, B MED LIB ASS, V32, P479
+   FENTON JE, 2000, CLIN OTOLARYNGOL, V25, P40
+   FOSTER WR, 1995, LANCET, V346, P1301
+   GARFIELD E, 1955, SCIENCE, V122, P108
+   GARFIELD E, 1972, CURRENT CONTENT 0628
+   GARFIELD E, 1973, CURR CONTENTS, P5
+   GARFIELD E, 1976, CURRENT CONTENT 0209
+   GARFIELD E, 1986, ANN INTERN MED, V105, P313
+   GARFIELD E, 1998, SCIENTIST, V12, P10
+   GARFIELD E, 1998, SCIENTIST, V12, P12
+   GARFIELD E, 1999, CAN MED ASSOC J, V161, P979
+   HANSEN HB, 1997, CLIN PHYSIOL, V17, P409
+   HOEFFEL C, 1998, ALLERGY, V53, P1225
+   LOBO RA, 2000, J SOC GYNECOL INVEST, V7, P3
+   OPTHOF T, 1999, CARDIOVASC RES, V41, P1
+   OREOPOULOS DG, 2000, PERITON DIALYSIS INT, V20, P5
+   PICUS D, 2000, J VASC INTERV RADI 1, V11, P147
+   PITTLER MH, 2000, J CLIN EPIDEMIOL, V53, P485
+   REN SL, 1999, SCIENCE, V286, P1683
+   SEMENZATO G, 2000, SARCOIDOSIS VASC DIF, V17, P22
+   SORRENTINO D, 2000, DIGESTION, V61, P77
+   VANLEEUWEN TN, 1997, CHEM INTELL, V3, P32
+NR 24
+TC 19
+PU PABST SCIENCE PUBLISHERS
+PI LENGERICH
+PA EICHENGRUND 28, D-49525 LENGERICH, GERMANY
+SN 0353-9504
+J9 CROAT MED J
+JI Croat. Med. J.
+PD DEC
+PY 2000
+VL 41
+IS 4
+BP 368
+EP 374
+PG 7
+SC Medicine, General & Internal
+GA 381TJ
+UT ISI:000165779300003
+ER
+
+PT J
+AU Garfield, E
+TI The diverse roles of citation indexes in scientific research
+SO REVISTA DE INVESTIGACION CLINICA
+LA English
+DT Article
+ID IMPACT FACTOR; JOURNALS
+C1 Inst Sci Informat, Philadelphia, PA 19104 USA.
+RP Garfield, E, Inst Sci Informat, 3501 Market St, Philadelphia, PA 19104
+   USA.
+CR BRACHORIQUELME RL, 1997, REV INVEST CLIN, V49, P369
+   BUTLER D, 1998, NATURE, V394, P309
+   GARFIELD E, ESSAYS INFORMATION S, V1
+   GARFIELD E, 1976, RECHERCHE, V7, P757
+   GARFIELD E, 1997, CURR SCI INDIA, V73, P639
+   GARFIELD E, 1998, 150 ANN M AAAS PHIL
+   GARFIELD E, 1998, SCIENTIST, V12, P10
+   GARFIELD E, 1998, SCIENTIST, V12, P12
+   GARFIELD E, 1998, UNFALLCHIRURG, V101, P413
+   KOREN G, 1997, CLIN INVEST MED, V20, P354
+   LINDNER UK, 1997, UNFALLCHIRURG, V100, P253
+   OESTERN HJ, 1997, UNFALLCHIRURG, V100, P838
+   SEGLEN PO, 1997, BRIT MED J, V314, P498
+   SHER IH, 1965, RES PROGRAM EFFECTIV
+   SPIRIDIONE G, 1995, PESO QUALITA ACCADEM, P123
+NR 15
+TC 9
+PU INST NACIONAL NUTRICION
+PI TLALPAN
+PA VASCO DE QUIROZA #15, TLALPAN 14000 D F, MEXICO
+SN 0034-8376
+J9 REV INVEST CLIN
+JI Rev. Invest. Clin.
+PD NOV-DEC
+PY 1998
+VL 50
+IS 6
+BP 497
+EP 504
+PG 8
+SC Medicine, General & Internal
+GA 167EF
+UT ISI:000078619100008
+ER
+
+PT J
+AU Garfield, E
+TI Random thoughts on citationology. Its theory and practice - Comments on
+   theories of citation?
+SO SCIENTOMETRICS
+LA English
+DT Article
+AB Theories of citation are as elusive as theories of information science,
+   which have been debated for decades. But as a basis for discussion I
+   offer the term citationology as the theory and practice of citation,
+   including its derivative disciplines citation analysis and
+   bibliometrics. Several maxims, commandments if you will, have been
+   enunciated. References are the result of a specialized symbolic
+   language with a citation syntax and grammar. References, like words,
+   have multiple meanings which are related to the aposteriori quality of
+   citation indexes. Therefore, citation relevance cannot be predicted.
+   Mathematical microtheories in bibliometrics abound, including the
+   apposite laws of scattering and concentration. Citation behavior is a
+   vast sub-set of citation theory, which like citation typology, can
+   never be complete. Deviant citation behavior preoccupies certain
+   authors but it is rarely significant in well-designed citation
+   analyses, where proper cohorts are defined. Myths about uncitedness and
+   the determinants of impact are discussed, as well as journal impact
+   factors as surrogates and observation's on scientists of Nobel Class.
+   After two years at Johns Hopkins investigating "machine documentation,"
+   and another year as a student of library science, I became,
+   fortuitously, a documentation consultant. By 1954, I called myself an
+   information engineer, which was an apt description of my professional
+   consulting activities. However, Pennsylvania licensing law requires
+   that engineers be graduates of engineering schools. So I became an
+   information scientist! I've never thought of myself as an information
+   theoretician and have been skeptical about a need for a theory of
+   information science. I've practiced information science and engineering
+   without explicit theoretical support. But undoubtedly there are
+   underlying principles which can guide information scientists who, like
+   myself, could be called "citationists" or "citationologists.'' If there
+   is a theory and practice of citation, it should probably be called
+   citationology.
+C1 Inst Sci Informat, Philadelphia, PA 19104 USA.
+   The Scientist, Philadelphia, PA 19104 USA.
+RP Garfield, E, Inst Sci Informat, 3501 Market St, Philadelphia, PA 19104
+   USA.
+EM garfield@aurora.cis.upenn.edu
+CR BRADFORD SC, 1934, ENGINEERING-LONDON, V137, P85
+   BRADFORD SC, 1950, DOCUMENTATION
+   CAWKELL AE, 1980, EINSTEIN 1ST HUNDRED, P31
+   CLEVERDON CW, 1967, ASLIB P, V19, P173
+   GARFIELD E, 1962, UNPUB PROGR REPORT C
+   GARFIELD E, 1971, CURRENT CONTENT 0804, P5
+   GARFIELD E, 1976, CURRENT CONTENT 0209, P5
+   GARFIELD E, 1976, J AM SOC INFORM SCI, V27, P288
+   GARFIELD E, 1977, CURR CONTENTS, P5
+   GARFIELD E, 1979, CITATION INDEXING
+   GARFIELD E, 1981, CURRENT CONTENTS, V13, P5
+   GARFIELD E, 1985, CURR CONTENTS, V43, P3
+   GARFIELD E, 1996, LIB Q, V66, P499
+   GARFIELD E, 1997, CELL DEATH DIFFER, V4, P352
+   GARFIELD E, 1998, 150 ANN M AAAS PHIL
+   GARFIELD E, 1998, CELL DEATH DIFFER, V5, P127
+   GARFIELD E, 1998, SCIENTIST, V12, P11
+   HAMILTON DP, 1990, SCIENCE, V250, P1331
+   KELLY K, 1995, SOCIAL SYSTEMS EC WO
+   KESSLER MM, 1963, AM DOC, V14, P10
+   LOWRY OH, 1951, J BIOL CHEM, V193, P265
+   PENDLEBURY DA, 1991, SCIENCE, V251, P1410
+   PERT C, 1997, MOL EMOTION WHY FEEL
+   SEGLEN PO, 1990, P INT C SCI TECHN IN
+   SEGLEN PO, 1997, BRIT MED J, V314, P498
+   SHER IH, 1966, RES PROGRAM EFFECTIV, P135
+   SMALL HG, 1978, SOC STUD SCI, V8, P327
+   WADE N, 1997, NY TIMES        1007, F4
+   WOUTERS P, 1998, SCIENTOMETRICS, V41, P225
+   ZUCKERMAN H, 1996, SCI ELITE NOBEL LAUR
+NR 30
+TC 17
+PU ELSEVIER SCIENCE BV
+PI AMSTERDAM
+PA PO BOX 211, 1000 AE AMSTERDAM, NETHERLANDS
+SN 0138-9130
+J9 SCIENTOMETRICS
+JI Scientometrics
+PD SEP
+PY 1998
+VL 43
+IS 1
+BP 69
+EP 76
+PG 8
+SC Computer Science, Interdisciplinary Applications; Information Science &
+   Library Science
+GA 119CL
+UT ISI:000075877700007
+ER
+
+PT J
+AU Garfield, E
+TI From citation indexes to informetrics: Is the tail now wagging the dog?
+SO LIBRI
+LA English
+DT Article
+ID CO-CITATION; DEPARTMENTS; DOCUMENTS; MODEL
+AB This article provides a synoptic review and history of citation indexes
+   and their evolution into research evaluation tools including a
+   discussion of the use of bibliometric data for evaluating U.S.
+   institutions (academic departments) by the National Research Council
+   (NRC). The review covers the origin and uses of journal impact factors,
+   validation studies of citation analysis, information retrieval and
+   dissemination (current awareness), citation consciousness,
+   historiography and science mapping, Citation Classics,(R) and the
+   history of contemporary science. Retrieval of information by cited
+   reference searching is illustrated, especially as it applies to
+   avoiding duplicated research. The fifteen-year cumulative impacts of
+   journals and the percentage of uncitedness, the emergence of
+   scientometrics, old boy networks, and citation frequency distributions
+   are discussed. The paper concludes with observations about the future
+   of citation indexing.
+C1 Inst Sci Informat, Philadelphia, PA 19104 USA.
+RP Garfield, E, 3501 Market St, Philadelphia, PA 19104 USA.
+EM garfield@aurora.cis.upenn.edu
+CR *NAT SCI BOARD, 1993, SCI ENG IND 1993
+   ADAIR WC, 1955, AM DOC, V6, P31
+   ASTIN HS, 1991, OUTER CIRCLE WOMEN S, P57
+   BIDDLE J, 1996, HIST POLIT ECON, V28, P137
+   CAMPANARIO JM, 1993, SOC STUD SCI, V23, P347
+   COZZENS SE, 1989, SCIENTOMETRICS, V15, P437
+   CRONIN B, 1984, CITATION PROCESS
+   GARFIELD E, 1955, SCIENCE, V122, P108
+   GARFIELD E, 1959, P INT C SCI INF WASH, V1, P461
+   GARFIELD E, 1964, SCIENCE, V144, P649
+   GARFIELD E, 1964, USE CITATION DATA WR
+   GARFIELD E, 1967, AM BEHAV SCI, V10, P29
+   GARFIELD E, 1967, J CHEM DOCUMENTATION, V7, P147
+   GARFIELD E, 1970, CURR CONTENTS, V16, P5
+   GARFIELD E, 1971, CURR CONTENTS, V27, P5
+   GARFIELD E, 1972, SCIENCE, V178, P471
+   GARFIELD E, 1975, CURR CONTENTS, P5
+   GARFIELD E, 1976, J AM SOC INFORM SCI, V27, P288
+   GARFIELD E, 1976, NATURE, V264, P689
+   GARFIELD E, 1978, CURRENT CONTENT 0710, P5
+   GARFIELD E, 1979, CITATION INDEXING, P58
+   GARFIELD E, 1980, CURR CONTENTS, V35, P5
+   GARFIELD E, 1983, CURRENT CONTENTS, V26, P5
+   GARFIELD E, 1985, CURR CONTENTS, V43, P3
+   GARFIELD E, 1987, CURR CONTENTS, V7, P3
+   GARFIELD E, 1988, CURR CONTENTS, V35, P3
+   GARFIELD E, 1992, THEORETICAL MED, V13, P117
+   GARFIELD E, 1993, CURRENT CONTENT 1108
+   GARFIELD E, 1993, J AM SOC INFORM SCI, V44, P298
+   GARFIELD E, 1994, J MAT ED, P327
+   GARFIELD E, 1996, LIBR QUART, V66, P449
+   GOLDBERGER ML, 1995, RES DOCTORATE PROGRA
+   HAGSTROM WO, 1971, SOCIOL EDUC, V44, P375
+   HAMILTON DP, 1990, SCIENCE, V250, P1331
+   HANSEN HB, 1997, CLIN PHYSIOL, V17, P409
+   HAUPTMANN R, 1994, J INFORMATION ETHICS, V3
+   KAPLAN N, 1965, AM DOC, V16, P179
+   KESSLER MM, 1963, AM DOC, V14, P10
+   KOENIG MED, 1983, J AM SOC INFORM SCI, V34, P136
+   KOENIG MED, 1983, RES POLICY, V12, P15
+   LAFOLLETTE MC, 1994, J INFORMATION ETHICS, V3, P25
+   LEPAIR C, 1995, INT FORUM INFORM DOC, V20, P16
+   LUNDBERG GD, 1984, JAMA-J AM MED ASSOC, V252, P812
+   MARGOLIS J, 1967, SCIENCE, V155, P123
+   MARSHAKOVA IV, 1973, NAUCHNO TEKHNICHESKA, V2, P3
+   MARTYN J, 1964, NEW SCI, V21, P388
+   MAZUR RH, 1962, J BIOL CHEM, V237, P3315
+   MERTON RK, 1968, SOCIAL THEORY SOCIAL, P27
+   MOTLUK A, 1997, NEW SCI, V154, P2083
+   NICOLINI C, 1995, SCIENTOMETRICS, V32, P93
+   OPPENHEIM C, 1995, J DOC, V51, P18
+   OPPENHEIM C, 1997, J DOC, V53, P477
+   PAO ML, 1993, INFORM PROCESS MANAG, V29, P95
+   PENDLEBURY DA, 1991, SCIENCE, V251, P1410
+   PRICE DJ, 1986, LITTLE SCI BIG SCI
+   SACHS F, 1997, NATURE, V390, P203
+   SCHWARTZ DP, 1958, ANAL CHEM, V30, P219
+   SMALL H, 1973, J AM SOC INFORM SCI, V24, P265
+   SMALL HG, 1977, SOC STUD SCI, V7, P139
+   SMALL HG, 1978, SOC STUD SCI, V8, P327
+   SMITH RL, 1981, J IND ECON, V30, P1
+   SPENCER CC, 1967, AM DOC, V18, P87
+   STEINBACH HB, 1967, SCIENCE, V145, P142
+   STENT GS, 1972, SCI AM, V227, P84
+   VIRGO JA, 1977, LIBRARY Q, V47, P415
+   WENNERAS C, 1997, NATURE, V387, P341
+   WHITE HD, 1989, ANNU REV INFORM SCI, V24, P119
+NR 67
+TC 25
+PU MUNKSGAARD INT PUBL LTD
+PI COPENHAGEN
+PA 35 NORRE SOGADE, PO BOX 2148, DK-1016 COPENHAGEN, DENMARK
+SN 0024-2667
+J9 LIBRI
+JI Libri
+PD JUN
+PY 1998
+VL 48
+IS 2
+BP 67
+EP 80
+PG 14
+SC Information Science & Library Science
+GA 103AT
+UT ISI:000074959000001
+ER
+
+PT J
+AU Garfield, E
+TI The Impact Factor and using it correctly
+SO UNFALLCHIRURG
+LA German
+DT Article
+C1 Inst Sci Informat, Philadelphia, PA 19101 USA.
+RP Garfield, E, Inst Sci Informat, 3501 Market St, Philadelphia, PA 19101
+   USA.
+NR 0
+TC 9
+PU SPRINGER VERLAG
+PI NEW YORK
+PA 175 FIFTH AVE, NEW YORK, NY 10010 USA
+SN 0177-5537
+J9 UNFALLCHIRURG
+JI Unfallchirurg
+PD JUN
+PY 1998
+VL 101
+IS 6
+BP 413
+EP 414
+PG 2
+SC Emergency Medicine; Surgery
+GA ZZ507
+UT ISI:000074736300001
+ER
+
+PT J
+AU Garfield, E
+TI When to cite
+SO LIBRARY QUARTERLY
+LA English
+DT Article
+ID CITATION ANALYSIS
+AB Although the Modern Language Association and other style manuals
+   describe in exquisite detail ''how'' to cite the literature, explicit
+   tutorials on ''when'' to cite are nonexistent. Most journals provide
+   instructions to authors but also fail to give explicit guidance on when
+   to cite. In spite of numerous studies of citation behavior and the wide
+   recognition by editors of the need to acknowledge intellectual debts,
+   authors and referees need explicit reminders as to when formal
+   references or acknowledgments are appropriate. Since referencing is
+   both subjective and culturally based, there can be no absolutes about
+   when to cite. Hence, it is unlikely that algorithmic documentation of
+   texts can ever meet the competing requirements for relevance,
+   selectivity, and comprehensiveness. What is common wisdom in one domain
+   may be new or unique in another. A three-year experiment involving
+   graduate students demonstrated the varying perceptions of the need for
+   documentation of terminology, ideas, methods, and so forth. A tentative
+   tutorial is suggested for journal editors that should be modified in
+   each scholarly context.
+RP Garfield, E, INST SCI INFORMAT,3501 MARKET ST,PHILADELPHIA,PA 19104.
+CR 1976, WEBSTERS 3 NEW INT D
+   1982, CHICAGO STYLE MANUAL
+   *EARLH COLL, 1993, HUM PROGR EARLH COLL
+   BARZUN J, 1985, MODERN RESEARCHER
+   BONITZ M, 1995, 4 SCI TECHN IND C OC, P163
+   CHERNIN E, 1988, BRIT MED J, V297, P1062
+   CRONIN B, 1984, CITATION PROCESS
+   CRONIN B, 1994, J DOC, V50, P165
+   FAIRCHILD RP, 1981, CHRONICLE HIGHE 0505, V3, P24
+   GARFIELD E, 1961, J CHEM DOC, V1, P70
+   GARFIELD E, 1965, NBS, V269, P189
+   GARFIELD E, 1970, CURRENT CONTENT 0304, P4
+   GARFIELD E, 1977, CURR CONTENTS, P5
+   GARFIELD E, 1980, CURR CONTENTS, V35, P5
+   GARFIELD E, 1982, CURRENT CONTENTS, V47, P5
+   GARFIELD E, 1985, CURR CONTENTS, V43, P3
+   GARFIELD E, 1989, CURRENT CONTENT 0501, P3
+   GARFIELD E, 1989, CURRENT CONTENT 0501, P3
+   GARFIELD E, 1990, CURRENT CONTENT 0212, P3
+   GIBALDI J, 1995, MODERN LANGUAGE ASS
+   HALBWACHS M, 1925, CADRES SOCIAUX MEMOI
+   HAUPTMANN R, 1994, J INFORMATION ET 1 2, V3
+   KAPLAN N, 1965, AM DOC, V16, P170
+   KLING R, 1994, ASIS INTERNET B BOAR
+   KOCHEN M, 1987, J DOC, V43, P54
+   LANGHAM T, 1995, J DOC, V51, P360
+   LEGGETT G, 1985, PRENTICE HALL HDB WR
+   LOWRY OH, 1951, J BIOL CHEM, V193, P265
+   MERTON RK, 1968, SCIENCE, V159, P56
+   MERTON RK, 1968, SOCIAL THEORY SOCIAL
+   MERTON RK, 1988, ISIS, V79, P606
+   MERTON RK, 1993, SHOULDERS GIANTS SHA
+   REISS P, 1984, THEORY FOOTNOTE
+   SMITH LC, 1981, LIBR TRENDS, V30, P83
+   SWANSON DR, 1986, LIBR QUART, V56, P103
+   SWANSON DR, 1987, J AM SOC INFORM SCI, V38, P228
+   ZUCKERMAN H, 1987, SCIENTOMETRICS, V12, P329
+NR 37
+TC 13
+PU UNIV CHICAGO PRESS
+PI CHICAGO
+PA 5720 S WOODLAWN AVE, CHICAGO, IL 60637
+SN 0024-2519
+J9 LIBR QUART
+JI Libr. Q.
+PD OCT
+PY 1996
+VL 66
+IS 4
+BP 449
+EP 458
+PG 10
+SC Information Science & Library Science
+GA VK164
+UT ISI:A1996VK16400004
+ER
+
+PT J
+AU Garfield, E
+TI How can impact factors be improved?
+SO BRITISH MEDICAL JOURNAL
+LA English
+DT Article
+AB Impact factors are widely used to rank and evaluate journals. They are
+   also often used inappropriately as surrogates in evaluation exercises.
+   The inventor of the Science Citation Index warns against the
+   indiscriminate use of these data. Fourteen year cumulative impact data
+   for 10 leading medical journals provide a quantitative indicator of
+   their long term influence. In the final analysis, impact simply
+   reflects the ability of journals and editors to attract the best papers
+   available.
+RP Garfield, E, THE SCIENTIST,3600 MARKET ST,SUITE 450,PHILADELPHIA,PA
+   19104.
+CR ABOULKER JP, 1993, LANCET, V341, P889
+   FLEISCHMANN M, 1989, J ELECTROANAL CHEM, V261, P301
+   GARFIELD E, 1955, SCIENCE, V122, P108
+   GARFIELD E, 1984, ESSAYS INFORMATION S, V6, P354
+   GARFIELD E, 1986, ANN INTERN MED, V105, P313
+   GARFIELD E, 1987, ESSAYS INFORMATION S, V10, P7
+   GARFIELD E, 1990, ESSAYS INFORMATION S, V13, P185
+   GROSS PLK, 1927, SCIENCE, V66, P385
+   LOCK SP, 1990, ESSAYS INFORMATION S, V13, P19
+   LOWRY OH, 1951, J BIOL CHEM, V193, P265
+   MARSHALL BJ, 1984, LANCET, V1, P1311
+   VANTRIGT AM, 1995, SOC SCI MED, V41, P893
+NR 12
+TC 156
+PU BRITISH MED JOURNAL PUBL GROUP
+PI LONDON
+PA BRITISH MED ASSOC HOUSE, TAVISTOCK SQUARE, LONDON, ENGLAND WC1H 9JR
+SN 0959-8138
+J9 BRIT MED J
+JI Br. Med. J.
+PD AUG 17
+PY 1996
+VL 313
+IS 7054
+BP 411
+EP 413
+PG 3
+SC Medicine, General & Internal
+GA VD206
+UT ISI:A1996VD20600032
+ER
+
+PT J
+AU GARFIELD, E
+TI SCIENCE IN SPAIN FROM THE POINT-OF-VIEW OF CITATIONS (1981-1992)
+SO ARBOR-CIENCIA PENSAMIENTO Y CULTURA
+LA Spanish
+DT Article
+RP GARFIELD, E, INST SCI INFORMAT,PHILADELPHIA,PA 19104.
+NR 0
+TC 2
+PU LIBRERIA CIENTIFICA MEDINACELI
+PI MADRID
+PA DUQUE DE MEDINACELI 4, 14 MADRID, SPAIN
+SN 0210-1963
+J9 ARBOR-CIEN PENSAM CULT
+JI Arbor-Cienc. Pensam. Cult.
+PD JAN-FEB
+PY 1994
+VL 147
+IS 577-78
+BP 111
+EP 133
+PG 23
+SC Humanities, Multidisciplinary
+GA ND401
+UT ISI:A1994ND40100008
+ER
+
+PT J
+AU GARFIELD, E
+TI WHAT CITATIONS TELL US ABOUT CANADIAN RESEARCH
+SO CANADIAN JOURNAL OF INFORMATION AND LIBRARY SCIENCE-REVUE CANADIENNE
+   DES SCIENCES DE L INFORMATION ET DE BIBLIOTHECONOMIE
+LA English
+DT Article
+AB The Ian P. Sharp Lecture an Information Science was established in 1990
+   with an endowment from Reuters Information Services (Canada) Limited in
+   honour of its founding president and former chief executive officer The
+   lectureship is intended to provide a forum for distinguished figures in
+   information science and related fields. I.P. Sharp Associates, one of
+   the world's leading numeric database companies, was founded by Ian P.
+   Sharp and seven colleagues. The Canadian company soon expanded
+   establishing a timesharing service and pioneering the use of electronic
+   mail in 1976, the company installed its own private, packet-switched
+   network, and today it supplies the world's major financial and economic
+   centres with historical information and financial products. In June
+   1987, I.P. Sharp Associates was acquired by Reuter Holdings PLC of
+   London, the world's largest electronic publisher.
+   Dr. Garfield, the fourth I.P. Sharp lecturer, delivered the address
+   that follows at the University of Toronto on April 8, 1993. He was
+   introduced by his longtime colleague Professor Charles Meadow, Faculty
+   of Library and Information Science, University of Toronto.
+RP GARFIELD, E, INST SCI INFORMAT, 3501 MARKET ST, PHILADELPHIA, PA 19104
+   USA.
+CR GARFIELD E, 1977, CURR CONTENTS, P5
+   GARFIELD E, 1979, CITATION INDEXING
+   GARFIELD E, 1983, CURRENT CONTENTS, V26, P5
+   GARFIELD E, 1983, CURRENT CONTENTS, V26, P5
+   GARFIELD E, 1986, CURRENT CONTENT  DEC, P3
+   GARFIELD E, 1990, CURRENT CONTENT 0212, P3
+   GARFIELD E, 1992, SCI PUBL POLICY, V19, P321
+   SMALL H, 1973, J AM SOC INFORM SCI, V24, P265
+   SMALL H, 1985, J INFORM SCI, V11, P147
+NR 9
+TC 4
+PU CANADIAN ASSOC INFORMATION SCIENCE
+PI OTTAWA
+PA PO BOX 6174, STATION J, OTTAWA ON K2A 1T2, CANADA
+SN 1195-096X
+J9 CAN J INFORM LIB SCI
+JI Can. J. Inf. Libr. Sci.-Rev. Can. Sci. Inf. Bibl.
+PD DEC
+PY 1993
+VL 18
+IS 4
+BP 14
+EP 35
+PG 22
+SC Computer Science, Information Systems; Information Science & Library
+   Science
+GA MN435
+UT ISI:A1993MN43500002
+ER
+
+PT J
+AU GARFIELD, E
+   WELLJAMSDOROF, A
+TI THE MICROBIOLOGY LITERATURE - LANGUAGES OF PUBLICATION AND THEIR
+   RELATIVE CITATION IMPACT
+SO FEMS MICROBIOLOGY LETTERS
+LA English
+DT Article
+DE CITATION ANALYSIS; SCIENCE CITATION INDEX; LANGUAGE TRENDS; IMPACT
+   TRENDS; SCIENTOMETRICS
+AB This study examined trends in the number of papers published annually
+   in various languages in 78 microbiology journals indexed in the Science
+   Citation Index(R) (SCI(R)), 1981-1991. Trends in the average number of
+   citations per paper (impact) for each language were also tracked. In
+   addition, interlingual citation patterns were examined. The results
+   showed that English is the lingua franca of microbiology research,
+   accounting for 90-95 percent of all SCI-indexed papers in this time
+   period. Also, the impact of English-language papers was greater than
+   that of other languages by factors ranging from 2.4 to 14.4. Lastly,
+   the majority of citations to papers published in English, German,
+   French, or Italian were from English-language papers. The exception
+   were papers in Russian: more than 90 percent of citations they received
+   were from Russian-language papers.
+C1 INST SCI INFORMAT,3501 MARKET ST,PHILADELPHIA,PA 19104.
+CR GARFIELD E, 1976, RECHERCHE, V7, P757
+   GARFIELD E, 1985, ESSAYS INFORMATION S, V7, P138
+   GARFIELD E, 1986, ANN INTERN MED, V105, P313
+   GARFIELD E, 1989, ESSAYS INFORMATION S, V10, P342
+   GARFIELD E, 1990, ANN AM ACAD POLIT SS, V511, P10
+NR 5
+TC 7
+PU ELSEVIER SCIENCE BV
+PI AMSTERDAM
+PA PO BOX 211, 1000 AE AMSTERDAM, NETHERLANDS
+SN 0378-1097
+J9 FEMS MICROBIOL LETT
+JI FEMS Microbiol. Lett.
+PD DEC 15
+PY 1992
+VL 100
+IS 1-3
+BP 33
+EP 37
+PG 5
+SC Microbiology
+GA KE540
+UT ISI:A1992KE54000008
+ER
+
+PT J
+AU GARFIELD, E
+TI THE RELATIONSHIP BETWEEN MECHANICAL INDEXING, STRUCTURAL LINGUISTICS
+   AND INFORMATION-RETRIEVAL
+SO JOURNAL OF INFORMATION SCIENCE
+LA English
+DT Article
+RP GARFIELD, E, INST SCI INFORMAT,3501 MKT ST,PHILADELPHIA,PA 19104.
+CR BERNIER CL, 1948, IND ENG CHEM, V40, P725
+   BUSA R, 1957, NACHR DOK, V8, P20
+   CASEY RS, 1958, PUNCHED CARDS THEIR
+   GARFIELD E, 1953, MAR S MACH TECHN SCI
+   GARFIELD E, 1955, SCIENCE, V122, P108
+   GARFIELD E, 1957, 1957 P INT STUD C CL, P91
+   HARRIS Z, 1957, LANGUAGE, V33, P283
+   HARRIS ZS, 1951, METHODS STRUCTURAL L
+   HARRIS ZS, 1959, 1958 P INT SCI INF, V2, P937
+   HARRIS ZS, 1959, ANTHROPOL LINGUIST, V1, P27
+   HARRIS ZS, 1959, TRANSFORMATIONS DISC
+   LARKEY SV, 1953, B MED LIB ASS, V41, P32
+   LINDERSTROMLANG K, 1954, BIOCHIM BIOPHYS ACTA, V15, P156
+   LUHN HP, 1958, IBM J RES DEV, V2, P159
+   LUHN HP, 1959, ASDD RC127 REP
+   NEWMAN JSM, 1956, PROBLEMS MECHANIZING
+   NEWMAN SM, 1957, MONOGRAPH GEORGETOWN, V10
+   PERRY JW, 1958, TOOLS MACHINE LITERA, P489
+   TAUBE M, 1953, STUDIES COORDINATE I
+   WELT ID, 1958, B MED LIBR ASSOC, V46, P60
+NR 20
+TC 0
+PU BOWKER-SAUR LTD
+PI E GRINSTEAD
+PA MAYPOLE HOUSE, MAYPOLE RD, E GRINSTEAD, W SUSSEX, ENGLAND RH19 1HH
+SN 0165-5515
+J9 J INFORM SCI
+JI J. Inf. Sci.
+PY 1992
+VL 18
+IS 5
+BP 343
+EP 354
+PG 12
+SC Computer Science, Information Systems; Information Science & Library
+   Science
+GA JV725
+UT ISI:A1992JV72500003
+ER
+
+PT J
+AU GARFIELD, E
+   WELLJAMSDOROF, A
+TI OF NOBEL CLASS - A CITATION PERSPECTIVE ON HIGH-IMPACT RESEARCH AUTHORS
+SO THEORETICAL MEDICINE
+LA English
+DT Article
+DE CITATION ANALYSIS; CITATION IMPACT; NOBEL PRIZE; SCIENCE CITATION
+   INDEX; SCIENTOMETRICS
+ID SCIENTIFIC LITERATURE
+AB The purpose of this paper was to determine if quantitative rankings of
+   highly cited research authors confirm Nobel prize awards. Six studies
+   covering different time periods and author sample sizes were reviewed.
+   The number of Nobel laureates at the time each study was published was
+   tabulated, as was the number of high impact authors who later became
+   laureates. ne Nobelists and laureates-to-be were also compared with
+   non-Nobelists to see if they differed in terms of impact and
+   productivity. The results indicate that high rankings by citation
+   frequency identify researchers of Nobel class - that is, a small set of
+   authors that includes a high proportion of actual Nobelists and
+   laureates-to-be. Also, the average impact (citations per author) of
+   Nobelists and laureates-to-be is sufficiently high to distinguish them
+   from non-Nobelists in these rankings. In conclusion, a simple,
+   quantitative, and objective algorithm based on citation data can
+   effectively corroborate - and even forecast - a complex, qualitative,
+   and subjective selection process based on human judgement.
+RP GARFIELD, E, INST SCI INFORMAT,3501 MARKET ST,PHILADELPHIA,PA 19104.
+CR BAYER AE, 1966, SOCIOL EDUC, V39, P381
+   COLE JR, 1973, SOCIAL STRATIFICATIO
+   COLE S, 1967, AM SOCIOL REV, V32, P377
+   GARFIELD E, 1970, NATURE, V227, P669
+   GARFIELD E, 1977, ESSAYS INFORMATION S, V1, P487
+   GARFIELD E, 1977, ESSAYS INFORMATION S, V2, P611
+   GARFIELD E, 1980, ESSAYS INFORMATION S, V3, P326
+   GARFIELD E, 1981, ESSAYS INFORMATION S, V4, P609
+   GARFIELD E, 1983, ESSAYS INFORMATION S, V5, P269
+   GARFIELD E, 1985, ESSAYS INFORMATION S, V7, P175
+   GARFIELD E, 1986, ESSAYS INFORMATION S, V8, P132
+   GARFIELD E, 1988, ESSAYS INFORMATION S, V9, P55
+   GARFIELD E, 1990, CURR CONTENTS, V12, P3
+   GARFIELD E, 1990, CURRENT CONTENT 0212, P3
+   GARFIELD E, 1990, CURRENT CONTENT 0212, P3
+   LOWRY OH, 1951, J BIOL CHEM, V193, P265
+   MERTON RK, 1965, SHOULDERS GIANTS SHA
+   PENDLEBURY D, 1989, SCIENTIST       1002
+   PENDLEBURY D, 1989, SCIENTIST       1016
+   PENDLEBURY D, 1989, SCIENTIST       1019
+   SHER IH, 1966, RES PROGRAM EFFECTIV, P135
+   SMALL H, 1973, J AM SOC INFORM SCI, V24, P265
+   SMALL H, 1985, J INFORM SCI, P147
+   WATSON JD, 1953, NATURE, V171, P737
+   ZUCKERMAN H, 1977, SCI ELITE NOBEL LAUR
+   ZUCKERMAN H, 1986, NATURE, V324, P629
+NR 26
+TC 31
+PU KLUWER ACADEMIC PUBL
+PI DORDRECHT
+PA SPUIBOULEVARD 50, PO BOX 17, 3300 AA DORDRECHT, NETHERLANDS
+SN 0167-9902
+J9 THEOR MED
+JI Theor. Med.
+PD JUN
+PY 1992
+VL 13
+IS 2
+BP 117
+EP 135
+PG 19
+SC Medicine, Legal; Social Issues
+GA JL941
+UT ISI:A1992JL94100002
+ER
+
+PT J
+AU GARFIELD, E
+TI A CITATION ANALYSIS OF AUSTRIAN MEDICAL-RESEARCH AND
+   WIENER-KLINISCHE-WOCHENSCHRIFT
+SO WIENER KLINISCHE WOCHENSCHRIFT
+LA English
+DT Article
+DE CITATION ANALYSIS; AUSTRIAN MEDICAL RESEARCH; SCIENTIFIC PRODUCTIVITY
+AB Criteria for the prediction of Nobel price winners based on citation
+   and predictor prizes are presented. The position of Austrian medical
+   research and the role of the "Wiener klinische Wochenschrift" are
+   compared to international standards.
+RP GARFIELD, E, INST SCI INFORMAT,3501 MARKET ST,PHILADELPHIA,PA 19104.
+CR GARFIELD E, 1986, ANN INTERN MED, V105, P313
+NR 1
+TC 5
+PU SPRINGER-VERLAG WIEN
+PI VIENNA
+PA SACHSENPLATZ 4-6, PO BOX 89, A-1201 VIENNA, AUSTRIA
+SN 0043-5325
+J9 WIEN KLIN WOCHENSCHR
+JI Wien. Klin. Wochen.
+PY 1991
+VL 103
+IS 11
+BP 318
+EP 325
+PG 8
+SC Medicine, General & Internal
+GA FQ610
+UT ISI:A1991FQ61000001
+ER
+
+PT J
+AU GARFIELD, E
+   SMALL, H
+TI MORAVCSIK,MICHAEL,J. - MULTIDIMENSIONAL SCHOLAR AND HERO OF THIRD-WORLD
+   SCIENCE
+SO SCIENTOMETRICS
+LA English
+DT Article
+ID PARTICLE PHYSICS; METHODOLOGY; TECHNOLOGY; CITATIONS; COUNTRIES;
+   QUALITY; CRISIS
+RP GARFIELD, E, INST SCI INFORMAT,PHILADELPHIA,PA 19104.
+CR BLICKENSTAFF J, 1982, SCIENTOMETRICS, V4, P135
+   MORAVCSIK M, 1987, SCIENTIST, V1, P11
+   MORAVCSIK MJ, 1964, MINERVA, V2, P197
+   MORAVCSIK MJ, 1965, PHYS TODAY, V18, P23
+   MORAVCSIK MJ, 1966, MINERVA, V4, P381
+   MORAVCSIK MJ, 1968, PHYS TODAY, V19, P62
+   MORAVCSIK MJ, 1968, PHYS TODAY, V19, P65
+   MORAVCSIK MJ, 1968, PHYS TODAY, V21, P48
+   MORAVCSIK MJ, 1973, RES POLICY, V2, P266
+   MORAVCSIK MJ, 1974, LEONARDO, V7, P255
+   MORAVCSIK MJ, 1974, RES POLICY, V3, P88
+   MORAVCSIK MJ, 1975, PHYS TODAY, V28, P9
+   MORAVCSIK MJ, 1975, RES POLICY, V4, P80
+   MORAVCSIK MJ, 1975, SOC STUD SCI, V5, P86
+   MORAVCSIK MJ, 1977, J SCI IND RES INDIA, V36, P195
+   MORAVCSIK MJ, 1977, RES POLICY, V6, P78
+   MORAVCSIK MJ, 1979, RES POLICY, V8, P26
+   MORAVCSIK MJ, 1980, B ATOM SCI, V36, P56
+   MORAVCSIK MJ, 1983, RES POLICY, V12, P287
+   MORAVCSIK MJ, 1984, SCIENTOMETRICS, V6, P75
+   MORAVCSIK MJ, 1985, CURRENT CONTENTS SOC, V17, P18
+   MORAVCSIK MJ, 1985, JUL PHIL WORKSH DISC
+   MORAVCSIK MJ, 1985, SCIENTOMETRICS, V7, P143
+   MORAVCSIK MJ, 1985, SCIENTOMETRICS, V7, P165
+   MORAVCSIK MJ, 1986, RES POLICY, V15, P1
+   MORAVCSIK MJ, 1986, SOC STUD SCI, V16, P534
+   MORAVCSIK MJ, 1988, RES POLICY, V17, P293
+   MORAVCSIK MJ, 1988, SOC STUD SCI, V18, P515
+   NICHOLLS PT, 1989, CANADIAN LIB J, V46, P257
+   WEINBERG AM, 1963, MINERVA, V1, P159
+NR 30
+TC 1
+PU ELSEVIER SCIENCE BV
+PI AMSTERDAM
+PA PO BOX 211, 1000 AE AMSTERDAM, NETHERLANDS
+SN 0138-9130
+J9 SCIENTOMETRICS
+JI Scientometrics
+PD JAN
+PY 1991
+VL 20
+IS 1
+BP 19
+EP 24
+PG 6
+SC Computer Science, Interdisciplinary Applications; Information Science &
+   Library Science
+GA EY261
+UT ISI:A1991EY26100003
+ER
+
+PT J
+AU GARFIELD, E
+TI MAPPING CHOLERA RESEARCH AND THE IMPACT OF DE,SAMBHU,NATH OF CALCUTTA
+   (REPRINTED FROM CURRENT-CONTENTS, VOL 14, PG 3-11, 7 APRIL 1986)
+SO CURRENT SCIENCE
+LA English
+DT Article
+RP GARFIELD, E, INST SCI INFORMAT,3501 MARKET ST,PHILADELPHIA,PA 19104.
+CR ARUNACHALAM S, 1985, UNPUB MAY ANN M AM A
+   ARUNACHALAM S, 1986, COMMUNICATION   0206
+   AZURIN JC, 1974, B WORLD HEALTH ORGAN, V51, P19
+   BLAKE PA, 1980, NEW ENGL J MED, V302, P305
+   DE SN, 1953, J PATHOL BACTERIOL, V66, P559
+   DE SN, 1956, J PATHOL BACTERIOL, V71, P201
+   DE SN, 1959, NATURE, V183, P1533
+   DE SN, 1960, J PATHOL BACTERIOL, V79, P373
+   FEELEY JC, 1980, CHOLERA RELATED DIAR, P204
+   GARFELD E, 1986, CURR CONTENTS, V10, P3
+   GARFIELD E, 1985, CURR CONTENTS, V36, P3
+   GARFIELD E, 1985, CURR CONTENTS, V37, P3
+   GARFIELD E, 1985, CURRENT CONTENTS PHY, V25, P3
+   GARFIELD E, 1986, CURR CONTENTS, V9, P3
+   GLASS RI, 1982, AM J EPIDEMIOL, V116, P959
+   KAPER JB, 1984, NATURE, V308, P655
+   KHAN M, 1981, INT J EPIDEMIOL, V10, P23
+   KHAN MU, 1982, T R SOC TROP MED HYG, V76, P373
+   KUSTNER HG, 1981, S AFR MED J, V60, P87
+   LONGMATE N, 1966, KING CHOLERA BIOGRAP
+   MACKAY DM, 1980, PUBLIC HLTH, V94, P283
+   MILLER CJ, 1982, LANCET, V1, P1216
+   MORIRS RJ, 1971, NEW SOC, V18, P52
+   MORRIS RJ, 1976, CHOLERA 1832 SOCIAL, P17
+   MOSLEY WH, 1968, B WORLD HEALTH ORGAN, V38, P327
+   NARAYANAN EK, 1964, INDIAN J MED RES, V52, P916
+   RAHMAN ASMM, 1985, LANCET, V2, P539
+   ROSENBERG CE, 1966, COMP STUDIES SOC HIS, V8, P452
+   SAMADI AR, 1983, LANCET, V1, P805
+   SENGUPTA PG, 1978, B WORLD HEALTH ORGAN, V56, P323
+   SHANDERA WX, 1983, AM J TROP MED HYG, V32, P812
+   SNOW J, 1936, SNOW CHOLERA REPRINT, P1
+   VANHEYNINGEN WE, 1983, CHOLERA AM SCI EXPER, P61
+   WEISSMAN JB, 1975, AM J EPIDEMIOL, V100, P487
+NR 34
+TC 0
+PU CURRENT SCIENCE ASSN
+PI BANGALORE
+PA C V RAMAN AVENUE, PO BOX 8005, BANGALORE 560 080, INDIA
+SN 0011-3891
+J9 CURR SCI
+JI Curr. Sci.
+PD JUL 25
+PY 1990
+VL 59
+IS 13-14
+BP 643
+EP 649
+PG 7
+SC Multidisciplinary Sciences
+GA DY529
+UT ISI:A1990DY52900007
+ER
+
+PT J
+AU GARFIELD, E
+   WELLJAMSDOROF, A
+TI LANGUAGE USE IN INTERNATIONAL RESEARCH - A CITATION ANALYSIS
+SO ANNALS OF THE AMERICAN ACADEMY OF POLITICAL AND SOCIAL SCIENCE
+LA English
+DT Article
+RP GARFIELD, E, INST SCI INFORMAT,EDITORIAL SERV,PHILADELPHIA,PA 19104.
+CR GARFIELD E, 1976, RECHERCHE, V7, P757
+   GARFIELD E, 1984, CURR CONTENTS, V7, P3
+   GARFIELD E, 1987, CURR CONTENTS, V7, P3
+NR 3
+TC 16
+PU SAGE SCIENCE PRESS
+PI THOUSAND OAKS
+PA 2455 TELLER RD, THOUSAND OAKS, CA 91320
+SN 0002-7162
+J9 ANN AMER ACAD POLIT SOC SCI
+JI Ann. Am. Acad. Polit. Soc. Sci.
+PD SEP
+PY 1990
+VL 511
+BP 10
+EP 24
+PG 15
+SC Political Science; Social Sciences, Interdisciplinary
+GA DW661
+UT ISI:A1990DW66100002
+ER
+
+PT J
+AU GARFIELD, E
+TI THE MOST-CITED PAPERS OF ALL TIME, SCI 1945-1988 .2. THE 2ND 100
+   CITATION-CLASSICS
+SO CURRENT COMMENTS
+LA English
+DT Article
+RP GARFIELD, E, INST SCI INFORMAT,3501 MARKET ST,PHILADELPHIA,PA 19104.
+NR 0
+TC 0
+PU INST SCI INFORM INC
+PI PHILADELPHIA
+PA 3501 MARKET ST, PHILADELPHIA, PA 19104
+J9 CURR COMMENT
+PD JUN 25
+PY 1990
+IS 26
+BP 3
+EP &
+PG 0
+SC Multidisciplinary Sciences
+GA DH015
+UT ISI:A1990DH01500001
+ER
+
+PT J
+AU GARFIELD, E
+TI THE RUSSIAN ARE COMING .2. THE TOP 50 SOVIET PAPERS MOST-CITED IN THE
+   1973-1988 SCIENCE-CITATION-INDEX AND A LOOK AT 1988 RESEARCH FRONTS
+SO CURRENT COMMENTS
+LA English
+DT Article
+RP GARFIELD, E, INST SCI INFORMAT,3501 MARKET ST,PHILADELPHIA,PA 19104.
+NR 0
+TC 0
+PU INST SCI INFORM INC
+PI PHILADELPHIA
+PA 3501 MARKET ST, PHILADELPHIA, PA 19104
+J9 CURR COMMENT
+PD JUN 18
+PY 1990
+IS 25
+BP 3
+EP &
+PG 0
+SC Multidisciplinary Sciences
+GA DF961
+UT ISI:A1990DF96100001
+ER
+
+PT J
+AU GARFIELD, E
+TI THE RUSSIANS ARE COMING .1. THE RED HOT 100 SOVIET SCIENTISTS, 1973-1988
+SO CURRENT COMMENTS
+LA English
+DT Article
+RP GARFIELD, E, INST SCI INFORMAT,3501 MARKET ST,PHILADELPHIA,PA 19104.
+NR 0
+TC 0
+PU INST SCI INFORM INC
+PI PHILADELPHIA
+PA 3501 MARKET ST, PHILADELPHIA, PA 19104
+J9 CURR COMMENT
+PD JUN 11
+PY 1990
+IS 24
+BP 3
+EP &
+PG 0
+SC Multidisciplinary Sciences
+GA DF009
+UT ISI:A1990DF00900001
+ER
+
+PT J
+AU GARFIELD, E
+TI A PUBLISHERS PERSPECTIVE ON LAUNCHING NEW JOURNALS
+SO CURRENT COMMENTS
+LA English
+DT Article
+RP GARFIELD, E, INST SCI INFORMAT,3501 MARKET ST,PHILADELPHIA,PA 19104.
+NR 0
+TC 0
+PU INST SCI INFORM INC
+PI PHILADELPHIA
+PA 3501 MARKET ST, PHILADELPHIA, PA 19104
+J9 CURR COMMENT
+PD JUN 4
+PY 1990
+IS 23
+BP 3
+EP &
+PG 0
+SC Multidisciplinary Sciences
+GA DD756
+UT ISI:A1990DD75600001
+ER
+
+PT J
+AU GARFIELD, E
+TI HOW ISI SELECTS JOURNALS FOR COVERAGE - QUANTITATIVE AND QUALITATIVE
+   CONSIDERATIONS
+SO CURRENT COMMENTS
+LA English
+DT Article
+RP GARFIELD, E, INST SCI INFORMAT,3501 MARKET ST,PHILADELPHIA,PA 19104.
+NR 0
+TC 0
+PU INST SCI INFORM INC
+PI PHILADELPHIA
+PA 3501 MARKET ST, PHILADELPHIA, PA 19104
+J9 CURR COMMENT
+PD MAY 28
+PY 1990
+IS 22
+BP 3
+EP &
+PG 0
+SC Multidisciplinary Sciences
+GA DC829
+UT ISI:A1990DC82900001
+ER
+
+PT J
+AU GARFIELD, E
+TI BEAVEN,D.W. ON THE DANGERS OF ALTERNATIVE MEDICINE
+SO CURRENT COMMENTS
+LA English
+DT Article
+RP GARFIELD, E, INST SCI INFORMAT,3501 MARKET ST,PHILADELPHIA,PA 19104.
+NR 0
+TC 0
+PU INST SCI INFORM INC
+PI PHILADELPHIA
+PA 3501 MARKET ST, PHILADELPHIA, PA 19104
+J9 CURR COMMENT
+PD MAY 21
+PY 1990
+IS 21
+BP 3
+EP 3
+PG 1
+SC Multidisciplinary Sciences
+GA DB798
+UT ISI:A1990DB79800001
+ER
+
+PT J
+AU GARFIELD, E
+TI RESPONSE TO THE PANEL ON EVALUATION OF SCIENTIFIC-INFORMATION AND THE
+   IMPACT OF NEW INFORMATION TECHNOLOGY
+SO JOURNAL OF THE AMERICAN SOCIETY FOR INFORMATION SCIENCE
+LA English
+DT Article
+RP GARFIELD, E, INST SCI INFORMAT,PHILADELPHIA,PA 19104.
+CR GARFIELD E, 1983, ESSAYS INFORMATION S, V5
+   GARFIELD E, 1988, SCIENTIST, V2, P11
+   KOCHEN M, 1987, J DOC, V43, P54
+   SHER IH, 1966, RES PROGRAM EFFECTIV, P135
+NR 4
+TC 2
+PU JOHN WILEY & SONS INC
+PI NEW YORK
+PA 605 THIRD AVE, NEW YORK, NY 10158-0012
+SN 0002-8231
+J9 J AMER SOC INFORM SCI
+JI J. Am. Soc. Inf. Sci.
+PD APR
+PY 1990
+VL 41
+IS 3
+BP 229
+EP 230
+PG 2
+SC Computer Science, Information Systems; Information Science & Library
+   Science
+GA CZ961
+UT ISI:A1990CZ96100015
+ER
+
+PT J
+AU GARFIELD, E
+TI THE MOST-CITED PHYSICAL-SCIENCES PUBLICATIONS IN THE 1945-1954 SCIENCE
+   CITATION INDEX .1. 52 CITATION CLASSICS IN PHYSICS AND CHEMISTRY
+SO CURRENT COMMENTS
+LA English
+DT Article
+RP GARFIELD, E, INST SCI INFORMAT,3501 MARKET ST,PHILADELPHIA,PA 19104.
+NR 0
+TC 29
+PU INST SCI INFORM INC
+PI PHILADELPHIA
+PA 3501 MARKET ST, PHILADELPHIA, PA 19104
+J9 CURR COMMENT
+PD MAY 14
+PY 1990
+IS 20
+BP 3
+EP &
+PG 0
+SC Multidisciplinary Sciences
+GA DA624
+UT ISI:A1990DA62400001
+ER
+
+PT J
+AU GARFIELD, E
+   WELLJAMSDOROF, A
+TI THE IMPACT OF FRAUDULENT RESEARCH ON THE SCIENTIFIC LITERATURE - THE
+   BREUNING,STEPHEN,E. CASE
+SO JAMA-JOURNAL OF THE AMERICAN MEDICAL ASSOCIATION
+LA English
+DT Article
+C1 INST SCI INFORMAT,3501 MARKET ST,PHILADELPHIA,PA 19104.
+CR AMAN MG, 1986, J MENT DEFIC RES, V30, P203
+   AMAN MG, 1987, J MENT DEFIC RES, V31, P121
+   ANDERSON A, 1988, NATURE, V335, P389
+   ANDERSON A, 1989, NATURE, V340, P3
+   BREUNING SE, 1982, DRUGS MENTAL RETARDA
+   CULLITON BJ, 1988, SCIENCE, V242, P657
+   CULLITON BJ, 1989, SCIENCE, V245, P24
+   GARFIELD E, 1955, SCIENCE, V122, P108
+   GARFIELD E, 1987, SCIENTIST, V1, P9
+   GARFIELD E, 1989, SCIENTIST, V3, P12
+   HOLDEN C, 1986, SCIENCE, V234, P1488
+   HOLDEN C, 1987, SCIENCE, V235, P1566
+   LEWIN B, 1989, CELL, V57, P699
+   RENNIE D, 1989, JAMA-J AM MED ASSOC, V261, P2543
+   ROMAN MB, 1988, DISCOVER, V9, P50
+   SHAPIRO MF, 1989, JAMA-J AM MED ASSOC, V261, P2505
+   SPRAGUE RL, 1984, PSYCHOPHARMACOL BULL, V20, P328
+   THOMASSON P, 1955, SCIENCE, V121, P610
+   WOOLF PK, 1987, JAMA-J AM MED ASSOC, V258, P3424
+NR 19
+TC 25
+PU AMER MEDICAL ASSOC
+PI CHICAGO
+PA 515 N STATE ST, CHICAGO, IL 60610
+SN 0098-7484
+J9 JAMA-J AM MED ASSN
+JI JAMA-J. Am. Med. Assoc.
+PD MAR 9
+PY 1990
+VL 263
+IS 10
+BP 1424
+EP 1426
+PG 3
+SC Medicine, General & Internal
+GA CQ724
+UT ISI:A1990CQ72400021
+ER
+
+PT J
+AU GARFIELD, E
+TI ROLE OF INFORMATION SCIENTISTS AND THE TRANSFORMATION OF SOCIETY
+SO BULLETIN OF THE AMERICAN SOCIETY FOR INFORMATION SCIENCE
+LA English
+DT Article
+RP GARFIELD, E, INST SCI INFORMAT,3501 MARKET ST,PHILADELPHIA,PA 19104.
+NR 0
+TC 0
+PU AMER SOC INFORM SCI MEMBER #110113
+PI SILVER SPRING
+PA 8720 GEORGIA AVE SUITE 501, SILVER SPRING, MD 20910
+SN 0095-4403
+J9 BULL AMER SOC INFORM SCI
+JI Bull. Amer. Soc. Inf. Sci.
+PD JUN-JUL
+PY 1988
+VL 14
+IS 5
+BP 38
+EP 40
+PG 3
+SC Information Science & Library Science
+GA Q6039
+UT ISI:A1988Q603900008
+ER
+
+PT J
+AU GARFIELD, E
+TI 100 CITATION-CLASSICS FROM THE
+   JOURNAL-OF-THE-AMERICAN-MEDICAL-ASSOCIATION
+SO JAMA-JOURNAL OF THE AMERICAN MEDICAL ASSOCIATION
+LA English
+DT Article
+RP GARFIELD, E, INST SCI INFORMAT,3501 MARKET ST,PHILADELPHIA,PA 19104.
+CR AVERY OT, 1944, J EXP MED, V79, P137
+   BARRETT JT, 1986, CONT CLASSICS LIFE S
+   BISTRIAN BR, 1976, JAMA-J AM MED ASSOC, V235, P1567
+   BLUMBERG BS, 1965, JAMA-J AM MED ASSOC, V191, P541
+   BLUMBERG BS, 1967, ANN INTERN MED, V66, P924
+   BLUMBERG BS, 1979, CURR CONTENTS LIFE S, V22, P14
+   GARFIELD E, 1984, CURR CONTENTS, V47, P3
+   LEWIS D, 1899, T SECT OBSTET D 0616, P453
+   LUNDBERG GD, 1984, JAMA-J AM MED ASSOC, V252, P812
+   MERTON RK, 1968, SOCIAL THEORY SOCIAL, P27
+   MEYER HS, 1985, 51 LANDMARK ARTICLES
+   SABIN AB, 1960, JAMA-J AM MED ASSOC, V173, P1521
+   SALK JE, 1955, JAMA-J AM MED ASSOC, V158, P1239
+   SAMMONS JH, 1983, JAMA-J AM MED ASSOC, V250, P236
+   WATSON JD, 1953, NATURE, V171, P737
+NR 15
+TC 34
+PU AMER MEDICAL ASSOC
+PI CHICAGO
+PA 515 N STATE ST, CHICAGO, IL 60610
+SN 0098-7484
+J9 JAMA-J AM MED ASSN
+JI JAMA-J. Am. Med. Assoc.
+PD JAN 2
+PY 1987
+VL 257
+IS 1
+BP 52
+EP 59
+PG 8
+SC Medicine, General & Internal
+GA F3846
+UT ISI:A1987F384600025
+ER
+
+PT J
+AU GARFIELD, E
+TI AN INVESTMENT IN THE FUTURE
+SO CHEMTECH
+LA English
+DT Article
+RP GARFIELD, E, INST SCI INFORMAT,3501 MARKET ST,PHILADELPHIA,PA 19104.
+CR 1973, EVALUATING CHILDRENS
+   1979, COMMUNITY SOLUTIONS
+   1980, CHILD CARE CTR SPONS
+   1981, BUS WEEK, V2719, P60
+   1981, BUS WEEK, V2719, P63
+   ARDMAN C, 1982, J COMMERCE      0809, A7
+   CARRO G, 1982, LADIES HOME J, V99, P103
+   CARRO G, 1982, LADIES HOME J, V99, P69
+   CLARKESTEWART A, 1982, DAYCARE
+   ERIKSON EH, 1963, CHILDHOOD SOC, P247
+   EVANS EB, 1971, DAY CARE PLAN DEV OP
+   GARFIELD E, 1977, ESSAYS INFORMATION S, V2, P535
+   GARFIELD E, 1980, ESSAYS INFORMATION S, V3, P116
+   GARFIELD E, 1981, ESSAYS INFORMATION S, V4, P351
+   GARFIELD E, 1983, ESSAYS INFORMATION 1, V5, P164
+   GARFIELD E, 1983, ESSAYS INFORMATION S, V5, P15
+   GARFIELD E, 1986, CURR CONTENTS, V24, P3
+   GARFIELD E, 1986, CURRENT CONTENTS, V22, P3
+   GARFIELD E, 1986, CURRENT CONTENTS, V33
+   GLOVER ME, 1978, EARLY LAP EARLY LEAR
+   KAMERMAN S, 1980, MON LABOR REV, V103, P23
+   LEVY MZ, 1976, NEW YORK, V9, P73
+   MCCROSKEY J, 1982, PERS J, V61, P30
+   MURPHY EF, 1978, CROWN TREASURY RELEV, P140
+   PIAGET J, 1950, PSYCHOL INTELLIGENCE
+   VERZAROLAWRENCE M, 1982, YOUNG CHILDREN, V37, P4
+NR 26
+TC 0
+PU AMER CHEMICAL SOC
+PI WASHINGTON
+PA 1155 16TH ST, NW, WASHINGTON, DC 20036
+SN 0009-2703
+J9 CHEMTECH
+JI Chemtech
+PD AUG
+PY 1986
+VL 16
+IS 8
+BP 458
+EP 461
+PG 4
+SC Chemistry, Applied
+GA E1025
+UT ISI:A1986E102500003
+ER
+
+PT J
+AU SMALL, H
+   GARFIELD, E
+TI THE GEOGRAPHY OF SCIENCE - DISCIPLINARY AND NATIONAL MAPPINGS
+SO JOURNAL OF INFORMATION SCIENCE
+LA English
+DT Article
+RP SMALL, H, INST SCI INFORMAT,UNIV CITY SCI CTR,PHILADELPHIA,PA 19104.
+CR BRADFORD SC, 1948, DOCUMENTATION, P137
+   BUSH V, 1945, SCI ENDLESS FRONTIER
+   CRANE D, 1972, INVISIBLE COLLEGES D
+   GARFIELD E, 1964, ISI MONOGRAPH
+   GOULD P, 1974, MENTAL MAPS
+   KRUSKAL JB, 1964, PSYCHOMETRIKA, V29, P1
+   PRICE DJD, 1965, SCIENCE, V149, P510
+   PRICE DJD, 1966, MED OPINION REV, V1, P88
+   SALTON G, 1979, IEEE T PROF COMMUN, V22, P146
+   SMALL H, 1973, J AM SOC INFORM SCI, V24, P265
+   SMALL H, 1982, PROGR COMMUNICATION, V3, P287
+   SMALL H, 1985, SCIENTOMETRICS, V7, P391
+   SMALL H, 1985, SCIENTOMETRICS, V8, P321
+NR 13
+TC 82
+PU BOWKER-SAUR LTD
+PI E GRINSTEAD
+PA MAYPOLE HOUSE, MAYPOLE RD, E GRINSTEAD, W SUSSEX, ENGLAND RH19 1HH
+SN 0165-5515
+J9 J INFORM SCI
+JI J. Inf. Sci.
+PY 1985
+VL 11
+IS 4
+BP 147
+EP 159
+PG 13
+SC Computer Science, Information Systems; Information Science & Library
+   Science
+GA D5573
+UT ISI:A1985D557300001
+ER
+
+PT J
+AU GARFIELD, E
+TI WHICH MEDICAL JOURNALS HAVE THE GREATEST IMPACT
+SO ANNALS OF INTERNAL MEDICINE
+LA English
+DT Article
+RP GARFIELD, E, INST SCI INFORMAT,3501 MARKET ST,UNIV CITY SCI
+   CTR,PHILADELPHIA,PA 19104.
+CR GARFIELD E, 1970, NATURE, V227, P669
+   GARFIELD E, 1972, SCIENCE, V178, P471
+   GARFIELD E, 1976, RECHERCHE, V7, P757
+   GARFIELD E, 1977, ESSAYS INFORMATION S, P467
+   INGELFINGER FJ, 1974, AM J MED, V56, P686
+   LOCK S, 1985, DIFFICULT BALANCE, P15
+   MISSET JL, 1981, NEW ENGL J MED, V304, P1544
+   MUNDY DJ, 1984, ANN INTERN MED, V100, P61
+   OUSLANDER J, 1981, N ENGL J MED, V304, P428
+   PRICE DJD, 1965, NATURE, V206, P233
+   ROLAND CG, 1975, NEW ENGL J MED, V292, P1273
+   THORN MD, 1985, AM J HOSP PHARM, V42, P1077
+NR 12
+TC 97
+PU AMER COLL PHYSICIANS
+PI PHILADELPHIA
+PA INDEPENDENCE MALL WEST 6TH AND RACE ST, PHILADELPHIA, PA 19106-1572
+SN 0003-4819
+J9 ANN INTERN MED
+JI Ann. Intern. Med.
+PD AUG
+PY 1986
+VL 105
+IS 2
+BP 313
+EP 320
+PG 8
+SC Medicine, General & Internal
+GA D5018
+UT ISI:A1986D501800068
+ER
+
+PT J
+AU GARFIELD, E
+TI MAPPING THE WORLD OF BIOMEDICAL-ENGINEERING - ALZA LECTURE (1985)
+SO ANNALS OF BIOMEDICAL ENGINEERING
+LA English
+DT Article
+RP GARFIELD, E, INST SCI INFORMAT,3501 MARKET ST,PHILADELPHIA,PA 19104.
+CR 1985, SCI SCI CITATION IND
+   GARFIELD E, 1977, ESSAYS INFORMATION S, V1, P222
+   PRICE DJD, 1963, LITTLE SCI BIG SCI
+   SMALL H, 1974, SCI STUD, V4, P17
+NR 4
+TC 5
+PU BLACKWELL SCIENCE INC
+PI MALDEN
+PA 350 MAIN ST, MALDEN, MA 02148
+SN 0090-6964
+J9 ANN BIOMED ENG
+JI Ann. Biomed. Eng.
+PY 1986
+VL 14
+IS 2
+BP 97
+EP 108
+PG 12
+SC Engineering, Biomedical
+GA D1090
+UT ISI:A1986D109000002
+ER
+
+PT J
+AU FISHER, J
+   GARFIELD, E
+TI INFORMATION-SCIENCE AND THE PLASTIC SURGEON
+SO PLASTIC AND RECONSTRUCTIVE SURGERY
+LA English
+DT Article
+C1 UNIV CALIF SAN DIEGO,MED CTR,SAN DIEGO,CA 92103.
+   INST SCI INFORMAT,PHILADELPHIA,PA 19104.
+CR GARFIELD E, 1984, CURRENT CONTENTS, V8, P3
+NR 1
+TC 1
+PU WILLIAMS & WILKINS
+PI BALTIMORE
+PA 351 WEST CAMDEN ST, BALTIMORE, MD 21201-2436
+SN 0032-1052
+J9 PLAST RECONSTR SURG
+JI Plast. Reconstr. Surg.
+PY 1985
+VL 75
+IS 6
+BP 914
+EP 920
+PG 7
+SC Surgery
+GA AJY19
+UT ISI:A1985AJY1900027
+ER
+
+PT J
+AU GARFIELD, E
+TI IN TRIBUTE TO PRICE,DEREK,JOHN,DESOLLA - A CITATION ANALYSIS OF LITTLE
+   SCIENCE, BIG SCIENCE
+SO SCIENTOMETRICS
+LA English
+DT Article
+RP GARFIELD, E, INST SCI INFORMAT,3501 MARKET ST,UNIV CITY SCI
+   CTR,PHILADELPHIA,PA 19104.
+CR ANDERSON S, 1970, BIOSCIENCE, V20, P949
+   BAYER AE, 1982, J MARRIAGE FAM, V44, P527
+   BLASHFIELD RK, 1982, SCHIZOPHRENIA BULL, V8, P1
+   CAMPBELL WH, 1968, RADIO SCI, V3, P726
+   CHILDS B, 1967, AM J DIS CHILD, V114, P464
+   CLEMENTE F, 1973, GERONTOLOGIST, V13, P106
+   COX C, 1982, INT J NURS STUD, V19, P1
+   FEIGHNER JP, 1972, ARCH GEN PSYCHIAT, V26, P57
+   GARFIELD E, 1984, CURRENT CONTENTS, V27, P3
+   GERBER LS, 1965, J AM VET MED ASS, V147, P1530
+   GIBSON SS, 1982, J LIBR HIST, V17, P144
+   GOSS DJ, 1973, FOOD DRUG COSMET LAW, V28, P407
+   JENKIN JG, 1981, J ELECTRON SPECTROSC, V23, P187
+   KAPITSA PL, 1979, SOV STUD PHIL ENGL T, V18, P52
+   LUKASIEWICZ J, 1971, ENG EDUC, V61, P880
+   MIDDLETON GV, 1974, J SEDIMENTARY PETROL, V44, P3
+   MORAN BT, 1981, TECHNOL CULT, V22, P253
+   NEEDHAM J, 1956, NATURE, V177, P600
+   NEEDHAM J, 1960, HEAVENLY CLOCKWORK G
+   OCONNOR ME, 1980, AUSTR NZ J CRIMINOL, V13, P11
+   PRICE DJD, 1953, B BRIT SOC HIST SCI, V1, P223
+   PRICE DJD, 1955, EQUATORIE PLANETIS
+   PRICE DJD, 1959, SCI AM, V200, P60
+   PRICE DJD, 1960, AM PHILOS SOC YB 195, P618
+   PRICE DJD, 1961, SCI BABYLON
+   PRICE DJD, 1963, LITTLE SCI BIG SCI
+   PRICE DJD, 1965, SCIENCE, V149, P510
+   PRICE DJD, 1966, AM PSYCHOL, V21, P1011
+   PRICE DJD, 1969, P ISRAEL ACADEMY SCI, V4, P98
+   PRICE DJD, 1970, COMMUNICATION SCI EN, P3
+   PRICE DJD, 1974, GEARS GREEKS ANTIKYT
+   PRICE DJD, 1976, J AM SOC INFORM SCI, V27, P292
+   ROGGE AE, 1976, AM ANTHROPOL, V78, P829
+   RUSSETT BM, 1967, INT STUD Q, V11, P12
+   SCHOPF TJM, 1967, SYST ZOOL, V16, P318
+   STEARNS SC, 1980, OIKOS, V35, P266
+   WEISS W, 1968, ARCH ENV HLTH, V16, P307
+   WHITE HD, 1981, J AM SOC INFORM SCI, V32, P163
+   YANKAUER A, 1975, AM J PUBLIC HEALTH, V65, P877
+NR 39
+TC 11
+PU ELSEVIER SCIENCE BV
+PI AMSTERDAM
+PA PO BOX 211, 1000 AE AMSTERDAM, NETHERLANDS
+SN 0138-9130
+J9 SCIENTOMETRICS
+JI Scientometrics
+PY 1985
+VL 7
+IS 3-6
+BP 487
+EP 503
+PG 17
+SC Computer Science, Interdisciplinary Applications; Information Science &
+   Library Science
+GA AHA38
+UT ISI:A1985AHA3800024
+ER
+
+PT J
+AU GARFIELD, E
+TI EXCERPTS FROM IS PUBLIC CONFIDENCE IN SCIENCE DECLINING (REPRINTED)
+SO JOURNAL OF PUBLIC HEALTH DENTISTRY
+LA English
+DT Article
+CR GARFIELD E, 1982, CURRENT CONTENTS, V47, P5
+   HOROWITZ HS, 1982, EDIT J PUB HLTH DENT, V42, P290
+   TRACHTMAN LE, 1982, SIPISCOPE, V10, P1
+NR 3
+TC 0
+PU AAPHD NATIONAL OFFICE
+PI RICHMOND
+PA J PUBLIC HEALTH DENT 10619 JOUSTING LANE, RICHMOND, VA 23235
+SN 0022-4006
+J9 J PUBLIC HEALTH DENT
+JI J. Public Health Dent.
+PY 1984
+VL 44
+IS 2
+BP 80
+EP 82
+PG 3
+SC Dentistry, Oral Surgery & Medicine; Public, Environmental &
+   Occupational Health
+GA SU481
+UT ISI:A1984SU48100005
+ER
+
+PT J
+AU GARFIELD, E
+TI DJERASSI,CARL - CHEMIST AND ENTREPRENEUR
+SO CHEMTECH
+LA English
+DT Article
+RP GARFIELD, E, INST SCI INFORMAT,PHILADELPHIA,PA 19104.
+CR BARTH G, 1981, TETRAHEDRON, V37, P4123
+   BROWN P, 1967, ANGEW CHEM         B, V6, P477
+   BUDZIKIEWICZ H, 1963, J AM CHEM SOC, V85, P3688
+   BUDZIKIEWICZ H, 1964, INTERPRETATION MASS
+   BUDZIKIEWICZ H, 1964, STRUCTURE ELUCIDATIO, V1
+   BUDZIKIEWICZ H, 1964, STRUCTURE ELUCIDATIO, V2
+   BUDZIKIEWICZ H, 1967, MASS SPECTROMETRY OR
+   BUDZIKIEWICZ H, 1982, CURRENT CONTENTS PHY, V22, P18
+   BYLINSKY G, 1973, FORTUNE, V88, P94
+   CARLSON RMK, 1980, FRONTIERS BIOORGANIC, P211
+   CONNELL EB, 1981, B ATOM SCI, V37, P46
+   DIXON JS, 1977, J AM CHEM SOC, V99, P3432
+   DJERASSI C, 1954, J AM CHEM SOC, V76, P6410
+   DJERASSI C, 1956, J AM CHEM SOC, V78, P6362
+   DJERASSI C, 1956, J ORG CHEM, V21, P1547
+   DJERASSI C, 1958, J AM CHEM SOC, V80, P4001
+   DJERASSI C, 1962, J AM CHEM SOC, V84, P870
+   DJERASSI C, 1962, J CHEM SOC, P4929
+   DJERASSI C, 1975, CHEM IND LONDON, V14, P593
+   DJERASSI C, 1975, PURE APPL CHEM, V41, P113
+   DJERASSI C, 1979, NATURWISSENSCHAFTEN, V66, P9
+   DJERASSI C, 1980, MODERN SCI ENG, V1, P294
+   DJERASSI C, 1981, POLITICS CONTRACEPTI
+   DJERASSI C, 1981, PURE APPL CHEM, V53, P873
+   DJERASSI C, 1982, COMMUNICATION
+   GARFIELD EA, 1979, CURR CONTENTS, V26, P5
+   LINDSAY RK, 1980, APPLICATIONS ARTIFIC
+   MASSEY IJ, 1979, J ORG CHEM, V44, P2448
+   MOFFITT W, 1961, J AM CHEM SOC, V83, P4013
+   MOSCOWITZ A, 1962, J AM CHEM SOC, V84, P1945
+   PARTRIDGE LG, 1977, J AM CHEM SOC, V99, P7686
+   PETERSON I, 1981, SCI NEWS, V120, P264
+   PRICE DJD, 1974, BRITANNICA 1975 YB S, P409
+   ROSENKRANZ G, 1951, J AM CHEM SOC, V73, P4055
+   SHAPIRO RH, 1964, J AM CHEM SOC, V86, P2825
+   TOKES L, 1968, J AM CHEM SOC, V90, P5465
+   WELLMAN KM, 1975, J AM CHEM SOC, V87, P60
+NR 37
+TC 0
+PU AMER CHEMICAL SOC
+PI WASHINGTON
+PA 1155 16TH ST, NW, WASHINGTON, DC 20036
+SN 0009-2703
+J9 CHEMTECH
+JI Chemtech
+PY 1983
+VL 13
+IS 9
+BP 534
+EP 538
+PG 5
+SC Chemistry, Applied
+GA RF443
+UT ISI:A1983RF44300005
+ER
+
+PT J
+AU GARFIELD, E
+TI THE LITERATURE OF MARINE BIOLOGY
+SO BIOLOGIYA MORYA-MARINE BIOLOGY
+LA Russian
+DT Article
+RP GARFIELD, E, INST SCI INFORMAT,PHILADELPHIA,PA 19104.
+CR GARFIELD E, ANESTHESIOLOGY
+   GARFIELD E, TRENDS BIOCH SOC
+   GARFIELD E, 1972, SCIENCE, V178, P471
+   GARFIELD E, 1974, CURR CONT, V42, P5
+   GARFIELD E, 1975, CURR CONTENTS, V20, P5
+   GARFIELD E, 1976, NATURE, V264, P609
+   GARFIELD E, 1979, CITATION INDEXING
+NR 7
+TC 4
+PU NAUKA
+PI MOSCOW
+PA 103717 GSP K-62 PODSOSENSKII PER 21, MOSCOW, RUSSIA
+SN 0134-3475
+J9 BIOL MORYA
+PY 1980
+IS 3
+BP 3
+EP 20
+PG 18
+SC Marine & Freshwater Biology
+GA KJ713
+UT ISI:A1980KJ71300001
+ER
+
+PT J
+AU GARFIELD, E
+TI THE HAZARDS OF SUNBATHING
+SO CHEMTECH
+LA English
+DT Article
+RP GARFIELD, E, INST SCI INFORMAT,UNIV CITY SCI CTR,3501 MARKET
+   ST,PHILADELPHIA,PA 19104.
+CR 1976, SENSE SUN
+   1978, CONSUMERS UNION NEWS, V3, P7
+   1978, SCI NEWS, V114, P407
+   AHMED AK, 1975, ENVIRONMENT, V17, P6
+   BLUM HF, 1959, CARCINOGENESIS ULTRA
+   CICERONE RJ, 1974, SCIENCE, V185, P1165
+   CLARK WH, 1977, ADV CANCER RES, V24, P267
+   DANIELS F, 1959, J INVEST DERMATOL, V32, P147
+   DANIELS F, 1968, SCI AM, V219, P38
+   EDSON L, 1971, NY TIMES        0808, P13
+   EDSON L, 1971, NY TIMES        0808, P21
+   EIGNER J, 1975, ENVIRONMENT, V17, P15
+   ELLSAESSER HW, 1978, ATMOS ENV, V12, P1849
+   FITZPATRICK TB, 1971, P ROY SOC MED, V64, P861
+   FORBES PD, 1977, RES PHOTOBIOLOGY, P469
+   GIBBIN J, 1978, NEW SCI, V80, P94
+   HARRIS M, 1973, NAT HIST, V82, P20
+   HOUCK C, 1978, NEW YORK, V11, P118
+   KENWARD M, 1978, SCI GOV REP, V8, P8
+   SCHULZE R, 1974, P INT C STRUCTURE CO, V1, P479
+   SCOTTO S, 1974, CANCER, V34, P133
+   SETLOW RB, 1977, RES PHOTOBIOLOGY, P449
+   TIPTON JB, 1978, PLAST RECONSTR SURG, V62, P223
+   URBACH F, 1976, ADV BIOL SKIN, V7, P195
+   WURTMAN RJ, 1975, ANNU REV PHYSIOL, V37, P467
+   WURTMAN RJ, 1975, SCI AM, V233, P69
+NR 26
+TC 0
+PU AMER CHEMICAL SOC
+PI WASHINGTON
+PA 1155 16TH ST, NW, WASHINGTON, DC 20036
+SN 0009-2703
+J9 CHEMTECH
+JI Chemtech
+PY 1980
+VL 10
+IS 6
+BP 337
+EP 339
+PG 3
+SC Chemistry, Applied
+GA JV406
+UT ISI:A1980JV40600003
+ER
+
+PT J
+AU GARFIELD, E
+TI IS INFORMATION-RETRIEVAL IN THE ARTS AND HUMANITIES INHERENTLY
+   DIFFERENT FROM THAT IN SCIENCE - EFFECT THAT
+   ISIS-CITATION-INDEX-FOR-THE-ARTS-AND-HUMANITIES IS EXPECTED TO HAVE ON
+   FUTURE SCHOLARSHIP
+SO LIBRARY QUARTERLY
+LA English
+DT Article
+RP GARFIELD, E, INST SCI INFORMAT,PHILADELPHIA,PA 19106.
+CR FRYE N, 1973, DAEDALUS, V102, P11
+   GARFIELD E, CURRENT CONTENTS
+   GARFIELD E, TRENDS BIOCH SCI
+   GARFIELD E, 1955, NOV ANN M AM DOC I P
+   GARFIELD E, 1964, AM BEHAV SCI, V7, P58
+   GARFIELD E, 1975, CURRENT CONTENTS, V26, P5
+   GARFIELD E, 1978, CURR CONTENTS, V28, P5
+   GARFIELD E, 1978, CURR CONTENTS, V35, P5
+   GARFIELD E, 1978, CURRENT CONTENTS, V47, P5
+   GARFIELD E, 1978, CURRENT CONTENTS, V48, P5
+   GARFIELD E, 1978, CURRENT CONTENTS, V49, P5
+   GOMBRICH EH, 1973, DAEDALUS, V102, P1
+   KUHN TS, 1970, STRUCTURE SCI REVOLU
+   LANGRIDGE DW, 1976, CLASSIFICATION INDEX
+   WEIL E, 1973, DAEDALUS, V102, P27
+NR 15
+TC 44
+PU UNIV CHICAGO PRESS
+PI CHICAGO
+PA 5720 S WOODLAWN AVE, CHICAGO, IL 60637
+SN 0024-2519
+J9 LIBR QUART
+JI Libr. Q.
+PY 1980
+VL 50
+IS 1
+BP 40
+EP 57
+PG 18
+SC Information Science & Library Science
+GA JD184
+UT ISI:A1980JD18400004
+ER
+
+PT J
+AU GARFIELD, E
+TI 2001 - INFORMATION-SOCIETY
+SO JOURNAL OF INFORMATION SCIENCE
+LA English
+DT Article
+RP GARFIELD, E, INST SCI INFORMAT,3501 MARKET ST,UNIV CITY SCI
+   CTR,PHILADELPHIA,PA 19104.
+CR 1979, BUSINESS WEEK    APR, V16, P121
+   BRANSCOMB LM, 1979, SCIENCE, V203, P143
+   CAWKELL AE, 1978, WIRELESS WORLD, V84, P38
+   CAWKELL AE, 1978, WIRELESS WORLD, V84, P69
+   GARFIELD E, 1971, J AM SOC INFORMATION, V22, P71
+   GARFIELD E, 1977, CURRENT CONTENTS, V41, P5
+   GARFIELD E, 1978, CURR CONTENTS, V29, P5
+   GARFIELD E, 1978, KNOWLEDGE DEV RESHAP, P307
+   HOKENDOLPH E, 1979, NY TIMES        0407, P29
+   LINDSEY R, 1979, NY TIMES        0329, C1
+   LINDSEY R, 1979, NY TIMES        0329, C3
+   LINDSEY R, 1979, NY TIMES        0405, B15
+   REED F, 1979, WASHINGTON POST 0330, A23
+   SAWYER K, 1979, WASHINGTON POST 0404, A3
+NR 14
+TC 18
+PU BOWKER-SAUR LTD
+PI E GRINSTEAD
+PA MAYPOLE HOUSE, MAYPOLE RD, E GRINSTEAD, W SUSSEX, ENGLAND RH19 1HH
+SN 0165-5515
+J9 J INFORM SCI
+JI J. Inf. Sci.
+PY 1979
+VL 1
+IS 4
+BP 209
+EP 215
+PG 7
+SC Computer Science, Information Systems; Information Science & Library
+   Science
+GA HZ686
+UT ISI:A1979HZ68600003
+ER
+
+PT J
+AU VLADUTZ, G
+   GARFIELD, E
+TI KWPSI - ALGORITHMICALLY DERIVED KEY WORD-PHRASE SUBJECT INDEX
+SO PROCEEDINGS OF THE AMERICAN SOCIETY FOR INFORMATION SCIENCE
+LA English
+DT Article
+RP VLADUTZ, G, INST SCI INFORMAT,325 CHESTNUT ST,PHILADELPHIA,PA 19106.
+CR *NY IBM CORP, 1959, RC127 REP
+   ARMITAGE JE, 1967, J CHEMICAL DOCUMENTA, V7, P170
+   AUSTIN D, 1974, J DOC, V30, P47
+   COHEN SM, 1976, J CHEM INFORMATION C, V16, P93
+   CRAVEN TC, 1977, J AM SOC INFORM SCI, V28, P107
+   FARRADANE J, 1977, STRING INDEXING RELA
+   FENICHEL C, 1971, 34TH P AM SOC INF SC, P349
+   GARFIELD E, 1969, 3RD P INT C MED LIBR
+   GARFIELD E, 1976, J AM SOC INFORM SCI, V27, P288
+   HALLER J, 1978, NACHR DOKUM, V29, P177
+   RESNIKOF HL, 1965, MECHANICAL TRANSLATI, V8, P84
+   SAGER N, 1973, NATURAL LANGUAGE PRO
+   SAGER N, 1975, J AM SOC INFORM SCI, V26, P10
+   STEINACKER I, 1974, J AM SOC INFORMATION, V25, P237
+NR 14
+TC 2
+PU LEARNED INFORMATION LTD
+PI OXFORD
+PA WOODSIDE, HINKSEY HILL, OXFORD, ENGLAND OX1 5AU
+SN 0044-7870
+J9 PROC AMER SOC INFORM SCI
+PY 1979
+VL 16
+BP 236
+EP 245
+PG 10
+SC Computer Science, Information Systems; Information Science & Library
+   Science
+GA HR725
+UT ISI:A1979HR72500031
+ER
+
+PT J
+AU GARFIELD, E
+TI MAKING CONTACTS AT CONFERENCES
+SO IEEE TRANSACTIONS ON PROFESSIONAL COMMUNICATION
+LA English
+DT Article
+RP GARFIELD, E, INST SCI INFORMAT,325 CHESTNUT ST,PHILADELPHIA,PA 19106.
+CR 1977, ASS TRANSNAT, V12, P532
+   BONDS W, 1978, FORUM, V2, P1
+   FREEDMAN R, 1977, NEW SCI, V76, P98
+   GARFIELD E, 1976, CURRENT CONTENT 0209, P5
+   GUTFREUND H, 1976, TRENDS BIOCHEM SCI, V1, P198
+   JUDGE AJN, 1976, ASS INT, V1, P34
+   KINDLER HS, 1960, ORG TECHNICAL C
+   LAITINEN H, 1978, ANAL CHEM, V50, P833
+   MANTEN AA, 1976, S S PUBLICATIONS
+   WELT I, 1978, COMMUNICATION   0913
+   WHELAN WJ, 1976, TRENDS BIOCH SCI, V1, P25
+NR 11
+TC 0
+PU IEEE-INST ELECTRICAL ELECTRONICS ENGINEERS INC
+PI NEW YORK
+PA 345 E 47TH ST, NEW YORK, NY 10017-2394
+SN 0361-1434
+J9 IEEE TRANS PROF COMM
+JI IEEE Trans. Prof. Commun.
+PY 1979
+VL 22
+IS 3
+BP 131
+EP 133
+PG 3
+SC Communication; Engineering, Multidisciplinary
+GA HL569
+UT ISI:A1979HL56900002
+ER
+
+PT J
+AU GARFIELD, E
+TI IS CITATION ANALYSIS A LEGITIMATE EVALUATION TOOL
+SO SCIENTOMETRICS
+LA English
+DT Article
+RP GARFIELD, E, INST SCI INFORMAT,325 CHESTNUT ST,PHILADELPHIA,PA 19106.
+CR AGARWAL JC, 1976, J MET, V28, P33
+   ALTSTETTER CJ, 1976, J MET, V28, P33
+   ARBITER N, 1976, J MET, V28, P33
+   BAYER AE, 1966, SOCIOL EDUC, V39, P381
+   BERNIER CL, 1975, CHEM ENGINEERING ED, V9, P94
+   CARTER GM, 1974, R1583HEW RAND CORP R
+   COLE JR, 1972, SCIENCE, V178, P368
+   COLE JR, 1973, SOCIAL STRATIFICATIO, P32
+   CROSBIE GG, 1976, J MET, V28, P27
+   GARFIELD E, 1963, AM DOC, V14, P289
+   GARFIELD E, 1970, NATURE, V227, P669
+   GARFIELD E, 1977, CURR CONTENTS, P5
+   GARFIELD E, 1977, CURR CONTENTS, P5
+   GARFIELD E, 1977, CURR CONTENTS, P5
+   GARFIELD E, 1977, CURR CONTENTS, P5
+   GARFIELD E, 1977, CURR CONTENTS, P5
+   GARFIELD E, 1977, CURR CONTENTS, P5
+   GARFIELD E, 1977, ESSAYS INFORMATION S, V2, P419
+   GARFIELD E, 1977, TRENDS BIOCH SCI, V2
+   GARFIELD E, 1978, CURRENT CONTENT 0710, P5
+   GELLER NL, SOCIAL SCI RES
+   GELLER NL, 1975, P AM STAT ASS SOC ST, P429
+   GRIFFITH BC, 1974, SCI STUD, V4, P339
+   GUSTAFSON T, 1975, SCIENCE, V190, P1060
+   JOHNSON AA, 1975, J MET, V27, P28
+   KLERER M, 1975, SCIENCE, V188, P1064
+   KOSHY GP, 1976, APR P NE REG C AM I, P224
+   LEDERBERG J, 1960, SCIENCE, V131, P269
+   LINDSEY D, UNPUBLISHED
+   LOWRY OH, 1951, J BIOL CHEM, V193, P265
+   LOWRY OH, 1969, COMMUNICATION   1111
+   MARTINO JP, 1971, IEEE T ENG MANAGE, V18, P146
+   MEADOWS AJ, 1974, COMMUNICATION SCI, P45
+   MERTON RK, 1965, SHOULDERS GIANTS SHA, P218
+   NARIN F, 1976, NTISPB252339AS, P500
+   PRICE DJD, 1963, LITTLE SCI BIG SCI
+   PRICE DJD, 1966, AM PSYCHOL, V21, P1011
+   ROY R, 1976, J MET, V28, P29
+   ROY R, 1977, APPROXIMATING TOTAL
+   SHAPLEY D, 1975, SCIENCE, V189, P622
+   SHAPLEY D, 1976, SCIENCE, V191, P53
+   SHER IH, 1966, RES PROGRAM EFFECTIV, P135
+   SMALL H, 1974, SCI STUD, V4, P17
+   SMALL HG, 1974, C795 CONTR
+   VIRGO JA, 1977, LIBRARY Q, V47, P415
+   WADE N, 1975, SCIENCE, V188, P429
+   WERT CA, 1975, J MET, V27, P20
+NR 47
+TC 92
+PU ELSEVIER SCIENCE BV
+PI AMSTERDAM
+PA PO BOX 211, 1000 AE AMSTERDAM, NETHERLANDS
+SN 0138-9130
+J9 SCIENTOMETRICS
+JI Scientometrics
+PY 1979
+VL 1
+IS 4
+BP 359
+EP 375
+PG 17
+SC Computer Science, Interdisciplinary Applications; Information Science &
+   Library Science
+GA GV844
+UT ISI:A1979GV84400004
+ER
+
+PT J
+AU GARFIELD, E
+TI RADIO - NEGLECTED MEDIUM FOR SCIENTIFIC COMMUNICATION
+SO IEEE TRANSACTIONS ON PROFESSIONAL COMMUNICATION
+LA English
+DT Article
+RP GARFIELD, E, INST SCI INFORMAT,325 CHESTNUT ST,PHILADELPHIA,PA 19106.
+CR *FED COMM COMM, 1977, 17 B
+   *FED COMM COMM, 1977, 3 B
+   GARFIELD E, 1977, CURR CONTENTS, P5
+NR 3
+TC 0
+PU IEEE-INST ELECTRICAL ELECTRONICS ENGINEERS INC
+PI NEW YORK
+PA 345 E 47TH ST, NEW YORK, NY 10017-2394
+SN 0361-1434
+J9 IEEE TRANS PROF COMM
+JI IEEE Trans. Prof. Commun.
+PY 1979
+VL 22
+IS 1
+BP 14
+EP 15
+PG 2
+SC Communication; Engineering, Multidisciplinary
+GA GN792
+UT ISI:A1979GN79200002
+ER
+
+PT J
+AU GARFIELD, E
+TI WHERE IS CHEMICAL INFORMATION-SCIENCE GOING
+SO JOURNAL OF CHEMICAL INFORMATION AND COMPUTER SCIENCES
+LA English
+DT Article
+RP GARFIELD, E, INST SCI INFORMAT,PHILADELPHIA,PA 19106.
+CR BROOKS H, 1977, SCIENCE, V195, P536
+   COLE JR, 1972, SCIENCE, V178, P368
+   DEBRE M, 1976, RECHERCHE, V7, P956
+   GARFIELD E, 1962, CURR CONTENTS   0807, P32
+   GARFIELD E, 1974, B AM SOC INF SCI, V1, P32
+   GARFIELD E, 1974, B AM SOC INFORM SCI, V1, P10
+   GARFIELD E, 1974, CURR CONTENTS, P5
+   GARFIELD E, 1975, J CHEM INFORMATION C, V15, P153
+   GARFIELD E, 1976, 1ST C BIOM PRESS IT
+   GARFIELD E, 1976, NATURE, V264, P609
+   GARFIELD E, 1976, RECHERCHE, V7, P757
+   GARFIELD E, 1977, CURR CONTENTS, P5
+   GARFIELD E, 1977, CURR CONTENTS, P5
+   GARFIELD E, 1977, CURR CONTENTS, P5
+   GARFIELD E, 1977, CURR CONTENTS, P5
+   MARTYN J, 1964, NEW SCI, V21, P388
+   MAZELLA A, 1977, BIBLIOMETRIC STUDY R
+   MERTON RK, 1968, SCIENCE, V199, P55
+   SKOLNIK H, 1976, J CHEM INF COMPUT SC, V16, P187
+   TURNER S, 1976, SOC SCI INFORM, V15, P657
+   WOODWARD AM, 1974, ASLIB P, V26, P367
+NR 21
+TC 4
+PU AMER CHEMICAL SOC
+PI WASHINGTON
+PA 1155 16TH ST, NW, WASHINGTON, DC 20036
+SN 0095-2338
+J9 J CHEM INFORM COMPUT SCI
+JI J. Chem. Inf. Comput. Sci.
+PY 1978
+VL 18
+IS 1
+BP 1
+EP 4
+PG 4
+SC Chemistry, Multidisciplinary; Computer Science, Information Systems;
+   Computer Science, Interdisciplinary Applications
+GA EM267
+UT ISI:A1978EM26700001
+ER
+
+PT J
+AU GARFIELD, E
+TI WHAT THIS COUNTRY NEEDS IS A FREE PHONE CALL
+SO BULLETIN OF THE ATOMIC SCIENTISTS
+LA English
+DT Article
+RP GARFIELD, E, INST SCI INFORMAT,PHILADELPHIA,PA 19106.
+CR 1977, CONSUMER REPORTS, V42, P40
+   BENJAMIN MR, 1977, NY TIMES MAGAZI 1128, P33
+   CERRA F, 1977, NY TIMES        0425, P55
+   FARBER D, 1977, SCIENCE, V195, P1166
+   IRWIN MR, 1977, SCIENCE, V195, P1170
+   MONEYHUN G, 1977, CHRISTIAN SCI MONITO, V69, P13
+NR 6
+TC 0
+PU EDUC FOUNDATION NUCLEAR SCI
+PI CHICAGO
+PA 6042 SOUTH KIMBARK, CHICAGO, IL 60637
+SN 0096-3402
+J9 BULL ATOM SCI
+JI Bull. Atom. Scient.
+PY 1978
+VL 34
+IS 2
+BP 56
+EP 59
+PG 4
+SC International Relations; Social Issues
+GA EL279
+UT ISI:A1978EL27900018
+ER
+
+PT J
+AU GARFIELD, E
+   SIM, M
+TI INDEX CHEMICUS REGISTRY SYSTEM - PAST, PRESENT AND FUTURE
+SO PURE AND APPLIED CHEMISTRY
+LA English
+DT Article
+C1 INST SCI INFORMAT,UXBRIDGE,MIDDLESEX,ENGLAND.
+RP GARFIELD, E, INST SCI INFORMAT,PHILADELPHIA,PA 19106.
+CR ASH JE, 1975, CHEMICAL INFORMATION, P73
+   DEFOREIT H, 1976, OCT ICRS US M LOND, P1
+   EAKIN DR, 1976, JUN ICRS US M PHIL
+   GARFIELD E, 1970, J CHEM DOC, V10, P54
+   GARFIELD E, 1976, NATURE, V264, P609
+   GRANITO CE, 1971, J CHEM DOC, V11, P251
+   GRANITO CE, 1972, J CHEM DOC, V12, P190
+   GRANITO CE, 1973, J CHEM DOC, V13, P72
+   GRANITO CE, 1973, NATURWISSENSCHAFTEN, V60, P189
+   HYDE E, 1968, J CHEM DOCUM, V8, P138
+   NUBLING W, 1970, ANGEW CHEM INT EDIT, V9, P596
+   REVESZ GS, 1969, J CHEM DOC, V9, P106
+   SMITH EG, 1968, WISWESSER LINE FORMU
+   SMITH EG, 1976, WISWESSER LINE FORMU
+   STEIDLE W, 1957, PHARMAZEUTISCHE INDU, V19, P88
+   THOMSON LH, 1967, J CHEM DOC, V7, P204
+   WARD E, 1976, CNA UK NEWSLETTER
+   WISWESSER NH, 1954, LINE FORMULA CHEMICA
+NR 18
+TC 3
+PU BLACKWELL SCIENCE LTD
+PI OXFORD
+PA OSNEY MEAD, OXFORD, OXON, ENGLAND OX2 0EL
+SN 0033-4545
+J9 PURE APPL CHEM
+JI Pure Appl. Chem.
+PY 1977
+VL 49
+IS 12
+BP 1803
+EP 1805
+PG 3
+SC Chemistry, Multidisciplinary
+GA EG971
+UT ISI:A1977EG97100005
+ER
+
+PT J
+AU GARFIELD, E
+TI CAN ITALIAN BIOMEDICAL JOURNALS SURVIVE
+SO JOURNAL OF NUCLEAR MEDICINE AND ALLIED SCIENCES
+LA English
+DT Article
+C1 INST SCI INFORMAT,PHILADELPHIA,PA 19106.
+CR GARFIELD E, 1977, CURRENT CONTENT 0124
+   GARFIELD E, 1977, CURRENT CONTENT 0207
+NR 2
+TC 0
+PU EDIZIONI MINERVA MEDICA
+PI TURIN
+PA CORSO BRAMANTE 83-85 INT JOURNALS DEPT., 10126 TURIN, ITALY
+SN 0392-0208
+J9 J NUCL MED ALLIED SCI
+PY 1977
+VL 21
+IS 3
+BP 121
+EP 122
+PG 2
+SC Radiology, Nuclear Medicine & Medical Imaging
+GA EA155
+UT ISI:A1977EA15500007
+ER
+
+PT J
+AU GARFIELD, E
+   KOENIG, M
+   DIRENZO, T
+TI ISI DATA-BASE-PRODUCED INFORMATION-SERVICES
+SO IEEE TRANSACTIONS ON PROFESSIONAL COMMUNICATION
+LA English
+DT Article
+C1 INST SCI INFORMAT,PHILADELPHIA,PA 19106.
+CR GARFIELD E, IN PRESS
+   GARFIELD E, 1970, 35TH C DOC INT FED D
+   GARFIELD E, 1975, CURR CONTENTS, P5
+   GARFIELD E, 1976, NATURE, V264, P609
+   GARFIELD E, 1977, 1ST INT C SCIENT ED
+   WEINSTOCK M, 1971, ENCY LIBRARY INFORMA, V5, P16
+NR 6
+TC 3
+PU IEEE-INST ELECTRICAL ELECTRONICS ENGINEERS INC
+PI NEW YORK
+PA 345 E 47TH ST, NEW YORK, NY 10017-2394
+SN 0361-1434
+J9 IEEE TRANS PROF COMM
+JI IEEE Trans. Prof. Commun.
+PY 1977
+VL 20
+IS 2
+BP 95
+EP 99
+PG 5
+SC Communication; Engineering, Multidisciplinary
+GA DU890
+UT ISI:A1977DU89000020
+ER
+
+PT J
+AU GARFIELD, E
+TI SCIENTIST USES CITATION INDEXING TO PREDICT WINNERS OF NOBEL-PRIZE
+SO TEXAS MEDICINE
+LA English
+DT Article
+C1 INST SCI INFORMAT,PHILADELPHIA,PA 19106.
+NR 0
+TC 0
+PU TEXAS MED ASSN
+PI AUSTIN
+PA 1801 N LAMAR BLVD, AUSTIN, TX 78701
+SN 0040-4470
+J9 TEX MED
+PY 1977
+VL 73
+IS 6
+BP 87
+EP 88
+PG 2
+SC Medicine, General & Internal
+GA DJ283
+UT ISI:A1977DJ28300007
+ER
+
+PT J
+AU GARFIELD, E
+TI PERMUTERM SUBJECT INDEX - AUTOBIOGRAPHICAL REVIEW
+SO JOURNAL OF THE AMERICAN SOCIETY FOR INFORMATION SCIENCE
+LA English
+DT Article
+C1 INST SCI INFORMAT,PHILADELPHIA,PA 19106.
+CR 1959, AM DOCUMENTATION, V11, P288
+   *INT BUS MACH CORP, 1959, RC127 REP
+   CITRON J, 1959, PERMUTATION INDEX PR
+   FENICHEL C, 1971, 34TH P AM SOC INF SC, P349
+   GARFIELD E, 1969, CURRENT CONTENT 0603, P22
+   GARFIELD E, 1970, 3RD P INT C MED LIBR, P187
+   GARFIELD E, 1971, 4TH WORLD C INT ASS, P107
+   GARFIELD E, 1972, J DOC, V28, P344
+   HEUMANN K, 1954, CHEMICAL BIOLOGICAL, P18
+   OHLMAN H, 1975, COMMUNICATION    NOV
+   STEVENS ME, 1965, NBS91 MON WASH
+   WEINSTOCK M, 1970, 7TH ANN NAT C INF RE, P181
+   WEINSTOCK M, 1971, ENCY LIBRARY INFORMA, V5, P16
+NR 13
+TC 14
+PU JOHN WILEY & SONS INC
+PI NEW YORK
+PA 605 THIRD AVE, NEW YORK, NY 10158-0012
+SN 0002-8231
+J9 J AMER SOC INFORM SCI
+JI J. Am. Soc. Inf. Sci.
+PY 1976
+VL 27
+IS 5-6
+BP 288
+EP 291
+PG 4
+SC Computer Science, Information Systems; Information Science & Library
+   Science
+GA CT063
+UT ISI:A1976CT06300003
+ER
+
+PT J
+AU GARFIELD, E
+TI SCIENCE IN FRANCE - TOO PROVINCIAL
+SO RECHERCHE
+LA French
+DT Article
+C1 INST SCI INFORMATION,PHILADELPHIA,PA 19106.
+CR GARFIELD E, 1970, NATURE, V227, P669
+   GARFIELD E, 1972, SCIENCE, V178, P471
+   GARFIELD E, 1976, CURRENT CONTENT 0209, P5
+   NARIN F, 1975, J AM SOC INFORMATION, P80
+NR 4
+TC 27
+PU SOC ED SCIENTIFIQUES
+PI PARIS 06
+PA 57 RUE DE SEINE, 75280 PARIS 06, FRANCE
+SN 0029-5671
+J9 RECHERCHE
+JI Recherche
+PY 1976
+VL 7
+IS 70
+BP 757
+EP 760
+PG 4
+SC Multidisciplinary Sciences
+GA CC478
+UT ISI:A1976CC47800006
+ER
+
+PT J
+AU GARFIELD, E
+TI CITATION ANALYSIS, MECHANICAL TRANSLATION OF CHEMICAL NOMENCLATURE, AND
+   MACROSTRUCTURE OF SCIENCE
+SO JOURNAL OF CHEMICAL INFORMATION AND COMPUTER SCIENCES
+LA English
+DT Article
+C1 INST SCI INFORMATION,PHILADELPHIA,PA 19106.
+CR 1969, CHEM ENG NEWS, V47, P45
+   BAKER DB, 1971, CHEMICAL ENGINEERING, V49, P37
+   COLE JR, 1972, SCIENCE, V178, P368
+   GARFIELD E, UNPUBLISHED
+   GARFIELD E, 1961, ALGORITHM TRANSLATIN
+   GARFIELD E, 1961, NATURE, V192, P192
+   GARFIELD E, 1964, USE CITATION DATA WR
+   GARFIELD E, 1972, CURRENT CONTENT 1101, P5
+   GARFIELD E, 1975, CURR CONTENTS, P5
+   LOWRY O, 1973, CURRENT CONTENT 0131, P5
+   OPLER A, 1956, CHEM ENG NEWS   0604, V34, P2812
+   ORTEGAYGASSET J, 1932, REVOLT MASSES, P84
+   PARRY AA, 1974, INFO SCIENTIST, V8, P179
+   SAGER N, 1972, AFIPS C P, V41, P791
+   STEMMLE JT, 1975, CHEM ENG NEWS, V53, P33
+   SUSSENGUTH EH, 1965, J CHEM DOCUMENTATION, V5, P36
+   VANDERSTOUW GG, 1967, J CHEM DOC, V7, P165
+   VANDERSTOUW GG, 1974, J CHEM DOC, V14, P185
+   WATSON JD, 1953, NATURE, V171, P737
+NR 19
+TC 4
+PU AMER CHEMICAL SOC
+PI WASHINGTON
+PA 1155 16TH ST, NW, WASHINGTON, DC 20036
+SN 0095-2338
+J9 J CHEM INFORM COMPUT SCI
+JI J. Chem. Inf. Comput. Sci.
+PY 1975
+VL 15
+IS 3
+BP 153
+EP 155
+PG 3
+SC Chemistry, Multidisciplinary; Computer Science, Information Systems;
+   Computer Science, Interdisciplinary Applications
+GA AN369
+UT ISI:A1975AN36900005
+ER
+
+PT J
+AU GARFIELD, E
+   MALIN, MV
+   SMALL, H
+TI SYSTEM FOR AUTOMATIC CLASSIFICATION OF SCIENTIFIC LITERATURE
+SO JOURNAL OF THE INDIAN INSTITUTE OF SCIENCE
+LA English
+DT Article
+C1 INST SCI INFORMATION,325 CHESTNUT ST,PHILADELPHIA,PA 19106.
+CR GARFIELD E, 1955, SCIENCE, V122, P108
+   GARFIELD E, 1964, SCIENCE, V144, P649
+   GARFIELD E, 1965, STATISTICAL ASSOC ME, V269, P189
+   GARFIELD E, 1972, SCIENCE, V178, P471
+   MALIN MV, 1968, LIBR TRENDS, V16, P374
+   SALTON G, 1963, J ACM, V10, P440
+   SMALL H, 1974, SCI STUD, V4, P17
+   SPARCKJONES K, 1970, J DOCUMENTATION, V26
+   WEINSTOCK M, 1971, ENCY LIBRARY INFORMA, V5, P16
+NR 9
+TC 11
+PU INDIAN INSTITUTE OF SCIENCE
+PI BANGALORE
+PA  BANGALORE 560012, INDIA
+J9 J INDIAN INST SCI
+PY 1975
+VL 57
+IS 2
+BP 61
+EP 74
+PG 14
+SC Engineering, Multidisciplinary; Multidisciplinary Sciences
+GA AE853
+UT ISI:A1975AE85300001
+ER
+
+PT J
+AU GARFIELD, E
+TI WEEKLY SUBJECT INDEX TO CURRENT CONTENTS
+SO METHODS OF INFORMATION IN MEDICINE
+LA English
+DT Article
+C1 INST SCI INFORMATION,325 CHESTNUT ST,PHILADELPHIA,PA 19106.
+CR GARFIELD E, 1971, SCIENCE CITATION IND
+   WOOD DN, 1970, METHODS INFORMATION, V9, P46
+NR 2
+TC 0
+PU F K SCHATTAUER VERLAG GMBH
+PI STUTTGART
+PA P O BOX 10 45 45, LENZHALDE 3, D-70040 STUTTGART, GERMANY
+SN 0026-1270
+J9 METHODS INFORM MED
+JI Methods Inf. Med.
+PY 1974
+VL 13
+IS 2
+BP 106
+EP 109
+PG 4
+SC Computer Science, Information Systems; Health Care Sciences & Services;
+   Medical Informatics
+GA S8849
+UT ISI:A1974S884900010
+ER
+
+PT J
+AU GARFIELD, E
+TI WHAT SCIENTIFIC JOURNALS CAN TELL US ABOUT SCIENTIFIC JOURNALS
+SO IEEE TRANSACTIONS ON PROFESSIONAL COMMUNICATION
+LA English
+DT Article
+C1 INST SCI INFORMATION,PHILADELPHIA,PA 19106.
+CR 1972, CURRENT CONTENT 0607, M1
+   CAWKELL AE, 1968, RADIO ELECTRONIC ENG, V35, P352
+   CAWKELL AE, 1970, CHEMISTRY BRIT, V6
+   GARFIELD E, 1955, SCIENCE, V122, P108
+   GARFIELD E, 1963, AM DOC, V14, P195
+   GARFIELD E, 1964, SCIENCE, V144, P649
+   GARFIELD E, 1969, CURRENT CONTENTS, V12, P6
+   GARFIELD E, 1970, J LIBRARY HISTORY, V5, P184
+   GARFIELD E, 1972, CURRENT CONTENT 1101, P5
+   GARFIELD E, 1972, CURRENT CONTENT 1101, P5
+   GARFIELD E, 1972, CURRENT CONTENT 1101, P5
+   GARFIELD E, 1972, CURRENT CONTENTS, P6
+   GARFIELD E, 1972, SCIENCE, V178, P471
+   HAGSTROM WO, 1971, SOCIOL EDUC, V44, P375
+   MALIN MV, 1968, LIBR TRENDS, V16, P374
+   MARGOLIS J, 1967, SCIENCE, V155, P1213
+   MYERS CR, 1970, AM PSYCHOL, V25, P1041
+   PRICE DJD, 1965, SCIENCE, V149, P510
+   SPENCER CC, 1967, AM DOC, V18, P87
+NR 19
+TC 13
+PU IEEE-INST ELECTRICAL ELECTRONICS ENGINEERS INC
+PI NEW YORK
+PA 345 E 47TH ST, NEW YORK, NY 10017-2394
+SN 0361-1434
+J9 IEEE TRANS PROF COMM
+JI IEEE Trans. Prof. Commun.
+PY 1973
+VL PC16
+IS 4
+BP 200
+EP 203
+PG 4
+SC Communication; Engineering, Multidisciplinary
+GA S0330
+UT ISI:A1973S033000002
+ER
+
+PT J
+AU GRANITO, CE
+   GARFIELD, E
+TI SUBSTRUCTURE SEARCH AND CORRELATION IN MANAGEMENT OF CHEMICAL
+   INFORMATION
+SO NATURWISSENSCHAFTEN
+LA English
+DT Article
+C1 INST SCI INFORMATION,PHILADELPHIA,PA 19106.
+CR 1950, METHOD CODING CHEMIC
+   1960, 1733 CHEM STRUCT INF
+   1964, 1150 NAT RES COUNC N
+   1965, 1278 EUR NONC CHEM N
+   ARNETT EM, 1970, SCIENCE, V170, P1370
+   BAKER DB, 1971, J CHEM DOCUMENTATION, V11, P90
+   BOWMAN CM, 1967, J CHEM DOC, V7, P43
+   BOWMAN CM, 1968, J CHEM DOC, V8, P133
+   BOWMAN CM, 1970, J CHEM DOC, V10, P50
+   BRASIE WC, 1965, CHEM ENG PROG, V61, P102
+   BRASIE WC, 1965, CHEM ENG PROGR, V61, P16
+   CASEY RS, 1958, PUNCHED CARDS
+   COREY EJ, 1969, SCIENCE, V166, P178
+   COSSUM WE, 1964, P AM DOC I, V1, P270
+   DEVLIN TJ, 1967, ENCYCLOPEDIA CHEMICA, V12, P511
+   FARRELL CD, 1971, J CHEM DOC, V11, P52
+   FELDMANN RJ, 1971, J CHEM DOC, V11, P154
+   GARFIELD E, 1970, J CHEM DOC, V10, P54
+   GELBERG A, 1971, ENCYCLOPEDIA LIBRARY
+   GELBERG AJ, 1966, J CHEM DOCUMENTATION, V6, P60
+   GLUCK DJ, 1965, J CHEM DOC, V5, P43
+   GRANITO CE, 1965, J CHEM DOC, V5, P229
+   GRANITO CE, 1966, J CHEM DOC, V6, P252
+   GRANITO CE, 1968, 155 NAT M AM CHEM SO
+   GRANITO CE, 1971, 162 NAT M AM CHEM SO
+   GRANITO CE, 1971, J CHEM DOC, V11, P106
+   GRANITO CE, 1971, J CHEM DOC, V11, P251
+   HANSCH C, 1964, J AM CHEM SOC, V86, P1616
+   HUBER ML, 1965, J CHEM DOC, V5, P4
+   HYDE E, 1967, J CHEM DOC, V7, P200
+   HYDE E, 1968, J CHEM DOCUM, V8, P138
+   LEITER DP, 1965, J CHEM DOC, V5, P238
+   MEYER E, 1965, ANGEW CHEM INT EDIT, V4, P347
+   MORGAN HL, 1965, J CHEM DOC, V5, P107
+   MULLEN JM, 1967, J CHEM DOCUMENTATION, V7, P88
+   OATFIELD H, 1967, J CHEM DOC, V7, P37
+   REVESZ GS, 1969, J CHEM DOC, V9, P106
+   SMITH EG, 1968, WISWESSER LINE FORMU
+   STEIDLE W, 1957, PHARMAZEUTISCHE INDU, V19, P88
+   THOMSON LH, 1967, J CHEM DOC, V7, P204
+   VANDERSTOUW GG, 1967, J CHEM DOC, V7, P165
+   WISWESSER WH, 1954, LINE FORMULA CHEMICA
+NR 42
+TC 7
+PU SPRINGER VERLAG
+PI NEW YORK
+PA 175 FIFTH AVE, NEW YORK, NY 10010
+SN 0028-1042
+J9 NATURWISSENSCHAFTEN
+JI Naturwissenschaften
+PY 1973
+VL 60
+IS 4
+BP 189
+EP 179
+PG 11
+SC Multidisciplinary Sciences
+GA P5035
+UT ISI:A1973P503500004
+ER
+
+PT J
+AU GARFIELD, E
+   REVESZ, GS
+   BATZIG, JH
+TI SYNTHETIC CHEMICAL LITERATURE FROM 1960-TO-1969
+SO NATURE
+LA English
+DT Article
+C1 INST SCI INFORMATION,PHILADELPHIA,PA 19106.
+CR BAKER DB, 1971, CHEM ENG NEWS, V49, P36
+   BRADFORD SC, 1948, DOCUMENTATION
+   ELIAS AW, 1968, J CHEM DOC, V8, P74
+   GARFIELD E, IN PRESS
+   GARFIELD E, 1964, 148 AM CHEM SOC M
+   GARFIELD E, 1972, CURRENT CONTENTS
+   REVESZ GS, 1969, J CHEM DOC, V9, P106
+   WEINSTOCK M, 1971, NATURE, V233, P434
+   WOOD JL, 1966, PARAMETERS DOCUMENT
+NR 9
+TC 14
+PU MACMILLAN MAGAZINES LTD
+PI LONDON
+PA PORTERS SOUTH, 4 CRINAN ST, LONDON, ENGLAND N1 9XW
+SN 0028-0836
+J9 NATURE
+JI Nature
+PY 1973
+VL 242
+IS 5396
+BP 307
+EP 309
+PG 3
+SC Multidisciplinary Sciences
+GA P1991
+UT ISI:A1973P199100028
+ER
+
+PT J
+AU GARFIELD, E
+TI CITATION ANALYSIS AS A TOOL IN JOURNAL EVALUATION - JOURNALS CAN BE
+   RANKED BY FREQUENCY AND IMPACT OF CITATIONS FOR SCIENCE POLICY STUDIES
+SO SCIENCE
+LA English
+DT Article
+CR ALLEN ES, 1929, SCIENCE, V70, P552
+   ANDERSON PK, 1966, BIOSCIENCE, V16, P794
+   BARRETT RL, 1957, J CHEM EDUC, V34, P35
+   BAYER AE, 1966, SOCIOL EDUC, V39, P382
+   BECK LN, 1971, J AM SOC INFORM SCI, V22, P85
+   BRADFORD SC, 1953, DOCUMENTATION, P2
+   BROWN CH, 1956, ACRL16 MON
+   BURTON RE, 1959, AM DOC, V10, P135
+   BURTON RE, 1959, AM DOC, V10, P209
+   BURTON RE, 1959, AM DOC, V10, P70
+   CHADWICK RW, 1968, AM BEHAV SCI, V11, NS9
+   COILE RC, 1952, J DOC, V8, P209
+   COLE J, 1971, AM SOCIOL, V6, P23
+   COLE S, 1967, AM SOCIOL REV, V32, P377
+   COLE S, 1970, AM J SOCIOL, V76, P286
+   CREAGER JA, 1966, 26 NAT AC SCIENC NAT
+   DAVIS RA, 1964, 195 DREX I TECHN PRO
+   DEBROV GM, 1967, ANALIZ TENDENTSII PR, P5
+   DEBROV GM, 1968, CIBA F SCIENCE SCIEN, P189
+   EAST H, 1969, ASLIB P, V21, P160
+   FUSSLER HH, 1949, LIBRARY Q, V19, P119
+   FUSSLER HH, 1949, LIBRARY Q, V19, P19
+   GARFIELD E, 1955, SCIENCE, V122, P108
+   GARFIELD E, 1964, SCIENCE, V144, P649
+   GARFIELD E, 1967, J CHEM DOCUMENTATION, V7, P147
+   GARFIELD E, 1970, 3RD P INT C MED LIBR, P187
+   GARFIELD E, 1971, CURRENT CONTENT 0804, P5
+   GARFIELD E, 1972, 164 NAT M AM CHEM SO
+   GILIAREVSKII RS, 1968, PRIKLADNAIA DOKUMENT, P32
+   GROSS PLK, 1927, SCIENCE, V66, P385
+   GROSS PLK, 1931, SCIENCE, V73, P660
+   HAGSTROM WO, 1971, SOCIOL EDUC, V44, P375
+   HALL AM, 1970, R704 I EL ENG REP
+   HENKLE HH, 1938, B MED LIBR ASSOC, V27, P139
+   HOOKER RH, 1935, REV SCI INSTRUM, V6, P333
+   KORENNOI AA, 1968, NAUCH TEKH INFORM  2, P3
+   LARABI J, 1969, REV FRANC INFORM REC, V3, P103
+   LOWRY OH, 1951, J BIOL CHEM, V193, P265
+   LOWRY OH, 1951, J BIOLOGICAL CHEMIST
+   MACRAE D, 1969, AM SOCIOL REV, V34, P361
+   MARGOLIS J, 1967, SCIENCE, V155, P1213
+   MARTINO JP, 1971, IEEE T ENGINEERING M, EM18, P146
+   MARTYN J, 1968, EVALUATION BRIT SCIE
+   MEADOWS AJ, 1967, J DOC, V23, P28
+   MYERS CR, 1970, AM PSYCHOL, V25, P1041
+   NALIMOV VV, 1969, NAUKOMETRIIA
+   PARKER EB, 1967, BIBLIOGRAPHICAL CITA
+   PRICE DJD, 1965, SCIENCE, V149, P510
+   PRICE DJD, 1969, ASLIB P, V21, P328
+   PRICE DJD, 1969, P ISRAEL ACADEMY SCI, V4, P98
+   ROTHMAN H, 1971, J DOC, V27, P287
+   SCOTT C, 1969, DISCOVERY, P110
+   TRIMBLE RF, 1963, J CHEM DOCUM, V3, P79
+   WEINBERG AM, 1963, MINERVA, V1, P159
+   WHITLEY RD, 1969, SOCIOL REV, V17, P219
+   WOOD JL, 1966, 8 AM U ANN I INF STO
+NR 56
+TC 672
+PU AMER ASSOC ADVANCEMENT SCIENCE
+PI WASHINGTON
+PA 1200 NEW YORK AVE, NW, WASHINGTON, DC 20005
+SN 0036-8075
+J9 SCIENCE
+JI Science
+PY 1972
+VL 178
+IS 4060
+BP 471
+EP +
+PG 0
+SC Multidisciplinary Sciences
+GA N8310
+UT ISI:A1972N831000009
+ER
+
+PT J
+AU GARFIELD, E
+TI COMMUNICATION, ENGINEERING, AND ENGINEERS
+SO IEEE TRANSACTIONS ON PROFESSIONAL COMMUNICATION
+LA English
+DT Article
+NR 0
+TC 0
+PU IEEE-INST ELECTRICAL ELECTRONICS ENGINEERS INC
+PI NEW YORK
+PA 345 E 47TH ST, NEW YORK, NY 10017-2394
+SN 0361-1434
+J9 IEEE TRANS PROF COMM
+JI IEEE Trans. Prof. Commun.
+PY 1972
+VL PC15
+IS 2
+BP 49
+EP &
+PG 0
+SC Communication; Engineering, Multidisciplinary
+GA N1395
+UT ISI:A1972N139500007
+ER
+
+PT J
+AU GARFIELD, E
+TI NEW METHODS FOR DOCUMENTATION IN SYNTHETIC CHEMISTRY
+SO CHEMIKER-ZEITUNG
+LA German
+DT Article
+CR 1964, 1150 NAT AC SCIENC P
+   1965, 1278 NAT AC SCIENC P
+   1969, 1733 NAT AC SCIENC P
+   BONNETT HT, 1963, J CHEM DOC, V3, P235
+   COSSUM WE, 1965, J CHEM DOCUMENTATION, V5, P33
+   DYSON GM, 1963, INFORM STOR RETR, V1, P69
+   GARFIELD E, 1955, SCIENCE, V122, P108
+   GARFIELD E, 1963, J CHEM DOC, V3, P97
+   GARFIELD E, 1964, SCIENCE, V144, P649
+   GARFIELD E, 1970, NATURE, V227, P669
+   GRANITO CE, 1965, J CHEM DOC, V5, P229
+   GRANITO CE, 1971, J CHEM DOC, V11, P251
+   HUBER ML, 1965, J CHEM DOC, V5, P4
+   HYDE E, 1967, J CHEM DOC, V7, P200
+   MARGOLIS J, 1967, SCIENCE, V155, P1213
+   MARTYN J, 1965, ASLIB P, V17, P184
+   SMITH EG, 1968, WISWESSER LINE FORMU
+   SPENCER CC, 1967, AM DOC, V18, P87
+   TATE FA, 1967, ANN REV INFORMATION, V2, P285
+   THOMSON LH, 1967, J CHEM DOC, V7, P204
+NR 20
+TC 0
+PU DR ALFRED HUTHIG VERLAG GMBH
+PI HEIDELBERG 1
+PA POSTFACH 102869, W-69018 HEIDELBERG 1, GERMANY
+SN 0009-2894
+J9 CHEM ZTG
+PY 1972
+VL 96
+IS 6
+BP 334
+EP &
+PG 0
+SC Chemistry, Multidisciplinary; Engineering, Chemical
+GA M7122
+UT ISI:A1972M712200004
+ER
+
+PT J
+AU GARFIELD, E
+TI INTRODUCING MALIN,MV,PHD ISIRS VICE PRESIDENT FOR CORPORATE PLANNING
+   AND INTERNATIONAL RELATIONS
+SO CURRENT CONTENTS/LIFE SCIENCES
+LA English
+DT Article
+CR GARFIELD E, 1971, CURRENT CONTENT 0804, P5
+   GARFIELD E, 1972, CURRENT CONTENT 1101, P5
+NR 2
+TC 0
+PU INST SCI INFORM INC
+PI PHILADELPHIA
+PA 3501 MARKET ST, PHILADELPHIA, PA 19104
+SN 0011-3409
+J9 CC/LIFE SCIENCES
+PY 1972
+VL 15
+IS 17
+BP 3
+EP &
+PG 0
+SC Multidisciplinary Sciences; Social Sciences, Interdisciplinary
+GA ZZ183
+UT ISI:A1972ZZ18300001
+ER
+
+PT J
+AU GARFIELD, E
+TI WHO IS PUBLISHING IN SCIENCE-AND HOW MUCH
+SO CURRENT CONTENTS/LIFE SCIENCES
+LA English
+DT Article
+CR GARFIELD E, 1969, CURRENT CONTENTS LIF, V12, P9
+   GARFIELD E, 1971, CURRENT CONTENTS LIF, V14, P4
+NR 2
+TC 0
+PU INST SCI INFORM INC
+PI PHILADELPHIA
+PA 3501 MARKET ST, PHILADELPHIA, PA 19104
+SN 0011-3409
+J9 CC/LIFE SCIENCES
+PY 1971
+VL 14
+IS 17
+BP 4
+EP &
+PG 0
+SC Multidisciplinary Sciences; Social Sciences, Interdisciplinary
+GA ZZ235
+UT ISI:A1971ZZ23500001
+ER
+
+PT J
+AU GARFIELD, E
+TI INFORMATION SCIENCE AND INFORMATION-CONSCIOUS SOCIETY
+SO JOURNAL OF THE AMERICAN SOCIETY FOR INFORMATION SCIENCE
+LA English
+DT Article
+C1 INST SCIENTIFIC INFORMATION,PHILADELPHIA,PA.
+CR LAURITIS E, 1970, LEGAL AID BRIEFCASE, V28, P205
+NR 1
+TC 7
+PU JOHN WILEY & SONS INC
+PI NEW YORK
+PA 605 THIRD AVE, NEW YORK, NY 10158-0012
+SN 0002-8231
+J9 J AMER SOC INFORM SCI
+JI J. Am. Soc. Inf. Sci.
+PY 1971
+VL 22
+IS 2
+BP 71
+EP 73
+PG 3
+SC Computer Science, Information Systems; Information Science & Library
+   Science
+GA Y1560
+UT ISI:A1971Y156000001
+ER
+
+PT J
+AU GARFIELD, E
+   REVESZ, GS
+   GRANITO, CE
+   DORR, HA
+   CALDERON, MM
+   WARNER, A
+TI INDEX CHEMICUS REGISTRY SYSTEM . PRAGMATIC APPROACH TO SUBSTRUCTURE
+   CHEMICAL RETRIEVAL
+SO JOURNAL OF CHEMICAL DOCUMENTATION
+LA English
+DT Article
+CR 1969, RADIICAL USERS MANUA
+   FINLAY AC, PRIVATE COMMUNICATIO
+   FRACTION GF, 1968, 432 NATL BUR STD TEC
+   GRANITO CE, 1965, J CHEM DOC, V5, P229
+   HYDE E, 1967, J CHEM DOC, V7, P200
+   KULPINSKI S, C467 NSF CONTR
+   KULPINSKI S, 1967, STUDY IMPLEMENTATION, V1
+   KULPINSKI S, 1967, STUDY IMPLEMENTATION, V2
+   REVESZ GS, 1969, J CHEM DOC, V9, P106
+   SMITH EG, 1968, WISWESSER LINE FORMU
+   WISWESSER WJ, 1954, LINE FORMULA CHEMICA
+NR 11
+TC 25
+PU J CHEMICAL DOCUMENTATION
+PI WASHINGTON
+PA  WASHINGTON, DC
+SN 0021-9576
+J9 J CHEM DOC
+PY 1970
+VL 10
+IS 1
+BP 54
+EP &
+PG 0
+SC Computer Science, Interdisciplinary Applications
+GA F4684
+UT ISI:A1970F468400017
+ER
+
+PT J
+AU GARFIELD, E
+TI METHODS AND OBJECTIVES IN JUDGING INFORMATION CONTENT OF DOCUMENT TITLES
+SO JOURNAL OF CHEMICAL DOCUMENTATION
+LA English
+DT Article
+CR BOTTLE RT, 1962, USE CHEMICAL LITERAT
+   BOTTLE RT, 1965, J DOC, V21, P177
+   GARFIELD E, CITED INDIRECTLY
+   GARFIELD E, 1967, AM BEHAV SCI, V10, P29
+   GARFIELD E, 1967, J CHEM DOCUMENTATION, V7, P147
+   GARFIELD E, 1970, CURRENT CONTENTS, V14, P4
+   LAKEY SV, 1949, B MED LIBR ASSOC, V37, P121
+   OCONNOR J, 1964, J ASSOC COMPUT MACH, V11, P437
+   RESNICK A, 1961, SCIENCE, V134, P1004
+   STEVENS ME, 1964, STATISTICAL ASSOCIAT, P189
+   WOOD DN, 1970, METHODS INFORMATION, V9, P46
+NR 11
+TC 6
+PU J CHEMICAL DOCUMENTATION
+PI WASHINGTON
+PA  WASHINGTON, DC
+SN 0021-9576
+J9 J CHEM DOC
+PY 1970
+VL 10
+IS 4
+BP 260
+EP &
+PG 0
+SC Computer Science, Interdisciplinary Applications
+GA I0269
+UT ISI:A1970I026900008
+ER
+
+PT J
+AU REVESZ, GS
+   GRANITO, CE
+   GARFIELD, E
+TI ONE-LETTER NOTATION FOR CALCULATING MOLECULAR FORMULAS AND SEARCHING
+   LONG-CHAIN PEPTIDES IN INDEX-CHEMICUS-REGISTRY-SYSTEM
+SO JOURNAL OF CHEMICAL DOCUMENTATION
+LA English
+DT Article
+CR 1968, NATURE, V218, P10
+   BRAND E, 1945, J AM CHEM SOC, V67, P1524
+   DAYHOFF MO, 1965, ATLAS PROTEIN SEQUEN
+   DAYHOFF MO, 1968, ATLAS PROTEIN SEQUEN
+   ECK RV, 1966, ATLAS PROTEIN SEQUEN
+   GAMOV G, 1958, S INFORMATION THEORY
+   GARFIELD E, 1970, J CHEM DOC, V10, P54
+   GRANITO CE, 1965, J CHEM DOC, V5, P229
+   REID KBM, 1968, BIOCHEM J, V110, P289
+   REVESZ GS, 1968, NATURE ENGLAND, V219, P1113
+   REVESZ GS, 1969, J CHEM DOC, V2, P106
+   SMITH EG, 1968, WISWESSER LINE FORMU
+   SORM F, 1961, COLLECT CZECH CHEM C, V26, P531
+   SORTER PF, 1964, J CHEM DOC, V4, P56
+   WEBER U, 1968, Z PHYSIOL CHEM, V349, P1431
+   WISWESSER WJ, 1954, LINE FORMULA CHEMICA
+   WISWESSER WJ, 1964, CHEM ENG NEWS, V42, P4
+NR 17
+TC 3
+PU J CHEMICAL DOCUMENTATION
+PI WASHINGTON
+PA  WASHINGTON, DC
+SN 0021-9576
+J9 J CHEM DOC
+PY 1970
+VL 10
+IS 3
+BP 212
+EP &
+PG 0
+SC Computer Science, Interdisciplinary Applications
+GA H1166
+UT ISI:A1970H116600011
+ER
+
+PT J
+AU GARFIELD, E
+TI CITATION INDEXING FOR STUDYING SCIENCE
+SO NATURE
+LA English
+DT Article
+CR 1969, NATURE, V224, P529
+   BAYER AE, 1966, SOCIOL EDUC, V39, P381
+   COLE S, 1967, AM SOCIOL REV, V32, P377
+   GARFIELD E, 1955, SCIENCE, V122, P108
+   GARFIELD E, 1957, J PATENT OFFICE SOC, V39, P583
+   GARFIELD E, 1964, USE CITATION DATA WR
+   GARFIELD E, 1967, DIAGONAL DISPLAY NEW
+   GARFIELD E, 1968, 135 M AM ASS ADV SCI
+   GARFIELD E, 1968, F ACCESS KNOWLEDGE, P169
+   GIULIANO VE, 1963, IEEE T MIL ELEC, MIL7, P221
+   MALIN MV, 1968, LIBR TRENDS, V16, P374
+   MARTINO JP, IN PRESS
+   MARTINO JP, 1967, AD656366D DOC, P226
+   MARTYN J, 1965, ASLIB P, V17, P184
+   MARTYN J, 1968, ASLIB1 OCC PUB
+   PARKER EB, 1967, REPORT STANFORD U PR
+   PRICE DJD, 1965, B ATOM SCI, V21, P2
+   PRICE DJD, 1965, SCIENCE, V149, P510
+   SPENCER CC, 1967, AM DOC, V18, P87
+   WATSON JD, 1968, DOUBLE HELIX
+   ZIRKLE C, 1964, J HERED, V55, P65
+NR 21
+TC 134
+PU MACMILLAN MAGAZINES LTD
+PI LONDON
+PA PORTERS SOUTH, 4 CRINAN ST, LONDON N1 9XW, ENGLAND
+SN 0028-0836
+J9 NATURE
+JI Nature
+PY 1970
+VL 227
+IS 5259
+BP 669
+EP &
+PG 0
+SC Multidisciplinary Sciences
+GA H0226
+UT ISI:A1970H022600017
+ER
+
+PT J
+AU GARFIELD, E
+TI WHO AND WHY OF ISI
+SO CURRENT CONTENTS/LIFE SCIENCES
+LA English
+DT Article
+CR GARFIELD E, 1964, AM BEHAV SCI, V7, P58
+   GARFIELD E, 1964, SCIENCE, V144, P649
+   GARFIELD E, 1964, USE CITATION DATA WR, P75
+   GARFIELD E, 1967, AM BEHAV SCI, V10, P29
+   GARFIELD E, 1967, J LIBRARY HISTORY, V2, P235
+   GARFIELD E, 1968, CHEMISTRY, V41, P24
+   MALIN MV, 1968, LIBR TRENDS, V16, P374
+NR 7
+TC 0
+PU INST SCI INFORM INC
+PI PHILADELPHIA
+PA 3501 MARKET ST, PHILADELPHIA, PA 19104
+SN 0011-3409
+J9 CC/LIFE SCIENCES
+PY 1969
+VL 12
+IS 12
+BP 5
+EP &
+PG 0
+SC Multidisciplinary Sciences; Social Sciences, Interdisciplinary
+GA ZZ290
+UT ISI:A1969ZZ29000002
+ER
+
+PT J
+AU GARFIELD.E
+TI ROLE OF MEDICAL LIBRARIAN IN SDI SYSTEMS
+SO BULLETIN OF THE MEDICAL LIBRARY ASSOCIATION
+LA English
+DT Article
+CR BROWN WS, 1967, SCIENCE, V158, P1153
+   DORR HA, 1968, AM J PHARMACEUTICAL, V32, P177
+   GARFIELD E, 1964, SCIENCE, V144, P649
+   GARFIELD E, 1967, AM BEHAV SCI, V10, P29
+   GARFIELD E, 1967, J CHEM DOCUMENTATION, V7, P147
+   GARFIELD E, 1968, CURR CONTENTS, V2, P5
+   MALIN MV, 1968, LIBR TRENDS, V16, P374
+NR 7
+TC 7
+PU MEDICAL LIBRARY ASSOC
+PI CHICAGO
+PA 65 EAST WACKER PLACE, STE 1900, CHICAGO, IL 60601-7298
+SN 0025-7338
+J9 BULL MED LIBR ASSN
+JI Bull. Med. Libr. Assoc.
+PY 1969
+VL 57
+IS 4
+BP 348
+EP &
+PG 0
+SC Information Science & Library Science
+GA E4518
+UT ISI:A1969E451800005
+ER
+
+PT J
+AU GARFIELD, E
+TI WORLD BRAIN OR MEMEX - MECHANICAL AND INTELLECTUAL REQUIREMENTS FOR
+   UNIVERSAL BIBLIOGRAPHIC CONTROL
+SO FRONTIERS OF LIBRARIANSHIP-SYRACUSE UNIVERSITY
+LA English
+DT Article
+CR 1965, 5164019A I SCIENT IN
+   AVAKIAN E, 1957, SPEC LIBR, V48, P145
+   BECKER J, 1963, INFORMATION STORAGE, P144
+   BECKER J, 1963, INFORMATION STORAGE, P236
+   BECKER J, 1963, INFORMATION STORAGE, P371
+   BORKO H, 1964, TM1763 TECHN MEM
+   BUSH V, 1945, ATLANTIC MONTHLY, V176, P101
+   CARLSON G, 1964, SEARCH STRATEGY REFE
+   CLAPP VW, 1964, FUTURE RESEARCH LIBR, P18
+   CLAPP VW, 1964, FUTURE RESEARCH LIBR, P19
+   CLARKE BL, 1964, SCIENCE, V143, P822
+   CROW JF, 1965, SCIENCE, V148, P1579
+   DOYLE LB, 1963, SP1262 SYST DEV CORP
+   FAIRTHORNE RA, 1961, TOWARDS INFORMATION, P192
+   FANO RM, 1956, DOCUMENTATION ACTION, P238
+   GARFIELD E, 1959, 1958 P INT C SCI INF, P461
+   GARFIELD E, 1961, J CHEM DOC, V1, P70
+   GARFIELD E, 1963, 1 ANN S BIOM COMP SC
+   GARFIELD E, 1963, AUTOMATION SCIENTI 3, P419
+   GARFIELD E, 1964, AM BEHAV SCI, V7, P58
+   GARFIELD E, 1964, SCIENCE, V144, P649
+   GARFIELD E, 1964, USE CITATION DATA WR
+   GARFIELD E, 1965, 269 NAT BUR STAND MI, P189
+   GARNER R, 1965, THESIS DREXEL I TECH
+   KAREL L, 1965, SCIENCE WASHINGTON, V148, P766
+   KAREL L, 1965, SCIENCE, V148, P1257
+   KESSLER MM, 1963, AM DOC, V14, P10
+   KESSLER MM, 1965, PHYS TODAY, V18, P28
+   LEDERBERG J, 1963, NATURE, V198, P428
+   LEDERBERG J, 1964, MAN HIS FUTURE, P263
+   LINEWEAVER H, 1934, J AM CHEM SOC, V56, P658
+   MARON ME, 1960, J ACM, V7, P216
+   MARRON H, 1963, PHYS TODAY, V16, P34
+   MONTGOMERY C, 1962, AM DOC, V13, P359
+   MOOERS C, 1951, AM DOC, V2, P20
+   MUELLER G, 1965, NATURE, V205, P1200
+   OCONNOR J, 1964, J ASSOC COMPUT MACH, V11, P437
+   PARKERRHODES AF, 1960, THEORY CLUMPS
+   PRICE DJD, 1965, SCIENCE, V149, P510
+   RICE CN, 1965, J CHEM DOC, V5, P163
+   SAGE CR, 1965, AM DOCUMENTATION, V16, P185
+   SALTON G, 1963, J ACM, V10, P440
+   SHER IH, 1965, 2 OFF NAV RES C RES
+   SHERA JH, 1956, DOCUMENTATION ACT ED, P238
+   SOKAL RR, 1963, PRINCIPLES NUMERICAL
+   STEVENS ME, 1964, AFIPS C P, V25, P563
+   SWENSON S, 1965, SPEC LIBR, V56, P239
+   TAUBER MR, 1953, SUBJECT ANALYSIS LIB
+   TAYLOR RS, 1962, AM DOC, V13, P391
+   TUKEY JW, 1962, J CHEM DOCUMENTATION, V2, P34
+   UREY HC, 1952, PLANETS
+   UREY HC, 1962, SCIENCE, V137, P623
+   VEANER AB, 1965, J MEDICAL EDUCATION, V40, P43
+   WARBURG O, 1965, KLINISCH WOCHENSCHR, V43, P289
+   WELLS HG, 1938, WORLD BRAIN
+   WOLSTENHOLME G, 1964, MAN HIS FUTURE    ED, P263
+NR 56
+TC 14
+J9 FRONT LIBRARIANSH-SYRACUSE U
+PY 1968
+IS 8
+BP 169
+EP &
+PG 0
+SC Computer Science, Information Systems; Instruments & Instrumentation
+GA C7672
+UT ISI:A1968C767200016
+ER
+
+PT J
+AU GARFIELD, E
+   SHER, IH
+TI ISIS EXPERIENCES WITH ASCA - A SELECTIVE DISSEMINATION SYSTEM
+SO JOURNAL OF CHEMICAL DOCUMENTATION
+LA English
+DT Article
+CR GARFIELD E, 1955, SCIENCE, V122, P108
+   GARFIELD E, 1964, SCIENCE, V144, P649
+   GARFIELD E, 1965, 8 SYR U SCH LIBR SCI
+   GORN S, 1962, P S PURE MATHEMATICS, V5, P201
+   KEEN EM, 1964, ASLIB P, V16, P246
+   LUHN HP, 1961, AM DOC, V12, P131
+   RICE CN, 1965, J CHEM DOC, V5, P163
+   ROGERS FB, 1966, B MED LIBR ASS, V54, P1
+   SAGE CR, 1965, AM DOCUMENTATION, V16, P185
+   SIMKINS MA, 1967, CHEM IND LONDON, V3, P122
+NR 10
+TC 26
+PU J CHEMICAL DOCUMENTATION
+PI WASHINGTON
+PA  WASHINGTON, DC
+SN 0021-9576
+J9 J CHEM DOC
+PY 1967
+VL 7
+IS 3
+BP 147
+EP &
+PG 0
+SC Computer Science, Interdisciplinary Applications
+GA 97738
+UT ISI:A19679773800013
+ER
+
+PT J
+AU GARFIELD, E
+   SHER, IH
+TI ASCA (AUTOMATIC SUBJECT CITATION ALERT) - A NEW PERSONALIZED CURRENT
+   AWARENESS SERVICE FOR SCIENTISTS
+SO AMERICAN BEHAVIORAL SCIENTIST
+LA English
+DT Article
+CR GARFIELD E, 1964, AM BEHAV SCI, V7, P58
+   GARFIELD E, 1964, SCIENCE, V144, P649
+   GARFIELD E, 1966, KARGER GAZETTE, P2
+   GARFIELD E, 1966, SCIENCE, V154, P762
+   SMITH JF, 1964, CHEM ENG NEWS, V42, P55
+NR 5
+TC 25
+PU SAGE PUBLICATIONS INC
+PI THOUSAND OAKS
+PA 2455 TELLER RD, THOUSAND OAKS, CA 91320
+SN 0002-7642
+J9 AMER BEHAV SCI
+JI Am. Behav. Sci.
+PY 1967
+VL 10
+IS 5
+BP 29
+EP &
+PG 0
+SC Psychology, Clinical; Social Sciences, Interdisciplinary
+GA 92641
+UT ISI:A19679264100007
+ER
+
+PT J
+AU GARFIELD, E
+TI PATENT CITATION INDEXING AND NOTIONS OF NOVELTY SIMILARITY AND RELEVANCE
+SO JOURNAL OF CHEMICAL DOCUMENTATION
+LA English
+DT Article
+CR ADAIR WC, 1955, AM DOC, V63, P31
+   GARFIELD E, 1957, J PATENT OFFICE SOC, V39, P583
+   GARFIELD E, 1964, SCIENCE, V144, P649
+   GARFIELD E, 1965, JUL S F ACC KNOWL SY
+   HART HC, 1949, J PAT OFF SOC, V37, P714
+   KESSLER MM, 1963, AM DOC, V14, P10
+   SALTON G, 1963, J ACM, V10, P440
+   SEIDEL AH, 1949, J PATENT OFFICE SOC, V31, P554
+   SOKAL RR, 1963, PRINCIPLES NUMERICAL
+   SPENCER RA, 1964, PRIVATE COMMUNICATIO
+   TAYLOR RS, 1962, AM DOC, V13, P31
+NR 11
+TC 15
+PU J CHEMICAL DOCUMENTATION
+PI WASHINGTON
+PA  WASHINGTON, DC
+SN 0021-9576
+J9 J CHEM DOC
+PY 1966
+VL 6
+IS 2
+BP 63
+EP &
+PG 0
+SC Computer Science, Interdisciplinary Applications
+GA 78423
+UT ISI:A19667842300003
+ER
+
+PT J
+AU GARFIELD, E
+TI SCIENCE CITATION INDEX - ANSWERS TO FREQUENTLY ASKED QUESTIONS
+SO REVUE INTERNATIONALE DE LA DOCUMENTATION
+LA English
+DT Article
+CR BRADFORD SC, 1946, ROYAL SOC EMPIRE SCI, P729
+   CLEVERDON C, 1964, NATURE, V203, P446
+   CLEVERDON CW, 1964, REV I DOCUMENTATION, V31, P161
+   COLE PF, 1962, J DOC, V18, P58
+   GARFIELD E, ABSTRACTS PAPERS, G12
+   GARFIELD E, 1964, 148 M AM CHEM SOC DI
+   GARFIELD E, 1964, AM BEHAV SCI, V7, P58
+   GARFIELD E, 1964, MAR NAT BUR STAND DO
+   GARFIELD E, 1964, NSFC332 NAT SCIENC F
+   GARFIELD E, 1964, SCIENCE, V144, P649
+   GARFIELD E, 1965, SCITECH NEWS, V18, P133
+   GARFIELD E, 1965, SCITECH NEWS, V18, P142
+   KEENAN S, 1964, AIPDRPPA1 AM I PHYS
+   STONEHILL HI, 1965, CHEM INDUS, V10, P416
+NR 14
+TC 3
+J9 REV INT DOC
+PY 1965
+VL 32
+IS 3
+BP 112
+EP &
+PG 0
+SC Computer Science, Information Systems
+GA 69932
+UT ISI:A19656993200006
+ER
+
+PT J
+AU GARFIELD, E
+   STEVENS, LJ
+TI ON THE SCIENCE-CITATION-INDEX (SCI) AND RELATED RECENT DEVELOPMENTS
+SO NACHRICHTEN FUR DOKUMENTATION
+LA German
+DT Article
+CR GARFIELD E, 1963, AM DOC, V14, P289
+   GARFIELD E, 1964, SCIENCE, V144, P649
+   MODEL F, 1964, NACHR DOKUMENTATION, V15, P122
+NR 3
+TC 1
+PU VERLAG HOPPENSTEDT & CO
+PI DARMSTADT 1
+PA POSTFACH 40 06, HAVELSTR 9, D-6100 DARMSTADT 1, GERMANY
+SN 0027-7436
+J9 NACHR DOK
+JI Nachr. Dok.
+PY 1965
+VL 16
+IS 3
+BP 130
+EP 140
+PG 11
+SC Information Science & Library Science
+GA CEP90
+UT ISI:A1965CEP9000003
+ER
+
+PT J
+AU GARFIELD, E
+TI SCIENCE CITATION INDEX-NEW DIMENSION IN INDEXING - UNIQUE APPROACH
+   UNDERLIES VERSATILE BIBLIOGRAPHIC SYSTEMS FOR COMMUNICATING +
+   EVALUATING INFORMATION
+SO SCIENCE
+LA English
+DT Article
+CR 1961, PROPOSAL MEDLARS
+   1962, J BIOL CHEM, V237, P3315
+   1963, NATIONAL INFORMATION
+   ADAIR WC, 1955, AM DOC, V6, P31
+   ATHERTON P, 1962, 3 EXP CIT IND BIBL C
+   AVAKIAN EA, 1956, SPEC LIBRARIES, V48, P145
+   BENNETT G, 1961, SCITECH NEWS, V15, P129
+   BERNAL JD, 1963, SCIENTIST SPECULATES, P11
+   BORING EG, 1955, SCI MONTHLY, V80, P101
+   BUSH V, 1945, ATLANTIC MONTHLY, V176, P101
+   CEZAIRLIYAN AO, 1960, 11 THERM PROP RES CE
+   CLARKE BL, 1964, SCIENCE, V143, P822
+   CROSS LC, 1964, PERSONAL COMMUNICATI
+   ERNST HA, 1959, THESIS MASSACHUSETTS
+   FANO RM, 1959, PRIVATE MEMORANDUM
+   GARFIELD E, 1955, SCIENCE, V122, P108
+   GARFIELD E, 1956, CHEM B, V43, P11
+   GARFIELD E, 1956, SCIENCE, V123, P62
+   GARFIELD E, 1957, J PATENT OFFICE SOC, V39, P583
+   GARFIELD E, 1957, P INTERNATIONAL STUD, P98
+   GARFIELD E, 1959, 1958 P INT C SCI INF, P461
+   GARFIELD E, 1961, J CHEM DOC, V1, P70
+   GARFIELD E, 1963, AM DOC, V14, P289
+   GARFIELD E, 1963, GENETICS CITATION IN
+   GARFIELD E, 1963, NATIONAL INFORMATION, P226
+   GARFIELD E, 1963, P AM DOC I         1, P45
+   GARFIELD E, 1963, SCIENCE CITATION IND
+   GOOD IJ, 1963, SCIENTIST SPECULATES, P11
+   HANSON CW, 1960, J DOCUMENTATION, V16, P65
+   HART HC, 1949, J PATENT OFFICE SOC, V31, P714
+   HERNER S, 1956, SCI MONTHLY, V83, P82
+   HOAGLAND H, 1964, SCIENCE, V143, P111
+   HUMPHREY HH, 1963, INTERAGENCY COORDINA
+   KESSLER MM, 1961, P W JOINT COMP C CAM, P247
+   KESSLER MM, 1963, AM DOC, V14, P10
+   LIPETZ BA, 1962, AM DOC, V13, P251
+   LOWRY OH, 1951, J BIOL CHEM, V193, P265
+   LYKOUDIS PS, 1959, P INTERNATIONAL C SC, V1, P351
+   MADDOX J, 1963, B ATOMIC SCI, V19, P14
+   MAZUR RH, 1962, J BIOL CHEM, V237, P1619
+   MURRA KO, 1951, BIBLIOGRAPHIC ORGANI, P24
+   REIF F, 1961, SCIENCE, V134, P1957
+   SALTON G, 1963, J ACM, V10, P440
+   SAVAGE IR, 1962, BIBLIOGRAPHY NONPARA
+   SCHOENBACH UH, 1956, SCIENCE, V123, P61
+   SCHWARTZ DP, 1958, ANAL CHEM, V30, P219
+   SEIDEL AH, 1949, J PATENT OFFICE SOC, V31, P554
+   SENDERS JW, 1963, SCIENCE, V141, P1067
+   SHERA JH, 1951, BIBLIOGRAPHIC ORGANI
+   SHERA JH, 1951, BIBLIOGRAPHIC ORGANI, P24
+   TUKEY JW, 1962, J CHEM DOCUMENTATION, V2, P34
+   TUKEY JW, 1962, PRINCETON U STATISTI
+   WEINBERG AM, 1963, SCIENCE GOVERNMENT I
+   WELLS HG, 1938, WORLD BRAIN
+NR 54
+TC 109
+PU AMER ASSOC ADVANCEMENT SCIENCE
+PI WASHINGTON
+PA 1200 NEW YORK AVE, NW, WASHINGTON, DC 20005
+SN 0036-8075
+J9 SCIENCE
+JI Science
+PY 1964
+VL 144
+IS 361
+BP 649
+EP &
+PG 0
+SC Multidisciplinary Sciences
+GA 3060C
+UT ISI:A19643060C00065
+ER
+
+PT J
+AU GARFIELD, E
+   SHER, IH
+TI NEW FACTORS IN EVALUATION OF SCIENTIFIC LITERATURE THROUGH CITATION
+   INDEXING
+SO AMERICAN DOCUMENTATION
+LA English
+DT Article
+CR COLE PF, 1962, J DOC, V18, P58
+   GARFIELD E, 1955, SCIENCE, V122, P108
+   GARFIELD E, 1958, P INT C SCI INFORMAT, V1, P461
+   GROSS PLK, 1927, SCIENCE, V66, P385
+   RAISIG LM, 1960, SCIENCE, V131, P1417
+   WESTBROOK JH, 1960, SCIENCE, V132, P1229
+NR 6
+TC 78
+PU JOHN WILEY & SONS INC
+PI NEW YORK
+PA 605 THIRD AVE, NEW YORK, NY 10158-0012
+SN 0096-946X
+J9 AMER DOCUMEN
+PY 1963
+VL 14
+IS 3
+BP 195
+EP &
+PG 0
+SC Computer Science, Information Systems; Information Science & Library
+   Science
+GA 2557A
+UT ISI:A19632557A00003
+ER
+
+PT J
+AU GARFIELD, E
+TI CITATION INDEXES IN SOCIOLOGICAL AND HISTORICAL RESEARCH
+SO AMERICAN DOCUMENTATION
+LA English
+DT Article
+CR ADAIR WC, 1955, AM DOC, V6, P31
+   ALLEN G, PRIVATE COMMUNICATIO
+   ALLEN GL, 1962, RESEARCH EVALUATION
+   BERNAL JD, PRIVATE COMMUNICATIO
+   BERNAL JD, 1953, SCIENCE INDUSTRY NIN, P230
+   BRODMAN E, 1944, MED LIB ASS B, V32, P479
+   EINSTEIN A, 1906, ANN PHYS-BERLIN, V19, P289
+   ELWORTHY PH, 1959, J CHEM SOC, P1951
+   GARFIELD E, 1955, SCIENCE, V122, P108
+   GARFIELD E, 1963, AM DOC, V14, P195
+   GROSS PLK, 1927, SCIENCE, V66, P385
+   KAHN AB, 1962, COMMUN ACM, V5, P558
+   KESSLER MM, 1963, AM DOC, V14, P10
+   LASSER DJ, 1961, CACM, V4, P167
+   LEAKE CD, PRIVATE COMMUNICATIO
+   LOWRY OH, 1951, J BIOL CHEM, V193, P265
+   MERTON RK, PRIVATE COMMUNICATIO
+   NEWELL A, PRIVATE COMMUNICATIO
+   PRICE DD, PRIVATE COMMUNICATIO
+   PRICE DD, 1963, LITTLE SCI BIG SCI, P41
+   RAISIG LM, 1960, SCIENCE, V131, P1417
+   SHRYOCK R, PRIVATE COMMUNICATIO
+   SWANSON DR, 1962, SPEC LIBRARIES, V53, P466
+   WESTBROOK JH, 1960, SCIENCE, V132, P1229
+   WHITNAH CH, 1959, J DAIRY SCI, V42, P227
+NR 25
+TC 69
+PU JOHN WILEY & SONS INC
+PI NEW YORK
+PA 605 THIRD AVE, NEW YORK, NY 10158-0012
+SN 0096-946X
+J9 AMER DOCUMEN
+PY 1963
+VL 14
+IS 4
+BP 289
+EP &
+PG 0
+SC Computer Science, Information Systems; Information Science & Library
+   Science
+GA 2556A
+UT ISI:A19632556A00005
+ER
+
+PT J
+AU GARFIELD, E
+TI GENERIC SEARCHING BY USE OF ROTATED FORMULA INDEXES
+SO JOURNAL OF CHEMICAL DOCUMENTATION
+LA English
+DT Article
+CR ANSCHUTZ L, 1927, ANN, V454, P71
+   DYSON GM, 1952, CHEM IND, P676
+   FLETCHER JH, 1956, CHEM ENG NEWS, V34, P5888
+   GARFIELD E, 1954, COMMUNICATION   0901
+   GARFIELD E, 1961, 139TH NAT M AM CHEM, Q1
+   GARFIELD E, 1961, INDEX CHEM 1 CUMULAT, P1
+   PAULING L, 1952, J AM CHEM SOC, V74, P1111
+   PAULING L, 1952, J AM CHEM SOC, V74, P3172
+   PAULING L, 1962, COMMUNICATION   0804
+   RONWIN E, 1951, J AM CHEM SOC, V73, P5141
+   RONWIN E, 1954, COMMUNICATION   0924
+   SKOLNIK H, 1958, J CHEM EDUC, V35, P150
+NR 12
+TC 8
+PU J CHEMICAL DOCUMENTATION
+PI WASHINGTON
+PA  WASHINGTON, DC
+SN 0021-9576
+J9 J CHEM DOC
+PY 1963
+VL 3
+IS 2
+BP 97
+EP 103
+PG 7
+SC Computer Science, Interdisciplinary Applications
+GA XG088
+UT ISI:A1963XG08800015
+ER
+
+PT J
+AU GARFIELD, E
+TI AN ALGORITHM FOR TRANSLATING CHEMICAL NAMES TO MOLECULAR FORMULAS
+SO JOURNAL OF CHEMICAL DOCUMENTATION
+LA English
+DT Article
+CR GARFIELD E, 1961, ALGORITHM TRANSLATIN
+   GARFIELD E, 1961, NATURE, V192, P192
+NR 2
+TC 19
+PU J CHEMICAL DOCUMENTATION
+PI WASHINGTON
+PA  WASHINGTON, DC
+SN 0021-9576
+J9 J CHEM DOC
+PY 1962
+VL 2
+IS 3
+BP 177
+EP 179
+PG 3
+SC Computer Science, Interdisciplinary Applications
+GA XG085
+UT ISI:A1962XG08500021
+ER
+
+PT J
+AU GARFIELD, E
+TI INFORMATION THEORY AND OTHER QUANTITATIVE FACTORS IN CODE DESIGN FOR
+   DOCUMENT CARD SYSTEMS
+SO JOURNAL OF CHEMICAL DOCUMENTATION
+LA English
+DT Article
+CR 1955, UNITERM SYSTEM INDEX
+   1957, AM DOCUMENTATION, V8, P330
+   ANDREWS DD, 1957, ADV DOCUMENTATION LI, V2, P447
+   AVAKIAN E, 1957, SPEC LIBR, V48, P145
+   BAILY ME, 1953, J PATENT OFFICE SOC, V35, P566
+   BALL NT, 1955, AM DOC, V6, P88
+   BATTEN WE, 1951, PUNCHED CARDS, P169
+   BEARD RL, 1952, SCIENCE, V116, P553
+   BERKSON J, 1936, AM J PUBLIC HEALTH, V26, P606
+   CASEY RS, 1958, PUNCHED CARDS THEIR
+   CAWKELL AE, ELECTRONIC ENGINEE 1, V39, P212
+   CAWKELL AE, ELECTRONIC ENGINEE 2, V39, P302
+   CAWKELL AE, INFORMATION PROCESSI, V11, P243
+   COSTELLO JC, 1961, AM DOC, V12, P20
+   CRISTINA SX, 1958, HOSPITAL MANAGEMEN 1, V72, P111
+   CRISTINA SX, 1958, HOSPITAL MANAGEMEN 2, V86, P82
+   GARFIELD E, 1954, AM DOC, V5, P7
+   GARFIELD E, 1961, NATURE, V192, P192
+   HAYES RM, 1959, MAGNACARD SYSTEM
+   HEUMANN KF, 1955, SEP AM CHEM SOC M
+   HILDEBRAND JH, STRUCTURE PROPERTY R, P1
+   HIMWICH WA, 1955, FINAL REPORT MACHINE
+   LUHN HP, 1959, EMERGING SOLUTIONS M, V5, P112
+   MOOERS C, 1951, AM DOC, V2, P20
+   MOOERS CN, 1951, 66 ZAT TECHN B
+   MOOERS CN, 1952, AUG INT C MATH HARV, P572
+   MOOERS CN, 1956, ASLIB PROC         1, V8, P3
+   MOOERS CS, 1950, AM DOC, V1, P225
+   NOLAN JJ, 1959, AM DOC, V10, P27
+   OTLET P, 1934, TRAITE DOCUMENTATION, P388
+   PERRY JW, 1958, TOOLS MACHINE LITERA, P489
+   REES TH, 1958, PUNCHED CARDS THEIR, P30
+   SAMAIN J, 1952, FILMOREX NOUVELLE TE
+   SCHULTZ CK, 1958, PUNCHED CARDS THEIR, P232
+   SHANNON CE, 1948, BELL SYST TECH J, V27, P379
+   SHANNON CE, 1948, BELL SYST TECH J, V27, P623
+   SHANNON CE, 1949, BELL SYST TECH J, V28, P656
+   SHANNON CE, 1949, MATHEMATICAL THEORY
+   SHANNON CE, 1958, ENCYCL BRITANNICA, V12, P350
+   SHAW RR, 1949, J DOC, V5, P164
+   STEIDLE W, 1957, PHARMAZEUTISCHE INDU, V19, P88
+   TAUBE M, 1953, STUDIES COORDINATE I
+   TAUBE M, 1953, STUDIES COORDINATE I, V1
+   TAUBE M, 1957, MECHANIZATION DATA R, V5, P55
+   TAUBE M, 1959, P INT C SCIENTIFIC I, V2, P1245
+   WHALEY FR, 1961, AM DOC, V12, P101
+   WISE CS, 1952, AM DOC, V3, P223
+   WISWESSER WJ, 1954, LINE FORMULA CHEMICA
+NR 48
+TC 10
+PU J CHEMICAL DOCUMENTATION
+PI WASHINGTON
+PA  WASHINGTON, DC
+SN 0021-9576
+J9 J CHEM DOC
+PY 1961
+VL 1
+IS 1
+BP 70
+EP 75
+PG 6
+SC Computer Science, Interdisciplinary Applications
+GA XG080
+UT ISI:A1961XG08000020
+ER
+
+PT J
+AU AVAKIAN, EA
+   GARFIELD, E
+TI AMFIS - THE AUTOMATIC MICROFILM INFORMATION-SYSTEM
+SO SPECIAL LIBRARIES
+LA English
+DT Article
+NR 0
+TC 9
+PU SPECIAL LIBRARIES ASSN
+PI WASHINGTON
+PA 1700 EIGHTEENTH ST NW, WASHINGTON, DC 20009-2508
+SN 0038-6723
+J9 SPEC LIBR
+JI Spec. Libr.
+PY 1957
+VL 48
+IS 4
+BP 145
+EP 148
+PG 4
+SC Information Science & Library Science
+GA CEG57
+UT ISI:A1957CEG5700003
+ER
+
+PT J
+AU GARFIELD, E
+TI BREAKING THE SUBJECT INDEX BARRIER - A CITATION INDEX FOR CHEMICAL
+   PATENTS
+SO JOURNAL OF THE PATENT OFFICE SOCIETY
+LA English
+DT Article
+CR ADAIR WC, 1955, AM DOC, V6, P31
+   CRANE EJ, 1955, CHEM ENG NEWS, V33, P2752
+   GARFIELD E, 1955, SCIENCE, V122, P108
+   HART HC, 1949, J PATENT OFFICE SOC, V31, P714
+   SEIDEL AH, 1949, J PATENT OFFICE SOC, V31, P554
+NR 5
+TC 26
+PU PATENT AND TRADEMARK OFF SOC
+PI ARLINGTON
+PA PO BOX 2600, ARLINGTON, VA 22202
+SN 0096-3577
+J9 J PAT OFF SOC
+PY 1957
+VL 39
+IS 8
+BP 583
+EP 595
+PG 13
+SC Business; Information Science & Library Science; Law
+GA CDQ37
+UT ISI:A1957CDQ3700004
+ER
+
+PT J
+AU ROCKWELL, HE
+   HAYNE, RL
+   GARFIELD, E
+TI A UNIQUE SYSTEM FOR RAPID ACCESS TO LARGE VOLUME OF PHARMACOLOGICAL
+   DATA - APPLICATION TO PUBLISHED LITERATURE ON CHLORPROMAZINE
+SO FEDERATION PROCEEDINGS
+LA English
+DT Article
+NR 0
+TC 5
+PU FEDERATION AMER SOC EXP BIOL
+PI BETHESDA
+PA 9650 ROCKVILLE PIKE, BETHESDA, MD 20814-3998
+SN 0014-9446
+J9 FED PROC
+PY 1957
+VL 16
+IS 3
+BP 726
+EP 731
+PG 6
+SC Biology
+GA WE228
+UT ISI:A1957WE22800015
+ER
+
+PT J
+AU GARFIELD, E
+TI CITATION INDEXES FOR SCIENCE - NEW DIMENSION IN DOCUMENTATION THROUGH
+   ASSOCIATION OF IDEAS
+SO SCIENCE
+LA English
+DT Article
+CR ADAIR WC, 1955, AM DOC, V6, P31
+   ANDREW AM, 1953, ELECTRON ENG, V25, P471
+   BEHNKE JA, 1954, SCIENCE, V120, P1055
+   BITNER H, 1954, COMMUNICATION    APR
+   BRODMAN E, 1944, B MED LIB ASS, V32, P479
+   BUSA R, 1952, NACHR DOK, V3, P14
+   DENNIS W, 1954, SCI MONTHLY, V79, P180
+   FUSSLER HH, 1949, LIBRARY Q, V19, P19
+   GARFIELD E, UNPUBLISHED
+   GARFIELD E, 1954, SCIENCE, V120, P1039
+   GROSS PLK, 1927, SCIENCE, V66, P385
+   LEHMAN HC, 1954, SCI MONTHLY, V78, P321
+   SELYE H, 1946, J CLIN ENDOCRINOL, V6, P117
+   SHAW RR, 1951, MACHINES BIBLIOGRAPH, P19
+   THOMASSON P, 1955, SCIENCE, V121, P610
+   ZIRKLE C, 1954, SCIENCE, V120, P189
+   ZWORYKIN VK, 1947, P AM PHILOS SOC, V91, P139
+NR 17
+TC 295
+PU AMER ASSOC ADVANCEMENT SCIENCE
+PI WASHINGTON
+PA 1200 NEW YORK AVE, NW, WASHINGTON, DC 20005
+SN 0036-8075
+J9 SCIENCE
+JI Science
+PY 1955
+VL 122
+IS 3159
+BP 108
+EP 111
+PG 4
+SC Multidisciplinary Sciences
+GA ZQ151
+UT ISI:A1955ZQ15100002
+ER
+
+EF

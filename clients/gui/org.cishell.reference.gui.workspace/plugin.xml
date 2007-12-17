@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         id="CIShellApplication"
+         point="org.eclipse.core.runtime.applications">
+      <application>
+         <run
+               class="org.cishell.reference.gui.workspace.CIShellApplication">
+         </run>
+      </application>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            name="Default CIShell Perspective"
+            class="org.cishell.reference.gui.workspace.Perspective"
+            id="org.cishell.reference.gui.workspace.Perspective">
+      </perspective>
+   </extension>
+</plugin>

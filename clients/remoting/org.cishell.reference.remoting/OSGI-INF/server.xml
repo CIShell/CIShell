@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="org.cishell.reference.remoting.frontend.CIShellServerAlg" immediate="true">
+	<implementation class="org.cishell.reference.remoting.frontend.CIShellServerAlg"/>
+	
+	<reference name="LOG" interface="org.osgi.service.log.LogService"/>
+	<reference name="HTTP" interface="org.osgi.service.http.HttpService"/>
+	<reference name="SOAP" interface="org.knopflerfish.service.ksoap.KSoapAdmin"/>
+	<reference name="EventAdmin" interface="org.osgi.service.event.EventAdmin"/>
+</component>
