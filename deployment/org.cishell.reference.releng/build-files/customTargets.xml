@@ -168,6 +168,9 @@
 		<zip destfile="${archiveName}" update="true" >
 			<zipfileset dir="${buildDirectory}/temp.extra-files" includes="**/*" excludes="${archivePrefix}/${archivePrefix}*"/>
 			<zipfileset dir="${buildDirectory}/temp.extra-files" includes="${archivePrefix}/${archivePrefix}*" filemode="755"/>
+			
+			<!-- Set executable bit for Mac binaries -->
+			<zipfileset dir="${buildDirectory}/temp.extra-files" includes="${archivePrefix}/${archivePrefix}.app/MacOS/${archivePrefix}" filemode="755"/>
 		</zip>
 		<delete dir="${buildDirectory}/temp.extra-files"/>
 	</target>
