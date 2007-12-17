@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metatype:MetaData xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.0.0">
+	<OCD name="%person" id="2.5.6.6"
+		 description="%person_record">
+		<AD name="%sex" id="2.5.4.12" type="Integer" default="1">
+			<Option label="%male" value="1" />
+			<Option label="%Female" value="0" />
+		</AD>
+		<AD name="%sn" id="2.5.4.4" type="String" default="" />
+		<AD name="%cn" id="2.5.4.3" type="String" default="" />
+		<AD name="%seeAlso" id="2.5.4.34" type="String" description="blah"
+			cardinality="8" default="http://www.google.com,
+			http://www.yahoo.com" />
+		<AD name="%telNumber" id="2.5.4.20" type="String" default="" />
+	</OCD>
+	<Designate pid="default.id">
+		<Object ocdref="2.5.6.6" />
+	</Designate>
+</metatype:MetaData>

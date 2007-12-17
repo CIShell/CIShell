@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="org.cishell.tests.alg1.component2" immediate="false">
+	<implementation class="org.cishell.tests.alg1.Alg2Factory"/>
+	<properties entry="OSGI-INF/algorithm2.properties"/>
+	<reference name="LOG" interface="org.osgi.service.log.LogService"/>
+	<reference name="MTS" interface="org.osgi.service.metatype.MetaTypeService"/>
+	
+	<service>
+		<provide interface=
+			"org.cishell.framework.algorithm.AlgorithmFactory"/>
+	</service>
+</component>
