@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://inkscape.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg10687"
+   sodipodi:version="0.32"
+   inkscape:version="0.43"
+   sodipodi:docbase="/home/bherr/workspace/org.cishell.docs.intro/src/graphics"
+   sodipodi:docname="algorithmPool.svg"
+   inkscape:export-filename="/home/bherr/workspace/org.cishell.docs.intro/src/graphics/algorithmPool.png"
+   inkscape:export-xdpi="3582.0896"
+   inkscape:export-ydpi="3582.0896">
+  <defs
+     id="defs10689">
+    <marker
+       inkscape:stockid="Arrow2Lend"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Arrow2Lend"
+       style="overflow:visible;">
+      <path
+         id="path6234"
+         style="font-size:12.0;fill-rule:evenodd;stroke-width:0.62500000;stroke-linejoin:round;"
+         d="M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z "
+         transform="scale(1.1) rotate(180) translate(-5,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Send"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Arrow1Send"
+       style="overflow:visible;">
+      <path
+         id="path6240"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
+         transform="scale(0.2) rotate(180)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Sstart"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Arrow1Sstart"
+       style="overflow:visible">
+      <path
+         id="path6243"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none"
+         transform="scale(0.2)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lstart"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Arrow1Lstart"
+       style="overflow:visible">
+      <path
+         id="path6255"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none"
+         transform="scale(0.8)" />
+    </marker>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="12.865422"
+     inkscape:cx="333.82094"
+     inkscape:cy="431.03272"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     showguides="false"
+     inkscape:window-width="1918"
+     inkscape:window-height="1128"
+     inkscape:window-x="0"
+     inkscape:window-y="23" />
+  <metadata
+     id="metadata10692">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       sodipodi:type="arc"
+       style="fill:#ffffff;fill-opacity:0;stroke:#000000;stroke-width:0.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="path10720"
+       sodipodi:cx="263.5"
+       sodipodi:cy="416.86218"
+       sodipodi:rx="25"
+       sodipodi:ry="25"
+       d="M 288.5 416.86218 A 25 25 0 1 1  238.5,416.86218 A 25 25 0 1 1  288.5 416.86218 z"
+       transform="translate(66.9375,201.0625)"
+       inkscape:export-xdpi="3582.0896"
+       inkscape:export-ydpi="3582.0896" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#ff0000;fill-opacity:0;stroke:#000000;stroke-width:0.875;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="path10718"
+       sodipodi:cx="314.73203"
+       sodipodi:cy="590.67749"
+       sodipodi:rx="0"
+       sodipodi:ry="0.33322605"
+       d="M 314.73203 590.67749 A 0 0.33322605 0 1 1  314.73203,590.67749 A 0 0.33322605 0 1 1  314.73203 590.67749 z" />
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot10704"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans"
+       transform="matrix(0.270441,0,0,0.301689,252.3726,482.2889)"><flowRegion
+         id="flowRegion10706"><rect
+           id="rect10708"
+           width="54.428574"
+           height="13.857147"
+           x="248.57143"
+           y="409.50504"
+           style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans" /></flowRegion><flowPara
+         id="flowPara10712">Alg</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot10740"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans"
+       transform="matrix(0.270441,0,0,0.301689,250.2994,489.2698)"><flowRegion
+         id="flowRegion10742"><rect
+           id="rect10744"
+           width="54.428574"
+           height="13.857147"
+           x="248.57143"
+           y="409.50504"
+           style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans" /></flowRegion><flowPara
+         id="flowPara10746">Alg</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot10730"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans"
+       transform="matrix(0.270441,0,0,0.301689,257.2507,487.2698)"><flowRegion
+         id="flowRegion10732"><rect
+           id="rect10734"
+           width="54.428574"
+           height="13.857147"
+           x="248.57143"
+           y="409.50504"
+           style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans" /></flowRegion><flowPara
+         id="flowPara10736">Alg</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot10755"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans"
+       transform="matrix(0.270441,0,0,0.301689,254.7574,475.3501)"><flowRegion
+         id="flowRegion10757"><rect
+           id="rect10759"
+           width="54.428574"
+           height="13.857147"
+           x="248.57143"
+           y="409.50504"
+           style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans" /></flowRegion><flowPara
+         id="flowPara10761">Alg</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot10765"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans"
+       transform="matrix(0.270441,0,0,0.301689,245.2507,484.2698)"><flowRegion
+         id="flowRegion10767"><rect
+           id="rect10769"
+           width="54.428574"
+           height="13.857147"
+           x="248.57143"
+           y="409.50504"
+           style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans" /></flowRegion><flowPara
+         id="flowPara10771">Alg</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot10775"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans"
+       transform="matrix(0.270441,0,0,0.301689,247.7574,476.9231)"><flowRegion
+         id="flowRegion10777"><rect
+           id="rect10779"
+           width="54.428574"
+           height="13.857147"
+           x="248.57143"
+           y="409.50504"
+           style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans" /></flowRegion><flowPara
+         id="flowPara10781">Alg</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot10785"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans"
+       transform="matrix(0.270441,0,0,0.301689,271.4535,497.2867)"><flowRegion
+         id="flowRegion10787"><rect
+           id="rect10789"
+           width="54.428574"
+           height="13.857147"
+           x="248.57143"
+           y="409.50504"
+           style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans" /></flowRegion><flowPara
+         id="flowPara10791">Logging</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot10795"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans"
+       transform="matrix(0.270441,0,0,0.301689,268.7196,509.1511)"><flowRegion
+         id="flowRegion10797"><rect
+           id="rect10799"
+           width="54.428574"
+           height="13.857147"
+           x="248.57143"
+           y="409.50504"
+           style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans" /></flowRegion><flowPara
+         id="flowPara10801">Prefs</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot10809"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans"
+       transform="matrix(0.270441,0,0,0.301689,259.7574,480.707)"><flowRegion
+         id="flowRegion10811"><rect
+           id="rect10813"
+           width="54.428574"
+           height="13.857147"
+           x="248.57143"
+           y="409.50504"
+           style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans" /></flowRegion><flowPara
+         id="flowPara10815">Alg</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot10819"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans"
+       transform="matrix(0.270441,0,0,0.301689,260.7838,504.1511)"><flowRegion
+         id="flowRegion10821"><rect
+           id="rect10823"
+           width="54.428574"
+           height="13.857147"
+           x="248.57143"
+           y="409.50504"
+           style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans" /></flowRegion><flowPara
+         id="flowPara10825">GUI</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot10841"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans"
+       transform="matrix(0.270441,0,0,0.301689,244.253,502.4859)"><flowRegion
+         id="flowRegion10843"><rect
+           id="rect10845"
+           width="54.428574"
+           height="13.857147"
+           x="248.57143"
+           y="409.50504"
+           style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans" /></flowRegion><flowPara
+         id="flowPara10847">Other</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot10871"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans"
+       transform="matrix(0.270441,0,0,0.301689,259.253,496.1511)"><flowRegion
+         id="flowRegion10873"><rect
+           id="rect10875"
+           width="54.428574"
+           height="13.857147"
+           x="248.57143"
+           y="409.50504"
+           style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans" /></flowRegion><flowPara
+         id="flowPara10877">Other</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot10905"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans"
+       transform="matrix(0.270441,0,0,0.301689,240.9146,494.5662)"><flowRegion
+         id="flowRegion10907"><rect
+           id="rect10909"
+           width="54.428574"
+           height="13.857147"
+           x="248.57143"
+           y="409.50504"
+           style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans" /></flowRegion><flowPara
+         id="flowPara10911">Alg</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot10915"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans"
+       transform="matrix(0.270441,0,0,0.301689,254.3726,509.1392)"><flowRegion
+         id="flowRegion10917"><rect
+           id="rect10919"
+           width="54.428574"
+           height="13.857147"
+           x="248.57143"
+           y="409.50504"
+           style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans" /></flowRegion><flowPara
+         id="flowPara10921">Alg</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot10927"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans"
+       transform="matrix(0.270441,0,0,0.301689,268.4284,486.0351)"><flowRegion
+         id="flowRegion10929"><rect
+           id="rect10931"
+           width="54.428574"
+           height="13.857147"
+           x="248.57143"
+           y="409.50504"
+           style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans" /></flowRegion><flowPara
+         id="flowPara10933">Other</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot10937"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans"
+       transform="matrix(0.270441,0,0,0.301689,272.4284,478.707)"><flowRegion
+         id="flowRegion10939"><rect
+           id="rect10941"
+           width="54.428574"
+           height="13.857147"
+           x="248.57143"
+           y="409.50504"
+           style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans" /></flowRegion><flowPara
+         id="flowPara10943">Other</flowPara></flowRoot>    <rect
+       style="fill:#ff0000;fill-opacity:0;stroke:#000000;stroke-width:0.25;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect12410"
+       width="6"
+       height="0"
+       x="393"
+       y="599.36218" />
+  </g>
+</svg>
