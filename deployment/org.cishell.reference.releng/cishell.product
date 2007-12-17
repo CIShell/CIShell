@@ -43,10 +43,11 @@
    </plugins>
 
    <features>
+      <feature id="org.cishell.environment.equinox.feature" version="0.0.0"/>
       <feature id="org.cishell.feature" version="0.3.0"/>
       <feature id="org.cishell.reference.feature" version="0.4.0"/>
       <feature id="org.cishell.reference.gui.feature" version="0.4.0"/>
-      <feature id="org.cishell.environment.equinox.feature" version="0.0.0"/>
+      <feature id="org.cishell.reference.gui.brand.feature" version="0.8.0"/>
    </features>
 
 </product>
