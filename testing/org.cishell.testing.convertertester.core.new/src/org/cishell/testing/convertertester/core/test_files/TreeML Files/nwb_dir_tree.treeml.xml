@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- prefuse TreeML Writer | Mon Jul 02 11:19:12 EDT 2007 -->
+<tree>
+  <declarations>
+    <attributeDecl name="label" type="String"/>
+  </declarations>
+
+  <branch>
+    <attribute name="label" value="nwb"/>
+    <branch>
+      <attribute name="label" value="plugins"/>
+      <leaf>
+        <attribute name="label" value="FreeHEP_VectorGraphics_1.0.0"/>
+      </leaf>
+      <leaf>
+        <attribute name="label" value="edu.uci.ics.jung_1.7.4"/>
+      </leaf>
+      <leaf>
+        <attribute name="label" value="Stax_Library_1.0.0"/>
+      </leaf>
+      <leaf>
+        <attribute name="label" value="org.eclipse.core.runtime.compatibility.registry_3.2.1.R32x_v20060907"/>
+      </leaf>
+      <leaf>
+        <attribute name="label" value="org.prefuse.lib_20060715.0.0"/>
+      </leaf>
+      <leaf>
+        <attribute name="label" value="cern.colt_1.2.0"/>
+      </leaf>
+      <leaf>
+        <attribute name="label" value="org.apache.commons.collections_3.1.0"/>
+      </leaf>
+    </branch>
+    <leaf>
+      <attribute name="label" value="licenses"/>
+    </leaf>
+    <branch>
+      <attribute name="label" value="features"/>
+      <leaf>
+        <attribute name="label" value="org.cishell.reference.gui.feature_0.4.0"/>
+      </leaf>
+      <leaf>
+        <attribute name="label" value="edu.iu.nwb.gui.brand.feature_0.5.0"/>
+      </leaf>
+      <leaf>
+        <attribute name="label" value="edu.iu.nwb.converter.feature_0.6.0"/>
+      </leaf>
+      <leaf>
+        <attribute name="label" value="org.cishell.reference.feature_0.4.0"/>
+      </leaf>
+      <leaf>
+        <attribute name="label" value="edu.iu.iv.algorithm.feature_0.5.0"/>
+      </leaf>
+      <leaf>
+        <attribute name="label" value="org.cishell.feature_0.3.0"/>
+      </leaf>
+      <leaf>
+        <attribute name="label" value="org.cishell.environment.equinox.feature_0.1.0"/>
+      </leaf>
+    </branch>
+    <branch>
+      <attribute name="label" value="sampledata"/>
+      <leaf>
+        <attribute name="label" value="Network"/>
+      </leaf>
+    </branch>
+    <branch>
+      <attribute name="label" value="configuration"/>
+      <leaf>
+        <attribute name="label" value="org.eclipse.osgi"/>
+      </leaf>
+      <leaf>
+        <attribute name="label" value="org.eclipse.update"/>
+      </leaf>
+      <leaf>
+        <attribute name="label" value="org.eclipse.core.runtime"/>
+      </leaf>
+    </branch>
+    <leaf>
+      <attribute name="label" value="Uninstaller"/>
+    </leaf>
+  </branch>
+</tree>
