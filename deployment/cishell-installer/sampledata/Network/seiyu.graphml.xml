@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns
+  http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+
+  <key id="label" for="node" attr.name="label" attr.type="string"/>
+  <key id="show" for="node" attr.name="show" attr.type="string"/>
+  <key id="showE" for="node" attr.name="showEnglish" attr.type="string"/>
+  <key id="character" for="node" attr.name="character" attr.type="string"/>
+  <key id="total" for="node" attr.name="totalShows" attr.type="integer"/>
+
+  <graph edgedefault="undirected">
+    <!-- nodes -->
+    <node id="0">
+      <data key="label">平野 綾</data>
+      <data key="show">涼宮ハルヒの憂鬱</data>
+      <data key="showE">The Melancholy of Haruhi Suzumiya</data>
+      <data key="character">涼宮ハルヒ</data>
+      <data key="total">20</data>
+    </node>
+     <node id="1">
+      <data key="label">後藤邑子</data>
+      <data key="show">涼宮ハルヒの憂鬱</data>
+      <data key="showE">The Melancholy of Haruhi Suzumiya</data>
+      <data key="character">朝比奈 みくる</data>
+      <data key="total">15</data>
+    </node>
+     <node id="2">
+      <data key="label">野中 藍</data>
+      <data key="show">くじびき♥アンバランス</data>
+      <data key="showE">Kujibiki♥Unbalance</data>
+      <data key="character">秋山時乃</data>
+      <data key="total">21</data>
+   </node>
+     <node id="3">
+      <data key="label">岡野 浩介</data>
+      <data key="show">かみちゅ!～かみさまでちゅうがくせい</data>
+      <data key="showE">Kamichu!</data>
+      <data key="character">八島様</data>
+      <data key="total">12</data>
+    </node>
+     <node id="4">
+      <data key="label">山口勝平</data>
+      <data key="show">犬夜叉</data>
+      <data key="showE">InuYasha</data>
+      <data key="character">犬夜叉</data>
+      <data key="total">70</data>
+    </node>
+        <!-- edges -->
+    <edge id="0" source="0" target="1"/>
+    <edge id="1" source="1" target="2"/>
+    <edge id="2" source="2" target="3"/>
+    <edge id="3" source="3" target="4"/>
+    <edge id="4" source="4" target="0"/>
+    
+  </graph>
+</graphml>

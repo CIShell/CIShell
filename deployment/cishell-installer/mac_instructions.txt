@@ -1,0 +1,5 @@
+Extra installation steps for Mac OSX users:
+
+For all CIShell features to work properly, please upgrade to the newest version
+of Java, version 1.5.0 Release 5 (or greater). See the FAQ section at 
+http://cishell.org for more information.

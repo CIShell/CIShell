@@ -1,0 +1,117 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Version: 1.7.0.v200706080842
+Created-By: 2.3 (IBM Corporation)
+Bundle-SymbolicName: org.apache.ant.source
+Bundle-Name: %pluginName
+Bundle-Localization: plugin
+Bundle-Vendor: %providerName
+Ant-Version: Apache Ant 1.7.0
+
+Name: src/org.apache.ant_1.7.0.v200706080842/lib/ant-swingsrc.zip
+SHA1-Digest: 7KeVtz8asRCK+3q8WRTZbW5s3mY=
+
+Name: src/org.apache.ant_1.7.0.v200706080842/lib/ant-traxsrc.zip
+SHA1-Digest: oKb3ZlhuhacqvPlvhLaFCK9ewaU=
+
+Name: src/org.apache.ant_1.7.0.v200706080842/lib/ant-apache-log4jsrc.z
+ ip
+SHA1-Digest: n31lp/ai8sqvLh1ZccKSn2+OZ4o=
+
+Name: src/org.apache.ant_1.7.0.v200706080842/lib/ant-apache-resolversr
+ c.zip
+SHA1-Digest: iG83sYhGgHzrBesberzkLna6Qwg=
+
+Name: src/org.apache.ant_1.7.0.v200706080842/lib/ant-launchersrc.zip
+SHA1-Digest: 3FV7N8VOfgOUZEkimqbG2/eSKvc=
+
+Name: src/org.apache.ant_1.7.0.v200706080842/lib/ant-antlrsrc.zip
+SHA1-Digest: JCtTsLz6RzCFlCgnRlcfbhb44eE=
+
+Name: src/org.apache.ant_1.7.0.v200706080842/lib/ant-nodepssrc.zip
+SHA1-Digest: ooK/Dd6zgT7fliNIyUuBDZCoY2s=
+
+Name: src/org.apache.ant_1.7.0.v200706080842/lib/ant-netrexxsrc.zip
+SHA1-Digest: LtwoTtx3ibnHr35DxC3MFeK74V8=
+
+Name: about.html
+SHA1-Digest: gDT2Er1IoaKBT1HypdzQDPB7LUU=
+
+Name: src/org.apache.ant_1.7.0.v200706080842/lib/ant-jaisrc.zip
+SHA1-Digest: xRT7kkD35cZoYu6avbznoPQyimQ=
+
+Name: src/org.apache.ant_1.7.0.v200706080842/lib/ant-jdependsrc.zip
+SHA1-Digest: SliWqcjKv7x+jQyxXlvpIN6WLI8=
+
+Name: META-INF/eclipse.inf
+SHA1-Digest: KyT9FF7C7t86NoBoa2kZT3ZJBfw=
+
+Name: src/org.apache.ant_1.7.0.v200706080842/lib/ant-jschsrc.zip
+SHA1-Digest: Qdo8T905Fd4yrlpK69EfOxDL0wM=
+
+Name: src/org.apache.ant_1.7.0.v200706080842/lib/ant-stylebooksrc.zip
+SHA1-Digest: gYLjacs7qLpSuAfyWifoAbDIYH8=
+
+Name: src/org.apache.ant_1.7.0.v200706080842/about.html
+SHA1-Digest: N0elfKP7uYuYLATOh5XaE1P3nXI=
+
+Name: src/org.apache.ant_1.7.0.v200706080842/lib/ant-apache-bsfsrc.zip
+SHA1-Digest: C3y9ima4TR+jkwrypvauxo3GzPY=
+
+Name: plugin.xml
+SHA1-Digest: jDGmVmqrGmBObcq69i9+MOEP7cI=
+
+Name: src/org.apache.ant_1.7.0.v200706080842/lib/ant-javamailsrc.zip
+SHA1-Digest: IKGH4v+o8LQt1nV6C+dLl0G4e4Q=
+
+Name: src/org.apache.ant_1.7.0.v200706080842/lib/ant-jmfsrc.zip
+SHA1-Digest: lx30qV7iRepigmo2zIeyF8nmYkc=
+
+Name: src/org.apache.ant_1.7.0.v200706080842/about_files/NOTICE
+SHA1-Digest: Mu3gQHJl963VZJ+BCE906ZAhmXY=
+
+Name: src/org.apache.ant_1.7.0.v200706080842/lib/ant-apache-bcelsrc.zi
+ p
+SHA1-Digest: +yPyLJZqMH7xbtF7yeKDZOK5iAw=
+
+Name: src/org.apache.ant_1.7.0.v200706080842/lib/ant-apache-regexpsrc.
+ zip
+SHA1-Digest: T3fz2xx6UxOfymQPiB9xaejGT2I=
+
+Name: src/org.apache.ant_1.7.0.v200706080842/lib/antsrc.zip
+SHA1-Digest: g9zolc7nK8WLs3V1JLXXD0MJY7E=
+
+Name: plugin.properties
+SHA1-Digest: qPZD5qCATS2MeCw5qzZF/4uuvFM=
+
+Name: src/org.apache.ant_1.7.0.v200706080842/lib/ant-junitsrc.zip
+SHA1-Digest: PRjQuEx0ZEY7qA0gK4vd14PbbNQ=
+
+Name: src/org.apache.ant_1.7.0.v200706080842/lib/ant-weblogicsrc.zip
+SHA1-Digest: xX1Uq55bNsohwVo3HmcWk0ZyXyo=
+
+Name: src/org.apache.ant_1.7.0.v200706080842/lib/ant-apache-orosrc.zip
+SHA1-Digest: hgNXh5GGVgyOhYRTwoWlyfeTtKw=
+
+Name: src/org.apache.ant_1.7.0.v200706080842/about_files/asl-v20.txt
+SHA1-Digest: K4uBUimqimHkg/tLoFiLi2xJGJA=
+
+Name: src/org.apache.ant_1.7.0.v200706080842/lib/ant-commons-netsrc.zi
+ p
+SHA1-Digest: jTV1pV29dgYDsAoaAhRMxpKt8xg=
+
+Name: src/org.apache.ant_1.7.0.v200706080842/lib/ant-starteamsrc.zip
+SHA1-Digest: iQKFRygCJ9o14PUQCxG1SH4RYVs=
+
+Name: src/org.apache.ant_1.7.0.v200706080842/about_files/LICENSE.dom.h
+ tml
+SHA1-Digest: 9F8cZaCgriCte0T6Mt5hAFumadk=
+
+Name: src/org.apache.ant_1.7.0.v200706080842/lib/ant-commons-loggingsr
+ c.zip
+SHA1-Digest: 8vSpa0IVN8MvUH5f6X5w1jcA9q4=
+
+Name: src/org.apache.ant_1.7.0.v200706080842/about_files/LICENSE.sax.t
+ xt
+SHA1-Digest: uLnQn2qwT77aJ6MThuLeWz1I5ek=
+

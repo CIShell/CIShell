@@ -1,0 +1,42 @@
+<!--
+	CIShell: Cyberinfrastructure Shell (http://cishell.org/)
+
+	CIShell Installer ant build file.
+	
+	Note: this script assumes there is a full version of ivc extracted to:
+	${basedir}/cishell_full and ${basedir}/cishell_min
+	
+	Maintained by Bruce Herr.
+-->
+
+<project name='CIShell Installer' default='compile' basedir='.'>
+
+	<!--  Properties -->
+	<property name="version" value="0.4.0"/>
+	<property name="full.xml" value="install.xml"/>
+	<property name="min.xml" value="install.xml"/>
+	<property name="full.jar" value="cishell-installer_${version}.jar"/>
+	<property name="min.jar" value="cishell.${version}.minimal-installer.jar"/>
+
+
+	<!-- Allows us to use the IzPack Ant task -->
+	<taskdef name="izpack" classpath="${basedir}/lib/standalone-compiler.jar"
+	         classname="com.izforge.izpack.ant.IzPackTask"/>
+	
+	<target name='compile'>
+<!--    No need for a minimal installer at this time.
+		<echo message="Making the minimal CIShell installer using IzPack"/>
+		<izpack input="${basedir}/${min.xml}"
+	    	    output="${basedir}/${min.jar}"
+	        	installerType="standard"
+		        basedir="${basedir}/cishell_min"/>
+ -->
+
+		<echo message="Making the full CIShell installer using IzPack"/>
+		<izpack input="${basedir}/${full.xml}"
+	    	    output="${basedir}/${full.jar}"
+	        	installerType="standard"
+		        basedir="${basedir}/cishell_full"/>
+	</target>
+
+</project>

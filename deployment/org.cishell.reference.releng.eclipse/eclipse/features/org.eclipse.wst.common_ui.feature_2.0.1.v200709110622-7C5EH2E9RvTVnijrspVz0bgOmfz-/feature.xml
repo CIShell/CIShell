@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.eclipse.wst.common_ui.feature"
+      label="%featureName"
+      version="2.0.1.v200709110622-7C5EH2E9RvTVnijrspVz0bgOmfz-"
+      provider-name="%providerName">
+
+   <description>
+      %description
+   </description>
+
+   <copyright>
+      %copyright
+   </copyright>
+
+   <license url="%licenseURL">
+      %license
+   </license>
+
+   <url>
+      <update label="%updateSiteName" url="http://download.eclipse.org/webtools/updates/"/>
+   </url>
+
+   <includes
+         id="org.eclipse.wst.common_core.feature"
+         version="2.0.1.v200709110622-7C78EKGE_EkMNfNleyerlz"/>
+
+   <requires>
+      <import plugin="org.eclipse.wst.command.env.core" version="1.0.101" match="equivalent"/>
+      <import plugin="org.eclipse.wst.command.env" version="1.0.101" match="equivalent"/>
+      <import plugin="org.eclipse.core.runtime" version="3.2.0" match="compatible"/>
+      <import plugin="org.eclipse.ui" version="3.2.0" match="compatible"/>
+      <import plugin="org.eclipse.wst.common.frameworks" version="1.1.0" match="equivalent"/>
+      <import plugin="org.eclipse.ui.ide" version="3.2.0" match="compatible"/>
+      <import plugin="org.eclipse.core.resources" version="3.2.0" match="compatible"/>
+      <import plugin="org.eclipse.jem.util" version="2.0.0" match="compatible"/>
+      <import plugin="org.eclipse.wst.common.environment" version="1.0.100" match="equivalent"/>
+      <import plugin="org.eclipse.ui.forms" version="3.2.0" match="compatible"/>
+      <import plugin="org.eclipse.wst.common.project.facet.core" version="1.2.0" match="equivalent"/>
+      <import plugin="org.eclipse.draw2d" version="3.2.0" match="compatible"/>
+      <import plugin="org.eclipse.gef" version="3.2.0" match="compatible"/>
+      <import plugin="org.eclipse.ui.workbench.texteditor" version="3.2.0" match="compatible"/>
+      <import plugin="org.eclipse.jface.text" version="3.2.0" match="compatible"/>
+      <import plugin="com.ibm.icu" version="3.4.4" match="compatible"/>
+      <import plugin="org.eclipse.wst.common.core" version="1.1.0" match="equivalent"/>
+      <import plugin="org.eclipse.core.runtime.compatibility" version="3.1.100" match="equivalent"/>
+      <import plugin="org.eclipse.ui.views" version="3.2.0" match="compatible"/>
+      <import plugin="org.eclipse.wst.common.uriresolver" version="1.1.0" match="equivalent"/>
+      <import plugin="org.eclipse.swt" version="3.2.0" match="compatible"/>
+      <import plugin="org.eclipse.wst.common.frameworks.ui" version="1.1.0" match="equivalent"/>
+      <import plugin="org.eclipse.wst.validation" version="1.1.0" match="equivalent"/>
+      <import plugin="org.eclipse.search" version="3.2.0"/>
+   </requires>
+
+   <plugin
+         id="org.eclipse.wst.command.env.ui"
+         download-size="0"
+         install-size="0"
+         version="1.0.203.v200709052219"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.wst.common.frameworks.ui"
+         download-size="0"
+         install-size="0"
+         version="1.1.101.v200709122200"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.wst.common.infopop"
+         download-size="0"
+         install-size="0"
+         version="1.0.2.v200706110217"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.wst.common.project.facet.ui"
+         download-size="0"
+         install-size="0"
+         version="1.2.1.v200708232226"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.wst.common.snippets"
+         download-size="0"
+         install-size="0"
+         version="1.1.101.v200705302225"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.wst.common.ui"
+         download-size="0"
+         install-size="0"
+         version="1.1.200.v200705302225"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.wst.common.ui.properties"
+         download-size="0"
+         install-size="0"
+         version="1.0.102.v200706120315"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.wst.internet.cache"
+         download-size="0"
+         install-size="0"
+         version="1.0.201.v200705302225"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.wst.validation.ui"
+         download-size="0"
+         install-size="0"
+         version="1.1.102.v200706071630"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.wst.command.env.infopop"
+         download-size="0"
+         install-size="0"
+         version="1.0.3.v200706110217"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.wst.validation.infopop"
+         download-size="0"
+         install-size="0"
+         version="1.0.202.v200706110217"
+         unpack="false"/>
+
+</feature>

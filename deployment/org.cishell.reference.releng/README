@@ -1,0 +1,44 @@
+CIShell Release Engineering Project
+-----------------------------------
+Initial version by Bruce Herr building on the Eclipse PluginBuilder project.
+
+Getting Eclipse to play nicely is a severe challenge. Hopefully, all that is 
+documented here continues to work for at least a couple versions.
+
+The following sections assume that you just follow the model of whatever
+file is pointed to in there. Its a pain in the butt, but generally it works.
+
+==
+Files that will need edited as new versions come out:
+releases/HEAD.properties
+
+==
+Files that will need edited as new plugins/features are added:
+maps/all.map
+build-files/fetchSvnAll.xml
+
+NOTE: for build-files/fetchSvnAll.xml if you do not want to pull from svn, but
+simply want to copy a local copy, use a copy command instead. This is sometimes
+helpful when you need to debug features/plugins (though you should try to 
+minimize this by exporting from the product file in the Eclipse IDE before
+trying to update the releng project).
+
+==
+Files that will need edited as new platforms are added:
+build-files/customTargets.xml
+build-files/allElements.xml
+
+== 
+Files that will need edited for different brands:
+cishell.product
+build-files/build.properties
+
+==
+NOTE: pluginbuilder.config is basically useless now that I have customized 
+the project.
+
+NOTE: Unfortunately buildHome will need to be set in build_local.properties 
+depending on where the project is checked out at.
+
+NOTE: You should also check out org.cishell.reference.releng.eclipse for the
+current base eclipse builder. 

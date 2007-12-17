@@ -1,0 +1,31 @@
+Manifest-Version: 1.0
+Ant-Version: Apache Ant 1.7.0
+Created-By: 1.4.2 (IBM Corporation)
+Bundle-Activator: org.eclipse.wst.command.internal.env.plugin.EnvPlugi
+ n
+Bundle-RequiredExecutionEnvironment: J2SE-1.4
+Export-Package: org.eclipse.wst.command.internal.env;x-internal:=true,
+ org.eclipse.wst.command.internal.env.ant;x-internal:=true,org.eclipse
+ .wst.command.internal.env.commandline;x-internal:=true,org.eclipse.ws
+ t.command.internal.env.common;x-internal:=true,org.eclipse.wst.comman
+ d.internal.env.context;x-internal:=true,org.eclipse.wst.command.inter
+ nal.env.eclipse;x-internal:=true,org.eclipse.wst.command.internal.env
+ .plugin;x-internal:=true,org.eclipse.wst.command.internal.env.prefere
+ nces;x-internal:=true
+Bundle-Version: 1.0.204.v200708202226
+Eclipse-LazyStart: true
+Bundle-Name: %PLUGIN_NAME
+Bundle-ClassPath: env.jar
+Bundle-ManifestVersion: 2
+Bundle-Vendor: %PLUGIN_PROVIDER
+Bundle-SymbolicName: org.eclipse.wst.command.env; singleton:=true
+Bundle-Localization: plugin
+Require-Bundle: org.eclipse.wst.command.env.core;bundle-version="[1.0.
+ 101,1.1.0)",org.eclipse.core.runtime;bundle-version="[3.2.0,4.0.0)",o
+ rg.eclipse.core.resources;bundle-version="[3.2.0,3.4.0)",org.eclipse.
+ wst.common.frameworks;bundle-version="[1.1.0,1.2.0)",org.eclipse.core
+ .commands;bundle-version="[3.2.0,4.0.0)",org.eclipse.wst.common.envir
+ onment;bundle-version="[1.0.100,1.1.0)",org.apache.ant;bundle-version
+ ="[1.6.5,2.0.0)",org.eclipse.ant.core;bundle-version="[3.1.100,3.2.0)
+ "
+
