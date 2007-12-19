@@ -6,7 +6,7 @@
 	Maintained by Bruce Herr (bh2@bh2.net).
 -->
 
-<project name='CIShell Installer' default='compile.both' basedir='.'>
+<project name='CIShell Installer Builder' default='compile.both' basedir='.'>
 	<!--  Properties -->
 	<property file="build.properties" />
 	<property name="full.jar" value="${archivePrefix}-full-installer_${version}.jar"/>
@@ -54,8 +54,7 @@
 		<authors>
 			<author name="Bruce Herr" email="bh2@bh2.net" />
 			<author name="Weixia Huang" email="huangb@indiana.edu" />
-			<author name="Shashikant Penumarthy" email="sprao@cs.indiana.edu" />
-			<author name="Dr. Katy Borner" email="katy@indiana.edu" />
+			<author name="Katy Borner" email="katy@indiana.edu" />
 		</authors>
 		<url>@{home.url}/</url>
 		<webdir>@{packs.url}</webdir>
@@ -96,14 +95,14 @@
 		The ids must be these ones if you want to use the LicencePanel and/or the InfoPanel.
 	-->
 	<resources>
-		<res id="LicencePanel.licence" src="info/license.txt" />
+		<res id="LicencePanel.licence" src="info/license.txt" parse="yes" />
 		<!-- <res id="Installer.image" src="info/nice-image.png" /> -->
 		<res src="info/windows_shortcut_specification.xml"
 			id="shortcutSpec.xml" />
 		<res src="info/unix_shortcut_specification.xml"
 			id="Unix_shortcutSpec.xml"/>
-		<res id="InfoPanel.info" src="info/thanks.txt" />
-		<res id="XInfoPanel.info" src="info/mac_instructions.txt" />
+		<res id="InfoPanel.info" src="info/thanks.txt" parse="yes" />
+		<res id="XInfoPanel.info" src="info/mac_instructions.txt" parse="yes" />
 	</resources>
 
 	<native type="izpack" name="ShellLink.dll" />

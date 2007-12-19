@@ -16,5 +16,4 @@ permissions and limitations under the License.
 Project Contacts:
 Bruce Herr (bh2@bh2.net)
 Weixia Huang (huangb@indiana.edu)
-Shashikant Penumarthy (sprao@indiana.edu)
-Dr. Katy Borner (katy@indiana.edu)
+Katy Borner (katy@indiana.edu)
