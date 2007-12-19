@@ -117,14 +117,12 @@ public class DatasetIntegrationTask extends Task {
         File parent = dataProps.getParentFile();
         while (parent != null && !parent.getName().equals("data") &&
                 !parent.getParent().equals(baseDir.getName())) {
-            symbolicDir = parent.getName() + "/" + symbolicDir;
+            symbolicDir = parent.getName() + "." + symbolicDir;
             parent = parent.getParentFile();
         }
-        //symbolicDir at this point should be '/' or /dir1/dir2/
-        symbolicDir = "/" + symbolicDir;
+        symbolicDir = "." + symbolicDir;
         
-        String pid = symbolicName + symbolicDir.replace(File.separatorChar, '.')
-            + dataFile.getName();
+        String pid = symbolicName + dataFile.getName();
         
         out.println("service.pid="+pid);
         out.close();
