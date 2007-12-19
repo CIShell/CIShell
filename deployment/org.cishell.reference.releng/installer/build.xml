@@ -1,0 +1,225 @@
+<!--
+	CIShell: Cyberinfrastructure Shell (http://cishell.org/)
+
+	CIShell Installer Generator
+	
+	Maintained by Bruce Herr (bh2@bh2.net).
+-->
+
+<project name='CIShell Installer' default='compile.both' basedir='.'>
+	<!--  Properties -->
+	<property file="build.properties" />
+	<property name="full.jar" value="${archivePrefix}-full-installer_${version}.jar"/>
+	<property name="web.jar" value="${archivePrefix}-web-installer_${version}.jar"/>
+	<property name="build.dir" value="${finalResults}/${version.full}"/>
+	<property name="packs.url" value="${files.url.base}/${version.full}/packs"/>
+	<property name="packs.dir" value="${build.dir}/packs" />
+	
+	<!-- Allows us to use the IzPack Ant task -->
+	<taskdef name="izpack" classpath="${basedir}/lib/standalone-compiler.jar"
+	         classname="com.izforge.izpack.ant.IzPackTask"/>
+	
+	<target name='compile.both' depends='compile.web,compile.full' />
+	
+	<target name='compile.full'>
+		<antcall target="-compile">
+			<param name="installerType" value="standard" />
+			<param name="outputFile" value="${build.dir}/${full.jar}" />
+		</antcall>
+	</target>
+	
+	<target name='compile.web'>
+		<mkdir dir="${packs.dir}"/>
+		<antcall target="-compile">
+			<param name="installerType" value="web" />
+			<param name="outputFile" value="${packs.dir}/${web.jar}" />
+		</antcall>
+		<move file="${packs.dir}/${web.jar}" tofile="${build.dir}/${web.jar}" />
+	</target>
+	
+	<target name='-compile'>
+		<izpack installerType="${installerType}"
+				output="${outputFile}"
+		        basedir="${basedir}">
+			<config><![CDATA[
+<installation version="1.0">
+
+	<!-- 
+		The info section.
+	-->			
+	<info>
+		<appname>@{project.name}</appname>
+		<appsubpath>@{archivePrefix}</appsubpath>
+		<appversion>@{version}</appversion>
+		<authors>
+			<author name="Bruce Herr" email="bh2@bh2.net" />
+			<author name="Weixia Huang" email="huangb@indiana.edu" />
+			<author name="Shashikant Penumarthy" email="sprao@cs.indiana.edu" />
+			<author name="Dr. Katy Borner" email="katy@indiana.edu" />
+		</authors>
+		<url>@{home.url}/</url>
+		<webdir>@{packs.url}</webdir>
+		<javaversion>1.4</javaversion>
+	</info>
+		
+	<variables>
+		<variable name="archivePrefix" value="@{archivePrefix}"/>
+		<variable name="projectName" value="@{project.name}"/>
+		<variable name="projectShortName" value="@{project.short.name}"/>				
+	</variables>
+	
+	<!-- 
+		The gui preferences indication.
+		Sets the installer window to 640x480. It will not be able to change the size.
+	-->
+	<guiprefs width="640" height="480" resizable="no">
+		<laf name="metouia">
+			<os family="unix" />
+		</laf>
+		<laf name="looks">
+			<os family="windows" />
+			<param name="variant" value="extwin" />
+		</laf>
+		<modifier value="true" key="showDebugWindow"/>
+	</guiprefs>
+
+	<!-- 
+		The locale section.
+		Asks here to include the English and French langpacks.
+	-->
+	<locale>
+		<langpack iso3="eng" />
+	</locale>
+
+	<!-- 
+		The resources section.
+		The ids must be these ones if you want to use the LicencePanel and/or the InfoPanel.
+	-->
+	<resources>
+		<res id="LicencePanel.licence" src="info/license.txt" />
+		<!-- <res id="Installer.image" src="info/nice-image.png" /> -->
+		<res src="info/windows_shortcut_specification.xml"
+			id="shortcutSpec.xml" />
+		<res src="info/unix_shortcut_specification.xml"
+			id="Unix_shortcutSpec.xml"/>
+		<res id="InfoPanel.info" src="info/thanks.txt" />
+		<res id="XInfoPanel.info" src="info/mac_instructions.txt" />
+	</resources>
+
+	<native type="izpack" name="ShellLink.dll" />
+
+	<!-- 
+		The panels section.
+		We indicate here which panels we want to use. The order will be respected.
+	-->
+	<panels>
+		<panel classname="HelloPanel" />
+		<panel classname="LicencePanel" />
+		<panel classname="PacksPanel"/>				
+		<panel classname="TargetPanel" />		
+		<panel classname="InstallPanel" />
+		<panel classname="ShortcutPanel" />
+		<panel os="mac" classname="XInfoPanel" />
+		<panel classname="InfoPanel" />
+		<panel classname="SimpleFinishPanel" />
+	</panels>
+
+	<!-- 
+		The packs section.
+		We specify here our packs.
+	-->
+	<packs>
+		<pack name="Windows_Vista" os="windows" required="no">
+			<description>Windows Vista Version</description>
+			<file unpack="true" targetdir="$INSTALL_PATH" 
+				  src="@{build.dir}/@{archivePrefix}-@{buildLabel}-win32.wpf.x86.zip" />
+				
+			<parsable targetfile="$INSTALL_PATH/post_install.bat" />
+			<file targetdir="$INSTALL_PATH" 
+				src="post_install/post_install.bat" />
+			<executable keep="false" stage="postinstall"
+				targetfile="$INSTALL_PATH/post_install.bat" />
+		</pack>
+		<pack name="Windows_XP" os="windows" required="no">
+			<description>Windows 2000/XP Version</description>
+			<file unpack="true" targetdir="$INSTALL_PATH" 
+				  src="@{build.dir}/@{archivePrefix}-@{buildLabel}-win32.win32.x86.zip" />
+			
+			<parsable targetfile="$INSTALL_PATH/post_install.bat" />
+			<file targetdir="$INSTALL_PATH" 
+				src="post_install/post_install.bat" />				
+			<executable keep="false" stage="postinstall"
+				targetfile="$INSTALL_PATH/post_install.bat"/>
+		</pack>
+		<pack name="32-bit_Linux_(x86)" os="unix" required="no">
+			<description>32-bit Linux (x86) Version</description>
+			<file unpack="true" targetdir="$INSTALL_PATH" 
+				  src="@{build.dir}/@{archivePrefix}-@{buildLabel}-linux.gtk.x86.zip" />
+			
+			<parsable targetfile="$INSTALL_PATH/post_install.sh" />
+			<file targetdir="$INSTALL_PATH"
+				src="post_install/post_install.sh" />
+			<executable keep="false" stage="postinstall"
+				targetfile="$INSTALL_PATH/post_install.sh" />
+			<executable keep="true" stage="never" 
+				targetfile="$INSTALL_PATH/@{archivePrefix}" />
+		</pack>
+		<pack name="64-bit_Linux_(x86_64)" os="unix" required="no">
+			<description>64-bit Linux (x86_64) Version</description>
+			<file unpack="true" targetdir="$INSTALL_PATH" 
+				  src="@{build.dir}/@{archivePrefix}-@{buildLabel}-linux.gtk.x86_64.zip" />
+			
+			<parsable targetfile="$INSTALL_PATH/post_install.sh" />
+			<file targetdir="$INSTALL_PATH" 
+				src="post_install/post_install.sh" />
+			<executable keep="false" stage="postinstall"
+				targetfile="$INSTALL_PATH/post_install.sh" />
+			<executable keep="true" stage="never" 
+				targetfile="$INSTALL_PATH/@{archivePrefix}" />
+		</pack>
+		<pack name="Mac_OSX_(x86)" os="mac" required="no">
+			<description>Mac OSX (x86) Version</description>
+			<file unpack="true" targetdir="$INSTALL_PATH" 
+				  src="@{build.dir}/@{archivePrefix}-@{buildLabel}-macosx.carbon.x86.zip" />
+				
+			<parsable targetfile="$INSTALL_PATH/post_install.sh" />
+			<file targetdir="$INSTALL_PATH" 
+				src="post_install/post_install.sh" />
+			<executable keep="false" stage="postinstall"
+				targetfile="$INSTALL_PATH/post_install.sh" />
+			<executable keep="true" stage="never" 
+				targetfile="$INSTALL_PATH/@{archivePrefix}.app/Contents/MacOS/@{archivePrefix}" />	
+		</pack>
+		<pack name="Mac_OSX_(ppc)" os="mac" required="no">
+			<description>Mac OSX (ppc) Version</description>
+			<file unpack="true" targetdir="$INSTALL_PATH" 
+				  src="@{build.dir}/@{archivePrefix}-@{buildLabel}-macosx.carbon.ppc.zip" />
+			
+			<parsable targetfile="$INSTALL_PATH/post_install.sh" />
+			<file targetdir="$INSTALL_PATH" 
+				src="post_install/post_install.sh" />
+			<executable keep="false" stage="postinstall"
+				targetfile="$INSTALL_PATH/post_install.sh" />
+			<executable keep="true" stage="never" 
+				targetfile="$INSTALL_PATH/@{archivePrefix}.app/Contents/MacOS/@{archivePrefix}" />
+		</pack>
+		<pack name="Solaris_(sparc)" os="unix" required="no">
+			<description>Solaris (sparc) Version</description>
+			<file unpack="true" targetdir="$INSTALL_PATH" 
+				  src="@{build.dir}/@{archivePrefix}-@{buildLabel}-solaris.gtk.sparc.zip" />
+			
+			<parsable targetfile="$INSTALL_PATH/post_install.sh" />
+			<file targetdir="$INSTALL_PATH" 
+				src="post_install/post_install.sh" />
+			<executable keep="false" stage="postinstall"
+				targetfile="$INSTALL_PATH/post_install.sh" />
+			<executable keep="true" stage="never" 
+				targetfile="$INSTALL_PATH/@{archivePrefix}" />
+		</pack>
+	</packs>
+
+</installation>
+			]]></config>
+		</izpack>
+	</target>
+</project>
