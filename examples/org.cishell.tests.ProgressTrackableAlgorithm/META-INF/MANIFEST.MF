@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: My algorithm tester
-Bundle-SymbolicName: org.my.algorithm.test
+Bundle-Name: ProgressTrackableAlgorithm
+Bundle-SymbolicName: org.cishell.tests.ProgressTrackableAlgorithm
 Bundle-Version: 0.3.0
 Bundle-ClassPath: .
 Bundle-Localization: plugin
