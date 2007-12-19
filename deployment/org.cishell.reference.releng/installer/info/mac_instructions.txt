@@ -1,5 +1,7 @@
 Extra installation steps for Mac OSX users:
 
-For all CIShell features to work properly, please upgrade to the newest version
-of Java, version 1.5.0 Release 5 (or greater). See the FAQ section at 
-http://cishell.org for more information.
+In order to get certain Swing or AWT based algorithms to work, some additional
+steps are needed. First, you need Java version 1.5.0 Release 4 (or greater). 
+Second, you must download and install the "SWT Compatibility Libraries" from 
+the Apple Developer Connection website at 'http://connect.apple.com'. See the 
+FAQ section at http://cishell.org for more information.
