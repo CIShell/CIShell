@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+
+<shortcuts>
+  <programGroup defaultName="${projectName}"
+                location="startMenu"/>
+  <shortcut
+    name="${projectName}"
+    target="$INSTALL_PATH\${archivePrefix}.exe"
+    commandLine=""
+    workingDirectory="$INSTALL_PATH"
+    description="${projectName}"
+    iconFile="$INSTALL_PATH\${archivePrefix}.exe"
+    iconIndex="0"
+    initialState="normal"
+    programGroup="yes"
+    desktop="yes"
+    applications="no"
+    startMenu="yes"
+    startup="no">
+  </shortcut>
+  
+  <shortcut
+    name="Uninstall ${projectShortName}"
+    target="$INSTALL_PATH\Uninstaller\uninstaller.jar"
+    commandLine=""
+    workingDirectory="$INSTALL_PATH\Uninstaller"
+    description="Uninstall ${projectShortName}"
+    iconFile="$INSTALL_PATH\${archivePrefix}.exe"
+    iconIndex="0"
+    initialState="normal"
+    programGroup="yes"
+    desktop="yes"
+    applications="no"
+    startMenu="yes"
+    startup="no">
+  </shortcut>
+  
+</shortcuts>
