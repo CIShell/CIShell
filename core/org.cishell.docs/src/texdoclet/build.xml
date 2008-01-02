@@ -1,0 +1,93 @@
+<project name="overcyte" default="build">
+	<property name="build" location="build"/>
+	<property name="jars" location="../../lib"/>
+	<property name="version" value="1.0"/>
+	<property name="source" location=""/>
+	
+	<path id="texdoclet.classpath">
+		<pathelement path="${build}/"/>
+	</path>
+	
+	<target name="build" unless="build-completed"
+		description="Builds the whole tree"
+		depends="compile,jar,updjar">
+	</target>
+	<target name="all" unless="build-completed"
+		description="Builds the whole tree"
+		depends="compile,jar">
+	</target>
+	
+	<target name="updjar" unless="updjar-completed">
+		<copy file="${jars}/texdoclet.jar"
+			todir="${jars}"/>	
+	</target>
+	
+	<target name="jar" unless="jar-completed">
+		<jar destfile="${jars}/texdoclet.jar"
+			basedir="${build}"
+			filesonly="true"
+		/>
+	</target>
+	
+	<target name="rmic" unless="rmic-completed"
+		description="Run RMIC on remote classes"
+		depends="compile">
+	</target>
+	
+	<target name="compile" unless="compile-completed"
+		description="Builds the whole tree"
+		depends="mkdirs">
+	
+		<javac srcdir="${source}/src"
+			destdir="${build}"
+			source="1.4"
+			target="1.4"
+			classpathref="texdoclet.classpath"
+			/>
+
+		<!--
+		<javadoc
+			packagenames="org.wonderly.*"
+			destdir="www/javadocs"
+			author="true"
+			version="true"
+			use="true"
+			windowtitle="Java Docs"
+			>
+			<fileset dir="src">
+			</fileset>
+		</javadoc>
+	    
+		<jar destfile="www/docs.zip"
+			basedir="www/javadocs"
+			filesonly="true"
+		/>
+	
+		<jar destfile="www/texdoclet.jar"
+			basedir="build"
+			filesonly="true"
+		/>
+	    -->
+	</target>
+	
+	<target name="javadoclet">
+		<javadoc>
+			<doclet name="org.wonderly.doclets.TexDoclet"
+				path="${jars}/texdoclet.jar">
+			</doclet>
+			<fileset dir="src">
+			</fileset>
+		</javadoc>
+	</target>
+	
+	<target name="clean">
+		<delete dir="${build}"/>
+		<delete file="${jars}/texdoclet.jar"/>
+	</target>
+	
+	<target name="mkdirs">
+		<delete dir="${build}"/>
+		<mkdir dir="${build}"/>
+		<mkdir dir="${jars}"/>
+	</target>
+</project>
