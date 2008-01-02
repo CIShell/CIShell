@@ -1,0 +1,79 @@
+%% CIShell Algorithm Developer's Guide
+%%
+%
+
+\documentclass[pdftex,11pt,a4paper]{article}
+\usepackage[top=0.4in, left=0.5in, right=0.5in, bottom=0.6in]{geometry}
+\usepackage[pdftex]{graphicx}
+\DeclareGraphicsExtensions{.pdf,.png,.jpg,.mps,.eps}
+\usepackage[pdftex]{hyperref}
+\usepackage{color}
+
+\hypersetup{
+    pdftitle={CIShell Algorithm Developer's Guide},    % title
+    pdfsubject={CIShell Algorithm Developer's Guide},
+    pdfauthor={},      
+    pdfnewwindow=true,      % links in new window
+}
+
+\usepackage[refpages]{gloss}
+\renewcommand{\glosslinkborder}{0 0 0}
+\renewcommand{\glosslinkcolor}{blue}
+
+\makegloss
+
+\usepackage{../mystyle}
+
+\title{CIShell Algorithm Developer's Guide \\
+\textbf{DRAFT}}
+% \author{} % Will fill in later 
+% \date{} % ditto
+
+\begin{document}
+
+\maketitle{}
+\tableofcontents{}
+
+
+% Overview, introduction, etc.
+\input{./tex/coreoverview.tex}
+
+\section{Plugin Tutorials}
+% Setup
+\input{./tex/envsetup.tex}
+
+% General Algs
+\subsection{General Algorithm Development}
+\input{./tex/algconcepts.tex}
+\input{./tex/javaalgs.tex}
+\input{./tex/execalgs.tex}
+\input{./tex/jythonalgs.tex}
+
+% Specific Algs
+\subsection{Specific Algorithm types}
+\input{./tex/analysismodeling.tex}
+\input{./tex/vizalgs.tex}
+\input{./tex/dataalgs.tex}
+\input{./tex/converteralgs.tex}
+
+% Other Tutorials
+\input{./tex/javalibs.tex}
+\input{./tex/services.tex}
+\input{./tex/guicreation.tex}
+
+% Software Update Tool
+\input{./tex/usingupdatesites.tex}
+\input{./tex/creatingupdatesites.tex}
+
+\section{Appendix}
+\input{./tex/examplealgs.tex}
+\input{./tex/cishellupdatesites.tex}
+
+\printgloss{../glossary}
+
+% Bibliography:
+\clearpage
+\bibliographystyle{plain}
+\bibliography{../bibliography}
+
+\end{document}

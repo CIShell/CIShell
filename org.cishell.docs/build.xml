@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="CIShell Documentation" default="all">
+	<property file="build.properties" />
+	
+	<target name="all" depends="javadoc-tex,build-spec,build-guide,setup"/>
+	
+	<target name="setup">
+		<mkdir dir="${build.dir}"/>
+		<available file="${lib.texdoclet.jar}" property="texdoclet-build.notRequired" />
+		<available file="${api.final.tex}" property="api-tex-build.notRequired" />
+	</target>
+	
+	<target name="setup-latex-task">
+		<taskdef name="latex"
+			classname="de.dokutransdata.antlatex.LaTeX"
+			classpath="${lib.ant_latex}" />
+		
+		<taskdef name="makeindex"  
+		    classname="de.dokutransdata.antlatex.MakeindexTask"  
+		    classpath="${lib.ant_latex}"/>
+		
+		<taskdef name="bibtex"  
+		    classname="de.dokutransdata.antlatex.BibTeXTask"  
+		    classpath="${lib.ant_latex}"/>
+	</target>
+	
+	<target name="build-spec" depends="setup,javadoc-tex">
+		<antcall target="latex">
+			<param name="tex_file" value="${spec.tex}"/>
+			<param name="working_dir" value="${spec.dir}"/>
+			<param name="html_dir" value="${spec.html.dir}"/>
+		</antcall>
+		<move file="${spec.tmp.pdf}" tofile="${spec.final.pdf}" />
+	</target>
+	
+	<target name="build-guide" depends="setup">
+		<antcall target="latex">
+			<param name="tex_file" value="${guide.tex}"/>
+			<param name="working_dir" value="${guide.dir}"/>
+			<param name="html_dir" value="${guide.html.dir}"/>
+		</antcall>
+		<move file="${guide.tmp.pdf}" tofile="${guide.final.pdf}" />
+	</target>
+	
+	<target name="build-texdoclet" depends="setup" unless="texdoclet-build.notRequired">
+		<ant dir="${texdoclet.dir}" target="${build.dir}" />
+	</target>
+	
+	<target name="javadoc-tex" depends="setup,build-texdoclet" unless="api-tex-build.notRequired">
+		<javadoc access="public"
+			source="1.4"  
+			packagenames="${fw.packages}" 
+			sourcepath="${fw.dir}/${fw.src.dir}" 
+			classpath="${fw.classpath}">
+			
+			<doclet name="org.wonderly.doclets.TexDoclet"
+				path="${lib.texdoclet.jar}">
+				<param name="-docdir" value="${fw.src.dir}"/>
+				<param name="-output" value="${api.final.tex}"/>
+			</doclet>
+		</javadoc>		
+	</target>
+	
+	<target name="latex" depends="setup-latex-task">
+		<latex
+			latexfile="${tex_file}"
+			verbose="off"
+			pdftex="true"
+			workingDir="${working_dir}" 
+		/>
+		<bibtex  
+			workingDir="${working_dir}">  
+		    <fileset dir="${working_dir}">  
+		    	<include name="*.aux"/>  
+		    </fileset>  
+		</bibtex>
+		
+		<!-- uncomment this when we get serious about html output
+		<mkdir dir="${working_dir}/html"/>
+		<mkdir dir="${html_dir}"/>
+		<exec executable="/usr/bin/env" dir="${working_dir}" >
+			<arg value="latex2html" />
+			<arg line="-dir html" />
+			<arg value="-white" />
+			<arg value="-auto_navigation" />
+			<arg line="-long_titles 20" />
+			<arg line="-external_file *.aux" />
+			<arg value="${tex_file}" />
+		</exec>
+		<move file="${working_dir}/html" tofile="${html_dir}"/>
+		-->
+		
+		<!-- Need to run twice to get the TOC/Bib/Glossary right -->
+		<latex
+				latexfile="${tex_file}"
+				verbose="off"
+				pdftex="true"
+				clean="true"
+				workingDir="${working_dir}" 
+		/>
+	</target>
+	
+	<target name="clean">
+		<ant dir="${texdoclet.dir}" target="clean" />
+		<delete dir="${build.dir}" />
+		<delete file="${lib.texdoclet.jar}" />
+		<delete file="${api.final.tex}"/>
+	</target>
+</project>
