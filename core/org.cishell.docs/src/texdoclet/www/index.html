@@ -1,0 +1,106 @@
+<html>
+<head>
+   <title>A LaTeX Generating Java 2.0 (JDK1.2) doclet</title>
+</head>
+<body>
+
+<h1>
+A L<sup><sub><font size=+2>A</font></sub></sup>T<sub><font size=+3>E</font></sub>X
+2<sub>E</sub> Generating Java doclet</h1>
+<hr>
+I needed to print some Java API documentation in a way that
+made it useful. In particular, we considered the following a necessary
+part of printed documentation.
+<ul>
+<li>
+Table of Contents for entire document.</li>
+
+<li>
+Table of Contents for each Class.</li>
+
+<li>
+See Also references correct for references to things within the document.</li>
+</ul>
+So, we created this doclet to create the needed documentation.
+<ul>
+<li>
+Example LaTeX2e <a href="docs.tex">document</a>,
+the output of running javadoc.</li>
+
+<li>
+Example postscript <a href="docs.ps">document</a>,
+the output after running latex on the LaTeX2e javadoc output.</li>
+
+<li>
+Example PDF <a href="docs.pdf">document</a>,
+the output after running latexpdf on the LaTeX2e javadoc output.</li>
+
+<li>
+The doclet <a href="texdoclet.jar">jar</a>
+(org.wonderly.doclets.TexDoclet).</li>
+</ul>
+The doclet supports the use of a class filter. See the docs on the ClassFilter
+interface in the above sample documents for more information.
+<p>If you have comments, questions or enhancments to share please join
+the lists and let me know.
+<hr>
+<h2> Command Line Usage</h2>
+
+<pre>u<b>sage: javadoc [options] [packagenames] [sourcefiles] [classnames] [@files]
+</b>-overview &lt;file>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Read overview documentation from HTML file
+-public&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Show only public classes and members
+-protected&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Show protected/public classes and members (default)
+-package&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Show package/protected/public classes and members
+-private&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Show all classes and members
+-help&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Display command line options
+-doclet &lt;class>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Generate output via alternate doclet
+-docletpath &lt;path>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Specify where to find doclet class files
+-1.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Generate output using JDK 1.1 emulating doclet
+-sourcepath &lt;pathlist>&nbsp;&nbsp;&nbsp; Specify where to find source files
+-classpath &lt;pathlist>&nbsp;&nbsp;&nbsp;&nbsp; Specify where to find user class files
+-bootclasspath &lt;pathlist> Override location of class files loaded
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; by the bootstrap class loader
+-extdirs &lt;dirlist>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Override location of installed extensions
+-verbose&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Output messages about what Javadoc is doing
+-locale &lt;name>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Locale to be used, e.g. en_US or en_US_WIN
+-encoding &lt;name>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Source file encoding name
+-J&lt;flag>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Pass &lt;flag> directly to the runtime system
+
+<b>TexDoclet Usage:
+</b>-title &lt;title>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A title to use for the generated output document.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; No -title will result in no title page.
+-output &lt;outfile>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Specifies the output file to write to.&nbsp; If none
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; specified, the default is docs.tex in the current
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; directory.
+-docclass &lt;class>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; LaTeX2e document class, `report' is the default.
+-doctype &lt;type>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; LaTeX2e document style, `myheadings' is the default.
+-docdir &lt;dirname>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Directory tree where package documentation exists.
+-packagefile &lt;name>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The name of the HTML file that has the packages' documentation
+-classfilter &lt;name>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The name of a class implementing the ClassFilter interface.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; This class is used to indicate classes to be excluded.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Typically there are classes in a package that are non-public,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; and this mechanism can be used to exclude them and only
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; include the public classes.
+-date &lt;date string>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The value to use for the document date.
+-author &lt;author>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Specifies string to use for document Author.
+-initialize &lt;file>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; LaTeX2e statements included before \begin{document}.
+-setup &lt;file>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; LaTeX2e statements included after \begin{document}.
+-finish &lt;file>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; LaTeX2e statements included before \end{document}.
+-package &lt;file>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; LaTeX2e statements included before packages' \chapter.
+-noinherited&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Do not include inherited API information in output.</pre>
+
+<hr>
+<h2>
+More Information on Using the Output</h2>
+
+<h3>
+Tables</h3>
+In order to get tables to work with some width adjustability, I forced
+them to all be controlled by values set within the output LaTeX document.
+The format of the variables referenced is <b>\tblaaa caaa w</b>. This allows
+26^3 tables to be provided in a document with a table being able to contain
+26^3 columns. These sizes can be adjusted via preprocessing scripts prior
+to running latex. In the future, this might be done differently. The default
+column widths are equally divided amongst the columns.
+</body>
+</html>
