@@ -578,12 +578,7 @@ public class TexDoclet extends Doclet {
 	
 	static void layoutClasses( String type, Vector classes ) {
 		if( classes.size() > 0 && !("Classes".equals(type))) {
-		    if (type.startsWith("org.cishell.framework.")) {
-		        os.print("\\subsection{" );
-		    } else {
-		        os.print("\\section{" );
-		    }
-		    
+		    os.print("\\section{" );
 			os.print( type );
 			os.println( "}{" );
 		}

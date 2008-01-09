@@ -1,5 +1,36 @@
-\section{GUI Specification}
+\section{User Interface Specification}
+\label{GUISpec}
 \subsection*{\textit{Version 1.0}}
 \subsection{Introduction}
-\subsection{org.osgi.service.metatype}
-\subsection{MetaType Extensions}
+
+For many algorithms, just looking at the data given isn't enough. Additional
+parameters are often needed to know how to operate on a given piece of data. An
+algorithm can define what parameters are needed by providing a
+\class{MetaTypeProvider}. It defines the types, value range, and textual
+description of the parameters needed. From this information, a user interface
+(UI) can be created that asks a user for the data. The \class{MetaTypeProvider}
+is not tied to any specific UI, so it can be reused depending on the context
+(desktop application, web application, command line, etc.).
+
+\class{MetaTypeProvider} is defined in the OSGi R4 Specification Service
+Compendium as part of the Meta Type Service. \class{MetaTypeProvider}s can be
+created in code or can be specified in an xml file (as defined in the
+specification) and pulled out of the \class{MetaTypeService} service. A
+\class{MetaTypeProvider} can be thought of as a collection of UIs. Each UI is
+called an \class{ObjectClassDefinition}, which provides a UI name and
+description and is a collection of parameters. Each parameter is an
+\class{AttributeDefinition} which includes the type, label, description, default
+value, and range of valid values. Drop-down boxes can also be defined by using
+option labels and values with the \class{AttributeDefinition}. OSGi's
+documentation should be consulted for more information.
+
+\subsection{MetaTypeProvider Extensions}
+
+Some minor extensions to \class{MetaTypeProvider} were made to support some
+use cases. The \class{MetaTypeProvider} supports several simple types such as
+strings, integers, booleans, etc, but several useful types are missing. Two
+such types are files and directories. To get a file or a directory as input,
+create an \class{AttributeDefinition} with string as its type and with ``file:``
+or ``directory:`` (respectively) as its default value. When the algorithm is
+run it will receive a \class{String} which is the absolute path to a file or
+directory.

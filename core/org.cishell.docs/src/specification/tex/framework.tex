@@ -4,11 +4,12 @@
 
 \section{Introduction}
 
-The org.cishell.framework package and subpackages define the core of CIShell. The
-key components being algorithms, data, and CIShell service access.
+The \class{org.cishell.framework} package and subpackages define the core of
+CIShell. The key components being algorithms, data, and CIShell service access.
 
 \subsection{Essentials}
 
+\comments{Needs work}
 \begin{itemize}
   \item \textit{Application Independence} - Algorithms must be usable in a wide
   variety of contexts and should not be tied to any one front end where
@@ -23,30 +24,33 @@ key components being algorithms, data, and CIShell service access.
 
 \begin{itemize}
   \item \textit{AlgorithmFactory} - The service interface for algorithms.
-  A factory class which creates an Algorithm for execution from input data.
+  A factory class which creates an \class{Algorithm} for execution from input
+  data.
   \item \textit{Algorithm} - The interface for the code execution part of the
   algorithm.
   \item \textit{AlgorithmProperty} - The interface which provides string
   constants for an algorithm's service metadata.
-  \item \textit{DataValidator} - The interface an AlgorithmFactory extends to
-  provide additional data validation in addition to the data format validation
+  \item \textit{DataValidator} - The interface an \class{AlgorithmFactory}
+  extends to provide additional data validation in addition to the data format validation
   that an application should provide ahead of time.
-  \item \textit{ProgressTrackable} - The interface an Algorithm extends to allow
-  for more detailed monitoring and control of an Algorithm's progress while
+  \item \textit{ProgressTrackable} - The interface an \class{Algorithm} extends
+  to allow for more detailed monitoring and control of an Algorithm's progress while
   executing.
   \item \textit{ProgressMonitor} - The interface for a class to be passed in to
-  a ProgressTrackable Algorithm so that the Algorithm can be controlled
-  and provide information on its progress while executing.
+  a \class{ProgressTrackable} \class{Algorithm} so that the \class{Algorithm}
+  can be controlled and provide information on its progress while executing.
   \item \textit{Data} - The interface used to pass data (other than
   parameters) and meta-data between algorithms.
-  \item \textit{BasicData} - A simple implementation of the Data interface. 
+  \item \textit{BasicData} - A simple implementation of the \class{Data}
+  interface.
   \item \textit{DataProperty} - The interface which provides string constants
-  for Data's metadata.
+  for \class{Data}'s metadata.
   \item \textit{CIShellContext} - The interface for a class to be passed in to
-  an AlgorithmFactory for us in gaining access to standard CIShell services.
+  an \class{AlgorithmFactory} for use in gaining access to standard CIShell
+  services.
   \item \textit{LocalCIShellContext} - A simple implementation of the
-  CIShellContext interface which pulls CIShell services from the OSGi Service
-  Registry.
+  \class{CIShellContext} interface which pulls CIShell services from the OSGi
+  Service Registry.
 \end{itemize}
 
 \begin{figure}[htb!]
@@ -58,8 +62,8 @@ key components being algorithms, data, and CIShell service access.
 
 \subsection{Operations}
 
-The algorithm developer should fully implement the AlgorithmFactory interface and
-make it available in OSGi's Service Registry. The system developer will provide
-the services required by CIShell in OSGi's Service Registry. Application
-developers will provide everything else, orchestrating the passing of information
-between algorithms.
+The algorithm developer should fully implement the \class{AlgorithmFactory}
+interface and make it available in OSGi's service registry. The system developer
+will provide the services required by CIShell in OSGi's service registry.
+Application developers will provide everything else, orchestrating the passing of
+information between algorithms.
