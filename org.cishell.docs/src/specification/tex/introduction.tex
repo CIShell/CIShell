@@ -1,5 +1,54 @@
 \chapter{Introduction}
-\section{CIShell Overview}
+
+The Cyberinfrastructure Shell (CIShell) is an open source, community-driven
+platform for the integration and utilization of datasets, algorithms, tools, and
+computing resources. It is built specifically to enable (1) algorithm developers
+to write and disseminate their algorithms in their favorite programming language
+while retaining their intellectual rights after distribution; (2) data holders to
+easily disseminate their data for use by others; (3) application developers to
+design applications from custom sets of algorithms and datasets that interoperate
+seamlessly; and finally (4) researchers, educators, and practitioners to use
+existing datasets and algorithms to further science.
+
+\section{CIShell Platform Overview}
+
+The CIShell Platform consists of Java interface definitions of algorithms, data,
+services for algorithm developers, and services for application developers. Much
+of the platform uses metadata and is fully defined.
+
 \section{What is New}
+
+This is the first release of the CIShell Platform Specification. Future
+versions will strive for backwards compatibility.
+
 \section{Reader Level}
+
+This specification is written for the following audiences:
+\begin{itemize}
+  \item Java Algorithm developers
+  \item Non-Java Algorithm developers
+  \item Framework and system service developers (system developers)
+  \item Application developers building on CIShell
+\end{itemize}
+
+The CIShell Specifications assume that the reader has at least one year of
+practical experience in writing Java programs. CIShell is built to run on the
+OSGi Service Platform Release 4 and thus a working knowledge of OSGi is expected.
+OSGi (and thus CIShell) is highly dynamic and must be taken into consideration
+when developing anything on CIShell.
+
+Non-Java Algorithm developers may not need to know any Java and should be mainly
+concerned with the metadata definitions for Algorithms and Data. They may also
+need to be aware of OSGi and the other services CIShell provides, but more than
+likely will not directly interact with them.
+
 \section{Conventions and Terms}
+
+The conventions and terms are exactly the same as from OSGi's Core
+Specification, section 1.4.
+
+\section{Version Information}
+
+This is the first release of the CIShell Platform Specification. All packages are
+at 1.0 for this release. Subsequent releases may increase the version number of
+specific packages, if changes have been made.
