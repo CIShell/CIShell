@@ -57,7 +57,7 @@ public class Save implements Algorithm {
     public Data[] execute() {
     	//This only checks the first Data in the array
     	final Converter[] converters = conversionManager.findConverters(data[0], "file-ext:*");
-
+    	
     	if (converters.length < 1 && !(data[0].getData() instanceof File)) {
     		guiBuilder.showError("No Converters", 
     				"No valid converters for data type: " + 

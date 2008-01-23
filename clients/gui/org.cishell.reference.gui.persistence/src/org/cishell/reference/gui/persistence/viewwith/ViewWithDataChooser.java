@@ -16,7 +16,6 @@ import org.eclipse.swt.widgets.Shell;
 public class ViewWithDataChooser extends SaveDataChooser {
 	private File tempFile;
 	boolean isSaved = false;
-	Converter[] converters;
 	Data theData;
 	
 	public ViewWithDataChooser(String title, File tempFile, Shell parent, 
@@ -24,7 +23,6 @@ public class ViewWithDataChooser extends SaveDataChooser {
 		super (data, parent, converters, title, context);
 		
 		this.tempFile = tempFile;
-		this.converters = converters;
 		this.theData = data;
 	}
 

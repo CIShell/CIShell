@@ -6,8 +6,12 @@
  */
 package org.cishell.reference.gui.persistence.save;
 
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Dictionary;
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.AlgorithmProperty;
@@ -38,7 +42,7 @@ import org.osgi.framework.ServiceReference;
  *
  * @author Team IVC
  */
-public class SaveDataChooser extends AbstractDialog {
+public class SaveDataChooser extends AbstractDialog implements AlgorithmProperty {
     protected Data data;
     protected Converter[] converterArray;
     private List converterList;
@@ -61,7 +65,7 @@ public class SaveDataChooser extends AbstractDialog {
     						String title, CIShellContext context) {
     	super(parent, title, QUESTION);
         this.data = data;        
-        this.converterArray = converterArray;
+        this.converterArray = alphabetizeConverters(filterConverters(converterArray));
         this.context = context;
     }   
 
@@ -187,6 +191,117 @@ public class SaveDataChooser extends AbstractDialog {
             detailPane.append(val + "\n");
         }
     }
+    
+    /**
+     * In allConverters, there are sometimes more than one 
+     * that converts to a single data type. When the 
+     * chooser pops up, this is confusing to the user, since it 
+     * will, for instance, display two 'Pajek.net' choices.
+     * 
+     * This method attempts to choose the best converter for each
+     * out_data format, choosing based on lossiness primarily, and
+     * length of converter chain secondarily.
+     * @param allConverters All the converters starting with
+     * the original file's data type (that is, any type in its class heirarchy)
+     * and ending in a file format.
+     * @return allConverters, with redudant out file formats removed.
+     */
+    private Converter[] filterConverters(Converter[] allConverters) {
+    	Map lastInDataToConverter = new HashMap();
+    	
+    	for (int i = 0; i < allConverters.length; i++) {
+    		Converter converter = allConverters[i];
+    		
+    		
+    		
+    		//for .xml files, to uniquely identify it 
+    		//we need to know what kind of xml it was
+    		//so we look at the in_data type of the 
+    		//last converter
+    		String lastInData = getLastConverterInData(converter);
+    		
+    		//if we already have a converter with this out data type...
+    		if (lastInDataToConverter.containsKey(lastInData)) {
+    			Converter alreadyStoredConverter = (Converter) lastInDataToConverter.get(lastInData);
+    			
+    			Converter chosenConverter = returnPreferredConverter(converter,alreadyStoredConverter);
+    			
+    			lastInDataToConverter.put(lastInData, chosenConverter);
+    		} else {
+    			lastInDataToConverter.put(lastInData, converter);
+    		}
+    	}
+    	
+    	return (Converter[]) lastInDataToConverter.values().toArray(new Converter[0]);
+    }
+    
+    private String getLastConverterInData(Converter converter) {
+    	ServiceReference[] convChain = converter.getConverterChain();
+    	if (convChain.length >= 1) {
+    		ServiceReference lastConv = convChain[convChain.length - 1];
+    	
+    		String lastInData = (String) lastConv.getProperty("in_data");
+    	
+    		return lastInData;
+    	} else {
+    		return "";
+    	}
+    }
+    
+    /**
+     * Returns whichever converter is better to show to the user in the chooser,
+     * based on lossiness, and length of converter chain
+     * @param c1 A converter with the same out_data type as the other
+     * @param c2 A converter with the same out_data type as the other
+     * @return The preferred converter of the two
+     */
+    private Converter returnPreferredConverter(Converter c1, Converter c2) {
+    	Dictionary c1Dict = c1.getProperties();
+    	String c1Lossiness = (String) c1Dict.get(CONVERSION);
+    	int c1Quality = determineQuality(c1Lossiness);
+    	
+    	
+    	
+    	Dictionary c2Dict = c2.getProperties();
+    	String c2Lossiness = (String) c2Dict.get(CONVERSION);
+    	int c2Quality = determineQuality(c2Lossiness);
+    	
+    	if (c1Quality > c2Quality) {
+    		return c1;
+    	} else if (c2Quality > c1Quality) {
+    		return c2;
+    	} else {
+    		//they are tied. Look at converter chain length
+    		
+    		int c1Length = c1.getConverterChain().length;
+    		int c2Length = c2.getConverterChain().length;
+    		//return the shortest
+    		if (c1Length > c2Length) {
+    			return c2;
+    		} else if (c2Length > c1Length) {
+    			return c1;
+    		} else {
+    			//both have the same lossiness and same length
+    			//arbitrary pick the first
+    			return c1;
+    		}
+    	}
+    }
+    
+    private int determineQuality(String lossiness) {
+    	if (lossiness == LOSSY) {
+    		return 0;
+    	} else if (lossiness == null) {
+    		return 1;
+    	} else { //lossiness == LOSSLESS 
+    		return 2;
+    	}
+    }
+    
+    private Converter[] alphabetizeConverters(Converter[] cs) {
+    	Arrays.sort(cs, new CompareAlphabetically());
+    	return cs;
+    }
 
     /**
      * When a Persister is chosen to Persist this model, this method handles the job
@@ -243,5 +358,34 @@ public class SaveDataChooser extends AbstractDialog {
     	else {
     		return initGUI(parent);
     	}
+    }
+    
+    private class CompareAlphabetically implements Comparator {
+
+    	public int compare(Object o1, Object o2) {
+					if (o1 instanceof Converter && o2 instanceof Converter) {
+						Converter c1 = (Converter) o1;
+						String c1Label = getLabel(c1);
+						
+						Converter c2 = (Converter) o2;
+						String c2Label = getLabel(c2);
+						
+						return c1Label.compareTo(c2Label);
+					} else {
+						throw new IllegalArgumentException("Can only " +
+								"compare Converters");
+					}
+    	}
+					
+		private String getLabel(Converter c) {
+			 String label = "";
+            ServiceReference[] refs = c.getConverterChain();
+            if (refs != null && refs.length > 0) {
+                label = (String) refs[refs.length-1].getProperty(
+                        AlgorithmProperty.LABEL);
+            }
+            
+            return label;
+		}
     }
 }
