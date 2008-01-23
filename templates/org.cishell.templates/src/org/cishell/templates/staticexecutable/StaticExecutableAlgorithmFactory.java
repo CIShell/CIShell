@@ -41,6 +41,13 @@ public class StaticExecutableAlgorithmFactory implements AlgorithmFactory {
     BundleContext bContext;
     String algName;
     MetaTypeProvider provider;
+    
+    public StaticExecutableAlgorithmFactory() {}
+    
+    public StaticExecutableAlgorithmFactory(String algName, BundleContext bContext) {
+    	this.algName = algName;
+    	this.bContext = bContext;
+    }
 
     protected void activate(ComponentContext ctxt) {
         bContext = ctxt.getBundleContext();
