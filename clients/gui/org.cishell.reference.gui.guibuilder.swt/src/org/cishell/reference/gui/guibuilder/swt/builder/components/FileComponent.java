@@ -105,7 +105,7 @@ public class FileComponent extends StringComponent {
         	
         	//by default, point to NWB or CIShell application installation directory
 	        if (currentValue == null) {
-	        	value = System.getProperty("osgi.install.area").replace("file:/","");	            		
+	        	value = System.getProperty("osgi.install.area").replace("file:","");	            		
                 currentValue = value;                
             }
 	        else
