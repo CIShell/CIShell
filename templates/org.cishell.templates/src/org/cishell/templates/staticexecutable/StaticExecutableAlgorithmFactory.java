@@ -79,6 +79,8 @@ public class StaticExecutableAlgorithmFactory implements AlgorithmFactory {
 		private String MACOSX;
 		private String ALGORITHM_WIN32;
 		private String WIN32;
+		private String ALGORITHM_LINUX_X86;
+		private String LINUX;
 		private String ALGORITHM_DEFAULT;
 		Data[] data;
         Dictionary parameters;
@@ -96,8 +98,9 @@ public class StaticExecutableAlgorithmFactory implements AlgorithmFactory {
     		MACOSX = "macosx";
     		ALGORITHM_WIN32 = ALGORITHM + "win32/";
     		WIN32 = "win32";
+    		ALGORITHM_LINUX_X86 = ALGORITHM + "linux.x86/";
+    		LINUX = "linux";
     		ALGORITHM_DEFAULT = ALGORITHM + "default/";
-            
         }
 
         public Data[] execute() {
@@ -154,6 +157,8 @@ public class StaticExecutableAlgorithmFactory implements AlgorithmFactory {
             	path = ALGORITHM_WIN32;
             } else if(os.equals(MACOSX) && entries.contains(ALGORITHM_MACOSX_PPC)) {
             	path = ALGORITHM_MACOSX_PPC;
+            } else if(os.equals(LINUX) && entries.contains(ALGORITHM_LINUX_X86)) {
+            	path = ALGORITHM_LINUX_X86;
             }
             
             String platform_path = ALGORITHM + os + "." + arch + "/";
