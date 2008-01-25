@@ -1,0 +1,17 @@
+<installation version="1.0">
+<packs>
+	<pack name="64-bit_Linux_(x86_64)" os="unix" required="yes">
+		<description>64-bit Linux (x86_64) Version</description>
+		<file unpack="true" targetdir="$INSTALL_PATH" 
+			  src="@{build.dir}/@{archivePrefix}-@{buildLabel}-linux.gtk.x86_64.zip" />
+		
+		<parsable targetfile="$INSTALL_PATH/post_install.sh" />
+		<file targetdir="$INSTALL_PATH" 
+			src="post_install/post_install.sh" />
+		<executable keep="false" stage="postinstall"
+			targetfile="$INSTALL_PATH/post_install.sh" />
+		<executable keep="true" stage="never" 
+			targetfile="$INSTALL_PATH/@{archivePrefix}" />
+	</pack>
+</packs>
+</installation>
