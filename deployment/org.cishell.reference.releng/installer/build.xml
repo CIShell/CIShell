@@ -6,35 +6,67 @@
 	Maintained by Bruce Herr (bh2@bh2.net).
 -->
 
-<project name='CIShell Installer Builder' default='compile.both' basedir='.'>
+<project name='CIShell Installer Builder' default='build' basedir='.'>
 	<!--  Properties -->
 	<property file="build.properties" />
-	<property name="full.jar" value="${archivePrefix}-full-installer_${version}.jar"/>
-	<property name="web.jar" value="${archivePrefix}-web-installer_${version}.jar"/>
+	<property name="installer.prefix" value="${archivePrefix}-installer-${version}-"/>
+	<property name="installer.postfix" value=".jar"/>
 	<property name="build.dir" value="${finalResults}/${version.full}"/>
-	<property name="packs.url" value="${files.url.base}/${version.full}/packs"/>
-	<property name="packs.dir" value="${build.dir}/packs" />
+	<property name="packs.dir" value="${build.dir}/installers" />
+	<property file="packs.properties" />
 	
 	<!-- Allows us to use the IzPack Ant task -->
 	<taskdef name="izpack" classpath="${basedir}/lib/standalone-compiler.jar"
 	         classname="com.izforge.izpack.ant.IzPackTask"/>
 	
-	<target name='compile.both' depends='compile.web,compile.full' />
-	
-	<target name='compile.full'>
-		<antcall target="-compile">
-			<param name="installerType" value="standard" />
-			<param name="outputFile" value="${build.dir}/${full.jar}" />
+	<target name='build'>
+		<mkdir dir="${packs.dir}"/>
+		<antcall target="-compile.installer">
+			<param name="platform" value="win32.win32"/>
+		</antcall>
+		<antcall target="-compile.installer">
+			<param name="platform" value="win32.vista"/>
+		</antcall>
+		<antcall target="-compile.installer">
+			<param name="platform" value="linux.x86"/>
+		</antcall>
+		<antcall target="-compile.installer">
+			<param name="platform" value="linux.x86_64"/>
+		</antcall>
+		<antcall target="-compile.installer">
+			<param name="platform" value="macosx.x86"/>
+		</antcall>
+		<antcall target="-compile.installer">
+			<param name="platform" value="macosx.ppc"/>
+		</antcall>
+		<antcall target="-compile.installer">
+			<param name="platform" value="solaris.sparc"/>
 		</antcall>
 	</target>
 	
-	<target name='compile.web'>
-		<mkdir dir="${packs.dir}"/>
+	<target name='-compile.installer'>
+		<copy file="pack.definitions/pack.${platform}.xml" tofile="current.pack.definition.xml" />
+		<replace file="current.pack.definition.xml">
+			<replacefilter
+				token="@{build.dir}"
+				value="${build.dir}"
+			/>
+			<replacefilter
+				token="@{archivePrefix}"
+				value="${archivePrefix}"
+			/>
+			<replacefilter
+				token="@{buildLabel}"
+				value="${buildLabel}"
+			/>
+		</replace>
+		
 		<antcall target="-compile">
-			<param name="installerType" value="web" />
-			<param name="outputFile" value="${packs.dir}/${web.jar}" />
+			<param name="installerType" value="standard" />
+			<param name="outputFile" value="${packs.dir}/${installer.prefix}${platform}${installer.postfix}" />
+			<param name="pack.definitions" value="pack.definitions/pack.${platform}.xml"/>
 		</antcall>
-		<move file="${packs.dir}/${web.jar}" tofile="${build.dir}/${web.jar}" />
+		<delete file="current.pack.definition.xml" />
 	</target>
 	
 	<target name='-compile'>
@@ -55,9 +87,10 @@
 			<author name="Bruce Herr" email="bh2@bh2.net" />
 			<author name="Weixia Huang" email="huangb@indiana.edu" />
 			<author name="Katy Borner" email="katy@indiana.edu" />
+			<author name="Team CIShell" email="cishell-developers@lists.sourceforge.net" />
+			<author name="Team NWB" email="nwb-dev@googlegroups.com" />
 		</authors>
 		<url>@{home.url}/</url>
-		<webdir>@{packs.url}</webdir>
 		<javaversion>1.4</javaversion>
 	</info>
 		
@@ -114,7 +147,7 @@
 	<panels>
 		<panel classname="HelloPanel" />
 		<panel classname="LicencePanel" />
-		<panel classname="PacksPanel"/>				
+		<!-- <panel classname="PacksPanel"/> -->	
 		<panel classname="TargetPanel" />		
 		<panel classname="InstallPanel" />
 		<panel classname="ShortcutPanel" />
@@ -128,95 +161,8 @@
 		We specify here our packs.
 	-->
 	<packs>
-		<pack name="Windows_Vista" os="windows" required="no">
-			<description>Windows Vista Version</description>
-			<file unpack="true" targetdir="$INSTALL_PATH" 
-				  src="@{build.dir}/@{archivePrefix}-@{buildLabel}-win32.wpf.x86.zip" />
-				
-			<parsable targetfile="$INSTALL_PATH/post_install.bat" />
-			<file targetdir="$INSTALL_PATH" 
-				src="post_install/post_install.bat" />
-			<executable keep="false" stage="postinstall"
-				targetfile="$INSTALL_PATH/post_install.bat" />
-		</pack>
-		<pack name="Windows_XP" os="windows" required="no">
-			<description>Windows 2000/XP Version</description>
-			<file unpack="true" targetdir="$INSTALL_PATH" 
-				  src="@{build.dir}/@{archivePrefix}-@{buildLabel}-win32.win32.x86.zip" />
-			
-			<parsable targetfile="$INSTALL_PATH/post_install.bat" />
-			<file targetdir="$INSTALL_PATH" 
-				src="post_install/post_install.bat" />				
-			<executable keep="false" stage="postinstall"
-				targetfile="$INSTALL_PATH/post_install.bat"/>
-		</pack>
-		<pack name="32-bit_Linux_(x86)" os="unix" required="no">
-			<description>32-bit Linux (x86) Version</description>
-			<file unpack="true" targetdir="$INSTALL_PATH" 
-				  src="@{build.dir}/@{archivePrefix}-@{buildLabel}-linux.gtk.x86.zip" />
-			
-			<parsable targetfile="$INSTALL_PATH/post_install.sh" />
-			<file targetdir="$INSTALL_PATH"
-				src="post_install/post_install.sh" />
-			<executable keep="false" stage="postinstall"
-				targetfile="$INSTALL_PATH/post_install.sh" />
-			<executable keep="true" stage="never" 
-				targetfile="$INSTALL_PATH/@{archivePrefix}" />
-		</pack>
-		<pack name="64-bit_Linux_(x86_64)" os="unix" required="no">
-			<description>64-bit Linux (x86_64) Version</description>
-			<file unpack="true" targetdir="$INSTALL_PATH" 
-				  src="@{build.dir}/@{archivePrefix}-@{buildLabel}-linux.gtk.x86_64.zip" />
-			
-			<parsable targetfile="$INSTALL_PATH/post_install.sh" />
-			<file targetdir="$INSTALL_PATH" 
-				src="post_install/post_install.sh" />
-			<executable keep="false" stage="postinstall"
-				targetfile="$INSTALL_PATH/post_install.sh" />
-			<executable keep="true" stage="never" 
-				targetfile="$INSTALL_PATH/@{archivePrefix}" />
-		</pack>
-		<pack name="Mac_OSX_(x86)" os="mac" required="no">
-			<description>Mac OSX (x86) Version</description>
-			<file unpack="true" targetdir="$INSTALL_PATH" 
-				  src="@{build.dir}/@{archivePrefix}-@{buildLabel}-macosx.carbon.x86.zip" />
-				
-			<parsable targetfile="$INSTALL_PATH/post_install.sh" />
-			<file targetdir="$INSTALL_PATH" 
-				src="post_install/post_install.sh" />
-			<executable keep="false" stage="postinstall"
-				targetfile="$INSTALL_PATH/post_install.sh" />
-			<executable keep="true" stage="never" 
-				targetfile="$INSTALL_PATH/@{archivePrefix}.app/Contents/MacOS/@{archivePrefix}" />	
-		</pack>
-		<pack name="Mac_OSX_(ppc)" os="mac" required="no">
-			<description>Mac OSX (ppc) Version</description>
-			<file unpack="true" targetdir="$INSTALL_PATH" 
-				  src="@{build.dir}/@{archivePrefix}-@{buildLabel}-macosx.carbon.ppc.zip" />
-			
-			<parsable targetfile="$INSTALL_PATH/post_install.sh" />
-			<file targetdir="$INSTALL_PATH" 
-				src="post_install/post_install.sh" />
-			<executable keep="false" stage="postinstall"
-				targetfile="$INSTALL_PATH/post_install.sh" />
-			<executable keep="true" stage="never" 
-				targetfile="$INSTALL_PATH/@{archivePrefix}.app/Contents/MacOS/@{archivePrefix}" />
-		</pack>
-		<pack name="Solaris_(sparc)" os="unix" required="no">
-			<description>Solaris (sparc) Version</description>
-			<file unpack="true" targetdir="$INSTALL_PATH" 
-				  src="@{build.dir}/@{archivePrefix}-@{buildLabel}-solaris.gtk.sparc.zip" />
-			
-			<parsable targetfile="$INSTALL_PATH/post_install.sh" />
-			<file targetdir="$INSTALL_PATH" 
-				src="post_install/post_install.sh" />
-			<executable keep="false" stage="postinstall"
-				targetfile="$INSTALL_PATH/post_install.sh" />
-			<executable keep="true" stage="never" 
-				targetfile="$INSTALL_PATH/@{archivePrefix}" />
-		</pack>
+		<refpack file="current.pack.definition.xml"/>
 	</packs>
-
 </installation>
 			]]></config>
 		</izpack>

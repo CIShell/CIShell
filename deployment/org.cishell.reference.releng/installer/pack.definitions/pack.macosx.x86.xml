@@ -1,0 +1,17 @@
+<installation version="1.0">
+<packs>
+	<pack name="Mac_OSX_(x86)" os="mac" required="yes">
+		<description>Mac OSX (x86) Version</description>
+		<file unpack="true" targetdir="$INSTALL_PATH" 
+			  src="@{build.dir}/@{archivePrefix}-@{buildLabel}-macosx.carbon.x86.zip" />
+			
+		<parsable targetfile="$INSTALL_PATH/post_install.sh" />
+		<file targetdir="$INSTALL_PATH" 
+			src="post_install/post_install.sh" />
+		<executable keep="false" stage="postinstall"
+			targetfile="$INSTALL_PATH/post_install.sh" />
+		<executable keep="true" stage="never" 
+			targetfile="$INSTALL_PATH/@{archivePrefix}.app/Contents/MacOS/@{archivePrefix}" />	
+	</pack>
+</packs>
+</installation>
