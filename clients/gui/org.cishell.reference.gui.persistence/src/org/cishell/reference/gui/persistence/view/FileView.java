@@ -63,9 +63,28 @@ public class FileView implements Algorithm {
     	}
     	return tempFile;
     }
+    
+    public File getTempFileCSV(){ //TC181
+    	File tempFile;
+    
+    	String tempPath = System.getProperty("java.io.tmpdir");
+    	File tempDir = new File(tempPath+File.separator+"temp");
+    	if(!tempDir.exists())
+    		tempDir.mkdir();
+    	try{
+    		tempFile = File.createTempFile("xxx-Session-", ".csv", tempDir);
+		
+    	}catch (IOException e){
+    		logger.log(LogService.LOG_ERROR, e.toString());
+    		tempFile = new File (tempPath+File.separator+"temp"+File.separator+"temp.csv");
+
+    	}
+    	return tempFile;
+    }
 
     public Data[] execute() {
         boolean lastSaveSuccessful = false;
+        boolean isCSVFile          = false;//TC181
         String format;
         
         Display display;
@@ -78,19 +97,34 @@ public class FileView implements Algorithm {
         }
         parentShell = windows[0].getShell();
         display = PlatformUI.getWorkbench().getDisplay();
-        tempFile = getTempFile();
+        //tempFile = getTempFile(); TC181
                
         for (int i = 0; i < data.length; i++){
         	Object theData = data[i].getData();
         	format = data[i].getFormat();
+        	 
         	if (theData instanceof File ||
         		format.startsWith("file:text/") || 
         		format.startsWith("file-ext:")){
-           		copy((File)data[i].getData(), tempFile);
-        		lastSaveSuccessful = true;    
+        		 
+        		if (format.startsWith("file:text/csv") || format.startsWith("file-ext:csv"))
+        		{
+        		   tempFile = getTempFileCSV();
+        		   isCSVFile = true;
+        		    
+        		}
+        		else
+        		{
+        		   tempFile = getTempFile(); 
+        		}
+        		copy((File)data[i].getData(), tempFile);
+        		lastSaveSuccessful = true; 
+        		
+        		 
+        		
         	}else{
         		final Converter[] converters = conversionManager.findConverters(data[i], "file-ext:*");
-
+                
             	if (converters.length < 1) {
             		guiBuilder.showError("No Converters", 
             				"No valid converters for data type: " + 
@@ -100,8 +134,18 @@ public class FileView implements Algorithm {
             	else if (converters.length == 1){
              		//If length=1, use the unique path to save it directly 
             		//and bring the text editor.
-            	    Data newData = converters[0].convert(data[i]);                    
-                    copy((File)newData.getData(), tempFile);     
+            	    Data newData = converters[0].convert(data[i]);     
+            	    if (format.startsWith("prefuse.data.Table"))
+            	    {
+            	       tempFile = getTempFileCSV();
+              		   isCSVFile = true;
+            	    }
+            	    else
+            	    {
+            	    	tempFile = getTempFile(); 
+            	    	
+            	    }
+            	    copy((File)newData.getData(), tempFile);    
             		lastSaveSuccessful = true; 
             	}
             	else {
@@ -113,12 +157,21 @@ public class FileView implements Algorithm {
             		}
             	}
         	}
-            
-            
-            Display.getDefault().syncExec(new Runnable() {
-                public void run() {
-                    program = Program.findProgram("txt");
-                }});
+        	if (isCSVFile){//TC181
+        		Display.getDefault().syncExec(new Runnable() {
+                    public void run() {
+                        program = Program.findProgram("csv");
+                    }});
+        		 
+        	}else
+        	{
+        		 Display.getDefault().syncExec(new Runnable() {
+                     public void run() {
+                         program = Program.findProgram("txt");
+                     }});
+        		  
+        	}
+           
             /*
             Display.getDefault().syncExec(new Runnable() {
                 public void run() {

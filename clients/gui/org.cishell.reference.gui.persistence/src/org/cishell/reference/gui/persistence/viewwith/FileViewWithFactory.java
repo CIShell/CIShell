@@ -30,6 +30,7 @@ public class FileViewWithFactory implements AlgorithmFactory {
 	Program programTxt;
     Program programDoc;
     Program programHtml;
+    Program programCsv; //TS181
 	private MetaTypeProvider provider;
 
     protected void activate(ComponentContext ctxt) {
@@ -65,6 +66,12 @@ public class FileViewWithFactory implements AlgorithmFactory {
                 programHtml = Program.findProgram("htm");
                 
             }});
+        //TC181
+        Display.getDefault().syncExec(new Runnable() {
+            public void run() {
+                programCsv = Program.findProgram("csv");
+                
+            }});
 	    
 		System.err.println(definition.getID());
 		
@@ -83,6 +90,9 @@ public class FileViewWithFactory implements AlgorithmFactory {
 		if (programTxt != null) {
 			possiblePrograms++;
 		}
+		if (programCsv != null) {
+			possiblePrograms++;
+		}
 		
 		String[] myOptionLabels = new String[possiblePrograms];
 		String[] myOptionValues = new String[possiblePrograms];
@@ -97,6 +107,11 @@ public class FileViewWithFactory implements AlgorithmFactory {
 		if (programTxt != null) {
 			myOptionLabels[counter] = programTxt.getName();
 			myOptionValues[counter++] = "txt";
+		}
+		//TC181
+		if (programTxt != null) {
+			myOptionLabels[counter] = programCsv.getName();
+			myOptionValues[counter++] = "csv";
 		}
 		
 		

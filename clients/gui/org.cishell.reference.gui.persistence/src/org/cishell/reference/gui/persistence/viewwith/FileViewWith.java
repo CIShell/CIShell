@@ -33,6 +33,7 @@ public class FileViewWith implements Algorithm {
     Program program;
     Program programTwo;
     Program programThree;
+    Program programFour; //TC181
     File tempFile;
      
     public FileViewWith(Data[] data, Dictionary parameters, CIShellContext context) {
@@ -132,9 +133,14 @@ public class FileViewWith implements Algorithm {
                 public void run() {
                     programThree = Program.findProgram("htm");
                 }});
+            //TC181
+            Display.getDefault().syncExec(new Runnable() {
+                public void run() {
+                    programFour = Program.findProgram("csv");
+                }});
             
- 
-            if (program == null && programTwo == null && programThree == null) {
+            //TC181
+            if (program == null && programTwo == null && programThree == null && programThree == null) {
             		guiBuilder.showError("No Viewers for TXT, DOC, or HTM", 
     					"No valid viewers for .txt, .doc, or .htm files. " +
     					"The file is located at: "+tempFile.getAbsolutePath(), 
@@ -157,6 +163,12 @@ public class FileViewWith implements Algorithm {
             			Display.getDefault().syncExec(new Runnable() {
             				public void run() {
             					programThree.execute(tempFile.getAbsolutePath());
+            				}});
+            		//TC181	
+            		} else if (viewWith.equals("csv")) {
+            			Display.getDefault().syncExec(new Runnable() {
+            				public void run() {
+            					programFour.execute(tempFile.getAbsolutePath());
             				}});
             		} else {
             			// Try to run it with txt viewer...
