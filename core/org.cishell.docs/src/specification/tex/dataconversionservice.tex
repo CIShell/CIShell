@@ -14,13 +14,12 @@ Data Conversion Service is used here to simplify the process of converting data.
 \begin{itemize}
   \item \textit{DataConversionService} - The service interface for converting
   data to different formats.
-  \item \textit{Converter Algorithm} - A special type of algorithm which
-  converts data from one format to another.
+  \item \textit{Converter Algorithm} - A special type of algorithm, defined
+  on page \pageref{converterAlg}, which converts data from one format to
+  another.
   \item \textit{Converter} - The interface for a wrapped set of converter
   algorithms returned by the \class{DataConversionService} that will convert
   data from one format to another.
-  \item \textit{Validator} - A special type of converter algorithm which checks
-  a specified file to see if it is a particular file format. 
 \end{itemize}
 
 \section{Data Conversion Service}
@@ -42,72 +41,5 @@ illustrated in figure \ref{fig:conversionGraph}.
 \caption{A Conversion Graph}
 \label{fig:conversionGraph}
 \end{figure}
-
-\subsection{Converter Algorithms}
-
-A converter algorithm is a standard CIShell algorithm with the following
-constraints: 
-
-\subsubsection*{Required:}
-\begin{itemize}
-  \item The algorithm must be a conformant \class{AlgorithmFactory}
-  implementation and properly registered as a service.
-  \item The algorithm must take in a single \class{Data} item and convert the
-  item producing a single \class{Data} item. This must be reflected in the
-  algorithm's service metadata where ``in\_data'' and ``out\_data'' have only
-  one format each.
-  \item The algorithm's service metadata must contain a legal ``service.pid''.
-  \item The algorithm's service metadata must have ``type=converter''.
-  \item The algorithm's service metadata must have ``conversion=lossy'' if
-  data is lossed during conversion or ``conversion=lossless'' if not.
-\end{itemize}
-
-\subsubsection*{Optional:}
-\begin{itemize}
-  \item The algorithm's service metadata should have ``remoteable=true'' if it
-  meets the requirements of a remoteable algorithm.
-  \item The algorithm's service metadata should have a ``label'' which is a
-  short human-readable name for the converter, usually with a readable name of
-  the input data format and output data format.
-  \item The algorithm's service metadata should have a ``description''
-  describing the conversion in more detail, perhaps going into what data may be
-  lossed if ``conversion=lossy''.
-\end{itemize}
-
-\subsection{Validator Algorithms}
-
-A validator algorithm is a standard CIShell algorithm which checks either an
-incoming or outgoing file to be sure it is of the type specified. These algorithms
-have the following constraints:
-
-\subsubsection*{Required:}
-\begin{itemize}
-  \item The algorithm must be a conformant \class{AlgorithmFactory}
-  implementation and properly registered as a service.
-  \item The algorithm must take in a single \class{Data} item and validate the
-  item producing a single \class{Data} item (with the same data, but changed
-  format) or \class{null} if the file being validated is not of the right
-  type. This must be reflected in the algorithm's service metadata where
-  ``in\_data'' and ``out\_data'' have only one format each with one containing
-  a ``file:'' format and the other a ``file-ext:'' depending on the direction
-  of validation.
-  \item The algorithm must not alter the data. Its only purpose is to validate
-  the proposed incoming or outgoing file.
-  \item The algorithm's service metadata must contain a legal ``service.pid''.
-  \item The algorithm's service metadata must have ``type=validator''.
-\end{itemize}
-
-\subsubsection*{Optional:}
-\begin{itemize}
-  
-  \item The algorithm's service metadata should have ``remoteable=true'' if it
-  meets the requirements of a remoteable algorithm.
-  \item The algorithm's service metadata should have a ``label'' which is a
-  short human-readable name for the converter, usually with a readable name of
-  the input data format and output data format.
-  \item The algorithm's service metadata should have a ``description''
-  describing the conversion in more detail, perhaps going into what data may be
-  lossed if ``conversion=lossy''.
-\end{itemize}
 
 \orgcishellserviceconversion{}
