@@ -184,7 +184,7 @@ public class StaticExecutableRunner implements Algorithm {
         
         new Thread(new Runnable() {
 			public void run() {
-				logStream(LogService.LOG_INFO, process.getErrorStream());
+				logStream(LogService.LOG_ERROR, process.getErrorStream());
 			}
         }).start();
         
