@@ -172,10 +172,22 @@ public class StaticExecutableRunner implements Algorithm {
         File dir = new File(baseDir);
         String[] beforeFiles = dir.list();
         
-        Process process = Runtime.getRuntime().exec(cmdarray, null, new File(baseDir));
-
-        logStream(LogService.LOG_INFO, process.getInputStream());
-        logStream(LogService.LOG_ERROR, process.getErrorStream());
+        final Process process = Runtime.getRuntime().exec(cmdarray, null, new File(baseDir));
+        
+        process.getOutputStream().close();
+        
+        new Thread(new Runnable() {
+			public void run() {
+				logStream(LogService.LOG_INFO, process.getInputStream());
+			}
+        }).start();
+        
+        new Thread(new Runnable() {
+			public void run() {
+				logStream(LogService.LOG_INFO, process.getErrorStream());
+			}
+        }).start();
+        
         process.waitFor();
         
         //successfully ran?
