@@ -97,7 +97,8 @@
 	<variables>
 		<variable name="archivePrefix" value="@{archivePrefix}"/>
 		<variable name="projectName" value="@{project.name}"/>
-		<variable name="projectShortName" value="@{project.short.name}"/>				
+		<variable name="projectShortName" value="@{project.short.name}"/>
+		<variable name="DesktopShortcutCheckboxEnabled" value="true"/>		
 	</variables>
 	
 	<!-- 
