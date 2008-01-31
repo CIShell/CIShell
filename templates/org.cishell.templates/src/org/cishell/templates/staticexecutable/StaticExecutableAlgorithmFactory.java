@@ -29,6 +29,8 @@ import java.util.Set;
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
 import org.cishell.framework.algorithm.AlgorithmFactory;
+import org.cishell.framework.algorithm.ProgressMonitor;
+import org.cishell.framework.algorithm.ProgressTrackable;
 import org.cishell.framework.data.Data;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
@@ -73,7 +75,7 @@ public class StaticExecutableAlgorithmFactory implements AlgorithmFactory {
         return provider;
     }
     
-    private class StaticExecutableAlgorithm implements Algorithm {
+    private class StaticExecutableAlgorithm implements Algorithm, ProgressTrackable {
         private String ALGORITHM;
 		private String ALGORITHM_MACOSX_PPC;
 		private String MACOSX;
@@ -87,7 +89,10 @@ public class StaticExecutableAlgorithmFactory implements AlgorithmFactory {
         CIShellContext context;
         LogService logger;
         
-        public StaticExecutableAlgorithm(Data[] data, Dictionary parameters, CIShellContext context) {
+        private ProgressMonitor monitor;
+        
+        public StaticExecutableAlgorithm(Data[] data, Dictionary parameters, CIShellContext context) 
+        	{
             this.data = data;
             this.parameters = parameters;
             this.context = context;
@@ -112,7 +117,7 @@ public class StaticExecutableAlgorithmFactory implements AlgorithmFactory {
                 serviceProps.put("Algorithm-Directory", algName);
                 
                 StaticExecutableRunner runner = 
-                    new StaticExecutableRunner(bContext, context, serviceProps, parameters, data);
+                    new StaticExecutableRunner(bContext, context, serviceProps, parameters, data, monitor);
                 
                 copyFiles(runner.getTempDirectory());
             
@@ -234,5 +239,13 @@ public class StaticExecutableAlgorithmFactory implements AlgorithmFactory {
             }
             return props;
         }
+
+		public ProgressMonitor getProgressMonitor() {
+			return this.monitor;
+		}
+
+		public void setProgressMonitor(ProgressMonitor monitor) {
+			this.monitor = monitor;
+		}
     }
 }

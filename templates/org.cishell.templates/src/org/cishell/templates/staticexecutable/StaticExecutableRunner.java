@@ -32,6 +32,7 @@ import java.util.Properties;
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
 import org.cishell.framework.algorithm.AlgorithmProperty;
+import org.cishell.framework.algorithm.ProgressMonitor;
 import org.cishell.framework.data.BasicData;
 import org.cishell.framework.data.Data;
 import org.cishell.framework.data.DataProperty;
@@ -52,12 +53,20 @@ public class StaticExecutableRunner implements Algorithm {
     protected Properties props;
     protected CIShellContext ciContext;
     
+    protected ProgressMonitor monitor;
+    
+    protected Boolean processRunning = new Boolean(true);
+    protected Boolean killedOnPurpose = new Boolean(false);
+    
 
-    public StaticExecutableRunner(BundleContext bContext, CIShellContext ciContext, Properties props, Dictionary parameters, Data[] data) throws IOException {
+    public StaticExecutableRunner(BundleContext bContext, CIShellContext ciContext, Properties props,
+    		Dictionary parameters, Data[] data, ProgressMonitor monitor) throws IOException {
         this.ciContext = ciContext;
         this.props = props;
         this.parameters = parameters;
         this.data = data;
+        
+        this.monitor = monitor;
         
         guiBuilder = (GUIBuilderService)ciContext.getService(GUIBuilderService.class.getName());
 
@@ -73,7 +82,8 @@ public class StaticExecutableRunner implements Algorithm {
      */
     public Data[] execute() {
         try {
-            String algDir = tempDir + File.separator + props.getProperty("Algorithm-Directory") + File.separator;
+            String algDir = tempDir + File.separator + props.getProperty("Algorithm-Directory") 
+            	+ File.separator;
             
             chmod(algDir);
             File[] output = execute(getTemplate(algDir), algDir);
@@ -176,11 +186,17 @@ public class StaticExecutableRunner implements Algorithm {
         
         process.getOutputStream().close();
         
+        this.processRunning = new Boolean(true);
+        
+        //start thread to consume stdout of process
+        
         new Thread(new Runnable() {
 			public void run() {
 				logStream(LogService.LOG_INFO, process.getInputStream());
 			}
         }).start();
+        
+        //start thread to consume stderr of process
         
         new Thread(new Runnable() {
 			public void run() {
@@ -188,17 +204,39 @@ public class StaticExecutableRunner implements Algorithm {
 			}
         }).start();
         
+        //if we have a monitor...
+        if (this.monitor != null) {
+        	this.monitor.start(ProgressMonitor.CANCELLABLE, -1);
+        	
+        	//start thread that checks if the user wants to cancel the process
+        	
+        	new Thread(new Runnable() {
+            	public void run() {
+            		checkForCancellation(process);
+            	}
+            }).start();
+        }
+
         process.waitFor();
         
-        //successfully ran?
-        if (process.exitValue() != 0) {
+        
+        this.processRunning = new Boolean(false);
+        
+        if (this.monitor != null) {
+        	
+        	this.monitor.done();
+        }
+
+        //if the process failed unexpectedly...
+        if (process.exitValue() != 0 && this.killedOnPurpose.booleanValue() != true) {
         	//display the error message using gui builder
    			guiBuilder.showError("Algorithm Could Not Finish Execution", "Sorry, the algorithm could not finish execution.", 
    					"Please check the console window for the error log messages and report the bug.\n"
    					+"Thank you.");
         }
         
-        //get the outputted files
+        //get the files output from the process
+        
         String[] afterFiles = dir.list();
         
         Arrays.sort(beforeFiles);
@@ -244,6 +282,21 @@ public class StaticExecutableRunner implements Algorithm {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    
+    protected void checkForCancellation(Process process) {
+    	while (StaticExecutableRunner.this.processRunning.booleanValue()) {
+    		if (StaticExecutableRunner.this.monitor.isCanceled()) {
+    			StaticExecutableRunner.this.killedOnPurpose = new Boolean(true);
+    			process.destroy();
+    			} else {
+    			}
+    		
+    		try {
+    		Thread.sleep(100);
+    		} catch (InterruptedException e) {
+    		}
+    		}
     }
 
     protected String[] getTemplate(String algDir) {
