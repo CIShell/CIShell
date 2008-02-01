@@ -25,17 +25,18 @@ Data Conversion Service is used here to simplify the process of converting data.
 \section{Data Conversion Service}
 
 The Data Conversion Service provides unified access to converter algorithms.
-\class{DataConversionService} system developers may choose not to use converter
-algorithms, but is ill-advised. Also, good implementations will take advantage of
-the nature of algorithms to allow for more than just single hop conversions.
-Since all converter algorithms specify a single data object in and a single data
-object out, a graph can be constructed where nodes are the data formats and edges
-are the converters. Using this directed graph, when a conversion between data
-formats is requested, the \class{DataConversionService} will choose the shortest
-path of converters to do the conversion. A hypothetical conversion graph is
-illustrated in figure \ref{fig:conversionGraph}.
+\class{DataConversionService} system developers may choose not to leverage
+converter algorithms, but this is ill-advised. Also, good implementations will
+take advantage of the nature of converter algorithms to allow for more than just
+single hop conversions. Since all converter algorithms specify a single data
+object in and a single data object out, a graph can be constructed where nodes
+are the data formats and edges are the converters. Using this directed graph,
+when a conversion between data formats is requested, the
+\class{DataConversionService} will choose the shortest path of converters to do
+the conversion. A hypothetical conversion graph is illustrated in figure
+\ref{fig:conversionGraph}.
 
-\begin{figure}[htb!]
+\begin{figure}[h!]
 \centering
 \includegraphics[width=70mm]{../img/conversionGraph.pdf}
 \caption{A Conversion Graph}

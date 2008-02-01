@@ -1,0 +1,33 @@
+\section{OSGi Dependencies}
+
+CIShell is built to be run in a fully compliant OSGi Service Platform R4
+implementation. In addition to the base OSGi implementation, several
+optional OSGi services are required to be available in a fully compliant CIShell
+implementation. Each additional required service is described in the OSGi
+Service Platform Service Compendium R4.
+
+\subsection*{Required Service}
+\begin{description}
+  \item[Metatype Service] as described in OSGi section 105 ``Metatype Service
+  Specification'', this service defines the \class{MetaTypeProvider} class used
+  for specifying user interfaces in CIShell. In addition, it provides an XML 
+  format for automatically generating \class{MetaTypeProvider}s and a service,
+ \class{MetaTypeService} for harvesting them for use by bundles.
+  \item[Log Service] as described in OSGi section 101 ``Log Service 
+  Specification'', this service is used as a universal logging system for 
+  algorithms and services. See chapter \ref{logService} for more details.   
+  \item[Preferences Service] as described in OSGi section 106 ``Preferences
+  Service Specification'', this service is used as a universal preference storage
+  system for algorithms and services. See chapter \ref{preferencesService} for
+  more details.
+  \item[Configuration Admin Service] \comments{More details when the expanded
+  prefs spec is done\ldots}
+\end{description}
+
+\subsection*{Recommended Services}
+\begin{description}
+  
+  \item[Declarative Services] as described in OSGi section 112 ``Declarative
+  Services Specification'', this service can be used by CIShell algorithms to
+  simplify algorithm service registration and for finding necessary auxilary services.\item[]
+\end{description}

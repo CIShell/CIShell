@@ -48,16 +48,17 @@ encounter. A standard algorithm has the following constraints:
   simultaneously a classification and a location on a GUI's menubar to place
   the algorithm in. See section \ref{algMetaData} for how to format a
   ``menu\_path''.
-  \item The algorithm's service metadata must not have a ``type'' set.
 \end{itemize}
 
 \subsubsection*{Optional:}
 \begin{itemize}
+  
   \item The algorithm's service metadata should have ``remoteable=true'' if it
   meets the requirements of a remoteable algorithm.
   \item The algorithm's service metadata should have ``parentage=default'' if
   it wishes to use the default \class{Data} parenting scheme described in
   section \ref{algMetaData}.
+  \item The algorithm's service metadata does not need to have a ``type'' set.
   \item As much of the informational metadata as possible should be
   provided. This includes ``authors'', ``implementors'', ``integrators'',
   ``documentation\_url'', ``reference'', ``reference\_url'', and ``written\_in''.
@@ -83,7 +84,7 @@ algorithm has the following constraints:
   \item The algorithm's service metadata must contain a legal ``service.pid''.
   \item The algorithm's service metadata must have ``type=converter''.
   \item The algorithm's service metadata must have ``conversion=lossy'' if
-  data is lossed during conversion or ``conversion=lossless'' if not.
+  data is lost during conversion or ``conversion=lossless'' if not.
 \end{itemize}
 
 \subsubsection*{Optional:}
@@ -107,7 +108,9 @@ an incoming or outgoing file to be sure it is of the type specified. This is
 necessary due to the fact that one cannot simply assume based on the file
 extension what type of file format the data is in. Checking the contents of the
 file is necessary, especially in the case of multiple file formats for the same
-file extension (e.g., XML). A validator algorithm has the following constraints:
+file extension (e.g., XML). This type of algorithm is important for reliably
+bringing in outside data and saving out data from CIShell. A validator algorithm
+has the following constraints:
 
 \subsubsection*{Required:}
 \begin{itemize}

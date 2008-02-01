@@ -8,12 +8,14 @@ The \class{org.cishell.framework} package and subpackages define the core of
 CIShell. The key components being algorithms, data, and CIShell service access.
 
 \subsection{Essentials}
-
-\comments{Needs work}
 \begin{itemize}
   \item \textit{Application Independence} - Algorithms must be usable in a wide
-  variety of contexts and should not be tied to any one front end where
-  possible.
+  variety of contexts and should not be tied to any one CIShell environment or
+  front end where possible.
+  \item \textit{User Interface Independence} - Algorithms should not have to tie
+  themselves to a single UI where possible.
+  \item \textit{Black Box Algorithms} - Algorithms are black boxes whose
+  possible interactions are described in metadata.
   \item \textit{Delayed Execution} - There may be a large delay between an
   algorithm getting parameters for execution and its actual execution.
   \item \textit{Remote Execution} - Algorithm interfaces should be designed to
