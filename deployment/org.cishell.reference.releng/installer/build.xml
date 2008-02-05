@@ -137,6 +137,7 @@
 			id="Unix_shortcutSpec.xml"/>
 		<res id="InfoPanel.info" src="info/thanks.txt" parse="yes" />
 		<res id="XInfoPanel.info" src="info/mac_instructions.txt" parse="yes" />
+		<res id="TargetPanel.dir.windows" src="info/target_location.windows.txt"/>
 	</resources>
 
 	<native type="izpack" name="ShellLink.dll" />
