@@ -191,7 +191,7 @@ public class FileSaver {
     	
     	
     	//find the first character of the file name extension.
-    	int extensionBeginIndex = fileNameWithExtension.indexOf(".");
+    	int extensionBeginIndex = fileNameWithExtension.lastIndexOf(".");
     	
     	int endIndex;
     	
@@ -201,7 +201,7 @@ public class FileSaver {
     		//first period.
     	} else {
     		//we didn't find an extension on the file name.
-    		endIndex = fileLabel.length(); // don't cut any off the end.
+    		endIndex = fileNameWithExtension.length(); // don't cut any off the end.
     	}
     	
     	String fileNameWithoutExtension = fileNameWithExtension.substring(0, endIndex);
