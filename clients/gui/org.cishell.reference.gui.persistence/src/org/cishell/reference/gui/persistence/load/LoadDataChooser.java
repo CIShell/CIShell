@@ -165,6 +165,7 @@ public class LoadDataChooser extends AbstractDialog {
             dm = new Data[]{new BasicData(theFile.getPath(),String.class.getName())};
             dm = persister.createAlgorithm(dm, null, ciContext).execute();
         } catch (Throwable e) {
+        	this.logger.log(LogService.LOG_ERROR, "Error occurred while executing selection", e);
             e.printStackTrace();
         }
         
