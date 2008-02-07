@@ -92,13 +92,13 @@ all is valid.
 
 \subsection*{parentage}
 If this metadata element is used, it defines how the output \class{Data}
-produced by the algorithm should be arranged. \class{Data} items can be
-given a parent as part of their metadata (which usually means the \class{Data}
-was derived from the referenced \class{Data}). If parentage is set to
-``default'' then each of the algorithm's outputted \class{Data} items will have
-their parent \class{Data} item set as the first inputted \class{Data} item (if
-applicable). If parentage is set to something else or is not set at all, then
-it is up to the algorithm to set up these relationships.
+produced by the algorithm should be arranged. \class{Data} items can be given a parent as
+part of their metadata (which qsually means the \class{Data} was derived from the
+referenced \class{Data}). If parentage is set to ``default'' then each of the
+algorithm's outputted \class{Data} items will have their parent \class{Data} item
+set as the first inputted \class{Data} item (if applicable) by the
+CIShell-conforming application. If parentage is set to something else or is not
+set at all, then it is up to the algorithm to set up these relationships.
 
 \subsection*{type}
 Specifies the type of the algorithm. If no type is set, then
@@ -129,12 +129,12 @@ classification of the algorithm. The string is a ``/'' separated list with
 each element in the list getting more specific. The last element in the list
 specifies a group for grouping algorithms in its final menu. Possible groups
 include: ``additions'' for default placement, ``start'' for being placed at
-the start of the menu, ``end'' for being placed at the end of the menu. Some
+the start of the menu, or ``end'' for being placed at the end of the menu. Some
 examples of valid menu\_path strings include: ``File/additions'',
 ``Analysis/Undirected Networks/start'', and ``Visualization/Networks/end''.
 
 \subsection*{conversion}
-For converters algorithms, this metadata element specifies if any data is
+For converter algorithms, this metadata element specifies if any data is
 lossed in the conversion. Possible values are ``lossy'' and ``lossless''. A
 description of what type of information is lost should be explained in the
 description.
