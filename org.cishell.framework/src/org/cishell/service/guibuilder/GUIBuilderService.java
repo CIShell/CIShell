@@ -28,11 +28,10 @@ import org.osgi.service.metatype.ObjectClassDefinition;
  * what input is needed (String, Integer, Float, etc...), a description of the 
  * input, and a way to validate input. There is also an XML format that OSGi 
  * provides a service ({@link MetaTypeService}) for that will parse the XML into
- * a MetaTypeProvider instance. More information about MetaTypeProvider and 
- * MetaTypeService is available in the OSGi Service Platform Specification, 
- * Release 4 Service Compendium, Section 105 (pg 129). You can download it at
- * <a href="http://www.osgi.org/osgi_technology/download_specs.asp">
- * http://www.osgi.org/osgi_technology/download_specs.asp</a>.
+ * a MetaTypeProvider instance. See the 
+ * <a href="http://cishell.org/dev/docs/spec/cishell-spec-1.0.pdf">
+ * CIShell Specification 1.0</a> for documentation about creating GUIs with this
+ * service. 
  * 
  * Algorithm writers are encouraged to use this service if they need to get
  * additional input from the user rather than creating their own GUI. This is

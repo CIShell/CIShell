@@ -29,7 +29,7 @@ public class BasicData implements Data {
     private String format;
     
     /**
-     * Creates a Data object with the given data and an empty meta-data
+     * Creates a Data object with the given data and an empty metadata
      * {@link Dictionary}
      * 
      * @param data The data being wrapped
@@ -39,9 +39,9 @@ public class BasicData implements Data {
     }
     
     /**
-     * Creates a Data object with the given data and meta-data {@link Dictionary}
+     * Creates a Data object with the given data and metadata {@link Dictionary}
      * 
-     * @param properties The meta-data about the data
+     * @param properties The metadata about the data
      * @param data       The data being wrapped
      */
     public BasicData(Dictionary properties, Object data, String format) {

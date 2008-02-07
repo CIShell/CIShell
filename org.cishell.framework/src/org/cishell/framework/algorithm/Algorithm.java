@@ -13,31 +13,22 @@
  * ***************************************************************************/
 package org.cishell.framework.algorithm;
 
-import org.cishell.framework.CIShellContext;
 import org.cishell.framework.data.Data;
 
 /**
- * In CIShell, an algorithm can be basically any arbitrary code
- * execution cycle. What happens when the execute method is run is entirely
- * up to the Algorithm writer. Some algorithms may be primed with a Data array
- * that it analyzes and returns a derivitive Data array or it may convert from
- * one Data array to another or not take in any Data array and based on some 
- * given parameters create an entirely new Data array. 
- * 
- * Algorithms are typically also given a {@link CIShellContext} by which they 
- * can gain access to standard services like logging, preferences, and gui 
- * creation. If an algorithm only uses these standard services and does not pop
- * up any graphical gui (aside from using the GUIBuilderService) then this 
- * Algorithm may be safely run remotely. 
+ * A class which executes some arbitrary code and optionally returns any data 
+ * produced. What happens when the execute method is run is entirely
+ * up to the Algorithm developer. Algorithms should be primed with whatever data
+ * is needed, usually by its associated {@link AlgorithmFactory}, before 
+ * execution. This allows an Algorithm to be set up, then scheduled for later 
+ * execution.
  * 
  * @author Bruce Herr (bh2@bh2.net)
  */
 public interface Algorithm {
     
    /**
-    * Executes and optionally returns a Data array. Algorithms are usually 
-    * primed ahead of time with all the necessary data needed. This allows
-    * an Algorithm to be set up, then scheduled for later execution.
+    * Executes and optionally returns a Data array. 
     * 
     * @return A Data array that was created or <code>null</code>
     */

@@ -17,40 +17,36 @@ import java.io.File;
 import java.util.Dictionary;
 
 /**
- * A class that encapsulates data and its meta-data. This class is used to pass
+ * A class that encapsulates data and its metadata. This class is used to pass
  * data between algorithms and is what algorithms optionally create when executed. 
  * 
  * @author Bruce Herr (bh2@bh2.net)
  */
 public interface Data {
 	/**
-	 * Returns the meta-data associated with the data stored in this Data object.
+	 * Returns the metadata associated with the data stored in this Data object.
 	 * Some standard keys are in the {@link DataProperty} interface.
 	 * 
-	 * @return The data's meta-data
+	 * @return The data's metadata
 	 */
     public Dictionary getMetaData();
     
     /**
      * Returns the data stored in this Data object.
      * 
-     * @return The data (a java object)
+     * @return The data (a Java object)
      */
     public Object getData();
     
     
     /**
-     * Get the format of the encapsulated data. If the data is a {@link File}, 
+     * Returns the format of the encapsulated data. If the data is a {@link File}, 
      * then this method returns what MIME type it is with "file:" prepended 
-     * (eg. file:text/plain). Otherwise, the string returned should be the java 
+     * (eg. file:text/plain). Otherwise, the string returned should be the Java 
      * class it represents. For algorithms this format should be the same as 
      * their OUT_DATA property. 
      * 
      * @return The main format of the data
      */
     public String getFormat();
-    
-    //TODO: Consider these methods for inclusion in Data    
-    //public String getUID(); //may be better for specifying parent datamodels
-    //public Object getDataAsFormat(String format);
 }

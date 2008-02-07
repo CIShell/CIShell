@@ -20,13 +20,13 @@ import org.cishell.framework.data.Data;
 import org.osgi.service.metatype.MetaTypeProvider;
 
 /**
- * A class for creating {@link Algorithm}s. This class provides the parameters
- * needed by an <code>Algorithm</code> on demand and when given correct data, 
- * will create an <code>Algorithm</code> that can be executed. An algorithm
- * writer who wishes to be usable by CIShell clients must create an 
- * implementation of this interface and register it (along with some standard
- * meta-data about the algorithm, defined in the {@link AlgorithmProperty} 
- * class) in the OSGi service registry. 
+ * A class for creating {@link Algorithm}s. This class provides the 
+ * parameters needed by its associated <code>Algorithm</code> on demand and when
+ * given correct data, will create an <code>Algorithm</code> that can be executed. 
+ * An algorithm developer who wishes to be usable by CIShell applications must 
+ * create an implementation of this interface and register it (along with some 
+ * standard metadata about the algorithm, defined in the 
+ * {@link AlgorithmProperty} class) in the OSGi service registry. 
  * 
  * @author Bruce Herr (bh2@bh2.net)
  */
@@ -55,7 +55,7 @@ public interface AlgorithmFactory {
      *                   service in OSGi.
      * @param parameters A set of key-value pairs that were created based on 
      *                   the parameters given by the createParameters method.
-     * @param context    The context by which an Algorithm can gain access to 
+     * @param context    The context by which the Algorithm can gain access to 
      *                   standard CIShell services
      * @return An <code>Algorithm</code> primed for execution
      */

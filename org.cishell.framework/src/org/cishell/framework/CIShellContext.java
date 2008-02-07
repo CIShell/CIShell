@@ -21,7 +21,7 @@ import org.osgi.service.prefs.PreferencesService;
 /**
  * The context by which algorithms in the framework can gain access to standard
  * CIShell services. An instantiated CIShellContext must provide access to at 
- * least the default services (as of this specification, the OSGi 
+ * least the default services (as of the 1.0 specification, the OSGi 
  * {@link LogService}, the OSGi {@link PreferencesService}, the 
  * CIShell defined {@link DataConversionService}, and the CIShell defined 
  * {@link GUIBuilderService}). Other services may be made available through
@@ -32,7 +32,7 @@ import org.osgi.service.prefs.PreferencesService;
 public interface CIShellContext {
     
     /**
-     * Contains an array of the strings to access the default services
+     * Contains an array of the valid strings corresponding to the default services
      */
     public static final String[] DEFAULT_SERVICES = 
             new String[] { LogService.class.getName(), 
