@@ -96,6 +96,11 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 					}
 					
 					manager = manager.findMenuUsingPath("tools");
+					
+					if (manager == null) {
+						System.err.println( "Unable to add Scheduler to Tools menu, since Tools menu does not exist.");
+					}
+					
 					manager.appendToGroup("start", scheduler);
 					SchedulerView view = SchedulerView.getDefault();
 					boolean visible = view != null
