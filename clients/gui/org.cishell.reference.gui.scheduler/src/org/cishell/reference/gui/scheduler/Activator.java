@@ -27,6 +27,9 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 	private static BundleContext context;
 	private boolean waitForBundleContext;
 	
+	private static final int ATTEMPTS_TO_FIND_TOOLBAR = 15;
+	private static final int SLEEP_TIME = 100;
+	
 	public Activator() {
 		plugin = this;
 	}
@@ -81,6 +84,17 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 				public void run() {
 					Action scheduler = new SchedulerAction();
 					IMenuManager manager = CIShellApplication.getMenuManager();
+					
+					IMenuManager newManager = null;
+					for (int i = 0; i < ATTEMPTS_TO_FIND_TOOLBAR && newManager == null; i++) {
+						try {
+						Thread.sleep(SLEEP_TIME);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+						newManager = manager.findMenuUsingPath("tools");
+					}
+					
 					manager = manager.findMenuUsingPath("tools");
 					manager.appendToGroup("start", scheduler);
 					SchedulerView view = SchedulerView.getDefault();
