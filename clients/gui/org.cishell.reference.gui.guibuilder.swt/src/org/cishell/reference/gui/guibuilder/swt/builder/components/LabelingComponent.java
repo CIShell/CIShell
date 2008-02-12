@@ -88,6 +88,7 @@ public class LabelingComponent extends AbstractComponent implements UpdateListen
         String[] defaults = attr.getDefaultValue();
         
         if (defaults != null && defaults.length > 0) {
+        	
             Object value = StringConverter.getInstance().stringToObject(attr, defaults[0]);
             setValue(value);
         }

@@ -13,6 +13,8 @@
  * ***************************************************************************/
 package org.cishell.reference.gui.guibuilder.swt.builder.components;
 
+import java.util.Arrays;
+
 import org.cishell.reference.gui.guibuilder.swt.builder.AbstractComponent;
 import org.cishell.reference.gui.guibuilder.swt.builder.StringConverter;
 import org.eclipse.swt.SWT;
@@ -24,7 +26,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Text;
 
 /**
@@ -98,7 +99,11 @@ public class StringComponent extends AbstractComponent {
     }
 
     private String getListValue() {
-    	return optionValues[combo.getSelectionIndex()];
+    	if (optionValues != null) {
+    		return optionValues[combo.getSelectionIndex()];
+    	} else {
+    		return "You are not specifying option values, fool!";
+    	}
 	}
 
 	public String validate() {
@@ -113,6 +118,23 @@ public class StringComponent extends AbstractComponent {
     }
 
     public void setValue(Object value) {
+    	if (text != null) {
         text.setText(value == null ? "" : value.toString());
+    	} else if (combo != null) {
+    		
+    		int setComboToIndex = -1;
+    		for (int i = 0; i < optionValues.length; i++) {
+    			if (value.equals(optionValues[i])) {
+    				setComboToIndex = i;
+    			}
+    		}
+    		
+    		if (setComboToIndex != -1) {
+    			 combo.select(setComboToIndex);
+    		} else {
+    			System.err.println("Attempted to set combo box to a value " +
+    					"that didn't exist inside the combo box.");
+    		}
+    	}
     }
 }
