@@ -8,9 +8,12 @@ public class FilePassReport implements Report {
 	
 	private String name; 
 	
-	public FilePassReport (File filePassReport, String name) {
+	private ConvertedDataReport[] convertedDataReports;
+	
+	public FilePassReport (File filePassReport, String name, ConvertedDataReport[] convertedDataReports) {
 		this.filePassReport = filePassReport;
 		this.name = name;
+		this.convertedDataReports = convertedDataReports;
 	}
 	
 	public File getFilePassReport() {
@@ -19,5 +22,9 @@ public class FilePassReport implements Report {
 	
 	public String getName() {
 		return this.name;
+	}
+	
+	public ConvertedDataReport[] getConvertedDataReports() {
+		return this.convertedDataReports;
 	}
 }

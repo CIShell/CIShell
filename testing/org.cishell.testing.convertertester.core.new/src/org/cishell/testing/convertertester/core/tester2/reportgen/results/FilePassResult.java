@@ -23,6 +23,7 @@ public abstract class FilePassResult {
 	private String explanation;
 	private PassPhase lastReachedPhase;
 	private Converter failedConverter;
+	private Data[][] allData;
 		
 	//variables not set by constructor
 	
@@ -41,11 +42,12 @@ public abstract class FilePassResult {
 	private List chanceAtFaults;
 	
 	public FilePassResult(Data[] originalData, String explanation,
-			PassPhase lastReachedPhase, Converter failedConverter) {
+			PassPhase lastReachedPhase, Converter failedConverter, Data[][] allData) {
 		this.originalData = originalData;
 		this.explanation = explanation;
 		this.lastReachedPhase = lastReachedPhase;
 		this.failedConverter = failedConverter;
+		this.allData = allData;
 		
 		chanceAtFaults = new ArrayList();
 	}
@@ -93,6 +95,10 @@ public abstract class FilePassResult {
 	
 	public Data[] getOriginalData() {
 		return this.originalData;
+	}
+	
+	public Data[][] getAllData() {
+		return this.allData;
 	}
 	
 	public String getOriginalFileLabel() {
