@@ -24,6 +24,7 @@ import org.cishell.testing.convertertester.core.tester2.reportgen.reports.AllCon
 import org.cishell.testing.convertertester.core.tester2.reportgen.reports.AllErrorReport;
 import org.cishell.testing.convertertester.core.tester2.reportgen.reports.AllTestsReport;
 import org.cishell.testing.convertertester.core.tester2.reportgen.reports.ConvReport;
+import org.cishell.testing.convertertester.core.tester2.reportgen.reports.ConvertedDataReport;
 import org.cishell.testing.convertertester.core.tester2.reportgen.reports.FilePassReport;
 import org.cishell.testing.convertertester.core.tester2.reportgen.reports.ReadMeReport;
 import org.cishell.testing.convertertester.core.tester2.reportgen.reports.TestReport;
@@ -266,7 +267,9 @@ public class ConverterTesterAlgorithm implements Algorithm,
     	 * @param report the report to be returned from this algorithm
     	 */
         private void addReturn(Data report) {
-        	this.returnList.add(report);
+        	if (report != null) {
+        		this.returnList.add(report);
+        	}
         }
         
         
@@ -292,6 +295,14 @@ public class ConverterTesterAlgorithm implements Algorithm,
     					Data fpData = createReportData(fpFile, fp.getName(),
     							testReportData);
     					addReturn(fpData);
+    					ConvertedDataReport[] cdrs = fp.getConvertedDataReports();
+    					if (cdrs != null) {
+    					for (int mm = 0; mm < cdrs.length; mm++) {
+    						File cdrFile = cdrs[mm].getReport();
+    						Data cdrData = createReportData(cdrFile, cdrs[mm].getName(), fpData);
+    						addReturn(cdrData);
+    					}
+    					}
     				}
     				
     				FilePassReport[] fFilePassReports = 
@@ -302,6 +313,14 @@ public class ConverterTesterAlgorithm implements Algorithm,
     					Data fpData = createReportData(fpFile, fp.getName(),
     							testReportData);
     					addReturn(fpData);
+    					ConvertedDataReport[] cdrs = fp.getConvertedDataReports();
+    					if (cdrs != null) {
+    					for (int mm = 0; mm < cdrs.length; mm++) {
+    						File cdrFile = cdrs[mm].getReport();
+    						Data cdrData = createReportData(cdrFile, cdrs[mm].getName(), fpData);
+    						addReturn(cdrData);
+    					}
+    					}
     				}
     			}
         }
@@ -323,6 +342,13 @@ public class ConverterTesterAlgorithm implements Algorithm,
         		Data parent, String format, String type) {
         	Data reportData = new BasicData(report, format);
 			Dictionary metadata = reportData.getMetaData();
+			if (label == null) {
+				label = "no label";
+			}
+			
+			if (type == null) {
+				type = "No type";
+			}
 			metadata.put(DataProperty.LABEL, label);
 			metadata.put(DataProperty.TYPE, type);
 			if (parent != null) {
