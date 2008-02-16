@@ -5,23 +5,28 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 
+import org.cishell.framework.data.Data;
 import org.cishell.testing.convertertester.core.tester2.reportgen.ReportGenerator;
+import org.cishell.testing.convertertester.core.tester2.reportgen.reports.ConvertedDataReport;
 import org.cishell.testing.convertertester.core.tester2.reportgen.reports.FilePassReport;
 import org.cishell.testing.convertertester.core.tester2.reportgen.results.FilePassResult;
-import org.cishell.testing.convertertester.core.tester2.reportgen.results.filepass.PassPhase;
+import org.cishell.testing.convertertester.core.tester2.reportgen.results.TestResult;
 import org.osgi.service.log.LogService;
 
 public class FilePassSubGenerator {
 	
 	private FilePassReport filePassReport;
 	
+	private ConvertedDataSubGenerator convDataSubGenerator;
+	
 	private LogService log;
 	
 	public FilePassSubGenerator(LogService log) {
 		this.log = log;
+		this.convDataSubGenerator = new ConvertedDataSubGenerator(log);
 	}
 	
-	public void generateSubreport(FilePassResult fpr) {
+	public void generateSubreport(TestResult tr, FilePassResult fpr) {
 		FileOutputStream reportOutStream = null;
 		try {
 			File reportFile = new File(ReportGenerator.TEMP_DIR + fpr.getName());
@@ -42,7 +47,19 @@ public class FilePassSubGenerator {
 			
 			writeReport(report, fpr);
 			
-			this.filePassReport = new FilePassReport(reportFile, fpr.getName());
+			Data[][] allData = fpr.getAllData();
+			
+			ConvertedDataReport[] convDataReports = null; 
+			if (allData != null) {
+				convDataReports = new ConvertedDataReport[allData.length];
+
+				for (int ii = 0; ii < allData.length; ii++) {
+					Data[] data = allData[ii];
+					convDataSubGenerator.generateSubreport(tr, fpr, data);
+					convDataReports[ii] =convDataSubGenerator.getReport();
+				}
+			}
+			this.filePassReport = new FilePassReport(reportFile, fpr.getName() + "  for " + tr.getName(), convDataReports);
 			
 		} catch (IOException e) {
 			this.log.log(LogService.LOG_ERROR, 

@@ -117,8 +117,6 @@ public class ConverterTester2 implements AlgorithmProperty {
 			CIShellContext cContext,
 			BundleContext bContext) {
 		
-		
-		
 		Map fileFormatToTestConvs = convGraph.getTestMap();
 		Map fileFormatToCompareConvs = convGraph.getCompareMap();
 		
@@ -156,6 +154,7 @@ public class ConverterTester2 implements AlgorithmProperty {
 			if (filteredTestConvs != null &&
 					compareConv != null) {
 				for (int kk = 0; kk < filteredTestConvs.length; kk++) {
+					System.out.println("Running converter path " + kk);
 					numTestsSoFar++;
 					ConverterPath testConv = filteredTestConvs[kk];
 					

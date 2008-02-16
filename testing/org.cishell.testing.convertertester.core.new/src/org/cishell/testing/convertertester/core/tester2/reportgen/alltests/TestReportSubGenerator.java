@@ -33,7 +33,7 @@ public class TestReportSubGenerator {
 	public void generateSubreport(TestResult tr) {
 		FileOutputStream reportOutStream = null;
 		try {
-			File reportFile = new File(ReportGenerator.TEMP_DIR + tr.getName());
+			File reportFile = new File(ReportGenerator.TEMP_DIR + tr.getName() + " for " + tr.getName());
 			reportOutStream = new FileOutputStream(reportFile);
 			PrintStream report = new PrintStream(reportOutStream);
 			
@@ -102,7 +102,7 @@ public class TestReportSubGenerator {
 			for (int ii = 0; ii < successfulFPs.length; ii++) {
 				FilePassResult successfulFP = successfulFPs[ii];
 				
-				filePassSubGen.generateSubreport(successfulFP);
+				filePassSubGen.generateSubreport(tr, successfulFP);
 				FilePassReport filePassReport = filePassSubGen.getFilePassReport();
 				
 				successfulFPReports.add(filePassReport);
@@ -112,15 +112,14 @@ public class TestReportSubGenerator {
 			for (int ii = 0; ii < failedFPs.length; ii++) {
 				FilePassResult failedFP = failedFPs[ii];
 				
-				filePassSubGen.generateSubreport(failedFP);
+				filePassSubGen.generateSubreport(tr, failedFP);
 				FilePassReport filePassReport = filePassSubGen.getFilePassReport();
 				
 				failedFPReports.add(filePassReport);
 			}
-			//TODO: remove file pass reports
 			this.testReport = new TestReport(reportFile, tr.getNameWithSuccess(),
-					new FilePassReport[0],
-					new FilePassReport[0]);
+					(FilePassReport[]) successfulFPReports.toArray(new FilePassReport[successfulFPReports.size()]),
+					(FilePassReport[]) failedFPReports.toArray(new FilePassReport[failedFPReports.size()]));
 					
 			
 		} catch (IOException e) {

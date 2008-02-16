@@ -8,7 +8,6 @@ public class TestReport implements Report{
 	private File testReport;
 	private FilePassReport[] successfulFilePassReports;
 	private FilePassReport[] failedFilePassReports;
-	
 	private String name;
 	
 	public TestReport(File testReport, String name, FilePassReport[] successfulFilePassReports,
