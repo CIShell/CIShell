@@ -143,8 +143,8 @@ public class FileLoad implements Algorithm{
 
 		       		// no converters found means the file format is not supported
 		       		if (serviceRefList == null || serviceRefList.length == 0){
-		       			guiBuilder.showError("Unsupported File Format", "Sorry, the file format: *."+fileExtension+" is not supported so far.", 
-		       					"Sorry, the file format: *."+fileExtension+" is not supported so far. \n"+
+		       			guiBuilder.showError("Unsupported File Format", "Sorry, the file format: *."+fileExtension+" is not yet supported.", 
+		       					"Sorry, the file format: *."+fileExtension+" is not yet supported. \n"+
 		       					"Please send your requests to cishell-developers@lists.sourceforge.net. \n"
 		       					+"Thank you.");
 		           		
