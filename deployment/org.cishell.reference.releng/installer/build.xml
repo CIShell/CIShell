@@ -45,7 +45,7 @@
 	</target>
 	
 	<target name='-compile.installer'>
-		<copy file="pack.definitions/pack.${platform}.xml" tofile="current.pack.definition.xml" />
+		<copy file="pack.definitions/pack.${platform}.xml" tofile="current.pack.definition.xml" overwrite="true"/>
 		<replace file="current.pack.definition.xml">
 			<replacefilter
 				token="@{build.dir}"
