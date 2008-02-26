@@ -1,0 +1,17 @@
+\section{Data Specification}
+\label{dataSpec}
+\subsection*{\textit{Version 1.0}}
+\subsection{Introduction}
+
+Data to be operated on is passed around in \class{Data} objects which hold the
+real data, the data's format, and its properties (metadata). The data can be any
+Java \class{Object}. The format is a string which is either a full Java class or
+a mime type if it is a \class{java.io.File}. The mime type corresponds to the
+file's data type and has the following form - ``file:\textit{mime/type}''. Note
+that if no official mime type is available for a file format, a made up one can
+be used, but must still conform to how mime types are constructed. See RFCs 3023
+and 4288 for more information on how to construct MIME types. Finally, the
+properties help describe the data. The label to give the data, the parent
+\class{Data} object from which it was derived from, and a coarse data type can
+all be defined in the \class{Data}'s properties. See the \class{DataProperty}
+interface definition for specific properties to use.

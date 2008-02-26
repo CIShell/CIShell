@@ -1,0 +1,734 @@
+\documentclass[12pt]{report}
+\def\bl{\mbox{}\newline\mbox{}\newline{}}
+\usepackage{ifthen}
+\newcommand{\hide}[2]{
+\ifthenelse{\equal{#1}{inherited}}%
+{}%
+{}%
+}
+\newcommand{\entityintro}[3]{%
+  \hbox to \hsize{%
+    \vbox{%
+      \hbox to .2in{}%
+    }%
+    {\bf #1}%
+    \dotfill\pageref{#2}%
+  }
+  \makebox[\hsize]{%
+    \parbox{.4in}{}%
+    \parbox[l]{5in}{%
+      \vspace{1mm}\it%
+      #3%
+      \vspace{1mm}%
+    }%
+  }%
+}
+\newcommand{\isep}[0]{%
+\setlength{\itemsep}{-.4ex}
+}
+\newcommand{\sld}[0]{%
+\setlength{\topsep}{0em}
+\setlength{\partopsep}{0em}
+\setlength{\parskip}{0em}
+\setlength{\parsep}{-1em}
+}
+\newcommand{\headref}[3]{%
+\ifthenelse{#1 = 1}{%
+\addcontentsline{toc}{section}{\hspace{\qquad}\protect\numberline{}{#3}}%
+}{}%
+\ifthenelse{#1 = 2}{%
+\addcontentsline{toc}{subsection}{\hspace{\qquad}\protect\numerline{}{#3}}%
+}{}%
+\ifthenelse{#1 = 3}{%
+\addcontentsline{toc}{subsubsection}{\hspace{\qquad}\protect\numerline{}{#3}}%
+}{}%
+\label{#3}%
+\makebox[\textwidth][l]{#2 #3}%
+}%
+\newcommand{\membername}[1]{{\it #1}\linebreak}
+\newcommand{\divideents}[1]{\vskip -1em\indent\rule{2in}{.5mm}}
+\newcommand{\refdefined}[1]{
+\expandafter\ifx\csname r@#1\endcsname\relax
+\relax\else
+{$($ in \ref{#1}, page \pageref{#1}$)$}
+\fi}
+\newcommand{\startsection}[4]{
+\gdef\classname{#2}
+\subsection{\label{#3}{\bf {\sc #1} #2}}{
+\rule[1em]{\hsize}{4pt}\vskip -1em
+\vskip .1in 
+#4
+}%
+}
+\newcommand{\startsubsubsection}[2]{
+\subsubsection{\sc #1}{%
+\rule[1em]{\hsize}{2pt}%
+#2}
+}
+\usepackage{color}
+\date{\today}
+\pagestyle{myheadings}
+\addtocontents{toc}{\protect\def\protect\packagename{}}
+\addtocontents{toc}{\protect\def\protect\classname{}}
+\markboth{\protect\packagename -- \protect\classname}{\protect\packagename -- \protect\classname}
+\oddsidemargin 0in
+\evensidemargin 0in
+% \topmargin -.8in
+\chardef\bslash=`\\
+\textheight 9.4in
+\textwidth 6.5in
+\begin{document}
+\sloppy
+\raggedright
+\tableofcontents
+\gdef\packagename{}
+\gdef\classname{}
+\newpage
+\def\packagename{org.wonderly.doclets}
+\chapter{\bf Package org.wonderly.doclets}{
+\vskip -.25in
+\hbox to \hsize{\it Package Contents\hfil Page}
+\rule{\hsize}{.7mm}
+\vskip .13in
+\hbox{\bf Interfaces}
+\entityintro{ClassFilter}{l0}{This interface can be implemented and a class name provided
+  to the doclet to filter which classes are and are not included
+  in the output document.}
+\vskip .13in
+\hbox{\bf Classes}
+\entityintro{Package}{l1}{This class is used to manage the contents of a Java package.}
+\entityintro{TableInfo}{l2}{This class provides support for converting HTML tables into LaTeX tables.}
+\entityintro{TexDoclet}{l3}{This class provides a Java 2, {\tt javadoc} Doclet which generates
+  a LaTeX2e document out of the java classes that it is used on.}
+\vskip .1in
+\rule{\hsize}{.7mm}
+\vskip .1in
+\newpage
+\section{Interfaces}{
+\startsection{Interface}{ClassFilter}{l0}{%
+{\small This interface can be implemented and a class name provided
+  to the doclet to filter which classes are and are not included
+  in the output document.}
+\vskip .1in 
+\startsubsubsection{Declaration}{
+\fbox{\vbox{
+\hbox{\vbox{\small public interface 
+ClassFilter}}
+}}}
+\startsubsubsection{Methods}{
+\vskip -2em
+\begin{itemize}
+\item{\vskip -1.9ex 
+\membername{includeClass}
+{\tt public boolean {\bf includeClass}( {\tt com.sun.javadoc.ClassDoc } {\bf cd} )
+\label{l4}\label{l5}}%end signature
+\begin{itemize}
+\sld
+\item{
+\sld
+{\bf Usage}
+  \begin{itemize}\isep
+   \item{
+Filters the ClassDoc passed.  If true is returned,
+  the passed class will be included into the output.
+  If false is returned, this document will not be
+  included.
+}%end item
+  \end{itemize}
+}
+\end{itemize}
+}%end item
+\end{itemize}
+}
+}
+}
+\section{Classes}{
+\startsection{Class}{Package}{l1}{%
+{\small This class is used to manage the contents of a Java package.
+  It accepts ClassDoc objects and examines them and groups them
+  according to whether they are classes, interfaces, exceptions
+  or errors.  The accumulated Vectors can then be processed to
+  get to all of the elements of the package that fall into each
+  catagory.}
+\vskip .1in 
+\startsubsubsection{Declaration}{
+\fbox{\vbox{
+\hbox{\vbox{\small public 
+class 
+Package}}
+\noindent\hbox{\vbox{{\bf extends} java.lang.Object}}
+}}}
+\startsubsubsection{Constructors}{
+\vskip -2em
+\begin{itemize}
+\item{\vskip -1.9ex 
+\membername{Package}
+{\tt public {\bf Package}( {\tt java.lang.String } {\bf pkg} )
+\label{l6}\label{l7}}%end signature
+\begin{itemize}
+\sld
+\item{
+\sld
+{\bf Usage}
+  \begin{itemize}\isep
+   \item{
+Construct a new object corresponding to the passed package
+  name.
+}%end item
+  \end{itemize}
+}
+\item{
+\sld
+{\bf Parameters}
+\sld\isep
+  \begin{itemize}
+\sld\isep
+   \item{
+\sld
+{\tt pkg} - the package name to use}
+  \end{itemize}
+}%end item
+\end{itemize}
+}%end item
+\end{itemize}
+}
+\startsubsubsection{Methods}{
+\vskip -2em
+\begin{itemize}
+\item{\vskip -1.9ex 
+\membername{addElement}
+{\tt public void {\bf addElement}( {\tt com.sun.javadoc.ClassDoc } {\bf cd} )
+\label{l8}\label{l9}}%end signature
+\begin{itemize}
+\sld
+\item{
+\sld
+{\bf Usage}
+  \begin{itemize}\isep
+   \item{
+Adds a ClassDoc element to this package.
+}%end item
+  \end{itemize}
+}
+\item{
+\sld
+{\bf Parameters}
+\sld\isep
+  \begin{itemize}
+\sld\isep
+   \item{
+\sld
+{\tt cd} - the object to add to this package}
+  \end{itemize}
+}%end item
+\end{itemize}
+}%end item
+\end{itemize}
+}
+}
+\startsection{Class}{TableInfo}{l2}{%
+{\small This class provides support for converting HTML tables into LaTeX tables.
+  Some of the things {\bf NOT} implemented include the following:
+  \begin{itemize}
+  \item{\vskip -.8ex valign attributes are not procesed, but align= is.
+  }
+\item{\vskip -.8ex rowspan attributes are not processed, but colspan= is.
+  }
+\item{\vskip -.8ex the argument to border= in the table tag is not used to control line size
+  }
+\end{itemize}
+
+  \mbox{}\newline
+
+  Here is an example table.
+  \bl 
+  
+% Table #1
+\newlength{\tblaabcaaaw}
+\setlength{\tblaabcaaaw}{0.3333333333333333\hsize}
+\newlength{\tblaabcaabw}
+\setlength{\tblaabcaabw}{0.3333333333333333\hsize}
+\newlength{\tblaabcaacw}
+\setlength{\tblaabcaacw}{0.3333333333333333\hsize}
+\begin{tabular}{|p{\tblaabcaaaw}|p{\tblaabcaabw}|p{\tblaabcaacw}|}
+\hline {\bf Column 1 Heading} & {\bf Column two heading} & {\bf Column three heading   } \\ \hline
+{data} & \multicolumn{2}{p{\tblaabcaabw}|}{Span two columns   } \\ \hline
+{{\it more data}} & \multicolumn{1}{r|}{right} & \multicolumn{1}{p{\tblaabcaacw}|}{left   } \\ \hline
+\multicolumn{3}{|p{\hsize}|}{
+% Table #2
+\newlength{\tblaaccaaaw}
+\setlength{\tblaaccaaaw}{0.3333333333333333\hsize}
+\newlength{\tblaaccaabw}
+\setlength{\tblaaccaabw}{0.3333333333333333\hsize}
+\newlength{\tblaaccaacw}
+\setlength{\tblaaccaacw}{0.3333333333333333\hsize}
+\begin{tabular}{|p{\tblaaccaaaw}|p{\tblaaccaabw}|p{\tblaaccaacw}|}
+\hline \multicolumn{3}{|p{\tblaaccaaaw}|}{\bf A nested table example   } \\ \hline
+{\bf Column 1 Heading} & {\bf Column two heading} & {\bf Column three heading}    \\ \hline
+{data} & \multicolumn{2}{p{\tblaaccaabw}|}{Span two columns}    \\ \hline
+{{\it more data}} & \multicolumn{1}{r|}{right} & \multicolumn{1}{p{\tblaaccaacw}|}{left}    \\ \hline
+{{\tt
+\newline
+\phantom{ }\phantom{ }1\newline
+\phantom{ }\phantom{ }2\newline
+\phantom{ }\phantom{ }3\newline
+\phantom{ }\phantom{ }4\newline
+\phantom{ }\phantom{ }}
+}    & {{\tt
+\newline
+\phantom{ }\phantom{ }first\phantom{ }line\newline
+\phantom{ }\phantom{ }second\phantom{ }line\newline
+\phantom{ }\phantom{ }third\phantom{ }line\newline
+\phantom{ }\phantom{ }fourth\phantom{ }line\newline
+\phantom{ }\phantom{ }}
+}    \\ \hline
+\end{tabular}
+   } \\ \hline
+\end{tabular}
+}
+\vskip .1in 
+\startsubsubsection{Declaration}{
+\fbox{\vbox{
+\hbox{\vbox{\small public 
+class 
+TableInfo}}
+\noindent\hbox{\vbox{{\bf extends} java.lang.Object}}
+}}}
+\startsubsubsection{Constructors}{
+\vskip -2em
+\begin{itemize}
+\item{\vskip -1.9ex 
+\membername{TableInfo}
+{\tt public {\bf TableInfo}( {\tt java.util.Properties } {\bf p},
+{\tt java.lang.StringBuffer } {\bf ret},
+{\tt java.lang.String } {\bf table},
+{\tt int } {\bf off} )
+\label{l10}\label{l11}}%end signature
+\begin{itemize}
+\sld
+\item{
+\sld
+{\bf Usage}
+  \begin{itemize}\isep
+   \item{
+Constructs a new table object and starts processing of the table by
+  scanning the {\tt \textless table\textgreater } passed to count columns.
+}%end item
+  \end{itemize}
+}
+\item{
+\sld
+{\bf Parameters}
+\sld\isep
+  \begin{itemize}
+\sld\isep
+   \item{
+\sld
+{\tt p} - properties found on the {\tt \textless table\textgreater } tag}
+   \item{
+\sld
+{\tt ret} - the result buffer that will contain the output}
+   \item{
+\sld
+{\tt table} - the input string that has the entire table definition in it.}
+   \item{
+\sld
+{\tt off} - the offset into {\tt \textless table\textgreater } where scanning should start}
+  \end{itemize}
+}%end item
+\end{itemize}
+}%end item
+\end{itemize}
+}
+\startsubsubsection{Methods}{
+\vskip -2em
+\begin{itemize}
+\item{\vskip -1.9ex 
+\membername{endCol}
+{\tt public void {\bf endCol}( {\tt java.lang.StringBuffer } {\bf ret} )
+\label{l12}\label{l13}}%end signature
+\begin{itemize}
+\sld
+\item{
+\sld
+{\bf Usage}
+  \begin{itemize}\isep
+   \item{
+Ends the current column.
+}%end item
+  \end{itemize}
+}
+\item{
+\sld
+{\bf Parameters}
+\sld\isep
+  \begin{itemize}
+\sld\isep
+   \item{
+\sld
+{\tt ret} - the output buffer to put LaTeX into}
+  \end{itemize}
+}%end item
+\end{itemize}
+}%end item
+\divideents{endRow}
+\item{\vskip -1.9ex 
+\membername{endRow}
+{\tt public void {\bf endRow}( {\tt java.lang.StringBuffer } {\bf ret} )
+\label{l14}\label{l15}}%end signature
+\begin{itemize}
+\sld
+\item{
+\sld
+{\bf Usage}
+  \begin{itemize}\isep
+   \item{
+Ends the current row.
+}%end item
+  \end{itemize}
+}
+\item{
+\sld
+{\bf Parameters}
+\sld\isep
+  \begin{itemize}
+\sld\isep
+   \item{
+\sld
+{\tt ret} - the output buffer to put LaTeX into}
+  \end{itemize}
+}%end item
+\end{itemize}
+}%end item
+\divideents{endTable}
+\item{\vskip -1.9ex 
+\membername{endTable}
+{\tt public void {\bf endTable}( {\tt java.lang.StringBuffer } {\bf ret} )
+\label{l16}\label{l17}}%end signature
+\begin{itemize}
+\sld
+\item{
+\sld
+{\bf Usage}
+  \begin{itemize}\isep
+   \item{
+Ends the table, closing the last row as needed
+}%end item
+  \end{itemize}
+}
+\item{
+\sld
+{\bf Parameters}
+\sld\isep
+  \begin{itemize}
+\sld\isep
+   \item{
+\sld
+{\tt ret} - the output buffer to put LaTeX into}
+  \end{itemize}
+}%end item
+\end{itemize}
+}%end item
+\divideents{startCol}
+\item{\vskip -1.9ex 
+\membername{startCol}
+{\tt public void {\bf startCol}( {\tt java.lang.StringBuffer } {\bf ret},
+{\tt java.util.Properties } {\bf p} )
+\label{l18}\label{l19}}%end signature
+\begin{itemize}
+\sld
+\item{
+\sld
+{\bf Usage}
+  \begin{itemize}\isep
+   \item{
+Starts a new column, possibly closing the current column if needed
+}%end item
+  \end{itemize}
+}
+\item{
+\sld
+{\bf Parameters}
+\sld\isep
+  \begin{itemize}
+\sld\isep
+   \item{
+\sld
+{\tt ret} - the output buffer to put LaTeX into}
+   \item{
+\sld
+{\tt p} - the properties from the {\tt \textless td\textgreater } tag}
+  \end{itemize}
+}%end item
+\end{itemize}
+}%end item
+\divideents{startHeadCol}
+\item{\vskip -1.9ex 
+\membername{startHeadCol}
+{\tt public void {\bf startHeadCol}( {\tt java.lang.StringBuffer } {\bf ret},
+{\tt java.util.Properties } {\bf p} )
+\label{l20}\label{l21}}%end signature
+\begin{itemize}
+\sld
+\item{
+\sld
+{\bf Usage}
+  \begin{itemize}\isep
+   \item{
+Starts a new Heading column, possibly closing the current column
+  if needed.  A Heading column has a Bold Face font directive around
+  it.
+}%end item
+  \end{itemize}
+}
+\item{
+\sld
+{\bf Parameters}
+\sld\isep
+  \begin{itemize}
+\sld\isep
+   \item{
+\sld
+{\tt ret} - the output buffer to put LaTeX into}
+   \item{
+\sld
+{\tt p} - the properties from the {\tt \textless th\textgreater } tag}
+  \end{itemize}
+}%end item
+\end{itemize}
+}%end item
+\divideents{startRow}
+\item{\vskip -1.9ex 
+\membername{startRow}
+{\tt public void {\bf startRow}( {\tt java.lang.StringBuffer } {\bf ret},
+{\tt java.util.Properties } {\bf p} )
+\label{l22}\label{l23}}%end signature
+\begin{itemize}
+\sld
+\item{
+\sld
+{\bf Usage}
+  \begin{itemize}\isep
+   \item{
+Starts a new row, possibly closing the current row if needed
+}%end item
+  \end{itemize}
+}
+\item{
+\sld
+{\bf Parameters}
+\sld\isep
+  \begin{itemize}
+\sld\isep
+   \item{
+\sld
+{\tt ret} - the output buffer to put LaTeX into}
+   \item{
+\sld
+{\tt p} - the properties from the {\tt \textless tr\textgreater } tag}
+  \end{itemize}
+}%end item
+\end{itemize}
+}%end item
+\end{itemize}
+}
+}
+\startsection{Class}{TexDoclet}{l3}{%
+{\small This class provides a Java 2, {\tt javadoc} Doclet which generates
+  a LaTeX2e document out of the java classes that it is used on.  This is
+  convienent for creating printable documentation complete with cross reference
+  information.
+  \bl 
+  Supported HTML tags within comments include the following
+  \begin{itemize}
+
+  \item[\textless dl\textgreater 
+  ]{with the associated \textless dt\textgreater \textless dd\textgreater \textless $/$dl\textgreater  tags
+  }
+\item[\textless p\textgreater 
+  ]{but not align=center...yet
+  }
+\item[\textless br\textgreater 
+  ]{but not clear=xxx
+  }
+\item[\textless table\textgreater 
+  ]{including all the associcated \textless td\textgreater \textless th\textgreater \textless tr\textgreater \textless $/$td\textgreater \textless $/$th\textgreater \textless $/$tr\textgreater 
+  }
+\item[\textless ol\textgreater 
+  ]{ordered lists
+  }
+\item[\textless ul\textgreater 
+  ]{unordered lists
+  }
+\item[\textless font\textgreater 
+  ]{font coloring
+  }
+\item[\textless pre\textgreater 
+  ]{preformatted text
+  }
+\item[\textless code\textgreater 
+  ]{fixed point fonts
+  }
+\item[\textless i\textgreater 
+  ]{italized fonts
+  }
+\item[\textless b\textgreater 
+  ]{bold fonts
+	}
+\end{itemize}\bl  TexDoclet\refdefined{l24} 
+ start\refdefined{l25} }
+\vskip .1in 
+\startsubsubsection{Declaration}{
+\fbox{\vbox{
+\hbox{\vbox{\small public 
+class 
+TexDoclet}}
+\noindent\hbox{\vbox{{\bf extends} com.sun.javadoc.Doclet}}
+}}}
+\startsubsubsection{Fields}{
+\begin{itemize}
+\item{
+public static PrintWriter os\begin{itemize}\item{\vskip -.9ex Writer for writing to output file}\end{itemize}
+}
+\end{itemize}
+}
+\startsubsubsection{Constructors}{
+\vskip -2em
+\begin{itemize}
+\item{\vskip -1.9ex 
+\membername{TexDoclet}
+{\tt public {\bf TexDoclet}(  )
+\label{l26}\label{l27}}%end signature
+}%end item
+\end{itemize}
+}
+\startsubsubsection{Methods}{
+\vskip -2em
+\begin{itemize}
+\item{\vskip -1.9ex 
+\membername{optionLength}
+{\tt public static int {\bf optionLength}( {\tt java.lang.String } {\bf option} )
+\label{l28}\label{l29}}%end signature
+\begin{itemize}
+\sld
+\item{
+\sld
+{\bf Usage}
+  \begin{itemize}\isep
+   \item{
+Returns how many arguments would be consumed if {\tt option}
+  is a recognized option.
+}%end item
+  \end{itemize}
+}
+\item{
+\sld
+{\bf Parameters}
+\sld\isep
+  \begin{itemize}
+\sld\isep
+   \item{
+\sld
+{\tt option} - the option to check}
+  \end{itemize}
+}%end item
+\end{itemize}
+}%end item
+\divideents{start}
+\item{\vskip -1.9ex 
+\membername{start}
+{\tt public static boolean {\bf start}( {\tt com.sun.javadoc.RootDoc } {\bf root} )
+\label{l30}\label{l31}}%end signature
+\begin{itemize}
+\sld
+\item{
+\sld
+{\bf Usage}
+  \begin{itemize}\isep
+   \item{
+Called by the framework to format the entire document
+}%end item
+  \end{itemize}
+}
+\item{
+\sld
+{\bf Parameters}
+\sld\isep
+  \begin{itemize}
+\sld\isep
+   \item{
+\sld
+{\tt root} - the root of the starting document}
+  \end{itemize}
+}%end item
+\end{itemize}
+}%end item
+\divideents{validOptions}
+\item{\vskip -1.9ex 
+\membername{validOptions}
+{\tt public static boolean {\bf validOptions}( {\tt java.lang.String [][]} {\bf args},
+{\tt com.sun.javadoc.DocErrorReporter } {\bf err} )
+\label{l32}\label{l33}}%end signature
+\begin{itemize}
+\sld
+\item{
+\sld
+{\bf Usage}
+  \begin{itemize}\isep
+   \item{
+Checks the passed options and their arguments for validity.
+}%end item
+  \end{itemize}
+}
+\item{
+\sld
+{\bf Parameters}
+\sld\isep
+  \begin{itemize}
+\sld\isep
+   \item{
+\sld
+{\tt args} - the arguments to check}
+   \item{
+\sld
+{\tt err} - the interface to use for reporting errors}
+  \end{itemize}
+}%end item
+\end{itemize}
+}%end item
+\end{itemize}
+}
+\startsubsubsection{Methods inherited from class {\tt com.sun.javadoc.Doclet}}{
+\par{\small 
+\refdefined{l34}\vskip -2em
+\begin{itemize}
+\item{\vskip -1.9ex 
+\membername{languageVersion}
+{\tt public static LanguageVersion {\bf languageVersion}(  )
+}%end signature
+}%end item
+\divideents{optionLength}
+\item{\vskip -1.9ex 
+\membername{optionLength}
+{\tt public static int {\bf optionLength}( {\tt java.lang.String } {\bf arg0} )
+}%end signature
+}%end item
+\divideents{start}
+\item{\vskip -1.9ex 
+\membername{start}
+{\tt public static boolean {\bf start}( {\tt com.sun.javadoc.RootDoc } {\bf arg0} )
+}%end signature
+}%end item
+\divideents{validOptions}
+\item{\vskip -1.9ex 
+\membername{validOptions}
+{\tt public static boolean {\bf validOptions}( {\tt java.lang.String [][]} {\bf arg0},
+{\tt com.sun.javadoc.DocErrorReporter } {\bf arg1} )
+}%end signature
+}%end item
+\end{itemize}
+}}
+}
+}
+}
+\end{document}

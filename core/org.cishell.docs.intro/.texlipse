@@ -1,0 +1,13 @@
+#TeXlipse project settings
+#Mon Nov 06 14:13:50 EST 2006
+builderNum=2
+outputDir=build/
+makeIndSty=
+bibrefDir=
+outputFormat=pdf
+tempDir=build/tmp/
+mainTexFile=cishell+nwb.tex
+outputFile=cishell+nwb.pdf
+langSpell=en
+markDer=true
+srcDir=src/
