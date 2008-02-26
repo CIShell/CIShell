@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Log GUI Plug-in
+Bundle-SymbolicName: org.cishell.reference.gui.log;singleton:=true
+Bundle-Version: 0.6.0
+Bundle-Activator: org.cishell.reference.gui.log.Activator
+Bundle-Localization: plugin
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime
+Eclipse-LazyStart: true
+Import-Package: org.osgi.service.log;version="1.3.0"

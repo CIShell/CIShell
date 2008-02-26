@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: CIShell Remoting API
+Bundle-SymbolicName: org.cishell.remoting
+Bundle-Version: 1.0.0
+Bundle-Localization: plugin
+Import-Package: org.cishell.framework.algorithm,
+ org.cishell.framework.data,
+ org.osgi.service.metatype;version="1.1.0"
+Export-Package: org.cishell.remoting.service.conversion,
+ org.cishell.remoting.service.framework

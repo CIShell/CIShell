@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+     <extension
+         point="org.eclipse.ui.startup">
+      <startup class="org.cishell.reference.gui.scheduler.Activator"/>
+   </extension>
+
+   <extension
+	  point="org.eclipse.ui.views">
+	<view
+       allowMultiple="false"
+       class="org.cishell.reference.gui.scheduler.SchedulerView"
+       icon="icons/log_icon.gif"
+       id="org.cishell.reference.gui.scheduler.SchedulerView"
+       name="Scheduler"/>
+   </extension> 
+</plugin>
