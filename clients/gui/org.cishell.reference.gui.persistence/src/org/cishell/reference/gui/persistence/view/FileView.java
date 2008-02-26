@@ -123,39 +123,55 @@ public class FileView implements Algorithm {
         		 
         		
         	}else{
-        		final Converter[] converters = conversionManager.findConverters(data[i], "file-ext:*");
+        		final Converter[] convertersCSV = conversionManager.findConverters(data[i], "file-ext:csv");
+        		//logger.log(LogService.LOG_ERROR, "convertersCSV's length = " + convertersCSV.length);
+        		if (convertersCSV.length == 1)
+        		{
+        			Data newDataCSV = convertersCSV[0].convert(data[i]);
+        			tempFile = getTempFileCSV();
+        		    isCSVFile = true;
+        		    copy((File)newDataCSV.getData(), tempFile);    
+         		    lastSaveSuccessful = true; 
+        			
+        		}
+        		else if (convertersCSV.length > 1)
+        		{
+        			Data newDataCSV = convertersCSV[0].convert(data[i]);
+        			for (int j = 1; j < convertersCSV.length; j++ )
+        			{
+        				newDataCSV = convertersCSV[j].convert(newDataCSV);
+        			}
+        			tempFile = getTempFileCSV();
+        		    isCSVFile = true;
+        		    copy((File)newDataCSV.getData(), tempFile);    
+         		    lastSaveSuccessful = true; 
+        		}
+        		else{
+        		   final Converter[] converters = conversionManager.findConverters(data[i], "file-ext:*");
                 
-            	if (converters.length < 1) {
-            		guiBuilder.showError("No Converters", 
-            				"No valid converters for data type: " + 
-            				data[i].getData().getClass().getName(), 
-            				"Please install a plugin that will save the data type to a file");
-            	}
-            	else if (converters.length == 1){
-             		//If length=1, use the unique path to save it directly 
-            		//and bring the text editor.
-            	    Data newData = converters[0].convert(data[i]);     
-            	    if (format.startsWith("prefuse.data.Table"))
-            	    {
-            	       tempFile = getTempFileCSV();
-              		   isCSVFile = true;
+            	   if (converters.length < 1) {
+            		  guiBuilder.showError("No Converters", 
+            			    	"No valid converters for data type: " + 
+            				     data[i].getData().getClass().getName(), 
+            				    "Please install a plugin that will save the data type to a file");
+            	   }
+            	   else if (converters.length == 1){
+             		    //If length=1, use the unique path to save it directly 
+            		    //and bring the text editor.
+            	        Data newData = converters[0].convert(data[i]);     
+                        tempFile = getTempFile(); 
+            	        copy((File)newData.getData(), tempFile);    
+            	  	    lastSaveSuccessful = true; 
+            	   }
+            	   else {
+             		  if (!parentShell.isDisposed()) {
+            		    	DataViewer dataViewer = new DataViewer(parentShell, data[i], converters);
+            		    	display.syncExec(dataViewer);
+             		    	lastSaveSuccessful = dataViewer.isSaved;
+            			    tempFile = dataViewer.theFile;
+            		      }
             	    }
-            	    else
-            	    {
-            	    	tempFile = getTempFile(); 
-            	    	
-            	    }
-            	    copy((File)newData.getData(), tempFile);    
-            		lastSaveSuccessful = true; 
-            	}
-            	else {
-             		if (!parentShell.isDisposed()) {
-            			DataViewer dataViewer = new DataViewer(parentShell, data[i], converters);
-            			display.syncExec(dataViewer);
-             			lastSaveSuccessful = dataViewer.isSaved;
-            			tempFile = dataViewer.theFile;
-            		}
-            	}
+        	    }
         	}
         	if (isCSVFile){//TC181
         		Display.getDefault().syncExec(new Runnable() {
