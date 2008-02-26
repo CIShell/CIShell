@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="org.cishell.tests.conversion1.string2file.component" immediate="false">
+	<implementation class="org.cishell.tests.conversion1.String2File"/>
+	<properties entry="OSGI-INF/string2file.properties"/>
+	<reference name="LOG" interface="org.osgi.service.log.LogService"/>
+	
+	<service>
+		<provide interface=
+			"org.cishell.framework.algorithm.AlgorithmFactory"/>
+	</service>
+</component>

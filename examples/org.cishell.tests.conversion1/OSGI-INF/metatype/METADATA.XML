@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metatype:MetaData xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.0.0">
+	<OCD name="%name" id="org.cishell.tests.conversion1.AlgA.OCD"
+		 description="%name_desc">
+		<AD name="%input" id="org.cishell.tests.conversion1.AlgA.myInput" type="String" 
+			default="1" description="%desc" />
+	</OCD>
+	<Designate pid="org.cishell.tests.conversion1.algA">
+		<Object ocdref="org.cishell.tests.conversion1.AlgA.OCD" />
+	</Designate>
+</metatype:MetaData>
