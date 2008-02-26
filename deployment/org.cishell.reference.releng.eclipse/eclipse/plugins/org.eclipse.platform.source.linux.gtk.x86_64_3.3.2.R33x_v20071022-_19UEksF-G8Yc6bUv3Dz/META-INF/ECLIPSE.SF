@@ -1,0 +1,30 @@
+Signature-Version: 1.0
+SHA1-Digest-Manifest-Main-Attributes: 3aISYYMoUZJFidMCAJybYSNOr44=
+Created-By: 1.5.0 (IBM Corporation)
+SHA1-Digest-Manifest: 0Qjtp/0dIDcc+DOuQNn54JV6GTM=
+
+Name: src/org.eclipse.update.core.linux_3.2.0.v20070615/src/update.h
+SHA1-Digest: nkkHnGnLWfVosg+1vL+INbRcQfg=
+
+Name: about.html
+SHA1-Digest: nPN0wXb43sDZo80Tc64P623h2uo=
+
+Name: src/org.eclipse.update.core.linux_3.2.0.v20070615/about.html
+SHA1-Digest: ri1m12Q7xA/9UjnAb5bxfckXLYc=
+
+Name: src/org.eclipse.update.core.linux_3.2.0.v20070615/src/build.xml
+SHA1-Digest: +QR/daPOve5bxmGp6Sw04d+zE7g=
+
+Name: fragment.xml
+SHA1-Digest: LsWGWSE+zJuN/RmMmlC0MZ1Ot4g=
+
+Name: src/org.eclipse.update.core.linux_3.2.0.v20070615/src/update.c
+SHA1-Digest: UlN/vi2HKDQA8X3vWv8WUfVtpmw=
+
+Name: META-INF/eclipse.inf
+SHA1-Digest: SAqY+5ITAL0mkdYeijlSRhyIaZk=
+
+Name: src/org.eclipse.core.filesystem.linux.x86_64_1.0.100.v20070510/a
+ bout.html
+SHA1-Digest: pAxocTBnEOa3PZ2HV43nrk5RY6E=
+

@@ -1,0 +1,57 @@
+Manifest-Version: 1.0
+Bundle-Version: 1.0.1.R33x_r20070802-7C79_9_KKG-mDM9e3H5D
+Created-By: 1.4.2 (IBM Corporation)
+Bundle-SymbolicName: org.eclipse.cvs.source; singleton=true
+Bundle-Name: %pluginName
+Bundle-Localization: plugin
+Bundle-Vendor: %providerName
+Ant-Version: Apache Ant 1.7.0
+
+Name: src/org.eclipse.team.cvs.core_3.3.1.r33x_20070724/src.zip
+SHA1-Digest: 8JrP4H2VUk8dpmAaOcHa5DP6XD4=
+
+Name: plugin.xml
+SHA1-Digest: I0t+o6kXbySrxIY1bLaTaeai3Vc=
+
+Name: src/org.eclipse.team.cvs.ui_3.3.1.r33x_20070807/src.zip
+SHA1-Digest: /+a72KGelHvxgZI27TLmtiJ91bk=
+
+Name: src/org.eclipse.team.cvs.ssh2_3.2.100.I20070604/src.zip
+SHA1-Digest: rOzP+6dE5hkzaS28vkVrPfDzvHo=
+
+Name: about.properties
+SHA1-Digest: lIVLHpVjwAcZ/8t6n0M8GTnDQW0=
+
+Name: src/org.eclipse.team.cvs.ssh_3.2.100.I20061208/about.html
+SHA1-Digest: VGVTH2JzZ8eWhDjAF3I06ro4aHU=
+
+Name: src/org.eclipse.team.cvs.ssh_3.2.100.I20061208/src.zip
+SHA1-Digest: cG4jnMxXdwJU3FnBBFZqWvyFBwU=
+
+Name: plugin.properties
+SHA1-Digest: xqpRyUEwrjkPaRe3ZpEDPbJPVWA=
+
+Name: about.html
+SHA1-Digest: t15ZOHlrGDCeslNIq+PwNJ1tf+4=
+
+Name: src/org.eclipse.team.cvs.ui_3.3.1.r33x_20070807/about.html
+SHA1-Digest: ejOZra0kypGLQQ2bJtGTX+LI8tU=
+
+Name: src/org.eclipse.team.cvs.ssh2_3.2.100.I20070604/about.html
+SHA1-Digest: ejOZra0kypGLQQ2bJtGTX+LI8tU=
+
+Name: about.mappings
+SHA1-Digest: sVWh/9opqZMwTYGYdFtJ6e/e6cE=
+
+Name: META-INF/eclipse.inf
+SHA1-Digest: KyT9FF7C7t86NoBoa2kZT3ZJBfw=
+
+Name: src/org.eclipse.team.cvs.core_3.3.1.r33x_20070724/about.html
+SHA1-Digest: 11fBuOVMOfvsCHYj/19/qOI8/EI=
+
+Name: about.ini
+SHA1-Digest: qfnAvbOmiR+Z0SsIHPdMKQuPJ0g=
+
+Name: eclipse32.png
+SHA1-Digest: eCk/A3/COXL3S6qAVDOSrlsqmLw=
+

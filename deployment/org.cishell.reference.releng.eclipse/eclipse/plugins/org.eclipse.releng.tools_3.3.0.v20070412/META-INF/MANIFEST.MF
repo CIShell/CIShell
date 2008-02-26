@@ -1,0 +1,39 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Created-By: 1.4.2 (IBM Corporation)
+Bundle-Name: %PluginName
+Bundle-Vendor: %PluginProvider
+Ant-Version: Apache Ant 1.7.0
+Bundle-ClassPath: tools.jar
+Bundle-Version: 3.3.0.v20070412
+Bundle-Activator: org.eclipse.releng.tools.RelEngPlugin
+Require-Bundle: org.eclipse.ui.ide;resolution:=optional,org.eclipse.ui
+ .views;resolution:=optional,org.eclipse.jface.text;resolution:=option
+ al,org.eclipse.ui.workbench.texteditor;resolution:=optional,org.eclip
+ se.ui.editors;resolution:=optional,org.eclipse.core.resources,org.ecl
+ ipse.ui,org.eclipse.team.cvs.core,org.eclipse.team.core,org.eclipse.t
+ eam.cvs.ui;bundle-version="[3.3.0,4.0.0)",org.eclipse.core.runtime,or
+ g.eclipse.team.core,org.eclipse.team.ui,org.eclipse.compare
+Eclipse-LazyStart: true
+Bundle-SymbolicName: org.eclipse.releng.tools; singleton:=true
+Bundle-RequiredExecutionEnvironment: J2SE-1.4
+Bundle-Localization: plugin
+
+Name: plugin.properties
+SHA1-Digest: aAM/U5W6U/S18U+4jLS/etgEkJw=
+
+Name: plugin.xml
+SHA1-Digest: jyrmMb5AVHx57i9+O7fZj6OMEsg=
+
+Name: about.html
+SHA1-Digest: ejOZra0kypGLQQ2bJtGTX+LI8tU=
+
+Name: tools.jar
+SHA1-Digest: iHDwutvBwK9+x42pPvpPGUn+3H4=
+
+Name: META-INF/eclipse.inf
+SHA1-Digest: KyT9FF7C7t86NoBoa2kZT3ZJBfw=
+
+Name: icons/full/clcl16/release_action.gif
+SHA1-Digest: FwuGiWtTmVjRYt92wxHXgQKN/p4=
+

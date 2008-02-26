@@ -1,0 +1,89 @@
+Signature-Version: 1.0
+SHA1-Digest-Manifest-Main-Attributes: 5dqB5dmoQCmHFTsI0vr/p9of8aA=
+Created-By: 1.5.0 (IBM Corporation)
+SHA1-Digest-Manifest: 5U3UVArV+PWiMeYGS010624KJ6g=
+
+Name: scripts/genericTargets.xml
+SHA1-Digest: jZFM0QS+H1P+mCYhwkQghlrZOdw=
+
+Name: scripts/productBuild/allElements.xml
+SHA1-Digest: wjfKXLHRNu5AvU/w8qWwYPIRZno=
+
+Name: templates/features/customBuildCallbacks.xml
+SHA1-Digest: NyC3o1nQkrV1sYrLIPJr89aqmcQ=
+
+Name: templates/headless-build/build.properties
+SHA1-Digest: CMkH00iBdu1G/kzQVcGZT527Zr4=
+
+Name: scripts/productBuild/productBuild.xml
+SHA1-Digest: rxVOy1hI68TAr2UlLBhvD9NoM5E=
+
+Name: .options
+SHA1-Digest: jf17v6tebrVOy/2LizKC8hyG2EM=
+
+Name: lib/pdebuild-ant.jar
+SHA1-Digest: 9sowCbBVRpkpqB6Jf99lEb7XVoA=
+
+Name: templates/packager/customTargets.xml
+SHA1-Digest: cvpNR4xRYfhWx6708nI3/HdIawM=
+
+Name: data/21/plugin/plugin.xml
+SHA1-Digest: TpZd48Jmrj9/LTQDyuUubfQoi5w=
+
+Name: about.html
+SHA1-Digest: NsqonTvTIooyUcpddXY8f055MmA=
+
+Name: data/30/fragment/fragment.xml
+SHA1-Digest: zwzOmFfCE2+ab7G9wkLU7ozpJPc=
+
+Name: templates/packager/packaging.properties
+SHA1-Digest: vtFL0V2RKXrpAMwiftMEsxc9WSo=
+
+Name: templates/packager/packager.properties
+SHA1-Digest: 6lW7kLPw6o+7h7RI0cFTkCje1y0=
+
+Name: scripts/package.xml
+SHA1-Digest: L/TYgmKyV/phZbM1xwmLOLnTGM0=
+
+Name: META-INF/eclipse.inf
+SHA1-Digest: aM8odIt7KSTgo2Ap3NjnGa3gOAA=
+
+Name: templates/plugins/customBuildCallbacks.xml
+SHA1-Digest: osuAXZ/i65TwqRhp0N7fb8S3CpQ=
+
+Name: plugin.xml
+SHA1-Digest: QOxcV3Yro+Ky188u98v1DPG9LMo=
+
+Name: templates/headless-build/customTargets.xml
+SHA1-Digest: 9BFrTUa6P+bANIOMAsCWz8MKgqI=
+
+Name: data/env.properties
+SHA1-Digest: rFHEWZeCF3bCQS1iLzOK1q2qrxo=
+
+Name: data/30/fragment/META-INF/MANIFEST.MF
+SHA1-Digest: xuwIdriTMf5tW/1Q8pgg/DXqrkU=
+
+Name: data/30/plugin/META-INF/MANIFEST.MF
+SHA1-Digest: uGP7DGAAo+v2VD2WZMZMcvbW5rg=
+
+Name: scripts/build.xml
+SHA1-Digest: OQgtKTT32f6A9ty6XXFqAQGEK8s=
+
+Name: plugin.properties
+SHA1-Digest: fSjiXuBXrKDeiadiN8kWDMB5+d0=
+
+Name: data/21/fragment/fragment.xml
+SHA1-Digest: RuOvETVwkWHHIz6sLL0cGzWOyfs=
+
+Name: data/30/plugin/plugin.xml
+SHA1-Digest: TNr0SYVHOz82hYL1E035r1bdaxI=
+
+Name: pdebuild.jar
+SHA1-Digest: V+qgou3aha/qMsK2EYSx4mycqSw=
+
+Name: templates/headless-build/allElements.xml
+SHA1-Digest: 7oaDUl+2nr+Uy+GjqfKk1pZGgEw=
+
+Name: about_files/LICENSE-2.0.txt
+SHA1-Digest: DMnZPrY7w/ZEOj0YI/l8KoozuvM=
+

@@ -1,0 +1,160 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Schema file written by PDE -->
+<schema targetNamespace="org.eclipse.debug.ui">
+<annotation>
+      <appInfo>
+         <meta.schema plugin="org.eclipse.debug.ui" id="launchGroups" name="Launch Groups"/>
+      </appInfo>
+      <documentation>
+         This extension point provides support for defining a group of launch configurations to be viewed together in the launch configuration dialog, and support a launch history (recent and favorite launches).
+      </documentation>
+   </annotation>
+
+   <element name="extension">
+      <complexType>
+         <sequence>
+            <element ref="launchGroup" minOccurs="0" maxOccurs="unbounded"/>
+         </sequence>
+         <attribute name="point" type="string" use="required">
+            <annotation>
+               <documentation>
+                  a fully qualified identifier of the target extension point
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="id" type="string">
+            <annotation>
+               <documentation>
+                  an optional identifier of the extension instance
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string">
+            <annotation>
+               <documentation>
+                  an optional name of the extension instance
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="launchGroup">
+      <complexType>
+         <attribute name="id" type="string" use="required">
+            <annotation>
+               <documentation>
+                  specifies a unique identifier for this launch group.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="mode" type="string" use="required">
+            <annotation>
+               <documentation>
+                  specifies the launch mode associated with this group - i.e. run or debug.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="category" type="string">
+            <annotation>
+               <documentation>
+                  specifies the category of launch configurations in this group. When unspecified, the category is &lt;code&gt;null&lt;/code&gt;.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="label" type="string" use="required">
+            <annotation>
+               <documentation>
+                  specifies a translatable label used to render this group.
+               </documentation>
+               <appInfo>
+                  <meta.attribute translatable="true"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+         <attribute name="image" type="string" use="required">
+            <annotation>
+               <documentation>
+                  specifies a plug-in relative path to an image used to render this group in trees, lists, tabs, etc.
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="resource"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+         <attribute name="bannerImage" type="string" use="required">
+            <annotation>
+               <documentation>
+                  specifies a plug-in relative path to an image used to render this group in a wizard or dialog banner area.
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="resource"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+         <attribute name="public" type="string">
+            <annotation>
+               <documentation>
+                  specifies whether this launch group is public and should be have a visible launch history tab in the debug preferences. The implied value is &lt;code&gt;true&lt;/code&gt;, when not specified.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="title" type="string">
+            <annotation>
+               <documentation>
+                  title to display in the launch wizard when this launch group is opened - for example &quot;Select or configure an application to debug&quot; (since 3.1)
+               </documentation>
+               <appInfo>
+                  <meta.attribute translatable="true"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="since"/>
+      </appInfo>
+      <documentation>
+         2.1
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="examples"/>
+      </appInfo>
+      <documentation>
+         The following is an example of a launch group extension point: 
+&lt;p&gt;
+&lt;pre&gt;
+ &lt;extension point=&quot;org.eclipse.debug.ui.launchGroups&quot;&gt;
+  &lt;launchGroup
+     id=&quot;com.example.ExampleLaunchGroupId&quot;
+     mode=&quot;run&quot;
+     label=&quot;Run&quot;
+     image=&quot;icons\run.gif&quot;
+     bannerImage=&quot;icons\runBanner.gif&quot;&gt;
+  &lt;/launchGroup&gt;
+ &lt;/extension&gt;
+&lt;/pre&gt;
+&lt;/p&gt;
+In the above example, the launch group will consist of all launch configurations with no category that support run mode.
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="copyright"/>
+      </appInfo>
+      <documentation>
+Copyright (c) 2000, 2005 IBM Corporation and others.&lt;br&gt;
+All rights reserved. This program and the accompanying materials are made 
+available under the terms of the Eclipse Public License v1.0 which 
+accompanies this distribution, and is available at 
+&lt;a href=&quot;http://www.eclipse.org/legal/epl-v10.html&quot;&gt;http://www.eclipse.org/legal/epl-v10.html&lt;/a&gt;
+      </documentation>
+   </annotation>
+
+</schema>

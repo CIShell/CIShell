@@ -1,0 +1,66 @@
+Manifest-Version: 1.0
+Bundle-Version: 3.3.2.R33x_v20071022-_19UEksF-G8Yc6bUv3Dz
+Created-By: 1.4.2 (IBM Corporation)
+Bundle-SymbolicName: org.eclipse.platform.source.win32.win32.x86; sing
+ leton=true
+Bundle-Name: %pluginName
+Fragment-Host: org.eclipse.platform.source;bundle-version="3.3.2.R33x_
+ v20071022-_19UEksF-G8Yc6bUv3Dz"
+Bundle-Localization: plugin
+Bundle-Vendor: %providerName
+Ant-Version: Apache Ant 1.7.0
+Eclipse-PlatformFilter: (& (osgi.ws=win32) (osgi.os=win32) (osgi.arch=
+ x86))
+
+Name: src/org.eclipse.core.resources.win32_3.3.0.v20070226/a/ref.h
+SHA1-Digest: AW/D3LWI6aIDfTjM0zXYkZM8Jyc=
+
+Name: fragment.xml
+SHA1-Digest: lyCvCPJfg+w2XjG/WSlLT9rJmxo=
+
+Name: src/org.eclipse.core.resources.win32_3.3.0.v20070226/a/ref.c
+SHA1-Digest: p0z7tCsH19IurlwZAan/yDyGPOk=
+
+Name: src/org.eclipse.update.core.win32_3.2.100.v20070615/src/update.h
+SHA1-Digest: qE0S4te+8up598TMpq/UCqoSoEs=
+
+Name: src/org.eclipse.core.resources.win32_3.3.0.v20070226/src.zip
+SHA1-Digest: BFLEjnGqi85zfutbsIjXdAVCPAE=
+
+Name: src/org.eclipse.update.core.win32_3.2.100.v20070615/about.html
+SHA1-Digest: ejOZra0kypGLQQ2bJtGTX+LI8tU=
+
+Name: src/org.eclipse.ui.win32_3.2.100.I20070319-0010/about.html
+SHA1-Digest: ejOZra0kypGLQQ2bJtGTX+LI8tU=
+
+Name: src/org.eclipse.update.core.win32_3.2.100.v20070615/src/update.c
+ pp
+SHA1-Digest: rb9Ey/maTU66VrXbaPx48S/uv2k=
+
+Name: src/org.eclipse.ui.win32_3.2.100.I20070319-0010/src.zip
+SHA1-Digest: GjBXFK+OVRyaOFSwSd+BHhjBRpo=
+
+Name: src/org.eclipse.update.core.win32_3.2.100.v20070615/src/setup.ba
+ t
+SHA1-Digest: mnd/mgPWOSqCknovck1DKNSTsek=
+
+Name: src/org.eclipse.core.resources.win32_3.3.0.v20070226/about.html
+SHA1-Digest: ejOZra0kypGLQQ2bJtGTX+LI8tU=
+
+Name: about.html
+SHA1-Digest: t15ZOHlrGDCeslNIq+PwNJ1tf+4=
+
+Name: src/org.eclipse.update.core.win32_3.2.100.v20070615/src/make.bat
+SHA1-Digest: K/uVHpl83S6iQ/o+ErZDzgvwdks=
+
+Name: META-INF/eclipse.inf
+SHA1-Digest: KyT9FF7C7t86NoBoa2kZT3ZJBfw=
+
+Name: src/org.eclipse.update.core.win32_3.2.100.v20070615/src/build.xm
+ l
+SHA1-Digest: ylxNcQZKSwJA8mK2bFpnQ+AI3f0=
+
+Name: src/org.eclipse.core.filesystem.win32.x86_1.1.0.v20070510/about.
+ html
+SHA1-Digest: ejOZra0kypGLQQ2bJtGTX+LI8tU=
+

@@ -1,0 +1,27 @@
+Manifest-Version: 1.0
+Bundle-Version: 3.3.2.R33x_v20071022-_19UEksF-G8Yc6bUv3Dz
+Created-By: 1.4.2 (IBM Corporation)
+Bundle-SymbolicName: org.eclipse.platform.source.solaris.gtk.sparc; si
+ ngleton=true
+Bundle-Name: %pluginName
+Fragment-Host: org.eclipse.platform.source;bundle-version="3.3.2.R33x_
+ v20071022-_19UEksF-G8Yc6bUv3Dz"
+Bundle-Localization: plugin
+Bundle-Vendor: %providerName
+Ant-Version: Apache Ant 1.7.0
+Eclipse-PlatformFilter: (& (osgi.ws=gtk) (osgi.os=solaris) (osgi.arch=
+ sparc))
+
+Name: src/org.eclipse.core.filesystem.solaris.sparc_1.0.100.v20070425/
+ about.html
+SHA1-Digest: ejOZra0kypGLQQ2bJtGTX+LI8tU=
+
+Name: about.html
+SHA1-Digest: t15ZOHlrGDCeslNIq+PwNJ1tf+4=
+
+Name: fragment.xml
+SHA1-Digest: lyCvCPJfg+w2XjG/WSlLT9rJmxo=
+
+Name: META-INF/eclipse.inf
+SHA1-Digest: KyT9FF7C7t86NoBoa2kZT3ZJBfw=
+

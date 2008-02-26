@@ -1,0 +1,7 @@
+Extra installation steps for Mac OSX users:
+
+In order to get certain Swing or AWT based algorithms to work, some additional
+steps are needed. First, you need Java version 1.5.0 Release 4 (or greater). 
+Second, you must download and install the "SWT Compatibility Libraries" from 
+the Apple Developer Connection website at 'http://connect.apple.com'. See the 
+FAQ section at http://cishell.org for more information.
