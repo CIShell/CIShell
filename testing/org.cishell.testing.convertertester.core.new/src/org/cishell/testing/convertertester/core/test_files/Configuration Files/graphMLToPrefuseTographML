@@ -1,0 +1,9 @@
+test_graphs=workspace/edu.iu.nwb.converter.tester/test_files/GraphML Files
+test_converters=edu.iu.nwb.converter.prefusegraphml.reader.PrefuseGraphMLValidationAlg,
+edu.iu.nwb.converter.prefusegraphml.reader.PrefuseGraphMLReader,
+edu.iu.nwb.converter.prefusegraphml.writer.PrefuseGraphMLWriter,
+edu.iu.nwb.converter.prefusegraphml.writer.PrefuseGraphMLFileHandlerAlg
+comparison_converters=edu.iu.nwb.converter.prefusegraphml.reader.PrefuseGraphMLValidationAlg,
+edu.iu.nwb.converter.prefusegraphml.reader.PrefuseGraphMLReader
+nodeid_change=false
+extension=.xml

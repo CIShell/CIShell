@@ -1,0 +1,586 @@
+<graph directed="1" Rootnode="1">
+<node id="58" label="http://www.deitel.com/products_and_services/publications/jhtp2.htm" weight="-1">
+</node>
+<node id="57" label="http://www.inquiry.com/techtips/java_pro/" weight="-1">
+</node>
+<node id="56" label="http://java.sun.com/products/jdk/1.1/docs/api/packages.html" weight="-1">
+</node>
+<node id="55" label="http://www.gamelan.com/" weight="-1">
+</node>
+<node id="54" label="http://java.sun.com/" weight="-1">
+</node>
+<node id="53" label="http://www.yahoo.com/Computers_and_Internet/Programming_Languages/Java/" weight="-1">
+</node>
+
+	<node id="52" label="http://www.cs.rpi.edu/~puninj/JAVA/tests/esum98.html" weight="8025">
+<att name="title" value="Java Exam"/>
+<att name="mime" value="text/html"/>
+<att name="size" value="8025"/>
+<att name="date" value="Tue Sep 29 14:55:04 1998"/>
+<att name="code" value="200"/>
+</node>
+
+	<node id="51" label="http://www.cs.rpi.edu/~puninj/JAVA/projects/proj1.html" weight="1910">
+<att name="title" value="Project 1"/>
+<att name="mime" value="text/html"/>
+<att name="size" value="1910"/>
+<att name="date" value="Wed Jun  9 23:01:06 1999"/>
+<att name="code" value="200"/>
+</node>
+
+	<node id="50" label="http://www.cs.rpi.edu/~puninj/JAVA/homeworks/hw2.html" weight="2795">
+<att name="title" value="Homework 2"/>
+<att name="mime" value="text/html"/>
+<att name="size" value="2795"/>
+<att name="date" value="Sun May 30 22:28:52 1999"/>
+<att name="code" value="200"/>
+</node>
+
+	<node id="49" label="http://www.cs.rpi.edu/~puninj/JAVA/homeworks/hw1.html" weight="3157">
+<att name="title" value="Homework 1"/>
+<att name="mime" value="text/html"/>
+<att name="size" value="3157"/>
+<att name="date" value="Wed May 19 10:40:54 1999"/>
+<att name="code" value="200"/>
+</node>
+
+	<node id="48" label="http://www.cs.rpi.edu/~puninj/JAVA/classes/lec4.ppt" weight="53760">
+<att name="title" value="No title"/>
+<att name="mime" value="application/vnd.ms-powerpoint"/>
+<att name="size" value="53760"/>
+<att name="date" value="Mon Sep 14 13:22:26 1998"/>
+<att name="code" value="200"/>
+</node>
+
+	<node id="47" label="http://www.cs.rpi.edu/~puninj/JAVA/classes/lec4.rtf" weight="26048">
+<att name="title" value="No title"/>
+<att name="mime" value="text/rtf"/>
+<att name="size" value="26048"/>
+<att name="date" value="Mon Sep 14 13:22:29 1998"/>
+<att name="code" value="200"/>
+</node>
+
+	<node id="46" label="http://www.cs.rpi.edu/~puninj/JAVA/classes/lec4.ps" weight="211388">
+<att name="title" value="No title"/>
+<att name="mime" value="application/postscript"/>
+<att name="size" value="211388"/>
+<att name="date" value="Mon Sep 14 13:34:29 1998"/>
+<att name="code" value="200"/>
+</node>
+
+	<node id="45" label="http://www.cs.rpi.edu/~puninj/JAVA/classes/lec4.html" weight="9192">
+<att name="title" value="Programming in Java:  Lecture Notes 4"/>
+<att name="mime" value="text/html"/>
+<att name="size" value="9192"/>
+<att name="date" value="Mon Oct 26 02:17:24 1998"/>
+<att name="code" value="200"/>
+</node>
+
+	<node id="44" label="http://www.cs.rpi.edu/~puninj/JAVA/classes/lec3.ppt" weight="169984">
+<att name="title" value="No title"/>
+<att name="mime" value="application/vnd.ms-powerpoint"/>
+<att name="size" value="169984"/>
+<att name="date" value="Sat Aug 29 00:37:59 1998"/>
+<att name="code" value="200"/>
+</node>
+
+	<node id="43" label="http://www.cs.rpi.edu/~puninj/JAVA/classes/lec3.rtf" weight="93603">
+<att name="title" value="No title"/>
+<att name="mime" value="text/rtf"/>
+<att name="size" value="93603"/>
+<att name="date" value="Sat Aug 29 00:38:03 1998"/>
+<att name="code" value="200"/>
+</node>
+
+	<node id="42" label="http://www.cs.rpi.edu/~puninj/JAVA/classes/lec3.ps" weight="539469">
+<att name="title" value="No title"/>
+<att name="mime" value="application/postscript"/>
+<att name="size" value="539469"/>
+<att name="date" value="Sat Aug 29 00:38:02 1998"/>
+<att name="code" value="200"/>
+</node>
+
+	<node id="41" label="http://www.cs.rpi.edu/~puninj/JAVA/classes/lec3.html" weight="40702">
+<att name="title" value="Programming in Java : Lecture Notes 3"/>
+<att name="mime" value="text/html"/>
+<att name="size" value="40702"/>
+<att name="date" value="Wed Apr  7 12:00:44 1999"/>
+<att name="code" value="200"/>
+</node>
+
+	<node id="40" label="http://www.cs.rpi.edu/~puninj/JAVA/classes/lec2.ppt" weight="86016">
+<att name="title" value="No title"/>
+<att name="mime" value="application/vnd.ms-powerpoint"/>
+<att name="size" value="86016"/>
+<att name="date" value="Sat Aug 29 00:11:44 1998"/>
+<att name="code" value="200"/>
+</node>
+
+	<node id="39" label="http://www.cs.rpi.edu/~puninj/JAVA/classes/lec2.rtf" weight="33351">
+<att name="title" value="No title"/>
+<att name="mime" value="text/rtf"/>
+<att name="size" value="33351"/>
+<att name="date" value="Sat Aug 29 00:11:52 1998"/>
+<att name="code" value="200"/>
+</node>
+
+	<node id="38" label="http://www.cs.rpi.edu/~puninj/JAVA/classes/lec2.ps" weight="165658">
+<att name="title" value="No title"/>
+<att name="mime" value="application/postscript"/>
+<att name="size" value="165658"/>
+<att name="date" value="Sat Aug 29 00:14:24 1998"/>
+<att name="code" value="200"/>
+</node>
+
+	<node id="37" label="http://www.cs.rpi.edu/~puninj/JAVA/classes/lec2.html" weight="11174">
+<att name="title" value="Programming In Java : Lecture Notes 2"/>
+<att name="mime" value="text/html"/>
+<att name="size" value="11174"/>
+<att name="date" value="Wed Sep  2 23:10:32 1998"/>
+<att name="code" value="200"/>
+</node>
+
+	<node id="36" label="http://www.cs.rpi.edu/~puninj/JAVA/classes/lec1.ppt" weight="48640">
+<att name="title" value="No title"/>
+<att name="mime" value="application/vnd.ms-powerpoint"/>
+<att name="size" value="48640"/>
+<att name="date" value="Sat Aug 29 00:11:43 1998"/>
+<att name="code" value="200"/>
+</node>
+
+	<node id="35" label="http://www.cs.rpi.edu/~puninj/JAVA/classes/lec1.rtf" weight="14871">
+<att name="title" value="No title"/>
+<att name="mime" value="text/rtf"/>
+<att name="size" value="14871"/>
+<att name="date" value="Sat Aug 29 00:11:51 1998"/>
+<att name="code" value="200"/>
+</node>
+
+	<node id="34" label="http://www.cs.rpi.edu/~puninj/JAVA/classes/lec1.ps" weight="79558">
+<att name="title" value="No title"/>
+<att name="mime" value="application/postscript"/>
+<att name="size" value="79558"/>
+<att name="date" value="Sat Aug 29 00:14:22 1998"/>
+<att name="code" value="200"/>
+</node>
+
+	<node id="33" label="http://www.cs.rpi.edu/~puninj/JAVA/classes/lec1.html" weight="4530">
+<att name="title" value="Programming in Java : Lecture Notes 1"/>
+<att name="mime" value="text/html"/>
+<att name="size" value="4530"/>
+<att name="date" value="Wed Sep  2 16:49:15 1998"/>
+<att name="code" value="200"/>
+</node>
+<node id="32" label="http://www.oreilly.com/catalog/jenut/" weight="-1">
+</node>
+<node id="31" label="http://www.oreilly.com/catalog/javanut2/" weight="-1">
+</node>
+<node id="30" label="http://www.prenhall.com/allbooks/esm_0138993947.html" weight="-1">
+</node>
+<node id="29" label="mailto:puninj@rpi.edu" weight="-1">
+</node>
+
+	<node id="28" label="http://www.cs.rpi.edu/~puninj/JAVA/DEITEL/JHTP2/" weight="-1">
+<att name="code" value="404"/>
+</node>
+<node id="27" label="http://www.rpi.edu/dept/its/consult/www2/WWW/" weight="-1">
+</node>
+<node id="26" label="http://www.cs.rpi.edu/~puninj/ASHE/help.html" weight="-1">
+</node>
+<node id="25" label="http://www.cs.rpi.edu/~puninj/ASHE/RCS.html" weight="-1">
+</node>
+<node id="24" label="http://www.rpi.edu/Computing/Docs/Memos/rpi120/rpi120.html" weight="-1">
+</node>
+<node id="23" label="http://www.rpi.edu/~ricem4/" weight="-1">
+</node>
+<node id="22" label="http://www.rpi.edu/~waterj2/" weight="-1">
+</node>
+<node id="21" label="http://www.rpi.edu/~ludwis/" weight="-1">
+</node>
+<node id="20" label="http://www.rpi.edu/~obergg/" weight="-1">
+</node>
+<node id="19" label="http://www.rpi.edu/~milinm/" weight="-1">
+</node>
+
+	<node id="18" label="http://www.cs.rpi.edu/~puninj/JAVA/index.html" weight="2314">
+<att name="title" value="Programming in Java Home Page"/>
+<att name="mime" value="text/html"/>
+<att name="size" value="2314"/>
+<att name="date" value="Thu Jun 10 14:08:41 1999"/>
+<att name="code" value="200"/>
+</node>
+<node id="17" label="mailto:puninj@cs.rpi.edu" weight="-1">
+</node>
+<node id="16" label="http://www.cs.rpi.edu/" weight="-1">
+</node>
+<node id="15" label="http://www.rpi.edu/" weight="-1">
+</node>
+<node id="14" label="http://www.rpi.edu/Bestof/April96/Bestof_April96.html" weight="-1">
+</node>
+
+	<node id="13" label="http://www.cs.rpi.edu/~puninj/JAVA/toc.html" weight="4407">
+<att name="title" value="Programming in Java Table of Contents"/>
+<att name="mime" value="text/html"/>
+<att name="size" value="4407"/>
+<att name="date" value="Thu Jun 10 14:14:55 1999"/>
+<att name="code" value="200"/>
+</node>
+
+	<node id="12" label="http://www.cs.rpi.edu/~puninj/JAVA/hotlist.html" weight="1253">
+<att name="title" value="Hot List of Programming in Java"/>
+<att name="mime" value="text/html"/>
+<att name="size" value="1253"/>
+<att name="date" value="Fri Nov  6 15:21:22 1998"/>
+<att name="code" value="200"/>
+</node>
+
+	<node id="11" label="http://www.cs.rpi.edu/~puninj/JAVA/test.html" weight="473">
+<att name="title" value="Tests of Programming in Java"/>
+<att name="mime" value="text/html"/>
+<att name="size" value="473"/>
+<att name="date" value="Tue Jan 19 13:38:04 1999"/>
+<att name="code" value="200"/>
+</node>
+
+	<node id="10" label="http://www.cs.rpi.edu/~puninj/JAVA/projects.html" weight="472">
+<att name="title" value="Projects of Programming in Java"/>
+<att name="mime" value="text/html"/>
+<att name="size" value="472"/>
+<att name="date" value="Thu Jun 10 14:11:40 1999"/>
+<att name="code" value="200"/>
+</node>
+
+	<node id="9" label="http://www.cs.rpi.edu/~puninj/JAVA/homewk.html" weight="543">
+<att name="title" value="Homeworks of Programming in Java"/>
+<att name="mime" value="text/html"/>
+<att name="size" value="543"/>
+<att name="date" value="Thu Jun 10 14:11:41 1999"/>
+<att name="code" value="200"/>
+</node>
+
+	<node id="8" label="http://www.cs.rpi.edu/~puninj/JAVA/classes.html" weight="1375">
+<att name="title" value="Classes of Programming in Java"/>
+<att name="mime" value="text/html"/>
+<att name="size" value="1375"/>
+<att name="date" value="Wed Jun  9 22:06:02 1999"/>
+<att name="code" value="200"/>
+</node>
+
+	<node id="7" label="http://www.cs.rpi.edu/~puninj/JAVA/sched.html" weight="1606">
+<att name="title" value="Schedule of Programming in Java"/>
+<att name="mime" value="text/html"/>
+<att name="size" value="1606"/>
+<att name="date" value="Mon May 17 17:20:55 1999"/>
+<att name="code" value="200"/>
+</node>
+
+	<node id="6" label="http://www.cs.rpi.edu/~puninj/JAVA/syllabus.html" weight="8357">
+<att name="title" value="Syllabus"/>
+<att name="mime" value="text/html"/>
+<att name="size" value="8357"/>
+<att name="date" value="Tue May 18 11:42:14 1999"/>
+<att name="code" value="200"/>
+</node>
+
+	<node id="5" label="http://www.cs.rpi.edu/~puninj/JAVA/announ.html" weight="1297">
+<att name="title" value="Announcements of Programming in Java"/>
+<att name="mime" value="text/html"/>
+<att name="size" value="1297"/>
+<att name="date" value="Thu Jun 10 14:17:23 1999"/>
+<att name="code" value="200"/>
+</node>
+
+	<node id="4" label="http://www.cs.rpi.edu/~puninj/JAVA/students.html" weight="2010">
+<att name="title" value="Programming in Java - Groups"/>
+<att name="mime" value="text/html"/>
+<att name="size" value="2010"/>
+<att name="date" value="Tue Apr  6 14:57:35 1999"/>
+<att name="code" value="200"/>
+</node>
+
+	<node id="3" label="http://www.cs.rpi.edu/~puninj/JAVA/ta.html" weight="614">
+<att name="title" value="Programming in Java Table of Contents"/>
+<att name="mime" value="text/html"/>
+<att name="size" value="614"/>
+<att name="date" value="Thu May 20 11:27:37 1999"/>
+<att name="code" value="200"/>
+</node>
+<node id="2" label="http://www.cs.rpi.edu/~puninj/" weight="-1">
+</node>
+
+	<node id="1" label="http://www.cs.rpi.edu/~puninj/JAVA/" weight="2314">
+<att name="title" value="Programming in Java Home Page"/>
+<att name="mime" value="text/html"/>
+<att name="size" value="2314"/>
+<att name="date" value="Thu Jun 10 14:08:41 1999"/>
+<att name="code" value="200"/>
+</node>
+<edge label="SRC IMG ../icon/lfarrw.gif" source="51" target="18">
+</edge>
+<edge label="SRC IMG ../icon/lfarrw.gif" source="50" target="18">
+</edge>
+<edge label="SRC IMG ../../icon/lfarrw.gif" source="49" target="18">
+</edge>
+<edge label="IMG CS Home Page" source="18" target="16">
+</edge>
+<edge label="IMG RPI Info" source="18" target="15">
+</edge>
+<edge label="IMG Best of RPI Info" source="18" target="14">
+</edge>
+<edge label="IMG TOC" source="18" target="13">
+</edge>
+<edge label="IMG Hot List" source="18" target="12">
+</edge>
+<edge label="IMG Exams" source="18" target="11">
+</edge>
+<edge label="IMG Projects" source="18" target="10">
+</edge>
+<edge label="IMG Homework" source="18" target="9">
+</edge>
+<edge label="IMG Classes" source="18" target="8">
+</edge>
+<edge label="IMG Schedule" source="18" target="7">
+</edge>
+<edge label="IMG Syllabus" source="18" target="6">
+</edge>
+<edge label="IMG Announcements" source="18" target="5">
+</edge>
+<edge label="IMG Students" source="18" target="4">
+</edge>
+<edge label="IMG Xiaomei Zhang" source="18" target="3">
+</edge>
+<edge label="IMG John Punin" source="18" target="2">
+</edge>
+<edge label="SRC IMG icon/lfarrw.gif" source="13" target="18">
+</edge>
+<edge label="Code Examples from the Java How To Program 2/e Book" source="13" target="28">
+</edge>
+<edge label="Java How to Program, 2E: Download Examples" source="13" target="58">
+</edge>
+<edge label="Java How to Program 2/e (Textbook)" source="13" target="30">
+</edge>
+<edge label="Ask the Java Pro!" source="13" target="57">
+</edge>
+<edge label="Java Package Index" source="13" target="56">
+</edge>
+<edge label="Gamelan" source="13" target="55">
+</edge>
+<edge label="Java Technology Home Page" source="13" target="54">
+</edge>
+<edge label="Yahoo Index on Java" source="13" target="53">
+</edge>
+<edge label="Java Exam Summer 1998 (Example)" source="13" target="52">
+</edge>
+<edge label="Project" source="13" target="51">
+</edge>
+<edge label="Homework 2" source="13" target="50">
+</edge>
+<edge label="Homework 1" source="13" target="49">
+</edge>
+<edge label="powerpoint" source="13" target="48">
+</edge>
+<edge label="MSWord" source="13" target="47">
+</edge>
+<edge label="postscript" source="13" target="46">
+</edge>
+<edge label="Graphics and Graphical User Interfaces" source="13" target="45">
+</edge>
+<edge label="powerpoint" source="13" target="44">
+</edge>
+<edge label="MSWord" source="13" target="43">
+</edge>
+<edge label="postscript" source="13" target="42">
+</edge>
+<edge label="Classes, Inheritance, Interfaces" source="13" target="41">
+</edge>
+<edge label="powerpoint" source="13" target="40">
+</edge>
+<edge label="MSWord" source="13" target="39">
+</edge>
+<edge label="postscript" source="13" target="38">
+</edge>
+<edge label="Objects, Classes, Program Constructs" source="13" target="37">
+</edge>
+<edge label="powerpoint" source="13" target="36">
+</edge>
+<edge label="MSWord" source="13" target="35">
+</edge>
+<edge label="postscript" source="13" target="34">
+</edge>
+<edge label="Introduction" source="13" target="33">
+</edge>
+<edge label=" Syllabus" source="13" target="6">
+</edge>
+<edge label="New Class Schedule" source="13" target="7">
+</edge>
+<edge label="Students Group Page" source="13" target="4">
+</edge>
+<edge label="Code Examples from the Java How To Program 2/e Book" source="13" target="28">
+</edge>
+<edge label="Homework 1" source="13" target="9">
+</edge>
+<edge label="Homework 2" source="13" target="9">
+</edge>
+<edge label="Project" source="13" target="10">
+</edge>
+<edge label="John Punin" source="13" target="17">
+</edge>
+<edge label="John Punin" source="13" target="2">
+</edge>
+<edge label="SRC IMG icon/lfarrw.gif" source="12" target="18">
+</edge>
+<edge label="Code Examples from the Java How To Program 2/e Book" source="12" target="28">
+</edge>
+<edge label="Java How to Program, 2E: Download Examples" source="12" target="58">
+</edge>
+<edge label="Java How to Program 2/e (Textbook)" source="12" target="30">
+</edge>
+<edge label="Ask the Java Pro!" source="12" target="57">
+</edge>
+<edge label="Java Package Index" source="12" target="56">
+</edge>
+<edge label="Gamelan" source="12" target="55">
+</edge>
+<edge label="Java Technology Home Page" source="12" target="54">
+</edge>
+<edge label="Yahoo Index on Java" source="12" target="53">
+</edge>
+<edge label="SRC IMG icon/lfarrw.gif" source="11" target="18">
+</edge>
+<edge label="Java Exam Summer 1998 (Example)" source="11" target="52">
+</edge>
+<edge label="SRC IMG icon/lfarrw.gif" source="10" target="18">
+</edge>
+<edge label="Project" source="10" target="51">
+</edge>
+<edge label="SRC IMG icon/lfarrw.gif" source="9" target="18">
+</edge>
+<edge label="Homework 2" source="9" target="50">
+</edge>
+<edge label="Homework 1" source="9" target="49">
+</edge>
+<edge label="SRC IMG icon/lfarrw.gif" source="8" target="18">
+</edge>
+<edge label="powerpoint" source="8" target="48">
+</edge>
+<edge label="MSWord" source="8" target="47">
+</edge>
+<edge label="postscript" source="8" target="46">
+</edge>
+<edge label="Graphics and Graphical User Interfaces" source="8" target="45">
+</edge>
+<edge label="powerpoint" source="8" target="44">
+</edge>
+<edge label="MSWord" source="8" target="43">
+</edge>
+<edge label="postscript" source="8" target="42">
+</edge>
+<edge label="Classes, Inheritance, Interfaces" source="8" target="41">
+</edge>
+<edge label="powerpoint" source="8" target="40">
+</edge>
+<edge label="MSWord" source="8" target="39">
+</edge>
+<edge label="postscript" source="8" target="38">
+</edge>
+<edge label="Objects, Classes, Program Constructs" source="8" target="37">
+</edge>
+<edge label="powerpoint" source="8" target="36">
+</edge>
+<edge label="MSWord" source="8" target="35">
+</edge>
+<edge label="postscript" source="8" target="34">
+</edge>
+<edge label="Introduction" source="8" target="33">
+</edge>
+<edge label="SRC IMG icon/lfarrw.gif" source="7" target="18">
+</edge>
+<edge label="SRC IMG icon/lfarrw.gif" source="6" target="18">
+</edge>
+<edge label="Java Examples in a Nutshell" source="6" target="32">
+</edge>
+<edge label="Java in a Nutshell" source="6" target="31">
+</edge>
+<edge label="Java How To Program 2nd Edition" source="6" target="30">
+</edge>
+<edge label="http://www.cs.rpi.edu/~puninj/JAVA/" source="6" target="1">
+</edge>
+<edge label="puninj@cs.rpi.edu" source="6" target="17">
+</edge>
+<edge label="puninj" source="6" target="29">
+</edge>
+<edge label="John Punin" source="6" target="2">
+</edge>
+<edge label="SRC IMG icon/lfarrw.gif" source="5" target="18">
+</edge>
+<edge label="New Class Schedule" source="5" target="7">
+</edge>
+<edge label="Students Group Page" source="5" target="4">
+</edge>
+<edge label="Code Examples from the Java How To Program 2/e Book" source="5" target="28">
+</edge>
+<edge label="Homework 1" source="5" target="9">
+</edge>
+<edge label="Homework 2" source="5" target="9">
+</edge>
+<edge label="Project" source="5" target="10">
+</edge>
+<edge label="SRC IMG icon/lfarrw.gif" source="4" target="18">
+</edge>
+<edge label="ITS : "Help page on WWW"" source="4" target="27">
+</edge>
+<edge label="ASHE help file" source="4" target="26">
+</edge>
+<edge label="ASHE (A Simple HTML Editor) on RCS workstations." source="4" target="25">
+</edge>
+<edge label="Creating On-Line Documents in RPInfo on the World Wide Web" source="4" target="24">
+</edge>
+<edge label="Matthew Rice" source="4" target="23">
+</edge>
+<edge label="Jeremy Waterfall" source="4" target="22">
+</edge>
+<edge label="Steve Ludwig" source="4" target="21">
+</edge>
+<edge label="Greg Oberg" source="4" target="20">
+</edge>
+<edge label="Matthew Miling" source="4" target="19">
+</edge>
+<edge source="4" target="17">
+</edge>
+<edge label="puninj@cs.rpi.edu" source="4" target="17">
+</edge>
+<edge label="SRC IMG icon/lfarrw.gif" source="3" target="18">
+</edge>
+<edge label="John Punin (puninj@cs.rpi.edu)" source="3" target="17">
+</edge>
+<edge label="IMG CS Home Page" source="1" target="16">
+</edge>
+<edge label="IMG RPI Info" source="1" target="15">
+</edge>
+<edge label="IMG Best of RPI Info" source="1" target="14">
+</edge>
+<edge label="IMG TOC" source="1" target="13">
+</edge>
+<edge label="IMG Hot List" source="1" target="12">
+</edge>
+<edge label="IMG Exams" source="1" target="11">
+</edge>
+<edge label="IMG Projects" source="1" target="10">
+</edge>
+<edge label="IMG Homework" source="1" target="9">
+</edge>
+<edge label="IMG Classes" source="1" target="8">
+</edge>
+<edge label="IMG Schedule" source="1" target="7">
+</edge>
+<edge label="IMG Syllabus" source="1" target="6">
+</edge>
+<edge label="IMG Announcements" source="1" target="5">
+</edge>
+<edge label="IMG Students" source="1" target="4">
+</edge>
+<edge label="IMG Xiaomei Zhang" source="1" target="3">
+</edge>
+<edge label="IMG John Punin" source="1" target="2">
+</edge>
+</graph>
