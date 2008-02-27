@@ -26,6 +26,7 @@ import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
 import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.algorithm.AlgorithmProperty;
+import org.cishell.framework.algorithm.DataValidator;
 import org.cishell.framework.algorithm.ProgressMonitor;
 import org.cishell.framework.algorithm.ProgressTrackable;
 import org.cishell.framework.data.Data;
@@ -94,6 +95,21 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
             ciContext.getService(GUIBuilderService.class.getName());
         
             AlgorithmFactory factory = (AlgorithmFactory) bContext.getService(ref);
+            
+            if (factory instanceof DataValidator) {
+            	String validation = ((DataValidator) factory).validate(data);
+            	
+            	if (validation != null && validation.length() > 0) {
+            		String label = (String) ref.getProperty(LABEL);
+            		if (label == null) {
+            			label = "Algorithm";
+            		}
+            		
+            		builder.showError("Invalid Data", "The data given to \""+label+"\" is incompatible for this reason: "+validation , (String) null);
+            		return null;
+            	}
+            }
+            
             this.provider = factory.createParameters(data);
             String pid = (String)ref.getProperty(Constants.SERVICE_PID);
             
