@@ -69,6 +69,7 @@ public class TexDoclet extends Doclet {
 	static boolean verbose = false;
 	static String packageDir = null;
 	static ClassFilter clsFilt;
+	static String SHORT_PACKAGE = "org.cishell";
 	
 	/**
 	 *  Testing entry point for testing tables
@@ -174,11 +175,11 @@ public class TexDoclet extends Doclet {
 		os.println("\\newcommand{\\membername}[1]{{\\it #1}\\linebreak}");
 		os.println("\\newcommand{\\divideents}[1]{\\vskip -1em\\indent\\rule{2in}{.5mm}}" );
 		
-		os.println("\\newcommand{\\refdefined}[1]{" );
-		os.println("\\expandafter\\ifx\\csname r@#1\\endcsname\\relax");
-	    os.println("\\relax\\else");
-		os.println("{$($ in \\ref{#1}, page \\pageref{#1}$)$}");
-		os.println("\\fi}" );
+		os.println("\\newcommand{\\refdefined}[1]{%" );
+		os.println("\\expandafter\\ifx\\csname r@#1\\endcsname\\relax%");
+	    os.println("\\relax\\else%");
+		os.println("{$($ in \\ref{#1}, page \\pageref{#1}$)$}%");
+		os.println("\\fi}%" );
 
 		os.println("\\newcommand{\\startsection}[4]{" );
 		os.println( "\\gdef\\classname{#2}" );
@@ -705,7 +706,11 @@ System.out.println("done"); System.out.flush();
 				
 				String value = f.constantValueExpression();
 				if (value != null) {
-				    os.print( " = " + fixText(value) );
+					value = fixText(value);
+					if (value.startsWith("\"") && value.endsWith("\"")) {
+						value = "``"+value.substring(1,value.length()-1)+"''";
+					}
+				    os.print( " = " + value );
 				}
 				
 				os.println("\\begin{itemize}\\item{\\vskip -.9ex "+
@@ -745,7 +750,11 @@ System.out.println("done"); System.out.flush();
 			os.print("{\\tt " );
 			os.print( fixText(mem.modifiers()) );
 			if( mem instanceof MethodDoc ) {
-				os.print( " "+fixText(((MethodDoc)mem).returnType().typeName()) );
+				if (((MethodDoc) mem).returnType().qualifiedTypeName().startsWith(SHORT_PACKAGE)) {
+					os.print( " "+fixText(((MethodDoc)mem).returnType().typeName()) );
+				} else {
+					os.print( " "+fixText(((MethodDoc)mem).returnType().toString()) );
+				}	
 			}
 			os.print(" {\\bf "+fixText(mem.name())+"}( " );
 			Parameter[]parms = mem.parameters();
@@ -756,9 +765,14 @@ System.out.println("done"); System.out.flush();
 				if( p > 0 )
 					os.println( ",");
 				Type t = parms[p].type();
-				os.print( "{\\tt "+fixText(t.qualifiedTypeName())+" " );
-				os.print( fixText(t.dimension())+"}" );
-				os.print( " {\\bf "+fixText(parms[p].name())+"}" );
+				if (t.qualifiedTypeName().startsWith(SHORT_PACKAGE)) {
+					os.print( "{\\tt "+fixText(t.typeName())+"" );
+				} else {
+					os.print( "{\\tt "+fixText(t.qualifiedTypeName()).replaceAll("\\.", ".\\\\-")+"" );
+				}
+				
+				os.print( fixText(t.dimension())+"} " );
+				os.print( "{\\bf "+fixText(parms[p].name())+"}" );
 				if( qparmstr.length() != 0 )
 					qparmstr += ",";
 				qparmstr += t.qualifiedTypeName()+t.dimension();
@@ -871,9 +885,14 @@ System.out.println("done"); System.out.flush();
 					}
 					String cls = sees[j].referencedClassName();
 					String memn = sees[j].referencedMemberName();
-					os.print( "   \\item{{\\tt "+fixText(pkg+cls) );
+					if (pkg.startsWith(SHORT_PACKAGE)) {
+						os.print( "   \\item{{\\tt "+fixText(cls) );
+					} else {
+						os.print( "   \\item{{\\tt "+fixText(pkg+cls).replaceAll("\\.", ".\\\\-") );
+					}
+					
 					if( memn != null && memn.equals("") == false ) {
-						os.print( "."+fixText(memn) );
+						os.print( ".\\-"+fixText(memn).replaceAll("\\.", ".\\\\-").replaceAll("\\(", "( ").replaceAll("\\)", " )") );
 					}
 					os.println("} {\\small ");
 					printRef( pd, cls, memn );
@@ -909,7 +928,7 @@ System.out.println("done"); System.out.flush();
 
 	static void processBlock( String block, StringBuffer ret ) {
 		if( block.substring(0,6).equalsIgnoreCase("@link ") ) {
-			block = block.substring(6).trim();
+			block = block.substring(6).trim().replaceAll("#", ".");
 
 			StringTokenizer st = new StringTokenizer(block," \n\r\t");
 			String key = st.nextToken();
@@ -917,7 +936,7 @@ System.out.println("done"); System.out.flush();
 			if( st.hasMoreTokens() )
 				text = st.nextToken("\001").trim();
 			ret.append( fixText(text.trim())+
-					"\\refdefined{"+refName(makeRefKey(key))+"} ");
+					"\\refdefined{"+refName(makeRefKey(key))+"}");
 		} else {
 			ret.append("{"+block+"}");
 		}
@@ -1140,7 +1159,7 @@ System.out.println("done"); System.out.flush();
 						if( refurl.charAt(0) == '#' )
 							ret.append("\\refdefined{"+refName(makeRefKey(refurl.substring(1)))+"}" );
 						else
-							ret.append("(at "+fixText(refurl)+")" );
+							ret.append("at "+fixText(refurl)+"" );
 					}
 					i+=3;
 				} else if( str.length() > i+2 && str.substring(i,i+2).equalsIgnoreCase("<a") ){
