@@ -3,11 +3,11 @@
 \section{Introduction}
 
 A conscious design decision was made for CIShell not to enforce a central data
-model/format that all algorithms had to work with. Instead, an algorithm
-expresses in its service metadata for each data item coming into and out of the
-algorithm what the format of the data is. It is the job of the code calling the
-algorithm to get the data in the right format before calling the algorithm. The
-Data Conversion Service is used here to simplify the process of converting data.
+model/format that all algorithms have to work with. Instead, an algorithm
+expresses the data format of each data item coming into and out of the algorithm
+in its service metadata. It is the job of the code calling the algorithm to get
+the data in the right format before calling the algorithm. The Data Conversion
+Service is used here to simplify the process of converting data.
 
 \subsection{Entities}
 

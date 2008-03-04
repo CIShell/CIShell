@@ -8,8 +8,8 @@ CIShell-compliant system. This gives both the algorithms and the applications
 built on CIShell a standard logging sytem to use. This service has not been
 extended or modified. More information about the \class{LogService} is available
 in the OSGi Service Platform Service Compendium Specification R4, section 101
-under ``Log Service Specification''. Recommend output per log level for CIShell
-algorithms are listed in table \ref{table:logLevels}.
+under ``Log Service Specification.'' Recommended output per log level for
+CIShell algorithms are listed in table \ref{table:logLevels}.
 
 \begin{table}[htb!]
 \begin{center}
@@ -18,10 +18,10 @@ algorithms are listed in table \ref{table:logLevels}.
 LOG\_DEBUG & Used for problem determination and may be irrelevent to anyone but
 the algorithm developer. \\
 LOG\_ERROR & Indicates a problem occurred while the algorithm was executing.
-Indicators of possible fixes should be outputted to this level along with
+Indicators of possible fixes should be output to this level along with
 relevent information describing what went wrong, if possible. \\
 LOG\_INFO & Used for providing information about and while the algorithm is
-executing and does not indicate a problem. \\
+executing. It does not indicate a problem. \\
 LOG\_WARNING & Indicates that the algorithm will still be executed, but
 that outputs may not be what was expected. This is often in response to
 illogical, but still valid user inputs.
