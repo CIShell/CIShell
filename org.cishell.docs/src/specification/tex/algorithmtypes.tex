@@ -3,6 +3,10 @@
 \subsection*{\textit{Version 1.0}}
 
 \label{algConstraints}
+\subsection{Introduction}
+
+CIShell algorithms are a generic concept which have many uses. \comments{flesh
+out\ldots}
 
 \subsection{Base Algorithm Constraints}
 
@@ -13,7 +17,7 @@ constraints:
 \begin{itemize}
   \item The algorithm must be a conformant \class{AlgorithmFactory}
   implementation and properly registered as a service.
-  \item The algorithm's service metadata must contain a legal ``service.pid''.
+  \item The algorithm's service metadata must contain a valid ``service.pid''.
 \end{itemize}
 
 \subsubsection*{Optional:}
@@ -23,7 +27,7 @@ constraints:
   \item The algorithm's service metadata should have a ``label'' which is a
   short human-readable name for the algorithm.
   \item The algorithm's service metadata should have a ``description''
-  describing what the algorithm does in more detail.
+  explaining what the algorithm does in more detail.
   \item As much of the informational metadata as possible should be
   provided. This includes ``authors'', ``implementors'', ``integrators'',
   ``documentation\_url'', ``reference'', ``reference\_url'', and ``written\_in''.
@@ -38,12 +42,12 @@ encounter. A standard algorithm has the following constraints:
 \begin{itemize}
   \item The algorithm must be a conformant \class{AlgorithmFactory}
   implementation and properly registered as a service.
-  \item The algorithm's service metadata must contain a legal ``service.pid''.
+  \item The algorithm's service metadata must contain a valid ``service.pid''.
   \item The algorithm's service metadata must have a ``label'' which is a
   short human-readable name for the algorithm. This is typically used to label
   an algorithm for an end-user to see.
   \item The algorithm's service metadata must have a ``description''
-  describing what the algorithm does in more detail.
+  explaining what the algorithm does in more detail.
   \item The algorithm's service metadata must have a ``menu\_path'' which is
   simultaneously a classification and a location on a GUI's menubar to place
   the algorithm in. See section \ref{algMetaData} for how to format a
@@ -52,7 +56,9 @@ encounter. A standard algorithm has the following constraints:
 
 \subsubsection*{Optional:}
 \begin{itemize}
-  
+  \item If additional user-entered parameters are needed, the algorithm should
+  provide a \class{MetaTypeProvider} through its AlgorithmFactory's
+  createParameters method.
   \item The algorithm's service metadata should have ``remoteable=true'' if it
   meets the requirements of a remoteable algorithm.
   \item The algorithm's service metadata should have ``parentage=default'' if
@@ -64,6 +70,43 @@ encounter. A standard algorithm has the following constraints:
   ``documentation\_url'', ``reference'', ``reference\_url'', and ``written\_in''.
 \end{itemize}
 
+\subsection{Dataset Algorithms}
+
+A dataset algorithm is a custom type of CIShell algorithm for providing
+pre-generated data for use in the CIShell Platform. Dataset algorithms act just
+like standard algorithms and have a superset of requirements. CIShell
+Applications may not even treat them any differently than standard algorithms. A
+dataset algorithm has the following constraints:
+
+\subsubsection*{Required:}
+\begin{itemize}
+  \item The algorithm must be a conformant \class{AlgorithmFactory}
+  implementation and properly registered as a service.
+  \item The algorithm's service metadata must contain a valid ``service.pid''.
+  \item The algorithm's service metadata must have a ``label'' which is a
+  short human-readable name for the dataset being provided. This is typically
+  used to label a dataset for an end-user to see.
+  \item The algorithm's service metadata must have a ``description''
+  explaining what the dataset is in more detail.
+  \item The algorithm's service metadata must have a ``menu\_path'' which is
+  simultaneously a classification and a location on a GUI's menubar to place
+  the dataset in. Datasets will typically be in ``File/Datasets/additions''
+  See section \ref{algMetaData} for how to format a ``menu\_path''.
+  \item The algorithm's service metadata must have ``type=dataset''.
+  \item The algorithm's service metadata must have ``in\_data=null'' or
+  not defined at all.
+  \item The algorithm's service metadata must have at least one data item set
+  as its ``out\_data''.
+\end{itemize}
+
+\subsubsection*{Optional:}
+\begin{itemize}
+  \item The algorithm's service metadata should have ``remoteable=true'' if it
+  meets the requirements of a remoteable algorithm.
+  \item As much of the informational metadata as possible should be
+  provided. This includes ``authors'', ``implementors'', ``integrators'',
+  ``documentation\_url'', ``reference'', and ``reference\_url''.
+\end{itemize}
 
 \subsection{Converter Algorithms}
 \label{converterAlg}
@@ -80,22 +123,26 @@ algorithm has the following constraints:
   \item The algorithm must take in a single \class{Data} item and convert the
   item, producing a single \class{Data} item. This must be reflected in the
   algorithm's service metadata where ``in\_data'' and ``out\_data'' have only
-  one format each.
-  \item The algorithm's service metadata must contain a legal ``service.pid''.
+  one data item each.
+  \item The algorithm's service metadata must contain a valid ``service.pid''.
   \item The algorithm's service metadata must have ``type=converter''.
   \item The algorithm's service metadata must have ``conversion=lossy'' if
   data is lost during conversion or ``conversion=lossless'' if not.
+  \item The algorithm must not require any parameters. The
+  \class{AlgorithmFactory}'s createParameters method will never be called and
+  the \class{Dictionary} passed to the createAlgorithm method will always be
+  empty.
 \end{itemize}
 
 \subsubsection*{Optional:}
-\begin{itemize}
+\begin{itemize}an
   \item The algorithm's service metadata should have ``remoteable=true'' if it
   meets the requirements of a remoteable algorithm.
   \item The algorithm's service metadata should have a ``label'' which is a
   short human-readable name for the converter, usually with the common name of
   the input data format and output data format.
   \item The algorithm's service metadata should have a ``description''
-  describing the conversion in more detail, especially what data may be lossed
+  explaining the conversion in more detail, especially what data may be lossed
   if ``conversion=lossy''.
   \item The algorithm's service metadata should have ``implementers'' filled
   in accordingly.  
@@ -120,15 +167,19 @@ has the following constraints:
   item producing a single \class{Data} item (with the same data, but changed
   format) or \class{null} if the file being validated is not of the right
   type. This must be reflected in the algorithm's service metadata where
-  ``in\_data'' and ``out\_data'' have only one format each with one containing
-  a ``file:'' format and the other a ``file-ext:'' depending on the direction
-  of validation.
+  ``in\_data'' and ``out\_data'' have only one data item each with one
+  containing a ``file:'' format and the other a ``file-ext:'' depending on the 
+  direction of validation.
   \item The algorithm must not alter the data. Its only purpose is to validate
   the proposed incoming or outgoing file.
-  \item The algorithm's service metadata must contain a legal ``service.pid''.
+  \item The algorithm's service metadata must contain a valid ``service.pid''.
   \item The algorithm's service metadata must have ``type=validator''.
   \item The algorithm's service metadata must have a ``label'' which is the
   common name of the data format being validated.
+  \item The algorithm must not require any parameters. The
+  \class{AlgorithmFactory}'s createParameters method will never be called and
+  the \class{Dictionary} passed to the createAlgorithm method will always be
+  empty.
 \end{itemize}
 
 \subsubsection*{Optional:}

@@ -7,9 +7,9 @@
 The CIShell Platform has been specifically designed around the idea of the
 algorithm. It is the central and most important concept. Algorithms are fully
 defined and self-contained bits of execution. They can do many things from data
-conversion, data analysis, and can even spawn whole outside programs if it needs
-to. Algorithms are very well defined black boxes in that what can come into and
-out of the algorithm is specified in each algorithm's metadata. Other than that,
+conversion, data analysis, and can even spawn whole outside programs if needed.
+Algorithms are very well defined black boxes in that what can come into and out
+of the algorithm is specified in each algorithm's metadata. Other than that,
 CIShell makes no attempt to understand the algorithm.
 
 To be recognized by CIShell, an \class{AlgorithmFactory} must be registered with
@@ -54,10 +54,10 @@ documentation for more details.
 When an algorithm is registered with OSGi's service registry, a dictionary of
 metadata is provided. Since the algorithm itself is a black box, the metadata is
 used to provide information about the algorithm. Information such as the format
-of each \class{Data} item to be inputted and outputted is provided. In addition
-to the mechanics of the algorithms, interesting data such as the authors, label,
-urls, and description are provided. This metadata can be searched by anyone using
-OSGi's service registry to find relevant algorithms for use.
+of each \class{Data} item to be input and output is provided. In addition to the
+mechanics of the algorithms, data such as the authors, label, urls, citation
+references, and description are provided. This metadata can be searched by anyone
+using OSGi's service registry to find relevant algorithms.
 
 Each standard metadata element required by the CIShell specification is defined
 below and in the interface \class{AlgorithmProperty}. It defines each key string
@@ -68,7 +68,7 @@ registering an algorithm as a service.
 A string that uniquely identifies the algorithm. The service.pid should not
 change between sessions and only one algorithm with a given service.pid should
 be available in the service registry at any given time. It is recommended to 
-use the Java naming scheme including path for this purpose, i.e.
+use the Java naming scheme including path for this purpose, i.e.,
 ``org.cishell.my.algorithm.MyAlgorithm''. This metadata element is defined
 as part of the OSGi Service Platform Core Specification, section 6.1.12.58. 
 
@@ -93,8 +93,8 @@ all is valid.
 \subsection*{parentage}
 If this metadata element is used, it defines how the output \class{Data}
 produced by the algorithm should be arranged. \class{Data} items can be given a parent as
-part of their metadata (which qsually means the \class{Data} was derived from the
-referenced \class{Data}). If parentage is set to ``default'' then each of the
+part of their metadata (which usually means the \class{Data} was derived from
+the referenced \class{Data}). If parentage is set to ``default'' then each of the
 algorithm's outputted \class{Data} items will have their parent \class{Data} item
 set as the first inputted \class{Data} item (if applicable) by the
 CIShell-conforming application. If parentage is set to something else or is not
@@ -135,7 +135,7 @@ examples of valid menu\_path strings include: ``File/additions'',
 
 \subsection*{conversion}
 For converter algorithms, this metadata element specifies if any data is
-lossed in the conversion. Possible values are ``lossy'' and ``lossless''. A
+lost in the conversion. Possible values are ``lossy'' and ``lossless''. A
 description of what type of information is lost should be explained in the
 description.
 
