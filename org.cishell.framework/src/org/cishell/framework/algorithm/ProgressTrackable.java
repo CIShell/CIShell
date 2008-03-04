@@ -38,10 +38,10 @@ public interface ProgressTrackable {
     
     /**
      * Returns the progress monitor currently in use, or <code>null</code> if
-     * no monitor has been set.
+     * no monitor has been set
      * 
      * @return The current progress monitor, or <code>null</code> if there 
-     * isn't one set.
+     * isn't one set
      */
     public ProgressMonitor getProgressMonitor();
 }

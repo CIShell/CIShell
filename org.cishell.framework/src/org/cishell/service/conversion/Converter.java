@@ -21,7 +21,7 @@ import org.cishell.framework.data.Data;
 import org.osgi.framework.ServiceReference;
 
 /**
- * A class for converting Data objects.
+ * A class for converting Data objects
  * 
  * @author Bruce Herr (bh2@bh2.net)
  */
@@ -29,16 +29,16 @@ public interface Converter {
     
     /**
      * Returns an array of ServiceReferences to converter algorithms in the order
-     * in which they will be called when converting a Data object.
+     * in which they will be called when converting a Data object
      *  
-     * @return An array of ServiceReferences to converter algorithms to be used. 
+     * @return An array of ServiceReferences to converter algorithms to be used
      */
     public ServiceReference[] getConverterChain();
     
     /**
      * Returns the AlgorithmFactory that can be invoked to convert a given 
      * Data object of the correct input format (as specified in the Dictionary 
-     * from getProperties()) to a Data object of the correct output format.
+     * from getProperties()) to a Data object of the correct output format
      * 
      * @return The AlgorithmFactory to do the converting
      */
@@ -58,11 +58,11 @@ public interface Converter {
     /**
      * Uses this Converter to convert the given Data object to a new format. 
      * This is a convenience method that uses this Converter to convert a Data 
-     * object of the corrent format to a Data object of the defined output format
+     * object of the corrent format to a Data object of the defined output format.
      * 
      * @param data The Data object with compatible format
-     * @return A Data object of correct output format, or <code>null</code> if the
-     *         conversion fails
+     * @return A Data object of correct output format
+     * @throws ConversionException If the data conversion fails while converting
      */
-    public Data convert(Data data);
+    public Data convert(Data data) throws ConversionException;
 }

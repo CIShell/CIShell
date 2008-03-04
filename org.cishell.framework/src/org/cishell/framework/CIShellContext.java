@@ -44,10 +44,10 @@ public interface CIShellContext {
      * Locates and returns a standard service given the service name. The 
      * service name is generally the full class name of the service interface.
      * For example, <code>LogService</code>'s string is 
-     * <code>org.osgi.service.log.LogService</code>
+     * <code>org.osgi.service.log.LogService</code>.
      * 
      * @param service A string (usually the associated interface's full 
-     *                class name) that specifies the service to retrieve.
+     *                class name) that specifies the service to retrieve
      * @return An instantiated version of the service requested
      */
     public Object getService(String service);

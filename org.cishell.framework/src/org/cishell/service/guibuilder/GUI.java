@@ -24,13 +24,13 @@ import java.util.Dictionary;
 public interface GUI {
 	/**
      * Pops up this GUI, gets data from the user, and returns what they entered.
-     * This is a convenience method that first opens the GUI, then pops the GUI 
-     * up to the user, who then enters in the needed information, which is then 
+     * This is a convenience method that first opens the GUI, then shows the GUI 
+     * to the user, who then enters in the needed information, which is then 
      * taken and put into a {@link Dictionary}, and is given to this method's 
      * caller.
      * 
-	 * @return The data the user entered or <code>null</code> if they cancelled
-	 *         the operation.
+	 * @return The data the user entered or <code>null</code> if the operation 
+	 * 		   was cancelled
 	 */
     public Dictionary openAndWait();
     
@@ -52,7 +52,7 @@ public interface GUI {
     
     /**
      * Sets the selection listener to be informed when the user finishes 
-     * entering information and hits 'Ok' or cancels.
+     * entering information and hits 'Ok' or cancels
      * 
      * @param listener The listener to notify
      */

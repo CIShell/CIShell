@@ -16,7 +16,7 @@ package org.cishell.framework.data;
 
 /**
  * Standard property keys to use when creating metadata for a 
- * {@link Data} object.
+ * {@link Data} object
  * 
  * @author Bruce Herr (bh2@bh2.net)
  */
@@ -28,12 +28,20 @@ public interface DataProperty {
     public static final String LABEL = "Label";
     
     /** 
+     * A short label to give the Data object for shorter displays. It is 
+     * recommended to keep the string length below 20 characters. This will often
+     * be used for recommended file names when saving the data to disk. The type 
+     * associated with this property is of type {@link String}.
+     */
+    public static final String SHORT_LABEL = "Short_Label";
+    
+    /** 
      * The parent Data object of the Data object. This is used when a Data object
      * is derived from another Data object to show the hierarchical relationship
      * between them. This property can be null, signifying that the Data object
      * was not derived from any other Data object, such as when loading a new Data
      * object from a file. The type associated with this property is of type 
-     * {@link Data} 
+     * {@link Data}.
      */
     public static final String PARENT = "Parent";    
     
@@ -48,7 +56,7 @@ public interface DataProperty {
     /**
      * Flag to determine if the Data object has been modified and not saved since
      * the modification. This is used to do things like notify the user before 
-     * they exit that a modified Data object exists and see if they want to save 
+     * they exit that a modified Data object exists and ask if they want to save 
      * it. The type associated with this property is of type {@link Boolean}.
      */
     public static final String MODIFIED = "Modified";
@@ -68,6 +76,6 @@ public interface DataProperty {
     /** Says this data model is abstractly a plain text file */
     public static String TEXT_TYPE = "Text";
     
-    /** Says this data model is abstractly an informational graph. */
-    public static String GRAPH_TYPE = "Graph";
+    /** Says this data model is abstractly a data plot */
+    public static String PLOT_TYPE = "Plot";
 }

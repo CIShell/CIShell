@@ -36,7 +36,7 @@ public class LocalCIShellContext implements CIShellContext {
      * <code>BundleContext</code>
      * 
      * @param bContext The <code>BundleContext</code> to use to find 
-     *                 the registered standard services. 
+     *                 the registered standard services
      */
     public LocalCIShellContext(BundleContext bContext) {
         this(bContext, DEFAULT_SERVICES);
@@ -48,9 +48,9 @@ public class LocalCIShellContext implements CIShellContext {
      * this <code>CIShellContext</code>.
      * 
      * @param bContext         The <code>BundleContext</code> to use to find 
-     *                         registered standard services.
+     *                         registered standard services
      * @param standardServices An array of strings specifying the services that
-     *                         are allowed to be retrieved from this class.
+     *                         are allowed to be retrieved from this class
      */
     public LocalCIShellContext(BundleContext bContext, String[] standardServices) {
         this.bContext = bContext;

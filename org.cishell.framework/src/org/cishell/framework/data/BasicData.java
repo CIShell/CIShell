@@ -58,9 +58,9 @@ public class BasicData implements Data {
     }
 
     /**
-     * @see org.cishell.framework.data.Data#getMetaData()
+     * @see org.cishell.framework.data.Data#getMetadata()
      */
-    public Dictionary getMetaData() {
+    public Dictionary getMetadata() {
         return properties;
     }
 

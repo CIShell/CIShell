@@ -46,8 +46,8 @@ public interface DataConversionService {
 	 * 			        String should be formatted in the same way as an 
 	 *                  algorithm's {@link AlgorithmProperty#OUT_DATA}.
 	 * @return An array of {@link Converter}s that can convert a Data object of
-	 *         the given inFormat to the given outFormat, or <code>null</code> 
-	 *         if there is no way to convert.
+	 *         the given inFormat to the specified outFormat, or 
+	 *         <code>null</code> if there is no valid conversion sequence
 	 */
     public Converter[] findConverters(String inFormat, String outFormat);
     
@@ -57,20 +57,22 @@ public interface DataConversionService {
      * 
      * @param data      The Data object to convert
      * @param outFormat The output format to convert to
-     * @return An array of converters (may be zero length) that can convert the
-     *         given Data object to the specified output format.
+     * @return An array of {@link Converter}s that can convert the
+     *         given Data object to the specified output format, or 
+     *         <code>null</code> if there is no valid conversion sequence
      */
     public Converter[] findConverters(Data data, String outFormat);
     
     /**
      * Tries to convert a given Data object to the specified output format. If 
      * the conversion fails or there is no way to convert it, this method will 
-     * return a <code>null</code>
+     * return a <code>null</code>.
      * 
      * @param data      The Data to convert
      * @param outFormat The format of the Data object to be returned 
      * @return A Data object with the specified output format, or 
-     *         <code>null</code> if the conversion fails
+     * 		   <code>null</code> if there is no valid conversion sequence
+     * @throws ConversionException If the data conversion fails while converting
      */
-    public Data convert(Data data, String outFormat);
+    public Data convert(Data data, String outFormat) throws ConversionException;
 }

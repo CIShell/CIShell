@@ -35,7 +35,7 @@ import org.osgi.service.metatype.ObjectClassDefinition;
  * 
  * Algorithm writers are encouraged to use this service if they need to get
  * additional input from the user rather than creating their own GUI. This is
- * to ensure a consistant user input method and so that the GUI can easily be 
+ * to ensure a consistent user input method and so that the GUI can easily be 
  * routed to the user when running remotely.
  * 
  * @author Bruce Herr (bh2@bh2.net)
@@ -66,8 +66,8 @@ public interface GUIBuilderService {
 	 *                   MetaTypeProvider
 	 * @param parameters Provides the parameters needed to get information from 
 	 *                   the user
-     * @return The data the user entered or <code>null</code> if they cancelled
-     *         the operation.
+     * @return The data the user entered or <code>null</code> if the operation 
+     * 		   was cancelled
      */
     public Dictionary createGUIandWait(String id, MetaTypeProvider parameters);
     
@@ -77,7 +77,7 @@ public interface GUIBuilderService {
      * @param title   The title of the pop-up
      * @param message The message to display
      * @param detail  Additional details
-     * @return If they clicked "Ok", <code>true</code>, otherwise 
+     * @return If they clicked "Ok," <code>true</code>, otherwise 
      *         <code>false</code>
      */
     public boolean showConfirm(String title, String message, String detail);
@@ -88,7 +88,7 @@ public interface GUIBuilderService {
      * @param title   The title of the pop-up
      * @param message The question to display
      * @param detail  Additional details
-     * @return If they clicked "Yes", <code>true</code>, otherwise 
+     * @return If they clicked "Yes," <code>true</code>, otherwise 
      *         <code>false</code>
      */
     public boolean showQuestion(String title, String message, String detail);

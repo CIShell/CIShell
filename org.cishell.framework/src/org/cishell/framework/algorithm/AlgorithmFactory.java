@@ -22,18 +22,18 @@ import org.osgi.service.metatype.MetaTypeProvider;
 /**
  * A class for creating {@link Algorithm}s. This class provides the 
  * parameters needed by its associated <code>Algorithm</code> on demand and when
- * given correct data, will create an <code>Algorithm</code> that can be executed. 
- * An algorithm developer who wishes to be usable by CIShell applications must 
- * create an implementation of this interface and register it (along with some 
- * standard metadata about the algorithm, defined in the 
- * {@link AlgorithmProperty} class) in the OSGi service registry. 
+ * given correct data, will create an <code>Algorithm</code> that can be executed.
+ * <br> 
+ * An algorithm developer must create an implementation of this interface and 
+ * register it (along with some standard metadata about the algorithm, defined 
+ * in the {@link AlgorithmProperty} class) in the OSGi service registry. 
  * 
  * @author Bruce Herr (bh2@bh2.net)
  */
 public interface AlgorithmFactory {
     /**
-     * Creates a set of parameter definitions that define what parameters are 
-     * needed in order to run its associated Algorithm.  
+     * Creates a set of parameter definitions that specify what parameters are 
+     * needed in order to run its associated Algorithm
      * 
      * @param data An optional argument, the Data array that will be given to 
      *           this class to create an Algorithm with the createAlgorithm 
@@ -46,7 +46,7 @@ public interface AlgorithmFactory {
     public MetaTypeProvider createParameters(Data[] data);
     
     /**
-     * Creates an {@link Algorithm} to be executed. 
+     * Creates an {@link Algorithm} to be executed
      * 
      * @param data       The data to be given to the Algorithm to process. 
      *                   Some Algorithms may ignore this value. The order and
@@ -54,7 +54,7 @@ public interface AlgorithmFactory {
      *                   dictionary (the 'in_data' key) when registered as a 
      *                   service in OSGi.
      * @param parameters A set of key-value pairs that were created based on 
-     *                   the parameters given by the createParameters method.
+     *                   the parameters given by the createParameters method
      * @param context    The context by which the Algorithm can gain access to 
      *                   standard CIShell services
      * @return An <code>Algorithm</code> primed for execution

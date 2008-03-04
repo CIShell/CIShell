@@ -17,7 +17,7 @@ import org.cishell.framework.data.Data;
 
 
 /**
- * A listener that is notified of changes in the {@link DataManagerService}.
+ * A listener that is notified of changes in the {@link DataManagerService}
  * 
  * @author Bruce Herr (bh2@bh2.net)
  */

@@ -89,7 +89,7 @@ public interface SchedulerService {
     public boolean unschedule(Algorithm algorithm);
     
     /**
-     * Adds a listener to be notified of events happening in the scheduler. 
+     * Adds a listener to be notified of events happening in the scheduler
      * 
      * @param listener The listener to be added
      */
@@ -138,7 +138,7 @@ public interface SchedulerService {
      * 
      * @param algorithm The Algorithm
      * @return The scheduled time for the Algorithm to run or <code>null</code>
-     *         if the Algorithm is not scheduled or has completed execution.
+     *         if the Algorithm is not scheduled or has completed execution
      */
     public Calendar getScheduledTime(Algorithm algorithm);
     

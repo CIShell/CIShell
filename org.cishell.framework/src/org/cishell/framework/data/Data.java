@@ -29,10 +29,10 @@ public interface Data {
 	 * 
 	 * @return The data's metadata
 	 */
-    public Dictionary getMetaData();
+    public Dictionary getMetadata();
     
     /**
-     * Returns the data stored in this Data object.
+     * Returns the data stored in this Data object
      * 
      * @return The data (a Java object)
      */

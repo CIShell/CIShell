@@ -28,9 +28,13 @@ import org.cishell.framework.data.Data;
 public interface Algorithm {
     
    /**
-    * Executes and optionally returns a Data array. 
+    * Executes and optionally returns a Data array
     * 
-    * @return A Data array that was created or <code>null</code>
+    * @return A Data array that was created. <code>null</code> is ONLY acceptable
+    * when the algorithms out_data is null.
+    * @throws AlgorithmExecutionException An exception has occured while executing
+    * the algorithm. This exception should have a user-comprehendable message if
+    * at all possible.
     */
-   public Data[] execute(); 
+   public Data[] execute() throws AlgorithmExecutionException; 
 }

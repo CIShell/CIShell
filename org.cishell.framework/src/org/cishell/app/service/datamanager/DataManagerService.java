@@ -94,7 +94,7 @@ public interface DataManagerService {
      * to change the label so that it is unique.
      * 
      * @param data The Data
-     * @param label The new label for the data model.
+     * @param label The new label for the data model
      */
     public void setLabel(Data data, String label);
 }
