@@ -13,7 +13,6 @@
  * ***************************************************************************/
 package org.cishell.reference.gui.datamanager;
 
-import java.io.IOException;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -217,10 +216,46 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 		viewer.getControl().setFocus();
 	}
 
-	public void dataAdded(final Data data, String label) {
-		// get the data from the model needed to setup the DataModelGUIItem
-		Dictionary modelDictionary = data.getMetaData();
+	public void dataAdded(final Data newData, String label) {
+		
+		//get the new data's parent GUI Item (either root or another data item)
+		DataGUIItem parentItem = getParent(newData);
+		
+		// wrap the new data in a DataGUIItem
+		final DataGUIItem newItem = new DataGUIItem(newData, parentItem,
+				this.brandPluginID);
+		
+		// notify the parent DataModelGUIItem of its new child
+		parentItem.addChild(newItem);
+		
+		// keep a reference to the new model in the model->TreeItem mapping so
+		// that
+		// it can be used in the future if it has a child
+		dataToDataGUIItemMap.put(newData, newItem);
+		
+		// update the ModelManager with the new selection
+		final Set selection = new HashSet();
+		selection.add(newData);
 
+		guiRun(new Runnable() {
+			public void run() {
+				if (!tree.isDisposed()) {
+					// update the TreeView
+					viewer.refresh();
+					// context menu may need to have options enabled/disabled
+					// based on the new selection
+					updateContextMenu(newData);
+					// update the global selection
+					viewer.expandToLevel(newItem, 0);
+					manager.setSelectedData((Data[]) selection.toArray(new Data[0]));
+				}
+			}
+		});
+	}
+	
+	private DataGUIItem getParent(Data data) {
+		Dictionary modelDictionary = data.getMetaData();
+		
 		Data parent = (Data) modelDictionary.get(DataProperty.PARENT);
 		DataGUIItem parentItem;
 		if (parent == null) {
@@ -235,35 +270,8 @@ public abstract class AbstractDataManagerView extends ViewPart implements
                 parentItem = rootItem;
             }
 		}
-
-		// create the new DataModelGUIItem
-		final DataGUIItem item = new DataGUIItem(data, parentItem,
-				this.brandPluginID);
-		// notify the parent DataModelGUIItem of its new child
-		parentItem.addChild(item);
-		// keep a reference to the new model in the model->TreeItem mapping so
-		// that
-		// it can be used in the future if it has a child
-		dataToDataGUIItemMap.put(data, item);
 		
-		// update the ModelManager with the new selection
-		final Set selection = new HashSet();
-		selection.add(data);
-
-		guiRun(new Runnable() {
-			public void run() {
-				if (!tree.isDisposed()) {
-					// update the TreeView
-					viewer.refresh();
-					// context menu may need to have options enabled/disabled
-					// based on the new selection
-					updateContextMenu(data);
-					// update the global selection
-					viewer.expandToLevel(item, 0);
-					manager.setSelectedData((Data[]) selection.toArray(new Data[0]));
-				}
-			}
-		});
+		return parentItem;
 	}
 	
 	private void guiRun(Runnable run) {
@@ -454,7 +462,6 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 		model.getMetaData().put(DataProperty.LABEL, newLabel);
 		viewer.refresh();
 		newEditor.dispose();
-		
 	
 		updatingTreeItem = false;
 	}
