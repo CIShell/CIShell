@@ -8,12 +8,20 @@ public class FilePassReport implements Report {
 	
 	private String name; 
 	
-	private ConvertedDataReport[] convertedDataReports;
+	private ConvertedDataReport[] testConvertedDataReports;
+	private ConvertedDataReport[] origCompareConvertedDataReports;
+	private ConvertedDataReport[] resultCompareConvertedDataReports;
 	
-	public FilePassReport (File filePassReport, String name, ConvertedDataReport[] convertedDataReports) {
+	public FilePassReport (File filePassReport,
+			String name,
+			ConvertedDataReport[] testConvertedDataReports,
+			ConvertedDataReport[] origCompareConvertedDataReports,
+			ConvertedDataReport[] resultCompareConvertedDataReports) {
 		this.filePassReport = filePassReport;
 		this.name = name;
-		this.convertedDataReports = convertedDataReports;
+		this.testConvertedDataReports = testConvertedDataReports;
+		this.origCompareConvertedDataReports = origCompareConvertedDataReports;
+		this.resultCompareConvertedDataReports = resultCompareConvertedDataReports;
 	}
 	
 	public File getFilePassReport() {
@@ -24,7 +32,16 @@ public class FilePassReport implements Report {
 		return this.name;
 	}
 	
-	public ConvertedDataReport[] getConvertedDataReports() {
-		return this.convertedDataReports;
+	public ConvertedDataReport[] getTestConvertedDataReports() {
+		return this.testConvertedDataReports;
 	}
+	
+	public ConvertedDataReport[] getOrigCompareConvertedDataReports() {
+		return this.origCompareConvertedDataReports;
+	}
+	
+	public ConvertedDataReport[] getResultCompareConvertedDataReports() {
+		return this.resultCompareConvertedDataReports;
+	}
+	
 }

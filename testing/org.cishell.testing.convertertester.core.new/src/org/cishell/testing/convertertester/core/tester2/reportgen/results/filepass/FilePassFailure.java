@@ -7,8 +7,8 @@ import org.cishell.testing.convertertester.core.tester2.reportgen.results.FilePa
 public class FilePassFailure extends FilePassResult {
 
 	public FilePassFailure(Data[] originalData, String explanation,
-			PassPhase phaseReached, Converter failedConverter, Data[][] allData) {
+			PassPhase phaseReached, Converter failedConverter, Data[][] testData, Data[][] origCompareData, Data[][] resultCompareData) {
 		super(originalData, explanation, phaseReached,
-				failedConverter, allData);
+				failedConverter, testData, origCompareData, resultCompareData);
 	}
 }

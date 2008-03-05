@@ -50,38 +50,50 @@ public class AllConvsReportGenerator implements ReportGenerator {
 			report.println("---------------------------------------------");
 			report.println(""                                             );
 			
+			int numTested = 0;
+			
 			float passedPercentTotal = 0;
 			for (int ii = 0; ii < convResults.length; ii++) {
 				if (convResults[ii].wasTested()) {
+					if (convResults[ii].wasTested()) {
+						numTested++;
 				passedPercentTotal += convResults[ii].getPercentPassed(); 
+					}
 				}
 			}
-			float avgPercentPassed = 
-				passedPercentTotal / convResults.length;
+			float avgPercentPassed = 0;
+			if (numTested != 0) { 
+				avgPercentPassed = 
+					passedPercentTotal / (float) numTested;
+			}	
 			
 			float chanceCorrectTotal = 0.0f;
 			for (int ii = 0; ii < convResults.length; ii++) {
-				if (convResults[ii].wasTested()) {			
+				if (convResults[ii].wasTested()) {	
 					chanceCorrectTotal += convResults[ii].getChanceCorrect(); 
 				}
 			}
 			
+			float avgChanceCorrect = 0;
+			if (numTested != 0) {
+			avgChanceCorrect = chanceCorrectTotal / ((float) numTested);
+			}
 			
-			float avgChanceCorrect = 
-				chanceCorrectTotal / ((float) convResults.length);
-
 			List convReportsList = new ArrayList();
 
 			List trustedConvs = new ArrayList();
 			List nonTrustedConvs = new ArrayList();
+			List nonTestedConvs = new ArrayList();
 
 			for (int ii = 0; ii < convResults.length; ii++) {
 				ConvResult cr = convResults[ii];
 
 				if (cr.isTrusted()) {
 					trustedConvs.add(cr);
-				} else {
+				} else if (cr.wasTested()) {
 					nonTrustedConvs.add(cr);
+				} else {
+					nonTestedConvs.add(cr);
 				}
 			}
 			
@@ -90,6 +102,8 @@ public class AllConvsReportGenerator implements ReportGenerator {
 					trustedConvs.size());
 			report.println("  # of Non-Trusted Converters              : " + 
 					nonTrustedConvs.size());
+			report.println("  # of Untested Converters                 :"  +
+					nonTestedConvs.size());
 			report.println("  Total # of Converters                    : " + 
 					convResults.length);
 			
@@ -114,7 +128,7 @@ public class AllConvsReportGenerator implements ReportGenerator {
 			}
 			report.println("");
 			
-			report.println("Non-Trusted Converters...");
+			report.println("Non-Trusted Tested Converters...");
 			for (int ii = 0; ii < nonTrustedConvs.size(); ii++) {
 				ConvResult cr = (ConvResult) nonTrustedConvs.get(ii);
 				

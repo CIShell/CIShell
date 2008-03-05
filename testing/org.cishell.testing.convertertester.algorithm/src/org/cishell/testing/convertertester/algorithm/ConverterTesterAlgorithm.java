@@ -1,6 +1,7 @@
 package org.cishell.testing.convertertester.algorithm;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Dictionary;
 
@@ -295,15 +296,8 @@ public class ConverterTesterAlgorithm implements Algorithm,
     					Data fpData = createReportData(fpFile, fp.getName(),
     							testReportData);
     					addReturn(fpData);
-    					ConvertedDataReport[] cdrs = fp.getConvertedDataReports();
-    					if (cdrs != null) {
-    					for (int mm = 0; mm < cdrs.length; mm++) {
-    						File cdrFile = cdrs[mm].getReport();
-    						Data cdrData = createReportData(cdrFile, cdrs[mm].getName(), fpData);
-    						addReturn(cdrData);
+    					addAllConvertedDataReports(fp, fpData);
     					}
-    					}
-    				}
     				
     				FilePassReport[] fFilePassReports = 
     					tr.getFailedFilePassReports();	
@@ -313,17 +307,43 @@ public class ConverterTesterAlgorithm implements Algorithm,
     					Data fpData = createReportData(fpFile, fp.getName(),
     							testReportData);
     					addReturn(fpData);
-    					ConvertedDataReport[] cdrs = fp.getConvertedDataReports();
-    					if (cdrs != null) {
-    					for (int mm = 0; mm < cdrs.length; mm++) {
-    						File cdrFile = cdrs[mm].getReport();
-    						Data cdrData = createReportData(cdrFile, cdrs[mm].getName(), fpData);
-    						addReturn(cdrData);
+    					addAllConvertedDataReports(fp, fpData);
     					}
-    					}
-    				}
     			}
         }
+        
+        private void addConvertedDataReports(ConvertedDataReport[] cdrs, Data fpData) {
+    		if (cdrs != null) {
+    			for (int mm = 0; mm < cdrs.length; mm++) {
+    				File cdrFile = cdrs[mm].getReport();
+    				Data cdrData = createReportData(cdrFile, cdrs[mm].getName(), fpData);
+    				addReturn(cdrData);
+    			}
+    		}
+    	}
+        
+    	private void addAllConvertedDataReports(FilePassReport fp, Data fpData) {
+    		try {
+    		ConvertedDataReport[] testCDRs = fp.getTestConvertedDataReports();
+			File testDummyParentFile = File.createTempFile("testdummyfile", "");
+			Data testDummyParentData = createReportData(testDummyParentFile, "test phase", fpData);
+			addReturn(testDummyParentData);
+			addConvertedDataReports(testCDRs, testDummyParentData);
+			ConvertedDataReport[] origCompareCDRs = fp.getOrigCompareConvertedDataReports();
+			File origCompareDummyParentFile = File.createTempFile("origcomparedummyfile", "");
+			Data origCompareDummyParentData = createReportData(origCompareDummyParentFile, "compare phase for original file", fpData);
+			addReturn(origCompareDummyParentData);
+			addConvertedDataReports(origCompareCDRs, origCompareDummyParentData);
+			ConvertedDataReport[] resultCompareCDRs = fp.getResultCompareConvertedDataReports();
+			File resultCompareDummyParentFile = File.createTempFile("origresultdummyfile", "");
+			Data resultCompareDummyParentData = createReportData(resultCompareDummyParentFile, "compare phase for resulting file", fpData);
+			addReturn(resultCompareDummyParentData);
+			addConvertedDataReports(resultCompareCDRs, resultCompareDummyParentData);
+    		} catch (IOException e) {
+    			this.log.log(LogService.LOG_WARNING, "Unable to write converted data reports due to IO Error");
+    		}
+			
+    }
         
         /**
          * Wraps the report with metadata in a form that is ready to be 
@@ -372,6 +392,8 @@ public class ConverterTesterAlgorithm implements Algorithm,
         	return createReportData(report, label, parent, "file:text/plain",
         			DataProperty.TEXT_TYPE);
         }
+        
+       
    }
     
   
