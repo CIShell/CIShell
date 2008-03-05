@@ -26,11 +26,24 @@ documentation should be consulted for more information.
 
 \subsection{MetaTypeProvider Extensions}
 
-Some minor extensions to \class{MetaTypeProvider} were made to support some
-use cases. The \class{MetaTypeProvider} supports several primitive types such as
-strings, integers, booleans, etc, but several useful types are missing. Two
-such types are files and directories. To get a file or a directory as input,
-create an \class{AttributeDefinition} with string as its type and with ``file:``
-or ``directory:`` (respectively) as its default value. When the algorithm is
-run it will receive a \class{String} which is the absolute path to a file or
-directory.
+Some minor extensions to \class{MetaTypeProvider} were made to support some use
+cases. The \class{MetaTypeProvider} supports several primitive types such as
+strings, integers, booleans, etc, but several useful types are missing. To
+support more types, an \class{AttributeDefinition} (AD) of type ``string'' has
+its default value set to a certain string so that the UI builder recognizes this
+and selects an appropriate widget. When the algorithm receives the user entered
+parameters, the associated value will be of type \class{java.lang.String}, but
+should contain the correct value as defined below.
+
+\subsubsection*{file:}
+An AD with type ``string'' and default value ``file:'' will receive a string
+pointing to the absolute path to the file selected by the end-user.
+
+\subsubsection*{directory:}
+An AD with type ``string'' and default value ``directory:'' will receive a string
+pointing to the absolute path to the directory selected by the end-user.
+
+\subsubsection*{password:}
+An AD with type ``string'' and default value ``password:'' will receive a string
+corresponding to the entered password.
+
