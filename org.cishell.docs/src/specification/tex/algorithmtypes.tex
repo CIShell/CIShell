@@ -5,8 +5,13 @@
 \label{algConstraints}
 \subsection{Introduction}
 
-CIShell algorithms are a generic concept which have many uses. \comments{flesh
-out\ldots}
+CIShell algorithms are a generic concept which have many uses. In the CIShell
+Platform, they are used in 4 contexts: as general data-centric algorithms to be
+used by an end-user (Standard Algorithms), as data converters (Converter
+Algorithms), as data validators (Validator Algorithms), and as providers of data
+(Dataset Algorithms). In order to better separate these uses, a lightweight type
+system has been introduced. The only way to tell the difference between them is
+by the constraints defined for each algorithm type.
 
 \subsection{Base Algorithm Constraints}
 
