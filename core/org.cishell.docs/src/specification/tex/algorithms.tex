@@ -72,23 +72,48 @@ use the Java naming scheme including path for this purpose, i.e.,
 ``org.cishell.my.algorithm.MyAlgorithm''. This metadata element is defined
 as part of the OSGi Service Platform Core Specification, section 6.1.12.58. 
 
-\subsection*{in\_data}
-Specifies the type and number of \class{Data} inputs the
-algorithm accepts. The string is a comma separated list of data formats. Valid strings
-for each data format are: a full Java class if a Java \class{Object} is
-expected, a string with the format ``file:\textit{mime/type}'' if a
-\class{java.io.File} is expected, or a string with the format
-``file-ext:\textit{file-extension}'' if a \class{java.io.File} known only by
-extension is expected (only applicable for validator algorithms), see section
-\ref{dataSpec}. If no \class{Data} inputs are necessary then the string
-``null'' or not specifying the in\_data attribute at all is valid.
+\begin{quote}
+\begin{description}
+  \item[Example 1:] service.pid = org.cishell.my.algorithm.MyAlgorithm
+\end{description}
+\end{quote}
 
-\subsection*{out\_data}
-Specifies the type and number of \class{Data} outputs
-the algorithm will produce when successfully run. This metadata key has the same string format
-as defined in the in\_data specification. If no \class{Data} outputs are
-produced then the string ``null'' or not specifying the out\_data attribute at
-all is valid.
+\subsection*{in\_data} Specifies the type and number of \class{Data} inputs the
+algorithm accepts. The string is a comma separated list of data formats. There
+are several valid strings for each data format. If a Java \class{Object} is
+expected, use the expected full Java class as a string. If a \class{java.io.File}
+is expected, use a string with the format ``file:\textit{mime/type}''. If a
+\class{java.io.File} known only by file extension is expected (only applicable
+for validator algorithms), a string with the format
+``file-ext:\textit{file-extension}''. If no \class{Data} inputs are necessary
+then the string ``null'' or not specifying the in\_data attribute at all is
+valid. See section \ref{dataSpec} for more information on data format formatting.
+
+\begin{quote}
+\begin{description}
+  \item[Example 1:] in\_data = null
+  \item[Example 2:] in\_data = java.lang.String
+  \item[Example 3:] in\_data = java.lang.String, file:text/plain, file:text/xml
+  \item[Example 4:] in\_data = file-ext:xml
+\end{description}
+\end{quote}
+
+
+\subsection*{out\_data} 
+Specifies the type and number of \class{Data} outputs the
+algorithm will produce when successfully run. This metadata key has the same
+string format as defined in the in\_data specification. If no \class{Data}
+outputs are produced then the string ``null'' or not specifying the out\_data
+attribute at all is valid.
+
+\begin{quote}
+\begin{description}
+  \item[Example 1:] out\_data = null
+  \item[Example 2:] out\_data = java.lang.String
+  \item[Example 3:] out\_data = java.lang.String, file:text/plain, file:text/xml
+  \item[Example 4:] out\_data = file-ext:csv
+\end{description}
+\end{quote}
 
 \subsection*{parentage}
 If this metadata element is used, it defines how the output \class{Data}
@@ -100,12 +125,28 @@ set as the first inputted \class{Data} item (if applicable) by the
 CIShell-conforming application. If parentage is set to something else or is not
 set at all, then it is up to the algorithm to set up these relationships.
 
-\subsection*{type}
+\begin{quote}
+\begin{description}
+  \item[Example 1:] parentage = default 
+\end{description}
+\end{quote}
+
+
+\subsection*{type} 
 Specifies the type of the algorithm. If no type is set, then
-it is assumed to be of ``Standard Algorithm'' type. Which metadata keys to use and
-their exact meaning varies depending on the type of algorithm. The different
+it is assumed to be of ``Standard Algorithm'' type. Which metadata keys to use
+and their exact meaning varies depending on the type of algorithm. The different
 algorithm types and their constraints are defined in section
 \ref{algConstraints}.
+
+\begin{quote}
+\begin{description}
+  \item[Example 1:] type = converter
+  \item[Example 2:] type = validator
+  \item[Example 3:] type = dataset 
+\end{description}
+\end{quote}
+
 
 \subsection*{remotable}
 Specifies if the algorithm can be run remotely. An algorithm can be run
@@ -114,13 +155,34 @@ and does not create its own non-\class{GUIBuilderService}-built GUI. Valid
 strings are ``true'' or ``false''. If this metadata element is not set, then
 it is assumed that it cannot be run remotely.
 
+\begin{quote}
+\begin{description}
+  \item[Example 1:] remoteable = true 
+\end{description}
+\end{quote}
+
+
 \subsection*{label}
 Specifies a human-readable short name for the algorithm. What label is
 acceptable varies depending on the type of the algorithm. 
 
+\begin{quote}
+\begin{description}
+  \item[Example 1:] label = Load\ldots 
+\end{description}
+\end{quote}
+
+
 \subsection*{description}
 Provides more details on the workings of the algorithm. What
 description is acceptable varies depending on the type of the algorithm.
+
+\begin{quote}
+\begin{description}
+  \item[Example 1:] description = Loads selected data into the data manager. 
+\end{description}
+\end{quote}
+
 
 \subsection*{menu\_path}
 Specifies where on the menu an algorithm is to be
@@ -129,9 +191,16 @@ classification of the algorithm. The string is a ``/'' separated list with
 each element in the list getting more specific. The last element in the list
 specifies a group for grouping algorithms in its final menu. Possible groups
 include: ``additions'' for default placement, ``start'' for being placed at
-the start of the menu, or ``end'' for being placed at the end of the menu. Some
-examples of valid menu\_path strings include: ``File/additions'',
-``Analysis/Undirected Networks/start'', and ``Visualization/Networks/end''.
+the start of the menu, or ``end'' for being placed at the end of the menu.
+
+\begin{quote}
+\begin{description}
+  \item[Example 1:] menu\_path = File/additions
+  \item[Example 2:] menu\_path = Analysis/Undirected Networks/start
+  \item[Example 3:] menu\_path = Visualization/Networks/end
+\end{description}
+\end{quote}
+
 
 \subsection*{conversion}
 For converter algorithms, this metadata element specifies if any data is
@@ -139,25 +208,88 @@ lost in the conversion. Possible values are ``lossy'' and ``lossless''. A
 description of what type of information is lost should be explained in the
 description.
 
+\begin{quote}
+\begin{description}
+  \item[Example 1:] conversion = lossy 
+\end{description}
+\end{quote}
+
+
 \subsection*{authors}
 A comma separated list of the authors of the abstract algorithm.
 
+\begin{quote}
+\begin{description}
+  \item[Example 1:] authors = Bruce Herr
+  \item[Example 2:] authors = Bruce Herr, Weixia Huang, Katy Borner 
+\end{description}
+\end{quote}
+
+
 \subsection*{implementers}
 A comma separated list of the developers who implemented the algorithm in code.
+
+\begin{quote}
+\begin{description}
+  \item[Example 1:] implementers = Bruce Herr
+  \item[Example 2:] implementers = Bruce Herr, Weixia Huang, Katy Borner 
+\end{description}
+\end{quote}
+
 
 \subsection*{integrators}
 A comma separated list of the developers who integrated the algorithm code as
 a compliant cishell algorithm.
 
+\begin{quote}
+\begin{description}
+  \item[Example 1:] integrators = Bruce Herr
+  \item[Example 2:] integrators = Bruce Herr, Weixia Huang, Katy Borner 
+\end{description}
+\end{quote}
+
+
 \subsection*{documentation\_url}
 A URL to relevant documentation for the algorithm.
+
+\begin{quote}
+\begin{description}
+  \item[Example 1:] documentation\_url = http://cishell.org/dev/ 
+\end{description}
+\end{quote}
+
 
 \subsection*{reference}
 A formal reference to a paper explaining the abstract algorithm.
 
+\begin{quote}
+\begin{description}
+  \item[Example 1:] reference = Herr, Bruce W., Huang, Weixia, Penumarthy,
+  Shashikant, Börner, Katy. (2007) Designing Highly Flexible and Usable 
+  Cyberinfrastructures for Convergence. In William S. Bainbridge and Mihail C. 
+  Roco (Eds.) Progress in Convergence – Technologies for Human Wellbeing. 
+  Annals of the New York Academy of Sciences, Boston, MA, volume 1093, pp. 161-179.
+\end{description}
+\end{quote}
+
+
 \subsection*{reference\_url}
 A URL to a paper explaining the abstract algorithm.
+
+\begin{quote}
+\begin{description}
+  \item[Example 1:] reference\_url = http://cishell.org/papers/06-cishell.pdf 
+\end{description}
+\end{quote}
+
 
 \subsection*{written\_in}
 A comma separated list of the programming languages used to implement and
 integrate the algorithm code.
+
+\begin{quote}
+\begin{description}
+  \item[Example 1:] written\_in = Java
+  \item[Example 2:] written\_in = Java, C++ 
+\end{description}
+\end{quote}
