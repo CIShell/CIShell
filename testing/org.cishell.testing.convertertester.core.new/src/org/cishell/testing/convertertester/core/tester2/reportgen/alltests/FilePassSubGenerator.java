@@ -47,19 +47,19 @@ public class FilePassSubGenerator {
 			
 			writeReport(report, fpr);
 			
-			Data[][] allData = fpr.getAllData();
+			Data[][] testData = fpr.getTestData();
+			Data[][] origCompareData = fpr.getOrigCompareData();
+			Data[][] resultCompareData = fpr.getResultCompareData();
 			
-			ConvertedDataReport[] convDataReports = null; 
-			if (allData != null) {
-				convDataReports = new ConvertedDataReport[allData.length];
-
-				for (int ii = 0; ii < allData.length; ii++) {
-					Data[] data = allData[ii];
-					convDataSubGenerator.generateSubreport(tr, fpr, data);
-					convDataReports[ii] =convDataSubGenerator.getReport();
-				}
-			}
-			this.filePassReport = new FilePassReport(reportFile, fpr.getName() + "  for " + tr.getName(), convDataReports);
+			ConvertedDataReport[] testConvDataReports = genConvDataReports(tr, fpr, testData); 
+			ConvertedDataReport[] origCompareConvDataReports = genConvDataReports(tr, fpr,origCompareData);
+			ConvertedDataReport[] resultCompareConvDataReports = genConvDataReports(tr, fpr,resultCompareData);
+			
+			
+			this.filePassReport = new FilePassReport(reportFile, fpr.getName() + "  for " + tr.getName(), 
+					testConvDataReports,
+					origCompareConvDataReports,
+					resultCompareConvDataReports);
 			
 		} catch (IOException e) {
 			this.log.log(LogService.LOG_ERROR, 
@@ -68,10 +68,22 @@ public class FilePassSubGenerator {
 		} finally {
 			closeStream(reportOutStream);
 		}
-		
+	}
+	
+	private ConvertedDataReport[] genConvDataReports(TestResult tr, FilePassResult fpr, Data[][] data) {
+		if (data != null) {
+			ConvertedDataReport[] testConvDataReports = new ConvertedDataReport[data.length];
 
-
-		
+			for (int ii = 0; ii < data.length; ii++) {
+				Data[] datum = data[ii];
+				convDataSubGenerator.generateSubreport(tr, fpr, datum);
+				testConvDataReports[ii] =convDataSubGenerator.getReport();
+			}
+			
+			return testConvDataReports;
+		} else {
+			return new ConvertedDataReport[0];
+		}
 	}
 	
 	public FilePassReport getFilePassReport() {

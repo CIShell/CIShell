@@ -27,9 +27,13 @@ private ConvertedDataReport convertedDataReport;
 			Data firstData = convertedData[0];
 			Object fileData = firstData.getData();
 			if (fileData != null && fileData instanceof File) {
-				this.convertedDataReport = new ConvertedDataReport((File) fileData,(String) firstData.getMetaData().get(DataProperty.LABEL) + "for " + fpr.getName());
+				this.convertedDataReport =
+					new ConvertedDataReport((File) fileData,(String) firstData.getMetaData().get(DataProperty.LABEL) +
+							" for " + fpr.getName() + " of " + tr.getName());
 			} else {
-				this.convertedDataReport = new ConvertedDataReport((String) firstData.getMetaData().get(DataProperty.LABEL) + " for " + fpr.getName() + " of " +  tr.getName());
+				this.convertedDataReport = 
+					new ConvertedDataReport((String) firstData.getMetaData().get(DataProperty.LABEL) +  
+							" for " + fpr.getName() + " of " +  tr.getName());
 			}
 	}
 	

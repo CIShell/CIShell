@@ -6,7 +6,6 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.List;
@@ -52,49 +51,62 @@ public class DefaultTestRunner implements TestRunner {
 			// test conversion phase
 
 			ConvertResult testPhaseResult = convert(originalFileData,
-					testConverters, testData, null);
+					testConverters, testData);
 
+			Data[][] allDataFromTestPhase = testPhaseResult.getAllData();
+			
 			if (!testPhaseResult.succeeded()) {
 				FilePassFailure failure = createFailResult(originalFileData, 
 						PassPhase.TEST_CONV_PHASE,
 						testPhaseResult.getFailInfo(),
-						testPhaseResult.getAllData());
+					allDataFromTestPhase,
+					null,
+					null);
 				testResults.add(failure);
 				continue;
 			}
 			Data[] resultFileData = testPhaseResult.getResult();
-			Data[][] allDataFromTestPhase = testPhaseResult.getAllData();
+		
 			
 			// comparison conversion (for original file) phase
 
 			ConvertResult comparePhaseOrigResult = convert(originalFileData,
-					comparisonConverters, testData, allDataFromTestPhase);
+					comparisonConverters, testData);
 
+			Data[][] allDataFromOrigComparePhase = comparePhaseOrigResult.getAllData();
+			
 			if (!comparePhaseOrigResult.succeeded()) {
 				FilePassFailure failure = createFailResult(originalFileData, 
 						PassPhase.COMPARE_CONV_ORIG_PHASE,
 						comparePhaseOrigResult.getFailInfo(),
-						comparePhaseOrigResult.getAllData());
+						allDataFromTestPhase,
+						allDataFromOrigComparePhase,
+						null);
 				testResults.add(failure);
 				continue;
 			}
 			Data[] originalInMemory = comparePhaseOrigResult.getResult();
-			Data[][] allDataFromTestAndComparisonPhases = comparePhaseOrigResult.getAllData();
+		
 			
 			//comparison conversion (for result file) phase
 			
 			ConvertResult comparePhaseResultResult = convert(resultFileData,
-					comparisonConverters, testData, allDataFromTestAndComparisonPhases);
+					comparisonConverters, testData);
 
+			Data[][] allDataFromResultComparePhase = comparePhaseResultResult.getAllData();
+			
 			if (!comparePhaseResultResult.succeeded()) {
 				FilePassFailure failure = createFailResult(originalFileData, 
 						PassPhase.COMPARE_CONV_RESULT_PHASE,
 						comparePhaseResultResult.getFailInfo(),
-						comparePhaseResultResult.getAllData());
+						allDataFromTestPhase,
+						allDataFromOrigComparePhase,
+						allDataFromResultComparePhase);
 				testResults.add(failure);
 				continue;
 			}
 			Data[] resultInMemory = comparePhaseResultResult.getResult();
+		
 
 			// graph comparison phase
 
@@ -111,13 +123,15 @@ public class DefaultTestRunner implements TestRunner {
 				FilePassFailure failure = createFailResult(originalFileData, 
 						explanation, PassPhase.GRAPH_COMPARE_PHASE,
 						null,
-						comparePhaseResultResult.getAllData());
+						allDataFromTestPhase,
+						allDataFromOrigComparePhase,
+						allDataFromResultComparePhase);
 				testResults.add(failure);
 				continue;
 			}
 
 			FilePassSuccess success = new FilePassSuccess(originalFileData,
-					"",  comparePhaseResultResult.getAllData());
+					"",   allDataFromTestPhase, allDataFromOrigComparePhase, allDataFromResultComparePhase);
 			testResults.add(success);
 		}
 
@@ -127,20 +141,19 @@ public class DefaultTestRunner implements TestRunner {
 	}
 
 	private ConvertResult convert(Data[] startData,
-			ConverterPath converters, TestConfigData testData, Data[][] previousData) {
+			ConverterPath converters, TestConfigData testData) {
 
 		Data[] currentData = getFilePathData(startData);
 		
 		List dataSoFar = new ArrayList();
-		if (previousData != null) {
-			dataSoFar.addAll(Arrays.asList(previousData));
-		}
 		
-		if (startData != null) {
-			dataSoFar.add(startData);
-		}
+//    	if (startData != null) {
+//			alterMetaData(startData);
+//		dataSoFar.add(startData);
+//		}
+		
 		/*
-		 * rig up fake CISHellContext so we can get ahold of
+		 * rig up fake CIShellContext so we can get ahold of
 		 * errors sent to logger.
 		 */ 		
 		FakeLogCIShellContext fakeCContext = 
@@ -148,14 +161,14 @@ public class DefaultTestRunner implements TestRunner {
 		
 
 	
-		dataSoFar.add(currentData);
+		//dataSoFar.add(currentData);
 		
 		Converter currentConverter = null;
 		try {
 			for (int ii = 0; ii < converters.size(); ii++) {
 				currentConverter = converters.get(ii);
-				//no parameters used
-				Hashtable parameters = new Hashtable();
+			
+				Hashtable parameters = new Hashtable(); 	//no parameters used
 				
 				currentData = currentConverter.execute(currentData,
 						parameters, fakeCContext);
@@ -207,16 +220,16 @@ public class DefaultTestRunner implements TestRunner {
 	
 	private FilePassFailure createFailResult(Data[] origData,
 			String explanation, PassPhase lastReachedPhase,
-			Converter failedConverter, Data[][] allData) {
+			Converter failedConverter, Data[][] testData, Data[][] origCompareData, Data[][] resultCompareData) {
 		FilePassFailure failure = new FilePassFailure(origData, explanation,
-				lastReachedPhase, failedConverter, allData);
+				lastReachedPhase, failedConverter, testData, origCompareData, resultCompareData);
 		return failure;
 	}
 	
 	private FilePassFailure createFailResult(Data[] origData,
-			PassPhase lastReachedPhase, ConvFailureInfo failInfo, Data[][] allData) {
+			PassPhase lastReachedPhase, ConvFailureInfo failInfo, Data[][] testData, Data[][] origCompareData, Data[][] resultCompareData) {
 		return createFailResult(origData, failInfo.getExplanation(), 
-				lastReachedPhase, failInfo.getFailedConverter(), allData);
+				lastReachedPhase, failInfo.getFailedConverter(),  testData, origCompareData, resultCompareData);
 	}
 
 	private class ConvertResult {
@@ -312,6 +325,44 @@ public class DefaultTestRunner implements TestRunner {
 		Dictionary md = datum.getMetaData();
 		if (md.get(DataProperty.LABEL) == null) {
 			md.put(DataProperty.LABEL, "result of " + converter.getShortName());
+		} else {
+			alterMetaData(data);
+			md.put(DataProperty.LABEL, md.get(DataProperty.LABEL) + ": result of " + converter.getShortName());
+		}
+	}
+	
+	private String getFileName(String fileLabel) {
+    	
+    	//index variables will be -1 if index is not found.
+    	int descriptionEndIndex = fileLabel.lastIndexOf(":");
+    	int filePathEndIndex = fileLabel.lastIndexOf(File.separator);
+
+    	//doesn't matter if either variable is -1, since startIndex will be 
+    	//zero and none of the string will be cut off the front.
+    	int startIndex = Math.max(descriptionEndIndex, filePathEndIndex) + 1;
+    	
+    	String fileNameWithExtension = fileLabel.substring(startIndex);
+    	
+    	
+ 
+    	int endIndex = fileNameWithExtension.length(); // don't cut any off the end.
+
+    	
+    	String fileNameWithoutExtension = fileNameWithExtension.substring(0, endIndex);
+   	
+    	String fileName = fileNameWithoutExtension;
+    	return fileName;
+    }
+	
+	
+	private void alterMetaData(Data[] origFileData) {
+		Data data = origFileData[0];
+		Dictionary metadata = data.getMetaData();
+		String label = (String) metadata.get(DataProperty.LABEL);
+		if (label != null) {
+		metadata.put(DataProperty.LABEL, getFileName(label));
+		} else {
+			metadata.put(DataProperty.LABEL, "null");
 		}
 	}
 } 

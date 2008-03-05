@@ -10,11 +10,11 @@ public class FormatUtil {
 	 * @return 
 	 */
 	public static float formatToPercent(float decimal) {
-	
 		float temp = decimal;
 		temp *= 100f;
 		temp *= Math.pow(10.0, NUM_DECIMALS);
-		temp = Math.round(temp) / (float) (Math.pow(10.0, NUM_DECIMALS));
+		temp = Math.round(temp);
+		temp = temp / (float) (Math.pow(10.0, NUM_DECIMALS));
 		float percent = temp;
 		
 		return percent;

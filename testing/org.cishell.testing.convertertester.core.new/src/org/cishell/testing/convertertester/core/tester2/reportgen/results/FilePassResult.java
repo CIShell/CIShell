@@ -23,7 +23,10 @@ public abstract class FilePassResult {
 	private String explanation;
 	private PassPhase lastReachedPhase;
 	private Converter failedConverter;
-	private Data[][] allData;
+	
+	private Data[][] testData;
+	private Data[][] origCompareData;
+	private Data[][] resultCompareData;
 		
 	//variables not set by constructor
 	
@@ -42,12 +45,15 @@ public abstract class FilePassResult {
 	private List chanceAtFaults;
 	
 	public FilePassResult(Data[] originalData, String explanation,
-			PassPhase lastReachedPhase, Converter failedConverter, Data[][] allData) {
+			PassPhase lastReachedPhase, Converter failedConverter, Data[][] testData, Data[][] origCompareData, Data[][] resultCompareData) {
 		this.originalData = originalData;
 		this.explanation = explanation;
 		this.lastReachedPhase = lastReachedPhase;
 		this.failedConverter = failedConverter;
-		this.allData = allData;
+		
+		this.testData = testData;
+		this.origCompareData = origCompareData;
+		this.resultCompareData = resultCompareData;
 		
 		chanceAtFaults = new ArrayList();
 	}
@@ -97,8 +103,16 @@ public abstract class FilePassResult {
 		return this.originalData;
 	}
 	
-	public Data[][] getAllData() {
-		return this.allData;
+	public Data[][] getTestData() {
+		return this.testData;
+	}
+	
+	public Data[][] getOrigCompareData() {
+		return this.origCompareData;
+	}
+	
+	public Data[][] getResultCompareData() {
+		return this.resultCompareData;
 	}
 	
 	public String getOriginalFileLabel() {

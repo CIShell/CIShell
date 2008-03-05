@@ -20,9 +20,9 @@ import org.cishell.testing.convertertester.core.tester2.reportgen.results.TestRe
 
 public class ConvResultMaker {
 	
-	//must succeed at least 3 times in the file pass
+	//must succeed at least x times in the file pass
 	private static int MINIMUM_SUCCESSES_TO_BE_TRUSTED = 3;
-	//must be tested by at least 2/3rds of file passes in test 
+	//must be tested by at least x% of file passes in test 
 	private static float MINIMUM_PERCENT_FILE_PASSES_REACHED_TO_BE_TRUSTED = .8f;
 	
 	public static AllConvsResult generate(AllTestsResult atr,
@@ -65,7 +65,7 @@ public class ConvResultMaker {
 				//determine which converters always succeeded.
 				
 				int FAILED = -1;
-				int NEVER_TESTED = 0;
+				int NEVER_TESTED = 0; // array entries are 0 by default
 				
 				int[] trusted = new int[tr.getAllConverters().length];
 				for (int jj = 0; jj < fprs.length; jj++) {
@@ -94,8 +94,7 @@ public class ConvResultMaker {
 				ConverterPath testConvs = tr.getTestConverters();
 				if (fprs.length > 0) {
 					//mark trusted converters.
-					
-					
+						
 					for (int kk = 0; kk < testConvs.size(); kk++) {
 						Converter c = testConvs.get(kk);
 						float percentFilePassesThisConvParticipatedIn = 
@@ -106,22 +105,6 @@ public class ConvResultMaker {
 						trustedConverters.add(c);
 						}
 					}
-//					ConverterPath testConvs = tr.getAllConverters();
-//					for (int kk = 0; kk < testConvs.length; kk++) {
-//						Converter conv = testConvs[kk];
-//						if (trusted[kk] == ALWAYS_SUCCEEDED) {
-//							trustedConverters.add(conv);
-//						}
-//					}
-					
-//					//technically I wouldn't trust the comparison
-//					//converters here, but I'm adding this because
-//					//it makes the results easier to understand.
-//					ConverterPath compareConvs = tr.getComparisonConverters();
-//					for (int kk = 0; kk < compareConvs.size(); kk++) {
-//						Converter conv = compareConvs.get(kk);
-//						trustedConverters.add(conv);
-//					}
 				}
 			}
 			
