@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.cishell.testing.convertertester.core.tester.graphcomparison.ComparisonResult;
-import org.cishell.testing.convertertester.core.tester.graphcomparison.GraphUtil;
+import org.cishell.testing.convertertester.core.tester.graphcomparison.TableUtil;
 import org.cishell.testing.convertertester.core.tester.graphcomparison.RunningLog;
 
 import prefuse.data.Graph;
@@ -156,14 +156,14 @@ public class IdsNotPreservedComparer extends ComplexGraphComparer {
 	 * @return a stripped copy of the original table
 	 */
 	private Table getStrippedEdgeTable(Table t) {
-		Table tCopy = GraphUtil.copyTable(t);
+		Table tCopy = TableUtil.copyTable(t);
 		tCopy.removeColumn(Graph.DEFAULT_SOURCE_KEY);
 		tCopy.removeColumn(Graph.DEFAULT_TARGET_KEY);
 		return tCopy;
 	}
 	
 	private Table getStrippedNodeTable(Graph g) {
-		Table tCopy = GraphUtil.copyTable(g.getNodeTable());
+		Table tCopy = TableUtil.copyTable(g.getNodeTable());
 		String nodeKeyField = g.getNodeKeyField();
 		if (nodeKeyField != null) {
 			tCopy.removeColumn(nodeKeyField);
