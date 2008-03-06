@@ -78,16 +78,20 @@ as part of the OSGi Service Platform Core Specification, section 6.1.12.58.
 \end{description}
 \end{quote}
 
-\subsection*{in\_data} Specifies the type and number of \class{Data} inputs the
-algorithm accepts. The string is a comma separated list of data formats. There
-are several valid strings for each data format. If a Java \class{Object} is
-expected, use the expected full Java class as a string. If a \class{java.io.File}
-is expected, use a string with the format ``file:\textit{mime/type}''. If a
-\class{java.io.File} known only by file extension is expected (only applicable
-for validator algorithms), a string with the format
-``file-ext:\textit{file-extension}''. If no \class{Data} inputs are necessary
-then the string ``null'' or not specifying the in\_data attribute at all is
-valid. See section \ref{dataSpec} for more information on data format formatting.
+
+\subsection*{parameters_pid}
+\comments{Still need to define\ldots may play a bigger role than previously
+though\ldots}
+
+
+\subsection*{in\_data} 
+Specifies the formats and number of \class{Data} inputs the
+algorithm accepts. The string is a comma separated list of data formats as
+defined in section \ref{dataSpec}. If any data is optional, prefix the associated
+format with a ``?''. When receiving the \class{Data} array, an optional
+\class{Data} element will be null if it is not provided. If no \class{Data}
+inputs are necessary then the string ``null'' or not specifying the in\_data attribute
+at all is valid.
 
 \begin{quote}
 \begin{description}
@@ -95,16 +99,21 @@ valid. See section \ref{dataSpec} for more information on data format formatting
   \item[Example 2:] in\_data = java.lang.String
   \item[Example 3:] in\_data = java.lang.String, file:text/plain, file:text/xml
   \item[Example 4:] in\_data = file-ext:xml
+  \item[Example 5:] in\_data = +file:text/plain, *file:text/xml,
+  ?java.lang.String
+  \item[Example 6:] in\_data = ?my.package.SpecialClass
 \end{description}
 \end{quote}
 
 
 \subsection*{out\_data} 
-Specifies the type and number of \class{Data} outputs the
-algorithm will produce when successfully run. This metadata key has the same
-string format as defined in the in\_data specification. If no \class{Data}
-outputs are produced then the string ``null'' or not specifying the out\_data
-attribute at all is valid.
+Specifies the formats and number of \class{Data} inputs
+the algorithm produces when successfully run. The string is a comma separated
+list of data formats as defined in section \ref{dataSpec}. If any data is
+optional, prefix the associated format with a ``?''. When producing the
+\class{Data} array, an optional \class{Data} element must be null if it is not
+produced. If no \class{Data} is output then the string ``null'' or not specifying
+the out\_data attribute at all is valid.
 
 \begin{quote}
 \begin{description}
@@ -112,8 +121,12 @@ attribute at all is valid.
   \item[Example 2:] out\_data = java.lang.String
   \item[Example 3:] out\_data = java.lang.String, file:text/plain, file:text/xml
   \item[Example 4:] out\_data = file-ext:csv
+  \item[Example 5:] out\_data = +file:text/plain, *file:text/xml,
+  ?java.lang.String
+  \item[Example 6:] out\_data = ?my.package.SpecialClass
 \end{description}
 \end{quote}
+
 
 \subsection*{parentage}
 If this metadata element is used, it defines how the output \class{Data}
