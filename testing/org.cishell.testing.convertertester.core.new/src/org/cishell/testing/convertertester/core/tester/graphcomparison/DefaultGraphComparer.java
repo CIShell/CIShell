@@ -207,8 +207,8 @@ public class DefaultGraphComparer implements GraphComparer {
 	}
 	
 	private boolean areEqualWhenSorted(Table t1, Table t2) {	
-		boolean result = areEqual(GraphUtil.getSorted(t1),
-				GraphUtil.getSorted(t2));
+		boolean result = areEqual(TableUtil.getSorted(t1),
+				TableUtil.getSorted(t2));
 		return result;
 	}
 	
@@ -277,14 +277,14 @@ public class DefaultGraphComparer implements GraphComparer {
 	 * @return a stripped copy of the original table
 	 */
 	private Table getStrippedEdgeTable(Table t) {
-		Table tCopy = GraphUtil.copyTable(t);
+		Table tCopy = TableUtil.copyTable(t);
 		tCopy.removeColumn(Graph.DEFAULT_SOURCE_KEY);
 		tCopy.removeColumn(Graph.DEFAULT_TARGET_KEY);
 		return tCopy;
 	}
 	
 	private Table getStrippedNodeTable(Graph g) {
-		Table tCopy = GraphUtil.copyTable(g.getNodeTable());
+		Table tCopy = TableUtil.copyTable(g.getNodeTable());
 		String nodeKeyField = g.getNodeKeyField();
 		if (nodeKeyField != null) {
 			tCopy.removeColumn(nodeKeyField);

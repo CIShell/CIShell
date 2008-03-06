@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.cishell.testing.convertertester.core.tester.graphcomparison.ComparisonResult;
-import org.cishell.testing.convertertester.core.tester.graphcomparison.GraphUtil;
+import org.cishell.testing.convertertester.core.tester.graphcomparison.TableUtil;
 import org.cishell.testing.convertertester.core.tester.graphcomparison.RunningLog;
 
 import prefuse.data.Graph;

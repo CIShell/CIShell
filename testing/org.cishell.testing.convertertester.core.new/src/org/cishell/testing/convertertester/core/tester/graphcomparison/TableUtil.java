@@ -7,7 +7,7 @@ import prefuse.data.Tuple;
 import prefuse.data.expression.parser.ExpressionParser;
 import prefuse.data.util.Sort;
 
-public class GraphUtil {
+public class TableUtil {
 	
 	public static String[] getColumnNames(Table t) {
 		String[] columnNames = new String[t.getColumnCount()];

@@ -2,7 +2,7 @@ package org.cishell.testing.convertertester.core.tester2.graphcomparison;
 
 import java.util.Iterator;
 
-import org.cishell.testing.convertertester.core.tester.graphcomparison.GraphUtil;
+import org.cishell.testing.convertertester.core.tester.graphcomparison.TableUtil;
 import org.cishell.testing.convertertester.core.tester.graphcomparison.RunningLog;
 
 import prefuse.data.Table;
@@ -31,10 +31,10 @@ public abstract class ComplexGraphComparer extends SimpleGraphComparer {
 			return false;
 		}
 		
-		String[] colNames = GraphUtil.getColumnNames(t1);
+		String[] colNames = TableUtil.getColumnNames(t1);
 		
- 		boolean result = areEqual(GraphUtil.getSortedByColumns(t1, colNames),
-				GraphUtil.getSortedByColumns(t2, colNames));
+ 		boolean result = areEqual(TableUtil.getSortedByColumns(t1, colNames),
+				TableUtil.getSortedByColumns(t2, colNames));
 		return result;
 	}
 	
@@ -155,8 +155,8 @@ public abstract class ComplexGraphComparer extends SimpleGraphComparer {
 						t2.getColumnName(ii) + "', while the other does " +
 						"not.");
 				
-				String[] t1ColNames = GraphUtil.getColumnNames(t1);
-				String[] t2ColNames = GraphUtil.getColumnNames(t2);
+				String[] t1ColNames = TableUtil.getColumnNames(t1);
+				String[] t2ColNames = TableUtil.getColumnNames(t2);
 				
 			
 				log.append("t1 columns: " + format(t1ColNames));
