@@ -1,0 +1,60 @@
+\section{User Adjustable Preferences Specification}
+\label{userPrefsSpec}
+\subsection*{\textit{Version 1.0}}
+\subsection{Introduction}
+
+The user-adjustable preferences specification defines how any service can publish
+user-adjustable preferences both globally and locally. In addition to global and
+local preferences, algorithms can allow the system to allow end-users to adjust
+the default values for the algorithm parameters returned from
+\class{AlgorithmFactory.createParameters}. For storing data that is not directly
+end-user adjustable, see chapter \ref{preferencesService}.
+
+\subsection{Publishing User Adjustable Preferences}
+
+\subsubsection*{Create an ObjectClassDefinition (OCD)} To define parameters that
+can be adjusted by an end-user, an algorithm developer must first create an
+\class{ObjectClassDefinition} which details the parameters to be published. This
+OCD must be visible to the \class{MetaTypeService} either through the use of a
+METADATA.XML file or by the service implementing \class{MetaTypeProvider} and
+\class{ManagedService}. See section \ref{GUISpec} for more information.
+
+\subsubsection*{Designate a Persistent ID (PID) for the OCD} Then they must
+designate the ObjectClassDefinition a persistent id (PID). The PID can be
+designated in two ways. The simplest way is by following the convention of
+creating a string with the associated service's ``service.pid'' and appending
+either ``.prefs.local'' or ``.prefs.global''. The other way is to designate
+whatever PID the developer wishes and to provide a service property
+``local\_pref\_pid'' or ``global\_pref\_pid'' which is set to whatever PID they wish.
+
+\subsubsection*{Designate What Preferences are to be Published} To let the system
+know that you wish to publish preferences, the system properties must contain a
+``prefs\_published'' key with zero or more of the following values (separated by
+commas): ``local'' for publishing local prefs, ``global'' for global prefs, and
+``param-defaults'' for algorithm parameter defaults.
+
+\subsubsection*{Algorithm Parameter Defaults} 
+By publishing algorithm parameter defaults, algorithm developers allow
+end-users to adjust the default values they see when running their algorithm.
+This is typically accomplished by wrapping the created MetaTypeProvider
+returned from AlgorithmFactory.createParameters with overridden
+AttributeDefinitions that change their default value. Many systems will have
+this on by default, but if the ``prefs\_published'' key is set in the
+algorithm's service metadata and ``param-defaults'' is not set, then this
+feature will be disabled for the algorithm.
+
+\subsubsection*{Receiving Preference Data} To be notified of changes to local or
+global preferences, the service must implement
+\class{org.\-osgi.\-service.\-cm.\-ManagedService} and set in their service
+metadata ``receive\_prefs=true''. When either the local or global preferences are updated,
+the updated method will be passed a \class{Dictionary} of all of the id/value
+pairs, including the updated ones. Local preferences will have the same ids as
+the AttributeDefinitions (AD) defined in the associated OCD. The local
+preferences will also have an additional id ``Bundle-Version", which contains the
+version of the service's associated bundle that was used when the preference data
+was last updated. Global preferences will have the same ids (plus a
+``Bundle-Version'' id analagous to local preference's) from their OCD's ADs
+prefixed by the PID of the published global preference. In this way, all global
+preferences published in the system will be available to anyone receiving
+preference data. Note that one does not have to publish any preferences to
+receive just global preference data.

@@ -5,10 +5,12 @@
 
 CIShell requires OSGi's standard \class{PreferencesService} to be installed in a
 CIShell-compliant system. This gives both the algorithms and the applications
-built on CIShell a standard preferences storage sytem to use. This service has
-not been extended or modified. More information about the
-\class{PreferencesService} is available in the OSGi Service Platform Service
-Compendium Specification R4, section 106 under ``Preferences Service
-Specification.''
-
-\comments{Upcoming preferences w/ gui system spec goes here\ldots}
+built on CIShell a standard preferences storage system to use. It is used mainly
+as a storage mechanism for data that is not necessarily adjustable by end-users.
+Things like, last opened file, recently opened files, or any sort of data that
+may need to be saved between sessions. This service has not been modified or
+extended. More information about the \class{PreferencesService} is available in
+the OSGi Service Platform Service Compendium Specification R4, section 106 under
+``Preferences Service Specification.'' Algorithm developers wishing to expose
+user-adjustable preferences, should refer to section \ref{userPrefsSpec} for
+more information on this separate task.
