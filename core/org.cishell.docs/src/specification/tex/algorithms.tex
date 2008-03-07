@@ -21,15 +21,16 @@ algorithm for search and discovery, see section \ref{algMetaData}.
 
 An algorithm defines its inputs in two ways. First, the input data is defined in
 the algorithm's service metadata. Second, the acceptable user-entered parameters
-are defined in a \class{MetaTypeProvider}, see section \ref{GUISpec}.
+are defined in a \class{MetaTypeProvider} and published to the
+\class{MetaTypeService}, see section \ref{GUISpec}.
 
 Figure \ref{fig:algExecWorkflow} shows the typical flow of information into and
 out of an algorithm. First the input parameter specification is pulled from the
-\class{AlgorithmFactory}. If parameters are needed, then a UI is created and user
-inputs are entered. To create an \class{Algorithm}, the \class{AlgorithmFactory}
-is passed the user-entered parameters, zero or more pieces of data, and a
-\class{CIShellContext}. The \class{Algorithm} is then executed and produces zero
-or more pieces of data.
+\class{MetaTypeService}. If parameters are needed, then a UI is created and
+user inputs are entered. To create an \class{Algorithm}, the
+\class{AlgorithmFactory} is passed the user-entered parameters, zero or more
+pieces of data, and a \class{CIShellContext}. The \class{Algorithm} is then
+executed and produces zero or more pieces of data.
 
 \begin{figure}[htb!]
 \centering
@@ -41,12 +42,28 @@ or more pieces of data.
 \subsection{Optional Interfaces}
 
 Algorithm developers may augment algorithms with additional interfaces to enhance
-parts of the execution workflow. An \class{AlgorithmFactory} can also implement
-the \class{DataValidator} interface to validate the data beyond the data format
-validation that an application should provide ahead of time. An \class{Algorithm}
-can implement \class{ProgressTrackable} to allow for more detailed monitoring and
-control of an \class{Algorithm}'s progress while executing. See each interface's
-documentation for more details.
+parts of the execution workflow. See each interface's documentation for more
+details.
+
+\begin{description}
+  \item[ParameterMutator] An \class{AlgorithmFactory} can implement the
+  \class{ParameterMutator} interface to add, remove, or modify an algorithm's
+  parameters (\class{AttributeDefinition}s in an \class{ObjectClassDefinition}
+  in a \class{MetaTypeProvider}) between the time when its
+  \class{MetaTypeProvider} is pulled from the \class{MetaTypeService} and when
+  the corresponding UI is shown to the user. This is typically done to
+  customize the input parameters based on the data to be given to the
+  algorithm. See section \ref{GUISpec} for information on constructing and
+  publishing \class{MetaTypeProviders}.
+  
+  \item[DataValidator] An \class{AlgorithmFactory} can implement the
+  \class{DataValidator} interface to validate the data beyond the data format
+  validation that an application should provide ahead of time.
+
+  \item[ProgressTrackable] An \class{Algorithm} can implement
+  \class{ProgressTrackable} to allow for more detailed monitoring and control
+  of an \class{Algorithm}'s progress while executing.
+\end{description}
 
 \subsection{Algorithm Service Metadata Definition}
 \label{algMetaData}
@@ -79,9 +96,19 @@ as part of the OSGi Service Platform Core Specification, section 6.1.12.58.
 \end{quote}
 
 
-\subsection*{parameters_pid}
-\comments{Still need to define\ldots may play a bigger role than previously
-though\ldots}
+\subsection*{parameters\_pid} 
+
+When this key is not set, an algorithm's user-entered input parameters are
+assumed to be registered in the \class{MetaTypeService} with a persistent id
+equal to the algorithm service's ``service.pid''. An algorithm can override this
+by setting this key to their custom persistent id. See section \ref{GUISpec}
+for information on creating and publishing input parameters.
+
+\begin{quote}
+\begin{description}
+  \item[Example 1:] parameters\_pid = org.my.custom.pid.that.i.want.to.use
+\end{description}
+\end{quote}
 
 
 \subsection*{in\_data} 
@@ -92,6 +119,11 @@ format with a ``?''. When receiving the \class{Data} array, an optional
 \class{Data} element will be null if it is not provided. If no \class{Data}
 inputs are necessary then the string ``null'' or not specifying the in\_data attribute
 at all is valid.
+
+By using the ``+'', ``*'', or ``?'' prefixes, ambiguities could arise from
+specifying multiple input formats that could easily fit into two or more
+of the formats. An algorithm developer should take care when reading
+in \class{Data} arrays from possibly ambiguous in\_data strings.
 
 \begin{quote}
 \begin{description}
