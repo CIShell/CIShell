@@ -32,6 +32,10 @@ CIShell. The key components being algorithms, data, and CIShell service access.
   algorithm.
   \item \textit{AlgorithmProperty} - The interface which provides string
   constants for an algorithm's service metadata.
+  \item \textit{ParameterMutator} - The interface an \class{AlgorithmFactory}
+  extends to provide the ability to add, remove, or modify user-entered
+  parameters specifications (see section \ref{GUISpec}) before being shown to an
+  end-user.
   \item \textit{DataValidator} - The interface an \class{AlgorithmFactory}
   extends to provide additional data validation in addition to the data format validation
   that an application should provide ahead of time.

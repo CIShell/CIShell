@@ -62,8 +62,7 @@ encounter. A standard algorithm has the following constraints:
 \subsubsection*{Optional:}
 \begin{itemize}
   \item If additional user-entered parameters are needed, the algorithm should
-  provide a \class{MetaTypeProvider} through its AlgorithmFactory's
-  createParameters method.
+  provide a \class{MetaTypeProvider} published by the \class{MetaTypeService}.
   \item The algorithm's service metadata should have ``remoteable=true'' if it
   meets the requirements of a remoteable algorithm.
   \item The algorithm's service metadata should have ``parentage=default'' if
@@ -133,10 +132,8 @@ algorithm has the following constraints:
   \item The algorithm's service metadata must have ``type=converter''.
   \item The algorithm's service metadata must have ``conversion=lossy'' if
   data is lost during conversion or ``conversion=lossless'' if not.
-  \item The algorithm must not require any parameters. The
-  \class{AlgorithmFactory}'s createParameters method will never be called and
-  the \class{Dictionary} passed to the createAlgorithm method will always be
-  empty.
+  \item The algorithm must not require any parameters. The \class{Dictionary}
+  passed to the createAlgorithm method will always be empty.
 \end{itemize}
 
 \subsubsection*{Optional:}
@@ -181,10 +178,8 @@ has the following constraints:
   \item The algorithm's service metadata must have ``type=validator''.
   \item The algorithm's service metadata must have a ``label'' which is the
   common name of the data format being validated.
-  \item The algorithm must not require any parameters. The
-  \class{AlgorithmFactory}'s createParameters method will never be called and
-  the \class{Dictionary} passed to the createAlgorithm method will always be
-  empty.
+  \item The algorithm must not require any parameters. The \class{Dictionary}
+  passed to the createAlgorithm method will always be empty.
 \end{itemize}
 
 \subsubsection*{Optional:}
