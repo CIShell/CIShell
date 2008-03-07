@@ -17,34 +17,27 @@ import java.util.Dictionary;
 
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.data.Data;
-import org.osgi.service.metatype.MetaTypeProvider;
+import org.osgi.service.metatype.MetaTypeService;
 
 /**
- * A class for creating {@link Algorithm}s. This class provides the 
- * parameters needed by its associated <code>Algorithm</code> on demand and when
- * given correct data, will create an <code>Algorithm</code> that can be executed.
+ * A service interface for creating {@link Algorithm}s to be executed.
  * <br> 
  * An algorithm developer must create an implementation of this interface and 
  * register it (along with some standard metadata about the algorithm, defined 
  * in the {@link AlgorithmProperty} class) in the OSGi service registry. 
+ * <br>
+ * If the algorithm requires input in addition to the raw data provided, a 
+ * {@link MetaTypeProvider} must be published to OSGi's {@link MetaTypeService} 
+ * (usually through a METADATA.XML file in the algorithm's bundle).
+ * <br>
+ * See the <a href="http://cishell.org/dev/docs/spec/cishell-spec-1.0.pdf">
+ * CIShell Specification 1.0</a> for documentation on the full requirements for
+ * algorithm creation.
  * 
  * @author Bruce Herr (bh2@bh2.net)
  */
 public interface AlgorithmFactory {
-    /**
-     * Creates a set of parameter definitions that specify what parameters are 
-     * needed in order to run its associated Algorithm
-     * 
-     * @param data An optional argument, the Data array that will be given to 
-     *           this class to create an Algorithm with the createAlgorithm 
-     *           method. Clients that don't know the Data array that is going
-     *           to be used ahead of time can give a <code>null</code> value. 
-     * @return An OSGi {@link MetaTypeProvider} that defines the parameters
-     *         needed by the Algorithm this class creates. May be 
-     *         <code>null</code> if no parameters are needed.
-     */
-    public MetaTypeProvider createParameters(Data[] data);
-    
+	
     /**
      * Creates an {@link Algorithm} to be executed
      * 
@@ -54,7 +47,8 @@ public interface AlgorithmFactory {
      *                   dictionary (the 'in_data' key) when registered as a 
      *                   service in OSGi.
      * @param parameters A set of key-value pairs that were created based on 
-     *                   the parameters given by the createParameters method
+     *                   the associated input specification published to the 
+     *                   {@link MetaTypeService}
      * @param context    The context by which the Algorithm can gain access to 
      *                   standard CIShell services
      * @return An <code>Algorithm</code> primed for execution

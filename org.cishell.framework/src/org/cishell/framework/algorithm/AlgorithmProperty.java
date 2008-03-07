@@ -28,13 +28,16 @@ public interface AlgorithmProperty {
     public static final String OUT_DATA = "out_data";
     public static final String NULL_DATA = "null";
     
+    public static final String PARAMETERS_PID = "parameters_pid";
+    
     public static final String PARENTAGE = "parentage";
     public static final String DEFAULT_PARENTAGE="default";
         
     public static final String ALGORITHM_TYPE = "type";
     public static final String TYPE_CONVERTER = "converter";
     public static final String TYPE_VALIDATOR = "validator";
-
+    public static final String TYPE_DATASET = "dataset";
+    
     public static final String REMOTEABLE = "remoteable";
     public static final String REMOTE = "remote";
 
@@ -58,11 +61,4 @@ public interface AlgorithmProperty {
     public static final String REFERENCE = "reference";
     public static final String REFERENCE_URL = "reference_url";
     public static final String WRITTEN_IN = "written_in";
-
-    
-
-    //Undocumented/possibly-unnecessary properties
-    public static final String TYPE_ALGORITHM = "algorithm";
-    public static final String TYPE_DATASET = "dataset";
-    public static final String METATYPE_ID = "metatype-id";
 }

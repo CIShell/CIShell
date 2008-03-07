@@ -66,6 +66,9 @@ public interface DataProperty {
     
     /** Says this data model is abstractly a network */
     public static String NETWORK_TYPE = "Network";
+
+    /** Says this data model is abstractly a table */
+    public static String TABLE_TYPE = "Table";
     
     /** Says this data model is abstractly a tree */
     public static String TREE_TYPE = "Tree";
