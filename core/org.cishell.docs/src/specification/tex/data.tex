@@ -4,8 +4,8 @@
 \subsection{Introduction}
 
 Data to be operated on is passed around in \class{Data} objects which hold the
-real data, the data's format, and its properties (metadata). The real data can be
-any Java \class{Object}. The format is a string describing the 'format' of the
+real data, the data's format, and the data's properties (metadata). The real
+data can be any Java \class{Object}. The format is a string describing the 'format' of the
 data, see next section. Finally, the properties help describe the data. The label
 to give the data, the parent \class{Data} object from which it was derived from,
 and a coarse data type can all be defined in the \class{Data}'s properties. See
@@ -32,5 +32,5 @@ sub-\class{Data} objects of a single format, prefix the type with a ``+''. For
 zero or more, prefix the type with a ``*''. This corresponds to a \class{Data}
 object that is wrapping multiple (zero or one or more depending on the prefix)
 other \class{Data} objects of the associated format in a Java array
-(\class{Data[]}) stored as its wrapped real data. This is useful for algorithms
-that can work on a variable number of \class{Data} items.
+(\class{Data[]}) stored as its contained real data. This is useful for
+algorithms that can work on a variable number of \class{Data} items.
