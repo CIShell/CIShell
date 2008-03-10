@@ -4,21 +4,19 @@
 \subsection{Introduction}
 
 For many algorithms, just looking at the data given isn't enough. Additional
-parameters are often needed to know how to operate on a given piece of data. An
-algorithm can define what parameters are needed by providing a
+input parameters are often needed to know how to operate on a given piece of
+data. An algorithm can define what parameters are needed by providing a
 \class{MetaTypeProvider}. It defines the types, value range, and textual
 description of the parameters needed. From this information, a user interface
 (UI) can be created that asks a user for the data. The \class{MetaTypeProvider}
 is not tied to any specific UI, so it can be reused depending on the context
 (desktop application, web application, command line, etc.).
 
-\class{MetaTypeProvider} is defined in the OSGi R4 Specification Service
-Compendium as part of the Meta Type Service. \class{MetaTypeProvider}s can be
-created in code or can be specified in an xml file (as defined in the
-specification) and pulled out of the \class{MetaTypeService} service. A
+\class{MetaTypeProvider} is an interface defined in the OSGi R4 Specification
+Service Compendium as part of the ``Metatype Service Specification''. A
 \class{MetaTypeProvider} can be thought of as a collection of UIs. Each UI is
-called an \class{ObjectClassDefinition}, which provides a UI name and
-description and is a collection of parameters. Each parameter is an
+called an \class{ObjectClassDefinition}, which provides a UI name and description
+and is a collection of parameters. Each parameter is an
 \class{AttributeDefinition} which includes the type, label, description, default
 value, and range of valid values. Drop-down boxes can also be defined by using
 option labels and values with the \class{AttributeDefinition}. OSGi's
@@ -31,7 +29,7 @@ cases. The \class{MetaTypeProvider} supports several primitive types such as
 strings, integers, booleans, etc, but several useful types are missing. To
 support more types, an \class{AttributeDefinition} (AD) of type ``string'' has
 its default value set to a certain string so that the UI builder recognizes this
-and selects an appropriate widget. When the algorithm receives the user entered
+and selects an appropriate widget. When the algorithm receives the user-entered
 parameters, the associated value will be of type \class{java.lang.String}, but
 should contain the correct value as defined below.
 
@@ -53,3 +51,26 @@ receive a string which is a comma separated list that corresponds to the RGB
 color values the user chose. Each item in the comma separated list would be
 between 0 and 255. The first item would be the red value, second green value,
 and third blue value.
+
+\subsection{Publishing MetaTypeProviders}
+
+For user-adjustable preferences and algorithm input parameters, a
+\class{MetaTypeProvider} is required to be published to the
+\class{MetaTypeService}. This can be done in two ways, through code or by a
+METADATA.XML file.
+
+To publish through code, a few steps must be followed. First, the service to be
+registered with the OSGi service registry must fully implement
+\class{org.\-osgi.\-service.\-cm.\-ManagedService} and
+\class{org.\-osgi.\-service.\-metatype.\-MetaTypeProvider}. Second, when
+registering the service, both \class{ManagedService} and \class{MetaTypeProvider}
+must be in the list of interfaces the service implements. If these two things are
+done, the \class{MetaTypeService} will notice it and add it to its registry of
+\class{MetaTypeProviders}.
+
+The recommended way to publish \class{MetaTypeProviders} is to publish through a
+METADATA.XML file. A METADATA.XML file must be included in the algorithm's OSGi
+bundle in a specific directory, ``OSGI-INF/metatype/''. The
+\class{MetaTypeService} will notice this in the bundle and add it to its registry
+of \class{MetaTypeProviders}. See the ``Metatype Service Specification'' in the
+OSGi specification for details on the XML format.

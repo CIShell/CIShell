@@ -6,7 +6,7 @@
 The user-adjustable preferences specification defines how any service can publish
 user-adjustable preferences both globally and locally. In addition to global and
 local preferences, algorithms can allow the system to allow end-users to adjust
-the default values for algorithms' user-entered parameters specification
+the default values for algorithms' user-entered input parameters specification
 published to the \class{MetaTypeService}. For storing data that is not directly
 end-user adjustable, see chapter \ref{preferencesService}.
 
@@ -20,14 +20,15 @@ METADATA.XML file or by the service implementing \class{MetaTypeProvider} and
 \class{ManagedService}. See section \ref{GUISpec} for more information.
 
 \subsubsection*{Designate an OCD a Persistent ID (PID)} Then they must designate
-the ObjectClassDefinition a persistent id (PID). The PID can be designated in two
-ways. The simplest way is by following the convention of creating a string with
-the associated service's ``service.pid'' and appending either ``.prefs.local'' or
-``.prefs.global''. The other way is to designate whatever PID the developer
-wishes and to provide a service property ``local\_pref\_pid'' or
-``global\_pref\_pid'' which is set to whatever PID they chose.
+the \class{ObjectClassDefinition} a persistent id (PID). The PID can be
+designated in two ways. The simplest way is by following the convention of
+creating a string with the associated service's ``service.pid'' and appending
+either ``.prefs.local'' or ``.prefs.global''. The other way is to designate
+whatever PID the developer wishes and to provide a service property
+``local\_pref\_pid'' or ``global\_pref\_pid'' which is set to whatever PID they
+chose.
 
-\subsubsection*{Designate What Preferences are to be Published} To let the system
+\subsubsection*{Declare What Preferences are to be Published} To let the system
 know that you wish to publish preferences, the system properties must contain a
 ``prefs\_published'' key with zero or more of the following values (separated by
 commas): ``local'' for publishing local prefs, ``global'' for global prefs, and
@@ -37,12 +38,11 @@ commas): ``local'' for publishing local prefs, ``global'' for global prefs, and
 defaults, algorithm developers allow end-users to adjust the default values they
 see when running their algorithm. This is typically accomplished by wrapping the
 \class{MetaTypeProvider} published by the algorithm to the
-\class{MetaTypeService} (with PID designated to either the algorithm's
-``service.pid'' or whatever was specified by the algorithm's ``parameters\_pid'')
-with overridden \class{AttributeDefinitions} that change their default value.
-Many systems will have this on by default, but if the ``prefs\_published'' key is
-set in the algorithm's service metadata and ``param-defaults'' is not set, then
-this feature will be disabled for the algorithm.
+\class{MetaTypeService} with overridden \class{AttributeDefinitions} that
+change their default value. Many systems will have this on by default, but if
+the ``prefs\_published'' key is set in the algorithm's service metadata and
+``param-defaults'' is not set, then this feature will be disabled for the
+algorithm.
 
 \subsubsection*{Receiving Preference Data} To be notified of changes to local or
 global preferences, the service must implement
@@ -50,7 +50,7 @@ global preferences, the service must implement
 metadata ``receive\_prefs=true''. When either the local or global preferences are updated,
 the updated method will be passed a \class{Dictionary} of all of the id/value
 pairs, including the updated ones. Local preferences will have the same ids as
-the AttributeDefinitions (AD) defined in the associated OCD. The local
+the \class{AttributeDefinition}s (AD) defined in the associated OCD. The local
 preferences will also have an additional id ``Bundle-Version", which contains the
 version of the service's associated bundle that was used when the preference data
 was last updated. Global preferences will have the same ids (plus a
