@@ -21,15 +21,13 @@ import org.osgi.service.metatype.MetaTypeService;
 
 /**
  * A service interface for creating {@link Algorithm}s to be executed.
- * <br> 
  * An algorithm developer must create an implementation of this interface and 
  * register it (along with some standard metadata about the algorithm, defined 
  * in the {@link AlgorithmProperty} class) in the OSGi service registry. 
- * <br>
  * If the algorithm requires input in addition to the raw data provided, a 
  * {@link MetaTypeProvider} must be published to OSGi's {@link MetaTypeService} 
  * (usually through a METADATA.XML file in the algorithm's bundle).
- * <br>
+ * 
  * See the <a href="http://cishell.org/dev/docs/spec/cishell-spec-1.0.pdf">
  * CIShell Specification 1.0</a> for documentation on the full requirements for
  * algorithm creation.

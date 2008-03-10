@@ -17,7 +17,6 @@ import java.util.Dictionary;
 
 import org.osgi.service.log.LogService;
 import org.osgi.service.metatype.MetaTypeProvider;
-import org.osgi.service.metatype.MetaTypeService;
 import org.osgi.service.metatype.ObjectClassDefinition;
 
 /**
@@ -26,11 +25,11 @@ import org.osgi.service.metatype.ObjectClassDefinition;
  * simple information and a more flexible way to create {@link GUI}s using a 
  * standard OSGi {@link MetaTypeProvider}. The MetaTypeProvider basically lists 
  * what input is needed (String, Integer, Float, etc...), a description of the 
- * input, and a way to validate input. There is also an XML format that OSGi 
- * provides a service ({@link MetaTypeService}) for that will parse the XML into
- * a MetaTypeProvider instance. See the 
+ * input, and a way to validate input. 
+ * 
+ * See the 
  * <a href="http://cishell.org/dev/docs/spec/cishell-spec-1.0.pdf">
- * CIShell Specification 1.0</a> for documentation about creating GUIs with this
+ * CIShell Specification 1.0</a> for documentation on creating GUIs with this
  * service. 
  * 
  * Algorithm writers are encouraged to use this service if they need to get

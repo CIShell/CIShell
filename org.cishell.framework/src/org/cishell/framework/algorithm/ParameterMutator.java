@@ -21,7 +21,7 @@ import org.osgi.service.metatype.ObjectClassDefinition;
  * An additional interface an {@link AlgorithmFactory} can implement that allows
  * for adding, modifying, or removing input parameters before being shown to the
  * end-user for input. This interface is often implemented by algorithms that 
- * wish to customize the input UI based on the actual input data.
+ * wish to customize the user interface based on the actual input data.
  * 
  * @author Bruce Herr (bh2@bh2.net)
  */

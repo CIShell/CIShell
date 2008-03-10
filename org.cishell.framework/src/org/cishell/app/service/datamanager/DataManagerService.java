@@ -18,7 +18,7 @@ import org.cishell.framework.data.Data;
 /**
  * A service for managing loaded {@link Data} objects. 
  * {@link DataManagerListener}s may be registered to be notified of changes
- * in the model manager.
+ * in the data manager.
  * 
  * Application developers are encouraged to use this service for managing the
  * models they have loaded into memory. Algorithm developers are encouraged not 

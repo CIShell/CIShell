@@ -20,7 +20,7 @@ import org.osgi.framework.ServiceReference;
  * A simple implementation of {@link CIShellContext} that pulls the
  * CIShell services from the provided {@link BundleContext} that all OSGi
  * bundles receive on activation. This was included in the standard API since 
- * it will be used frequently by CIShell Application writers. 
+ * it will be used frequently by CIShell application developers. 
  * 
  * This implementation only returns standard services or the service strings
  * given to it in its constructor.
@@ -44,7 +44,7 @@ public class LocalCIShellContext implements CIShellContext {
     
     /**
      * Initializes the CIShell context with a custom set of standard services.
-     * Only the standard services provided will be allowed to be retrieved from 
+     * Only the service in the array will be allowed to be retrieved from 
      * this <code>CIShellContext</code>.
      * 
      * @param bContext         The <code>BundleContext</code> to use to find 

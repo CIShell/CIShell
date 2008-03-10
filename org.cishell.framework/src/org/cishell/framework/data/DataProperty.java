@@ -15,7 +15,7 @@ package org.cishell.framework.data;
 
 
 /**
- * Standard property keys to use when creating metadata for a 
+ * Standard property keys and values to use when creating metadata for a 
  * {@link Data} object
  * 
  * @author Bruce Herr (bh2@bh2.net)

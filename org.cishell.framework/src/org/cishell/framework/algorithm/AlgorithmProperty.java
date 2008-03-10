@@ -15,8 +15,8 @@ package org.cishell.framework.algorithm;
 
 /**
  * A standard set of properties and values used for creating a service 
- * Dictionary that is provided when registering an {@link AlgorithmFactory}
- * with the OSGi service registry.
+ * metadata Dictionary that is provided when registering an 
+ * {@link AlgorithmFactory} with the OSGi service registry.
  * 
  * See the <a href="http://cishell.org/dev/docs/spec/cishell-spec-1.0.pdf">
  * CIShell Specification 1.0</a> for documentation on each property. 

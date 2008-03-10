@@ -17,15 +17,16 @@ import java.io.File;
 import java.util.Dictionary;
 
 /**
- * A class that encapsulates data and its metadata. This class is used to pass
- * data between algorithms and is what algorithms optionally create when executed. 
+ * A class that contains data, its format, and its metadata. This class is used 
+ * to pass data between algorithms and is what algorithms optionally create when 
+ * executed.
  * 
  * @author Bruce Herr (bh2@bh2.net)
  */
 public interface Data {
 	/**
 	 * Returns the metadata associated with the data stored in this Data object.
-	 * Some standard keys are in the {@link DataProperty} interface.
+	 * Standard keys and values are in the {@link DataProperty} interface.
 	 * 
 	 * @return The data's metadata
 	 */
