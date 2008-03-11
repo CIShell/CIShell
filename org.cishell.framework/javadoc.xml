@@ -14,7 +14,7 @@
         	version="true" 
         	nodeprecatedlist="false" 
         	nodeprecated="false" 
-        	packagenames="org.cishell.framework.data,org.cishell.service.guibuilder,org.cishell.app.service.scheduler,org.cishell.framework,org.cishell.app.service.datamanager,org.cishell.framework.algorithm,org.cishell.service.conversion" 
+        	packagenames="org.cishell.framework.data,org.cishell.framework.userprefs,org.cishell.service.guibuilder,org.cishell.app.service.scheduler,org.cishell.framework,org.cishell.app.service.datamanager,org.cishell.framework.algorithm,org.cishell.service.conversion" 
         	sourcepath="src" 
         	classpath="lib/osgi.core.jar:lib/osgi.compendium.jar" 
         	overview="src/org/cishell/overview.html" 
