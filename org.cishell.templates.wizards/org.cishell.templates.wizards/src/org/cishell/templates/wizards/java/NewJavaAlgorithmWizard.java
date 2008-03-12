@@ -131,9 +131,9 @@ public class NewJavaAlgorithmWizard extends NewPluginTemplateWizard implements I
      */
     public String[] getImportPackages() {
         return new String[]{
-                "org.cishell.framework",
-                "org.cishell.framework.algorithm",
-                "org.cishell.framework.data",
+                "org.cishell.framework;version=\"1.0.0\"",
+                "org.cishell.framework.algorithm;version=\"1.0.0\"",
+                "org.cishell.framework.data;version=\"1.0.0\"",
                 "org.osgi.framework;version=\"1.3.0\"",
                 "org.osgi.service.component;version=\"1.0.0\"",
                 "org.osgi.service.log;version=\"1.3.0\"",

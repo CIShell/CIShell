@@ -2,8 +2,6 @@
 <component name="$algFullClass$.component" immediate="false">
 	<implementation class="$algFullClass$Factory"/>
 	<properties entry="OSGI-INF/algorithm.properties"/>
-	<reference name="LOG" interface="org.osgi.service.log.LogService"/>
-	<reference name="MTS" interface="org.osgi.service.metatype.MetaTypeService"/>
 	
 	<service>
 		<provide interface=
