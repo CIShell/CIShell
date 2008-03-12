@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.2"?>
 <plugin>
-
    <extension
          point="org.eclipse.ui.newWizards">
       <category
@@ -17,6 +16,7 @@
             name="Java-based algorithm"
             preferredPerspectives="org.eclipse.jdt.ui.JavaPerspective"
             project="true"/>
+<!-- disabling until they can be updated for CIShell 1.0 
       <wizard
             canFinishEarly="false"
             category="cishell"
@@ -47,6 +47,7 @@
             name="Dataset"
             preferredPerspectives="org.eclipse.jdt.ui.JavaPerspective"
             project="true"/>
+-->
       <wizard
             category="cishell"
             class="org.cishell.templates.wizards.java.NewLibraryIntegrationWizard"
@@ -57,5 +58,4 @@
             project="true">
       </wizard>
    </extension>
-
 </plugin>

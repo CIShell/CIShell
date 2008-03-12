@@ -134,11 +134,13 @@ public class NewJavaAlgorithmWizard extends NewPluginTemplateWizard implements I
                 "org.cishell.framework;version=\"1.0.0\"",
                 "org.cishell.framework.algorithm;version=\"1.0.0\"",
                 "org.cishell.framework.data;version=\"1.0.0\"",
+                "org.cishell.framework.userprefs;version=\"1.0.0\"",
                 "org.osgi.framework;version=\"1.3.0\"",
                 "org.osgi.service.component;version=\"1.0.0\"",
                 "org.osgi.service.log;version=\"1.3.0\"",
                 "org.osgi.service.metatype;version=\"1.1.0\"",
-                "org.osgi.service.prefs;version=\"1.1.0\""
+                "org.osgi.service.prefs;version=\"1.1.0\"",
+                "org.osgi.service.cm;version=\"1.2.0\""
         };
     }
 
