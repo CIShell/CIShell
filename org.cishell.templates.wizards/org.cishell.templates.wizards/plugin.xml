@@ -13,10 +13,9 @@
             hasPages="true"
             icon="icons/cishell.ico"
             id="org.cishell.templates.wizards.java.NewJavaAlgorithmWizard"
-            name="Java-based algorithm"
+            name="Java Algorithm Project"
             preferredPerspectives="org.eclipse.jdt.ui.JavaPerspective"
             project="true"/>
-<!-- disabling until they can be updated for CIShell 1.0 
       <wizard
             canFinishEarly="false"
             category="cishell"
@@ -24,7 +23,7 @@
             hasPages="true"
             icon="icons/cishell.ico"
             id="org.cishell.templates.wizards.staticexecutable.NewStaticExecutableAlgorithmWizard"
-            name="Executable (command line) based algorithm"
+            name="Executable (command line)/non-Java Algorithm Project"
             preferredPerspectives="org.eclipse.jdt.ui.JavaPerspective"
             project="true"/>
       <wizard
@@ -34,8 +33,16 @@
             hasPages="true"
             icon="icons/cishell.ico"
             id="org.cishell.templates.wizards.jython.NewJythonAlgorithmWizard"
-            name="Jython-based algorithm"
+            name="Jython Algorithm Project"
             preferredPerspectives="org.eclipse.jdt.ui.JavaPerspective"
+            project="true"/>
+      <wizard
+            category="cishell"
+            class="org.cishell.templates.wizards.java.NewLibraryIntegrationWizard"
+            icon="icons/cishell.ico"
+            id="org.cishell.templates.wizards.java.NewLibraryPluginProjectWizard"
+            name="Existing Java Library (JAR) Integration Project"
+            preferredPerspectives="org.eclipse.pde.ui.PDEPerspective, org.eclipse.jdt.ui.JavaPerspective"
             project="true"/>
       <wizard
             canFinishEarly="false"
@@ -44,18 +51,8 @@
             hasPages="true"
             icon="icons/cishell.ico"
             id="org.cishell.templates.wizards.staticexecutable.NewDatasetWizard"
-            name="Dataset"
+            name="Dataset Integration Project"
             preferredPerspectives="org.eclipse.jdt.ui.JavaPerspective"
             project="true"/>
--->
-      <wizard
-            category="cishell"
-            class="org.cishell.templates.wizards.java.NewLibraryIntegrationWizard"
-            icon="icons/cishell.ico"
-            id="org.cishell.templates.wizards.java.NewLibraryPluginProjectWizard"
-            name="Create code libraries from existing jar files"
-            preferredPerspectives="org.eclipse.pde.ui.PDEPerspective, org.eclipse.jdt.ui.JavaPerspective"
-            project="true">
-      </wizard>
    </extension>
 </plugin>
