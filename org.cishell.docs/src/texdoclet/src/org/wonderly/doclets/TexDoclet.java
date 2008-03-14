@@ -116,7 +116,7 @@ public class TexDoclet extends Doclet {
 		
 //		os.println("\\documentclass[11pt]{"+docclass+"}" );
 		
-		os.println("\\newcommand{\\packagesheader}{");
+		//os.println("\\newcommand{\\packagesheader}{");
 		os.println("%%% Start_Header");
 		os.println("\\def\\bl{\\mbox{}\\newline\\mbox{}\\newline{}}");
 		os.println("\\usepackage{ifthen}");
@@ -200,7 +200,7 @@ public class TexDoclet extends Doclet {
 		os.println("\\usepackage{color}");
 		
 		os.println("%%% End_Header");
-		os.println("}\n\n");
+		//os.println("}\n\n");
 //		os.println("\\packagesheader{}");
 		
 /*		
