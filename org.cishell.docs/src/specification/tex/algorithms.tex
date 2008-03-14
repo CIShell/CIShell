@@ -26,10 +26,10 @@ The CIShell Platform has been specifically designed around the idea of the
 algorithm. It is the central and most important concept. Algorithms are fully
 defined and self-contained bits of execution. They can do many things from data
 conversion, data analysis, and can even spawn whole external programs if needed.
-Algorithms are very well defined black boxes in that what can come into and out
-of the algorithm is specified in each algorithm's service metadata and
-associated \class{MetaTypeProvider}. Other than that, CIShell makes no attempt
-to understand the algorithm.
+Algorithms are well defined black boxes in that their input and output is
+specified in each algorithm's service metadata and associated
+\class{MetaTypeProvider}. Other than that, CIShell makes no attempt to understand
+the algorithm.
 
 \subsubsection{Essentials}
 \begin{itemize}
@@ -109,7 +109,7 @@ box, the metadata is used to provide information about the algorithm. Informatio
 such as the format of each \class{Data} item to be input and output is provided.
 In addition to the mechanics of the algorithms, data such as the authors, label,
 urls, citation references, and description are provided. This metadata can be
-searched by anyone using OSGi's service registry to find relevant algorithms.
+searched by anyone to find relevant algorithms using OSGi's service registry.
 
 Each standard metadata element required by the CIShell specification is defined
 below and in the interface \class{AlgorithmProperty}. It defines each key string
@@ -126,7 +126,7 @@ as part of the OSGi Service Platform Core Specification, section 6.1.12.
 
 \begin{quote}
 \begin{description}
-  \item[Example 1:] service.pid = org.cishell.my.algorithm.MyAlgorithm
+  \item[Example 1:] service.pid = org.my.algorithm.MyAlgorithm
 \end{description}
 \end{quote}
 
@@ -286,8 +286,8 @@ the start of the menu, or ``end'' for being placed at the end of the menu.
 \subsection*{conversion}
 For converter algorithms, this metadata element specifies if any data is
 lost in the conversion. Possible values are ``lossy'' and ``lossless''. A
-description of what type of information is lost should be explained in the
-description.
+description of what type of information is lost should be given in the
+``description'' metadata field.
 
 \begin{quote}
 \begin{description}
@@ -301,8 +301,8 @@ A comma separated list of the authors of the abstract algorithm.
 
 \begin{quote}
 \begin{description}
-  \item[Example 1:] authors = Bruce Herr
-  \item[Example 2:] authors = Bruce Herr, Weixia Huang, Katy Borner 
+  \item[Example 1:] authors = Bruce W. Herr II
+  \item[Example 2:] authors = Bruce W. Herr II, Weixia Huang, Katy Borner 
 \end{description}
 \end{quote}
 
@@ -312,8 +312,8 @@ A comma separated list of the developers who implemented the algorithm in code.
 
 \begin{quote}
 \begin{description}
-  \item[Example 1:] implementers = Bruce Herr
-  \item[Example 2:] implementers = Bruce Herr, Weixia Huang, Katy Borner 
+  \item[Example 1:] implementers = Bruce W. Herr II
+  \item[Example 2:] implementers = Bruce W. Herr II, Weixia Huang, Katy Borner 
 \end{description}
 \end{quote}
 
@@ -324,8 +324,8 @@ a compliant cishell algorithm.
 
 \begin{quote}
 \begin{description}
-  \item[Example 1:] integrators = Bruce Herr
-  \item[Example 2:] integrators = Bruce Herr, Weixia Huang, Katy Borner 
+  \item[Example 1:] integrators = Bruce W. Herr II
+  \item[Example 2:] integrators = Bruce W. Herr II, Weixia Huang, Katy Borner 
 \end{description}
 \end{quote}
 
@@ -345,10 +345,10 @@ A formal reference to a paper explaining the abstract algorithm.
 
 \begin{quote}
 \begin{description}
-  \item[Example 1:] reference = Herr, Bruce W., Huang, Weixia, Penumarthy,
-  Shashikant, Börner, Katy. (2007) Designing Highly Flexible and Usable 
+  \item[Example 1:] reference = Herr, Bruce W. II, Huang, Weixia, Penumarthy,
+  Shashikant, B\"{o}rner, Katy. (2007) Designing Highly Flexible and Usable 
   Cyberinfrastructures for Convergence. In William S. Bainbridge and Mihail C. 
-  Roco (Eds.) Progress in Convergence – Technologies for Human Wellbeing. 
+  Roco (Eds.) Progress in Convergence - Technologies for Human Wellbeing. 
   Annals of the New York Academy of Sciences, Boston, MA, volume 1093, pp. 161-179.
 \end{description}
 \end{quote}
@@ -359,7 +359,7 @@ A URL to a paper explaining the abstract algorithm.
 
 \begin{quote}
 \begin{description}
-  \item[Example 1:] reference\_url = http://cishell.org/papers/06-cishell.pdf 
+  \item[Example 1:] reference\_url = http://cishell.org/papers/07-cishell.pdf 
 \end{description}
 \end{quote}
 
