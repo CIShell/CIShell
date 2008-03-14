@@ -16,16 +16,12 @@
 %%
 %
 
-\documentclass[pdftex,11pt,letterpaper]{report}
-\usepackage[top=1in, left=1in, right=1in, bottom=1in]{geometry}
+\documentclass[11pt,letterpaper]{report}
+
+\usepackage{ifpdf}
+
+\ifpdf %PDF Specific Setup
 \usepackage[pdftex]{graphicx}
-\DeclareGraphicsExtensions{.pdf,.png,.jpg,.mps,.eps}
-\usepackage{color}
-
-\usepackage{../mystyle}
-\input{./tex/api.tex}
-\packagesheader{}
-
 \usepackage[pdftex]{hyperref}
 \hypersetup{
     pdftitle={Cyberinfrastructure Shell (CIShell) - Core Specification 1.0},
@@ -33,7 +29,18 @@
     pdfauthor={Bruce W. Herr II},
     pdfnewwindow=true% links in new window
 }
+\else %DVI Specific Setup
+\usepackage{graphicx}
+\usepackage{hyperref}
+\fi
 
+\usepackage[top=1in, left=1in, right=1in, bottom=1in]{geometry}
+
+\DeclareGraphicsExtensions{.pdf,.png,.jpg,.mps,.eps}
+\usepackage{color}
+
+\usepackage{../mystyle}
+\input{./tex/api.tex}
 
 \raggedright
 
