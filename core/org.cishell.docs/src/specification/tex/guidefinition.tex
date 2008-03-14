@@ -30,11 +30,11 @@ description of the parameters needed. From this information, a user interface
 is not tied to any specific UI, so it can be reused depending on the context
 (desktop application, web application, command line, etc.).
 
-\class{MetaTypeProvider} is an interface defined in the OSGi R4 Specification
-Service Compendium as part of the ``Metatype Service Specification''. A
-\class{MetaTypeProvider} can be thought of as a collection of UIs. Each UI is
-called an \class{ObjectClassDefinition}, which provides a UI name and description
-and is a collection of parameters. Each parameter is an
+\class{MetaTypeProvider} is a Java interface defined in the OSGi R4 Specification
+Service Compendium as part of the ``Metatype Service Specification,'' section
+105. A \class{MetaTypeProvider} can be thought of as a collection of UIs. Each UI
+is called an \class{ObjectClassDefinition}, which provides a UI name and
+description and is a collection of parameters. Each parameter is an
 \class{AttributeDefinition} which includes the type, label, description, default
 value, and range of valid values. Drop-down boxes can also be defined by using
 option labels and values with the \class{AttributeDefinition}. OSGi's
