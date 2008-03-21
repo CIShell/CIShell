@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metatype:MetaData xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.0.0">
+	<OCD name="Preferences" id="org.cishell.reference.gui.prefs.swt.PreferenceGuiAlgorithm.OCD"
+		 description="Lets you view and edit CIShell preferences ">
+		 <AD name="what" id="ever" type="String" default="work"/>
+	</OCD>
+	<Designate pid="org.cishell.reference.gui.prefs.swt.PreferenceGuiAlgorithm">
+		<Object ocdref="org.cishell.reference.gui.prefs.swt.PreferenceGuiAlgorithm.OCD" />
+	</Designate>
+</metatype:MetaData>
