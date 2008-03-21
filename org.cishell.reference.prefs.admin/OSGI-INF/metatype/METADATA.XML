@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metatype:MetaData xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.0.0">
+	<Designate pid="org.cishell.reference.prefs.admin.PrefAdmin">
+		<Object ocdref="org.cishell.reference.prefs.admin.PrefAdmin.OCD" />
+	</Designate>
+</metatype:MetaData>
