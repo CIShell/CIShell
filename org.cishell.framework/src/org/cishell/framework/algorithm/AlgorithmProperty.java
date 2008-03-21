@@ -33,11 +33,11 @@ public interface AlgorithmProperty {
     public static final String ADDITIONS_GROUP = "additions";
     public static final String START_GROUP = "start";
     public static final String END_GROUP = "end";
-    public static final String METATYPE_ID = "metatype-id";
     public static final String REMOTEABLE = "remoteable";
     public static final String REMOTE = "remote";
     public static final String ALGORITHM_TYPE = "type";
     public static final String TYPE_CONVERTER = "converter";
     public static final String TYPE_ALGORITHM = "algorithm";
     public static final String TYPE_DATASET = "dataset";
+    public static final String PARAMETER_PID = "parameter_pid";
 }
