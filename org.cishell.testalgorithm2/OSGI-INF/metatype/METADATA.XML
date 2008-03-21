@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metatype:MetaData xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.0.0">
+
+	<OCD name="Imaginary Load Algorithm" id="org.cishell.testalgorithm2.TestAlgorithm2.prefs.local.OCD"
+		 description="tests various things">
+		<AD name="Default load directory" id="loadDir" type="String" default="directory:"/>
+		<AD name="Default separator characters" id="sepChars" type="String" default=",;"/>
+	</OCD>
+	
+	<OCD name="Test Algorithm2" id="org.cishell.testalgorithm2.TestAlgorithm2.old.OCD"
+		 description="tests various things">
+		 <AD name="stringName" id="stringID" type="String" default="string default"/>
+		 <AD name="boolName" id="boolID" type="Boolean" default="true"/>
+		 <AD name="intName" id="intID" type="Integer" default="0"/>
+		 <AD name="fontName" id="fontID" type="String" default="font:"/>
+		 <AD name="directoryName" id="directoryID" type="String" default="directory:/home/"/>
+		 <AD name="fileName" id="fileID" type="String" default="file:/home/mwlinnem/nwb/nwb"/>
+		 <AD name="pathName" id="pathID" type="String" default="path:/home/mwlinnem/nwb/"/>
+		 <AD name="radioName" id="radioID" type="String" default="radio default">
+		 	<Option label="option 1" value="value 1"/>
+		 	<Option label="option 2" value="value 2"/>
+		 	<Option label="option 3" value="value 3"/>
+		 </AD>
+		 <AD name="floatName" id="floatID" type="Float" default="1.23"/>
+		 <Ad name="doubleName" id="doubleID" type="Double" default="1.2345678675442"/>
+	</OCD>
+	
+	<Designate pid="org.cishell.testalgorithm2.TestAlgorithm2.prefs.local">
+		<Object ocdref="org.cishell.testalgorithm2.TestAlgorithm2.prefs.local.OCD" />
+	</Designate>
+
+</metatype:MetaData>
