@@ -2,19 +2,19 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Menu Manager Plug-in
 Bundle-SymbolicName: org.cishell.reference.gui.menumanager;singleton:=true
-Bundle-Version: 0.6.0
+Bundle-Version: 1.0.0
 Bundle-Activator: org.cishell.reference.gui.menumanager.Activator
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime
 Eclipse-LazyStart: true
-Import-Package: org.cishell.app.service.datamanager,
- org.cishell.app.service.scheduler,
- org.cishell.framework,
- org.cishell.framework.algorithm,
- org.cishell.framework.data,
+Import-Package: org.cishell.app.service.datamanager;version="1.0.0",
+ org.cishell.app.service.scheduler;version="1.0.0",
+ org.cishell.framework;version="1.0.0",
+ org.cishell.framework.algorithm;version="1.0.0",
+ org.cishell.framework.data;version="1.0.0",
  org.cishell.reference.gui.workspace,
- org.cishell.service.conversion,
- org.cishell.service.guibuilder,
+ org.cishell.service.conversion;version="1.0.0",
+ org.cishell.service.guibuilder;version="1.0.0",
  org.osgi.service.log;version="1.3.0",
  org.osgi.service.metatype;version="1.1.0"

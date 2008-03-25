@@ -110,7 +110,9 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
             	}
             }
             
-            this.provider = factory.createParameters(data);
+            //FIXME:
+            //this.provider = factory.createParameters(data);
+            this.provider = null;
             String pid = (String)ref.getProperty(Constants.SERVICE_PID);
             
             this.parameters = new Hashtable();
@@ -218,12 +220,12 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
                 && originalData.length == data.length) {
             for (int i=0; i < outData.length; i++) {
                 if (outData[i] != null) {
-                    Object parent = outData[i].getMetaData().get(DataProperty.PARENT);
+                    Object parent = outData[i].getMetadata().get(DataProperty.PARENT);
                     
                     if (parent != null) {
                         for (int j=0; j < data.length; i++) {
                             if (parent == data[j]) {
-                                outData[i].getMetaData().put(DataProperty.PARENT, 
+                                outData[i].getMetadata().put(DataProperty.PARENT, 
                                         originalData[j]);
                                 break;
                             }
@@ -243,8 +245,8 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
                     for (int i=0; i < outData.length; i++) {
                         //if they don't have a parent set already then we set one
                         if (outData[i] != null && 
-                                outData[i].getMetaData().get(DataProperty.PARENT) == null) {
-                            outData[i].getMetaData().put(DataProperty.PARENT, originalData[0]);
+                                outData[i].getMetadata().get(DataProperty.PARENT) == null) {
+                            outData[i].getMetadata().put(DataProperty.PARENT, originalData[0]);
                         }
                     }
                 }
