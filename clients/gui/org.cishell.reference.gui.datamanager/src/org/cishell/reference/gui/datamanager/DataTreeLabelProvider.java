@@ -49,8 +49,8 @@ public class DataTreeLabelProvider extends LabelProvider {
     public String getText(Object element) {
         if (element instanceof DataGUIItem) {
             Data model = ((DataGUIItem) element).getModel();
-            String label = (String) model.getMetaData().get(DataProperty.LABEL);
-           // Boolean modified = (Boolean)model.getMetaData().get(DataProperty.MODIFIED);
+            String label = (String) model.getMetadata().get(DataProperty.LABEL);
+           // Boolean modified = (Boolean)model.getMetadata().get(DataProperty.MODIFIED);
            /* if(modified != null && modified.booleanValue()){
                 label = ">" + label;
             }*/
