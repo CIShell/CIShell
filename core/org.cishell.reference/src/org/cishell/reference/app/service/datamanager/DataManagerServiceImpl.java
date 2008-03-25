@@ -53,12 +53,12 @@ public class DataManagerServiceImpl implements DataManagerService {
     	if(model == null){
     		return;
     	}
-        String label = (String)model.getMetaData().get(DataProperty.LABEL);
-        String type = (String)model.getMetaData().get(DataProperty.TYPE);
+        String label = (String)model.getMetadata().get(DataProperty.LABEL);
+        String type = (String)model.getMetadata().get(DataProperty.TYPE);
         
         if(type == null){
             type = DataProperty.OTHER_TYPE;
-            model.getMetaData().put(DataProperty.TYPE, type);
+            model.getMetadata().put(DataProperty.TYPE, type);
         }
         
         //generate label if needed
@@ -98,9 +98,9 @@ public class DataManagerServiceImpl implements DataManagerService {
 
     private void addModel(Data model, String label) {
         label = findUniqueLabel(label);
-        model.getMetaData().put(DataProperty.LABEL, label);
+        model.getMetadata().put(DataProperty.LABEL, label);
         //set the model to be unsaved initially
-        model.getMetaData().put(DataProperty.MODIFIED, new Boolean(true));
+        model.getMetadata().put(DataProperty.MODIFIED, new Boolean(true));
                 
         modelToLabelMap.put(model, label);
         labelToModelMap.put(label, model);      

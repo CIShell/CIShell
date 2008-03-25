@@ -19,10 +19,12 @@ import java.util.Hashtable;
 
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
+import org.cishell.framework.algorithm.AlgorithmExecutionException;
 import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.algorithm.AlgorithmProperty;
 import org.cishell.framework.data.BasicData;
 import org.cishell.framework.data.Data;
+import org.cishell.service.conversion.ConversionException;
 import org.cishell.service.conversion.Converter;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -63,13 +65,17 @@ public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProp
     /**
      * @see org.cishell.service.conversion.Converter#convert(org.cishell.framework.data.Data)
      */
-    public Data convert(Data inDM) {
+    public Data convert(Data inDM) throws ConversionException {
         Data[] dm = new Data[]{inDM};
         
         AlgorithmFactory factory = getAlgorithmFactory();
         Algorithm alg = factory.createAlgorithm(dm, new Hashtable(), ciContext);
 
-        dm = alg.execute();
+        try {
+			dm = alg.execute();
+		} catch (AlgorithmExecutionException e1) {
+			throw new ConversionException(e1);
+		}
         
         Object outData = null;
         if (dm != null && dm.length > 0) {
@@ -77,7 +83,7 @@ public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProp
         }
         
         if (outData != null) {
-            Dictionary props = inDM.getMetaData();
+            Dictionary props = inDM.getMetadata();
             Dictionary newProps = new Hashtable();
             
             for (Enumeration e=props.keys(); e.hasMoreElements();) {
@@ -165,7 +171,7 @@ public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProp
             this.context = context;
         }
         
-        public Data[] execute() {
+        public Data[] execute() throws AlgorithmExecutionException {
             Data[] dm = inDM;
             for (int i=0; i < refs.length; i++) {
                 AlgorithmFactory factory = (AlgorithmFactory)bContext.getService(refs[i]);
@@ -175,7 +181,7 @@ public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProp
                     
                     dm = alg.execute();
                 } else {
-                    throw new RuntimeException("Missing subconverter: " 
+                    throw new AlgorithmExecutionException("Missing subconverter: " 
                             + refs[i].getProperty(Constants.SERVICE_PID));
                 }
             }

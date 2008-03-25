@@ -30,6 +30,7 @@ import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.algorithm.AlgorithmProperty;
 import org.cishell.framework.data.Data;
+import org.cishell.service.conversion.ConversionException;
 import org.cishell.service.conversion.Converter;
 import org.cishell.service.conversion.DataConversionService;
 import org.osgi.framework.BundleContext;
@@ -370,7 +371,7 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
      * @return The final data type
      * @see org.cishell.service.conversion.DataConversionService#convert(org.cishell.framework.data.Data, java.lang.String)
      */
-    public Data convert(Data inDM, String outFormat) {
+    public Data convert(Data inDM, String outFormat) throws ConversionException {
         String inFormat = inDM.getFormat();
         
         if (inFormat != null && inFormat.equals(outFormat)) {
