@@ -2,7 +2,7 @@
 <feature
       id="org.cishell.environment.equinox.feature"
       label="CIShell Equinox Execution Environment"
-      version="0.0.0">
+      version="1.0.0">
 
    <description url="http://cishell.org">
       CIShell OSGi Environment (Eclipse Equinox)

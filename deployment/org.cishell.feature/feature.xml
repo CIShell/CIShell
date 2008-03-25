@@ -2,7 +2,7 @@
 <feature
       id="org.cishell.feature"
       label="CIShell Framework API Feature"
-      version="0.3.0">
+      version="1.0.0">
 
    <description url="http://cishell.org">
       CIShell Framework API
