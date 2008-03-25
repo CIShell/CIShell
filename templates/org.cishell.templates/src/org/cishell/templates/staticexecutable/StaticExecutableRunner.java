@@ -124,7 +124,7 @@ public class StaticExecutableRunner implements Algorithm {
 
 					String label = props.getProperty(
 							"outFile[" + i + "].label", f.getName());
-					data[i].getMetaData().put(DataProperty.LABEL, label);
+					data[i].getMetadata().put(DataProperty.LABEL, label);
 
 					String type = props.getProperty("outFile[" + i + "].type",
 							DataProperty.OTHER_TYPE);
@@ -137,13 +137,15 @@ public class StaticExecutableRunner implements Algorithm {
 						type = DataProperty.TREE_TYPE;
 					} else if (type.equalsIgnoreCase(DataProperty.TEXT_TYPE)) {
 						type = DataProperty.TEXT_TYPE;
-					} else if (type.equalsIgnoreCase(DataProperty.GRACE_TYPE)) {
-						type = DataProperty.GRACE_TYPE;
-					} else {
+					} else if (type.equalsIgnoreCase(DataProperty.PLOT_TYPE)) {
+						type = DataProperty.PLOT_TYPE;
+					} else if (type.equalsIgnoreCase(DataProperty.TABLE_TYPE)) {
+						type = DataProperty.TABLE_TYPE;
+					}else {
 						type = DataProperty.OTHER_TYPE;
 					}
 
-					data[i].getMetaData().put(DataProperty.TYPE, type);
+					data[i].getMetadata().put(DataProperty.TYPE, type);
 				}
 			} else {
 				Iterator iter = nameToFileMap.values().iterator();
@@ -151,7 +153,7 @@ public class StaticExecutableRunner implements Algorithm {
 					File f = (File) iter.next();
 
 					data[i] = new BasicData(f, "file:text/plain");
-					data[i].getMetaData().put(DataProperty.LABEL, f.getName());
+					data[i].getMetadata().put(DataProperty.LABEL, f.getName());
 
 					i++;
 				}
