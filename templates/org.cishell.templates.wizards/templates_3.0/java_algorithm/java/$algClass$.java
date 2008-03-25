@@ -8,9 +8,9 @@ import org.cishell.framework.algorithm.AlgorithmExecutionException;
 import org.cishell.framework.data.Data;
 
 public class $algClass$ implements Algorithm {
-    Data[] data;
-    Dictionary parameters;
-    CIShellContext context;
+    private Data[] data;
+    private Dictionary parameters;
+    private CIShellContext context;
     
     public $algClass$(Data[] data, Dictionary parameters, CIShellContext context) {
         this.data = data;
