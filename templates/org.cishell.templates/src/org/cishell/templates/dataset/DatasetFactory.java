@@ -87,7 +87,7 @@ public class DatasetFactory implements AlgorithmFactory {
         public Data[] execute() {
             try {
                 Data data = new BasicData(getDataset(),format);
-                data.getMetaData().put(DataProperty.LABEL, label);
+                data.getMetadata().put(DataProperty.LABEL, label);
             
                 return new Data[]{data};
             } catch (IOException e) {
