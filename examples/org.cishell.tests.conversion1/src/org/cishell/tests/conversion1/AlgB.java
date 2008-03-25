@@ -29,14 +29,6 @@ import org.osgi.service.metatype.MetaTypeProvider;
  * @author Bruce Herr
  */
 public class AlgB implements AlgorithmFactory, DataValidator {
-
-    /**
-     * @see org.cishell.framework.algorithm.AlgorithmFactory#createParameters(org.cishell.framework.data.Data[])
-     */
-    public MetaTypeProvider createParameters(Data[] dm) {
-        return null;
-    }
-
     /**
      * @see org.cishell.framework.algorithm.AlgorithmFactory#createAlgorithm(org.cishell.framework.data.Data[], java.util.Dictionary, org.cishell.framework.CIShellContext)
      */
@@ -65,7 +57,7 @@ public class AlgB implements AlgorithmFactory, DataValidator {
             Integer i = new Integer(dm[0].getData().toString());           
             
             Data[] dm1 = new Data[]{ new BasicData(i, Integer.class.getName()) };
-            dm1[0].getMetaData().put(DataProperty.LABEL, "My Integer: " + i);
+            dm1[0].getMetadata().put(DataProperty.LABEL, "My Integer: " + i);
             //dm1[0].getProperties().put(DataProperty.PARENT, dm[0]);
             
             return dm1;

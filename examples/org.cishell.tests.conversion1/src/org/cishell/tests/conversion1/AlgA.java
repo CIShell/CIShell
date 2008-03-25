@@ -30,23 +30,6 @@ import org.osgi.service.metatype.MetaTypeService;
  * @author Bruce Herr
  */
 public class AlgA implements AlgorithmFactory {
-    private MetaTypeProvider provider;
-
-    protected void activate(ComponentContext ctxt) {
-        MetaTypeService mts = (MetaTypeService)ctxt.locateService("MTS");
-        provider = mts.getMetaTypeInformation(ctxt.getBundleContext().getBundle());       
-    }
-    protected void deactivate(ComponentContext ctxt) {
-        provider = null;
-    }
-
-    /**
-     * @see org.cishell.framework.algorithm.AlgorithmFactory#createParameters(org.cishell.framework.data.Data[])
-     */
-    public MetaTypeProvider createParameters(Data[] dm) {
-        return provider;
-    }
-
     /**
      * @see org.cishell.framework.algorithm.AlgorithmFactory#createAlgorithm(org.cishell.framework.data.Data[], java.util.Dictionary, org.cishell.framework.CIShellContext)
      */
@@ -66,7 +49,7 @@ public class AlgA implements AlgorithmFactory {
             String i = (String) parameters.get("org.cishell.tests.conversion1.AlgA.myInput");
             
             Data[] dm = new Data[]{ new BasicData(i, String.class.getName()) };
-            dm[0].getMetaData().put(DataProperty.LABEL, "My String: " + i);
+            dm[0].getMetadata().put(DataProperty.LABEL, "My String: " + i);
             
             return dm;
         }

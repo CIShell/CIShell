@@ -20,11 +20,11 @@ import java.util.Dictionary;
 
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
+import org.cishell.framework.algorithm.AlgorithmExecutionException;
 import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.data.BasicData;
 import org.cishell.framework.data.Data;
 import org.cishell.framework.data.DataProperty;
-import org.osgi.service.metatype.MetaTypeProvider;
 
 /**
  * 
@@ -37,15 +37,7 @@ public class Integer2File implements AlgorithmFactory {
      */
     public Algorithm createAlgorithm(Data[] dm, Dictionary parameters,
             CIShellContext context) {
-        
         return new Integer2FileAlgorithm(dm[0]);
-    }
-
-    /**
-     * @see org.cishell.framework.algorithm.AlgorithmFactory#createParameters(org.cishell.framework.data.Data[])
-     */
-    public MetaTypeProvider createParameters(Data[] dm) {
-        return null;
     }
     
     private static class Integer2FileAlgorithm implements Algorithm {
@@ -54,10 +46,10 @@ public class Integer2File implements AlgorithmFactory {
         
         public Integer2FileAlgorithm(Data dm) {
             i = (Integer)dm.getData();
-            label = (String)dm.getMetaData().get(DataProperty.LABEL);
+            label = (String)dm.getMetadata().get(DataProperty.LABEL);
         }
 
-        public Data[] execute() {
+        public Data[] execute() throws AlgorithmExecutionException {
             try {
                 File file = File.createTempFile("String2File-", "txt");
                 FileWriter fw = new FileWriter(file);
@@ -66,14 +58,12 @@ public class Integer2File implements AlgorithmFactory {
                 fw.close();
                 
                 Data dm = new BasicData(file, "file:text/plain");
-                dm.getMetaData().put(DataProperty.LABEL, "File of "+label);
+                dm.getMetadata().put(DataProperty.LABEL, "File of "+label);
                 
                 return new Data[]{dm};
             } catch (IOException e) {
-                e.printStackTrace();
+                throw new AlgorithmExecutionException(e);
             }
-            
-            return null;
         }
     }
 }

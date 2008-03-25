@@ -27,14 +27,6 @@ import org.osgi.service.metatype.MetaTypeProvider;
  * @author Bruce Herr
  */
 public class AlgC implements AlgorithmFactory {
-
-    /**
-     * @see org.cishell.framework.algorithm.AlgorithmFactory#createParameters(org.cishell.framework.data.Data[])
-     */
-    public MetaTypeProvider createParameters(Data[] dm) {
-        return null;
-    }
-
     /**
      * @see org.cishell.framework.algorithm.AlgorithmFactory#createAlgorithm(org.cishell.framework.data.Data[], java.util.Dictionary, org.cishell.framework.CIShellContext)
      */

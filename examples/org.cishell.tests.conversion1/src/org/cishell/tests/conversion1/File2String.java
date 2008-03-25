@@ -21,11 +21,11 @@ import java.util.Dictionary;
 
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
+import org.cishell.framework.algorithm.AlgorithmExecutionException;
 import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.data.BasicData;
 import org.cishell.framework.data.Data;
 import org.cishell.framework.data.DataProperty;
-import org.osgi.service.metatype.MetaTypeProvider;
 
 /**
  * 
@@ -41,13 +41,6 @@ public class File2String implements AlgorithmFactory {
         
         return new File2StringAlgorithm(dm[0]);
     }
-
-    /**
-     * @see org.cishell.framework.algorithm.AlgorithmFactory#createParameters(org.cishell.framework.data.Data[])
-     */
-    public MetaTypeProvider createParameters(Data[] dm) {
-        return null;
-    }
     
     private static class File2StringAlgorithm implements Algorithm {
         File file;
@@ -55,10 +48,10 @@ public class File2String implements AlgorithmFactory {
         
         public File2StringAlgorithm(Data dm) {
             file = (File) dm.getData();
-            label = (String)dm.getMetaData().get(DataProperty.LABEL);
+            label = (String)dm.getMetadata().get(DataProperty.LABEL);
         }
 
-        public Data[] execute() {
+        public Data[] execute() throws AlgorithmExecutionException {
             try {
                 if (file.exists()) {
                     BufferedReader reader = new BufferedReader(new FileReader(file));
@@ -71,15 +64,15 @@ public class File2String implements AlgorithmFactory {
                     }
                     
                     Data dm = new BasicData(outString, String.class.getName());
-                    dm.getMetaData().put(DataProperty.LABEL, "String for "+label);
+                    dm.getMetadata().put(DataProperty.LABEL, "String for "+label);
                     
                     return new Data[]{dm};
+                } else {
+                	throw new AlgorithmExecutionException("File does not exist!");
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                throw new AlgorithmExecutionException(e);
             }
-            
-            return null;
         }
     }
 }
