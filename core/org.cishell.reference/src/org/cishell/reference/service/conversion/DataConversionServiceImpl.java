@@ -53,7 +53,8 @@ import edu.uci.ics.jung.utils.UserDataContainer;
 /**
  * Builds converter chains from one data type to another
  * 
- * @author Bruce Herr, Ben Markines
+ * @author Bruce Herr
+ * @author Ben Markines
  *
  */
 public class DataConversionServiceImpl implements DataConversionService, AlgorithmProperty, ServiceListener {
@@ -291,14 +292,6 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
 			}
 		}
 		return null;
-    }
-    
-    /**
-     * @see org.cishell.service.conversion.DataConversionService#findConverters(java.lang.String, java.lang.String, int, java.lang.String)
-     */
-    public Converter[] findConverters(String inFormat, String outFormat,
-            int maxHops, String maxComplexity) {
-        return findConverters(inFormat, outFormat);
     }
 
     /**
