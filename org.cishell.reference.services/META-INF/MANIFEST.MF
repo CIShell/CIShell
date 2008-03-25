@@ -4,7 +4,6 @@ Bundle-Name: Reference Services Starter
 Bundle-SymbolicName: org.cishell.reference.services
 Bundle-Version: 1.0.0
 Bundle-Activator: org.cishell.reference.services.Activator
-Bundle-Localization: plugin
 X-AutoStart: true
 Import-Package: org.cishell.app.service.datamanager;version="1.0.0",
  org.cishell.app.service.scheduler;version="1.0.0",
