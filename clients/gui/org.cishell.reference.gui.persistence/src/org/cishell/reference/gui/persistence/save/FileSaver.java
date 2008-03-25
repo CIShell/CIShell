@@ -13,6 +13,7 @@ import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.AlgorithmProperty;
 import org.cishell.framework.data.Data;
 import org.cishell.framework.data.DataProperty;
+import org.cishell.service.conversion.ConversionException;
 import org.cishell.service.conversion.Converter;
 import org.cishell.service.guibuilder.GUIBuilderService;
 import org.eclipse.swt.SWT;
@@ -107,7 +108,7 @@ public class FileSaver {
         
         dialog.setText("Choose File");
         
-        String fileLabel = (String)data.getMetaData().get(DataProperty.LABEL);
+        String fileLabel = (String)data.getMetadata().get(DataProperty.LABEL);
        String suggestedFileName = getFileName(fileLabel);
         dialog.setFileName(suggestedFileName + "." + ext);
         
@@ -128,9 +129,10 @@ public class FileSaver {
                 if (ext != null && ext.length() != 0)
                     if (!selectedFile.getPath().endsWith(ext) && !ext.equals("*"))
                         selectedFile = new File(selectedFile.getPath()+'.'+ ext);
-
+                try {
                 Data newData = converter.convert(data);
-                
+				
+               
                 copy((File)newData.getData(), selectedFile);
                 
                 if (selectedFile.isDirectory()) {
@@ -140,7 +142,10 @@ public class FileSaver {
                 }
                     
                 done = true;
-       
+                } catch (ConversionException e1) {
+                	this.log.log(LogService.LOG_ERROR, "Error occurred while converting data to saved format.", e1);
+                	return false;
+                }
                 log.log(LogService.LOG_INFO, "Saved: " + selectedFile.getPath());
             } else {
                 done = true;

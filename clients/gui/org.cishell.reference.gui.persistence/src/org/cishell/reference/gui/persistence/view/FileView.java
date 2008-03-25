@@ -9,7 +9,9 @@ import java.util.Dictionary;
 
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
+import org.cishell.framework.algorithm.AlgorithmExecutionException;
 import org.cishell.framework.data.Data;
+import org.cishell.service.conversion.ConversionException;
 import org.cishell.service.conversion.Converter;
 import org.cishell.service.conversion.DataConversionService;
 import org.cishell.service.guibuilder.GUIBuilderService;
@@ -28,7 +30,6 @@ public class FileView implements Algorithm {
     Dictionary parameters;
     CIShellContext context;
     DataConversionService conversionManager;
-    static GUIBuilderService guiBuilder;
     LogService logger;
     Program program;
  //   Program programTwo;
@@ -43,9 +44,8 @@ public class FileView implements Algorithm {
         		DataConversionService.class.getName());
         
         logger = (LogService)context.getService(LogService.class.getName());
-        guiBuilder = (GUIBuilderService)context.getService(GUIBuilderService.class.getName());
-
-    }
+    	}
+   
     public File getTempFile(){
     	File tempFile;
     
@@ -82,7 +82,8 @@ public class FileView implements Algorithm {
     	return tempFile;
     }
 
-    public Data[] execute() {
+    public Data[] execute() throws AlgorithmExecutionException {
+    	try {
         boolean lastSaveSuccessful = false;
         boolean isCSVFile          = false;//TC181
         String format;
@@ -93,7 +94,7 @@ public class FileView implements Algorithm {
         
         windows = PlatformUI.getWorkbench().getWorkbenchWindows();
         if (windows.length == 0){
-        	return null;
+        	throw new AlgorithmExecutionException("Cannot get workbench window.");
         }
         parentShell = windows[0].getShell();
         display = PlatformUI.getWorkbench().getDisplay();
@@ -150,10 +151,9 @@ public class FileView implements Algorithm {
         		   final Converter[] converters = conversionManager.findConverters(data[i], "file-ext:*");
                 
             	   if (converters.length < 1) {
-            		  guiBuilder.showError("No Converters", 
-            			    	"No valid converters for data type: " + 
-            				     data[i].getData().getClass().getName(), 
-            				    "Please install a plugin that will save the data type to a file");
+            		  throw new AlgorithmExecutionException("No valid converters for data type: " + 
+            				     data[i].getData().getClass().getName() +
+            				    ". Please install a plugin that will save the data type to a file");
             	   }
             	   else if (converters.length == 1){
              		    //If length=1, use the unique path to save it directly 
@@ -202,10 +202,10 @@ public class FileView implements Algorithm {
             }
             */
             if (program == null) {
-            		guiBuilder.showError("No Text Viewer", 
+            		throw new AlgorithmExecutionException( 
     					"No valid text viewer for the .txt file. " +
-    					"The file is located at: "+tempFile.getAbsolutePath(), 
-    					"Unable to open default text viewer.  File is located at: "+
+    					"The file is located at: "+tempFile.getAbsolutePath() +  
+    					". Unable to open default text viewer.  File is located at: "+
     					tempFile.getAbsolutePath());
             }
             else {
@@ -220,10 +220,15 @@ public class FileView implements Algorithm {
         	
         	
         }
-        return null;   
+        return null;
+    	} catch (ConversionException e1) {
+    		throw new AlgorithmExecutionException("Error converting data to target view format.", e1);
+    	} catch (Throwable e2){
+    		throw new AlgorithmExecutionException(e2);
+    	}
     }
     
-    public static boolean copy(File in, File out) {
+    public static boolean copy(File in, File out) throws AlgorithmExecutionException{
     	try {
     		FileInputStream  fis = new FileInputStream(in);
     		FileOutputStream fos = new FileOutputStream(out);
@@ -238,9 +243,8 @@ public class FileView implements Algorithm {
     		return true;
     	}
     	catch (IOException ioe) {
-    		guiBuilder.showError("Copy Error", "IOException during copy", ioe.getMessage());
-            return false;
-    	}
+    	    throw new AlgorithmExecutionException("IOException during copy", ioe);
+       	}
     }
     
 	final class DataViewer  implements Runnable {

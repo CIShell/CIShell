@@ -3,25 +3,23 @@ package org.cishell.reference.gui.persistence.load;
 import java.io.File;
 import java.util.ArrayList;
 
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.FileDialog;
-import org.eclipse.swt.widgets.Display;
+import org.cishell.framework.CIShellContext;
+import org.cishell.framework.algorithm.Algorithm;
+import org.cishell.framework.algorithm.AlgorithmExecutionException;
+import org.cishell.framework.algorithm.AlgorithmFactory;
+import org.cishell.framework.data.BasicData;
+import org.cishell.framework.data.Data;
+import org.cishell.service.guibuilder.GUIBuilderService;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
-
-
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogService;
-
-import org.cishell.framework.CIShellContext;
-import org.cishell.framework.algorithm.AlgorithmFactory;
-import org.cishell.framework.algorithm.Algorithm;
-import org.cishell.framework.data.Data;
-import org.cishell.framework.data.BasicData;
-import org.cishell.service.guibuilder.GUIBuilderService;
 
 /* 
  * @author Weixia(Bonnie) Huang (huangb@indiana.edu)
@@ -48,7 +46,8 @@ public class FileLoad implements Algorithm{
 
     }
     
-    public Data[] execute() {
+    public Data[] execute() throws AlgorithmExecutionException {
+    	try {
 //    	int counter = PlatformUI.getWorkbench().getWorkbenchWindowCount();
 //    	System.out.println("counter is "+counter);
 //      ?? why getActiveWorkbenchWindow() didn't work??
@@ -56,7 +55,7 @@ public class FileLoad implements Algorithm{
 
     	final IWorkbenchWindow[] windows = PlatformUI.getWorkbench().getWorkbenchWindows();
     	if (windows.length ==0){
-    		return null;
+    		throw new AlgorithmExecutionException("Cannot obtain workbench window needed to open dialog.");
     	}
     
     	Display display = PlatformUI.getWorkbench().getDisplay();
@@ -76,10 +75,14 @@ public class FileLoad implements Algorithm{
     		}
     		return returnDM;
     	}
-    	else {    		
-    		return null;
+    	else {
+    		throw new AlgorithmExecutionException("No data could be loaded.");
     	}
-    	
+    	} catch (AlgorithmExecutionException e1) {
+    		throw e1;
+    	} catch (Throwable e2) {
+    		throw new AlgorithmExecutionException(e2);
+    	}
     }
     
 	public static String getFileExtension(File theFile) {
@@ -209,7 +212,7 @@ public class FileLoad implements Algorithm{
 
 
 	        	}catch (Exception e){
-	        		e.printStackTrace();    	
+	        		throw new RuntimeException(e);   	
 	        	}
 
 			}//end run()

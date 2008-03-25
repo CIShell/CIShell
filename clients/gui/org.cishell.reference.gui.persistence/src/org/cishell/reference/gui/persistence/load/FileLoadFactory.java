@@ -23,13 +23,8 @@ public class FileLoadFactory implements AlgorithmFactory {
     protected void activate(ComponentContext ctxt) {
         bcontext = ctxt.getBundleContext();
     }
-    protected void deactivate(ComponentContext ctxt) {}
-
+    
     public Algorithm createAlgorithm(Data[] data, Dictionary parameters, CIShellContext context) {
         return new FileLoad(context, bcontext);
     }
-    public MetaTypeProvider createParameters(Data[] data) {
-        return null;
-    }
-    
 }
