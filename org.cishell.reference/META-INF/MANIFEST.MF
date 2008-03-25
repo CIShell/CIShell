@@ -4,13 +4,13 @@ Bundle-Name: CIShell Reference Service Implementations
 Bundle-SymbolicName: org.cishell.reference
 Bundle-Version: 0.4.0
 Bundle-Localization: plugin
-Import-Package: org.cishell.app.service.datamanager,
- org.cishell.app.service.scheduler,
- org.cishell.framework,
- org.cishell.framework.algorithm,
- org.cishell.framework.data,
- org.cishell.service.conversion,
- org.cishell.service.guibuilder,
+Import-Package: org.cishell.app.service.datamanager;version="1.0.0",
+ org.cishell.app.service.scheduler;version="1.0.0",
+ org.cishell.framework;version="1.0.0",
+ org.cishell.framework.algorithm;version="1.0.0",
+ org.cishell.framework.data;version="1.0.0",
+ org.cishell.service.conversion;version="1.0.0",
+ org.cishell.service.guibuilder;version="1.0.0",
  org.osgi.framework,
  org.osgi.service.log,
  org.osgi.service.metatype;version="1.1.0",
