@@ -2,12 +2,12 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: JythonRunner
 Bundle-SymbolicName: org.cishell.templates.jythonrunner
-Bundle-Version: 0.0.1
+Bundle-Version: 1.0.0
 Bundle-ClassPath: .
 Bundle-Localization: plugin
 Import-Package: org.cishell.framework,
- org.cishell.framework.algorithm,
- org.cishell.framework.data,
+ org.cishell.framework.algorithm;version="1.0.0",
+ org.cishell.framework.data;version="1.0.0",
  org.osgi.framework;version="1.3.0",
  org.osgi.service.component;version="1.0.0",
  org.osgi.service.log;version="1.3.0",

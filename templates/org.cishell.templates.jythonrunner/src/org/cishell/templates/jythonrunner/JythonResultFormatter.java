@@ -191,7 +191,7 @@ public class JythonResultFormatter {
     		return s.charAt(s.length() - 1);
     	} else {
     		throw new IndexOutOfBoundsException("Cannot get the last " +
-    				"character of an empy string");
+    				"character of an empty string");
     	}
     }
     
