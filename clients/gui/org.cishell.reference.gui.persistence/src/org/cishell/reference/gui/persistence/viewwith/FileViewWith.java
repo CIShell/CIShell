@@ -9,7 +9,9 @@ import java.util.Dictionary;
 
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
+import org.cishell.framework.algorithm.AlgorithmExecutionException;
 import org.cishell.framework.data.Data;
+import org.cishell.service.conversion.ConversionException;
 import org.cishell.service.conversion.Converter;
 import org.cishell.service.conversion.DataConversionService;
 import org.cishell.service.guibuilder.GUIBuilderService;
@@ -66,7 +68,7 @@ public class FileViewWith implements Algorithm {
     	return tempFile;
     }
 
-    public Data[] execute() {
+    public Data[] execute() throws AlgorithmExecutionException {
         boolean lastSaveSuccessful = false;
         String format;
         
@@ -104,16 +106,25 @@ public class FileViewWith implements Algorithm {
             	else if (converters.length == 1){
              		//If length=1, use the unique path to save it directly 
             		//and bring the text editor.
-            	    Data newData = converters[0].convert(data[i]);                    
+            		try {
+            	    Data newData = converters[0].convert(data[i]);
                     copy((File)newData.getData(), tempFile);     
             		lastSaveSuccessful = true; 
+            		} catch (ConversionException e) {
+            			this.logger.log(LogService.LOG_WARNING, "Error while converting to target save format. Will attempt to use other available converters.");
+            		}
             	}
             	else {
              		if (!parentShell.isDisposed()) {
+             			try {
             			DataViewer dataViewer = new DataViewer(parentShell, data[i], converters);
             			display.syncExec(dataViewer);
+             			
              			lastSaveSuccessful = dataViewer.isSaved;
             			tempFile = dataViewer.theFile;
+             			} catch (Throwable e1) {
+             				throw new AlgorithmExecutionException(e1);
+             			}
             		}
             	}
         	}

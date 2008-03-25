@@ -12,24 +12,8 @@ import org.osgi.service.metatype.MetaTypeProvider;
 
 
 public class FileViewFactory implements AlgorithmFactory {
-//    private MetaTypeProvider provider;
 
-    protected void activate(ComponentContext ctxt) {
-        //You may delete all references to metatype service if 
-        //your algorithm does not require parameters and return
-        //null in the createParameters() method
-//        MetaTypeService mts = (MetaTypeService)ctxt.locateService("MTS");
-//        provider = mts.getMetaTypeInformation(ctxt.getBundleContext().getBundle());       
-    }
-    protected void deactivate(ComponentContext ctxt) {
-//        provider = null;
-    }
-
-    public Algorithm createAlgorithm(Data[] data, Dictionary parameters, CIShellContext context) {
+	public Algorithm createAlgorithm(Data[] data, Dictionary parameters, CIShellContext context) {
         return new FileView(data, parameters, context);
-    }
-    public MetaTypeProvider createParameters(Data[] data) {
-//        return provider;
-    	return null;
     }
 }

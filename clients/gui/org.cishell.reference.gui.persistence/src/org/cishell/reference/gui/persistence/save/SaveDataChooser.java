@@ -17,6 +17,7 @@ import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.AlgorithmProperty;
 import org.cishell.framework.data.Data;
 import org.cishell.reference.gui.common.AbstractDialog;
+import org.cishell.service.conversion.ConversionException;
 import org.cishell.service.conversion.Converter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
@@ -308,11 +309,15 @@ public class SaveDataChooser extends AbstractDialog implements AlgorithmProperty
      * of opening the FileSaver and saving the model.
      * @param selectedIndex The chosen converter
      */
-    protected void selectionMade(int selectedIndex) {
+    protected void selectionMade(int selectedIndex){
+    	try {
         getShell().setVisible(false);
         final Converter converter = converterArray[selectedIndex];
         final FileSaver saver = new FileSaver(getShell(), context);
         close(saver.save(converter, data));
+    	} catch (Exception e) {
+        	throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -327,7 +332,7 @@ public class SaveDataChooser extends AbstractDialog implements AlgorithmProperty
         select.addSelectionListener(new SelectionAdapter() {
                 public void widgetSelected(SelectionEvent e) {
                     int index = converterList.getSelectionIndex();
-
+                    
                     if (index != -1) {
                         selectionMade(index);
                     }

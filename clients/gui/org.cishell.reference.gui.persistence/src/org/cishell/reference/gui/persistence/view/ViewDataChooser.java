@@ -6,7 +6,6 @@ import org.cishell.framework.CIShellContext;
 import org.cishell.framework.data.Data;
 import org.cishell.reference.gui.persistence.save.SaveDataChooser;
 import org.cishell.service.conversion.Converter;
-
 import org.eclipse.swt.widgets.Shell;
 
 /* 
@@ -26,12 +25,16 @@ public class ViewDataChooser extends SaveDataChooser {
 		this.theData = data;
 	}
 
-	protected void selectionMade(int selectedIndex) {
+	protected void selectionMade(int selectedIndex){
+		try {
         getShell().setVisible(false);
         final Converter converter = converterArray[selectedIndex];
         Data newData = converter.convert(theData);    
         isSaved = FileView.copy((File)newData.getData(), tempFile);
       	close(true);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
 	public boolean isSaved(){

@@ -6,6 +6,7 @@ import java.util.Hashtable;
 
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
+import org.cishell.framework.algorithm.AlgorithmExecutionException;
 import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.algorithm.AlgorithmProperty;
 import org.cishell.framework.data.Data;
@@ -54,7 +55,8 @@ public class Save implements Algorithm {
      * 
      * @return Null for this algorithm
      */
-    public Data[] execute() {
+    public Data[] execute() throws AlgorithmExecutionException {
+    try {
     	//This only checks the first Data in the array
     	final Converter[] converters = conversionManager.findConverters(data[0], "file-ext:*");
     	
@@ -105,6 +107,9 @@ public class Save implements Algorithm {
     		}
     	}
         return null;
+    } catch (Throwable e) {
+    	throw new AlgorithmExecutionException(e);
+    }
     }
     
     private void guiRun(Runnable run) {

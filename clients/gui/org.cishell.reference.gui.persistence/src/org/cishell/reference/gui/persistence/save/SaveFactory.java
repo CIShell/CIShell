@@ -33,12 +33,6 @@ public class SaveFactory implements AlgorithmFactory, DataValidator {
     protected void activate(ComponentContext ctxt) {
         context = new LocalCIShellContext(ctxt.getBundleContext());
     }
-    
-    /**
-     * Deactivate the plugin
-     * @param ctxt Current CIShell context
-     */
-    protected void deactivate(ComponentContext ctxt) {}
 
     /**
      * Create a Save algorithm
@@ -50,15 +44,6 @@ public class SaveFactory implements AlgorithmFactory, DataValidator {
     public Algorithm createAlgorithm(Data[] data, Dictionary parameters, CIShellContext context) {
         this.context = context;
         return new Save(data, parameters, context);
-    }
-    
-    /**
-     * Create parameters (this returns null only)
-     * data input data
-     * @return null;
-     */
-    public MetaTypeProvider createParameters(Data[] data) {
-        return null;
     }
     
     /**

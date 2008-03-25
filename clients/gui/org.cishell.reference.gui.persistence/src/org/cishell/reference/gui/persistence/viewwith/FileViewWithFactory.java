@@ -1,23 +1,20 @@
 package org.cishell.reference.gui.persistence.viewwith;
 
-import java.io.IOException;
 import java.util.Dictionary;
 
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
 import org.cishell.framework.algorithm.AlgorithmFactory;
+import org.cishell.framework.algorithm.ParameterMutator;
 import org.cishell.framework.data.Data;
 import org.cishell.reference.service.metatype.BasicAttributeDefinition;
 import org.cishell.reference.service.metatype.BasicMetaTypeProvider;
 import org.cishell.reference.service.metatype.BasicObjectClassDefinition;
 import org.eclipse.swt.program.Program;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.PlatformUI;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.metatype.AttributeDefinition;
-import org.osgi.service.metatype.MetaTypeInformation;
 import org.osgi.service.metatype.MetaTypeProvider;
-import org.osgi.service.metatype.MetaTypeService;
 import org.osgi.service.metatype.ObjectClassDefinition;
 
 
@@ -26,7 +23,7 @@ import org.osgi.service.metatype.ObjectClassDefinition;
 // It implements AlgorithmFactory and adds dropbox boxes...
 // You will need to do something similar, but much less complicated, here, I believe.
 
-public class FileViewWithFactory implements AlgorithmFactory {
+public class FileViewWithFactory implements AlgorithmFactory, ParameterMutator {
 	Program programTxt;
     Program programDoc;
     Program programHtml;
@@ -46,8 +43,9 @@ public class FileViewWithFactory implements AlgorithmFactory {
         return new FileViewWith(data, parameters, context);
     }
     
-    public MetaTypeProvider createParameters(Data[] data) {
-    	
+	public ObjectClassDefinition mutateParameters(Data[] data,
+			ObjectClassDefinition parameters) {
+
 		BasicObjectClassDefinition definition;
 		definition = new BasicObjectClassDefinition("fileViewWithDefinition", "Application Viewer Type", "Please choose an application viewer to read this file.", null);
 					
@@ -118,7 +116,6 @@ public class FileViewWithFactory implements AlgorithmFactory {
 		AttributeDefinition ad = new BasicAttributeDefinition("viewWith", "View file as", "Type of viewer", AttributeDefinition.STRING /*string*/, 0, defValStringArray/*String[] defaultValue*/, null /*validator*/, myOptionLabels, myOptionValues);
 		definition.addAttributeDefinition(ObjectClassDefinition.REQUIRED, ad);
 
-		MetaTypeProvider provider = new BasicMetaTypeProvider(definition);
-        return provider;
-    }
+		return definition;
+	}
 }
