@@ -4,7 +4,6 @@ Bundle-Name: Menu Manager Plug-in
 Bundle-SymbolicName: org.cishell.reference.gui.menumanager;singleton:=true
 Bundle-Version: 1.0.0
 Bundle-Activator: org.cishell.reference.gui.menumanager.Activator
-Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime
 Eclipse-LazyStart: true
