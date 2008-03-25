@@ -21,15 +21,11 @@ import org.osgi.service.metatype.MetaTypeService;
 public class JythonAlgorithmFactory implements AlgorithmFactory {
     private BundleContext myBundleContext;
     private Bundle myBundle;
-	private MetaTypeProvider provider;
     private Dictionary properties;
     
     protected void activate(ComponentContext ctxt) {
-    	
-        MetaTypeService mts = (MetaTypeService)ctxt.locateService("MTS");
 		this.myBundleContext = ctxt.getBundleContext();
         this.myBundle = myBundleContext.getBundle();
-        this.provider = mts.getMetaTypeInformation(myBundle);
         this.properties = ctxt.getProperties();  
     }
 
@@ -42,9 +38,5 @@ public class JythonAlgorithmFactory implements AlgorithmFactory {
     		CIShellContext context) {
     	return new JythonRunnerAlgorithm(data, parameters, context,
     			properties, myBundle);
-    }
-    
-    public MetaTypeProvider createParameters(Data[] data) {
-        return provider;
     }
 }
