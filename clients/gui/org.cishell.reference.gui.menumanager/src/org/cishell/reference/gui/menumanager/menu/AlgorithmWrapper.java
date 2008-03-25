@@ -27,10 +27,13 @@ import org.cishell.framework.algorithm.Algorithm;
 import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.algorithm.AlgorithmProperty;
 import org.cishell.framework.algorithm.DataValidator;
+import org.cishell.framework.algorithm.ParameterMutator;
 import org.cishell.framework.algorithm.ProgressMonitor;
 import org.cishell.framework.algorithm.ProgressTrackable;
 import org.cishell.framework.data.Data;
 import org.cishell.framework.data.DataProperty;
+import org.cishell.reference.gui.menumanager.Activator;
+import org.cishell.reference.service.metatype.BasicMetaTypeProvider;
 import org.cishell.service.conversion.Converter;
 import org.cishell.service.guibuilder.GUIBuilderService;
 import org.osgi.framework.BundleContext;
@@ -39,6 +42,7 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogService;
 import org.osgi.service.metatype.AttributeDefinition;
 import org.osgi.service.metatype.MetaTypeProvider;
+import org.osgi.service.metatype.MetaTypeService;
 import org.osgi.service.metatype.ObjectClassDefinition;
 
 
@@ -110,10 +114,33 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
             	}
             }
             
-            //FIXME:
-            //this.provider = factory.createParameters(data);
-            this.provider = null;
             String pid = (String)ref.getProperty(Constants.SERVICE_PID);
+            
+            String metatype_pid = (String) ref.getProperty(PARAMETERS_PID);
+            if (metatype_pid == null) {
+            	metatype_pid = pid;
+            }
+
+            this.provider = null;
+            
+            MetaTypeService metaTypeService = (MetaTypeService) Activator.getService(MetaTypeService.class.getName());
+            if (metaTypeService != null) {
+            	provider = metaTypeService.getMetaTypeInformation(ref.getBundle());            	
+            }
+
+            if (factory instanceof ParameterMutator && provider != null) {
+            	try {
+            		ObjectClassDefinition ocd = provider.getObjectClassDefinition(metatype_pid, null);
+            		
+            		ocd = ((ParameterMutator) factory).mutateParameters(data, ocd);
+                	
+                	if (ocd != null) {
+                		provider = new BasicMetaTypeProvider(ocd);
+                	}
+            	} catch (IllegalArgumentException e) {
+            		 log(LogService.LOG_DEBUG, pid+" has an invalid metatype id: "+metatype_pid);
+            	}
+            }
             
             this.parameters = new Hashtable();
             if (provider != null) {
@@ -165,6 +192,15 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
             
             return new Data[0];
         }
+    }
+    
+    protected void log(int logLevel, String message) {
+    	LogService log = (LogService) Activator.getService(LogService.class.getName());
+    	if (log != null) {
+    		log.log(logLevel, message);
+    	} else {
+    		System.out.println(message);
+    	}
     }
     
     protected void printParameters() {
