@@ -37,7 +37,7 @@ public class DataGUIItem {
     private Image networkIcon;
     private Image unknownIcon;
     private Image textIcon;
-    private Image graceIcon;
+    private Image plotIcon;
     
     private Map typeToImageMapping;
     
@@ -63,7 +63,7 @@ public class DataGUIItem {
         networkIcon = createImage("network.png", this.brandPluginID);
         unknownIcon = createImage("unknown.png", this.brandPluginID);
         textIcon 	= createImage("text.png", this.brandPluginID);
-        graceIcon 	= createImage("grace.png", this.brandPluginID);
+        plotIcon 	= createImage("grace.png", this.brandPluginID);
 
         typeToImageMapping = new HashMap();
         registerImage(DataProperty.OTHER_TYPE, unknownIcon);
@@ -71,7 +71,7 @@ public class DataGUIItem {
         registerImage(DataProperty.NETWORK_TYPE, networkIcon);
         registerImage(DataProperty.TREE_TYPE, treeIcon);
         registerImage(DataProperty.TEXT_TYPE, textIcon);
-        registerImage(DataProperty.GRACE_TYPE, graceIcon);
+        registerImage(DataProperty.PLOT_TYPE, plotIcon);
     }
 
     /**
@@ -128,7 +128,7 @@ public class DataGUIItem {
      * @return the icon associated with this DataModel for display in IVC
      */
     public Image getIcon(){
-        Image icon = (Image)typeToImageMapping.get(data.getMetaData().get(DataProperty.TYPE));
+        Image icon = (Image)typeToImageMapping.get(data.getMetadata().get(DataProperty.TYPE));
         if(icon == null) icon = unknownIcon;
         return icon;
     }
