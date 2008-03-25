@@ -4,7 +4,6 @@ Bundle-Name: Jung Plug-in
 Bundle-SymbolicName: edu.uci.ics.jung
 Bundle-Version: 1.7.4
 Bundle-ClassPath: jung-1.7.4.jar
-Bundle-Localization: plugin
 Export-Package: edu.uci.ics.jung.algorithms,
  edu.uci.ics.jung.algorithms.blockmodel,
  edu.uci.ics.jung.algorithms.cluster,

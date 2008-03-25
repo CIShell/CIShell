@@ -3,7 +3,6 @@ Bundle-ManifestVersion: 2
 Bundle-Name: CIShell Template Code Provider
 Bundle-SymbolicName: org.cishell.templates;singleton:=true
 Bundle-Version: 1.0.0
-Bundle-Localization: plugin
 X-AutoStart: true
 Import-Package: org.cishell.framework;version="1.0.0",
  org.cishell.framework.algorithm;version="1.0.0",
