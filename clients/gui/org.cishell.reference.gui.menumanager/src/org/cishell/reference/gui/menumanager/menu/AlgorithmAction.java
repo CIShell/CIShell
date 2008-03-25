@@ -29,11 +29,6 @@ import org.eclipse.jface.action.Action;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogService;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 
 public class AlgorithmAction extends Action implements AlgorithmProperty, DataManagerListener {
@@ -113,7 +108,7 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, DataMa
         //adjust to log the whole acknowledgement in one block
         LogService logger = (LogService) ciContext.getService(LogService.class.getName());
         StringBuffer acknowledgement = new StringBuffer();
-        String label = (String)ref.getProperty("label");
+        String label = (String)ref.getProperty(LABEL);
         if (label != null){
         	acknowledgement.append("..........\n"+
             					label+" was selected.\n");
@@ -121,22 +116,22 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, DataMa
         String authors = (String)ref.getProperty("authors");
         if (authors != null)
         	acknowledgement.append("Author(s): "+authors+"\n"); 
-        String implementers = (String)ref.getProperty("implementers");
+        String implementers = (String)ref.getProperty(IMPLEMENTERS);
         if (implementers != null)
         	acknowledgement.append("Implementer(s): "+implementers+"\n");    
-        String integrators = (String)ref.getProperty("integrators");
+        String integrators = (String)ref.getProperty(INTEGRATORS);
         if (integrators != null)
             acknowledgement.append("Integrator(s): "+integrators+"\n");
-        String reference = (String)ref.getProperty("reference");
-        String reference_url = (String)ref.getProperty("reference_url");            
+        String reference = (String)ref.getProperty(REFERENCE);
+        String reference_url = (String)ref.getProperty(REFERENCE_URL);            
         if (reference != null && reference_url != null )
             acknowledgement.append("Reference: "+reference+
                     " ("+reference_url+")\n"); 
         else if (reference != null && reference_url == null )
         	acknowledgement.append("Reference: "+reference+"\n");                     
-        String docu = (String)ref.getProperty("docu");
+        String docu = (String)ref.getProperty(DOCUMENTATION_URL);
         if (docu != null)
-        	acknowledgement.append("Docu: "+docu+"\n");
+        	acknowledgement.append("Documentation: "+docu+"\n");
         if(acknowledgement.length()>1)
         	logger.log(LogService.LOG_INFO, acknowledgement.toString());    
         
