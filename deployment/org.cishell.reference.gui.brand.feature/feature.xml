@@ -2,7 +2,7 @@
 <feature
       id="org.cishell.reference.gui.brand.feature"
       label="CIShell Branding Feature"
-      version="0.8.0">
+      version="1.0.0">
 
    <description url="http://cishell.org">
       Branded CIShell Reference GUI
