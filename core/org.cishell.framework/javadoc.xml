@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="javadoc">
+	<property name="version" value="1.0" />
+    <target name="javadoc">
+        <javadoc destdir="bin/doc" 
+        	access="public" 
+        	source="1.4" 
+        	use="true" 
+        	notree="false" 
+        	nonavbar="false" 
+        	noindex="false" 
+        	splitindex="true" 
+        	author="true" 
+        	version="true" 
+        	nodeprecatedlist="false" 
+        	nodeprecated="false" 
+        	packagenames="org.cishell.framework.data,org.cishell.framework.userprefs,org.cishell.service.guibuilder,org.cishell.app.service.scheduler,org.cishell.framework,org.cishell.app.service.datamanager,org.cishell.framework.algorithm,org.cishell.service.conversion" 
+        	sourcepath="src" 
+        	classpath="lib/osgi.core.jar:lib/osgi.compendium.jar" 
+        	overview="src/org/cishell/overview.html" 
+        	doctitle="CIShell: Cyberinfrastructure Shell v${version} API">
+            <link href="http://bundles.osgi.org/javadoc/r4/"/>
+            <link href="http://java.sun.com/j2se/1.4.2/docs/api/"/>
+        </javadoc>
+    </target>
+</project>
