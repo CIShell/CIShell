@@ -23,7 +23,11 @@ package org.cishell.service.conversion;
 public class ConversionException extends Exception {
 	private static final long serialVersionUID = 1749134893481511313L;
 
-	public ConversionException(Exception exception) {
+	public ConversionException(String message, Throwable exception) {
+		super(message, exception);
+	}
+	
+	public ConversionException(Throwable exception) {
 		super(exception);
 	}
 	

@@ -22,7 +22,11 @@ package org.cishell.framework.algorithm;
 public class AlgorithmExecutionException extends Exception {
 	private static final long serialVersionUID = 9017277008277139930L;
 
-	public AlgorithmExecutionException(Exception exception) {
+	public AlgorithmExecutionException(String message, Throwable exception) {
+		super(message, exception);
+	}
+	
+	public AlgorithmExecutionException(Throwable exception) {
 		super(exception);
 	}
 	
