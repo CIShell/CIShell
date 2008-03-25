@@ -29,11 +29,6 @@ public class JythonAlgorithmFactory implements AlgorithmFactory {
         this.properties = ctxt.getProperties();  
     }
 
-    
-    protected void deactivate(ComponentContext ctxt) {
-        provider = null;
-    }
-
     public Algorithm createAlgorithm(Data[] data, Dictionary parameters, 
     		CIShellContext context) {
     	return new JythonRunnerAlgorithm(data, parameters, context,

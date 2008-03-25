@@ -53,7 +53,7 @@ public class JythonResultFormatter {
     	List results = new ArrayList();
     	for (int ii = 0; ii < data.size(); ii++) {
     		Data result = ((Data) data.get(ii));
-    		Dictionary metadataHolder = result.getMetaData();
+    		Dictionary metadataHolder = result.getMetadata();
     		
     		String dataLabel = getResultLabel(properties, ii);
     		metadataHolder.put(DataProperty.LABEL, dataLabel);
