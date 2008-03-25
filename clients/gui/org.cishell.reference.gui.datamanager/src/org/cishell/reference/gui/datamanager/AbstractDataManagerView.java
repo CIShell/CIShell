@@ -25,6 +25,7 @@ import org.cishell.app.service.datamanager.DataManagerListener;
 import org.cishell.app.service.datamanager.DataManagerService;
 import org.cishell.framework.algorithm.Algorithm;
 import org.cishell.framework.algorithm.AlgorithmFactory;
+import org.cishell.framework.algorithm.AlgorithmExecutionException;
 import org.cishell.framework.data.Data;
 import org.cishell.framework.data.DataProperty;
 import org.cishell.reference.gui.workspace.CIShellApplication;
@@ -105,17 +106,20 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 	private SaveListener saveListener;
 	private ViewListener viewListener;
 	private ViewWithListener viewWithListener;
+	private LogService log;
 
 	public AbstractDataManagerView(String brandPluginID) {
-		manager = Activator.getDataManagerService();
+
 		this.brandPluginID = brandPluginID;
 		dataToDataGUIItemMap = new HashMap();
-
-		if (manager == null) {
-			LogService log = Activator.getLogService();
+		
+		manager = Activator.getDataManagerService();
+		log = Activator.getLogService();
+		
+		if (manager == null) {			
 			if (log != null) {
 				log.log(LogService.LOG_ERROR, "Data Manager Service unavailable!");
-			}
+			}			
 		}
 	}
 
@@ -254,7 +258,7 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 	}
 	
 	private DataGUIItem getParent(Data data) {
-		Dictionary modelDictionary = data.getMetaData();
+		Dictionary modelDictionary = data.getMetadata();
 		
 		Data parent = (Data) modelDictionary.get(DataProperty.PARENT);
 		DataGUIItem parentItem;
@@ -459,7 +463,7 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 
 		DataGUIItem treeItem = (DataGUIItem) item.getData();
 		Data model = treeItem.getModel();
-		model.getMetaData().put(DataProperty.LABEL, newLabel);
+		model.getMetadata().put(DataProperty.LABEL, newLabel);
 		viewer.refresh();
 		newEditor.dispose();
 	
@@ -493,7 +497,21 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 				Algorithm algorithm = saveFactory
 						.createAlgorithm(data, new Hashtable(), Activator
 								.getCIShellContext());
-				algorithm.execute();
+				try{
+					algorithm.execute();
+				}catch (AlgorithmExecutionException aee)  {
+					if (log != null) {
+						log.log(LogService.LOG_ERROR, 
+								"org.cishell.framework.algorithm.AlgorithmExecutionException", 
+								aee);
+					}
+					else {
+						log = Activator.getLogService();
+						log.log(LogService.LOG_ERROR, 
+								"org.cishell.framework.algorithm.AlgorithmExecutionException",
+								aee);
+					}
+				}
 			}
 		}
 	}
@@ -506,7 +524,21 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 				Algorithm algorithm = viewFactory
 						.createAlgorithm(data, new Hashtable(), Activator
 								.getCIShellContext());
-				algorithm.execute();
+				try {
+					algorithm.execute();
+				}catch (AlgorithmExecutionException aee)  {
+					if (log != null) {
+						log.log(LogService.LOG_ERROR, 
+								"org.cishell.framework.algorithm.AlgorithmExecutionException", 
+								aee);
+					}
+					else {
+						log = Activator.getLogService();
+						log.log(LogService.LOG_ERROR, 
+								"org.cishell.framework.algorithm.AlgorithmExecutionException",
+								aee);
+					}
+				}
 			}
 		}
 	}
