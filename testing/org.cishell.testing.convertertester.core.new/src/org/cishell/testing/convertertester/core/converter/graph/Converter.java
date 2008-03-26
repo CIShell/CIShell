@@ -4,6 +4,7 @@ import java.util.Hashtable;
 
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
+import org.cishell.framework.algorithm.AlgorithmExecutionException;
 import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.algorithm.AlgorithmProperty;
 import org.cishell.framework.data.Data;
@@ -69,7 +70,7 @@ public class Converter {
 	}
 	
 	public Data[] execute(Data[] input, Hashtable parameters,
-			CIShellContext cContext) {
+			CIShellContext cContext) throws AlgorithmExecutionException {
 		
 		AlgorithmFactory convAlgFactory = 
 			(AlgorithmFactory) this.bContext.getService(this.ref);

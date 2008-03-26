@@ -116,7 +116,7 @@ public abstract class FilePassResult {
 	}
 	
 	public String getOriginalFileLabel() {
-		return (String) getOriginalData()[0].getMetaData().get(DataProperty.LABEL);
+		return (String) getOriginalData()[0].getMetadata().get(DataProperty.LABEL);
 	}
 	
 	public String getOriginalFileShortLabel() {

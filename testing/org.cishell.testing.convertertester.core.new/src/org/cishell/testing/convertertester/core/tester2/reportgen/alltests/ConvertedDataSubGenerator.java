@@ -28,11 +28,11 @@ private ConvertedDataReport convertedDataReport;
 			Object fileData = firstData.getData();
 			if (fileData != null && fileData instanceof File) {
 				this.convertedDataReport =
-					new ConvertedDataReport((File) fileData,(String) firstData.getMetaData().get(DataProperty.LABEL) +
+					new ConvertedDataReport((File) fileData,(String) firstData.getMetadata().get(DataProperty.LABEL) +
 							" for " + fpr.getName() + " of " + tr.getName());
 			} else {
 				this.convertedDataReport = 
-					new ConvertedDataReport((String) firstData.getMetaData().get(DataProperty.LABEL) +  
+					new ConvertedDataReport((String) firstData.getMetadata().get(DataProperty.LABEL) +  
 							" for " + fpr.getName() + " of " +  tr.getName());
 			}
 	}

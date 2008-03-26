@@ -212,7 +212,7 @@ public class ConverterTester2 implements AlgorithmProperty {
 			results[ii] = 
 				new Data[] {new BasicData(new File(filePath), format)};
 			
-			Dictionary metadata = results[ii][0].getMetaData();
+			Dictionary metadata = results[ii][0].getMetadata();
 			metadata.put(DataProperty.LABEL, filePath);
 		}
 		

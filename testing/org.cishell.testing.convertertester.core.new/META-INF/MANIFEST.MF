@@ -14,10 +14,7 @@ Import-Package: org.cishell.framework,
  org.osgi.service.metatype;version="1.1.0",
  org.osgi.service.prefs;version="1.1.0"
 Require-Bundle: org.prefuse.lib
-Export-Package: org.cishell.testing.convertertester.core.converter,
- org.cishell.testing.convertertester.core.converter.graph,
- org.cishell.testing.convertertester.core.service,
- org.cishell.testing.convertertester.core.tester,
+Export-Package: org.cishell.testing.convertertester.core.converter.graph,
  org.cishell.testing.convertertester.core.tester.graphcomparison,
  org.cishell.testing.convertertester.core.tester2,
  org.cishell.testing.convertertester.core.tester2.fakelogger,

@@ -322,7 +322,7 @@ public class DefaultTestRunner implements TestRunner {
 		}
 		
 		Data datum = data[0];
-		Dictionary md = datum.getMetaData();
+		Dictionary md = datum.getMetadata();
 		if (md.get(DataProperty.LABEL) == null) {
 			md.put(DataProperty.LABEL, "result of " + converter.getShortName());
 		} else {
@@ -357,7 +357,7 @@ public class DefaultTestRunner implements TestRunner {
 	
 	private void alterMetaData(Data[] origFileData) {
 		Data data = origFileData[0];
-		Dictionary metadata = data.getMetaData();
+		Dictionary metadata = data.getMetadata();
 		String label = (String) metadata.get(DataProperty.LABEL);
 		if (label != null) {
 		metadata.put(DataProperty.LABEL, getFileName(label));
