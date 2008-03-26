@@ -23,6 +23,7 @@ import org.cishell.framework.algorithm.AlgorithmProperty;
 import org.cishell.framework.data.Data;
 import org.cishell.remoting.service.conversion.RemoteDataConversionService;
 import org.cishell.remoting.service.framework.DataModelRegistry;
+import org.cishell.service.conversion.ConversionException;
 import org.cishell.service.conversion.Converter;
 import org.cishell.service.conversion.DataConversionService;
 import org.osgi.framework.BundleContext;
@@ -55,7 +56,11 @@ public class RemoteDataConversionServiceServer implements
         
         Data dm = dmRegistry.getDataModel(dataModelID);
         if (dm != null) {
-            dm = converter.convert(dm, outFormat);
+            try {
+				dm = converter.convert(dm, outFormat);
+			} catch (ConversionException e) {
+				dm = null;
+			}
             
             if (dm != null) {
                 id = dmRegistry.registerDataModel(dm);

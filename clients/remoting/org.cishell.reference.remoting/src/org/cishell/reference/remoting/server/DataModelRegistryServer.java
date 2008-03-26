@@ -27,6 +27,7 @@ import org.cishell.framework.data.BasicData;
 import org.cishell.framework.data.Data;
 import org.cishell.reference.remoting.ObjectRegistry;
 import org.cishell.remoting.service.framework.DataModelRegistry;
+import org.cishell.service.conversion.ConversionException;
 import org.cishell.service.conversion.DataConversionService;
 import org.osgi.framework.BundleContext;
 
@@ -79,7 +80,11 @@ public class DataModelRegistryServer implements DataModelRegistry {
             ciContext.getService(DataConversionService.class.getName());
         
         Data dm = getDataModel(dataModelID);
-        dm = converter.convert(dm, format);
+        try {
+			dm = converter.convert(dm, format);
+		} catch (ConversionException e1) {
+			dm = null;
+		}
         byte[] data = null;
         
         if (dm != null && dm.getData() instanceof File) {
@@ -138,7 +143,7 @@ public class DataModelRegistryServer implements DataModelRegistry {
      * @see org.cishell.remoting.service.framework.DataModelRegistry#getProperties(String)
      */
     public Hashtable getProperties(String dataModelID) {
-        return (Hashtable) getDataModel(dataModelID).getMetaData();
+        return (Hashtable) getDataModel(dataModelID).getMetadata();
     }
     
     /**
@@ -206,7 +211,7 @@ public class DataModelRegistryServer implements DataModelRegistry {
             return null;
         }
 
-        public Dictionary getMetaData() {
+        public Dictionary getMetadata() {
             return new Hashtable();
         }
 
