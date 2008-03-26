@@ -33,6 +33,7 @@ import org.cishell.framework.data.Data;
 import org.cishell.reference.remoting.RemotingClient;
 import org.cishell.remoting.service.conversion.RemoteDataConversionService;
 import org.cishell.remoting.service.framework.DataModelRegistry;
+import org.cishell.service.conversion.ConversionException;
 import org.cishell.service.conversion.Converter;
 import org.cishell.service.conversion.DataConversionService;
 
@@ -126,8 +127,8 @@ public class DataModelRegistryClient extends RemotingClient implements
             id = ((RemoteDataModel) dm).dmID;
         } else {
             Hashtable properties = null;
-            if (dm.getMetaData() != null) {
-                properties = toHashtable(dm.getMetaData());
+            if (dm.getMetadata() != null) {
+                properties = toHashtable(dm.getMetadata());
             } else {
                 properties = new Hashtable();
             }
@@ -166,7 +167,11 @@ public class DataModelRegistryClient extends RemotingClient implements
                         format = (String)conversion.get(0);
                         finalOutFormat = (String)conversion.get(1);
                         
-                        dm = converter.convert(dm, format);
+                        try {
+							dm = converter.convert(dm, format);
+						} catch (ConversionException e) {
+							dm = null;
+						}
                     }
                 } else {
                     dm = null;
@@ -283,7 +288,11 @@ public class DataModelRegistryClient extends RemotingClient implements
                             
                             Data dm = new BasicData(new Hashtable(), 
                                     file, inFormat);
-                            dm = convert[0].convert(dm);
+                            try {
+								dm = convert[0].convert(dm);
+							} catch (ConversionException e) {
+								dm = null;
+							}
                             
                             if (dm != null) {
                                 data = dm.getData();
@@ -298,7 +307,7 @@ public class DataModelRegistryClient extends RemotingClient implements
             return data;
         }
 
-        public Dictionary getMetaData() {
+        public Dictionary getMetadata() {
             if (properties == null) {
                 properties = reg.getProperties(dmID);
             }

@@ -23,6 +23,8 @@ import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
 import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.data.Data;
+import org.cishell.reference.service.metatype.BasicMetaTypeProvider;
+import org.cishell.reference.service.metatype.BasicObjectClassDefinition;
 import org.cishell.remoting.service.framework.AlgorithmFactoryRegistry;
 import org.cishell.remoting.service.framework.AlgorithmRegistry;
 import org.cishell.remoting.service.framework.DataModelRegistry;
@@ -106,11 +108,27 @@ public class AlgorithmFactoryRegistryServer implements AlgorithmFactoryRegistry 
         if (factory != null && algReg != null && mtpReg != null && dmReg != null) {
             Data[] dm = dmReg.getDataModels(dataModelIDs);
             
-            MetaTypeProvider mtp = factory.createParameters(dm);
+            MetaTypeProvider mtp = getMetaTypeProvider(servicePID, dm);
             mtpID = mtpReg.registerMetaTypeProvider(mtp);
         }
         
         return mtpID;
+    }
+    
+    //FIXME
+    private MetaTypeProvider getMetaTypeProvider(String servicePID, Data[] dm) {
+		try {
+			String filter = "(" + Constants.SERVICE_PID + "=" + servicePID + ")";
+			ServiceReference[] refs = bContext.getServiceReferences(AlgorithmFactory.class.getName(), filter);
+			
+			if (refs != null && refs.length == 1) {
+	            
+	        }
+		} catch (InvalidSyntaxException e) {
+
+		}
+		
+    	return new BasicMetaTypeProvider(new BasicObjectClassDefinition(servicePID,"","",null));
     }
     
     public Hashtable getProperties(String servicePID) {

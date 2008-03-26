@@ -22,6 +22,7 @@ import org.cishell.app.service.scheduler.SchedulerAdapter;
 import org.cishell.app.service.scheduler.SchedulerService;
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
+import org.cishell.framework.algorithm.AlgorithmExecutionException;
 import org.cishell.framework.data.Data;
 import org.cishell.reference.remoting.ObjectRegistry;
 import org.cishell.reference.remoting.event.CIShellEventConstants;
@@ -136,7 +137,7 @@ public class AlgorithmRegistryServer extends SchedulerAdapter implements Algorit
             this.algorithmID = algorithmID;
         }
 
-        public Data[] execute() {
+        public Data[] execute() throws AlgorithmExecutionException {
             return algorithm.execute();
         }
     }
