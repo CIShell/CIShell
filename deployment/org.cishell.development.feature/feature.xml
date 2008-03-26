@@ -40,10 +40,6 @@ Dr. Katy Borner (katy@indiana.edu)
          id="org.eclipse.equinox"
          version="0.0.0"/>
 
-   <includes
-         id="org.eclipse.equinox.source"
-         version="0.0.0"/>
-
    <plugin
          id="org.cishell.framework"
          download-size="0"
