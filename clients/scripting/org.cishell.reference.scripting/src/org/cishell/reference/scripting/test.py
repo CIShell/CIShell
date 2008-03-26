@@ -15,11 +15,11 @@ def getAlgorithm(ref):
 def getService(service):
     return bContext.getService(bContext.getServiceReference(str(service)))
 
-from org.cishell.framework.datamodel import BasicDataModel
+from org.cishell.framework.data import BasicData
 
 refs = findAlgorithms()
 factory = getAlgorithm(refs[2])
-alg = factory.createAlgorithm([BasicDataModel(None)],Hashtable(),ciContext)
+alg = factory.createAlgorithm([BasicData(None)],Hashtable(),ciContext)
 dm1 = alg.execute()
 
 dm2 = [BasicDataModel("100"),]
