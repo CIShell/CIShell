@@ -42,7 +42,7 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
         
-		this.context = context;
+		Activator.context = context;
 		
         while (getWorkbench() == null) {
             Thread.sleep(500);

@@ -116,7 +116,7 @@ public class MenuAdapter implements AlgorithmProperty {
      
 //          initializeMenu();
         } catch (InvalidSyntaxException e) {
-            getLog().log(LogService.LOG_ERROR, "Invalid Syntax", e);
+            getLog().log(LogService.LOG_DEBUG, "Invalid Syntax", e);
         }
     }
     
@@ -275,7 +275,7 @@ public class MenuAdapter implements AlgorithmProperty {
 			}
 			else{
 				//otherwise log the error
-				getLog().log(LogService.LOG_WARNING, 
+				getLog().log(LogService.LOG_DEBUG, 
 	                    "Can not find an algorithm package associated with Menu: "
 						+menuName+" and pid: " +pid+ ". Skip to show it on the menu.");
 			}
@@ -397,8 +397,8 @@ public class MenuAdapter implements AlgorithmProperty {
             
             Display.getDefault().asyncExec(updateAction);
         } else {
-//            getLog().log(LogService.LOG_WARNING, 
-//                    "Bad menu path for Algorithm: " + ref.getProperty(LABEL));
+            getLog().log(LogService.LOG_DEBUG, 
+                    "Bad menu path for Algorithm: " + ref.getProperty(LABEL));
         }
     }
     
