@@ -3,19 +3,19 @@
    <description url="http://cishell.org/update">
       Update site for CIShell: Cyberinfrastructure Shell
    </description>
-   <feature url="features/org.cishell.algorithm.examples.feature_0.2.0.200610161755.jar" id="org.cishell.algorithm.examples.feature" version="0.2.0.200610161755">
+   <feature url="features/org.cishell.development.feature_1.0.0.jar" id="org.cishell.development.feature" version="1.0.0">
       <category name="Development"/>
    </feature>
-   <feature url="features/org.cishell.development.feature_0.2.0.200610161755.jar" id="org.cishell.development.feature" version="0.2.0.200610161755">
-      <category name="Development"/>
-   </feature>
-   <feature url="features/org.cishell.reference.gui.feature_0.2.0.200610161755.jar" id="org.cishell.reference.gui.feature" version="0.2.0.200610161755">
+   <feature url="features/org.cishell.reference.gui.brand.feature_1.0.0.jar" id="org.cishell.reference.gui.brand.feature" version="1.0.0">
       <category name="Applications"/>
    </feature>
-   <feature url="features/org.cishell.feature_0.2.0.200610161755.jar" id="org.cishell.feature" version="0.2.0.200610161755">
+   <feature url="features/org.cishell.reference.gui.feature_1.0.0.jar" id="org.cishell.reference.gui.feature" version="1.0.0">
+      <category name="Applications"/>
+   </feature>
+   <feature url="features/org.cishell.feature_1.0.0.jar" id="org.cishell.feature" version="1.0.0">
       <category name="Core Features"/>
    </feature>
-   <feature url="features/org.cishell.reference.feature_0.2.0.200610161755.jar" id="org.cishell.reference.feature" version="0.2.0.200610161755">
+   <feature url="features/org.cishell.reference.feature_1.0.0.jar" id="org.cishell.reference.feature" version="1.0.0">
       <category name="Core Features"/>
    </feature>
    <category-def name="Development" label="Development"/>
