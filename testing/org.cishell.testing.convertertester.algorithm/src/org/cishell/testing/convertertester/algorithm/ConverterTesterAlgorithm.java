@@ -361,7 +361,7 @@ public class ConverterTesterAlgorithm implements Algorithm,
         private Data createReportData(Object report, String label,
         		Data parent, String format, String type) {
         	Data reportData = new BasicData(report, format);
-			Dictionary metadata = reportData.getMetaData();
+			Dictionary metadata = reportData.getMetadata();
 			if (label == null) {
 				label = "no label";
 			}
