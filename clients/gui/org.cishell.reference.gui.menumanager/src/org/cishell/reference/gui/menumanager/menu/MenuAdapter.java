@@ -13,7 +13,6 @@
  * ***************************************************************************/
 package org.cishell.reference.gui.menumanager.menu;
 
-//Java
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -52,10 +51,6 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 
-/*
- * Bonnie's comments:
- * weird, why implements AlgorithmProperty? It does not define any abstract interface.
- */
 public class MenuAdapter implements AlgorithmProperty {
     private IMenuManager menuBar;
     private Shell shell;
@@ -137,13 +132,11 @@ public class MenuAdapter implements AlgorithmProperty {
         		}
         		else{       
         			String pid = (String)refs[i].getProperty(PRESERVED_SERVICE_PID);
-//        			System.out.println("pid="+pid);
         			pidToServiceReferenceMap.put(pid.toLowerCase().trim(), refs[i]);
         			pidToServiceReferenceMapCopy.put(pid.toLowerCase().trim(), refs[i]);
         		}
         	}
         }
-
     }
     /*
      * Parse default_menu.xml file. For each menu node, get the value of the attribut "pid"
@@ -167,7 +160,6 @@ public class MenuAdapter implements AlgorithmProperty {
     
     private void processTopMenu (Element topMenuNode){    	
     	MenuManager topMenuBar = null;    	
-
     
     	/*	
     	 * The File and Help menus are created in ApplicationActionBarAdvisor.java
@@ -217,7 +209,7 @@ public class MenuAdapter implements AlgorithmProperty {
 					processSubMenu(el, groupMenuBar);					
 				}				
 				else if (menu_type.equalsIgnoreCase(PRESERVED_BREAK)){	
-					//It seems that Framework automatially takes care of issues
+					//It seems that Framework automatically takes care of issues
 					//such as double separators, a separator at the top or bottom					
 					parentMenuBar.add(new Separator());
 				}
@@ -260,7 +252,6 @@ public class MenuAdapter implements AlgorithmProperty {
 		if (pid == null || pid.length()==0){
 			//check if the name is one of the preserved one
 			//if so add the default action
-			
 		}
 		else{
 			//check if the pid has registered in pidToServiceReferenceMap
@@ -292,7 +283,6 @@ public class MenuAdapter implements AlgorithmProperty {
 			
 			//parse using builder to get DOM representation of the XML file
 	        String fullpath=System.getProperty("osgi.configuration.area") + DEFAULT_MENU_FILE_NAME;
-//	        System.out.println(">>parse file: "+fullpath);
 	        dom = db.parse(fullpath);	
 	    // printElementAttributes(dom);
 
@@ -338,7 +328,6 @@ public class MenuAdapter implements AlgorithmProperty {
         public void serviceChanged(ServiceEvent event) {
             switch (event.getType()) {
             case ServiceEvent.REGISTERED:
-//            	System.out.println(">>>receive ServiceEvent.Registered");
                 makeMenuItem(event.getServiceReference());
                 break;
             case ServiceEvent.UNREGISTERING:
@@ -367,19 +356,15 @@ public class MenuAdapter implements AlgorithmProperty {
                 menu = targetMenu.findMenuUsingPath(items[i]);
  
                 if (menu == null && items[i] != null) {
-                    menu = targetMenu.findMenuUsingPath(items[i].toLowerCase());
-                  
+                    menu = targetMenu.findMenuUsingPath(items[i].toLowerCase());                  
                 }
                 
-                if (menu == null) {
-                	
+                if (menu == null) {                	
                     menu = createMenu(items[i],items[i]);
                     targetMenu.appendToGroup(ADDITIONS_GROUP, menu);
                 }
                 
                 targetMenu = menu;
-                
-               
             }
             
             group = items[items.length-1];

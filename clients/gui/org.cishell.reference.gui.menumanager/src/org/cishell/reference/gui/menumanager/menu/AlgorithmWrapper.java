@@ -24,6 +24,7 @@ import java.util.Map;
 import org.cishell.app.service.datamanager.DataManagerService;
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
+import org.cishell.framework.algorithm.AlgorithmExecutionException;
 import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.algorithm.AlgorithmProperty;
 import org.cishell.framework.algorithm.DataValidator;
@@ -34,6 +35,7 @@ import org.cishell.framework.data.Data;
 import org.cishell.framework.data.DataProperty;
 import org.cishell.reference.gui.menumanager.Activator;
 import org.cishell.reference.service.metatype.BasicMetaTypeProvider;
+import org.cishell.service.conversion.ConversionException;
 import org.cishell.service.conversion.Converter;
 import org.cishell.service.guibuilder.GUIBuilderService;
 import org.osgi.framework.BundleContext;
@@ -70,128 +72,133 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
         this.converters = converters;
 
         this.idToLabelMap = new HashMap();
-        this.progressMonitor = null;
-        
-        
+        this.progressMonitor = null;                
     }
 
     /**
      * @see org.cishell.framework.algorithm.Algorithm#execute()
      */
     public Data[] execute() {
-        try {
-            for (int i=0; i < data.length; i++) {
-                if (converters[i] != null) {
-                    data[i] = converters[i][0].convert(data[i]);
-    
-                    if (data[i] == null && i < (data.length - 1)) {
-                    	Exception e = 
-                    		new Exception("The converter " + 
-                    				converters[i].getClass().getName() +
-                    				" returned a null result where data was expected.");
-                    	throw e;
-                    }
-                    converters[i] = null;
-                }
-            }
-            
-            GUIBuilderService builder = (GUIBuilderService)
-            ciContext.getService(GUIBuilderService.class.getName());
-        
-            AlgorithmFactory factory = (AlgorithmFactory) bContext.getService(ref);
-            
-            if (factory instanceof DataValidator) {
-            	String validation = ((DataValidator) factory).validate(data);
-            	
-            	if (validation != null && validation.length() > 0) {
-            		String label = (String) ref.getProperty(LABEL);
-            		if (label == null) {
-            			label = "Algorithm";
-            		}
-            		
-            		builder.showError("Invalid Data", "The data given to \""+label+"\" is incompatible for this reason: "+validation , (String) null);
+        for (int i=0; i < data.length; i++) {
+            if (converters[i] != null) {
+            	try {
+            		data[i] = converters[i][0].convert(data[i]);
+            	} catch (ConversionException e) {
+            		log(LogService.LOG_ERROR,"The conversion of data to give" +
+            				" the algorithm failed for this reason: "+e.getMessage(), e);
             		return null;
             	}
-            }
-            
-            String pid = (String)ref.getProperty(Constants.SERVICE_PID);
-            
-            String metatype_pid = (String) ref.getProperty(PARAMETERS_PID);
-            if (metatype_pid == null) {
-            	metatype_pid = pid;
-            }
 
-            this.provider = null;
-            
-            MetaTypeService metaTypeService = (MetaTypeService) Activator.getService(MetaTypeService.class.getName());
-            if (metaTypeService != null) {
-            	provider = metaTypeService.getMetaTypeInformation(ref.getBundle());            	
-            }
-
-            if (factory instanceof ParameterMutator && provider != null) {
-            	try {
-            		ObjectClassDefinition ocd = provider.getObjectClassDefinition(metatype_pid, null);
-            		
-            		ocd = ((ParameterMutator) factory).mutateParameters(data, ocd);
-                	
-                	if (ocd != null) {
-                		provider = new BasicMetaTypeProvider(ocd);
-                	}
-            	} catch (IllegalArgumentException e) {
-            		 log(LogService.LOG_DEBUG, pid+" has an invalid metatype id: "+metatype_pid);
-            	}
-            }
-            
-            this.parameters = new Hashtable();
-            if (provider != null) {
-                this.parameters = builder.createGUIandWait(pid, provider);
-            }
-            
-            if(this.parameters == null) {
-            	return new Data[0];
-            }
-            
-            algorithm = factory.createAlgorithm(data, parameters, ciContext);
-            
-            printParameters();
-            
-            if (progressMonitor != null && algorithm instanceof ProgressTrackable) {
-            	((ProgressTrackable)algorithm).setProgressMonitor(progressMonitor);
-            }
-            
-            Data[] outData = algorithm.execute();
-            
-            if (outData != null) {
-                DataManagerService dataManager = (DataManagerService) 
-                    bContext.getService(bContext.getServiceReference(
-                            DataManagerService.class.getName()));
-                
-                doParentage(outData);
-                
-                List goodData = new ArrayList();
-                for (int i=0; i < outData.length; i++) {
-                    if (outData[i] != null) {
-                        goodData.add(outData[i]);
-                    }
+                if (data[i] == null && i < (data.length - 1)) {
+                	log(LogService.LOG_ERROR, "The converter: " + 
+                				converters[i].getClass().getName() +
+                				" returned a null result where data was expected when" +
+                				" converting the data to give the algorithm.");
+                	return null;
                 }
-                
-                outData = (Data[]) goodData.toArray(new Data[0]);
-                
-                if (outData.length != 0) {
-                    dataManager.setSelectedData(outData);
-                }
+                converters[i] = null;
             }
-            
-            return outData;
-        } catch (Throwable e) {
-            GUIBuilderService guiBuilder = (GUIBuilderService) 
-                ciContext.getService(GUIBuilderService.class.getName());
-            guiBuilder.showError("Error!", 
-                    "The Algorithm: \""+ref.getProperty(AlgorithmProperty.LABEL)+
-                    "\" had an error while executing.", e);
-            
-            return new Data[0];
         }
+        
+        GUIBuilderService builder = (GUIBuilderService)
+        ciContext.getService(GUIBuilderService.class.getName());
+    
+        AlgorithmFactory factory = (AlgorithmFactory) bContext.getService(ref);
+        
+        if (factory instanceof DataValidator) {
+        	String validation = ((DataValidator) factory).validate(data);
+        	
+        	if (validation != null && validation.length() > 0) {
+        		String label = (String) ref.getProperty(LABEL);
+        		if (label == null) {
+        			label = "Algorithm";
+        		}
+        		
+        		builder.showError("Invalid Data", "The data given to \""+label+"\" is incompatible for this reason: "+validation , (String) null);
+        		return null;
+        	}
+        }
+        
+        String pid = (String)ref.getProperty(Constants.SERVICE_PID);
+        
+        String metatype_pid = (String) ref.getProperty(PARAMETERS_PID);
+        if (metatype_pid == null) {
+        	metatype_pid = pid;
+        }
+
+        this.provider = null;
+        
+        MetaTypeService metaTypeService = (MetaTypeService) Activator.getService(MetaTypeService.class.getName());
+        if (metaTypeService != null) {
+        	provider = metaTypeService.getMetaTypeInformation(ref.getBundle());            	
+        }
+
+        if (factory instanceof ParameterMutator && provider != null) {
+        	try {
+        		ObjectClassDefinition ocd = provider.getObjectClassDefinition(metatype_pid, null);
+        		
+        		ocd = ((ParameterMutator) factory).mutateParameters(data, ocd);
+            	
+            	if (ocd != null) {
+            		provider = new BasicMetaTypeProvider(ocd);
+            	}
+        	} catch (IllegalArgumentException e) {
+        		 log(LogService.LOG_DEBUG, pid+" has an invalid metatype id: "+metatype_pid);
+        	}
+        }
+        
+        this.parameters = new Hashtable();
+        if (provider != null) {
+            this.parameters = builder.createGUIandWait(metatype_pid, provider);
+        }
+        
+        //check to see if the user cancelled the operation
+        if(this.parameters == null) {
+        	return null;
+        }
+        
+        algorithm = factory.createAlgorithm(data, parameters, ciContext);
+        
+        printParameters();
+        
+        if (progressMonitor != null && algorithm instanceof ProgressTrackable) {
+        	((ProgressTrackable)algorithm).setProgressMonitor(progressMonitor);
+        }
+        
+        Data[] outData = null;
+        try {
+        	outData = algorithm.execute();
+        } catch (AlgorithmExecutionException e) {
+            log(LogService.LOG_ERROR,
+        		"The Algorithm: \""+ref.getProperty(AlgorithmProperty.LABEL)+
+                "\" had an error while executing: "+e.getMessage());
+        } catch (RuntimeException e) {
+        	builder.showError("Error!", "An unexpected exception occurred while "
+        			+"executing \""+ref.getProperty(AlgorithmProperty.LABEL)+".\"", e);
+        }
+        
+        if (outData != null) {
+            DataManagerService dataManager = (DataManagerService) 
+                bContext.getService(bContext.getServiceReference(
+                        DataManagerService.class.getName()));
+            
+            doParentage(outData);
+            
+            List goodData = new ArrayList();
+            for (int i=0; i < outData.length; i++) {
+                if (outData[i] != null) {
+                    goodData.add(outData[i]);
+                }
+            }
+            
+            outData = (Data[]) goodData.toArray(new Data[0]);
+            
+            if (outData.length != 0) {
+                dataManager.setSelectedData(outData);
+            }
+        }
+        
+        return outData;
     }
     
     protected void log(int logLevel, String message) {
@@ -202,6 +209,16 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
     		System.out.println(message);
     	}
     }
+
+    protected void log(int logLevel, String message, Throwable exception) {
+    	LogService log = (LogService) Activator.getService(LogService.class.getName());
+    	if (log != null) {
+    		log.log(logLevel, message, exception);
+    	} else {
+    		System.out.println(message);
+    		exception.printStackTrace();
+    	}
+    }    
     
     protected void printParameters() {
         LogService logger = getLogService();
