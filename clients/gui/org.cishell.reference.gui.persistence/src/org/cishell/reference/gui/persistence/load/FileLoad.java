@@ -133,7 +133,7 @@ public class FileLoad implements Algorithm{
                 }
                 
 		   		String fileExtension = getFileExtension(file).toLowerCase();
-	       		String filter = "(&(type=converter)(in_data=file-ext:"+fileExtension+"))";
+	       		String filter = "(&(type=validator)(in_data=file-ext:"+fileExtension+"))";
 		        try {
 
 		       		// set the properties for the resource descriptor.
