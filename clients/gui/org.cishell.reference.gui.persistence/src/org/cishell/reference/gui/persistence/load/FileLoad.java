@@ -76,7 +76,8 @@ public class FileLoad implements Algorithm{
     		return returnDM;
     	}
     	else {
-    		throw new AlgorithmExecutionException("No data could be loaded.");
+    		this.logger.log(LogService.LOG_WARNING, "File loading canceled");
+    		return new Data[0];
     	}
     	} catch (AlgorithmExecutionException e1) {
     		throw e1;
