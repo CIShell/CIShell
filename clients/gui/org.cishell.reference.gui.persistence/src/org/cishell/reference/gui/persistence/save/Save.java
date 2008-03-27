@@ -17,7 +17,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 import org.osgi.framework.ServiceReference;
-
 /**
  * Save algorithm for persisting a data object
  * 
@@ -72,26 +71,8 @@ public class Save implements Algorithm {
     			guiRun(new Runnable() {
     				public void run() {
     					if (converters.length == 0) {
-    						final FileSaver saver = new FileSaver(parentShell, context);
-                            saver.save(new Converter(){
-                                Dictionary props = new Hashtable();
-
-                                public Data convert(Data data) {
-                                    return data;
-                                }
-
-                                public AlgorithmFactory getAlgorithmFactory() {
-                                    return null;
-                                }
-
-                                public ServiceReference[] getConverterChain() {
-                                    return null;
-                                }
-
-                                public Dictionary getProperties() {
-                                    props.put(AlgorithmProperty.OUT_DATA, "file:*");
-                                    return props;
-                                }}, data[0]);
+    						FileSaver saver = new FileSaver(parentShell, context);
+                            saver.save(new NoConversionConverter(), data[0]);
     					} else if (converters.length == 1) {
                             final FileSaver saver = new FileSaver(parentShell, context);
                             saver.save(converters[0], data[0]);
@@ -118,5 +99,26 @@ public class Save implements Algorithm {
         } else {
             parentShell.getDisplay().syncExec(run);
         }
+    }
+    
+    private class NoConversionConverter implements Converter {
+            Dictionary props = new Hashtable();
+
+            public Data convert(Data data) {
+                return data;
+            }
+
+            public AlgorithmFactory getAlgorithmFactory() {
+                return null;
+            }
+
+            public ServiceReference[] getConverterChain() {
+                return null;
+            }
+
+            public Dictionary getProperties() {
+                props.put(AlgorithmProperty.OUT_DATA, "file:*");
+                return props;
+            }
     }
 }
