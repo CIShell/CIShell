@@ -169,7 +169,7 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
             //System.out.println("Converter:"+converters.length+":"+ inFormat + "->" + format + "->" + outFormat);
             
             if (!formats.contains(format)) {
-                String filter = "(&("+ALGORITHM_TYPE+"="+TYPE_CONVERTER+")" +
+                String filter = "(&("+ALGORITHM_TYPE+"="+TYPE_VALIDATOR+")" +
                                   "(!("+REMOTE+"=*))" +
                                   "("+IN_DATA+"="+format+")" + 
                                   "("+OUT_DATA+"="+outFormat+"))";
