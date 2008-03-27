@@ -30,6 +30,7 @@ import java.util.Properties;
 
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
+import org.cishell.framework.algorithm.AlgorithmExecutionException;
 import org.cishell.framework.algorithm.AlgorithmProperty;
 import org.cishell.framework.algorithm.ProgressMonitor;
 import org.cishell.framework.data.BasicData;
@@ -76,19 +77,14 @@ public class StaticExecutableRunner implements Algorithm {
 	/**
 	 * @see org.cishell.framework.algorithm.Algorithm#execute()
 	 */
-	public Data[] execute() {
-		try {
-			String algDir = tempDir + File.separator
-					+ props.getProperty("Algorithm-Directory") + File.separator;
+	public Data[] execute() throws AlgorithmExecutionException {
+		String algDir = tempDir + File.separator
+				+ props.getProperty("Algorithm-Directory") + File.separator;
 
-			chmod(algDir);
-			File[] output = execute(getTemplate(algDir), algDir);
+		chmod(algDir);
+		File[] output = execute(getTemplate(algDir), algDir);
 
-			return toData(output);
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
+		return toData(output);
 	}
 
 	protected Data[] toData(File[] files) {
@@ -164,7 +160,7 @@ public class StaticExecutableRunner implements Algorithm {
 		return data;
 	}
 
-	protected void chmod(String baseDir) {
+	protected void chmod(String baseDir) throws AlgorithmExecutionException {
 		// FIXME: Surely java has a way to do this!!!!
 		if (new File("/bin/chmod").exists()) {
 			try {
@@ -172,21 +168,27 @@ public class StaticExecutableRunner implements Algorithm {
 				Runtime.getRuntime().exec("/bin/chmod +x " + executable)
 						.waitFor();
 			} catch (IOException e) {
-				e.printStackTrace();
+				throw new AlgorithmExecutionException(e);
 			} catch (InterruptedException e) {
-				e.printStackTrace();
+				throw new AlgorithmExecutionException(e);
 			}
 		}
 	}
 
-	protected File[] execute(String[] cmdarray, String baseDir)
-			throws Exception {
+	protected File[] execute(String[] cmdarray, String baseDir) 
+		throws AlgorithmExecutionException {
 		File dir = new File(baseDir);
 		String[] beforeFiles = dir.list();
 
-		final Process process = Runtime.getRuntime().exec(cmdarray, null,
-				new File(baseDir));
-		process.getOutputStream().close();
+		Process process = null;
+		try {
+			process = Runtime.getRuntime().exec(cmdarray, null,
+					new File(baseDir));
+			process.getOutputStream().close();
+		} catch (IOException e1) {
+			throw new AlgorithmExecutionException(e1.getMessage(),e1);
+		}
+		
 		monitor.start(ProgressMonitor.CANCELLABLE, -1);
 		
 		InputStream in = process.getInputStream();
@@ -265,7 +267,7 @@ public class StaticExecutableRunner implements Algorithm {
 	}
 
 	protected StringBuffer logStream(int logLevel, InputStream is,
-			StringBuffer buffer) {
+			StringBuffer buffer) throws AlgorithmExecutionException {
 		try {
 			int available = is.available();
 			if (available > 0) {
@@ -278,7 +280,7 @@ public class StaticExecutableRunner implements Algorithm {
 		} catch (EOFException e) {
 			//normal operation
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new AlgorithmExecutionException("Error when processing the algorithm's screen output",e);
 		}
 
 		return buffer;

@@ -28,6 +28,7 @@ import java.util.Set;
 
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
+import org.cishell.framework.algorithm.AlgorithmExecutionException;
 import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.algorithm.ProgressMonitor;
 import org.cishell.framework.algorithm.ProgressTrackable;
@@ -108,7 +109,7 @@ public class StaticExecutableAlgorithmFactory implements AlgorithmFactory {
     		ALGORITHM_DEFAULT = ALGORITHM + "default/";
         }
 
-        public Data[] execute() {
+        public Data[] execute() throws AlgorithmExecutionException {
             try {
                 Properties serviceProps = getProperties("/"+algName+"/service.properties");
                 Properties configProps = getProperties("/"+algName+"/config.properties");
@@ -122,13 +123,12 @@ public class StaticExecutableAlgorithmFactory implements AlgorithmFactory {
                 copyFiles(runner.getTempDirectory());
             
                 return runner.execute();
-            } catch (Exception e) {
-                e.printStackTrace();
-                throw new RuntimeException(e);
+            } catch (IOException e) {
+                throw new AlgorithmExecutionException(e.getMessage(), e);
             }
         }
         
-        private void copyFiles(File dir) throws IOException {
+        private void copyFiles(File dir) throws IOException, AlgorithmExecutionException {
             Enumeration e = bContext.getBundle().getEntryPaths("/"+algName);
             
             Set entries = new HashSet();
@@ -173,7 +173,7 @@ public class StaticExecutableAlgorithmFactory implements AlgorithmFactory {
             }
             
             if (path == null) {
-                throw new RuntimeException("Unable to find compatible executable");
+                throw new AlgorithmExecutionException("Unable to find compatible executable");
             } else {
             	//logger.log(LogService.LOG_DEBUG, "base path: "+path+
             	//		"\n\t"+dir.getAbsolutePath() + "\n\n");
