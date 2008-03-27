@@ -114,7 +114,7 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
         			label = "Algorithm";
         		}
         		
-        		builder.showError("Invalid Data", "The data given to \""+label+"\" is incompatible for this reason: "+validation , (String) null);
+        		log(LogService.LOG_ERROR,"INVALID DATA: The data given to \""+label+"\" is incompatible for this reason: "+validation);
         		return null;
         	}
         }
