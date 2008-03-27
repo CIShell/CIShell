@@ -36,7 +36,6 @@ import org.cishell.framework.algorithm.ProgressMonitor;
 import org.cishell.framework.data.BasicData;
 import org.cishell.framework.data.Data;
 import org.cishell.framework.data.DataProperty;
-import org.cishell.service.guibuilder.GUIBuilderService;
 import org.cishell.templates.Activator;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.log.LogService;
@@ -47,7 +46,6 @@ import org.osgi.service.log.LogService;
  */
 public class StaticExecutableRunner implements Algorithm {
 	protected final String tempDir;
-	protected final GUIBuilderService guiBuilder;
 	protected final Data[] data;
 	protected Dictionary parameters;
 	protected Properties props;
@@ -69,8 +67,6 @@ public class StaticExecutableRunner implements Algorithm {
 		if (parameters == null)
 			parameters = new Hashtable();
 
-		guiBuilder = (GUIBuilderService) ciContext
-				.getService(GUIBuilderService.class.getName());
 		tempDir = makeTempDirectory();
 	}
 
@@ -227,12 +223,9 @@ public class StaticExecutableRunner implements Algorithm {
 
 		// if the process failed unexpectedly...
 		if (process.exitValue() != 0 && !killedOnPurpose) {
-			// display the error message using gui builder
-			guiBuilder.showError(
-				"Algorithm Could Not Finish Execution",
-				"Sorry, the algorithm could not finish execution.",
-				"Please check the console window for the error log messages and report the bug.\n"
-						+ "Thank you.");
+			throw new AlgorithmExecutionException(
+				"Algorithm exited unexpectedly (exit value: "+process.exitValue()+
+				"). Please check the console window for any error messages.");
 		}
 
 		// get the files output from the process

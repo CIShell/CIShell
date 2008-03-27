@@ -24,6 +24,7 @@ import java.util.Dictionary;
 
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
+import org.cishell.framework.algorithm.AlgorithmExecutionException;
 import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.data.BasicData;
 import org.cishell.framework.data.Data;
@@ -84,15 +85,14 @@ public class DatasetFactory implements AlgorithmFactory {
             this.ciContext = ciContext;
         }
         
-        public Data[] execute() {
+        public Data[] execute() throws AlgorithmExecutionException {
             try {
                 Data data = new BasicData(getDataset(),format);
                 data.getMetadata().put(DataProperty.LABEL, label);
             
                 return new Data[]{data};
             } catch (IOException e) {
-                e.printStackTrace();
-                throw new RuntimeException(e);
+                throw new AlgorithmExecutionException(e);
             }
         }
     }
