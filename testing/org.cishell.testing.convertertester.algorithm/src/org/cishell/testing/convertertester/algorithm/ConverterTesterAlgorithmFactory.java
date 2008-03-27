@@ -9,21 +9,20 @@ import java.util.List;
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
 import org.cishell.framework.algorithm.AlgorithmFactory;
+import org.cishell.framework.algorithm.ParameterMutator;
 import org.cishell.framework.data.Data;
 import org.cishell.reference.service.metatype.BasicAttributeDefinition;
-import org.cishell.reference.service.metatype.BasicMetaTypeProvider;
 import org.cishell.reference.service.metatype.BasicObjectClassDefinition;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.metatype.AttributeDefinition;
 import org.osgi.service.metatype.MetaTypeInformation;
-import org.osgi.service.metatype.MetaTypeProvider;
 import org.osgi.service.metatype.MetaTypeService;
 import org.osgi.service.metatype.ObjectClassDefinition;
 
 
-public class ConverterTesterAlgorithmFactory implements AlgorithmFactory {
+public class ConverterTesterAlgorithmFactory implements AlgorithmFactory, ParameterMutator {
 	
 	public static final String SELECTED_CONVERTER_PARAM_ID = "selectedConverter";
 	public static final String NUM_HOPS_PARAM_ID = "numHops";
@@ -46,7 +45,8 @@ public class ConverterTesterAlgorithmFactory implements AlgorithmFactory {
     public Algorithm createAlgorithm(Data[] data, Dictionary parameters, CIShellContext context) {
         return new ConverterTesterAlgorithm(data, parameters, context, bContext);
     }
-    public MetaTypeProvider createParameters(Data[] data) {
+    public ObjectClassDefinition mutateParameters(Data[] data,
+			ObjectClassDefinition parameters) {
 
     	String[] converterNames = extractConverterNames(
     			ConverterTesterAlgorithmUtil.
@@ -88,8 +88,7 @@ public class ConverterTesterAlgorithmFactory implements AlgorithmFactory {
 	    
 	   
 			
-		MetaTypeProvider provider = new BasicMetaTypeProvider(definition);
-		return provider;
+		return definition;
     }
     
     private String[] extractConverterNames(ServiceReference[] converterRefs) {
@@ -111,5 +110,10 @@ public class ConverterTesterAlgorithmFactory implements AlgorithmFactory {
 	private String removePackagePrefix(String pid) {
 		int startIndex = pid.lastIndexOf(".") + 1;
 		return pid.substring(startIndex);
+	}
+
+	public ObjectClassDefinition mutateParameters() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
