@@ -23,7 +23,7 @@ import org.osgi.service.metatype.MetaTypeProvider;
  * @author bmarkine
  *
  */
-public class SaveFactory implements AlgorithmFactory, DataValidator {
+public class SaveFactory implements AlgorithmFactory {
     private CIShellContext context;	
 
     /**
@@ -45,26 +45,4 @@ public class SaveFactory implements AlgorithmFactory, DataValidator {
         this.context = context;
         return new Save(data, parameters, context);
     }
-    
-    /**
-     * Validate the SaveFactory can handle the incoming file type
-     * @param data The data to save
-     * @return empty string on success
-     */
-	public String validate(Data[] data) {
-		DataConversionService conversionManager = (DataConversionService) context.getService(
-        		DataConversionService.class.getName());
-
-		//Fix me
-		//Bonnie:why only check data[0]? An user can select multiple objects from data manager.
-    	Converter[] converters = conversionManager.findConverters(data[0], "file-ext:*");
-    	if (converters.length == 0 && !(data[0].getData() instanceof File)) {
-    		return "No valid converters from " + 
-    				data[0].getData().getClass().getName() + " to any file extension";
-    	}
-    	else {
-    		return "";
-    	}
-	}
-
 }

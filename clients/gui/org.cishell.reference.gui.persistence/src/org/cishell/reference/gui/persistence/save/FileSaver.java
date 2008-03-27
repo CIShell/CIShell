@@ -88,8 +88,11 @@ public class FileSaver {
     public boolean save(Converter converter, Data data) {
     	String outDataStr = (String)converter.getProperties().get(AlgorithmProperty.OUT_DATA);
 
-    	String ext = outDataStr.substring(outDataStr.indexOf(':')+1);
-        
+    	String ext = "";
+    	if (outDataStr.startsWith("file-ext:")) {
+    		ext = outDataStr.substring(outDataStr.indexOf(':')+1);
+    	}
+    	
         if ((""+ext).startsWith(".")) {
             ext = ext.substring(1);
         }
