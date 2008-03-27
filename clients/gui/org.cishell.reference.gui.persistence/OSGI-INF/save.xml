@@ -8,7 +8,5 @@
 	<service>
 		<provide interface=
 			"org.cishell.framework.algorithm.AlgorithmFactory"/>
-		<provide interface=
-			"org.cishell.framework.algorithm.DataValidator"/>
 	</service>
 </component>

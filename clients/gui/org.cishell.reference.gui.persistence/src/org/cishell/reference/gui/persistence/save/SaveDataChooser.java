@@ -17,7 +17,6 @@ import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.AlgorithmProperty;
 import org.cishell.framework.data.Data;
 import org.cishell.reference.gui.common.AbstractDialog;
-import org.cishell.service.conversion.ConversionException;
 import org.cishell.service.conversion.Converter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
