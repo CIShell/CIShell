@@ -7,7 +7,7 @@ import java.util.Hashtable;
 import java.util.List;
 
 import org.cishell.framework.algorithm.AlgorithmProperty;
-import org.cishell.framework.preference.PreferenceProperty;
+import org.cishell.framework.userprefs.UserPrefsProperty;
 import org.cishell.reference.prefs.admin.PreferenceOCD;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
@@ -22,7 +22,7 @@ import org.osgi.service.metatype.ObjectClassDefinition;
 //NOTE: methods that get configuration objects don't really need the ObjectClassDefinitions. We just use them (hackishly) to know how many configuration objects we should get 
 //Since, there are possibly an infinite number of Configuration objects for a service, we need the ObjectClassDefinitions to tell us when to stop trying to grab configuration objects
 //(If we try to grab one that didn't previously exist, it will just make an empty one, sometimes we want this behaviour and sometimes we don't).
-public class PrefInfoGrabber implements PreferenceProperty, AlgorithmProperty {
+public class PrefInfoGrabber implements UserPrefsProperty, AlgorithmProperty {
 	
 	private LogService log;
 	private MetaTypeService mts;
@@ -50,38 +50,38 @@ public class PrefInfoGrabber implements PreferenceProperty, AlgorithmProperty {
 	}
 	
 	private String getLocalPrefOCDID(ServiceReference prefHolder) {
-		String localPrefOCDID = (String) prefHolder.getProperty(PreferenceProperty.LOCAL_PREF_PID);
+		String localPrefOCDID = (String) prefHolder.getProperty(UserPrefsProperty.LOCAL_PREFS_PID);
 		if (localPrefOCDID != null) {
 			return localPrefOCDID;
 		} else {
 			//no name defined. Use default name.
 			String defaultLocalPrefOCDID = (String) prefHolder.getProperty(Constants.SERVICE_PID)
-				+ PreferenceProperty.LOCAL_PREFS_OCD_SUFFIX;
+				+ UserPrefsProperty.LOCAL_PREFS_OCD_SUFFIX;
 			return defaultLocalPrefOCDID;
 		} 
 	}
 	
 	private String getGlobalPrefOCDID(ServiceReference prefHolder) {
-		String globalPrefOCDID = (String) prefHolder.getProperty(PreferenceProperty.GLOBAL_PREF_PID);
+		String globalPrefOCDID = (String) prefHolder.getProperty(UserPrefsProperty.GLOBAL_PREFS_PID);
 		if (globalPrefOCDID != null) {
 		return globalPrefOCDID;
 		} else {
 			//no names defined. Use default names.
 			String defaultGlobalPrefOCDID =  (String) prefHolder.getProperty(Constants.SERVICE_PID) 
-				+ PreferenceProperty.GLOBAL_PREFS_OCD_SUFFIX;
+				+ UserPrefsProperty.GLOBAL_PREFS_OCD_SUFFIX;
 			return defaultGlobalPrefOCDID;
 		}
 	}
 	
 	private String getParamPrefOCDID(ServiceReference prefHolder) {
 		System.out.println("    Getting param pref OCD ID for " + prefHolder.getProperty("service.pid"));
-		String paramPrefOCDID = (String) prefHolder.getProperty(AlgorithmProperty.PARAMETER_PID);
+		String paramPrefOCDID = (String) prefHolder.getProperty(AlgorithmProperty.PARAMETERS_PID);
 		if ( paramPrefOCDID != null) {
 			System.out.println("      RETURN override: " + paramPrefOCDID);
 		return  paramPrefOCDID;
 		} else {
 			//no names defined. Use default names.
-			String defaultParamPrefOCDID =  (String) prefHolder.getProperty(Constants.SERVICE_PID) + PreferenceProperty.PARAM_PREFS_OCD_SUFFIX;
+			String defaultParamPrefOCDID =  (String) prefHolder.getProperty(Constants.SERVICE_PID) + UserPrefsProperty.PARAM_PREFS_OCD_SUFFIX;
 			System.out.println("      RETURN default: " + defaultParamPrefOCDID);
 			return defaultParamPrefOCDID;
 		}
@@ -199,23 +199,23 @@ public class PrefInfoGrabber implements PreferenceProperty, AlgorithmProperty {
 	}
 	
 	private String getGlobalPrefConfID(ServiceReference prefHolder) {
-		String globalPrefOCDID = (String) prefHolder.getProperty(PreferenceProperty.GLOBAL_PREF_PID);
+		String globalPrefOCDID = (String) prefHolder.getProperty(UserPrefsProperty.GLOBAL_PREFS_PID);
 		if (globalPrefOCDID != null) {
 		return globalPrefOCDID;
 		} else {
 			//no names defined. Use default names.
-			String defaultGlobalPrefOCDID =  (String) prefHolder.getProperty(Constants.SERVICE_PID) + PreferenceProperty.GLOBAL_PREFS_CONF_SUFFIX;
+			String defaultGlobalPrefOCDID =  (String) prefHolder.getProperty(Constants.SERVICE_PID) + UserPrefsProperty.GLOBAL_PREFS_CONF_SUFFIX;
 			return defaultGlobalPrefOCDID;
 		}
 	}
 	
 	private String getParamPrefConfID(ServiceReference prefHolder) {
-		String paramPrefOCDID = (String) prefHolder.getProperty(AlgorithmProperty.PARAMETER_PID);
+		String paramPrefOCDID = (String) prefHolder.getProperty(AlgorithmProperty.PARAMETERS_PID);
 		if ( paramPrefOCDID != null) {
 		return  paramPrefOCDID;
 		} else {
 			//no names defined. Use default names.
-			String defaultGlobalPrefOCDID =  (String) prefHolder.getProperty(Constants.SERVICE_PID) + PreferenceProperty.PARAM_PREFS_CONF_SUFFIX;
+			String defaultGlobalPrefOCDID =  (String) prefHolder.getProperty(Constants.SERVICE_PID) + UserPrefsProperty.PARAM_PREFS_CONF_SUFFIX;
 			return defaultGlobalPrefOCDID;
 		}
 	}

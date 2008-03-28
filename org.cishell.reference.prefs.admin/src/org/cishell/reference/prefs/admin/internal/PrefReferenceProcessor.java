@@ -7,7 +7,7 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.List;
 
-import org.cishell.framework.preference.PreferenceProperty;
+import org.cishell.framework.userprefs.UserPrefsProperty;
 import org.cishell.reference.prefs.admin.PrefPage;
 import org.cishell.reference.prefs.admin.PreferenceAD;
 import org.cishell.reference.prefs.admin.PreferenceOCD;
@@ -47,7 +47,7 @@ public class PrefReferenceProcessor{
         	//get all preference pages from this service by type, and save them by type
     		
         	PrefPage[] localPrefPages = null;
-        	if(isTurnedOn(prefReference, PreferenceProperty.PUBLISH_LOCAL_PREF_VALUE)) {
+        	if(isTurnedOn(prefReference, UserPrefsProperty.PUBLISH_LOCAL_PREFS_VALUE)) {
         		localPrefPages = getLocalPrefPages(prefReference);
         		initializeConfigurations(localPrefPages);
         		this.allLocalPrefPages.addAll(Arrays.asList(localPrefPages));
@@ -55,14 +55,14 @@ public class PrefReferenceProcessor{
         	}
         	
         	PrefPage[] globalPrefPages = null;
-        	if (isTurnedOn(prefReference, PreferenceProperty.PUBLISH_GLOBAL_PREF_VALUE)) {
+        	if (isTurnedOn(prefReference, UserPrefsProperty.PUBLISH_GLOBAL_PREFS_VALUE)) {
         	    globalPrefPages = getGlobalPrefPages(prefReference);
         		initializeConfigurations(globalPrefPages);
         	    this.allGlobalPrefPages.addAll(Arrays.asList(globalPrefPages));
         	}
         	
         	PrefPage[] paramPrefPages = null;
-        	if (isTurnedOn(prefReference,PreferenceProperty.PUBLISH_PARAM_DEFAULT_PREF_VALUE)) {
+        	if (isTurnedOn(prefReference,UserPrefsProperty.PUBLISH_PARAM_DEFAULT_PREFS_VALUE)) {
         		System.out.println("  Attempting to publish param default prefs for " + prefReference.getProperty("service.pid"));
         		paramPrefPages = getParamPrefPages(prefReference);
         		initializeConfigurations(paramPrefPages);
@@ -76,7 +76,7 @@ public class PrefReferenceProcessor{
         	
         	//make sure that preferences are sent to this service if it wants to see them.
         	
-        	if (isTurnedOn(prefReference, PreferenceProperty.RECEIVE_PREFS_KEY)) {
+        	if (isTurnedOn(prefReference, UserPrefsProperty.RECEIVE_PREFS_KEY)) {
         		prefInfoGrabber.ensurePrefsCanBeSentTo(prefReference);
         	}
     	}
@@ -158,7 +158,7 @@ public class PrefReferenceProcessor{
     			
     		}
     		
-    		prefDict.put(PreferenceProperty.BUNDLE_VERSION_KEY, getCurrentBundleVersion(prefPage));
+    		prefDict.put(UserPrefsProperty.BUNDLE_VERSION_KEY, getCurrentBundleVersion(prefPage));
     		
     		try {
     		prefConf.update(prefDict);
@@ -189,13 +189,13 @@ public class PrefReferenceProcessor{
     
     //only supports 3 publish keys and receive_prefs key
     private boolean isTurnedOn(ServiceReference prefReference, String processingKey) {
-    	if (processingKey.equals(PreferenceProperty.RECEIVE_PREFS_KEY)) {
-    		String receivePrefsValue = (String) prefReference.getProperty(PreferenceProperty.RECEIVE_PREFS_KEY);
+    	if (processingKey.equals(UserPrefsProperty.RECEIVE_PREFS_KEY)) {
+    		String receivePrefsValue = (String) prefReference.getProperty(UserPrefsProperty.RECEIVE_PREFS_KEY);
     		return receivePrefsValue != null && receivePrefsValue.equals("true");
     	} else {
-    		String unparsedPublishedPrefsValues = (String) prefReference.getProperty(PreferenceProperty.PREFS_PUBLISHED_KEY);
+    		String unparsedPublishedPrefsValues = (String) prefReference.getProperty(UserPrefsProperty.PREFS_PUBLISHED_KEY);
     		if (unparsedPublishedPrefsValues == null) {
-    			if (processingKey ==PreferenceProperty.PUBLISH_PARAM_DEFAULT_PREF_VALUE) {
+    			if (processingKey ==UserPrefsProperty.PUBLISH_PARAM_DEFAULT_PREFS_VALUE) {
     				return true;
     			} else {
     				return false;
@@ -210,7 +210,7 @@ public class PrefReferenceProcessor{
     		}
     		
     		//makes it so parameter prefs are published by default
-    		if (publishedPrefsValues.length == 0 && processingKey ==PreferenceProperty.PUBLISH_PARAM_DEFAULT_PREF_VALUE) {
+    		if (publishedPrefsValues.length == 0 && processingKey ==UserPrefsProperty.PUBLISH_PARAM_DEFAULT_PREFS_VALUE) {
     			return true;
     		}
     		
@@ -236,7 +236,7 @@ public class PrefReferenceProcessor{
 
     private String getCurrentBundleVersion(PrefPage prefPage) {
     	Bundle b = prefPage.getServiceReference().getBundle();	
-    	String currentBundleVersion = (String) b.getHeaders().get(PreferenceProperty.BUNDLE_VERSION_KEY);
+    	String currentBundleVersion = (String) b.getHeaders().get(UserPrefsProperty.BUNDLE_VERSION_KEY);
     	return currentBundleVersion;
     }
     
@@ -246,13 +246,13 @@ public class PrefReferenceProcessor{
     		return null;
     	}
     	//no namespace in front of bundle version
-    	String bundleVersionForLocalsAndParams = (String) prefDict.get(PreferenceProperty.BUNDLE_VERSION_KEY);
+    	String bundleVersionForLocalsAndParams = (String) prefDict.get(UserPrefsProperty.BUNDLE_VERSION_KEY);
     	if (bundleVersionForLocalsAndParams != null) {
     		return bundleVersionForLocalsAndParams;
     	} else {
     		//try global kind, with namespace in front
     		String servicePID = (String) prefPage.getServiceReference().getProperty(Constants.SERVICE_PID);
-    		String bundleVersionForGlobals  = (String) prefDict.get(servicePID + "." + PreferenceProperty.BUNDLE_VERSION_KEY);
+    		String bundleVersionForGlobals  = (String) prefDict.get(servicePID + "." + UserPrefsProperty.BUNDLE_VERSION_KEY);
     		
     		if (bundleVersionForGlobals != null) {
     			return bundleVersionForGlobals;
@@ -275,7 +275,7 @@ public class PrefReferenceProcessor{
      }
     
     private void warnIfReceivePrefsIsNotOn(ServiceReference prefHolder) {
-    	if (! isTurnedOn(prefHolder, PreferenceProperty.RECEIVE_PREFS_KEY)) {
+    	if (! isTurnedOn(prefHolder, UserPrefsProperty.RECEIVE_PREFS_KEY)) {
     		String servicePID = (String) prefHolder.getProperty(Constants.SERVICE_PID);
     		log.log(LogService.LOG_WARNING, "Algorithm Developer Error: \r\n" +
     				"The algorithm " + servicePID + " has published local preferences without requested to receive preferences. \r\n" +

@@ -6,7 +6,7 @@ import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.List;
 
-import org.cishell.framework.preference.PreferenceProperty;
+import org.cishell.framework.userprefs.UserPrefsProperty;
 import org.cishell.reference.prefs.admin.PrefAdmin;
 import org.cishell.reference.prefs.admin.PrefPage;
 import org.cishell.reference.prefs.admin.PrefsByService;
@@ -147,8 +147,8 @@ public class PrefAdminImpl implements PrefAdmin, ConfigurationPlugin, Configurat
 		try {
 		for (int ii = 0; ii < this.prefHolderReferences.size(); ii++) {
 			ServiceReference prefHolder = (ServiceReference) this.prefHolderReferences.get(ii);
-			if (prefHolder.getProperty(PreferenceProperty.RECEIVE_PREFS_KEY) != null &&
-				prefHolder.getProperty(PreferenceProperty.RECEIVE_PREFS_KEY).equals("true")) {
+			if (prefHolder.getProperty(UserPrefsProperty.RECEIVE_PREFS_KEY) != null &&
+				prefHolder.getProperty(UserPrefsProperty.RECEIVE_PREFS_KEY).equals("true")) {
 			Configuration localPrefConf = ca.getConfiguration((String) prefHolder.getProperty(Constants.SERVICE_PID));
 			try {
 			localPrefConf.update();
@@ -163,8 +163,8 @@ public class PrefAdminImpl implements PrefAdmin, ConfigurationPlugin, Configurat
 	}
 	
 	private boolean isFromGlobalConf(String pid) {
-		return (pid.substring(0, pid.length() - 1).endsWith(PreferenceProperty.GLOBAL_PREFS_CONF_SUFFIX)
-				|| pid.endsWith(PreferenceProperty.GLOBAL_PREFS_CONF_SUFFIX));
+		return (pid.substring(0, pid.length() - 1).endsWith(UserPrefsProperty.GLOBAL_PREFS_CONF_SUFFIX)
+				|| pid.endsWith(UserPrefsProperty.GLOBAL_PREFS_CONF_SUFFIX));
 	}
 
 	
