@@ -12,6 +12,7 @@ import org.eclipse.ui.IStartup;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -24,7 +25,7 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 	// The shared instance
 	private static Activator plugin;
 	
-	private static final int DELAY_TIME = 500;
+	private static BundleContext context;
 	
     MenuAdapter menuAdapter;
     
@@ -41,14 +42,16 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
         
+		Activator.context = context;
+		
         while (getWorkbench() == null) {
-            Thread.sleep(DELAY_TIME);
+            Thread.sleep(500);
         }
         
         IWorkbenchWindow[] windows = getWorkbench().getWorkbenchWindows();
         
         while (windows.length == 0) {
-            Thread.sleep(DELAY_TIME);
+            Thread.sleep(500);
             windows = getWorkbench().getWorkbenchWindows();
         }
         
@@ -78,6 +81,16 @@ public class Activator extends AbstractUIPlugin implements IStartup {
         menuAdapter = null;
         
 		super.stop(context);
+	}
+	
+	public static Object getService(String service_pid) {
+		ServiceReference ref = context.getServiceReference(service_pid);
+		
+		if (ref != null) {
+			return context.getService(ref);
+		} else {
+			return null;
+		}
 	}
 
 	/**

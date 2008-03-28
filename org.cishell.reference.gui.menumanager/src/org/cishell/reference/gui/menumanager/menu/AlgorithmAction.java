@@ -77,8 +77,6 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, DataMa
         dataSelected(dataManager.getSelectedData());
     }
    
-    
-    
     public void run() {
         //hmm... should probably change this.. maybe use the scheduler...
         new Thread("Menu Item Runner") {
@@ -97,13 +95,9 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, DataMa
                 bContext.getService(bContext.getServiceReference(
                         SchedulerService.class.getName()));
             
-
             printAlgorithmInformation();
-            
-            
-
-            
-           scheduler.schedule(new AlgorithmWrapper(ref, bContext, ciContext, originalData, data, converters, ca), ref);
+           
+            scheduler.schedule(new AlgorithmWrapper(ref, ciContext, bContext, originalData, data, converters, ca), ref);
         } catch (Throwable e) {
             e.printStackTrace();
         }
@@ -113,33 +107,31 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, DataMa
         //adjust to log the whole acknowledgement in one block
         LogService logger = (LogService) ciContext.getService(LogService.class.getName());
         StringBuffer acknowledgement = new StringBuffer();
-        String label = (String)ref.getProperty("label");
+        String label = (String)ref.getProperty(LABEL);
         if (label != null){
-        	acknowledgement.append("..........\n"+
-            					label+" was selected.\n");
+        	acknowledgement.append("..........\n"+label+" was selected.\n");
         }
-        String authors = (String)ref.getProperty("authors");
+        String authors = (String)ref.getProperty(AUTHORS);
         if (authors != null)
         	acknowledgement.append("Author(s): "+authors+"\n"); 
-        String implementers = (String)ref.getProperty("implementers");
+        String implementers = (String)ref.getProperty(IMPLEMENTERS);
         if (implementers != null)
         	acknowledgement.append("Implementer(s): "+implementers+"\n");    
-        String integrators = (String)ref.getProperty("integrators");
+        String integrators = (String)ref.getProperty(INTEGRATORS);
         if (integrators != null)
             acknowledgement.append("Integrator(s): "+integrators+"\n");
-        String reference = (String)ref.getProperty("reference");
-        String reference_url = (String)ref.getProperty("reference_url");            
+        String reference = (String)ref.getProperty(REFERENCE);
+        String reference_url = (String)ref.getProperty(REFERENCE_URL);            
         if (reference != null && reference_url != null )
             acknowledgement.append("Reference: "+reference+
                     " ("+reference_url+")\n"); 
         else if (reference != null && reference_url == null )
         	acknowledgement.append("Reference: "+reference+"\n");                     
-        String docu = (String)ref.getProperty("docu");
+        String docu = (String)ref.getProperty(DOCUMENTATION_URL);
         if (docu != null)
-        	acknowledgement.append("Docu: "+docu+"\n");
+        	acknowledgement.append("Documentation: "+docu+"\n");
         if(acknowledgement.length()>1)
-        	logger.log(LogService.LOG_INFO, acknowledgement.toString());    
-        
+        	logger.log(LogService.LOG_INFO, acknowledgement.toString());
     }
     
     public void dataSelected(Data[] selectedData) {        
@@ -198,34 +190,6 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, DataMa
         setEnabled(data != null); //&& isValid());
     }
     
-    //This method will be disabled until we can find a better solution
-    //for extra validation beyond input/output checking
-/*    private boolean isValid() {
-        String valid = null;
-        String[] classes = (String[]) ref.getProperty(Constants.OBJECTCLASS);
-        
-        if (classes != null && data != null) {
-            for (int i=0; i < classes.length; i++) {
-                if (classes[i].equals(DataValidator.class.getName())) {
-                    DataValidator validator = (DataValidator) bContext.getService(ref);
-                                  
-                    //FIXME: Could cause concurrency problems...
-                    for (int j=0; j < data.length; j++) {
-                        if (converters[j] != null && converters[j].length > 0) {
-                            //does not work for large inputs...
-                            data[j] = converters[j][0].convert(data[j]);
-                            converters[j] = null;
-                        }
-                    }
-                    
-                    valid = validator.validate(data);
-                }
-            }
-        }
-        
-        return valid == null || valid.length() == 0;
-    }
-*/    
     private boolean isAsignableFrom(String type, Data datum) {
         Object data = datum.getData();
         boolean assignable = false;
@@ -252,6 +216,4 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, DataMa
     public ServiceReference getServiceReference(){
     	return ref;
     }
-    
-   
 }

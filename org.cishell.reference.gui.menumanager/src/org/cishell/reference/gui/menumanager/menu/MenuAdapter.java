@@ -13,7 +13,6 @@
  * ***************************************************************************/
 package org.cishell.reference.gui.menumanager.menu;
 
-//Java
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -53,12 +52,6 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 
-/*
- * Bonnie's comments:
- * weird, why implements AlgorithmProperty? It does not define any abstract interface.
- * Micah's comment, several millenia later:
- * It's so you can say things like "== LOSSLESS" as oppose to "== AlgorithmProperty.LOSSLESS".
- */
 public class MenuAdapter implements AlgorithmProperty {
     private IMenuManager menuBar;
     private Shell shell;
@@ -121,7 +114,7 @@ public class MenuAdapter implements AlgorithmProperty {
      
 //          initializeMenu();
         } catch (InvalidSyntaxException e) {
-            getLog().log(LogService.LOG_ERROR, "Invalid Syntax", e);
+            getLog().log(LogService.LOG_DEBUG, "Invalid Syntax", e);
         }
         
         attemptToObtainConfigurationAdmin(bContext);
@@ -163,7 +156,6 @@ public class MenuAdapter implements AlgorithmProperty {
         		}
         	}
         }
-
     }
     /*
      * Parse default_menu.xml file. For each menu node, get the value of the attribut "pid"
@@ -187,7 +179,6 @@ public class MenuAdapter implements AlgorithmProperty {
     
     private void processTopMenu (Element topMenuNode){    	
     	MenuManager topMenuBar = null;    	
-
     
     	/*	
     	 * The File and Help menus are created in ApplicationActionBarAdvisor.java
@@ -237,7 +228,7 @@ public class MenuAdapter implements AlgorithmProperty {
 					processSubMenu(el, groupMenuBar);					
 				}				
 				else if (menu_type.equalsIgnoreCase(PRESERVED_BREAK)){	
-					//It seems that Framework automatially takes care of issues
+					//It seems that Framework automatically takes care of issues
 					//such as double separators, a separator at the top or bottom					
 					parentMenuBar.add(new Separator());
 				}
@@ -276,10 +267,10 @@ public class MenuAdapter implements AlgorithmProperty {
     private void processAMenuNode(Element menuNode, MenuManager parentMenuBar ){
  		String menuName = menuNode.getAttribute(ATTR_NAME);
 		String pid = menuNode.getAttribute(ATTR_PID);
+		//System.out.println(">>>pid="+pid);
 		if (pid == null || pid.length()==0){
 			//check if the name is one of the preserved one
 			//if so add the default action
-			
 		}
 		else{
 			//check if the pid has registered in pidToServiceReferenceMap
@@ -295,7 +286,7 @@ public class MenuAdapter implements AlgorithmProperty {
 			}
 			else{
 				//otherwise log the error
-				getLog().log(LogService.LOG_WARNING, 
+				getLog().log(LogService.LOG_DEBUG, 
 	                    "Can not find an algorithm package associated with Menu: "
 						+menuName+" and pid: " +pid+ ". Skip to show it on the menu.");
 			}
@@ -386,19 +377,15 @@ public class MenuAdapter implements AlgorithmProperty {
                 menu = targetMenu.findMenuUsingPath(items[i]);
  
                 if (menu == null && items[i] != null) {
-                    menu = targetMenu.findMenuUsingPath(items[i].toLowerCase());
-                  
+                    menu = targetMenu.findMenuUsingPath(items[i].toLowerCase());                  
                 }
                 
-                if (menu == null) {
-                	
+                if (menu == null) {                	
                     menu = createMenu(items[i],items[i]);
                     targetMenu.appendToGroup(ADDITIONS_GROUP, menu);
                 }
                 
                 targetMenu = menu;
-                
-               
             }
             
             group = items[items.length-1];
@@ -416,8 +403,8 @@ public class MenuAdapter implements AlgorithmProperty {
             
             Display.getDefault().asyncExec(updateAction);
         } else {
-//            getLog().log(LogService.LOG_WARNING, 
-//                    "Bad menu path for Algorithm: " + ref.getProperty(LABEL));
+            getLog().log(LogService.LOG_DEBUG, 
+                    "Bad menu path for Algorithm: " + ref.getProperty(LABEL));
         }
     }
     
