@@ -151,19 +151,24 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
 	}
 
 	protected boolean testDataValidityIfPossible(AlgorithmFactory algFactory, Data[] dataInQuestion) {
-		String validation = ((DataValidator) algFactory).validate(dataInQuestion);
+		if (algFactory instanceof DataValidator) {
+			String validation = ((DataValidator) algFactory).validate(dataInQuestion);
 
-		if (validation != null && validation.length() > 0) {
-			String label = (String) algFactoryRef.getProperty(LABEL);
-			if (label == null) {
-				label = "Algorithm";
+			if (validation != null && validation.length() > 0) {
+				String label = (String) algFactoryRef.getProperty(LABEL);
+				if (label == null) {
+					label = "Algorithm";
+				}
+
+				builder.showError("Invalid Data", "The data given to \"" + label + "\" is incompatible for this reason: "
+						+ validation, (String) null);
+				return false;
 			}
-
-			builder.showError("Invalid Data", "The data given to \"" + label + "\" is incompatible for this reason: "
-					+ validation, (String) null);
-			return false;
-		}
-		return true;
+			return true;
+			} else {
+				//counts as valid if there is no validator available.
+				return true;
+			}
 	}
 
 	protected MetaTypeProvider obtainParameterSetupInfo(AlgorithmFactory algFactory, Data[] data) {
