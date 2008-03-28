@@ -1,0 +1,662 @@
+*Vertices     168
+       1 "Jimi Adams"                             0.1000    0.0365    0.5000 sh ellipse  ic Green bc White  bw .2 lc Gray70 x_fact 1.0 y_fact 1.0 
+       2 "Prof. Manju Ahuja"                      0.4509    0.3030    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 1.0 y_fact 1.0 
+       3 "Prof. Craig M Allen"                    0.5500    0.3304    0.5000
+       4 "Mr. Nicholas Altieri"                   0.1000    0.4382    0.5000
+       5 "Prof. Dimitris G Assimakopoulos"        0.7000    0.3481    0.5000
+       6 "Sricharan Ayyalasomayajula"             0.5484    0.6814    0.5000
+       7 "Ms. Duygu Balcan"                       0.3500    0.2686    0.5000 sh ellipse  ic Green bc White  bw .2 lc Gray70 x_fact 1.0 y_fact 1.0 
+       8 "Dr. Ariel Balter"                       0.3497    0.3698    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 1.0 y_fact 1.0 
+       9 "Prof. David C Bangert"                  0.4500    0.4231    0.5000
+      10 "Prof. Albert-Laszlo Barabasi"           0.9000    0.6369    0.5000 sh ellipse  ic Blue bc White  bw .2 lc Gray70 x_fact 3.0 y_fact 3.0 
+      11 "Dr. Jozsef Baranyi"                     0.1000    0.5300    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 1.0 y_fact 1.0 
+      12 "Dr. Alain Barrat"                       0.3500    0.1802    0.5000
+      13 "Dr. Marc Barthelemy"                    0.7000    0.8083    0.5000
+      14 "Mr. Wieslaw Bartkowski"                 0.7000    0.2756    0.5000
+      15 "Prof. Phillip Bonacich"                 0.1000    0.0781    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 2.0 y_fact 2.0 
+      16 "Dr. Katy Borner"                        0.3503    0.3134    0.5000 sh ellipse  ic Blue bc White  bw .2 lc Gray70 x_fact 3.0 y_fact 3.0 
+      17 "Kevin Boyack"                           0.7500    0.6352    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 3.0 y_fact 3.0 
+      18 "Dr. Denis Boyer"                        0.4500    0.4505    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 1.0 y_fact 1.0 
+      19 "Mr. Christian Briggs"                   0.7000    0.2049    0.5000
+      20 "Mr. Nathaniel Bulkley"                  0.6500    0.3772    0.5000
+      21 "Mr. John Burgoon"                       0.0987    0.1111    0.5000
+      22 "Prof. Agusti Canals Parera"             0.7994    0.4618    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 2.0 y_fact 2.0 
+      23 "Mr. Shai Carmi"                         0.7006    0.6797    0.5000 sh ellipse  ic Green bc White  bw .2 lc Gray70 x_fact 2.0 y_fact 2.0 
+      24 "Alessandro Chessa"                      0.3500    0.1572    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 1.0 y_fact 1.0 
+      25 "Dr. Carol Choksy"                       0.5500    0.2367    0.5000
+      26 "Mr. Aaron Clauset"                      0.5503    0.5174    0.5000 sh ellipse  ic Green bc White  bw .2 lc Gray70 x_fact 2.0 y_fact 2.0 
+      27 "Ms. Margaret Clements"                  0.0075    0.1076    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 1.0 y_fact 1.0 
+      28 "Ms. Kathryn Clodfelter"                 0.9000    0.4893    0.5000
+      29 "Dr. Vittoria Colizza"                   0.4503    0.6571    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 2.0 y_fact 2.0 
+      30 "Dr. Denise Collins"                     0.3497    0.4410    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 1.0 y_fact 1.0 
+      31 "Prof. Noshir Contractor"                0.9000    0.5398    0.5000 sh ellipse  ic Blue bc White  bw .2 lc Gray70 x_fact 3.0 y_fact 3.0 
+      32 "Mr. Victor P Corona"                    0.4491    0.5009    0.5000 sh ellipse  ic Green bc White  bw .2 lc Gray70 x_fact 1.0 y_fact 1.0 
+      33 "Mr. Joseph Cottam"                      0.1006    0.3194    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 1.0 y_fact 1.0 
+      34 "Mr. Gabor Csardi"                       0.7000    0.6589    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 2.0 y_fact 2.0 
+      35 "James A. Danowsky"                      0.8000    0.4878    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 1.0 y_fact 1.0 
+      36 "Dr. Daniel Delaurentis"                 0.6497    0.6970    0.5000
+      37 "Dr. Nicholas Difonzo"                   0.1000    0.4540    0.5000
+      38 "Prof. Kirk Dombrowski"                  0.5500    0.4028    0.5000
+      39 "Mr. Justin Donaldson"                   0.0082    0.0885    0.5000
+      40 "Mr. Shanon Donnelly"                    0.0069    0.0095    0.5000
+      41 "Prof. Sergey Dorogovtsev"               0.1000    0.2657    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 2.0 y_fact 2.0 
+      42 "Paul Dwyer"                             0.8500    0.3905    0.5000
+      43 "Andrew Feldstein"                       0.6503    0.4262    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 1.0 y_fact 1.0 
+      44 "Mr. Peter Fleck"                        0.3497    0.4045    0.5000
+      45 "Dr. Santo Fortunato"                    0.1000    0.2103    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 2.0 y_fact 2.0 
+      46 "Dr. Kimberly A Fredericks"              0.5503    0.3828    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 1.0 y_fact 1.0 
+      47 "Donald Fry"                             0.1000    0.6946    0.5000
+      48 "Luis Galvis"                            0.1000    0.5928    0.5000
+      49 "Floriana Gargiulo"                      0.4500    0.3799    0.5000
+      50 "Mr. Eric R Giannella"                   0.8500    0.7023    0.5000
+      51 "Dr. Harold Green"                       0.8013    0.5573    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 3.0 y_fact 3.0 
+      52 "Mr. Justin Gross"                       0.5503    0.5608    0.5000 sh ellipse  ic Green bc White  bw .2 lc Gray70 x_fact 1.0 y_fact 1.0 
+      53 "Mrs. Elise Hall"                        0.1000    0.4791    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 1.0 y_fact 1.0 
+      54 "En-Pei Han"                             0.1000    0.6489    0.5000
+      55 "Dr. Steven Harper"                      0.3491    0.5321    0.5000
+      56 "Prof. Shlomo Havlin"                    0.5497    0.6233    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 3.0 y_fact 3.0 
+      57 "Mr. Bruce Herr"                         0.6503    0.4800    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 2.0 y_fact 2.0 
+      58 "Mr. Cesar A Hidalgo"                    0.5491    0.7127    0.5000
+      59 "Thomas Hills"                           0.5509    0.3698    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 1.0 y_fact 1.0 
+      60 "Mr. Bernard Hogan"                      0.5500    0.4682    0.5000 sh ellipse  ic Green bc White  bw .2 lc Gray70 x_fact 1.0 y_fact 1.0 
+      61 "Mr. Todd Holloway"                      0.4503    0.2205    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 1.0 y_fact 1.0 
+      62 "Mr. Christopher Honey"                  0.1000    0.3819    0.5000
+      63 "Mr. Peter Hook"                         0.4509    0.4826    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 2.0 y_fact 2.0 
+      64 "Dr. Dan Horn"                           0.1000    0.4161    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 1.0 y_fact 1.0 
+      65 "Kun Huang"                              0.6509    0.5087    0.5000
+      66 "Portia Iversen"                         0.5500    0.4477    0.5000
+      67 "Benoy Jacob"                            0.0069    0.1476    0.5000
+      68 "Prof. Hawoong Jeong"                    0.7497    0.5104    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 2.0 y_fact 2.0 
+      69 "Mr. Liang Jing"                         0.7491    0.5729    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 1.0 y_fact 1.0 
+      70 "Kimberly Johns"                         0.0075    0.0295    0.5000
+      71 "Prof. Jeffrey Johnson"                  0.7500    0.6342    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 3.0 y_fact 3.0 
+      72 "Mr. Soong Kang"                         0.5503    0.5382    0.5000 sh ellipse  ic Green bc White  bw .2 lc Gray70 x_fact 2.0 y_fact 2.0 
+      73 "Prof. Igor Kanovsky"                    0.5503    0.5807    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 2.0 y_fact 2.0 
+      74 "Dr. Krzysztof Krejtz"                   0.1000    0.5042    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 1.0 y_fact 1.0 
+      75 "Dr. Izabela Krejtz"                     0.1000    0.3630    0.5000
+      76 "Mr. Maciej Kurant"                      0.5497    0.6484    0.5000 sh ellipse  ic Green bc White  bw .2 lc Gray70 x_fact 2.0 y_fact 2.0 
+      77 "Randall Landry"                         0.4491    0.1632    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 2.0 y_fact 2.0 
+      78 "Mr. Israel Lederhendler"                0.3500    0.2827    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 1.0 y_fact 1.0 
+      79 "James Leinart"                          0.3500    0.5150    0.5000
+      80 "Prof. David Levinson"                   0.4509    0.2648    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 2.0 y_fact 2.0 
+      81 "Dr. Paulette Lloyd"                     0.3497    0.5712    0.5000 sh ellipse  ic Green bc White  bw .2 lc Gray70 x_fact 1.0 y_fact 1.0 
+      82 "Mr. Marcelo Lufin"                      0.0082    0.0677    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 1.0 y_fact 1.0 
+      83 "Mr. Kevin Makice"                       0.8000    0.5313    0.5000
+      84 "Mr. Benjamin Markines"                  0.5500    0.1855    0.5000
+      85 "Dr. Francisco Martin"                   0.7000    0.3498    0.5000
+      86 "Mr. Winter Mason"                       0.3500    0.1952    0.5000
+      87 "Dr. Sharon Mastracci"                   0.0075    0.1276    0.5000
+      88 "Dr. Naoki Masuda"                       0.5497    0.7413    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 2.0 y_fact 2.0 
+      89 "Ms. Ann Mccranie"                       0.3500    0.0406    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 1.0 y_fact 1.0 
+      90 "Mr. Mark R Meiss"                       0.5500    0.2164    0.5000
+      91 "Dr. Filippo Menczer"                    0.4484    0.1415    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 2.0 y_fact 2.0 
+      92 "Marcello Mezzedimi"                     0.5497    0.3160    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 1.0 y_fact 1.0 
+      93 "James Moody"                            0.1000    0.0564    0.5000
+      94 "Mr. Lev Muchnik"                        0.9500    0.6528    0.5000
+      95 "Mr. Srikanth Mudigonda"                 0.8000    0.4392    0.5000
+      96 "Dr. Tsuyoshi Murata"                    0.1000    0.2917    0.5000
+      97 "Mr. Seyed Mussavi Rizi"                 0.5500    0.4240    0.5000
+      98 "Dr. Daniel A Newman"                    0.5500    0.4145    0.5000
+      99 "Mr. Alex K.S. Ng"                       0.3500    0.5495    0.5000 sh ellipse  ic Green bc White  bw .2 lc Gray70 x_fact 1.0 y_fact 1.0 
+     100 "Mr. Chris Nissen"                       0.4497    0.5356    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 2.0 y_fact 2.0 
+     101 "Prof. Andrzej Nowak"                    0.1000    0.3976    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 1.0 y_fact 1.0 
+     102 "Dr. Francesca Odella"                   0.4503    0.6319    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 2.0 y_fact 2.0 
+     103 "Mr. Nobuhiko Oshida"                    0.4503    0.5694    0.5000
+     104 "Mr. Jongwon Park"                       0.6497    0.4045    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 1.0 y_fact 1.0 
+     105 "Juyong Park"                            0.3500    0.0732    0.5000 sh ellipse  ic Green bc White  bw .2 lc Gray70 x_fact 2.0 y_fact 2.0 
+     106 "Mr. Roni Parshani"                      0.7000    0.5230    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 1.0 y_fact 1.0 
+     107 "Mr. Nishith Pathak"                     0.3497    0.1172    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 2.0 y_fact 2.0 
+     108 "Mr. Shashikant Penumarthy"              0.7500    0.2942    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 1.0 y_fact 1.0 
+     109 "Mr. Suresh Pillai"                      0.6497    0.4427    0.5000
+     110 "Dr. Maria Carmen Pin Arias"             0.1000    0.5530    0.5000
+     111 "Rosalyn Rael"                           0.1000    0.7804    0.5000 sh ellipse  ic Green bc White  bw .2 lc Gray70 x_fact 1.0 y_fact 1.0 
+     112 "Mr. Armando Razo"                       0.5500    0.4946    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 1.0 y_fact 1.0 
+     113 "Mr. Andreas Rechtsteiner"               0.4497    0.2448    0.5000
+     114 "Ms. Bettina Richards Heiss"             0.3491    0.1424    0.5000 sh ellipse  ic Green bc White  bw .2 lc Gray70 x_fact 1.0 y_fact 1.0 
+     115 "Dr. Alan Reifman"                       0.3503    0.2274    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 1.0 y_fact 1.0 
+     116 "Dr. Thimo Rohlf"                        0.4503    0.4661    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 2.0 y_fact 2.0 
+     117 "Ms. Heather Roinestad"                  0.6987    0.6128    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 1.0 y_fact 1.0 
+     118 "Mr. Domenico Salvatore"                 0.3497    0.4236    0.5000
+     119 "Dr. Alexander Samukhin"                 0.1000    0.1484    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 2.0 y_fact 2.0 
+     120 "Dr. Soma Sanyal"                        0.4503    0.4071    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 1.0 y_fact 1.0 
+     121 "Mr. Jan Scholz"                         0.5503    0.5972    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 2.0 y_fact 2.0 
+     122 "Dr. James Scott"                        0.4503    0.4349    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 1.0 y_fact 1.0 
+     123 "Kim B Serota"                           0.0082    0.0495    0.5000
+     124 "Oleg Sindiy"                            0.3497    0.6354    0.5000
+     125 "David Sloane"                           0.1000    0.9158    0.5000
+     126 "Kimberlie Stephens"                     0.3497    0.3889    0.5000 sh ellipse  ic Green bc White  bw .2 lc Gray70 x_fact 1.0 y_fact 1.0   
+     127 "Dr. Katherine Strandburg"               0.6509    0.6406    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 2.0 y_fact 2.0 
+     128 "Anthony Strathman"                      0.3503    0.2118    0.5000 sh ellipse  ic Green bc White  bw .2 lc Gray70 x_fact 1.0 y_fact 1.0 
+     129 "Mr. Adam Tatarynowicz"                  0.7000    0.2217    0.5000
+     130 "Mr. Hari Thadakamalla"                  0.4503    0.6033    0.5000 sh ellipse  ic Green bc White  bw .2 lc Gray70 x_fact 2.0 y_fact 2.0 
+     131 "Mr. Nebiyou Tilahun"                    0.3500    0.6069    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 1.0 y_fact 1.0 
+     132 "Mr. Richard Twu"                        0.4503    0.3637    0.5000
+     133 "Stephen Uzzo"                           0.3503    0.4679    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 2.0 y_fact 2.0 
+     134 "Dr. Alexei Vazquez"                     0.4509    0.2847    0.5000
+     135 "Prof. Venkat Venkatasubramanian"        0.4503    0.3472    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 1.0 y_fact 1.0 
+     136 "Allessandro Vespignani"                 0.4491    0.1901    0.5000 sh ellipse  ic Blue bc White  bw .2 lc Gray70 x_fact 3.0 y_fact 3.0 
+     137 "Cuauhcihuatl Vital"                     0.3497    0.5911    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 1.0 y_fact 1.0 
+     138 "Mr. Dylan Walker"                       0.0994    0.1806    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 2.0 y_fact 2.0 
+     139 "Mr. Pu Wang"                            0.3500    0.2527    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 1.0 y_fact 1.0 
+     140 "Ms. Jing Wang"                          0.1000    0.3403    0.5000
+     141 "Prof. Stan Wasserman"                   0.1013    0.0130    0.5000 sh ellipse  ic Blue bc White  bw .2 lc Gray70 x_fact 3.0 y_fact 3.0 
+     142 "Steven Wilcox"                          0.7000    0.4959    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 1.0 y_fact 1.0 
+     143 "Mr. Huafeng Xie"                        0.1000    0.2343    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 2.0 y_fact 2.0 
+     144 "Dr. Takuya Yamano"                      0.3503    0.3464    0.5000
+     145 "Mr. Jan Zajac"                          0.4500    0.3277    0.5000 sh ellipse  ic Black bc White  bw .2 lc Gray70 x_fact 1.0 y_fact 1.0 
+     146 "Ms. Mengxiao Zhu"                       0.6500    0.3021    0.5000
+     147 "Management (32)"                        0.2000    0.4000    0.5000 sh diamond ic Red bc White x_fact 4.07692307692 y_fact 4.07692307692 
+     148 "Telecommunications (other than internet) (11)"    0.2000    0.7453    0.5000 sh diamond ic Red bc White x_fact 2.05769230769 y_fact 2.05769230769 
+     149 "Psychology (30)"                        0.2000    0.4500    0.5000 sh diamond ic Red bc White x_fact 3.88461538462 y_fact 3.88461538462 
+     150 "Biochemistry (5)"                       0.2000    0.8812    0.5000 sh diamond ic Red bc White x_fact 1.48076923077 y_fact 1.48076923077 
+     151 "Sociology (52)"                         0.2000    0.0400    0.5000 sh diamond ic Red bc White x_fact 6.0 y_fact 6.0 
+     152 "Political Science (16)"                 0.2000    0.6300    0.5000 sh diamond ic Red bc White x_fact 2.53846153846 y_fact 2.53846153846 
+     153 "Internet (46)"                          0.2000    0.1600    0.5000 sh diamond ic Red bc White x_fact 5.42307692308 y_fact 5.42307692308 
+     154 "Medicine (2)"                           0.2000    0.9157    0.5000 sh diamond ic Red bc White x_fact 1.19230769231 y_fact 1.19230769231 
+     155 "Biology (26)"                           0.2000    0.5000    0.5000 sh diamond ic Red bc White x_fact 3.5 y_fact 3.5 
+     156 "Transportation (17)"                    0.2000    0.6700    0.5000 sh diamond ic Red bc White x_fact 2.63461538462 y_fact 2.63461538462 
+     157 "Utilities (2)"                          0.1994    0.9846    0.5000 sh diamond ic Red bc White x_fact 1.19230769231 y_fact 1.19230769231 
+     158 "Scientometrics (14)"                    0.2000    0.7091    0.5000 sh diamond ic Red bc White x_fact 2.34615384615 y_fact 2.34615384615 
+     159 "Economics (26)"                         0.2000    0.5500    0.5000 sh diamond ic Red bc White x_fact 3.5 y_fact 3.5 
+     160 "Computer Sciences (41)"                 0.2000    0.2800    0.5000 sh diamond ic Red bc White x_fact 4.94230769231 y_fact 4.94230769231 
+     161 "Public Health / Epidemiology (7)"       0.2000    0.8468    0.5000 sh diamond ic Red bc White x_fact 1.67307692308 y_fact 1.67307692308 
+     162 "Public Policy (20)"                     0.2000    0.5900    0.5000 sh diamond ic Red bc White x_fact 2.92307692308 y_fact 2.92307692308 
+     163 "Organizations Theory (39)"              0.2000    0.3400    0.5000 sh diamond ic Red bc White x_fact 4.75 y_fact 4.75 
+     164 "Physics (45)"                           0.2000    0.2200    0.5000 sh diamond ic Red bc White x_fact 5.32692307692 y_fact 5.32692307692 
+     165 "Information Technology (47)"            0.2000    0.1000    0.5000 sh diamond ic Red bc White x_fact 5.51923076923 y_fact 5.51923076923 
+     166 "Ecology (9)"                            0.2000    0.7806    0.5000 sh diamond ic Red bc White x_fact 1.86538461538 y_fact 1.86538461538 
+     167 "Chemistry (other than biochemistry) (2)"    0.2000    0.9500    0.5000 sh diamond ic Red bc White x_fact 1.19230769231 y_fact 1.19230769231 
+     168 "Operations Research (9)"                0.2000    0.8141    0.5000 sh diamond ic Red bc White x_fact 1.86538461538 y_fact 1.86538461538 
+*Edges
+       1      151 1 c Gray55 
+       2      163 1 c Gray55 
+       2      147 1 c Gray55 
+       2      165 1 c Gray55 
+       3      163 1 c Gray55 
+       3      147 1 c Gray55 
+       3      160 1 c Gray55 
+       3      168 1 c Gray55 
+       4      149 1 c Gray55 
+       5      151 1 c Gray55 
+       5      159 1 c Gray55 
+       5      147 1 c Gray55 
+       5      153 1 c Gray55 
+       5      163 1 c Gray55 
+       5      165 1 c Gray55 
+       6      161 1 c Gray55 
+       6      162 1 c Gray55 
+       6      159 1 c Gray55 
+       6      156 1 c Gray55 
+       7      155 1 c Gray55 
+       7      164 1 c Gray55 
+       8      155 1 c Gray55 
+       8      164 1 c Gray55 
+       9      162 1 c Gray55 
+       9      147 1 c Gray55 
+       9      163 1 c Gray55 
+      10      155 1 c Gray55 
+      10      159 1 c Gray55 
+      10      148 1 c Gray55 
+      10      150 1 c Gray55 
+      10      151 1 c Gray55 
+      10      160 1 c Gray55 
+      10      167 1 c Gray55 
+      10      153 1 c Gray55 
+      10      164 1 c Gray55 
+      10      165 1 c Gray55 
+      11      155 1 c Gray55 
+      12      164 1 c Gray55 
+      12      153 1 c Gray55 
+      13      166 1 c Gray55 
+      13      148 1 c Gray55 
+      13      157 1 c Gray55 
+      13      156 1 c Gray55 
+      13      163 1 c Gray55 
+      13      164 1 c Gray55 
+      14      151 1 c Gray55 
+      14      149 1 c Gray55 
+      14      160 1 c Gray55 
+      14      153 1 c Gray55 
+      14      164 1 c Gray55 
+      14      165 1 c Gray55 
+      15      151 1 c Gray55 
+      16      158 1 c Gray55 
+      16      165 1 c Gray55 
+      17      147 1 c Gray55 
+      17      150 1 c Gray55 
+      17      160 1 c Gray55 
+      17      158 1 c Gray55 
+      17      167 1 c Gray55 
+      17      161 1 c Gray55 
+      17      165 1 c Gray55 
+      18      151 1 c Gray55 
+      18      166 1 c Gray55 
+      18      164 1 c Gray55 
+      19      147 1 c Gray55 
+      19      160 1 c Gray55 
+      19      151 1 c Gray55 
+      19      153 1 c Gray55 
+      19      163 1 c Gray55 
+      19      165 1 c Gray55 
+      20      163 1 c Gray55 
+      20      151 1 c Gray55 
+      20      159 1 c Gray55 
+      20      147 1 c Gray55 
+      20      165 1 c Gray55 
+      21      165 1 c Gray55 
+      22      147 1 c Gray55 
+      22      159 1 c Gray55 
+      22      160 1 c Gray55 
+      22      158 1 c Gray55 
+      22      151 1 c Gray55 
+      22      153 1 c Gray55 
+      22      163 1 c Gray55 
+      22      164 1 c Gray55 
+      23      155 1 c Gray55 
+      23      150 1 c Gray55 
+      23      160 1 c Gray55 
+      23      153 1 c Gray55 
+      23      156 1 c Gray55 
+      23      164 1 c Gray55 
+      24      164 1 c Gray55 
+      24      165 1 c Gray55 
+      25      163 1 c Gray55 
+      25      147 1 c Gray55 
+      25      165 1 c Gray55 
+      25      153 1 c Gray55 
+      26      155 1 c Gray55 
+      26      160 1 c Gray55 
+      26      153 1 c Gray55 
+      26      164 1 c Gray55 
+      28      147 1 c Gray55 
+      28      148 1 c Gray55 
+      28      149 1 c Gray55 
+      28      160 1 c Gray55 
+      28      151 1 c Gray55 
+      28      152 1 c Gray55 
+      28      153 1 c Gray55 
+      28      162 1 c Gray55 
+      28      163 1 c Gray55 
+      28      165 1 c Gray55 
+      29      156 1 c Gray55 
+      29      164 1 c Gray55 
+      29      161 1 c Gray55 
+      30      163 1 c Gray55 
+      30      151 1 c Gray55 
+      31      147 1 c Gray55 
+      31      148 1 c Gray55 
+      31      149 1 c Gray55 
+      31      160 1 c Gray55 
+      31      151 1 c Gray55 
+      31      153 1 c Gray55 
+      31      161 1 c Gray55 
+      31      163 1 c Gray55 
+      31      162 1 c Gray55 
+      31      165 1 c Gray55 
+      32      163 1 c Gray55 
+      32      151 1 c Gray55 
+      32      168 1 c Gray55 
+      33      160 1 c Gray55 
+      34      159 1 c Gray55 
+      34      160 1 c Gray55 
+      34      158 1 c Gray55 
+      34      153 1 c Gray55 
+      34      164 1 c Gray55 
+      34      165 1 c Gray55 
+      35      151 1 c Gray55 
+      35      148 1 c Gray55 
+      35      149 1 c Gray55 
+      35      158 1 c Gray55 
+      35      152 1 c Gray55 
+      35      153 1 c Gray55 
+      35      163 1 c Gray55 
+      35      165 1 c Gray55 
+      36      161 1 c Gray55 
+      36      162 1 c Gray55 
+      36      156 1 c Gray55 
+      36      157 1 c Gray55 
+      36      168 1 c Gray55 
+      37      149 1 c Gray55 
+      38      155 1 c Gray55 
+      38      166 1 c Gray55 
+      38      151 1 c Gray55 
+      38      149 1 c Gray55 
+      41      164 1 c Gray55 
+      42      147 1 c Gray55 
+      42      149 1 c Gray55 
+      42      159 1 c Gray55 
+      42      160 1 c Gray55 
+      42      151 1 c Gray55 
+      42      152 1 c Gray55 
+      42      153 1 c Gray55 
+      42      163 1 c Gray55 
+      42      165 1 c Gray55 
+      43      151 1 c Gray55 
+      43      159 1 c Gray55 
+      43      147 1 c Gray55 
+      43      163 1 c Gray55 
+      43      153 1 c Gray55 
+      44      155 1 c Gray55 
+      44      164 1 c Gray55 
+      45      164 1 c Gray55 
+      46      162 1 c Gray55 
+      46      147 1 c Gray55 
+      46      152 1 c Gray55 
+      46      163 1 c Gray55 
+      47      156 1 c Gray55 
+      48      159 1 c Gray55 
+      49      151 1 c Gray55 
+      49      164 1 c Gray55 
+      49      152 1 c Gray55 
+      50      155 1 c Gray55 
+      50      147 1 c Gray55 
+      50      150 1 c Gray55 
+      50      159 1 c Gray55 
+      50      160 1 c Gray55 
+      50      158 1 c Gray55 
+      50      162 1 c Gray55 
+      50      164 1 c Gray55 
+      50      165 1 c Gray55 
+      51      147 1 c Gray55 
+      51      149 1 c Gray55 
+      51      151 1 c Gray55 
+      51      153 1 c Gray55 
+      51      161 1 c Gray55 
+      51      162 1 c Gray55 
+      51      163 1 c Gray55 
+      51      165 1 c Gray55 
+      52      162 1 c Gray55 
+      52      151 1 c Gray55 
+      52      149 1 c Gray55 
+      52      152 1 c Gray55 
+      53      149 1 c Gray55 
+      54      156 1 c Gray55 
+      55      147 1 c Gray55 
+      55      168 1 c Gray55 
+      56      156 1 c Gray55 
+      56      155 1 c Gray55 
+      56      164 1 c Gray55 
+      56      153 1 c Gray55 
+      57      149 1 c Gray55 
+      57      160 1 c Gray55 
+      57      158 1 c Gray55 
+      57      153 1 c Gray55 
+      57      165 1 c Gray55 
+      58      164 1 c Gray55 
+      58      155 1 c Gray55 
+      58      159 1 c Gray55 
+      58      151 1 c Gray55 
+      59      155 1 c Gray55 
+      59      166 1 c Gray55 
+      59      151 1 c Gray55 
+      59      149 1 c Gray55 
+      60      148 1 c Gray55 
+      60      151 1 c Gray55 
+      60      165 1 c Gray55 
+      60      153 1 c Gray55 
+      61      160 1 c Gray55 
+      61      165 1 c Gray55 
+      61      153 1 c Gray55 
+      62      149 1 c Gray55 
+      63      152 1 c Gray55 
+      63      165 1 c Gray55 
+      63      158 1 c Gray55 
+      64      149 1 c Gray55 
+      65      161 1 c Gray55 
+      65      162 1 c Gray55 
+      65      147 1 c Gray55 
+      65      151 1 c Gray55 
+      65      163 1 c Gray55 
+      66      151 1 c Gray55 
+      66      149 1 c Gray55 
+      66      165 1 c Gray55 
+      66      153 1 c Gray55 
+      68      155 1 c Gray55 
+      68      151 1 c Gray55 
+      68      159 1 c Gray55 
+      68      160 1 c Gray55 
+      68      153 1 c Gray55 
+      68      164 1 c Gray55 
+      68      165 1 c Gray55 
+      69      155 1 c Gray55 
+      69      147 1 c Gray55 
+      69      148 1 c Gray55 
+      69      159 1 c Gray55 
+      69      153 1 c Gray55 
+      69      164 1 c Gray55 
+      69      165 1 c Gray55 
+      71      155 1 c Gray55 
+      71      166 1 c Gray55 
+      71      149 1 c Gray55 
+      71      159 1 c Gray55 
+      71      151 1 c Gray55 
+      71      152 1 c Gray55 
+      71      163 1 c Gray55 
+      72      151 1 c Gray55 
+      72      159 1 c Gray55 
+      72      147 1 c Gray55 
+      72      163 1 c Gray55 
+      73      164 1 c Gray55 
+      73      160 1 c Gray55 
+      73      165 1 c Gray55 
+      73      153 1 c Gray55 
+      74      149 1 c Gray55 
+      75      149 1 c Gray55 
+      76      156 1 c Gray55 
+      76      160 1 c Gray55 
+      76      153 1 c Gray55 
+      76      148 1 c Gray55 
+      77      160 1 c Gray55 
+      77      165 1 c Gray55 
+      77      153 1 c Gray55 
+      78      147 1 c Gray55 
+      78      165 1 c Gray55 
+      79      160 1 c Gray55 
+      79      168 1 c Gray55 
+      80      156 1 c Gray55 
+      80      162 1 c Gray55 
+      80      151 1 c Gray55 
+      81      151 1 c Gray55 
+      81      152 1 c Gray55 
+      83      147 1 c Gray55 
+      83      149 1 c Gray55 
+      83      151 1 c Gray55 
+      83      152 1 c Gray55 
+      83      153 1 c Gray55 
+      83      163 1 c Gray55 
+      83      164 1 c Gray55 
+      83      165 1 c Gray55 
+      84      164 1 c Gray55 
+      84      160 1 c Gray55 
+      84      165 1 c Gray55 
+      84      153 1 c Gray55 
+      85      147 1 c Gray55 
+      85      148 1 c Gray55 
+      85      159 1 c Gray55 
+      85      153 1 c Gray55 
+      85      163 1 c Gray55 
+      85      165 1 c Gray55 
+      86      151 1 c Gray55 
+      86      149 1 c Gray55 
+      88      164 1 c Gray55 
+      88      155 1 c Gray55 
+      88      166 1 c Gray55 
+      88      151 1 c Gray55 
+      89      162 1 c Gray55 
+      89      151 1 c Gray55 
+      90      158 1 c Gray55 
+      90      160 1 c Gray55 
+      90      165 1 c Gray55 
+      90      153 1 c Gray55 
+      91      160 1 c Gray55 
+      91      165 1 c Gray55 
+      91      153 1 c Gray55 
+      92      163 1 c Gray55 
+      92      160 1 c Gray55 
+      92      165 1 c Gray55 
+      92      153 1 c Gray55 
+      93      151 1 c Gray55 
+      94      151 1 c Gray55 
+      94      156 1 c Gray55 
+      94      149 1 c Gray55 
+      94      159 1 c Gray55 
+      94      160 1 c Gray55 
+      94      158 1 c Gray55 
+      94      165 1 c Gray55 
+      94      152 1 c Gray55 
+      94      153 1 c Gray55 
+      94      154 1 c Gray55 
+      94      164 1 c Gray55 
+      94      168 1 c Gray55 
+      95      147 1 c Gray55 
+      95      149 1 c Gray55 
+      95      160 1 c Gray55 
+      95      158 1 c Gray55 
+      95      151 1 c Gray55 
+      95      153 1 c Gray55 
+      95      163 1 c Gray55 
+      95      165 1 c Gray55 
+      96      160 1 c Gray55 
+      97      162 1 c Gray55 
+      97      159 1 c Gray55 
+      97      160 1 c Gray55 
+      97      152 1 c Gray55 
+      98      147 1 c Gray55 
+      98      151 1 c Gray55 
+      98      149 1 c Gray55 
+      98      163 1 c Gray55 
+      99      156 1 c Gray55 
+      99      168 1 c Gray55 
+     100      148 1 c Gray55 
+     100      147 1 c Gray55 
+     100      165 1 c Gray55 
+     101      149 1 c Gray55 
+     102      162 1 c Gray55 
+     102      151 1 c Gray55 
+     102      149 1 c Gray55 
+     103      164 1 c Gray55 
+     103      155 1 c Gray55 
+     103      165 1 c Gray55 
+     104      162 1 c Gray55 
+     104      163 1 c Gray55 
+     104      151 1 c Gray55 
+     104      158 1 c Gray55 
+     104      152 1 c Gray55 
+     105      164 1 c Gray55 
+     105      151 1 c Gray55 
+     106      155 1 c Gray55 
+     106      156 1 c Gray55 
+     106      150 1 c Gray55 
+     106      160 1 c Gray55 
+     106      153 1 c Gray55 
+     106      164 1 c Gray55 
+     107      151 1 c Gray55 
+     107      160 1 c Gray55 
+     108      147 1 c Gray55 
+     108      159 1 c Gray55 
+     108      160 1 c Gray55 
+     108      158 1 c Gray55 
+     108      153 1 c Gray55 
+     108      164 1 c Gray55 
+     108      165 1 c Gray55 
+     109      151 1 c Gray55 
+     109      159 1 c Gray55 
+     109      164 1 c Gray55 
+     109      160 1 c Gray55 
+     109      153 1 c Gray55 
+     110      155 1 c Gray55 
+     111      166 1 c Gray55 
+     112      159 1 c Gray55 
+     112      151 1 c Gray55 
+     112      152 1 c Gray55 
+     112      163 1 c Gray55 
+     113      155 1 c Gray55 
+     113      160 1 c Gray55 
+     113      165 1 c Gray55 
+     114      163 1 c Gray55 
+     114      153 1 c Gray55 
+     115      151 1 c Gray55 
+     115      149 1 c Gray55 
+     116      164 1 c Gray55 
+     116      155 1 c Gray55 
+     116      160 1 c Gray55 
+     117      155 1 c Gray55 
+     117      166 1 c Gray55 
+     117      149 1 c Gray55 
+     117      160 1 c Gray55 
+     117      153 1 c Gray55 
+     117      165 1 c Gray55 
+     118      147 1 c Gray55 
+     118      163 1 c Gray55 
+     119      164 1 c Gray55 
+     120      164 1 c Gray55 
+     120      158 1 c Gray55 
+     120      165 1 c Gray55 
+     121      164 1 c Gray55 
+     121      160 1 c Gray55 
+     121      148 1 c Gray55 
+     121      153 1 c Gray55 
+     122      162 1 c Gray55 
+     122      151 1 c Gray55 
+     122      153 1 c Gray55 
+     124      162 1 c Gray55 
+     124      156 1 c Gray55 
+     125      154 1 c Gray55 
+     126      147 1 c Gray55 
+     126      163 1 c Gray55 
+     127      151 1 c Gray55 
+     127      159 1 c Gray55 
+     127      153 1 c Gray55 
+     127      162 1 c Gray55 
+     127      164 1 c Gray55 
+     128      164 1 c Gray55 
+     128      160 1 c Gray55 
+     129      147 1 c Gray55 
+     129      159 1 c Gray55 
+     129      160 1 c Gray55 
+     129      151 1 c Gray55 
+     129      163 1 c Gray55 
+     129      164 1 c Gray55 
+     130      156 1 c Gray55 
+     130      168 1 c Gray55 
+     130      165 1 c Gray55 
+     131      159 1 c Gray55 
+     131      156 1 c Gray55 
+     132      162 1 c Gray55 
+     132      147 1 c Gray55 
+     132      163 1 c Gray55 
+     133      155 1 c Gray55 
+     133      165 1 c Gray55 
+     134      164 1 c Gray55 
+     134      155 1 c Gray55 
+     134      153 1 c Gray55 
+     135      155 1 c Gray55 
+     135      163 1 c Gray55 
+     135      165 1 c Gray55 
+     136      156 1 c Gray55 
+     136      164 1 c Gray55 
+     136      153 1 c Gray55 
+     137      155 1 c Gray55 
+     137      166 1 c Gray55 
+     138      164 1 c Gray55 
+     139      164 1 c Gray55 
+     139      160 1 c Gray55 
+     140      163 1 c Gray55 
+     141      151 1 c Gray55 
+     142      151 1 c Gray55 
+     142      149 1 c Gray55 
+     142      159 1 c Gray55 
+     142      152 1 c Gray55 
+     142      163 1 c Gray55 
+     142      168 1 c Gray55 
+     143      164 1 c Gray55 
+     144      164 1 c Gray55 
+     144      159 1 c Gray55 
+     145      163 1 c Gray55 
+     145      151 1 c Gray55 
+     145      149 1 c Gray55 
+     146      163 1 c Gray55 
+     146      147 1 c Gray55 
+     146      160 1 c Gray55 
+     146      165 1 c Gray55 
+     146      153 1 c Gray55 

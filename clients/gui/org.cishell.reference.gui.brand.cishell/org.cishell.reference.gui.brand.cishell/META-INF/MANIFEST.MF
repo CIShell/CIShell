@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: CIShell Branding Plug-in
+Bundle-SymbolicName: org.cishell.reference.gui.brand.cishell;singleton:=true
+Bundle-Version: 0.4.0
+Bundle-Activator: org.cishell.reference.gui.brand.cishell.Activator
+Bundle-Localization: plugin
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.ui,
+ org.cishell.reference.gui.datamanager,
+ org.cishell.reference.gui.log,
+ org.cishell.reference.gui.workspace,
+ org.cishell.reference.gui.menumanager
+Eclipse-LazyStart: true
+Import-Package: org.cishell.app.service.datamanager,
+ org.osgi.service.log;version="1.3.0"
