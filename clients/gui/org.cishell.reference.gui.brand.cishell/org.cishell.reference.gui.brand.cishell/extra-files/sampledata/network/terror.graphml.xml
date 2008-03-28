@@ -1,0 +1,503 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns
+  http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+
+  <!-- prefuse GraphML Writer | Tue Jul 03 09:45:36 EDT 2007 -->
+  <key id="label" for="node" attr.name="label" attr.type="string"/>
+  <key id="Y" for="node" attr.name="Y" attr.type="float"/>
+  <key id="flight" for="node" attr.name="flight" attr.type="string"/>
+  <key id="pilot" for="node" attr.name="pilot" attr.type="string"/>
+  <key id="id" for="node" attr.name="id" attr.type="string"/>
+  <key id="X" for="node" attr.name="X" attr.type="float"/>
+  <key id="weight" for="edge" attr.name="weight" attr.type="string"/>
+
+  <graph edgedefault="undirected">
+    <!-- nodes -->
+    <node id="n0">
+      <data key="label">Ziad Samir Jarrah</data>
+      <data key="Y">362.0</data>
+      <data key="flight">United Airlines Flight 93 (Pennsylvania)</data>
+      <data key="pilot">true</data>
+      <data key="id">jarrah</data>
+      <data key="X">126.0</data>
+    </node>
+    <node id="n1">
+      <data key="label">Mohamed Atta</data>
+      <data key="Y">393.0</data>
+      <data key="flight">American Airlines Flight 11 (WTC1)</data>
+      <data key="pilot">true</data>
+      <data key="id">atta</data>
+      <data key="X">229.0</data>
+    </node>
+    <node id="n2">
+      <data key="label">Rayed Mohammed Abdullah</data>
+      <data key="Y">67.0</data>
+      <data key="id">abdullah</data>
+      <data key="X">77.0</data>
+    </node>
+    <node id="n3">
+      <data key="label">Hani Hanjour</data>
+      <data key="Y">67.0</data>
+      <data key="flight">American Airlines Flight 77 (Pentagon)</data>
+      <data key="pilot">true</data>
+      <data key="id">hanjour</data>
+      <data key="X">200.0</data>
+    </node>
+    <node id="n4">
+      <data key="label">Satam M. A. Al Suqami</data>
+      <data key="Y">443.0</data>
+      <data key="flight">American Airlines Flight 11 (WTC1)</data>
+      <data key="id">alsuqami</data>
+      <data key="X">413.0</data>
+    </node>
+    <node id="n5">
+      <data key="label">Wail M. Alshehri</data>
+      <data key="Y">501.0</data>
+      <data key="flight">American Airlines Flight 11 (WTC1)</data>
+      <data key="id">walshehri</data>
+      <data key="X">386.0</data>
+    </node>
+    <node id="n6">
+      <data key="label">Abdussattar Shaikh</data>
+      <data key="Y">12.0</data>
+      <data key="id">shaikh</data>
+      <data key="X">529.0</data>
+    </node>
+    <node id="n7">
+      <data key="label">Fayez Rashid Ahmed Hassan Al Qadi Banihammad</data>
+      <data key="Y">536.0</data>
+      <data key="flight">United Airlines Flight 175 (WTC2)</data>
+      <data key="id">banihammad</data>
+      <data key="X">553.0</data>
+    </node>
+    <node id="n8">
+      <data key="label">Habib Zacarias Moussaoui</data>
+      <data key="Y">223.0</data>
+      <data key="id">moussaoui</data>
+      <data key="X">201.0</data>
+    </node>
+    <node id="n9">
+      <data key="label">Abdulaziz Alomari</data>
+      <data key="Y">387.0</data>
+      <data key="flight">American Airlines Flight 11 (WTC1)</data>
+      <data key="id">alomari</data>
+      <data key="X">352.0</data>
+    </node>
+    <node id="n10">
+      <data key="label">Ahmed Khalil Ibrahim Samir Al-Ani</data>
+      <data key="Y">280.0</data>
+      <data key="id">al-ani</data>
+      <data key="X">129.0</data>
+    </node>
+    <node id="n11">
+      <data key="label">Nabil al-Marabh</data>
+      <data key="Y">311.0</data>
+      <data key="id">al-marabh</data>
+      <data key="X">475.0</data>
+    </node>
+    <node id="n12">
+      <data key="label">Ahmed Alghamdi</data>
+      <data key="Y">174.0</data>
+      <data key="flight">United Airlines Flight 175 (WTC2)</data>
+      <data key="id">aalghamdi</data>
+      <data key="X">359.0</data>
+    </node>
+    <node id="n13">
+      <data key="label">Mohand Alshehri</data>
+      <data key="Y">438.0</data>
+      <data key="flight">United Airlines Flight 175 (WTC2)</data>
+      <data key="id">malshehri</data>
+      <data key="X">543.0</data>
+    </node>
+    <node id="n14">
+      <data key="label">Waleed M. Alshehri</data>
+      <data key="Y">571.0</data>
+      <data key="flight">American Airlines Flight 11 (WTC1)</data>
+      <data key="id">alshehri</data>
+      <data key="X">383.0</data>
+    </node>
+    <node id="n15">
+      <data key="label">Ahmed Ibrahim A. Al Haznawi</data>
+      <data key="Y">254.0</data>
+      <data key="flight">United Airlines Flight 93 (Pennsylvania)</data>
+      <data key="id">alhaznawi</data>
+      <data key="X">251.0</data>
+    </node>
+    <node id="n16">
+      <data key="label">Faisal Al Salmi</data>
+      <data key="Y">15.0</data>
+      <data key="id">alsalmi</data>
+      <data key="X">107.0</data>
+    </node>
+    <node id="n17">
+      <data key="label">Mamduh Mahmud Salim</data>
+      <data key="Y">554.0</data>
+      <data key="id">salim</data>
+      <data key="X">71.0</data>
+    </node>
+    <node id="n18">
+      <data key="label">Majed Moqed</data>
+      <data key="Y">12.0</data>
+      <data key="flight">American Airlines Flight 77 (Pentagon)</data>
+      <data key="id">moqed</data>
+      <data key="X">200.0</data>
+    </node>
+    <node id="n19">
+      <data key="label">Mohamed Abdi</data>
+      <data key="Y">73.0</data>
+      <data key="id">abdi</data>
+      <data key="X">544.0</data>
+    </node>
+    <node id="n20">
+      <data key="label">Nawaf Alhazmi</data>
+      <data key="Y">43.0</data>
+      <data key="flight">American Airlines Flight 77 (Pentagon)</data>
+      <data key="id">nalhazmi</data>
+      <data key="X">460.0</data>
+    </node>
+    <node id="n21">
+      <data key="label">Khalid Almihdhar</data>
+      <data key="Y">12.0</data>
+      <data key="flight">American Airlines Flight 77 (Pentagon)</data>
+      <data key="id">almihdhar</data>
+      <data key="X">364.0</data>
+    </node>
+    <node id="n22">
+      <data key="label">Hamza Alghamdi</data>
+      <data key="Y">329.0</data>
+      <data key="flight">United Airlines Flight 175 (WTC2)</data>
+      <data key="id">halghamdi</data>
+      <data key="X">300.0</data>
+    </node>
+    <node id="n23">
+      <data key="label">Mamoun Darkazanli</data>
+      <data key="Y">516.0</data>
+      <data key="id">darkazanli</data>
+      <data key="X">174.0</data>
+    </node>
+    <node id="n24">
+      <data key="label">Ahmed Alnami</data>
+      <data key="Y">161.0</data>
+      <data key="flight">United Airlines Flight 93 (Pennsylvania)</data>
+      <data key="id">alnami</data>
+      <data key="X">460.0</data>
+    </node>
+    <node id="n25">
+      <data key="label">Ramzi Omar</data>
+      <data key="Y">435.0</data>
+      <data key="id">omar</data>
+      <data key="X">41.0</data>
+    </node>
+    <node id="n26">
+      <data key="label">Said Bahaji</data>
+      <data key="Y">393.0</data>
+      <data key="id">bahaji</data>
+      <data key="X">41.0</data>
+    </node>
+    <node id="n27">
+      <data key="label">Lotfi Raissi</data>
+      <data key="Y">186.0</data>
+      <data key="id">raissi</data>
+      <data key="X">77.0</data>
+    </node>
+    <node id="n28">
+      <data key="label">Raed Hijazi</data>
+      <data key="Y">350.0</data>
+      <data key="id">hijazi</data>
+      <data key="X">541.0</data>
+    </node>
+    <node id="n29">
+      <data key="label">Salem Alhazmi</data>
+      <data key="Y">116.0</data>
+      <data key="flight">American Airlines Flight 77 (Pentagon)</data>
+      <data key="id">salhazmi</data>
+      <data key="X">304.0</data>
+    </node>
+    <node id="n30">
+      <data key="label">Shaykh Saiid</data>
+      <data key="Y">517.0</data>
+      <data key="id">saiid</data>
+      <data key="X">287.0</data>
+    </node>
+    <node id="n31">
+      <data key="label">Marwan Al-Shehhi</data>
+      <data key="Y">435.0</data>
+      <data key="flight">United Airlines Flight 175 (WTC2)</data>
+      <data key="pilot">true</data>
+      <data key="id">al-shehhi</data>
+      <data key="X">229.0</data>
+    </node>
+    <node id="n32">
+      <data key="label">Saeed Alghamdi</data>
+      <data key="Y">211.0</data>
+      <data key="flight">United Airlines Flight 93 (Pennsylvania)</data>
+      <data key="id">salghamdi</data>
+      <data key="X">541.0</data>
+    </node>
+    <node id="n33">
+      <data key="label">Zakariya Essabar</data>
+      <data key="Y">469.0</data>
+      <data key="id">essabar</data>
+      <data key="X">126.0</data>
+    </node>
+
+    <!-- edges -->
+    <edge id="e0" source="n21" target="n6">
+      <data key="weight">3</data>
+    </edge>
+    <edge id="e1" source="n22" target="n13">
+      <data key="weight">2</data>
+    </edge>
+    <edge id="e2" source="n11" target="n28">
+      <data key="weight">2</data>
+    </edge>
+    <edge id="e3" source="n31" target="n25">
+      <data key="weight">3</data>
+    </edge>
+    <edge id="e4" source="n9" target="n7">
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e5" source="n20" target="n19">
+      <data key="weight">2</data>
+    </edge>
+    <edge id="e6" source="n26" target="n0">
+      <data key="weight">3</data>
+    </edge>
+    <edge id="e7" source="n1" target="n7">
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e8" source="n25" target="n1">
+      <data key="weight">3</data>
+    </edge>
+    <edge id="e9" source="n4" target="n1">
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e10" source="n25" target="n0">
+      <data key="weight">3</data>
+    </edge>
+    <edge id="e11" source="n20" target="n29">
+      <data key="weight">3</data>
+    </edge>
+    <edge id="e12" source="n20" target="n32">
+      <data key="weight">3</data>
+    </edge>
+    <edge id="e13" source="n4" target="n11">
+      <data key="weight">2</data>
+    </edge>
+    <edge id="e14" source="n14" target="n9">
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e15" source="n24" target="n32">
+      <data key="weight">3</data>
+    </edge>
+    <edge id="e16" source="n31" target="n5">
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e17" source="n12" target="n3">
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e18" source="n18" target="n3">
+      <data key="weight">3</data>
+    </edge>
+    <edge id="e19" source="n20" target="n6">
+      <data key="weight">2</data>
+    </edge>
+    <edge id="e20" source="n5" target="n7">
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e21" source="n17" target="n23">
+      <data key="weight">2</data>
+    </edge>
+    <edge id="e22" source="n4" target="n7">
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e23" source="n1" target="n27">
+      <data key="weight">2</data>
+    </edge>
+    <edge id="e24" source="n1" target="n10">
+      <data key="weight">2</data>
+    </edge>
+    <edge id="e25" source="n1" target="n23">
+      <data key="weight">2</data>
+    </edge>
+    <edge id="e26" source="n2" target="n16">
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e27" source="n1" target="n3">
+      <data key="weight">2</data>
+    </edge>
+    <edge id="e28" source="n31" target="n4">
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e29" source="n14" target="n4">
+      <data key="weight">3</data>
+    </edge>
+    <edge id="e30" source="n18" target="n21">
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e31" source="n29" target="n21">
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e32" source="n25" target="n26">
+      <data key="weight">3</data>
+    </edge>
+    <edge id="e33" source="n32" target="n15">
+      <data key="weight">3</data>
+    </edge>
+    <edge id="e34" source="n31" target="n0">
+      <data key="weight">3</data>
+    </edge>
+    <edge id="e35" source="n22" target="n24">
+      <data key="weight">3</data>
+    </edge>
+    <edge id="e36" source="n33" target="n1">
+      <data key="weight">3</data>
+    </edge>
+    <edge id="e37" source="n31" target="n14">
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e38" source="n20" target="n21">
+      <data key="weight">3</data>
+    </edge>
+    <edge id="e39" source="n31" target="n22">
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e40" source="n16" target="n3">
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e41" source="n1" target="n26">
+      <data key="weight">3</data>
+    </edge>
+    <edge id="e42" source="n21" target="n3">
+      <data key="weight">3</data>
+    </edge>
+    <edge id="e43" source="n4" target="n9">
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e44" source="n33" target="n0">
+      <data key="weight">3</data>
+    </edge>
+    <edge id="e45" source="n29" target="n12">
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e46" source="n4" target="n28">
+      <data key="weight">2</data>
+    </edge>
+    <edge id="e47" source="n22" target="n15">
+      <data key="weight">3</data>
+    </edge>
+    <edge id="e48" source="n31" target="n26">
+      <data key="weight">3</data>
+    </edge>
+    <edge id="e49" source="n13" target="n7">
+      <data key="weight">2</data>
+    </edge>
+    <edge id="e50" source="n9" target="n3">
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e51" source="n4" target="n5">
+      <data key="weight">3</data>
+    </edge>
+    <edge id="e52" source="n1" target="n5">
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e53" source="n31" target="n30">
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e54" source="n18" target="n29">
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e55" source="n27" target="n0">
+      <data key="weight">2</data>
+    </edge>
+    <edge id="e56" source="n22" target="n32">
+      <data key="weight">2</data>
+    </edge>
+    <edge id="e57" source="n14" target="n5">
+      <data key="weight">3</data>
+    </edge>
+    <edge id="e58" source="n31" target="n27">
+      <data key="weight">2</data>
+    </edge>
+    <edge id="e59" source="n31" target="n1">
+      <data key="weight">3</data>
+    </edge>
+    <edge id="e60" source="n2" target="n3">
+      <data key="weight">3</data>
+    </edge>
+    <edge id="e61" source="n18" target="n20">
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e62" source="n2" target="n27">
+      <data key="weight">2</data>
+    </edge>
+    <edge id="e63" source="n1" target="n30">
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e64" source="n1" target="n8">
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e65" source="n29" target="n9">
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e66" source="n31" target="n33">
+      <data key="weight">3</data>
+    </edge>
+    <edge id="e67" source="n22" target="n12">
+      <data key="weight">2</data>
+    </edge>
+    <edge id="e68" source="n14" target="n7">
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e69" source="n11" target="n32">
+      <data key="weight">2</data>
+    </edge>
+    <edge id="e70" source="n31" target="n23">
+      <data key="weight">2</data>
+    </edge>
+    <edge id="e71" source="n20" target="n3">
+      <data key="weight">3</data>
+    </edge>
+    <edge id="e72" source="n29" target="n3">
+      <data key="weight">2</data>
+    </edge>
+    <edge id="e73" source="n33" target="n26">
+      <data key="weight">3</data>
+    </edge>
+    <edge id="e74" source="n1" target="n0">
+      <data key="weight">3</data>
+    </edge>
+    <edge id="e75" source="n9" target="n5">
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e76" source="n25" target="n33">
+      <data key="weight">3</data>
+    </edge>
+    <edge id="e77" source="n11" target="n12">
+      <data key="weight">2</data>
+    </edge>
+    <edge id="e78" source="n27" target="n3">
+      <data key="weight">2</data>
+    </edge>
+    <edge id="e79" source="n14" target="n30">
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e80" source="n15" target="n0">
+      <data key="weight">3</data>
+    </edge>
+    <edge id="e81" source="n20" target="n24">
+      <data key="weight">3</data>
+    </edge>
+    <edge id="e82" source="n22" target="n20">
+      <data key="weight">2</data>
+    </edge>
+    <edge id="e83" source="n32" target="n28">
+      <data key="weight">2</data>
+    </edge>
+    <edge id="e84" source="n12" target="n9">
+      <data key="weight">1</data>
+    </edge>
+  </graph>
+</graphml>
