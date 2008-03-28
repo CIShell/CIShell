@@ -1,0 +1,47 @@
+*Nodes
+id*int label*string wealth*int totalties*int priorates*int
+1 "Acciaiuoli" 10 2 53
+2 "Albizzi" 36 3 65
+3 "Barbadori" 55 14 0
+4 "Bischeri" 44 9 12
+5 "Castellani" 20 18 22
+6 "Ginori" 32 9 0
+7 "Guadagni" 8 14 21
+8 "Lamberteschi" 42 14 0
+9 "Medici" 103 54 53
+10 "Pazzi" 48 7 0
+11 "Peruzzi" 49 32 42
+12 "Pucci" 3 1 0
+13 "Ridolfi" 27 4 38
+14 "Salviati" 10 5 35
+15 "Strozzi" 146 29 74
+16 "Tornabuoni" 48 7 0
+*UndirectedEdges
+source*int target*int marriage*string business*string
+9 1 "T" "F"
+6 2 "T" "F"
+7 2 "T" "F"
+9 2 "T" "F"
+5 3 "T" "T"
+6 3 "F" "T"
+9 3 "T" "T"
+11 3 "F" "T"
+7 4 "T" "T"
+8 4 "F" "T"
+11 4 "T" "T"
+15 4 "T" "F"
+8 5 "F" "T"
+11 5 "T" "T"
+15 5 "T" "F"
+9 6 "F" "T"
+8 7 "T" "T"
+16 7 "T" "F"
+11 8 "F" "T"
+10 9 "F" "T"
+13 9 "T" "F"
+14 9 "T" "T"
+16 9 "T" "T"
+14 10 "T" "F"
+15 11 "T" "F"
+15 13 "T" "F"
+16 13 "T" "F"
