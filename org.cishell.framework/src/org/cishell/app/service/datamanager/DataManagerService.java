@@ -16,14 +16,14 @@ package org.cishell.app.service.datamanager;
 import org.cishell.framework.data.Data;
 
 /**
- * A service for managing loaded {@link Data}s. 
+ * A service for managing loaded {@link Data} objects. 
  * {@link DataManagerListener}s may be registered to be notified of changes
- * in the model manager.
+ * in the data manager.
  * 
- * Clients are encouraged to use this service for managing the models they have 
- * loaded into memory. Algorithm writers are encouraged not to use this service 
- * as it is not guaranteed to be available like the standard CIShell services 
- * are.
+ * Application developers are encouraged to use this service for managing the
+ * models they have loaded into memory. Algorithm developers are encouraged not 
+ * to use this service as it is not guaranteed to be available like the standard
+ * CIShell services are.
  * 
  * @author Bruce Herr (bh2@bh2.net)
  */
@@ -81,7 +81,6 @@ public interface DataManagerService {
      */
     public void removeDataManagerListener(DataManagerListener listener);
     
-
     /**
      * Returns the label for a stored Data object
      * 
@@ -95,7 +94,7 @@ public interface DataManagerService {
      * to change the label so that it is unique.
      * 
      * @param data The Data
-     * @param label The new label for the data model.
+     * @param label The new label for the data model
      */
     public void setLabel(Data data, String label);
 }

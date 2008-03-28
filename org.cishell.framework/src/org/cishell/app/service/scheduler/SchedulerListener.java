@@ -45,7 +45,7 @@ public interface SchedulerListener {
     
     /**
      * Notification that an already scheduled Algorithm has been unscheduled
-     * and will therefore not be run.
+     * and will therefore not be run
      * 
      * @param algorithm The scheduled Algorithm that was unscheduled
      */
@@ -62,8 +62,8 @@ public interface SchedulerListener {
      * Notification that an Algorithm has finished executing
      * 
      * @param algorithm The scheduled Algorithm
-     * @param createdData The Data(s) it returned, or <code>null</code> if
-     *                  it returned <code>null</code>
+     * @param createdData The {@link Data} array it returned, or 
+     * 					  <code>null</code> if it returned <code>null</code>
      */
     public void algorithmFinished(Algorithm algorithm, Data[] createdData);
     
@@ -86,7 +86,7 @@ public interface SchedulerListener {
     
     /**
      * Notification that the scheduler's schedule of Algorithms to be run has 
-     * been cleared.
+     * been cleared
      */
     public void schedulerCleared();
 }

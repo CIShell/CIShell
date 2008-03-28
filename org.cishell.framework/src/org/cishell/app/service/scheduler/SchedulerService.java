@@ -23,9 +23,10 @@ import org.osgi.framework.ServiceReference;
  * A service for scheduling {@link Algorithm}s to be run. 
  * {@link SchedulerListener}s may be registered to be notified of events.  
  * 
- * Clients are encouraged to use this service for scheduling Algorithms to be
- * run. Algorithm writers are encouraged not to use this service as it is not 
- * guaranteed to be available like the standard CIShell services are.
+ * Application Developers are encouraged to use this service for scheduling 
+ * Algorithms to be run. Algorithm developers are encouraged not to use this 
+ * service as it is not guaranteed to be available like the standard CIShell 
+ * services are.
  * 
  * @author Bruce Herr (bh2@bh2.net)
  */
@@ -88,7 +89,7 @@ public interface SchedulerService {
     public boolean unschedule(Algorithm algorithm);
     
     /**
-     * Adds a listener to be notified of events happening in the scheduler. 
+     * Adds a listener to be notified of events happening in the scheduler
      * 
      * @param listener The listener to be added
      */
@@ -137,10 +138,9 @@ public interface SchedulerService {
      * 
      * @param algorithm The Algorithm
      * @return The scheduled time for the Algorithm to run or <code>null</code>
-     *         if the Algorithm is not scheduled or has completed execution.
+     *         if the Algorithm is not scheduled or has completed execution
      */
     public Calendar getScheduledTime(Algorithm algorithm);
-    
     
     /**
      * Returns an Algorithm's associated ServiceReference if one was provided

@@ -21,31 +21,31 @@ import org.cishell.framework.data.Data;
 import org.osgi.framework.ServiceReference;
 
 /**
- * A class for converting Data objects.
+ * A class for converting Data objects
  * 
  * @author Bruce Herr (bh2@bh2.net)
  */
 public interface Converter {
     
     /**
-     * Returns an array of ServiceReferences to converters in the order that
-     * they will be called when converting a Data
+     * Returns an array of ServiceReferences to converter algorithms in the order
+     * in which they will be called when converting a Data object
      *  
-     * @return An array ServiceReferences to converters to be used 
+     * @return An array of ServiceReferences to converter algorithms to be used
      */
     public ServiceReference[] getConverterChain();
     
     /**
      * Returns the AlgorithmFactory that can be invoked to convert a given 
-     * Data of the correct in format (as specified in the Dictionary from
-     * getProperties()) to a Data of the correct out format.
+     * Data object of the correct input format (as specified in the Dictionary 
+     * from getProperties()) to a Data object of the correct output format
      * 
      * @return The AlgorithmFactory to do the converting
      */
     public AlgorithmFactory getAlgorithmFactory();
     
     /**
-     * Get properties of the converter (same as algorithm service properties).
+     * Get properties of the Converter (same as algorithm service properties).
      * It is a set of properties that correspond to the 
      * {@link AlgorithmProperty}s properties. The IN_DATA and OUT_DATA 
      * properties are guaranteed to be set in this Dictionary.
@@ -56,13 +56,13 @@ public interface Converter {
     public Dictionary getProperties();
     
     /**
-     * Uses this converter to convert the given Data object to a new format. 
-     * This is a convenience method that uses this converter to convert a Data 
-     * object of the corrent format to a Data object of the defined out format
+     * Uses this Converter to convert the given Data object to a new format. 
+     * This is a convenience method that uses this Converter to convert a Data 
+     * object of the corrent format to a Data object of the defined output format.
      * 
-     * @param data The Data object with compatible in format
-     * @return A Data object of correct out format, or <code>null</code> if the
-     *         conversion fails
+     * @param data The Data object with compatible format
+     * @return A Data object of correct output format
+     * @throws ConversionException If the data conversion fails while converting
      */
-    public Data convert(Data data);
+    public Data convert(Data data) throws ConversionException;
 }

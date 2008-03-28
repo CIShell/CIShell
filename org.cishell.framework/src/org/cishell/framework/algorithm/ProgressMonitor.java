@@ -16,9 +16,9 @@ package org.cishell.framework.algorithm;
 /**
  * A class to monitor the progress of an algorithm. It allows for notification
  * of progress, notification of cancellation, notification of pausing, and 
- * description of current work during execution. These methods are generally 
- * only called by the algorithm with the CIShell client providing the progress 
- * monitor implementation.
+ * description of current work during execution. Except for the setter methods, 
+ * the methods are generally only called by the algorithm with the CIShell 
+ * application providing the progress monitor implementation.
  * 
  * @author Bruce Herr (bh2@bh2.net)
  */
@@ -59,14 +59,14 @@ public interface ProgressMonitor {
 	
     /**
      * Notifies the start of execution of the algorithm in addition to 
-     * revealing how many work units will be used.  
+     * revealing how many work units will be used 
      * 
-     * @param capabilities   An ORed int that tells the monitor what the 
+     * @param capabilities   An OR'ed int that tells the monitor what the 
      *                       algorithm is capable of with respect to the 
-     *                       monitor. The ORed values are taken from the int
+     *                       monitor. The OR'ed values are taken from the int
      *                       constants specified in this interface.
-     * @param totalWorkUnits The number of work units, may be -1 if the  
-     *                       algorithm does not provide progress information.
+     * @param totalWorkUnits The number of work units, -1 if the  
+     *                       algorithm does not provide progress information
      */
     public void start(int capabilities, int totalWorkUnits);
     
@@ -74,19 +74,19 @@ public interface ProgressMonitor {
      * Notifies that a certain number of units of work has been completed
      * 
      * @param work The number of units of work completed 
-     *             since last notification.
+     *             since last notification
      */
     public void worked(int work);
     
     /**
-     * The algorithm is finished executing.
+     * The algorithm is finished executing
      */
     public void done();
     
     /**
      * Sets or clears a flag for cancellation of this algorithm's execution.
-     * An algorithm writer can ignore or clear this flag if it cannot stop 
-     * midstream. This is one of the methods that can be called by someone 
+     * An algorithm developer can ignore or clear this flag if it cannot stop 
+     * midstream. This is one of the methods that can be called by something 
      * other than the algorithm.
      * 
      * @param value Set or clear the cancellation request
@@ -104,8 +104,8 @@ public interface ProgressMonitor {
     
     /**
      * Sets or clears a flag for pausing of this algorithm's execution. An
-     * algorithm writer can ignore or clear this flag if it cannot pause 
-     * midstream. This is one of the methods that can be called by someone 
+     * algorithm developer can ignore or clear this flag if it cannot pause 
+     * midstream. This is one of the methods that can be called by something 
      * other than the algorithm.
      * 
      * @param value Set or clear the pause request
@@ -123,7 +123,7 @@ public interface ProgressMonitor {
     
     /**
      * Method to describe what the algorithm is currently doing for the benefit
-     * of the users of the algorithm as it progresses during execution.
+     * of the users of the algorithm as it progresses during execution
      * 
      * @param currentWork A short description of the current work the algorithm
      *                    is doing

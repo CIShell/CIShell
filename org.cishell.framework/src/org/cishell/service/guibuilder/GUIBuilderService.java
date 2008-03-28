@@ -17,7 +17,6 @@ import java.util.Dictionary;
 
 import org.osgi.service.log.LogService;
 import org.osgi.service.metatype.MetaTypeProvider;
-import org.osgi.service.metatype.MetaTypeService;
 import org.osgi.service.metatype.ObjectClassDefinition;
 
 /**
@@ -26,17 +25,16 @@ import org.osgi.service.metatype.ObjectClassDefinition;
  * simple information and a more flexible way to create {@link GUI}s using a 
  * standard OSGi {@link MetaTypeProvider}. The MetaTypeProvider basically lists 
  * what input is needed (String, Integer, Float, etc...), a description of the 
- * input, and a way to validate input. There is also an XML format that OSGi 
- * provides a service ({@link MetaTypeService}) for that will parse the XML into
- * a MetaTypeProvider instance. More information about MetaTypeProvider and 
- * MetaTypeService is available in the OSGi Service Platform Specification, 
- * Release 4 Service Compendium, Section 105 (pg 129). You can download it at
- * <a href="http://www.osgi.org/osgi_technology/download_specs.asp">
- * http://www.osgi.org/osgi_technology/download_specs.asp</a>.
+ * input, and a way to validate input. 
+ * 
+ * See the 
+ * <a href="http://cishell.org/dev/docs/spec/cishell-spec-1.0.pdf">
+ * CIShell Specification 1.0</a> for documentation on creating GUIs with this
+ * service. 
  * 
  * Algorithm writers are encouraged to use this service if they need to get
  * additional input from the user rather than creating their own GUI. This is
- * to ensure a consistant user input method and so that the GUI can easily be 
+ * to ensure a consistent user input method and so that the GUI can easily be 
  * routed to the user when running remotely.
  * 
  * @author Bruce Herr (bh2@bh2.net)
@@ -67,8 +65,8 @@ public interface GUIBuilderService {
 	 *                   MetaTypeProvider
 	 * @param parameters Provides the parameters needed to get information from 
 	 *                   the user
-     * @return The data the user entered or <code>null</code> if they cancelled
-     *         the operation.
+     * @return The data the user entered or <code>null</code> if the operation 
+     * 		   was cancelled
      */
     public Dictionary createGUIandWait(String id, MetaTypeProvider parameters);
     
@@ -78,7 +76,7 @@ public interface GUIBuilderService {
      * @param title   The title of the pop-up
      * @param message The message to display
      * @param detail  Additional details
-     * @return If they clicked "Ok", <code>true</code>, otherwise 
+     * @return If they clicked "Ok," <code>true</code>, otherwise 
      *         <code>false</code>
      */
     public boolean showConfirm(String title, String message, String detail);
@@ -89,7 +87,7 @@ public interface GUIBuilderService {
      * @param title   The title of the pop-up
      * @param message The question to display
      * @param detail  Additional details
-     * @return If they clicked "Yes", <code>true</code>, otherwise 
+     * @return If they clicked "Yes," <code>true</code>, otherwise 
      *         <code>false</code>
      */
     public boolean showQuestion(String title, String message, String detail);

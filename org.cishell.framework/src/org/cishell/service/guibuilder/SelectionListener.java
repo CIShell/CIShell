@@ -17,8 +17,8 @@ import java.util.Dictionary;
 
 /**
  * A listener that is notified when all values entered by a {@link GUI} user 
- * have been validated and they have clicked 'Ok' to proceed or if they 
- * cancelled the operation 
+ * have been validated and they have clicked 'Ok' to proceed or if the operation
+ * was cancelled
  * 
  * @author Bruce Herr (bh2@bh2.net)
  */

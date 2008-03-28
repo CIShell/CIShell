@@ -24,10 +24,6 @@ import org.cishell.framework.data.Data;
  * make additional checks. For example, if an algorithm only worked on 
  * symmetric matrices, this interface would check the data ahead of time
  * to ensure that the given matrix was in fact a symmetric matrix.
- * <br />
- * In order for CIShell clients to fully recognize this additional validation 
- * method, an algorithm writer must register this interface in addition to the 
- * algorithm interface when registering their service.
  * 
  * @author Bruce Herr (bh2@bh2.net)
  */
