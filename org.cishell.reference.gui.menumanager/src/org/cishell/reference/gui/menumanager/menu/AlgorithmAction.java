@@ -155,7 +155,7 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, DataMa
                     Data datum = (Data) dataSet.get(j);
                     
                     if (datum != null) {
-                        if (isAsignableFrom(inData[i], datum)) {
+                        if (isAssignableFrom(inData[i], datum)) {
                             dataSet.remove(j);
                             data[i] = datum;
                             converters[i] = null;
@@ -190,7 +190,7 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, DataMa
         setEnabled(data != null); //&& isValid());
     }
     
-    private boolean isAsignableFrom(String type, Data datum) {
+    private boolean isAssignableFrom(String type, Data datum) {
         Object data = datum.getData();
         boolean assignable = false;
         
