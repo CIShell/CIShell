@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metatype:MetaData xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.0.0">
+	<OCD name="File Load" id="org.cishell.reference.gui.persistence.load.FileLoad.prefs.local.OCD"
+		 description="">
+		  <AD name="Default load directory" id="loadDir" type="String" default="directory:sampledata/"/>
+	</OCD>
+	<Designate pid="org.cishell.reference.gui.persistence.load.FileLoad.prefs.local">
+		<Object ocdref="org.cishell.reference.gui.persistence.load.FileLoad.prefs.local.OCD" />
+	</Designate>
+</metatype:MetaData>
