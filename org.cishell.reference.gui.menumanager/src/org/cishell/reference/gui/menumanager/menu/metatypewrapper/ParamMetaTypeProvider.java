@@ -2,7 +2,6 @@ package org.cishell.reference.gui.menumanager.menu.metatypewrapper;
 
 import java.util.Dictionary;
 
-import org.osgi.service.log.LogService;
 import org.osgi.service.metatype.MetaTypeProvider;
 import org.osgi.service.metatype.ObjectClassDefinition;
 
