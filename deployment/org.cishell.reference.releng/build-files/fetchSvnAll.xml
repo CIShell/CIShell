@@ -44,6 +44,12 @@
     </antcall>
     <antcall target="svn.co">
       <param name="target" value="plugins"/>
+      <param name="element.id" value="org.cishell.reference.prefs.admin"/>
+      <param name="project.name" value="/core/org.cishell.reference.prefs.admin"/>
+      <param name="url" value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk"/>
+    </antcall>
+    <antcall target="svn.co">
+      <param name="target" value="plugins"/>
       <param name="element.id" value="org.cishell.service.autostart"/>
       <param name="project.name" value="/core/org.cishell.service.autostart"/>
       <param name="url" value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk"/>
@@ -114,6 +120,12 @@
       <param name="project.name" value="/clients/gui/org.cishell.reference.gui.menumanager"/>
       <param name="url" value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk"/>
     </antcall>
+    <antcall target="svn.co">
+      <param name="target" value="plugins"/>
+      <param name="element.id" value="org.cishell.reference.gui.prefs.swt"/>
+      <param name="project.name" value="/clients/gui/org.cishell.reference.gui.prefs.swt"/>
+      <param name="url" value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk"/>
+    </antcall>  	
     <antcall target="svn.co">
       <param name="target" value="plugins"/>
       <param name="element.id" value="org.cishell.reference.gui.workspace"/>
