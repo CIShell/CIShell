@@ -180,14 +180,17 @@ has the following constraints:
 \begin{itemize}
   \item The algorithm must be a conformant \class{AlgorithmFactory}
   implementation and properly registered as a service.
+  \item The algorithm's service metadata must contain an ``in\_data''
+  and ``out\_data'' with only one data item each with one containing a
+  ``file:\textit{mime/type}'' format and the other a
+  ``file-ext:\textit{file-extension}'' depending on the direction of
+  validation. See section \ref{dataSpec} for data format details.
   \item The algorithm must take in a single \class{Data} item and validate the
   item producing a single \class{Data} item (with the same data, but changed
-  format) or throw an exception if the file being validated is not of the right
-  type. This must be reflected in the algorithm's service metadata where
-  ``in\_data'' and ``out\_data'' have only one data item each with one
-  containing a ``file:\textit{mime/type}'' format and the other a
-  ``file-ext:\textit{file-extension}'' depending on the direction of validation.
-  See section \ref{dataSpec} for data format details.
+  format) if the file is of the right type. If not, then the algorithm should
+  log (using the CIShellContext-provided \class{LogService}) what the problem
+  was and must return null. If a problem occurs that is unrelated to the
+  file's format, then an \class{AlgorithmExecutionException} should be thrown.
   \item The algorithm must not alter the data. Its only purpose is to validate
   the proposed incoming or outgoing file.
   \item The algorithm's service metadata must contain a valid ``service.pid''.
