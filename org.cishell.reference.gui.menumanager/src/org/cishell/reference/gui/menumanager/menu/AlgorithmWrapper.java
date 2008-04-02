@@ -25,6 +25,7 @@ import java.util.Map;
 import org.cishell.app.service.datamanager.DataManagerService;
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
+import org.cishell.framework.algorithm.AlgorithmExecutionException;
 import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.algorithm.AlgorithmProperty;
 import org.cishell.framework.algorithm.DataValidator;
@@ -86,8 +87,11 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
 	public Data[] execute() {
 		try {
 			// prepare to run the algorithm
-
+			if (convertableData.length > 0) System.err.println("Convertable Data 0 in AlgorithmWrapper" + convertableData[0]);
+			else System.err.println("No Conv 0!");
 			Data[] data = convertDataToRequiredFormat(this.convertableData, this.converters);
+			if (data.length > 0) System.err.println("Data 0 in AlgorithmWrapper humph:" + data[0]);
+			else System.err.println("No Normal 0!");
 			AlgorithmFactory algFactory = (AlgorithmFactory) bContext.getService(algFactoryRef);
 			boolean inputIsValid = testDataValidityIfPossible(algFactory, data);
 			if (!inputIsValid) return null;
@@ -106,10 +110,14 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
 			// execute the algorithm
 
 			Data[] rawOutData = algorithm.execute();
+			if (rawOutData.length > 0) System.err.println("rawOutData 0 in AlgorithmWrapper:" + rawOutData[0]);
+			else System.err.println("No Raw 0!");
 
 			// return the algorithm's output
 
 			Data[] processedOutData = processOutData(rawOutData);
+			if (processedOutData.length > 0) System.err.println("processedOutData 0 in AlgorithmWrapper:" + processedOutData[0]);
+			else System.err.println("No Processed 0!");
 			return processedOutData;
 
 		} catch (Throwable e) {
@@ -128,17 +136,15 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
 	public void setProgressMonitor(ProgressMonitor monitor) {
 		progressMonitor = monitor;
 	}
-
-	protected Data[] convertDataToRequiredFormat(Data[] providedData, Converter[][] converters) throws Exception {
+	
+	protected Data[] convertDataToRequiredFormat(Data[] data, Converter[][] converters) throws Exception {
 		// convert data into the in_data format of the algorithm we are trying to run
-		Data[] readyData = new Data[providedData.length];
-
-		for (int i = 0; i < providedData.length; i++) {
+		for (int i = 0; i < data.length; i++) {
 			if (converters[i] != null) {
 				// WARNING: arbitrarily chooses first converter out of a list of possible converters
-				readyData[i] = converters[i][0].convert(providedData[i]);
-
-				if (readyData[i] == null && i < (readyData.length - 1)) {
+				data[i] = converters[i][0].convert(data[i]);
+				System.out.println("readyData " + i + ": " + data[i]);
+				if (data[i] == null && i < (data.length - 1)) {
 					Exception e = new Exception("The converter " + converters[i].getClass().getName()
 							+ " returned a null result where data was expected.");
 					throw e;
@@ -147,7 +153,7 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
 			}
 		}
 
-		return readyData;
+		return data;
 	}
 
 	protected boolean testDataValidityIfPossible(AlgorithmFactory algFactory, Data[] dataInQuestion) {
