@@ -28,6 +28,7 @@ import org.cishell.service.conversion.DataConversionService;
 import org.eclipse.jface.action.Action;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.log.LogService;
 
 
@@ -39,10 +40,14 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, DataMa
     protected Data[] originalData;
     protected Converter[][] converters;
     
-    public AlgorithmAction(ServiceReference ref, BundleContext bContext, CIShellContext ciContext) {
+    protected ConfigurationAdmin ca;
+    
+    //ConfigurationAdmin can be null
+    public AlgorithmAction(ServiceReference ref, BundleContext bContext, CIShellContext ciContext, ConfigurationAdmin ca) {
         this.ref = ref;
         this.ciContext = ciContext;
         this.bContext = bContext;
+        this.ca = ca;
         
         setText((String)ref.getProperty(LABEL));
         setToolTipText((String)ref.getProperty(AlgorithmProperty.DESCRIPTION));
@@ -92,7 +97,7 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, DataMa
             
             printAlgorithmInformation();
            
-            scheduler.schedule(new AlgorithmWrapper(ref, bContext, ciContext, originalData, data, converters), ref);
+            scheduler.schedule(new AlgorithmWrapper(ref, ciContext, bContext, originalData, data, converters, ca), ref);
         } catch (Throwable e) {
             e.printStackTrace();
         }
@@ -150,7 +155,7 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, DataMa
                     Data datum = (Data) dataSet.get(j);
                     
                     if (datum != null) {
-                        if (isAsignableFrom(inData[i], datum)) {
+                        if (isAssignableFrom(inData[i], datum)) {
                             dataSet.remove(j);
                             data[i] = datum;
                             converters[i] = null;
@@ -185,7 +190,7 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, DataMa
         setEnabled(data != null); //&& isValid());
     }
     
-    private boolean isAsignableFrom(String type, Data datum) {
+    private boolean isAssignableFrom(String type, Data datum) {
         Object data = datum.getData();
         boolean assignable = false;
         
