@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metatype:MetaData xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.0.0">
+
+	<OCD name="General" id="org.cishell.testalgorithm3.prefs.global.OCD"
+		description=" ">
+		<AD name="Save data files to" id="saveDataDir" type="String" default="directory:/home/mwlinnem/"/>
+		<AD name="Open .txt files with" id="txtFileProg" type="String" default="file:"/>
+		<AD name="Open .csv files with" id="csvFileProg"  type="String" default="file:"/>
+		<AD name="Prompt to save on exit?" id="promptSave" type="Boolean" default="true"/>
+	</OCD>
+	
+	<OCD name="Logging" id="org.cishell.testalgorithm3.prefs.global2.OCD"
+		description=" ">
+		 <AD name="Set default logging level" id="logLevel" type="String" default="Normal">
+		 	<Option label="Minimal" value="Minimal"/>
+		 	<Option label="Normal" value="Normal"/>
+		 	<Option label="Verbose" value="Verbose"/>
+		 </AD>
+		 
+		  <AD name="Class Path" id="cp" type="String" default="path:">
+		 </AD>
+		 
+		 <AD name="Save log files to" id="logFileSaveDir" type="String" default="directory:/tmp/"/>
+	</OCD>
+	
+	<Designate pid="org.cishell.testalgorithm3.TestAlgorithm.prefs.global">
+		<Object ocdref="org.cishell.testalgorithm3.prefs.global.OCD"/>
+	</Designate>
+	
+	<Designate pid="org.cishell.testalgorithm3.TestAlgorithm.prefs.global2">
+		<Object ocdref="org.cishell.testalgorithm3.prefs.global2.OCD"/>
+	</Designate>
+</metatype:MetaData>
