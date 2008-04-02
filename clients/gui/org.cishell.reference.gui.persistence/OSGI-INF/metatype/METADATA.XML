@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<metatype:MetaData xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.0.0">
-	<OCD name="FileView" id="org.cishell.reference.gui.persistence.view.FileView.OCD"
-		 description="">
-	</OCD>
-	<Designate pid="org.cishell.reference.gui.persistence.view.FileView">
-		<Object ocdref="org.cishell.reference.gui.persistence.view.FileView.OCD" />
-	</Designate>
-</metatype:MetaData>
