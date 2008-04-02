@@ -107,6 +107,13 @@ public class FileLoad implements Algorithm{
     	
     	public void run (){
     	
+    		//WARNING: Verified that file dialog has different behavior on different platforms.
+    		//On linux (gtk?),  providing a filterPath that doesn't end in a directory causes the FileDialog to
+    		//default to the filterPath of the directory cishell was started from (not the directory the executable is necessarily in!)
+    		//However, the same code works as intended on Windows.
+    		
+    		//This code works on Linux, but still hasn't been tested on Windows.
+    		
     	    	FileDialog dialog = new FileDialog(window.getShell(), SWT.OPEN);
 		        if (currentDir == null) {
 		        	currentDir = new File(System.getProperty("osgi.install.area").replace("file:","")
