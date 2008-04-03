@@ -25,6 +25,7 @@ import java.util.Map;
 import org.cishell.app.service.datamanager.DataManagerService;
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
+import org.cishell.framework.algorithm.AlgorithmExecutionException;
 import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.algorithm.AlgorithmProperty;
 import org.cishell.framework.algorithm.DataValidator;
@@ -37,6 +38,7 @@ import org.cishell.framework.userprefs.UserPrefsProperty;
 import org.cishell.reference.gui.menumanager.Activator;
 import org.cishell.reference.gui.menumanager.menu.metatypewrapper.ParamMetaTypeProvider;
 import org.cishell.reference.service.metatype.BasicMetaTypeProvider;
+import org.cishell.service.conversion.ConversionException;
 import org.cishell.service.conversion.Converter;
 import org.cishell.service.guibuilder.GUIBuilderService;
 import org.osgi.framework.BundleContext;
@@ -50,224 +52,221 @@ import org.osgi.service.metatype.MetaTypeProvider;
 import org.osgi.service.metatype.MetaTypeService;
 import org.osgi.service.metatype.ObjectClassDefinition;
 
+
 public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressTrackable {
-	protected ServiceReference algFactoryRef;
-	protected BundleContext bContext;
-	protected CIShellContext ciContext;
-	protected Data[] originalData;
-	protected Data[] convertableData;
-	protected Converter[][] converters;
-	protected ProgressMonitor progressMonitor;
+    protected ServiceReference ref;
+    protected BundleContext bContext;
+    protected CIShellContext ciContext;
+    protected Data[] originalData;
+    protected Data[] data;
+    protected Converter[][] converters;
+    protected ProgressMonitor progressMonitor;
+    protected Algorithm algorithm;
+    
+    public AlgorithmWrapper(ServiceReference ref, BundleContext bContext,
+            CIShellContext ciContext, Data[] originalData, Data[] data,
+            Converter[][] converters) {
+        this.ref = ref;
+        this.bContext = bContext;
+        this.ciContext = ciContext;
+        this.originalData = originalData;
+        this.data = data;
+        this.converters = converters;
+        this.progressMonitor = null;           
+    }
 
-	protected ConfigurationAdmin ca;
-	protected GUIBuilderService builder;
-	protected DataManagerService dataManager;
+    /**
+     * @see org.cishell.framework.algorithm.Algorithm#execute()
+     */
+    public Data[] execute() {
+    	AlgorithmFactory factory = (AlgorithmFactory) bContext.getService(ref);
+    	String pid = (String)ref.getProperty(Constants.SERVICE_PID);
+    	
+    	// convert input data to the correct format
+        boolean conversionSuccessful = tryConvertingDataToRequiredFormat(data, converters);
+        if (!conversionSuccessful) return null;
+        boolean inputIsValid = testDataValidityIfPossible(factory, data);
+        if (!inputIsValid) return null;
+        
+        // create algorithm parameters        
+        String metatype_pid = getMetaTypeID(ref);
+        
+        MetaTypeProvider provider = getPossiblyMutatedMetaTypeProvider(metatype_pid, pid, factory);
+        Dictionary parameters = getUserEnteredParameters(metatype_pid, provider);
+        
+        // check to see if the user cancelled the operation
+        if(parameters == null) return null;
+        
+        printParameters(metatype_pid, provider, parameters);
+        
+        // create the algorithm
+        algorithm = factory.createAlgorithm(data, parameters, ciContext);
+        trackAlgorithmIfPossible(algorithm);
+        
+        // execute the algorithm
+        Data[] outData = tryExecutingAlgorithm(algorithm);
+        if (outData == null) return null;
+        
+        // process and return the algorithm's output
+        doParentage(outData);
+        outData = removeNullData(outData);
+        addDataToDataManager(outData);
 
-	// ConfigurationAdmin may be null
-	public AlgorithmWrapper(ServiceReference ref, CIShellContext ciContext, BundleContext bContext,
-			Data[] originalData, Data[] data, Converter[][] converters, ConfigurationAdmin ca) {
-		this.algFactoryRef = ref;
-		this.bContext = bContext;
-		this.ciContext = ciContext;
-		this.originalData = originalData;
-		this.convertableData = data;
-		this.converters = converters;
+        return outData;
+    }
+    
+    protected Data[] removeNullData(Data[] outData) {
+        if (outData != null) {            
+            List goodData = new ArrayList();
+            for (int i=0; i < outData.length; i++) {
+                if (outData[i] != null) {
+                    goodData.add(outData[i]);
+                }
+            }
+            
+            outData = (Data[]) goodData.toArray(new Data[0]);
+        }
+        
+        return outData;
+    }
+    
+    protected void addDataToDataManager(Data[] outData) {
+        if (outData != null) {
+            DataManagerService dataManager = (DataManagerService) 
+                bContext.getService(bContext.getServiceReference(
+                        DataManagerService.class.getName()));
+                        
+            if (outData.length != 0) {
+                dataManager.setSelectedData(outData);
+            }
+        }
+    }
+    
+    protected Data[] tryExecutingAlgorithm(Algorithm algorithm) {
+        Data[] outData = null;
+        try {
+        	outData = algorithm.execute();
+        } catch (AlgorithmExecutionException e) {
+            log(LogService.LOG_ERROR,
+        		"The Algorithm: \""+ref.getProperty(AlgorithmProperty.LABEL)+
+                "\" had an error while executing: "+e.getMessage());
+        } catch (RuntimeException e) {
+            GUIBuilderService builder = (GUIBuilderService)
+            ciContext.getService(GUIBuilderService.class.getName());
+            
+        	builder.showError("Error!", "An unexpected exception occurred while "
+        			+"executing \""+ref.getProperty(AlgorithmProperty.LABEL)+".\"", e);
+        }
+        
+        return outData;
+    }
+    
+    protected boolean tryConvertingDataToRequiredFormat(Data[] data, Converter[][] converters) {
+        for (int i=0; i < data.length; i++) {
+            if (converters[i] != null) {
+            	try {
+            		data[i] = converters[i][0].convert(data[i]);
+            	} catch (ConversionException e) {
+            		log(LogService.LOG_ERROR,"The conversion of data to give" +
+            				" the algorithm failed for this reason: "+e.getMessage(), e);
+            		return false;
+            	}
 
-		this.ca = ca;
-		this.progressMonitor = null;
-		this.builder = (GUIBuilderService) ciContext.getService(GUIBuilderService.class.getName());
-		this.dataManager = (DataManagerService) bContext.getService(bContext
-				.getServiceReference(DataManagerService.class.getName()));
-	}
+                if (data[i] == null && i < (data.length - 1)) {
+                	log(LogService.LOG_ERROR, "The converter: " + 
+                				converters[i].getClass().getName() +
+                				" returned a null result where data was expected when" +
+                				" converting the data to give the algorithm.");
+                	return false;
+                }
+                converters[i] = null;
+            }
+        }
+        
+        return true;
+    }
+    
+    protected boolean testDataValidityIfPossible(AlgorithmFactory factory, Data[] data) {
+        if (factory instanceof DataValidator) {
+        	String validation = ((DataValidator) factory).validate(data);
+        	
+        	if (validation != null && validation.length() > 0) {
+        		String label = (String) ref.getProperty(LABEL);
+        		if (label == null) {
+        			label = "Algorithm";
+        		}
+        		
+        		log(LogService.LOG_ERROR,"INVALID DATA: The data given to \""+label+"\" is incompatible for this reason: "+validation);
+        		return false;
+        	}
+        }
+        
+        return true;
+    }
+    
+    protected String getMetaTypeID(ServiceReference ref) {
+    	String pid = (String)ref.getProperty(Constants.SERVICE_PID);
+        String metatype_pid = (String) ref.getProperty(PARAMETERS_PID);
+        
+        if (metatype_pid == null) {
+        	metatype_pid = pid;
+        }
+        
+        return metatype_pid;
+    }
+    
+    protected MetaTypeProvider getPossiblyMutatedMetaTypeProvider(String metatype_pid, String pid, AlgorithmFactory factory) {
+    	MetaTypeProvider provider = null;
+    	
+        MetaTypeService metaTypeService = (MetaTypeService) Activator.getService(MetaTypeService.class.getName());
+        if (metaTypeService != null) {
+        	provider = metaTypeService.getMetaTypeInformation(ref.getBundle());            	
+        }
 
-	/**
-	 * @see org.cishell.framework.algorithm.Algorithm#execute()
-	 */
-	public Data[] execute() {
-		try {
-			// prepare to run the algorithm
-			Data[] data = convertDataToRequiredFormat(this.convertableData, this.converters);
-			AlgorithmFactory algFactory = (AlgorithmFactory) bContext.getService(algFactoryRef);
-			boolean inputIsValid = testDataValidityIfPossible(algFactory, data);
-			if (!inputIsValid) return null;
-
-			// create algorithm parameters
-
-			MetaTypeProvider parameterSetupInfo = obtainParameterSetupInfo(algFactory, data);
-			Dictionary parameters = createParameters(parameterSetupInfo);
-			printParameters(parameters, parameterSetupInfo);
-
-			// create the algorithm
-
-			Algorithm algorithm = algFactory.createAlgorithm(data, parameters, ciContext);
-			trackAlgorithmProgressIfPossible(algorithm);
-
-			// execute the algorithm
-
-			Data[] rawOutData = algorithm.execute();
-
-			// return the algorithm's output
-
-			Data[] processedOutData = processOutData(rawOutData);
-			return processedOutData;
-
-		} catch (Throwable e) {
-			// show any errors to the user
-
-			showGenericExecutionError(e);
-			return new Data[0];
-		}
-	}
-
-	// should return null if algorithm is not progress trackable
-	public ProgressMonitor getProgressMonitor() {
-		return progressMonitor;
-	}
-
-	public void setProgressMonitor(ProgressMonitor monitor) {
-		progressMonitor = monitor;
-	}
-	
-	protected Data[] convertDataToRequiredFormat(Data[] data, Converter[][] converters) throws Exception {
-		// convert data into the in_data format of the algorithm we are trying to run
-		for (int i = 0; i < data.length; i++) {
-			if (converters[i] != null) {
-				// WARNING: arbitrarily chooses first converter out of a list of possible converters
-				data[i] = converters[i][0].convert(data[i]);
-				if (data[i] == null && i < (data.length - 1)) {
-					Exception e = new Exception("The converter " + converters[i].getClass().getName()
-							+ " returned a null result where data was expected.");
-					throw e;
-				}
-				converters[i] = null;
-			}
-		}
-
-		return data;
-	}
-
-	protected boolean testDataValidityIfPossible(AlgorithmFactory algFactory, Data[] dataInQuestion) {
-		if (algFactory instanceof DataValidator) {
-			String validation = ((DataValidator) algFactory).validate(dataInQuestion);
-
-			if (validation != null && validation.length() > 0) {
-				String label = (String) algFactoryRef.getProperty(LABEL);
-				if (label == null) {
-					label = "Algorithm";
-				}
-
-				builder.showError("Invalid Data", "The data given to \"" + label + "\" is incompatible for this reason: "
-						+ validation, (String) null);
-				return false;
-			}
-			return true;
-			} else {
-				//counts as valid if there is no validator available.
-				return true;
-			}
-	}
-
-	protected MetaTypeProvider obtainParameterSetupInfo(AlgorithmFactory algFactory, Data[] data) {
-
-		MetaTypeProvider provider = null;
-
-		// first, get the standard parameter setup info for the algorithm factory.
-
-		MetaTypeService metaTypeService = (MetaTypeService) Activator.getService(MetaTypeService.class.getName());
-		if (metaTypeService != null) {
-			provider = metaTypeService.getMetaTypeInformation(algFactoryRef.getBundle());
-		}
-
-		// if the algorithm factory wants to mutate the parameter setup info, allow it to.
-		if (algFactory instanceof ParameterMutator && provider != null) {
-			String parameterPID = determineParameterPID(algFactoryRef, provider);
-			try {
-				ObjectClassDefinition ocd = provider.getObjectClassDefinition(parameterPID, null);
-
-				ocd = ((ParameterMutator) algFactory).mutateParameters(data, ocd);
-
-				if (ocd != null) {
-					provider = new BasicMetaTypeProvider(ocd);
-				}
-			} catch (IllegalArgumentException e) {
-				LogService logger = getLogService();
-				logger.log(LogService.LOG_DEBUG, algFactoryRef.getProperty(Constants.SERVICE_PID)
-						+ " has an invalid metatype parameter id: " + parameterPID);
-			}
-		}
-
-		// wrap the parameter setup info so that default parameter values
-		// specified in the user preference service are filled in.
-
-		if (provider != null) {
-			provider = wrapProvider(this.algFactoryRef, provider);
-		}
-
-		return provider;
-	}
-
-	protected Dictionary createParameters(MetaTypeProvider parameterSetupInfo) {
-		// ask the user to specify the values for algorithm's parameters
-		String parameterPID = determineParameterPID(algFactoryRef, parameterSetupInfo);
-		Dictionary parameters = new Hashtable();
-		if (parameterSetupInfo != null) {
-			parameters = builder.createGUIandWait(parameterPID, parameterSetupInfo);
-		}
-		return parameters;
-	}
-
-	protected void printParameters(Dictionary parameters, MetaTypeProvider parameterSetupInfo) {
-		LogService logger = getLogService();
-		Map idToLabelMap = createIdToLabelMap(parameterSetupInfo);
-
-		if (logger != null) {
-			if (parameters.isEmpty()) {
-				// adjust to log all input parameters in one block
-				StringBuffer inputParams = new StringBuffer("\n" + "Input Parameters:");
-
-				for (Enumeration e = parameters.keys(); e.hasMoreElements();) {
-					String key = (String) e.nextElement();
-					Object value = parameters.get(key);
-
-					key = (String) idToLabelMap.get(key);
-					inputParams.append("\n" + key + ": " + value);
-
-				}
-				logger.log(LogService.LOG_INFO, inputParams.toString());
-			}
-		}
-	}
-
-	protected void trackAlgorithmProgressIfPossible(Algorithm algorithm) {
-		if (algorithm instanceof ProgressTrackable) {
-			((ProgressTrackable) algorithm).setProgressMonitor(progressMonitor);
-		}
-	}
-
-	protected Data[] processOutData(Data[] rawOutData) {
-		if (rawOutData != null) {
-			doParentage(rawOutData);
-			List goodData = new ArrayList();
-			for (int i = 0; i < rawOutData.length; i++) {
-				if (rawOutData[i] != null) {
-					goodData.add(rawOutData[i]);
-				}
-			}
-
-			Data[] processedOutData = (Data[]) goodData.toArray(new Data[goodData.size()]);
-			if (rawOutData.length != 0) {
-				dataManager.setSelectedData(rawOutData);
-			}
-
-			return processedOutData;
-		} else {
-			return null;
-		}
-	}
-
+        if (factory instanceof ParameterMutator && provider != null) {
+        	try {
+        		ObjectClassDefinition ocd = provider.getObjectClassDefinition(metatype_pid, null);
+        		
+        		ocd = ((ParameterMutator) factory).mutateParameters(data, ocd);
+            	
+            	if (ocd != null) {
+            		provider = new BasicMetaTypeProvider(ocd);
+            	}
+        	} catch (IllegalArgumentException e) {
+        		 log(LogService.LOG_DEBUG, pid+" has an invalid metatype id: "+metatype_pid);
+        	}
+        }
+        
+        if (provider != null) {
+        	provider = wrapProvider(ref, provider);
+        }
+        
+        return provider;
+    }
+    
+    protected void trackAlgorithmIfPossible(Algorithm algorithm) {
+        if (progressMonitor != null && algorithm instanceof ProgressTrackable) {
+        	((ProgressTrackable)algorithm).setProgressMonitor(progressMonitor);
+        }
+    }
+    
+    protected Dictionary getUserEnteredParameters(String metatype_pid, MetaTypeProvider provider) {
+    	Dictionary parameters = new Hashtable();
+        if (provider != null) {
+            GUIBuilderService builder = (GUIBuilderService)
+            ciContext.getService(GUIBuilderService.class.getName());
+            
+            parameters = builder.createGUIandWait(metatype_pid, provider);
+        }
+        
+    	return parameters;
+    }
+        
 	// wrap the provider to provide special functionality, such as overriding default values of attributes through
 	// preferences.
 	protected MetaTypeProvider wrapProvider(ServiceReference algRef, MetaTypeProvider unwrappedProvider) {
+		ConfigurationAdmin ca = getConfigurationAdmin();
+		
 		if (ca != null && hasParamDefaultPreferences(algRef)) {
 			String standardServicePID = (String) algRef.getProperty(Constants.SERVICE_PID);
 			String paramOverrideConfPID = standardServicePID + UserPrefsProperty.PARAM_PREFS_CONF_SUFFIX;
@@ -285,107 +284,156 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
 
 		return unwrappedProvider;
 	}
-
-	protected String determineParameterPID(ServiceReference ref, MetaTypeProvider provider) {
-		String overridePID = (String) ref.getProperty(AlgorithmProperty.PARAMETERS_PID);
-		if (overridePID != null) {
-			return overridePID;
-		} else {
-			return (String) ref.getProperty(Constants.SERVICE_PID);
-		}
-	}
-
-	protected Map createIdToLabelMap(MetaTypeProvider parameterSetupInfo) {
-		Map idToLabelMap = new HashMap();
-		if (parameterSetupInfo != null) {
-			ObjectClassDefinition ocd = null;
-			try {
-				String parameterPID = determineParameterPID(algFactoryRef, parameterSetupInfo);
-				ocd = parameterSetupInfo.getObjectClassDefinition(parameterPID, null);
-
-				if (ocd != null) {
-					AttributeDefinition[] attr = ocd.getAttributeDefinitions(ObjectClassDefinition.ALL);
-
-					for (int i = 0; i < attr.length; i++) {
-						String id = attr[i].getID();
-						String label = attr[i].getName();
-
-						idToLabelMap.put(id, label);
-					}
-				}
-			} catch (IllegalArgumentException e) {
-			}
-		}
-
-		return idToLabelMap;
-	}
-
-	// only does anything if parentage=default so far...
-	protected void doParentage(Data[] outData) {
-		// make sure the parent set is the original Data and not the
-		// converted data...
-		if (outData != null && convertableData != null && originalData != null
-				&& originalData.length == convertableData.length) {
-			for (int i = 0; i < outData.length; i++) {
-				if (outData[i] != null) {
-					Object parent = outData[i].getMetadata().get(DataProperty.PARENT);
-
-					if (parent != null) {
-						for (int j = 0; j < convertableData.length; i++) {
-							if (parent == convertableData[j]) {
-								outData[i].getMetadata().put(DataProperty.PARENT, originalData[j]);
-								break;
-							}
-						}
-					}
-				}
-			}
-		}
-
-		// check and act on parentage settings
-		String parentage = (String) algFactoryRef.getProperty("parentage");
-		if (parentage != null) {
-			parentage = parentage.trim();
-			if (parentage.equalsIgnoreCase("default")) {
-				if (originalData != null && originalData.length > 0 && originalData[0] != null) {
-
-					for (int i = 0; i < outData.length; i++) {
-						// if they don't have a parent set already then we set one
-						if (outData[i] != null && outData[i].getMetadata().get(DataProperty.PARENT) == null) {
-							outData[i].getMetadata().put(DataProperty.PARENT, originalData[0]);
-						}
-					}
-				}
-			}
-		}
-	}
-
-	protected LogService getLogService() {
-		ServiceReference serviceReference = bContext.getServiceReference(DataManagerService.class.getName());
-		LogService log = null;
-
-		if (serviceReference != null) {
-			log = (LogService) bContext.getService(bContext.getServiceReference(LogService.class.getName()));
-		}
-
-		return log;
-	}
-
+	
 	protected boolean hasParamDefaultPreferences(ServiceReference algRef) {
 		String prefsToPublish = (String) algRef.getProperty(UserPrefsProperty.PREFS_PUBLISHED_KEY);
 		if (prefsToPublish == null) {
 			return true;
 		}
 
-		if (prefsToPublish.contains(UserPrefsProperty.PUBLISH_PARAM_DEFAULT_PREFS_VALUE)) {
-			return true;
-		} else {
-			return false;
+		return prefsToPublish.contains(UserPrefsProperty.PUBLISH_PARAM_DEFAULT_PREFS_VALUE);
+	}
+    
+    protected void log(int logLevel, String message) {
+    	LogService log = (LogService) ciContext.getService(LogService.class.getName());
+    	if (log != null) {
+    		log.log(logLevel, message);
+    	} else {
+    		System.out.println(message);
+    	}
+    }
+
+    protected void log(int logLevel, String message, Throwable exception) {
+    	LogService log = (LogService) ciContext.getService(LogService.class.getName());
+    	if (log != null) {
+    		log.log(logLevel, message, exception);
+    	} else {
+    		System.out.println(message);
+    		exception.printStackTrace();
+    	}
+    }    
+    
+    protected void printParameters(String metatype_pid, MetaTypeProvider provider, Dictionary parameters) {
+        LogService logger = getLogService();
+        Map idToLabelMap = setupIdToLabelMap(metatype_pid, provider);
+        
+        if (logger != null && !parameters.isEmpty()) {
+        	//adjust to log all input parameters in one block
+        	StringBuffer inputParams = new StringBuffer("\n"+"Input Parameters:");
+            
+            for (Enumeration e = parameters.keys(); e
+                    .hasMoreElements();) {
+                String key = (String) e.nextElement();
+                Object value = parameters.get(key);
+                
+                key = (String) idToLabelMap.get(key);
+                inputParams.append("\n"+key+": "+value);                   
+                
+            }
+            logger.log(LogService.LOG_INFO, inputParams.toString());
+        }
+    }
+    
+    protected Map setupIdToLabelMap(String metatype_pid, MetaTypeProvider provider) {
+    	Map idToLabelMap = new HashMap();
+        if (provider != null) {
+            ObjectClassDefinition ocd = null;
+            try {
+                ocd = provider.getObjectClassDefinition(metatype_pid, null);
+                
+                if (ocd != null) {
+                    AttributeDefinition[] attr = 
+                        ocd.getAttributeDefinitions(ObjectClassDefinition.ALL);
+                    
+                    for (int i=0; i < attr.length; i++) {
+                        String id = attr[i].getID();
+                        String label = attr[i].getName();
+                        
+                        idToLabelMap.put(id, label);
+                    }
+                }
+            } catch (IllegalArgumentException e) {}
+        }
+        
+        return idToLabelMap;
+    }
+    
+    //only does anything if parentage=default so far...
+    protected void doParentage(Data[] outData) {
+        //make sure the parent set is the original Data and not the
+        //converted data...
+        if (outData != null && data != null && originalData != null 
+                && originalData.length == data.length) {
+            for (int i=0; i < outData.length; i++) {
+                if (outData[i] != null) {
+                    Object parent = outData[i].getMetadata().get(DataProperty.PARENT);
+                    
+                    if (parent != null) {
+                        for (int j=0; j < data.length; i++) {
+                            if (parent == data[j]) {
+                                outData[i].getMetadata().put(DataProperty.PARENT, 
+                                        originalData[j]);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        //check and act on parentage settings
+        String parentage = (String)ref.getProperty("parentage");
+        if (parentage != null) {
+            parentage = parentage.trim();
+            if (parentage.equalsIgnoreCase("default")) {
+                if (originalData != null && originalData.length > 0 && originalData[0] != null) {
+                    
+                    for (int i=0; i < outData.length; i++) {
+                        //if they don't have a parent set already then we set one
+                        if (outData[i] != null && 
+                                outData[i].getMetadata().get(DataProperty.PARENT) == null) {
+                            outData[i].getMetadata().put(DataProperty.PARENT, originalData[0]);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+	private LogService getLogService() {
+		ServiceReference serviceReference = bContext.getServiceReference(DataManagerService.class.getName());
+		LogService log = null;
+		
+		if (serviceReference != null) {
+			log = (LogService) bContext.getService(
+				bContext.getServiceReference(LogService.class.getName()));
+		}
+		
+		return log;
+	}
+	
+	private ConfigurationAdmin getConfigurationAdmin() {
+		ServiceReference serviceReference = bContext.getServiceReference(ConfigurationAdmin.class.getName());
+		ConfigurationAdmin ca = null;
+		
+		if (serviceReference != null) {
+			ca = (ConfigurationAdmin) bContext.getService(
+				bContext.getServiceReference(ConfigurationAdmin.class.getName()));
+		}
+		
+		return ca;
+	}
+
+	public ProgressMonitor getProgressMonitor() {
+		if (algorithm instanceof ProgressTrackable) {
+			return progressMonitor;
+		}
+		else {
+			return null;
 		}
 	}
 
-	protected void showGenericExecutionError(Throwable e) {
-		builder.showError("Error!", "The Algorithm: \"" + algFactoryRef.getProperty(AlgorithmProperty.LABEL)
-				+ "\" had an error while executing.", e);
+	public void setProgressMonitor(ProgressMonitor monitor) {
+		progressMonitor = monitor;
 	}
 }
