@@ -42,7 +42,6 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
-import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.log.LogService;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -62,7 +61,6 @@ public class MenuAdapter implements AlgorithmProperty {
     private ContextListener listener;
     private IWorkbenchWindow window;
     
-    private ConfigurationAdmin ca;
     /*
      * This map holds a pid as a key and the corresponding 
      * ServiceReference as a value.
@@ -116,24 +114,8 @@ public class MenuAdapter implements AlgorithmProperty {
         } catch (InvalidSyntaxException e) {
             getLog().log(LogService.LOG_DEBUG, "Invalid Syntax", e);
         }
+    }
         
-        attemptToObtainConfigurationAdmin(bContext);
-    }
-    
-    private void attemptToObtainConfigurationAdmin(BundleContext bContext) {
-    	if (ca == null) {
-    		try {
-    			ServiceReference caRef = bContext.getServiceReference(ConfigurationAdmin.class.getName());
-    			if (caRef != null) {
-    				ConfigurationAdmin ca = (ConfigurationAdmin) bContext.getService(caRef);
-    				this.ca = ca; //may or may not be null, but if it is null, its the same as if we never tried to set it (that is  to say, ok)
-    			}
-    		} catch (NoClassDefFoundError e) {
-    			//do nothing
-    		}
-    	}
-    }
-    
     /*
      * This method scans all service bundles. If a bundle specifies 
      * menu_path, get service.pid of this bundle (key), let the service
@@ -278,8 +260,7 @@ public class MenuAdapter implements AlgorithmProperty {
 				ServiceReference ref = (ServiceReference) pidToServiceReferenceMapCopy.
 											get(pid.toLowerCase().trim());
 				pidToServiceReferenceMap.remove(pid.toLowerCase().trim());
-	            attemptToObtainConfigurationAdmin(bContext);
-    			AlgorithmAction action = new AlgorithmAction(ref, bContext, ciContext, ca); 
+    			AlgorithmAction action = new AlgorithmAction(ref, bContext, ciContext); 
     			action.setId(getItemID(ref));
 				action.setText(menuName);
 				parentMenuBar.add(action);
@@ -365,8 +346,7 @@ public class MenuAdapter implements AlgorithmProperty {
         String[] items = (path == null) ? null : path.split("/");
         IMenuManager menu = null;
         if (items != null && items.length > 1) {
-            attemptToObtainConfigurationAdmin(bContext);
-            AlgorithmAction action = new AlgorithmAction(ref, bContext, ciContext, ca);
+            AlgorithmAction action = new AlgorithmAction(ref, bContext, ciContext);
             action.setId(getItemID(ref));
             
             IMenuManager targetMenu = menuBar;

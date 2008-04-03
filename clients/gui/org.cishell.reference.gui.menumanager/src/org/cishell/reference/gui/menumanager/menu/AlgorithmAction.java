@@ -21,6 +21,7 @@ import org.cishell.app.service.datamanager.DataManagerListener;
 import org.cishell.app.service.datamanager.DataManagerService;
 import org.cishell.app.service.scheduler.SchedulerService;
 import org.cishell.framework.CIShellContext;
+import org.cishell.framework.algorithm.Algorithm;
 import org.cishell.framework.algorithm.AlgorithmProperty;
 import org.cishell.framework.data.Data;
 import org.cishell.service.conversion.Converter;
@@ -28,7 +29,6 @@ import org.cishell.service.conversion.DataConversionService;
 import org.eclipse.jface.action.Action;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
-import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.log.LogService;
 
 
@@ -40,14 +40,10 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, DataMa
     protected Data[] originalData;
     protected Converter[][] converters;
     
-    protected ConfigurationAdmin ca;
-    
-    //ConfigurationAdmin can be null
-    public AlgorithmAction(ServiceReference ref, BundleContext bContext, CIShellContext ciContext, ConfigurationAdmin ca) {
+    public AlgorithmAction(ServiceReference ref, BundleContext bContext, CIShellContext ciContext) {
         this.ref = ref;
         this.ciContext = ciContext;
         this.bContext = bContext;
-        this.ca = ca;
         
         setText((String)ref.getProperty(LABEL));
         setToolTipText((String)ref.getProperty(AlgorithmProperty.DESCRIPTION));
@@ -58,7 +54,6 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, DataMa
         
         dataManager.addDataManagerListener(this);
         dataSelected(dataManager.getSelectedData());
-        
     }
     
     public AlgorithmAction(String label, ServiceReference ref, BundleContext bContext, CIShellContext ciContext) {
@@ -76,34 +71,22 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, DataMa
         dataManager.addDataManagerListener(this);
         dataSelected(dataManager.getSelectedData());
     }
-   
-    public void run() {
-        //hmm... should probably change this.. maybe use the scheduler...
-        new Thread("Menu Item Runner") {
-            public void run() {
-                runTask();
-            }}.start();
-    }
-    
-    public void runTask() {
-        try {
-            //save the current data
-            Data[] data = this.data;
-            Converter[][] converters = this.converters;
 
-            SchedulerService scheduler = (SchedulerService) 
-                bContext.getService(bContext.getServiceReference(
-                        SchedulerService.class.getName()));
-            
-            printAlgorithmInformation();
+    public void run() {
+        try {
+            printAlgorithmInformation(ref, ciContext);
            
-            scheduler.schedule(new AlgorithmWrapper(ref, ciContext, bContext, originalData, data, converters, ca), ref);
+            Algorithm algorithm = new AlgorithmWrapper(ref, bContext, ciContext, originalData, data, converters);
+            SchedulerService scheduler = (SchedulerService) getService(SchedulerService.class);
+            
+            scheduler.schedule(algorithm, ref);
         } catch (Throwable e) {
+        	//Just in case an uncaught exception occurs. Eclipse will swallow errors thrown here...
             e.printStackTrace();
         }
     }
     
-    private void printAlgorithmInformation() {
+    private void printAlgorithmInformation(ServiceReference ref, CIShellContext ciContext) {
         //adjust to log the whole acknowledgement in one block
         LogService logger = (LogService) ciContext.getService(LogService.class.getName());
         StringBuffer acknowledgement = new StringBuffer();
@@ -185,9 +168,8 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, DataMa
         } else {
             originalData = null;
         }
-     
         
-        setEnabled(data != null); //&& isValid());
+        setEnabled(data != null);
     }
     
     private boolean isAssignableFrom(String type, Data datum) {
@@ -212,6 +194,15 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, DataMa
     public void dataAdded(Data data, String label) {}
     public void dataLabelChanged(Data data, String label) {}
     public void dataRemoved(Data data) {}
+    
+    private Object getService(Class clas) {
+    	ServiceReference ref = bContext.getServiceReference(clas.getName());
+    	if (ref != null) {
+    		return bContext.getService(ref);
+    	}
+    	
+    	return null;
+    }
     
     public ServiceReference getServiceReference(){
     	return ref;
