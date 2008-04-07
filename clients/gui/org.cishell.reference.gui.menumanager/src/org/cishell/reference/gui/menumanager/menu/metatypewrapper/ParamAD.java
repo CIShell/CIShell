@@ -15,8 +15,7 @@ public class ParamAD implements AttributeDefinition {
 		this.log = log;
 		
 		this.realAD = realAD;
-		
-		this.defaultValueOverride = defaultValueOverride;
+		this.defaultValueOverride = replaceSpecialValues(defaultValueOverride);
 	}
 
 	public int getCardinality() {
@@ -57,6 +56,24 @@ public class ParamAD implements AttributeDefinition {
 
 	public String validate(String value) {
 		return this.realAD.validate(value);
+	}
+	
+	private String[] replaceSpecialValues(String[] overrideValues) {
+		try {
+		String[] defaultValues = realAD.getDefaultValue();
+		String[] replacedValues = new String[defaultValues.length];
+		for (int i = 0; i < defaultValues.length; i++) {
+			if (defaultValues[i] != null && defaultValues[i].contains(":") && overrideValues[i] != null && overrideValues[i].equals("")) {
+				replacedValues[i] = defaultValues[i].substring(0, defaultValues[i].indexOf(":") + 1);
+			} else {
+				replacedValues[i] = overrideValues[i];
+			}
+		}
+		return replacedValues;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return overrideValues;
+		}
 	}
 
 }
