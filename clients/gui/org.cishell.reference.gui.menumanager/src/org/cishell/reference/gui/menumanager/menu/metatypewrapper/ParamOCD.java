@@ -11,7 +11,9 @@ import org.osgi.service.metatype.ObjectClassDefinition;
 public class ParamOCD implements ObjectClassDefinition {
 	
 	private ObjectClassDefinition realOCD;
-	private ParamAD[] wrappedADs;
+	private ParamAD[] allWrappedADs;
+	private ParamAD[] requiredWrappedADs;
+	private ParamAD[] optionalWrappedADs;
 	
 	private LogService log;
 	
@@ -21,8 +23,9 @@ public class ParamOCD implements ObjectClassDefinition {
 		this.realOCD = realOCD;
 		this.defaultOverrider = defaultOverrider;
 		
-		//TODO: don't always return all attributeDefinitions, regardless of filter
-		this.wrappedADs = wrapAttributeDefinitions(realOCD.getAttributeDefinitions(ObjectClassDefinition.ALL));
+		this.allWrappedADs = wrapAttributeDefinitions(realOCD.getAttributeDefinitions(ObjectClassDefinition.ALL));
+		this.requiredWrappedADs =  wrapAttributeDefinitions(realOCD.getAttributeDefinitions(ObjectClassDefinition.REQUIRED));
+		this.optionalWrappedADs =  wrapAttributeDefinitions(realOCD.getAttributeDefinitions(ObjectClassDefinition.OPTIONAL));
 	}
 	
 	private ParamAD[] wrapAttributeDefinitions(AttributeDefinition[] realAttributeDefinitions) {
@@ -55,7 +58,17 @@ public class ParamOCD implements ObjectClassDefinition {
 	}
 
 	public AttributeDefinition[] getAttributeDefinitions(int filter) {
-		return wrappedADs;
+		if (filter == ObjectClassDefinition.ALL) {
+			return allWrappedADs;
+		} else if (filter == ObjectClassDefinition.REQUIRED) {
+			return requiredWrappedADs;
+		} else if (filter == ObjectClassDefinition.OPTIONAL) {
+			return optionalWrappedADs;
+		} else {
+			this.log.log(LogService.LOG_WARNING, "Requested filter of unrecognized type " + filter +
+					" in getAttributeDefinitions in ParamOCD. Treating as if your meant to return all attributes");
+			return allWrappedADs;
+		}
 	}
 	
 	public String getDescription() {
