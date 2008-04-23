@@ -1,0 +1,23 @@
+CIShell Specification Project
+-----------------------------
+CIShell 1.0 specification and build system by Bruce Herr. The Javadoc->Latex 
+doclet (TexDoclet) originally from https://texdoclet.dev.java.net/ was 
+customized by Bruce Herr.
+
+The build system was originally set up so that we could create the specification,
+developer guide, and other CIShell related documents. We are now doing the 
+developer guide at the CIShell Wiki ( https://cishell.org/?n=DevGuide.HomePage ).
+The initial workings of the dev_guide using LaTeX is left here as an example of 
+how another document could be integrated. 
+
+USING THE BUILD SYSTEM:
+Using ant, you will typically just run 'ant' and it'll build the spec. 
+'ant clean' can be used to clean up the generated files. You can look at the 
+build.xml file for other possible commands.
+
+In order to inject the API docs into the specification, you must have the 
+org.cishell.framework bundle checked out in the same directory as this project.
+If you are in eclipse, then just check it out into your workspace. 'ant 
+javadoc-tex' will invoke the javadoc command using the customized texdoclet 
+which will create an api.tex file in src/specification/tex/.
+
