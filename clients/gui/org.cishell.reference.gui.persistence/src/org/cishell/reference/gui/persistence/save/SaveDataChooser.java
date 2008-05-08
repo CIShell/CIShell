@@ -374,7 +374,18 @@ public class SaveDataChooser extends AbstractDialog implements AlgorithmProperty
 						Converter c2 = (Converter) o2;
 						String c2Label = getLabel(c2);
 						
-						return c1Label.compareTo(c2Label);
+						if (c1Label != null && c2Label != null) {
+							return c1Label.compareTo(c2Label);
+						} else if (c1Label == null) {
+							//c1 > c2
+							return 1;
+						} else if (c2Label == null) {
+							//c1 < c2
+							return -1;
+						} else {
+							//c1 == c2
+							return 0;
+						}
 					} else {
 						throw new IllegalArgumentException("Can only " +
 								"compare Converters");

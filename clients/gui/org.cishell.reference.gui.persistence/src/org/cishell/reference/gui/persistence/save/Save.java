@@ -79,7 +79,7 @@ public class Save implements Algorithm {
     	} else { //result instanceof Exception
     		Exception reasonForFailure = (Exception) firstAttemptResult;
     		this.log.log(LogService.LOG_WARNING, "Exception occurred while attempting to save" +
-    				" file using a validator. Attempting to save without validating.");
+    				" file using a validator. Attempting to save without validating.", reasonForFailure);
     		System.out.println("Exception");
     	}
     	
