@@ -28,7 +28,6 @@ public class BasicTree {
 	}
 	
 	public void addEdge(Object parent, Object child) {
-		System.out.println("Adding edge from " + parent + " to " + child);
 		parentToChildren.put(parent, child);
 		childToParent.put(child, parent);
 	}
@@ -36,10 +35,8 @@ public class BasicTree {
 	public List getChildren(Object node) {
 		List children = parentToChildren.get(node);
 		if (children == null) {
-			System.out.println("Getting empty children list");
 			return new ArrayList();
 		} else {
-			System.out.println("Getting children list of size "+ children.size());
 			return children;
 		}
 	}
