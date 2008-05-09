@@ -100,7 +100,8 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
         printParameters(metatype_pid, provider, parameters);
         
         // create the algorithm
-        algorithm = factory.createAlgorithm(data, parameters, ciContext);
+        algorithm = createAlgorithm(factory, data, parameters, ciContext); 
+        if (algorithm == null) return null;
         trackAlgorithmIfPossible(algorithm);
         
         // execute the algorithm
@@ -113,6 +114,20 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
         addDataToDataManager(outData);
 
         return outData;
+    }
+    
+    protected Algorithm createAlgorithm(AlgorithmFactory factory, Data[] data, Dictionary parameters, CIShellContext ciContext) {
+    	try {
+    		return factory.createAlgorithm(data, parameters, ciContext);
+    	} catch (Exception e) {
+    		String errorMessage = "Unexpected error occurred while creating algorithm " +
+        			"  \""+ref.getProperty(AlgorithmProperty.LABEL)+".\"";
+    		 GUIBuilderService builder = (GUIBuilderService)
+             ciContext.getService(GUIBuilderService.class.getName());
+    		 builder.showError("Error!", errorMessage, e);
+    		 log(LogService.LOG_ERROR, errorMessage, e);
+    		 return null;
+    	}
     }
     
     protected Data[] removeNullData(Data[] outData) {
@@ -217,7 +232,6 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
     
     protected MetaTypeProvider getPossiblyMutatedMetaTypeProvider(String metatype_pid, String pid, AlgorithmFactory factory) {
     	MetaTypeProvider provider = null;
-    	
         MetaTypeService metaTypeService = (MetaTypeService) Activator.getService(MetaTypeService.class.getName());
         if (metaTypeService != null) {
         	provider = metaTypeService.getMetaTypeInformation(ref.getBundle());            	
@@ -226,14 +240,20 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
         if (factory instanceof ParameterMutator && provider != null) {
         	try {
         		ObjectClassDefinition ocd = provider.getObjectClassDefinition(metatype_pid, null);
-        		
+        		if (ocd == null) logNullOCDWarning(pid, metatype_pid);
         		ocd = ((ParameterMutator) factory).mutateParameters(data, ocd);
-            	
             	if (ocd != null) {
             		provider = new BasicMetaTypeProvider(ocd);
             	}
         	} catch (IllegalArgumentException e) {
         		 log(LogService.LOG_DEBUG, pid+" has an invalid metatype id: "+metatype_pid);
+        	} catch (Exception e) {
+        		GUIBuilderService builder = (GUIBuilderService)
+                ciContext.getService(GUIBuilderService.class.getName());
+        		String errorMessage =  "An error occurred while preparing to run the algorithm  "
+        			+ref.getProperty(AlgorithmProperty.LABEL)+".\"";
+            	builder.showError("Error!", errorMessage, e);
+            	log(LogService.LOG_ERROR, errorMessage, e);
         	}
         }
         
@@ -422,6 +442,11 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
 		}
 		
 		return ca;
+	}
+	
+	private void logNullOCDWarning(String pid, String metatype_pid) {
+		this.log(LogService.LOG_WARNING, 
+				"Warning: could not get object class definition '" + metatype_pid + "' from the algorithm '" + pid + "'");
 	}
 
 	public ProgressMonitor getProgressMonitor() {
