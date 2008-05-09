@@ -61,6 +61,7 @@ public class ParamAD implements AttributeDefinition {
 	private String[] replaceSpecialValues(String[] overrideValues) {
 		try {
 		String[] defaultValues = realAD.getDefaultValue();
+		if (defaultValues == null) return new String[0];
 		String[] replacedValues = new String[defaultValues.length];
 		for (int i = 0; i < defaultValues.length; i++) {
 			if (defaultValues[i] != null && defaultValues[i].contains(":") && overrideValues[i] != null && overrideValues[i].equals("")) {
