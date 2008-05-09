@@ -74,15 +74,12 @@ public class PrefInfoGrabber implements UserPrefsProperty, AlgorithmProperty {
 	}
 	
 	private String getParamPrefOCDID(ServiceReference prefHolder) {
-		System.out.println("    Getting param pref OCD ID for " + prefHolder.getProperty("service.pid"));
 		String paramPrefOCDID = (String) prefHolder.getProperty(AlgorithmProperty.PARAMETERS_PID);
 		if ( paramPrefOCDID != null) {
-			System.out.println("      RETURN override: " + paramPrefOCDID);
 		return  paramPrefOCDID;
 		} else {
 			//no names defined. Use default names.
 			String defaultParamPrefOCDID =  (String) prefHolder.getProperty(Constants.SERVICE_PID) + UserPrefsProperty.PARAM_PREFS_OCD_SUFFIX;
-			System.out.println("      RETURN default: " + defaultParamPrefOCDID);
 			return defaultParamPrefOCDID;
 		}
 	}

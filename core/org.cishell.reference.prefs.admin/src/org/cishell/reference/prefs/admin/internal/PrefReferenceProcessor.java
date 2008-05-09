@@ -43,7 +43,6 @@ public class PrefReferenceProcessor{
     	//for each service that purports to hold preference information...
     	for (int ii = 0; ii < prefReferences.length; ii++) {
     		ServiceReference prefReference = prefReferences[ii];
-    		System.out.println("Processing " + prefReference.getProperty("service.pid"));
         	//get all preference pages from this service by type, and save them by type
     		
         	PrefPage[] localPrefPages = null;
@@ -63,7 +62,6 @@ public class PrefReferenceProcessor{
         	
         	PrefPage[] paramPrefPages = null;
         	if (isTurnedOn(prefReference,UserPrefsProperty.PUBLISH_PARAM_DEFAULT_PREFS_VALUE)) {
-        		System.out.println("  Attempting to publish param default prefs for " + prefReference.getProperty("service.pid"));
         		paramPrefPages = getParamPrefPages(prefReference);
         		initializeConfigurations(paramPrefPages);
         		this.allParamPrefPages.addAll(Arrays.asList(paramPrefPages));
