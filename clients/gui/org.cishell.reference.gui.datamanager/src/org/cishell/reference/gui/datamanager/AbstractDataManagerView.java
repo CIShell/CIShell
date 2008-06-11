@@ -502,14 +502,16 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 				}catch (AlgorithmExecutionException aee)  {
 					if (log != null) {
 						log.log(LogService.LOG_ERROR, 
-								"org.cishell.framework.algorithm.AlgorithmExecutionException", 
+								aee.getMessage(), 
 								aee);
+						aee.printStackTrace();
 					}
 					else {
 						log = Activator.getLogService();
 						log.log(LogService.LOG_ERROR, 
 								"org.cishell.framework.algorithm.AlgorithmExecutionException",
 								aee);
+						aee.printStackTrace();
 					}
 				}
 			}
@@ -528,16 +530,17 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 					algorithm.execute();
 				}catch (AlgorithmExecutionException aee)  {
 					if (log != null) {
-						log.log(LogService.LOG_ERROR, 
-								"org.cishell.framework.algorithm.AlgorithmExecutionException", 
+						log.log(LogService.LOG_ERROR,
+								aee.getMessage(),
 								aee);
 					}
 					else {
 						log = Activator.getLogService();
-						log.log(LogService.LOG_ERROR, 
-								"org.cishell.framework.algorithm.AlgorithmExecutionException",
+						log.log(LogService.LOG_ERROR,
+								aee.getMessage(),
 								aee);
 					}
+					aee.printStackTrace();
 				}
 			}
 		}
