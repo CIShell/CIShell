@@ -109,6 +109,8 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 	private LogService log;
 
 	public AbstractDataManagerView(String brandPluginID) {
+		
+		
 		this.brandPluginID = brandPluginID;
 		dataToDataGUIItemMap = new HashMap();
 		
