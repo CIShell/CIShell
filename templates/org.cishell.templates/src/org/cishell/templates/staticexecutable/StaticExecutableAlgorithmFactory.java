@@ -31,13 +31,7 @@ public class StaticExecutableAlgorithmFactory implements AlgorithmFactory {
     MetaTypeProvider provider;
     
     public StaticExecutableAlgorithmFactory() {}
-    
-    //pretty sure this isn't used by anything, but I fear deleting it.
-    public StaticExecutableAlgorithmFactory(String algName, BundleContext bContext) {
-    	this.algName = algName;
-    	this.bContext = bContext;
-    }
-
+  
     protected void activate(ComponentContext ctxt) {
         bContext = ctxt.getBundleContext();
         algName = (String)ctxt.getProperties().get("Algorithm-Directory");
@@ -61,4 +55,11 @@ public class StaticExecutableAlgorithmFactory implements AlgorithmFactory {
     public MetaTypeProvider createParameters(Data[] data) {
         return provider;
     }
+        
+    //pretty sure this isn't used by anything, but I fear deleting it.
+    public StaticExecutableAlgorithmFactory(String algName, BundleContext bContext) {
+    	this.algName = algName;
+    	this.bContext = bContext;
+    }
+
 }
