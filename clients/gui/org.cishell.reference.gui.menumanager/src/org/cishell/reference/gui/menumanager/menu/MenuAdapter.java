@@ -120,7 +120,7 @@ public class MenuAdapter implements AlgorithmProperty {
      * This method scans all service bundles. If a bundle specifies 
      * menu_path, get service.pid of this bundle (key), let the service
      * reference as the value, and put key/value pair 
-     * to pidToServiceReferenceMap for further process.
+     * to pidToServiceReferenceMap for further processing.
      */
     private void preprocessServiceBundles() throws InvalidSyntaxException{
         ServiceReference[] refs = bContext.getAllServiceReferences(
