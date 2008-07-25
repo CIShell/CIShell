@@ -230,7 +230,7 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
         return metatype_pid;
     }
     
-    protected MetaTypeProvider getPossiblyMutatedMetaTypeProvider(String metatype_pid, String pid, AlgorithmFactory factory) {
+    protected MetaTypeProvider getPossiblyMutatedMetaTypeProvider(String metatypePID, String pid, AlgorithmFactory factory) {
     	MetaTypeProvider provider = null;
         MetaTypeService metaTypeService = (MetaTypeService) Activator.getService(MetaTypeService.class.getName());
         if (metaTypeService != null) {
@@ -239,14 +239,14 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
 
         if (factory instanceof ParameterMutator && provider != null) {
         	try {
-        		ObjectClassDefinition ocd = provider.getObjectClassDefinition(metatype_pid, null);
-        		if (ocd == null) logNullOCDWarning(pid, metatype_pid);
+        		ObjectClassDefinition ocd = provider.getObjectClassDefinition(metatypePID, null);
+        		if (ocd == null) logNullOCDWarning(pid, metatypePID);
         		ocd = ((ParameterMutator) factory).mutateParameters(data, ocd);
             	if (ocd != null) {
             		provider = new BasicMetaTypeProvider(ocd);
             	}
         	} catch (IllegalArgumentException e) {
-        		 log(LogService.LOG_DEBUG, pid+" has an invalid metatype id: "+metatype_pid);
+        		 log(LogService.LOG_DEBUG, pid+" has an invalid metatype id: "+metatypePID);
         	} catch (Exception e) {
         		GUIBuilderService builder = (GUIBuilderService)
                 ciContext.getService(GUIBuilderService.class.getName());
