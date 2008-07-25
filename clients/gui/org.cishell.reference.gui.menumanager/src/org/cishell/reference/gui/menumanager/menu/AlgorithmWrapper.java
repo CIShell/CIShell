@@ -389,7 +389,7 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
                     Object parent = outData[i].getMetadata().get(DataProperty.PARENT);
                     
                     if (parent != null) {
-                        for (int j=0; j < data.length; i++) {
+                        for (int j=0; j < data.length; j++) {
                             if (parent == data[j]) {
                                 outData[i].getMetadata().put(DataProperty.PARENT, 
                                         originalData[j]);
