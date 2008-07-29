@@ -14,8 +14,11 @@
 package org.cishell.reference.gui.menumanager.menu;
 
 import java.io.IOException;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.net.URI;
+
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -63,9 +66,21 @@ public class MenuAdapter implements AlgorithmProperty {
     
     /*
      * This map holds a pid as a key and the corresponding 
-     * ServiceReference as a value.
+     * ServiceReference as a value. It is built when 
+     * preprocessServiceBundles() is invoked. Then the entries 
+     * are gradually removed when the pids are specified in
+     * the defaul_menu.xml. If any entries are left, in 
+     * processLeftServiceBundles(), those plug-ins that have 
+     * specified the menu_path and label but are not listed in
+     * default_menu.xml will be added on to the menu.
      */
     private Map pidToServiceReferenceMap;
+    /*
+     * This is the exactly same copy of pidToServiceReferenceMap. 
+     * Since some plug-ins could display on menu more than once, it 
+     * provides a map between a pid and a ref while in pidToServiceReferenceMap
+     * that pid has been removed. 
+     */
     private Map pidToServiceReferenceMapCopy;
     private Document dom;
     private static String DEFAULT_MENU_FILE_NAME = "default_menu.xml";
@@ -106,11 +121,15 @@ public class MenuAdapter implements AlgorithmProperty {
             listener = new ContextListener();
             bContext.addServiceListener(listener, filter);
             preprocessServiceBundles();
-            createMenuFromXML();
-            processLeftServiceBundles();
+            URI fullpath=URI.create(System.getProperty("osgi.configuration.area") + DEFAULT_MENU_FILE_NAME);
+            if (new File(fullpath).exists()){
+            	createMenuFromXML(fullpath.toString());
+            	processLeftServiceBundles();
+            }else{
+            	initializeMenu();
+            }            
             Display.getDefault().asyncExec(updateAction);
      
-//          initializeMenu();
         } catch (InvalidSyntaxException e) {
             getLog().log(LogService.LOG_DEBUG, "Invalid Syntax", e);
         }
@@ -118,9 +137,10 @@ public class MenuAdapter implements AlgorithmProperty {
         
     /*
      * This method scans all service bundles. If a bundle specifies 
-     * menu_path, get service.pid of this bundle (key), let the service
+     * menu_path and label, get service.pid of this bundle (key), let the service
      * reference as the value, and put key/value pair 
      * to pidToServiceReferenceMap for further processing.
+     * 
      */
     private void preprocessServiceBundles() throws InvalidSyntaxException{
         ServiceReference[] refs = bContext.getAllServiceReferences(
@@ -128,6 +148,7 @@ public class MenuAdapter implements AlgorithmProperty {
         if (refs != null){
         	for (int i=0; i < refs.length; i++) {
         		String path = (String)refs[i].getProperty(MENU_PATH);
+        		String label = (String)refs[i].getProperty(LABEL);
         		if (path == null){
         			continue;
         		}
@@ -144,9 +165,16 @@ public class MenuAdapter implements AlgorithmProperty {
      * check if the pid exists in pidToServiceReferenceMap. If so, get the action and add to the parent menu
      * If not, ignore this menu. At the end of each top menu or subgroup menu or before help menu, 
      * add "additions" so that new algorithms can be added on later 
+     * 
+     * What is the reasonable logic?
+     * If a plug-in has been specified in the default_menu.xml, always use that menu layout
+     * If a plug-in has not been specified in the default_menu.xml, use the menu_path 
+     * specified in the properties file.
+     * If a plug-in specifies a label in the properties file, always use it.
+     *
      */
-    private void createMenuFromXML() throws InvalidSyntaxException{
-    	parseXmlFile();    	
+    private void createMenuFromXML(String menuFilePath) throws InvalidSyntaxException{
+    	parseXmlFile(menuFilePath);    	
     	//get the root elememt
 		Element docEle = dom.getDocumentElement();		
 		//get a nodelist of the top menu elements
@@ -249,7 +277,6 @@ public class MenuAdapter implements AlgorithmProperty {
     private void processAMenuNode(Element menuNode, MenuManager parentMenuBar ){
  		String menuName = menuNode.getAttribute(ATTR_NAME);
 		String pid = menuNode.getAttribute(ATTR_PID);
-		//System.out.println(">>>pid="+pid);
 		if (pid == null || pid.length()==0){
 			//check if the name is one of the preserved one
 			//if so add the default action
@@ -261,9 +288,25 @@ public class MenuAdapter implements AlgorithmProperty {
 											get(pid.toLowerCase().trim());
 				pidToServiceReferenceMap.remove(pid.toLowerCase().trim());
     			AlgorithmAction action = new AlgorithmAction(ref, bContext, ciContext); 
-    			action.setId(getItemID(ref));
-				action.setText(menuName);
-				parentMenuBar.add(action);
+    			String menuLabel = (String)ref.getProperty(LABEL);
+    			if(menuName!= null && !menuName.isEmpty()){
+    				//use the name specified in the xml to overwrite the label
+    				action.setText(menuName);
+    				action.setId(getItemID(ref));
+    				parentMenuBar.add(action);
+    			}
+    			else{
+    				if (menuLabel!= null && !menuLabel.isEmpty()){
+    					action.setText(menuLabel);
+    					action.setId(getItemID(ref));
+        				parentMenuBar.add(action);
+    				}
+    				else {
+    					//this is a problem -- no label is specified in the plug-in's properties file
+    					//and no name is specified in the xml file.
+    				}
+    			}
+				
 			}
 			else{
 				//otherwise log the error
@@ -274,7 +317,7 @@ public class MenuAdapter implements AlgorithmProperty {
 		}
     }    
     
-    private void parseXmlFile(){
+    private void parseXmlFile(String menuFilePath){
 		//get the factory
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		dbf.setCoalescing(true);
@@ -282,9 +325,8 @@ public class MenuAdapter implements AlgorithmProperty {
 			//Using factory get an instance of document builder
 			DocumentBuilder db = dbf.newDocumentBuilder();
 			
-			//parse using builder to get DOM representation of the XML file
-	        String fullpath=System.getProperty("osgi.configuration.area") + DEFAULT_MENU_FILE_NAME;
-	        dom = db.parse(fullpath);	
+			//parse using builder to get DOM representation of the XML file	        
+	        dom = db.parse(menuFilePath);	
 	    // printElementAttributes(dom);
 
 		}catch(ParserConfigurationException pce) {
@@ -311,7 +353,7 @@ public class MenuAdapter implements AlgorithmProperty {
     	}    		
     }
     
-/*
+
     private void initializeMenu() throws InvalidSyntaxException{   
         ServiceReference[] refs = bContext.getAllServiceReferences(
                 AlgorithmFactory.class.getName(), null);
@@ -323,7 +365,7 @@ public class MenuAdapter implements AlgorithmProperty {
         }
 
     }    
-*/
+
     
     private class ContextListener implements ServiceListener {
         public void serviceChanged(ServiceEvent event) {
