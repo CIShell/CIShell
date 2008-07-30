@@ -92,6 +92,8 @@ public class NewStaticExecutableAlgorithmWizard extends NewPluginTemplateWizard
             e.printStackTrace();
         }
         
+        //display the README file to the user in Eclipse
+        
         final IFile file = template.getProjectHandle().getFile("README.txt");
         final IWorkbenchWindow ww = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
         final IWorkbenchPage page = ww.getActivePage();
