@@ -58,6 +58,10 @@ public class NewStaticExecutableAlgorithmWizard extends NewPluginTemplateWizard
     }
 
     public boolean performFinish() {
+    	
+    	//prepare all the files necessary to call the 3-argument version of performFinish, which executes
+    	//each of the templates we provided in the "createTemplateSections()" method above.
+    	
         final IProject project = template.getProjectHandle();
         final IProjectDescription description = ResourcesPlugin.getWorkspace().newProjectDescription(project.getName());
         
