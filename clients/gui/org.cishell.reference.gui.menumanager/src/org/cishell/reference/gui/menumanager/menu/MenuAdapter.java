@@ -289,14 +289,14 @@ public class MenuAdapter implements AlgorithmProperty {
 				pidToServiceReferenceMap.remove(pid.toLowerCase().trim());
     			AlgorithmAction action = new AlgorithmAction(ref, bContext, ciContext); 
     			String menuLabel = (String)ref.getProperty(LABEL);
-    			if(menuName!= null && !menuName.isEmpty()){
+    			if(menuName!= null && menuName.trim().length()>0){
     				//use the name specified in the xml to overwrite the label
     				action.setText(menuName);
     				action.setId(getItemID(ref));
     				parentMenuBar.add(action);
     			}
     			else{
-    				if (menuLabel!= null && !menuLabel.isEmpty()){
+    				if (menuLabel!= null && menuLabel.trim().length()>0){
     					action.setText(menuLabel);
     					action.setId(getItemID(ref));
         				parentMenuBar.add(action);
