@@ -311,8 +311,9 @@ public class MenuAdapter implements AlgorithmProperty {
 			else{
 				//otherwise log the error
 				getLog().log(LogService.LOG_DEBUG, 
-	                    "Can not find an algorithm package associated with Menu: "
-						+menuName+" and pid: " +pid+ ". Skip to show it on the menu.");
+	                    "Oops! Network Workbench tried to place an algorithm with the id '" + pid + "' on the menu, but the algorithm could not be found.");
+				getLog().log(LogService.LOG_DEBUG, "If you see this error, please contact nwb-helpdesk@googlegroups.com, or post a ticket on our bug tracker at " +
+						"http://cns-trac.slis.indiana.edu/trac/nwb. ");
 			}
 		}
     }    
