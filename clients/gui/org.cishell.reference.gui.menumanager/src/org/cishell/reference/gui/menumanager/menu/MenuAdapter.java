@@ -313,7 +313,7 @@ public class MenuAdapter implements AlgorithmProperty {
 				getLog().log(LogService.LOG_DEBUG, 
 	                    "Oops! Network Workbench tried to place an algorithm with the id '" + pid + "' on the menu, but the algorithm could not be found.");
 				getLog().log(LogService.LOG_DEBUG, "If you see this error, please contact nwb-helpdesk@googlegroups.com, or post a ticket on our bug tracker at " +
-						"http://cns-trac.slis.indiana.edu/trac/nwb. ");
+						"http://cns-trac.slis.indiana.edu/trac/nwb  .");
 			}
 		}
     }    
