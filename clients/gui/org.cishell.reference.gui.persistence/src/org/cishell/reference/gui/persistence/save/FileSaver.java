@@ -13,6 +13,7 @@ import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.AlgorithmProperty;
 import org.cishell.framework.data.Data;
 import org.cishell.framework.data.DataProperty;
+import org.cishell.reference.gui.persistence.FileUtil;
 import org.cishell.service.conversion.ConversionException;
 import org.cishell.service.conversion.Converter;
 import org.cishell.service.guibuilder.GUIBuilderService;
@@ -112,7 +113,7 @@ public class FileSaver {
         dialog.setText("Choose File");
         
         String fileLabel = (String)data.getMetadata().get(DataProperty.LABEL);
-       String suggestedFileName = getFileName(fileLabel);
+        String suggestedFileName = FileUtil.extractFileName(fileLabel);
         dialog.setFileName(suggestedFileName + "." + ext);
         
 //        if (fileLabel == null) {
@@ -185,36 +186,5 @@ public class FileSaver {
     	}
     }
     
-    private String getFileName(String fileLabel) {
-    	
-    	//index variables will be -1 if index is not found.
-    	int descriptionEndIndex = fileLabel.lastIndexOf(":");
-    	int filePathEndIndex = fileLabel.lastIndexOf(File.separator);
-
-    	//doesn't matter if either variable is -1, since startIndex will be 
-    	//zero and none of the string will be cut off the front.
-    	int startIndex = Math.max(descriptionEndIndex, filePathEndIndex) + 1;
-    	
-    	String fileNameWithExtension = fileLabel.substring(startIndex);
-    	
-    	
-    	//find the first character of the file name extension.
-    	int extensionBeginIndex = fileNameWithExtension.lastIndexOf(".");
-    	
-    	int endIndex;
-    	
-    	if (extensionBeginIndex != -1) {
-    		//we found a period in the file name.
-    		endIndex = extensionBeginIndex; //cut off everything after 
-    		//first period.
-    	} else {
-    		//we didn't find an extension on the file name.
-    		endIndex = fileNameWithExtension.length(); // don't cut any off the end.
-    	}
-    	
-    	String fileNameWithoutExtension = fileNameWithExtension.substring(0, endIndex);
-   	
-    	String fileName = fileNameWithoutExtension;
-    	return fileName;
-    }
+    
 }
