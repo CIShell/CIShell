@@ -121,9 +121,10 @@ public class MenuAdapter implements AlgorithmProperty {
             listener = new ContextListener();
             bContext.addServiceListener(listener, filter);
             preprocessServiceBundles();
-            URI fullpath=URI.create(System.getProperty("osgi.configuration.area") + DEFAULT_MENU_FILE_NAME);
+            String app_location = System.getProperty("osgi.configuration.area");
+            String fullpath = app_location.substring(6)+ DEFAULT_MENU_FILE_NAME;    	
             if (new File(fullpath).exists()){
-            	createMenuFromXML(fullpath.toString());
+            	createMenuFromXML(fullpath);
             	processLeftServiceBundles();
             }else{
             	initializeMenu();
