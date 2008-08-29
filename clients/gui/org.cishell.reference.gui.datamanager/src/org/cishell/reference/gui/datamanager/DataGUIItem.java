@@ -63,7 +63,7 @@ public class DataGUIItem {
         networkIcon = createImage("network.png", this.brandPluginID);
         unknownIcon = createImage("unknown.png", this.brandPluginID);
         textIcon 	= createImage("text.png", this.brandPluginID);
-        plotIcon 	= createImage("grace.png", this.brandPluginID);
+        plotIcon 	= createImage("plot.png", this.brandPluginID);
 
         typeToImageMapping = new HashMap();
         registerImage(DataProperty.OTHER_TYPE, unknownIcon);
