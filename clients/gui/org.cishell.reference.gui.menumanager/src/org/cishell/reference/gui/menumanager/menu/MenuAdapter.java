@@ -155,18 +155,20 @@ public class MenuAdapter implements AlgorithmProperty {
              * This piece of code needs to be reviewed and refactored!!!
 			 */
             
-            System.out.println(">>>app_location = "+app_location);
+            //Better to use System.err, since it prints the stream immediately instead of storing it in a buffer which might be lost if there is a crash.
+            System.err.println(">>>app_location = "+app_location);
             String fileFullPath = app_location + DEFAULT_MENU_FILE_NAME; 
-            System.out.println(">>>fileFullPath = " + fileFullPath);
+            System.err.println(">>>fileFullPath = " + fileFullPath);
             URI configurationDirectoryURI = new URI(fileFullPath);
-            System.out.println(">>>URI = " + configurationDirectoryURI.toString());
-            System.out.println(">>> file at URI = " + new File(configurationDirectoryURI).toString());
+            System.err.println(">>>URI = " + configurationDirectoryURI.toString());
+            System.err.println(">>> file at URI = " + new File(configurationDirectoryURI).toString());
             if (new File(configurationDirectoryURI).exists()) {
             	System.out.println(">>>config.ini Exists!");
             	createMenuFromXML(fileFullPath);
             	processLeftServiceBundles();  
+
             } else {
-            	System.out.println("config.ini does not exist... Reverting to backup plan");
+            	System.err.println("config.ini does not exist... Reverting to backup plan");
             	initializeMenu();
             }
             Display.getDefault().asyncExec(updateAction);
@@ -175,6 +177,10 @@ public class MenuAdapter implements AlgorithmProperty {
             getLog().log(LogService.LOG_DEBUG, "Invalid Syntax", e);
         } catch (URISyntaxException e) {
         	getLog().log(LogService.LOG_DEBUG, "Invalid Syntax", e);
+        } catch (Throwable e) {
+        	//Should catch absolutely everything catchable. Will hopefully reveal the error coming out of the URI constructor.
+        	//No time to test today, just commiting this for testing later.
+        	e.printStackTrace();
         }
     }
         
