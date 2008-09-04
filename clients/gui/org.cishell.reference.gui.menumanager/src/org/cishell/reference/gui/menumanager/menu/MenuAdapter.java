@@ -122,8 +122,29 @@ public class MenuAdapter implements AlgorithmProperty {
             bContext.addServiceListener(listener, filter);
             preprocessServiceBundles();
             String app_location = System.getProperty("osgi.configuration.area");
-            String fullpath = app_location.substring(6)+ DEFAULT_MENU_FILE_NAME;    	
-            if (new File(fullpath).exists()){
+            /*
+             * This is a temporary fix. A bit complex to explain the observation 
+             * I got so far. On Windows XP 
+             * app_location = file:/C:/Documents and Settings/huangb/Desktop/
+             * nwb-sept4/nwb/configuration/
+             * If I didn't trim "file:/", on some windows machines 
+             * new File(fileFullpath).exists() will return false, and 
+             * initializaMenu() will be invoked. When initializaMenu() is invoked,
+             * not all required top menus will show up. So either Bruce code 
+             * or Tim's fix has some problems. Can not append top menu such as 
+             * Tools-->Scheduler if Tools is not specified in the XML
+             * If pass trimed file path C:/Documents and Settings/huangb/Desktop/
+             * nwb-sept4/nwb/configuration/ to createMenuFromXML, on some machines,
+             * URL =  C:/Documents and Settings/huangb/Desktop/nwb-sept4/nwb/configuration/ 
+             * is a bad one, and can not create a document builder instance and the
+             * DOM representation of the XML file.
+             * 
+             * This piece of code needs to be reviewed and refactored!!!
+			 */
+            System.out.println(">>>app_location = "+app_location);
+            String fileFullpath = app_location.substring(6)+ DEFAULT_MENU_FILE_NAME; 
+            String fullpath = app_location+ DEFAULT_MENU_FILE_NAME;
+            if (new File(fileFullpath).exists() || new File(fullpath).exists()){
             	createMenuFromXML(fullpath);
             	processLeftServiceBundles();
             }else{
@@ -177,7 +198,8 @@ public class MenuAdapter implements AlgorithmProperty {
     private void createMenuFromXML(String menuFilePath) throws InvalidSyntaxException{
     	parseXmlFile(menuFilePath);    	
     	//get the root elememt
-		Element docEle = dom.getDocumentElement();		
+		Element docEle = dom.getDocumentElement();
+			
 		//get a nodelist of the top menu elements
 		NodeList topMenuList = docEle.getElementsByTagName(TAG_TOP_MENU);
 		if(topMenuList != null && topMenuList.getLength() > 0) {
