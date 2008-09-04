@@ -162,12 +162,12 @@ public class MenuAdapter implements AlgorithmProperty {
             System.out.println(">>>URI = " + configurationDirectoryURI.toString());
             System.out.println(">>> file at URI = " + new File(configurationDirectoryURI).toString());
             if (new File(configurationDirectoryURI).exists()) {
-            	System.out.println("config.ini Exists!");
-            String fullpath = app_location + DEFAULT_MENU_FILE_NAME;
-            createMenuFromXML(fullpath);
+            	System.out.println(">>>config.ini Exists!");
+            	createMenuFromXML(fileFullPath);
+            	processLeftServiceBundles();  
             } else {
             	System.out.println("config.ini does not exist... Reverting to backup plan");
-            processLeftServiceBundles();   
+            	initializeMenu();
             }
             Display.getDefault().asyncExec(updateAction);
      
