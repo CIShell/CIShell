@@ -13,12 +13,12 @@
  * ***************************************************************************/
 package org.cishell.reference.gui.menumanager.menu;
 
-import java.io.IOException;
 import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
-import java.net.URI;
-
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -101,27 +101,40 @@ public class MenuAdapter implements AlgorithmProperty {
     
 
 
+    
     public MenuAdapter(IMenuManager menu, Shell shell, 
             BundleContext bContext,CIShellContext ciContext,
             IWorkbenchWindow window) {
+    	//basic initialization
         this.menuBar = menu;
         this.shell = shell;
         this.bContext = bContext;
         this.ciContext = ciContext;
         this.window = window;
+        
         this.algorithmToItemMap = new HashMap();
         this.itemToParentMap = new HashMap();
+        
         pidToServiceReferenceMap = new HashMap();
         pidToServiceReferenceMapCopy = new HashMap();
         
+        //appears to add a listener which updates the menu item whenever a 
+        //corresponding change occurs in the bundle (registers, unregisters, etc...)
         String filter = "(" + Constants.OBJECTCLASS + 
                         "=" + AlgorithmFactory.class.getName() + ")";
+        listener = new ContextListener();
+       
         
         try {
-            listener = new ContextListener();
+        
             bContext.addServiceListener(listener, filter);
             preprocessServiceBundles();
             String app_location = System.getProperty("osgi.configuration.area");
+         
+            //Comments below refer to problems with earlier versions of this document.
+            //Keeping these around for now, as well as the system.out.printlns,
+            //until we are sure that the current fix works.
+            
             /*
              * This is a temporary fix. A bit complex to explain the observation 
              * I got so far. On Windows XP 
@@ -141,19 +154,27 @@ public class MenuAdapter implements AlgorithmProperty {
              * 
              * This piece of code needs to be reviewed and refactored!!!
 			 */
+            
             System.out.println(">>>app_location = "+app_location);
-            String fileFullpath = app_location.substring(6)+ DEFAULT_MENU_FILE_NAME; 
-            String fullpath = app_location+ DEFAULT_MENU_FILE_NAME;
-            if (new File(fileFullpath).exists() || new File(fullpath).exists()){
-            	createMenuFromXML(fullpath);
-            	processLeftServiceBundles();
-            }else{
-            	initializeMenu();
-            }            
+            String fileFullPath = app_location + DEFAULT_MENU_FILE_NAME; 
+            System.out.println(">>>fileFullPath = " + fileFullPath);
+            URI configurationDirectoryURI = new URI(fileFullPath);
+            System.out.println(">>>URI = " + configurationDirectoryURI.toString());
+            System.out.println(">>> file at URI = " + new File(configurationDirectoryURI).toString());
+            if (new File(configurationDirectoryURI).exists()) {
+            	System.out.println("config.ini Exists!");
+            String fullpath = app_location + DEFAULT_MENU_FILE_NAME;
+            createMenuFromXML(fullpath);
+            } else {
+            	System.out.println("config.ini does not exist... Reverting to backup plan");
+            processLeftServiceBundles();   
+            }
             Display.getDefault().asyncExec(updateAction);
      
         } catch (InvalidSyntaxException e) {
             getLog().log(LogService.LOG_DEBUG, "Invalid Syntax", e);
+        } catch (URISyntaxException e) {
+        	getLog().log(LogService.LOG_DEBUG, "Invalid Syntax", e);
         }
     }
         
