@@ -15,8 +15,8 @@ package org.cishell.reference.gui.menumanager.menu;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -159,15 +159,15 @@ public class MenuAdapter implements AlgorithmProperty {
             System.err.println(">>>app_location = "+app_location);
             String fileFullPath = app_location + DEFAULT_MENU_FILE_NAME; 
             System.err.println(">>>fileFullPath = " + fileFullPath);
-            URI configurationDirectoryURI = new URI(fileFullPath);
-            System.err.println(">>>URI = " + configurationDirectoryURI.toString());
-            System.err.println(">>> file at URI = " + new File(configurationDirectoryURI).toString());
-            if (new File(configurationDirectoryURI).exists()) {
+            URL configurationDirectoryURL = new URL(fileFullPath);
+            System.err.println(">>>URL = " + configurationDirectoryURL.toString());
+            try {
+            	configurationDirectoryURL.getContent();
             	System.out.println(">>>config.ini Exists!");
             	createMenuFromXML(fileFullPath);
             	processLeftServiceBundles();  
-
-            } else {
+            } catch (IOException e) {
+            	e.printStackTrace();
             	System.err.println("config.ini does not exist... Reverting to backup plan");
             	initializeMenu();
             }
@@ -175,8 +175,6 @@ public class MenuAdapter implements AlgorithmProperty {
      
         } catch (InvalidSyntaxException e) {
             getLog().log(LogService.LOG_DEBUG, "Invalid Syntax", e);
-        } catch (URISyntaxException e) {
-        	getLog().log(LogService.LOG_DEBUG, "Invalid Syntax", e);
         } catch (Throwable e) {
         	//Should catch absolutely everything catchable. Will hopefully reveal the error coming out of the URI constructor.
         	//No time to test today, just commiting this for testing later.
