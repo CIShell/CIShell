@@ -228,21 +228,26 @@ public class LogView extends ViewPart implements LogListener{
 
         if (index > -1) {
             String url = message.substring(index);
-
+            System.out.println(">>>url = "+url);
             if (url.indexOf(") ") > -1) {
                 url = url.substring(0, url.indexOf(") "));
             }
             else if (url.indexOf(" ") > -1) {
                 url = url.substring(0, url.indexOf(" "));
+                if (url.trim().endsWith(".") ){
+                	url=url.substring(0, url.length()-1);
+                }
             }
-
+            if (url.endsWith(".\n") || url.endsWith(".\t")){
+            	url=url.substring(0, url.length()-2);
+            }
             if (url.indexOf("\n") > -1) {
                 url = url.substring(0, url.indexOf("\n"));
             }
-
             if (url.indexOf("\t") > -1) {
                 url = url.substring(0, url.indexOf("\n"));
             }
+               
 
             printHelper(message.substring(0, index), color, SWT.NORMAL);
             urlListener.addUrl(text.getText().length(), url);
