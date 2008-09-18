@@ -72,6 +72,7 @@ public class DataGUIItem {
         registerImage(DataProperty.TREE_TYPE, treeIcon);
         registerImage(DataProperty.TEXT_TYPE, textIcon);
         registerImage(DataProperty.PLOT_TYPE, plotIcon);
+        registerImage(DataProperty.TABLE_TYPE, matrixIcon);
     }
 
     /**
