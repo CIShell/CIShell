@@ -38,6 +38,7 @@ public class DataGUIItem {
     private Image unknownIcon;
     private Image textIcon;
     private Image plotIcon;
+    private Image tableIcon;
     
     private Map typeToImageMapping;
     
@@ -58,12 +59,13 @@ public class DataGUIItem {
         children = new ArrayList();
         
         this.brandPluginID = brandPluginID;
-        matrixIcon  = createImage("table.png", this.brandPluginID);
+        matrixIcon  = createImage("matrix.png", this.brandPluginID);
         treeIcon    = createImage("tree.png", this.brandPluginID);
         networkIcon = createImage("network.png", this.brandPluginID);
         unknownIcon = createImage("unknown.png", this.brandPluginID);
         textIcon 	= createImage("text.png", this.brandPluginID);
         plotIcon 	= createImage("plot.png", this.brandPluginID);
+        tableIcon 	= createImage("table.png", this.brandPluginID);
 
         typeToImageMapping = new HashMap();
         registerImage(DataProperty.OTHER_TYPE, unknownIcon);
@@ -72,7 +74,7 @@ public class DataGUIItem {
         registerImage(DataProperty.TREE_TYPE, treeIcon);
         registerImage(DataProperty.TEXT_TYPE, textIcon);
         registerImage(DataProperty.PLOT_TYPE, plotIcon);
-        registerImage(DataProperty.TABLE_TYPE, matrixIcon);
+        registerImage(DataProperty.TABLE_TYPE, tableIcon);
     }
 
     /**
