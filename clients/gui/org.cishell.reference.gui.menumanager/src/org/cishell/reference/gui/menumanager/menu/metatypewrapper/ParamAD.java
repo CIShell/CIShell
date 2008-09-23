@@ -64,10 +64,15 @@ public class ParamAD implements AttributeDefinition {
 		if (defaultValues == null) return new String[0];
 		String[] replacedValues = new String[defaultValues.length];
 		for (int i = 0; i < defaultValues.length; i++) {
+			
 			if (defaultValues[i] != null && defaultValues[i].contains(":") && overrideValues[i] != null && overrideValues[i].equals("")) {
 				replacedValues[i] = defaultValues[i].substring(0, defaultValues[i].indexOf(":") + 1);
 			} else {
 				replacedValues[i] = overrideValues[i];
+			}
+			if (defaultValues[i].contains(":") && overrideValues[i] != null && ! overrideValues[i].equals("") && ! overrideValues[i].contains(":")) {
+				String prefix = defaultValues[i].substring(0, defaultValues[i].indexOf(":") + 1);
+				replacedValues[i] = prefix + overrideValues[i];
 			}
 		}
 		return replacedValues;
