@@ -110,12 +110,6 @@ public class FileComponent extends StringComponent {
             }
 	        else {
 	        	value = currentValue;
-	        	
-	        	if (value instanceof String) {
-	        		String stringValue = (String) value;
-	        		stringValue.replace("file:", "");
-	        		stringValue.replace("directory:", "");
-	        	}
 	        }
            	
         }
