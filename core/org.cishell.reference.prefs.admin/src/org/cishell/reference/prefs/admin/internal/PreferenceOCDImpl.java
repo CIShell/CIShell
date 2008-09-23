@@ -90,4 +90,23 @@ public class PreferenceOCDImpl implements ObjectClassDefinition, PreferenceOCD {
 		return this.realOCD.getName();
 	}
 
+	public PreferenceAD getAttributeByID(String attributeID) {
+		PreferenceAD adWeAreLookingFor = null;
+		
+		PreferenceAD[] ads = this.getPreferenceAttributeDefinitions(ObjectClassDefinition.ALL);
+		for (int ii = 0; ii < ads.length; ii++) {
+			PreferenceAD ad = ads[ii];
+			
+			if (ad.getID().equals(attributeID)) {
+				adWeAreLookingFor = ad;
+				break;
+			}
+		}
+		
+		if (adWeAreLookingFor != null) {
+			return adWeAreLookingFor;
+		} else {
+			return null;
+		}
+	}
 }

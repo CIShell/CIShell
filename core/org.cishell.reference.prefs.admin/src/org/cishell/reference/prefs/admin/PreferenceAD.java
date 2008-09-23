@@ -29,6 +29,8 @@ public interface PreferenceAD extends AttributeDefinition {
 	public abstract int getType();
 
 	public abstract int getPreferenceType();
+	
+	public abstract String getPreferenceTypePrefix();
 
 	public abstract String validate(String value);
 
