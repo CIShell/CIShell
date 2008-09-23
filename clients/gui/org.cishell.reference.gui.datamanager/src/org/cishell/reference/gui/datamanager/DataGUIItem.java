@@ -69,7 +69,15 @@ public class DataGUIItem {
 
         typeToImageMapping = new HashMap();
         registerImage(DataProperty.OTHER_TYPE, unknownIcon);
-        registerImage(DataProperty.MATRIX_TYPE, matrixIcon);
+        
+        /********************************************
+         * This is a temporary work around solution.
+         * Since many algs claims the output data type is MATRIX_TYPE,
+         * but in fact it should be TABLE_TYPE. 
+         * Should associate MATRIX_TYPE with matrixIcon and clean up
+         * related algs.
+         * ******************************************/      
+        registerImage(DataProperty.MATRIX_TYPE, tableIcon);
         registerImage(DataProperty.NETWORK_TYPE, networkIcon);
         registerImage(DataProperty.TREE_TYPE, treeIcon);
         registerImage(DataProperty.TEXT_TYPE, textIcon);
