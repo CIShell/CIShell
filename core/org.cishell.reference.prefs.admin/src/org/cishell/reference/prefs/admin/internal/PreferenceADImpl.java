@@ -34,7 +34,7 @@ public class PreferenceADImpl implements AttributeDefinition, PreferenceAD {
 	
 	private int inferPreferenceType(AttributeDefinition realAD) {
 		int preferenceType; 
-		if (realAD.getType() == AttributeDefinition.STRING) {
+		if (realAD.getType() != PreferenceAD.TEXT) {
 			String defaultVal = realAD.getDefaultValue()[0];
 			
 			if (defaultVal.startsWith(TypePrefixes.DIRECTORY_PREFIX)) {
@@ -194,6 +194,10 @@ public class PreferenceADImpl implements AttributeDefinition, PreferenceAD {
 	public int getPreferenceType() {
 		return this.preferenceType;
 	}
+	
+	public String getPreferenceTypePrefix() {
+		return TypePrefixes.getPrefPrefixFromPrefTypeID(new Integer(this.getPreferenceType()));
+	}
 
 	/* (non-Javadoc)
 	 * @see org.cishell.service.prefadmin.shouldbeelsewhere.PreferenceAttributeDefinition#validate(java.lang.String)
@@ -201,5 +205,4 @@ public class PreferenceADImpl implements AttributeDefinition, PreferenceAD {
 	public String validate(String value) {
 		return this.realAD.validate(value);
 	}
-
 }

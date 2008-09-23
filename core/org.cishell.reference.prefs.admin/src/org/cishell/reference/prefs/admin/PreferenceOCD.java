@@ -14,6 +14,8 @@ public interface PreferenceOCD extends ObjectClassDefinition {
 	//use to get at the special preference attribute goodness.
 	public abstract PreferenceAD[] getPreferenceAttributeDefinitions(
 			int filter);
+	
+	public abstract PreferenceAD getAttributeByID(String attributeID);
 
 	public abstract String getDescription();
 
