@@ -88,12 +88,7 @@ public class CIShellPreferenceStore implements IPersistentPreferenceStore {
 	}
 
 	public String getString(String name) {
-		PreferenceAD attributeCorrespondingToThisName = this.prefOCD.getAttributeByID(name);
-		String attributePrefix = attributeCorrespondingToThisName.getPreferenceTypePrefix();
 		String result = (String) this.prefDict.get(name);
-		if (result != null) {
-			result = attributePrefix + result;
-		}
 		return result;
 	}
 
