@@ -108,8 +108,15 @@ public class FileComponent extends StringComponent {
 	        	value = new File(System.getProperty("osgi.install.area").replace("file:","")).getAbsolutePath();	       
                 currentValue = value;                
             }
-	        else
-	        	value = currentValue;          	
+	        else {
+	        	value = currentValue;
+	        	
+	        	if (value instanceof String) {
+	        		String stringValue = (String) value;
+	        		stringValue.replace("file:", "");
+	        		stringValue.replace("directory:", "");
+	        	}
+	        }
            	
         }
         
