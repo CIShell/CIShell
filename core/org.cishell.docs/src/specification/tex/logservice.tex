@@ -1,0 +1,50 @@
+%% Cyberinfrastructure Shell (CIShell) Core Specification
+%%
+%% Copyright 2006,2007,2008 Indiana University
+%%
+%% Licensed under the Apache License, Version 2.0 (the "License");
+%% you may not use this file except in compliance with the License.
+%% You may obtain a copy of the License at
+%%
+%%     http://www.apache.org/licenses/LICENSE-2.0
+%%
+%% Unless required by applicable law or agreed to in writing, software
+%% distributed under the License is distributed on an "AS IS" BASIS,
+%% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%% See the License for the specific language governing permissions and
+%% limitations under the License.
+%%
+%
+
+\chapter{Log Service Specification}
+\label{logService}
+\section*{Version 1.3}
+\section{Introduction}
+
+CIShell requires OSGi's standard \class{LogService} to be installed in a
+CIShell-compliant system. This gives both the algorithms and the applications
+built on CIShell a standard logging sytem to use. This service has not been
+extended or modified. More information about the \class{LogService} is available
+in the OSGi Service Platform Service Compendium Specification R4, section 101
+under ``Log Service Specification.'' Recommended output per log level for
+CIShell algorithms are listed in table \ref{table:logLevels}.
+
+\begin{table}[htb!]
+\begin{center}
+\begin{tabular}{l p{12cm}}
+\textbf{Log Level} & \textbf{Recommended Use} \\
+LOG\_DEBUG & Used for problem determination and may be irrelevent to anyone but
+the algorithm developer. \\
+LOG\_ERROR & Indicates a problem occurred while the algorithm was executing.
+Indicators of possible fixes should be output to this level along with
+relevent information describing what went wrong, if possible. \\
+LOG\_INFO & Used for providing information about and while the algorithm is
+executing. It does not indicate a problem. \\
+LOG\_WARNING & Indicates that the algorithm will still be executed, but
+that outputs may not be what was expected. This is often in response to
+illogical, but still valid user inputs.
+\end{tabular}
+\end{center}
+\caption{Log Level Recommendations for Algorithms}
+\label{table:logLevels}
+\end{table}

@@ -1,0 +1,210 @@
+%% Cyberinfrastructure Shell (CIShell) Core Specification
+%%
+%% Copyright 2006,2007,2008 Indiana University
+%%
+%% Licensed under the Apache License, Version 2.0 (the "License");
+%% you may not use this file except in compliance with the License.
+%% You may obtain a copy of the License at
+%%
+%%     http://www.apache.org/licenses/LICENSE-2.0
+%%
+%% Unless required by applicable law or agreed to in writing, software
+%% distributed under the License is distributed on an "AS IS" BASIS,
+%% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%% See the License for the specific language governing permissions and
+%% limitations under the License.
+%%
+%
+
+\subsection{Algorithm Types}
+\label{algConstraints}
+\subsubsection{Introduction}
+
+CIShell algorithms are a generic concept which have many uses. In the CIShell
+Platform, they are used in 4 contexts: as general data-centric algorithms to be
+used by an end-user (Standard Algorithms), as data converters (Converter
+Algorithms), as data validators (Validator Algorithms), and as providers of data
+(Dataset Algorithms). In order to better separate these uses, a lightweight type
+system has been introduced. The only way to tell the difference between them is
+by the constraints defined for each algorithm type as defined below.
+
+\subsubsection{Base Algorithm Constraints}
+
+All conformant algorithms regardless of type, must adhere to the following
+constraints:
+
+\paragraph*{Required:}
+\begin{itemize}
+  \item The algorithm must be a conformant \class{AlgorithmFactory}
+  implementation and properly registered as a service.
+  \item The algorithm's service metadata must contain a valid ``service.pid''.
+\end{itemize}
+
+\paragraph*{Optional:}
+\begin{itemize}
+  \item The algorithm's service metadata should have ``remoteable=true'' if it
+  meets the requirements of a remoteable algorithm.
+  \item The algorithm's service metadata should have a ``label'' which is a
+  short human-readable name for the algorithm.
+  \item The algorithm's service metadata should have a ``description''
+  explaining what the algorithm does in more detail.
+  \item As much of the informational metadata as possible should be
+  provided. This includes ``authors'', ``implementors'', ``integrators'',
+  ``documentation\_url'', ``reference'', ``reference\_url'', and ``written\_in''.
+\end{itemize}
+
+\subsubsection{Standard Algorithms}
+
+Standard CIShell algorithms are the algorithms that most end-users will
+encounter. A standard algorithm has the following constraints:
+
+\paragraph*{Required:}
+\begin{itemize}
+  \item The algorithm must be a conformant \class{AlgorithmFactory}
+  implementation and properly registered as a service.
+  \item The algorithm's service metadata must contain a valid ``service.pid''.
+  \item The algorithm's service metadata must have a ``label'' which is a
+  short human-readable name for the algorithm. This is typically used to label
+  an algorithm for an end-user to see.
+  \item The algorithm's service metadata must have a ``description''
+  explaining what the algorithm does in more detail.
+  \item The algorithm's service metadata must have a ``menu\_path'' which is
+  simultaneously a classification and a location on a GUI's menubar to place
+  the algorithm in. See section \ref{algMetaData} for how to format a
+  ``menu\_path''.
+\end{itemize}
+
+\paragraph*{Optional:}
+\begin{itemize}
+  \item If additional user-entered input parameters are needed, the algorithm
+  should provide a \class{MetaTypeProvider} published to the \class{MetaTypeService}.
+  \item The algorithm's service metadata should have ``remoteable=true'' if it
+  meets the requirements of a remoteable algorithm.
+  \item The algorithm's service metadata should have ``parentage=default'' if
+  it wishes to use the default \class{Data} parenting scheme described in
+  section \ref{algMetaData}.
+  \item The algorithm's service metadata does not need to have a ``type'' set.
+  \item As much of the informational metadata as possible should be
+  provided. This includes ``authors'', ``implementors'', ``integrators'',
+  ``documentation\_url'', ``reference'', ``reference\_url'', and ``written\_in''.
+\end{itemize}
+
+\subsubsection{Dataset Algorithms}
+
+A dataset algorithm is a custom type of CIShell algorithm for providing
+pre-generated data for use in the CIShell Platform. Dataset algorithms act just
+like standard algorithms and have a superset of requirements. CIShell
+Applications may not even treat them any differently than standard algorithms. A
+dataset algorithm has the following constraints:
+
+\paragraph*{Required:}
+\begin{itemize}
+  \item The algorithm must be a conformant \class{AlgorithmFactory}
+  implementation and properly registered as a service.
+  \item The algorithm's service metadata must contain a valid ``service.pid''.
+  \item The algorithm's service metadata must have a ``label'' which is a
+  short human-readable name for the dataset being provided. This is typically
+  used to label a dataset for an end-user to see.
+  \item The algorithm's service metadata must have a ``description''
+  explaining what the dataset is in more detail.
+  \item The algorithm's service metadata must have a ``menu\_path'' which is
+  simultaneously a classification and a location on a GUI's menubar to place
+  the dataset in. Datasets will typically be in ``File/Datasets/additions''
+  See section \ref{algMetaData} for how to format a ``menu\_path''.
+  \item The algorithm's service metadata must have ``type=dataset''.
+  \item The algorithm's service metadata must have ``in\_data=null'' or
+  not defined at all.
+  \item The algorithm's service metadata must have at least one data item set
+  as its ``out\_data''.
+\end{itemize}
+
+\paragraph*{Optional:}
+\begin{itemize}
+  \item The algorithm's service metadata should have ``remoteable=true'' if it
+  meets the requirements of a remoteable algorithm.
+  \item As much of the informational metadata as possible should be
+  provided. This includes ``authors'', ``implementors'', ``integrators'',
+  ``documentation\_url'', ``reference'', and ``reference\_url''.
+\end{itemize}
+
+\subsubsection{Converter Algorithms}
+\label{converterAlg}
+
+A converter algorithm is a custom type of CIShell algorithm for converting data
+of one type to another. Converters are typically leveraged by the
+\class{DataConversionService} and are not used directly by end-users. A converter
+algorithm has the following constraints:
+
+\paragraph*{Required:}
+\begin{itemize}
+  \item The algorithm must be a conformant \class{AlgorithmFactory}
+  implementation and properly registered as a service.
+  \item The algorithm must take in a single \class{Data} item and convert the
+  item, producing a single \class{Data} item. This must be reflected in the
+  algorithm's service metadata where ``in\_data'' and ``out\_data'' have only
+  one data item each.
+  \item The algorithm's service metadata must contain a valid ``service.pid''.
+  \item The algorithm's service metadata must have ``type=converter''.
+  \item The algorithm's service metadata must have ``conversion=lossy'' if
+  data is lost during conversion or ``conversion=lossless'' if not.
+  \item The algorithm must not require any input parameters. The
+  \class{Dictionary} passed to the createAlgorithm method will always be empty.
+\end{itemize}
+
+\paragraph*{Optional:}
+\begin{itemize}
+  \item The algorithm's service metadata should have ``remoteable=true'' if it
+  meets the requirements of a remoteable algorithm.
+  \item The algorithm's service metadata should have a ``label'' which is a
+  short human-readable name for the converter, usually with the common name of
+  the input data format and output data format.
+  \item The algorithm's service metadata should have a ``description''
+  explaining the conversion in more detail, especially what data may be lossed
+  if ``conversion=lossy''.
+  \item The algorithm's service metadata should have ``implementers'' filled
+  in accordingly.  
+\end{itemize}
+
+\subsubsection{Validator Algorithms}
+
+A validator algorithm is a custom type of CIShell algorithm which checks either
+an incoming or outgoing file to be sure it is of the type specified. This is
+necessary due to the fact that one cannot simply assume based on the file
+extension what type of file format the data is in. Checking the contents of the
+file is necessary, especially in the case of multiple file formats for the same
+file extension (e.g., XML). This type of algorithm is important for reliably
+bringing in outside data and saving out data from CIShell. A validator algorithm
+has the following constraints:
+
+\paragraph*{Required:}
+\begin{itemize}
+  \item The algorithm must be a conformant \class{AlgorithmFactory}
+  implementation and properly registered as a service.
+  \item The algorithm's service metadata must contain an ``in\_data''
+  and ``out\_data'' with only one data item each with one containing a
+  ``file:\textit{mime/type}'' format and the other a
+  ``file-ext:\textit{file-extension}'' depending on the direction of
+  validation. See section \ref{dataSpec} for data format details.
+  \item The algorithm must take in a single \class{Data} item and validate the
+  item producing a single \class{Data} item (with the same data, but changed
+  format) if the file is of the right type. If not, then the algorithm should
+  log (using the CIShellContext-provided \class{LogService}) what the problem
+  was and must return null. If a problem occurs that is unrelated to the
+  file's format, then an \class{AlgorithmExecutionException} should be thrown.
+  \item The algorithm must not alter the data. Its only purpose is to validate
+  the proposed incoming or outgoing file.
+  \item The algorithm's service metadata must contain a valid ``service.pid''.
+  \item The algorithm's service metadata must have ``type=validator''.
+  \item The algorithm's service metadata must have a ``label'' which is the
+  common name of the data format being validated.
+  \item The algorithm must not require any input parameters. The
+  \class{Dictionary} passed to the createAlgorithm method will always be empty.
+\end{itemize}
+
+\paragraph*{Optional:}
+\begin{itemize}
+  \item The algorithm's service metadata should have ``remoteable=true'' if it
+  meets the requirements of a remoteable algorithm.
+  \item The algorithm's service metadata should have ``implementers'' filled
+  in accordingly.
+\end{itemize}

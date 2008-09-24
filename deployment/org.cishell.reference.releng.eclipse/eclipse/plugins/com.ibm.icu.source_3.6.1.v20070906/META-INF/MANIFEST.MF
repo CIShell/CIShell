@@ -1,0 +1,33 @@
+Manifest-Version: 1.0
+Bundle-Version: 3.6.1.v20070906
+Created-By: 2.3 (IBM Corporation)
+Bundle-SymbolicName: com.ibm.icu.source; singleton=true
+Bundle-Name: %pluginName
+Bundle-Localization: plugin
+Bundle-Vendor: %providerName
+Ant-Version: Apache Ant 1.7.0
+
+Name: plugin.properties
+SHA1-Digest: T4nZnDS0BwNEfeTBjDaylHD/2Dw=
+
+Name: src/com.ibm.icu_3.6.1.v20070906/about_files/license.html
+SHA1-Digest: qENQtBjCiRTyNfK/oPwkGdjQJx0=
+
+Name: src/com.ibm.icu_3.6.1.v20070906/src.zip
+SHA1-Digest: Hu76zMYaw+HHsyuazJYD7e17n9E=
+
+Name: plugin.xml
+SHA1-Digest: I0t+o6kXbySrxIY1bLaTaeai3Vc=
+
+Name: about.html
+SHA1-Digest: t15ZOHlrGDCeslNIq+PwNJ1tf+4=
+
+Name: src/com.ibm.icu_3.6.1.v20070906/about_files/ucdterms.txt
+SHA1-Digest: 4B5JYwVQ1/4nvmoBq9fErfhgWrc=
+
+Name: src/com.ibm.icu_3.6.1.v20070906/about.html
+SHA1-Digest: YbbQLq/54BiOdNEdRoNFobynJhw=
+
+Name: META-INF/eclipse.inf
+SHA1-Digest: KyT9FF7C7t86NoBoa2kZT3ZJBfw=
+

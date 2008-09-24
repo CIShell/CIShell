@@ -1,0 +1,376 @@
+%% Cyberinfrastructure Shell (CIShell) Core Specification
+%%
+%% Copyright 2006,2007,2008 Indiana University
+%%
+%% Licensed under the Apache License, Version 2.0 (the "License");
+%% you may not use this file except in compliance with the License.
+%% You may obtain a copy of the License at
+%%
+%%     http://www.apache.org/licenses/LICENSE-2.0
+%%
+%% Unless required by applicable law or agreed to in writing, software
+%% distributed under the License is distributed on an "AS IS" BASIS,
+%% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%% See the License for the specific language governing permissions and
+%% limitations under the License.
+%%
+%
+
+\section{Algorithm Specification}
+
+\subsection*{\textit{Version 1.0}}
+
+\subsection{Introduction}
+
+The CIShell Platform has been specifically designed around the idea of the
+algorithm. It is the central and most important concept. Algorithms are fully
+defined and self-contained bits of execution. They can do many things from data
+conversion, data analysis, and can even spawn whole external programs if needed.
+Algorithms are well defined black boxes in that their input and output is
+specified in each algorithm's service metadata and associated
+\class{MetaTypeProvider}. Other than that, CIShell makes no attempt to understand
+the algorithm.
+
+\subsubsection{Essentials}
+\begin{itemize}
+  \item \textit{Application Independence} - Algorithms must be usable in a wide
+  variety of contexts and should not be tied to any one CIShell environment or
+  front end where possible.
+  \item \textit{User Interface Independence} - Algorithms should not have to tie
+  themselves to a single UI where possible.
+  \item \textit{Black Box Algorithms} - Algorithms are black boxes whose
+  possible interactions are described in metadata.
+  \item \textit{Delayed Execution} - There may be a large delay between an
+  algorithm getting parameters for execution and its actual execution.
+  \item \textit{Remote Execution} - Algorithm interfaces should be designed to
+  facilitate remote execution of algorithms where possible.
+\end{itemize}
+
+\subsubsection{Operations}
+
+To be recognized by CIShell, an \class{AlgorithmFactory} must be registered with
+OSGi's service registry. The service registry requires three things when
+registering: an interface (\class{AlgorithmFactory}), an implementation, and a
+\class{Dictionary} of metadata. The algorithm developer provides the
+implementation and metadata. The metadata helps to differentiate and define the
+algorithm for search and discovery, see section \ref{algMetaData}.
+
+An algorithm defines its inputs in two ways. First, the input data is defined in
+the algorithm's service metadata. Second, the acceptable user-entered
+input parameters are defined in a \class{MetaTypeProvider} and published to the
+\class{MetaTypeService}.
+
+Figure \ref{fig:algExecWorkflow} shows the typical flow of information into and
+out of an algorithm. First the input parameter specification is pulled from the
+\class{MetaTypeService}. If parameters are needed, then a UI is created and
+user inputs are entered. To create an \class{Algorithm}, the
+\class{AlgorithmFactory} is passed the user-entered parameters, zero or more
+pieces of data, and a \class{CIShellContext}. The \class{Algorithm} is then
+executed and produces zero or more pieces of data.
+
+\begin{figure}[htb!]
+\centering
+\includegraphics[width=150mm]{../img/algExecWorkflow.pdf}
+\caption{Algorithm Execution Workflow}
+\label{fig:algExecWorkflow}
+\end{figure}
+
+
+\subsection{Optional Interfaces}
+
+Algorithm developers may augment algorithms with additional interfaces to enhance
+parts of the execution workflow. See each interface's API documentation for more
+details.
+
+\begin{description}
+  \item[ParameterMutator] An \class{AlgorithmFactory} can implement the
+  \class{ParameterMutator} interface to add, remove, or modify an algorithm's
+  input parameters between the time when its \class{MetaTypeProvider} is pulled
+  from the \class{MetaTypeService} and when the corresponding UI is shown to the
+  user. This is typically done to customize the input parameters based on the
+  data to be given to the algorithm. See section \ref{GUISpec} for information
+  on constructing and publishing \class{MetaTypeProviders}.
+  
+  \item[DataValidator] An \class{AlgorithmFactory} can implement the
+  \class{DataValidator} interface to validate the data beyond the data format
+  validation that an application should provide ahead of time.
+
+  \item[ProgressTrackable] An \class{Algorithm} can implement
+  \class{ProgressTrackable} to allow for more detailed monitoring and control
+  of an \class{Algorithm}'s progress while executing.
+\end{description}
+
+\subsection{Service Metadata}
+\label{algMetaData}
+
+When an algorithm is registered with OSGi's service registry, a
+\class{Dictionary} of metadata is provided. Since the algorithm itself is a black
+box, the metadata is used to provide information about the algorithm. Information
+such as the format of each \class{Data} item to be input and output is provided.
+In addition to the mechanics of the algorithms, data such as the authors, label,
+urls, citation references, and description are provided. This metadata can be
+searched by anyone to find relevant algorithms using OSGi's service registry.
+
+Each standard metadata element required by the CIShell specification is defined
+below and in the interface \class{AlgorithmProperty}. It defines each key string
+and the valid value strings to set in the metadata \class{Dictionary} when
+registering an algorithm as a service.
+
+\subsection*{service.pid}
+A string that uniquely identifies the algorithm. The service.pid should not
+change between sessions and only one algorithm with a given service.pid should
+be available in the service registry at any given time. It is recommended to 
+use the Java naming scheme including path for this purpose, i.e.,
+``org.cishell.my.algorithm.MyAlgorithm''. This metadata element is defined
+as part of the OSGi Service Platform Core Specification, section 6.1.12. 
+
+\begin{quote}
+\begin{description}
+  \item[Example 1:] service.pid = org.my.algorithm.MyAlgorithm
+\end{description}
+\end{quote}
+
+
+\subsection*{parameters\_pid} 
+
+When this key is not set, an algorithm's user-entered input parameters are
+assumed to be registered in the \class{MetaTypeService} with a persistent id
+equal to the algorithm service's ``service.pid''. An algorithm can override this
+by setting this key to their custom persistent id. See section \ref{GUISpec}
+for information on creating and publishing input parameters.
+
+\begin{quote}
+\begin{description}
+  \item[Example 1:] parameters\_pid = org.my.custom.pid.that.i.want.to.use
+\end{description}
+\end{quote}
+
+
+\subsection*{in\_data} 
+Specifies the formats and number of \class{Data} inputs the
+algorithm accepts. The string is a comma separated list of data formats as
+defined in section \ref{dataSpec}. If no \class{Data} inputs are necessary then
+the string ``null'' or not specifying the in\_data attribute at all is valid.
+If any data is optional, prefix the associated format with a ``?''. When the
+\class{AlgorithmFactory.createAlgorithm} method is called with a \class{Data}
+array, an optional \class{Data} element will be \class{null} if it is not
+provided.
+
+By using the ``+'', ``*'', or ``?'' prefixes, ambiguities could arise from
+specifying multiple input formats that could easily fit into two or more
+of the formats. An algorithm developer should take care when reading
+in \class{Data} arrays from possibly ambiguous in\_data strings.
+
+\begin{quote}
+\begin{description}
+  \item[Example 1:] in\_data = null
+  \item[Example 2:] in\_data = java.lang.String
+  \item[Example 3:] in\_data = java.lang.String, file:text/plain, file:text/xml
+  \item[Example 4:] in\_data = file-ext:xml
+  \item[Example 5:] in\_data = +file:text/plain, *file:text/xml,
+  ?java.lang.String
+  \item[Example 6:] in\_data = ?my.package.SpecialClass
+\end{description}
+\end{quote}
+
+
+\subsection*{out\_data} 
+Specifies the formats and number of \class{Data} inputs
+the algorithm produces when successfully executed. The string is a comma
+separated list of data formats as defined in section \ref{dataSpec}. If no
+\class{Data} is output then the string ``null'' or not specifying the out\_data
+attribute at all is valid. If any data is optional, prefix the associated
+format with a ``?''. When producing the \class{Data} array, an optional
+\class{Data} element must be \class{null} if it is not produced. 
+
+\begin{quote}
+\begin{description}
+  \item[Example 1:] out\_data = null
+  \item[Example 2:] out\_data = java.lang.String
+  \item[Example 3:] out\_data = java.lang.String, file:text/plain, file:text/xml
+  \item[Example 4:] out\_data = file-ext:csv
+  \item[Example 5:] out\_data = +file:text/plain, *file:text/xml,
+  ?java.lang.String
+  \item[Example 6:] out\_data = ?my.package.SpecialClass
+\end{description}
+\end{quote}
+
+
+\subsection*{parentage}
+If this metadata element is used, it defines how the output \class{Data} produced
+by the algorithm should be arranged. \class{Data} items can be given a parent as
+part of their metadata (which usually means the \class{Data} was derived from the
+referenced \class{Data}). If parentage is set to ``default'' then each of the
+algorithm's output \class{Data} items will have their parent \class{Data} item
+set as the first input \class{Data} item (if applicable) by the
+CIShell-conforming application. If parentage is set to something else or is not
+set at all, then it is up to the algorithm to set up these relationships.
+
+\begin{quote}
+\begin{description}
+  \item[Example 1:] parentage = default 
+\end{description}
+\end{quote}
+
+
+\subsection*{type} 
+Specifies the type of the algorithm. If no type is set, then
+it is assumed to be of ``Standard Algorithm'' type. Which metadata keys to use
+and their exact meaning varies depending on the type of algorithm. The different
+algorithm types and their constraints are defined in section
+\ref{algConstraints}.
+
+\begin{quote}
+\begin{description}
+  \item[Example 1:] type = converter
+  \item[Example 2:] type = validator
+  \item[Example 3:] type = dataset 
+\end{description}
+\end{quote}
+
+
+\subsection*{remotable}
+Specifies if the algorithm can be run remotely. An algorithm can be run
+remotely if it only uses the services provided by the \class{CIShellContext}
+and does not create its own non-\class{GUIBuilderService}-built GUI. Valid
+strings are ``true'' or ``false''. If this metadata element is not set, then
+it is assumed that it cannot be run remotely.
+
+\begin{quote}
+\begin{description}
+  \item[Example 1:] remoteable = true 
+\end{description}
+\end{quote}
+
+
+\subsection*{label}
+Specifies a human-readable short name for the algorithm. What label is
+acceptable varies depending on the type of the algorithm. 
+
+\begin{quote}
+\begin{description}
+  \item[Example 1:] label = Load\ldots 
+\end{description}
+\end{quote}
+
+
+\subsection*{description}
+Provides more details on the workings of the algorithm. What
+description is acceptable varies depending on the type of the algorithm.
+
+\begin{quote}
+\begin{description}
+  \item[Example 1:] description = Loads selected data into the data manager. 
+\end{description}
+\end{quote}
+
+
+\subsection*{menu\_path}
+Specifies where on the menu an algorithm is to be
+placed if a menu bar is used. Otherwise, it can act as a primitive hierarchical
+classification of the algorithm. The string is a ``/'' separated list with
+each element in the list getting more specific. The last element in the list
+specifies a group for grouping algorithms in its final menu. Possible groups
+include: ``additions'' for default placement, ``start'' for being placed at
+the start of the menu, or ``end'' for being placed at the end of the menu.
+
+\begin{quote}
+\begin{description}
+  \item[Example 1:] menu\_path = File/additions
+  \item[Example 2:] menu\_path = Analysis/Undirected Networks/start
+  \item[Example 3:] menu\_path = Visualization/Networks/end
+\end{description}
+\end{quote}
+
+
+\subsection*{conversion}
+For converter algorithms, this metadata element specifies if any data is
+lost in the conversion. Possible values are ``lossy'' and ``lossless''. A
+description of what type of information is lost should be given in the
+``description'' metadata field.
+
+\begin{quote}
+\begin{description}
+  \item[Example 1:] conversion = lossy 
+\end{description}
+\end{quote}
+
+
+\subsection*{authors}
+A comma separated list of the authors of the abstract algorithm.
+
+\begin{quote}
+\begin{description}
+  \item[Example 1:] authors = Bruce W. Herr II
+  \item[Example 2:] authors = Bruce W. Herr II, Weixia Huang, Katy Borner 
+\end{description}
+\end{quote}
+
+
+\subsection*{implementers}
+A comma separated list of the developers who implemented the algorithm in code.
+
+\begin{quote}
+\begin{description}
+  \item[Example 1:] implementers = Bruce W. Herr II
+  \item[Example 2:] implementers = Bruce W. Herr II, Weixia Huang, Katy Borner 
+\end{description}
+\end{quote}
+
+
+\subsection*{integrators}
+A comma separated list of the developers who integrated the algorithm code as
+a compliant cishell algorithm.
+
+\begin{quote}
+\begin{description}
+  \item[Example 1:] integrators = Bruce W. Herr II
+  \item[Example 2:] integrators = Bruce W. Herr II, Weixia Huang, Katy Borner 
+\end{description}
+\end{quote}
+
+
+\subsection*{documentation\_url}
+A URL to relevant documentation for the algorithm.
+
+\begin{quote}
+\begin{description}
+  \item[Example 1:] documentation\_url = http://cishell.org/dev/ 
+\end{description}
+\end{quote}
+
+
+\subsection*{reference}
+A formal reference to a paper explaining the abstract algorithm.
+
+\begin{quote}
+\begin{description}
+  \item[Example 1:] reference = Herr, Bruce W. II, Huang, Weixia, Penumarthy,
+  Shashikant, B\"{o}rner, Katy. (2007) Designing Highly Flexible and Usable 
+  Cyberinfrastructures for Convergence. In William S. Bainbridge and Mihail C. 
+  Roco (Eds.) Progress in Convergence - Technologies for Human Wellbeing. 
+  Annals of the New York Academy of Sciences, Boston, MA, volume 1093, pp. 161-179.
+\end{description}
+\end{quote}
+
+
+\subsection*{reference\_url}
+A URL to a paper explaining the abstract algorithm.
+
+\begin{quote}
+\begin{description}
+  \item[Example 1:] reference\_url = http://cishell.org/papers/07-cishell.pdf 
+\end{description}
+\end{quote}
+
+
+\subsection*{written\_in}
+A comma separated list of the programming languages used to implement and
+integrate the algorithm code.
+
+\begin{quote}
+\begin{description}
+  \item[Example 1:] written\_in = Java
+  \item[Example 2:] written\_in = Java, C++ 
+\end{description}
+\end{quote}

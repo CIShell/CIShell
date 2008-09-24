@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metatype:MetaData xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.0.0">
+	<OCD name="Sample Jython Algorithm" id="org.cishell.templates.wizards.samplejythonalgorithm.OCD"
+		 description="A sample jython algorithm">
+		 	<AD name="Sample Attribute" id="sample_attr" type="Integer" description="Enter a positive integer" default="1" min="1" />
+	</OCD>
+	<Designate pid="org.cishell.templates.wizards.samplejythonalgorithm">
+		<Object ocdref="org.cishell.templates.wizards.samplejythonalgorithm.OCD" />
+	</Designate>
+</metatype:MetaData>

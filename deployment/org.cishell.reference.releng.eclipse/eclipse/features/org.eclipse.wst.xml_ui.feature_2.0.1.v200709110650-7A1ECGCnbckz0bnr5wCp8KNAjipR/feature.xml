@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.eclipse.wst.xml_ui.feature"
+      label="%featureName"
+      version="2.0.1.v200709110650-7A1ECGCnbckz0bnr5wCp8KNAjipR"
+      provider-name="%providerName">
+
+   <description>
+      %description
+   </description>
+
+   <copyright>
+      %copyright
+   </copyright>
+
+   <license url="%licenseURL">
+      %license
+   </license>
+
+   <url>
+      <update label="%updateSiteName" url="http://download.eclipse.org/webtools/updates/"/>
+      <discovery label="Web Tools Platform (WTP) Updates" url="http://download.eclipse.org/webtools/updates"/>
+   </url>
+
+   <includes
+         id="org.eclipse.wst.xml_userdoc.feature"
+         version="2.0.1.v200709110650-4-EGk_kE77Y7QI7EEEQ"/>
+
+   <includes
+         id="org.eclipse.wst.xml_core.feature"
+         version="2.0.1.v200709110650-787BE_1CYQCCz-CvRQLQSV"/>
+
+   <requires>
+      <import plugin="org.eclipse.core.resources" version="3.2.0" match="compatible"/>
+      <import plugin="org.eclipse.core.runtime" version="3.2.0" match="compatible"/>
+      <import plugin="org.eclipse.jface.text" version="3.2.0" match="compatible"/>
+      <import plugin="org.eclipse.ui.ide" version="3.2.0" match="compatible"/>
+      <import plugin="org.eclipse.ui.workbench.texteditor" version="3.2.0" match="compatible"/>
+      <import plugin="org.eclipse.wst.common.ui" version="1.1.0" match="equivalent"/>
+      <import plugin="org.eclipse.wst.dtd.core" version="1.1.0" match="equivalent"/>
+      <import plugin="org.eclipse.wst.sse.core" version="1.1.0" match="equivalent"/>
+      <import plugin="org.eclipse.wst.sse.ui" version="1.0.101" match="equivalent"/>
+      <import plugin="org.eclipse.wst.xml.core" version="1.1.0" match="equivalent"/>
+      <import plugin="org.eclipse.wst.xml.ui" version="1.0.100" match="equivalent"/>
+      <import plugin="org.eclipse.wst.common.uriresolver" version="1.1.0" match="equivalent"/>
+      <import plugin="org.eclipse.ui.views.properties.tabbed" version="3.2.0" match="compatible"/>
+      <import plugin="com.ibm.icu" version="3.4.4" match="compatible"/>
+      <import plugin="org.eclipse.debug.ui" version="3.2.0" match="compatible"/>
+      <import plugin="org.eclipse.ui.editors" version="3.2.0" match="compatible"/>
+      <import plugin="org.eclipse.search" version="3.2.0" match="compatible"/>
+      <import plugin="org.eclipse.ui" version="3.2.0" match="compatible"/>
+      <import plugin="org.eclipse.ui.views" version="3.2.0" match="compatible"/>
+      <import plugin="org.eclipse.wst.validation" version="1.1.0" match="equivalent"/>
+      <import plugin="org.eclipse.emf.common" version="2.2.0" match="compatible"/>
+      <import plugin="org.eclipse.wst.common.core" version="1.1.0" match="equivalent"/>
+      <import plugin="org.eclipse.gef" version="3.2.0" match="compatible"/>
+      <import plugin="org.eclipse.emf.ecore.edit" version="2.2.0" match="compatible"/>
+      <import plugin="org.eclipse.xsd.edit" version="2.2.0" match="compatible"/>
+      <import plugin="org.eclipse.emf.edit.ui" version="2.2.0" match="compatible"/>
+      <import plugin="org.eclipse.ltk.core.refactoring" version="3.2.0" match="compatible"/>
+      <import plugin="org.eclipse.ltk.ui.refactoring" version="3.2.0" match="compatible"/>
+      <import plugin="org.eclipse.wst.xsd.core" version="1.1.0" match="equivalent"/>
+   </requires>
+
+   <plugin
+         id="org.eclipse.wst.dtd.ui"
+         download-size="0"
+         install-size="0"
+         version="1.0.201.v200705302225"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.wst.dtd.ui.infopop"
+         download-size="0"
+         install-size="0"
+         version="1.0.2.v200706110217"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.wst.sse.ui.infopop"
+         download-size="0"
+         install-size="0"
+         version="1.0.102.v200706110217"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.wst.xml.ui.infopop"
+         download-size="0"
+         install-size="0"
+         version="1.0.2.v200706110217"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.wst.sse.ui"
+         download-size="0"
+         install-size="0"
+         version="1.0.303.v200709061102"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.wst.xml.ui"
+         download-size="0"
+         install-size="0"
+         version="1.0.301.v200709112242"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.wst.xsd.ui"
+         download-size="0"
+         install-size="0"
+         version="1.2.1.v200709112242"
+         unpack="false"/>
+
+</feature>

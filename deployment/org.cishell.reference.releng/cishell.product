@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?pde version="3.1"?>
+
+<product name="Cyberinfrastructure Shell" id="org.cishell.reference.gui.brand.cishell.cishell" application="org.cishell.reference.gui.workspace.CIShellApplication" useFeatures="true">
+
+   <aboutInfo>
+      <image path="icons/about.gif"/>
+      <text>
+         %blurb
+      </text>
+   </aboutInfo>
+
+   <configIni use="custom" path="/org.cishell.reference.gui.brand.cishell/extra-files/configuration/config.ini"/>
+
+   <launcherArgs>
+   </launcherArgs>
+
+   <windowImages/>
+
+   <splash
+      location="org.cishell.reference.gui.brand.cishell"
+      startupProgressRect="0,163,500,10" />
+   <launcher name="cishell">
+      <linux icon="/org.cishell.reference.gui.brand.cishell/icons/cishell.xpm"/>
+      <macosx icon="/org.cishell.reference.gui.brand.cishell/icons/cishell.icns"/>
+      <solaris/>
+      <win useIco="true">
+         <ico path="/org.cishell.reference.gui.brand.cishell/icons/cishell.ico"/>
+         <bmp
+            winSmallHigh="icons/ivc_sm_32.bmp"
+            winSmallLow="icons/ivc_sm_16.bmp"
+            winMediumHigh="icons/ivc_lg_32.bmp"
+            winMediumLow="icons/ivc_lg_16.bmp"
+            winLargeHigh="icons/ivc_xlg_32.bmp"
+            winLargeLow="icons/ivc_xlg_16.bmp"/>
+      </win>
+   </launcher>
+
+   <vm>
+   </vm>
+
+   <plugins>
+   </plugins>
+
+   <features>
+      <feature id="org.cishell.environment.equinox.feature" version="0.0.0"/>
+      <feature id="org.cishell.feature" version="0.3.0"/>
+      <feature id="org.cishell.reference.feature" version="0.4.0"/>
+      <feature id="org.cishell.reference.gui.feature" version="0.4.0"/>
+      <feature id="org.cishell.reference.gui.brand.feature" version="0.8.0"/>
+   </features>
+
+</product>

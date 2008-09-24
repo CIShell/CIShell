@@ -1,0 +1,123 @@
+%% Cyberinfrastructure Shell (CIShell) Core Specification
+%%
+%% Copyright 2006,2007,2008 Indiana University
+%%
+%% Licensed under the Apache License, Version 2.0 (the "License");
+%% you may not use this file except in compliance with the License.
+%% You may obtain a copy of the License at
+%%
+%%     http://www.apache.org/licenses/LICENSE-2.0
+%%
+%% Unless required by applicable law or agreed to in writing, software
+%% distributed under the License is distributed on an "AS IS" BASIS,
+%% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%% See the License for the specific language governing permissions and
+%% limitations under the License.
+%%
+%
+
+\chapter{Introduction}
+
+The Cyberinfrastructure Shell (CIShell) is an open source, community-driven
+platform for the integration and utilization of datasets, algorithms, tools, and
+computing resources. It is built specifically to enable (1) algorithm developers
+to write and disseminate their algorithms in their favorite programming language
+while retaining their intellectual rights after distribution; (2) data holders to
+easily disseminate their data for use by others; (3) application developers to
+design applications from custom sets of algorithms and datasets that interoperate
+seamlessly; and ultimately (4) end-users to use datasets and algorithms
+effectively.
+
+\section{Acknowledgements}
+
+The Cyberinfrastructure Shell was designed and developed at the
+Cyberinfrastructure for Network Science Center (CNSC) at Indiana University in
+Bloomington, Indiana. The specification and API was designed and authored by
+Bruce W. Herr II, but received input from all members of the CIShell team.
+Important contributors from the CIShell team include Katy B\"{o}rner (director of
+CNSC), Weixia Huang, Russell Duhon, Micah Linnemeier, and Timothy Kelley. Much of
+the design of CIShell draws on previous work by Shashikant Penumarthy, Bruce W.
+Herr II, and Katy B\"{o}rner on the Information Visualization Cyberinfrastructure
+(IVC). Thanks go out to all those who have used or contributed to IVC, CIShell,
+and the Network Workbench (the first project to use CIShell). Development of the
+Cyberinfrastructure Shell was funded by two grants from the National Science
+Foundation, NSF IIS-0238261 and NSF IIS-0513650.
+
+\section{CIShell Platform Overview}
+
+The CIShell Platform consists of Java interface definitions for algorithms, data,
+services for algorithm developers, and services for application developers. Much
+of the platform uses metadata and is fully defined.
+
+This specification and associated Java API are released under the Apache 2.0
+License.
+
+%The next version should have this section.
+%\section{What is New}
+
+%This is the first release of the CIShell Platform Specification. Future
+%versions will strive for backwards compatibility.
+
+\section{Reader Level}
+
+This specification is written for the following audiences:
+\begin{itemize}
+  \item Java algorithm developers
+  \item Non-Java algorithm developers
+  \item Framework and system service developers (system developers)
+  \item Application developers building on CIShell
+\end{itemize}
+
+The CIShell Specification assumes that the reader has at least one year of
+practical experience in writing Java programs. CIShell is built to run on the
+OSGi Service Platform Release 4\footnote{http://www.osgi.org/Release4/Download}
+and thus a working knowledge of OSGi is expected. OSGi (and thus CIShell) is
+highly dynamic and must be taken into consideration when developing anything on
+CIShell.
+
+Non-Java algorithm developers may not need to know any Java and should be mainly
+concerned with the metadata definitions for algorithms and data. They may also
+need to be aware of OSGi and the other services CIShell provides, but more than
+likely will not directly interact with them.
+
+\section{Conventions and Terms}
+
+In this specification, algorithms are referred to in three different contexts. An
+abstract algorithm is the pure idea of the algorithm with no actual source code.
+It is a series of steps sometimes put into pseudo-code and often published in
+academic journals. An \class{Algorithm} with a capital A refers to the Java class
+called Algorithm. And finally, an algorithm with a lowercase A refers to the
+bundle of code and metadata that encompasses an algorithm written to work with
+the CIShell Platform. This includes the implementation of
+\class{AlgorithmFactory} and \class{Algorithm}, and the metadata, files, and
+other code that go into an OSGi bundle.
+
+All other conventions and terms are exactly the same as from OSGi's Core
+Specification, section 1.4.
+
+\section{Version Information}
+
+This is the first release of the CIShell Platform Specification. All packages are
+at 1.0 for this release. Subsequent releases may increase the version number of
+specific packages if changes have been made.
+
+\begin{table}[h!]
+\begin{tabular}{l l l}
+\textbf{Item} & \textbf{Package} & \textbf{Version} \\
+Framework Specification & org.cishell.framework & Version 1.0 \\
+Algorithm Specification & org.cishell.framework.algorithm & Version 1.0 \\
+Data Specification & org.cishell.framework.data & Version 1.0 \\
+User Adjustable Preferences Specification & org.cishell.framework.userprefs &
+Version 1.0 \\
+Data Conversion Service Specification & org.cishell.service.conversion &
+Version 1.0 \\
+GUI Builder Service Specification & org.cishell.service.guibuilder & Version
+1.0 \\
+Data Manager Application Service Specification & org.cishell.app.datamanager &
+Version 1.0 \\
+Scheduler Application Service Specification & org.cishell.app.scheduler &
+Version 1.0 \\
+\end{tabular}
+\caption{Packages and Versions}
+\label{table:packageVersions}
+\end{table}

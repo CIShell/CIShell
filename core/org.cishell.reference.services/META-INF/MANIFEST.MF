@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Reference Services Starter
+Bundle-SymbolicName: org.cishell.reference.services
+Bundle-Version: 1.0.0
+Bundle-Activator: org.cishell.reference.services.Activator
+X-AutoStart: true
+Import-Package: org.cishell.app.service.datamanager;version="1.0.0",
+ org.cishell.app.service.scheduler;version="1.0.0",
+ org.cishell.framework;version="1.0.0",
+ org.cishell.reference.app.service.datamanager,
+ org.cishell.reference.app.service.scheduler,
+ org.cishell.reference.service.conversion,
+ org.cishell.service.conversion;version="1.0.0",
+ org.osgi.framework;version="1.3.0"

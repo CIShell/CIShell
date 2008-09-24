@@ -1,0 +1,15 @@
+#ModelParameters(0=without,1=with)#Aging disabled/enabled   1
+StartYear  1985
+EndYear 1989
+NumberofAuthorsin StartYear 10
+NumberofPapersinStartYear      100       
+Maximum Age of Authors (random)  10 
+Number of Topics (random) 60   
+Number of Authors to be Deleted per10Year(s)   5
+Growth in Number of Authors per1Year(s)   2 
+NumberOfpublicationsPerYear 5 
+NumberofCo-Authors 3	
+NumberofPapers Read each Year 5
+NumberofPapersCited each Year  5
+NumberofPapers Produced each Year 5
+NumberOfreferencesConsidered 5

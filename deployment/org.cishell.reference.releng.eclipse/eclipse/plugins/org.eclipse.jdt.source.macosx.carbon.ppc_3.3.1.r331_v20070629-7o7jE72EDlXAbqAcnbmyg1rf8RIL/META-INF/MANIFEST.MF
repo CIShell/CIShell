@@ -1,0 +1,23 @@
+Manifest-Version: 1.0
+Bundle-Version: 3.3.1.r331_v20070629-7o7jE72EDlXAbqAcnbmyg1rf8RIL
+Created-By: 1.4.2 (IBM Corporation)
+Bundle-SymbolicName: org.eclipse.jdt.source.macosx.carbon.ppc; singlet
+ on=true
+Bundle-Name: %pluginName
+Fragment-Host: org.eclipse.jdt.source;bundle-version="3.3.1.r331_v2007
+ 0629-7o7jE72EDlXAbqAcnbmyg1rf8RIL"
+Bundle-Localization: plugin
+Bundle-Vendor: %providerName
+Ant-Version: Apache Ant 1.7.0
+Eclipse-PlatformFilter: (& (osgi.ws=carbon) (osgi.os=macosx) (osgi.arc
+ h=ppc))
+
+Name: fragment.xml
+SHA1-Digest: lyCvCPJfg+w2XjG/WSlLT9rJmxo=
+
+Name: META-INF/eclipse.inf
+SHA1-Digest: KyT9FF7C7t86NoBoa2kZT3ZJBfw=
+
+Name: src/org.eclipse.jdt.launching.macosx_3.1.100.v20061211/src.zip
+SHA1-Digest: eFdNSYZACvI0BG9NP3wdeoK8L0A=
+

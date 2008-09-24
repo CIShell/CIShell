@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+
+<shortcuts>
+  <programGroup defaultName="${projectShortName}" location="applications"/>
+   <shortcut
+     name="${projectShortName}"
+     programGroup="yes"
+     desktop="yes"
+     applications="no"
+     startMenu="yes"
+     startup="no"
+     target="$INSTALL_PATH/${archivePrefix}"
+     commandLine=""
+     workingDirectory="$INSTALL_PATH"
+     description="${projectName}"
+     iconFile="$INSTALL_PATH/icon.xpm"
+     iconIndex="0"
+     type="Application"
+     encoding="UTF-8"
+     terminal="false"
+     KdeSubstUID="false"
+     initialState="normal">
+   </shortcut>
+</shortcuts>

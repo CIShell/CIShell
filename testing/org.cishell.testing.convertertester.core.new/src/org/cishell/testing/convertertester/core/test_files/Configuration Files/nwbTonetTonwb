@@ -1,0 +1,10 @@
+test_graphs=workspace/edu.iu.nwb.converter.tester/test_files/NWB Files
+test_converters=edu.iu.nwb.converter.nwb.reader.NWBValidation,
+edu.iu.nwb.converter.nwbpajeknet.NWBToPajeknet,
+edu.iu.nwb.converter.nwbpajeknet.PajeknetToNWB,
+edu.iu.nwb.converter.nwb.writer.NWBFileHandler
+comparison_converters=edu.iu.nwb.converter.nwb.reader.NWBValidation,
+edu.iu.nwb.converter.nwbgraphml.NWBToGraphML,
+edu.iu.nwb.converter.prefusegraphml.reader.PrefuseGraphMLReader
+nodeid_change=false
+extension=.nwb

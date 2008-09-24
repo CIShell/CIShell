@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>org.cishell.templates.standalone.executable</name>
+	<comment></comment>
+	<projects>
+		<project>org.cishell.reference.templates</project>
+	</projects>
+	<buildSpec>
+	</buildSpec>
+	<natures>
+	</natures>
+</projectDescription>

@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Scheduler GUI Plug-in
+Bundle-SymbolicName: org.cishell.reference.gui.scheduler;singleton:=true
+Bundle-Version: 1.0.0
+Bundle-Activator: org.cishell.reference.gui.scheduler.Activator
+Bundle-Localization: plugin
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime
+Eclipse-LazyStart: true
+Import-Package: org.cishell.app.service.scheduler,
+ org.cishell.framework,
+ org.cishell.framework.algorithm,
+ org.cishell.framework.data,
+ org.cishell.reference.gui.workspace
+Export-Package: org.cishell.reference.gui.scheduler

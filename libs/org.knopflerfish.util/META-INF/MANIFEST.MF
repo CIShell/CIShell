@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Knopflerfish Utility Bundle
+Bundle-SymbolicName: org.knopflerfish.util
+Bundle-Version: 2.0.4
+Export-Package: org.knopflerfish.util,
+ org.knopflerfish.util.framework,
+ org.knopflerfish.util.sort,
+ org.knopflerfish.util.workerthread
+Import-Package: org.osgi.framework; version="1.4.0"

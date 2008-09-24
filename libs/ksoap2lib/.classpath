@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry exported="true" sourcepath="/ksoap2" kind="lib" path="ksoap2-j2se-full-2.1.1.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

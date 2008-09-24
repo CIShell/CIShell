@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="org.cishell.tests.conversion1.AlgB.component" immediate="false">
+	<implementation class="org.cishell.tests.conversion1.AlgB"/>
+	<properties entry="OSGI-INF/algorithmB.properties"/>
+	<reference name="LOG" interface="org.osgi.service.log.LogService"/>
+	
+	<service>
+		<provide interface=
+			"org.cishell.framework.algorithm.AlgorithmFactory"/>
+		<provide interface=
+			"org.cishell.framework.algorithm.DataValidator"/>
+	</service>
+</component>

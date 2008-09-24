@@ -1,0 +1,74 @@
+%% Cyberinfrastructure Shell (CIShell) Core Specification
+%%
+%% Copyright 2006,2007,2008 Indiana University
+%%
+%% Licensed under the Apache License, Version 2.0 (the "License");
+%% you may not use this file except in compliance with the License.
+%% You may obtain a copy of the License at
+%%
+%%     http://www.apache.org/licenses/LICENSE-2.0
+%%
+%% Unless required by applicable law or agreed to in writing, software
+%% distributed under the License is distributed on an "AS IS" BASIS,
+%% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%% See the License for the specific language governing permissions and
+%% limitations under the License.
+%%
+%
+
+\documentclass[11pt,letterpaper]{report}
+
+\usepackage{ifpdf}
+
+\ifpdf %PDF Specific Setup
+\usepackage[pdftex]{graphicx}
+\usepackage[pdftex]{hyperref}
+\hypersetup{
+    pdftitle={Cyberinfrastructure Shell (CIShell) - Core Specification 1.0},
+    pdfsubject={Cyberinfrastructure Shell (CIShell) - Core Specification 1.0},
+    pdfauthor={Bruce W. Herr II},
+    pdfnewwindow=true% links in new window
+}
+\else %DVI Specific Setup
+\usepackage{graphicx}
+\usepackage{hyperref}
+\fi
+
+\usepackage[top=1in, left=1in, right=1in, bottom=1in]{geometry}
+
+\DeclareGraphicsExtensions{.pdf,.png,.jpg,.mps,.eps}
+\usepackage{color}
+
+\usepackage{../mystyle}
+\input{./tex/api.tex}
+
+\raggedright
+
+\begin{document}
+
+\input{./tex/title.tex}
+\tableofcontents{}
+
+\input{./tex/introduction.tex}
+\input{./tex/framework.tex}
+\input{./tex/osgidependencies.tex}
+\input{./tex/algorithms.tex}
+\input{./tex/algorithmtypes.tex}
+\input{./tex/data.tex}
+\input{./tex/guidefinition.tex}
+\input{./tex/useradjustableprefs.tex}
+\orgcishellframework{}
+\orgcishellframeworkalgorithm{}
+\orgcishellframeworkdata{}
+\orgcishellframeworkuserprefs{}
+
+\input{./tex/dataconversionservice.tex}
+\input{./tex/guibuilderservice.tex}
+\input{./tex/logservice.tex}
+\input{./tex/preferencesservice.tex}
+\input{./tex/datamanagerservice.tex}
+\input{./tex/schedulerservice.tex}
+
+\input{./tex/license.tex}
+
+\end{document}

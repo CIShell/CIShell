@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="$algFullClass$.component" immediate="false">
+	<implementation class="$algFullClass$Factory"/>
+	<properties entry="OSGI-INF/algorithm.properties"/>
+	
+	<service>
+		<provide interface=
+			"org.cishell.framework.algorithm.AlgorithmFactory"/>
+	</service>
+</component>

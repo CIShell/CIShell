@@ -1,0 +1,11 @@
+#!/bin/sh
+
+echo $2 $4
+
+echo "$2" > blah.txt
+echo "$4" > blah2.txt
+
+
+
+
+

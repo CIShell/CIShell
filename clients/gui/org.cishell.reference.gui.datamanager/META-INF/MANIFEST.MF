@@ -1,0 +1,18 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Data Manager GUI Plug-in
+Bundle-SymbolicName: org.cishell.reference.gui.datamanager;singleton:=true
+Bundle-Version: 1.0.0
+Bundle-Activator: org.cishell.reference.gui.datamanager.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime
+Import-Package: org.cishell.app.service.datamanager;version="1.0.0",
+ org.cishell.framework;version="1.0.0",
+ org.cishell.framework.algorithm;version="1.0.0",
+ org.cishell.framework.data;version="1.0.0",
+ org.cishell.reference.gui.datamanager,
+ org.cishell.reference.gui.workspace,
+ org.cishell.service.guibuilder;version="1.0.0",
+ org.osgi.service.log;version="1.3.0"
+Export-Package: org.cishell.reference.gui.datamanager
+Bundle-ActivationPolicy: lazy

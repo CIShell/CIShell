@@ -1,0 +1,55 @@
+%% Cyberinfrastructure Shell (CIShell) Core Specification
+%%
+%% Copyright 2006,2007,2008 Indiana University
+%%
+%% Licensed under the Apache License, Version 2.0 (the "License");
+%% you may not use this file except in compliance with the License.
+%% You may obtain a copy of the License at
+%%
+%%     http://www.apache.org/licenses/LICENSE-2.0
+%%
+%% Unless required by applicable law or agreed to in writing, software
+%% distributed under the License is distributed on an "AS IS" BASIS,
+%% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%% See the License for the specific language governing permissions and
+%% limitations under the License.
+%%
+%
+
+\section{OSGi Dependencies}
+
+CIShell is built to be run in a fully compliant OSGi Service Platform R4
+implementation. In addition to the base OSGi implementation, several
+optional OSGi services are required to be available in a fully compliant CIShell
+implementation. Each additional required service is described in the OSGi
+Service Platform Service Compendium
+R4\footnote{http://www.osgi.org/Release4/Download}.
+
+\subsection*{Required Services}
+\begin{description}
+  \item[Metatype Service] is described in OSGi section 105 ``Metatype Service
+  Specification.'' This service is used by CIShell to find
+  \class{MetaTypeProviders} for user interface specification, user-adjustable
+  preferences, and input parameters. It also provides an XML format for
+  automatically generating \class{MetaTypeProvider}s which the 
+  \class{MetaTypeService} harvests for use.
+  \item[Log Service] is described in OSGi section 101 ``Log Service 
+  Specification.'' This service is used as a universal logging system for 
+  algorithms and services. See chapter \ref{logService} for more details.   
+  \item[Preferences Service] is described in OSGi section 106 ``Preferences
+  Service Specification.'' This service is used as a universal preference
+  storage system for algorithms and services. See chapter \ref{preferencesService} for
+  more details.
+  \item[Configuration Admin Service] is described in OSGi section 104
+  ``Configuration Admin Service Specification.'' This service is used as a
+  manager/provider of configuration information for bundles and services. It is 
+  useful for meeting the User Adjustable Preferences (section
+  \ref{userPrefsSpec}) requirements.
+\end{description}
+
+\subsection*{Recommended Services}
+\begin{description}
+  \item[Declarative Services] is described in OSGi section 112 ``Declarative
+  Services Specification.'' This service can be used by CIShell algorithms to
+  simplify algorithm service registration and for finding necessary auxilary services.
+\end{description}

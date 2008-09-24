@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- prefuse TreeML Writer | Mon Jul 02 11:17:57 EDT 2007 -->
+<tree>
+  <declarations>
+    <attributeDecl name="label" type="String"/>
+  </declarations>
+
+  <branch>
+    <attribute name="label" value="mwlinnem"/>
+    <leaf>
+      <attribute name="label" value=".emacs.d"/>
+    </leaf>
+    <leaf>
+      <attribute name="label" value=".gconf"/>
+    </leaf>
+    <leaf>
+      <attribute name="label" value=".gconfd"/>
+    </leaf>
+    <leaf>
+      <attribute name="label" value=".gnome2"/>
+    </leaf>
+    <leaf>
+      <attribute name="label" value=".gnome2_private"/>
+    </leaf>
+    <leaf>
+      <attribute name="label" value=".metacity"/>
+    </leaf>
+    <leaf>
+      <attribute name="label" value=".update-notifier"/>
+    </leaf>
+    <leaf>
+      <attribute name="label" value=".nautilus"/>
+    </leaf>
+    <leaf>
+      <attribute name="label" value="Desktop"/>
+    </leaf>
+    <leaf>
+      <attribute name="label" value=".gnome"/>
+    </leaf>
+    <leaf>
+      <attribute name="label" value=".gstreamer-0.10"/>
+    </leaf>
+    <leaf>
+      <attribute name="label" value="bin"/>
+    </leaf>
+    <leaf>
+      <attribute name="label" value=".mozilla"/>
+    </leaf>
+    <leaf>
+      <attribute name="label" value="Download_Dump"/>
+    </leaf>
+    <leaf>
+      <attribute name="label" value=".Trash"/>
+    </leaf>
+    <leaf>
+      <attribute name="label" value=".local"/>
+    </leaf>
+    <leaf>
+      <attribute name="label" value=".subversion"/>
+    </leaf>
+    <leaf>
+      <attribute name="label" value="jdk1.6.0_01"/>
+    </leaf>
+    <leaf>
+      <attribute name="label" value="eclipse"/>
+    </leaf>
+    <leaf>
+      <attribute name="label" value="workspace"/>
+    </leaf>
+    <leaf>
+      <attribute name="label" value="nwb"/>
+    </leaf>
+    <leaf>
+      <attribute name="label" value=".openoffice.org2"/>
+    </leaf>
+    <leaf>
+      <attribute name="label" value="logs"/>
+    </leaf>
+    <leaf>
+      <attribute name="label" value=".gimp-2.2"/>
+    </leaf>
+    <leaf>
+      <attribute name="label" value=".fontconfig"/>
+    </leaf>
+    <leaf>
+      <attribute name="label" value="runtime-EclipseApplication"/>
+    </leaf>
+    <leaf>
+      <attribute name="label" value=".thumbnails"/>
+    </leaf>
+    <leaf>
+      <attribute name="label" value="converterTesterTemp"/>
+    </leaf>
+  </branch>
+</tree>

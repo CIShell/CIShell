@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metatype:MetaData xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.0.0">
+	<OCD name="%name" id="org.cishell.reference.remoting.frontend.client"
+		 description="%name_desc">
+		<AD name="%host" id="org.cishell.reference.remoting.frontend.client.host" type="String" 
+			default="localhost" description="%host_desc" />
+		<AD name="%port" id="org.cishell.reference.remoting.frontend.client.port" type="Integer" 
+			default="8180" description="%port_desc" />
+	</OCD>
+	<Designate pid="default.id">
+		<Object ocdref="org.cishell.reference.remoting.frontend.client" />
+	</Designate>
+</metatype:MetaData>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metatype:MetaData xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.0.0">
+<!-- SAMPLE
+	<OCD name="SER Test" id="org.cishell.templates.sampleAlg.gui"
+		 description="Testing gui creation w/ SER">
+		<AD name="A String" id="myString" type="String" default="stringiness"/>
+	</OCD>
+	<Designate pid="org.cishell.templates.sampleAlg">
+		<Object ocdref="org.cishell.templates.sampleAlg.gui" />
+	</Designate>
+ -->
+</metatype:MetaData>

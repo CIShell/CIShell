@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: CIShell Reference GUI Workspace Plug-in
+Bundle-SymbolicName: org.cishell.reference.gui.workspace; singleton:=true
+Bundle-Version: 1.0.0
+Bundle-Activator: org.cishell.reference.gui.workspace.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.update.ui
+Eclipse-LazyStart: true
+Export-Package: org.cishell.reference.gui.common,
+ org.cishell.reference.gui.workspace
+Import-Package: org.cishell.reference.gui.guibuilder.swt,
+ org.cishell.service.guibuilder

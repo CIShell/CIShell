@@ -1,0 +1,54 @@
+%% Cyberinfrastructure Shell (CIShell) Core Specification
+%%
+%% Copyright 2006,2007,2008 Indiana University
+%%
+%% Licensed under the Apache License, Version 2.0 (the "License");
+%% you may not use this file except in compliance with the License.
+%% You may obtain a copy of the License at
+%%
+%%     http://www.apache.org/licenses/LICENSE-2.0
+%%
+%% Unless required by applicable law or agreed to in writing, software
+%% distributed under the License is distributed on an "AS IS" BASIS,
+%% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%% See the License for the specific language governing permissions and
+%% limitations under the License.
+%%
+%
+
+\section{Data Specification}
+\label{dataSpec}
+\subsection*{\textit{Version 1.0}}
+\subsection{Introduction}
+
+Data to be operated on is passed around in \class{Data} objects which hold the
+real data, the data's format, and the data's properties (metadata). The real
+data can be any Java \class{Object}. The format is a string describing the 'format' of the
+data, see next section. Finally, the properties help describe the data. The label
+to give the data, the parent \class{Data} object from which it was derived from,
+and a coarse data type can all be defined in the \class{Data}'s properties. See
+the \class{DataProperty} interface definition for specific properties to use.
+
+\subsection{Data Format Specification}
+
+Data formats are used by algorithms specifying what \class{Data} items are
+consumed/producted and \class{Data} objects must know what the format of its
+contained real data is. This format is simply a string that says what the
+format of the real data is. If the real data is a \class{java.io.File}, use a
+MIME type\footnote{If no official mime type is available for a file format, a
+made up one can be used, but must still conform to how mime types are
+constructed, see RFCs 3023 (http://tools.ietf.org/html/rfc3023) and 4288
+(http://tools.ietf.org/html/rfc4288).} prefixed by ``file:'', i.e.,
+``file:\textit{mime/type}''. If the real data is a \class{java.io.File} known
+only by file extension (only applicable for validator algorithms), use the format
+``file-ext:\textit{file-extension}''. Otherwise, if the real data is a Java
+\class{Object}, use the full Java class as a string, i.e., ``java.lang.String''
+or ``my.package.SpecialClass''.
+
+To specify that a single \class{Data} object contains one or more
+sub-\class{Data} objects of a single format, prefix the type with a ``+''. For
+zero or more, prefix the type with a ``*''. This corresponds to a \class{Data}
+object that is wrapping multiple (zero or one or more depending on the prefix)
+other \class{Data} objects of the associated format in a Java array
+(\class{Data[]}) stored as its contained real data. This is useful for
+algorithms that can work on a variable number of \class{Data} items.
