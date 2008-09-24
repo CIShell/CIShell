@@ -82,8 +82,12 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 		if (context != null) {
 			Display.getDefault().asyncExec(new Runnable() {
 				public void run() {
+					/* 
+					 * 
+					 */
 					Action scheduler = new SchedulerAction();
 					IMenuManager manager = CIShellApplication.getMenuManager();
+					
 					
 					IMenuManager newManager = null;
 					for (int i = 0; i < ATTEMPTS_TO_FIND_TOOLBAR && newManager == null; i++) {
@@ -99,16 +103,21 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 					
 					if (manager == null) {
 						System.err.println( "Unable to add Scheduler to Tools menu, since Tools menu does not exist.");
+					} else {
+						manager.appendToGroup("start", scheduler);
 					}
-					
-					manager.appendToGroup("start", scheduler);
 					SchedulerView view = SchedulerView.getDefault();
 					boolean visible = view != null
 							&& PlatformUI.getWorkbench()
 									.getActiveWorkbenchWindow().getActivePage()
 									.isPartVisible(view);
 					scheduler.setChecked(visible);
-					CIShellApplication.getMenuManager().update(true);
+					IMenuManager otherManagerReference = CIShellApplication.getMenuManager();
+					if(otherManagerReference == null) {
+						System.err.println("The menu manager is still null. Surprise.");
+					} else {
+						otherManagerReference.update(true);
+					}
 				}
 			});
 			waitForBundleContext = false;
