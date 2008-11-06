@@ -74,7 +74,9 @@ public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProp
         try {
 			dm = alg.execute();
 		} catch (AlgorithmExecutionException e1) {
-			throw new ConversionException(e1);
+			throw new ConversionException("Exception occurred while converting data \r\n" + e1.getMessage(),e1);
+		} catch (Exception e2) {
+			throw new ConversionException("Exception occurred while converting data \r\n" + e2.getMessage(), e2);
 		}
         
         Object outData = null;
