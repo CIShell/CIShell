@@ -44,7 +44,7 @@ public class CIShellPreferenceStore implements IPersistentPreferenceStore {
 	}
 
 	public boolean getBoolean(String name) {
-		return Boolean.parseBoolean((String) this.prefDict.get(name));
+		return (Boolean.valueOf((String) this.prefDict.get(name))).booleanValue();
 	}
 
 	public boolean getDefaultBoolean(String name) {
