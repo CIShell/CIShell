@@ -1,16 +1,17 @@
 package org.cishell.reference.gui.log;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.Calendar;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 import org.osgi.service.log.LogEntry;
 import org.osgi.service.log.LogListener;
-
-import java.util.Calendar;
-import java.util.logging.FileHandler;
-import java.util.logging.Logger;
-import java.util.logging.Level;
-import java.util.logging.SimpleFormatter;
-import java.io.IOException;
 
 /**
  * This is a basic implementation. It writes log records to files
@@ -89,8 +90,21 @@ public class LogToFile implements LogListener {
     		javaLogLevel = Level.INFO;
     	}  // edited by Felix Terkhorn.  terkhorn@gmail.com   May-9-2007
     	
-    	if (goodMessage(message)){
-    		logger.log(javaLogLevel, message+"\n"); // stdout printing happens here, despite having 1 handler only
+    	// Log the exception?
+    	Throwable throwableToBeLogged = entry.getException();
+    	
+    	// Log the exception's stack trace?
+    	if (throwableToBeLogged != null) {
+    		// TODO: Log to a different file?  This would possibly be where we'd
+    		// check the preferences/etc.
+    		StringWriter stackTraceStringWriter = new StringWriter();
+    		
+    		throwableToBeLogged.printStackTrace(new PrintWriter(stackTraceStringWriter));
+    		logger.log(javaLogLevel, "Stace Trace: " + stackTraceStringWriter.toString() + "\r\n");
+    	}
+    	
+    	if (goodMessage(message)) {
+    		logger.log(javaLogLevel, message + "\r\n"); // stdout printing happens here, despite having 1 handler only
     	}
     }
     
