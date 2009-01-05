@@ -176,7 +176,7 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
 			outData = algorithm.execute();
 		} catch (AlgorithmExecutionException e) {
 			log(LogService.LOG_ERROR, "The Algorithm: \"" + ref.getProperty(AlgorithmProperty.LABEL)
-					+ "\" had an error while executing: " + e.getMessage());
+					+ "\" had an error while executing: " + e.getMessage(), e);
 		} catch (RuntimeException e) {
 			GUIBuilderService builder = (GUIBuilderService) ciContext.getService(GUIBuilderService.class.getName());
 
@@ -258,7 +258,7 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
 					provider = new BasicMetaTypeProvider(ocd);
 				}
 			} catch (IllegalArgumentException e) {
-				log(LogService.LOG_DEBUG, pid + " has an invalid metatype id: " + metatypePID);
+				log(LogService.LOG_DEBUG, pid + " has an invalid metatype id: " + metatypePID, e);
 			} catch (Exception e) {
 				GUIBuilderService builder = (GUIBuilderService) ciContext.getService(GUIBuilderService.class.getName());
 				String errorMessage = "An error occurred while preparing to run the algorithm  "
