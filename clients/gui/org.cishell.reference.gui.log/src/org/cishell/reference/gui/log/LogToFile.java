@@ -90,21 +90,9 @@ public class LogToFile implements LogListener {
     		javaLogLevel = Level.INFO;
     	}  // edited by Felix Terkhorn.  terkhorn@gmail.com   May-9-2007
     	
-    	// Log the exception?
-    	Throwable throwableToBeLogged = entry.getException();
-    	
-    	// Log the exception's stack trace?
-    	if (throwableToBeLogged != null) {
-    		// TODO: Log to a different file?  This would possibly be where we'd
-    		// check the preferences/etc.
-    		StringWriter stackTraceStringWriter = new StringWriter();
-    		
-    		throwableToBeLogged.printStackTrace(new PrintWriter(stackTraceStringWriter));
-    		logger.log(javaLogLevel, "Stace Trace: " + stackTraceStringWriter.toString() + "\r\n");
-    	}
-    	
     	if (goodMessage(message)) {
-    		logger.log(javaLogLevel, message + "\r\n"); // stdout printing happens here, despite having 1 handler only
+    		// stdout printing happens here, despite having 1 handler only.
+    		logger.log(javaLogLevel, message + "\r\n", entry.getException());
     	}
     }
     
