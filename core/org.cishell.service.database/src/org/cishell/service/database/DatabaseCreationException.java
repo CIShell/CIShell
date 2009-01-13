@@ -1,4 +1,4 @@
-package org.cishell.service.database.databasefactory;
+package org.cishell.service.database;
 
 public class DatabaseCreationException extends Exception {
 	
