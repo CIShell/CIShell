@@ -9,5 +9,5 @@ Import-Package: org.osgi.framework,
  org.osgi.service.metatype,
  org.osgi.service.prefs
 Export-Package: 
- org.cishell.service.database.databasefactory
+ org.cishell.service.database
 Bundle-ActivationPolicy: lazy

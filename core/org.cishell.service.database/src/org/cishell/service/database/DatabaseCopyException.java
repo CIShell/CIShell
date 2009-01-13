@@ -11,7 +11,7 @@
  * Contributors:
  *     Indiana University - 
  * ***************************************************************************/
-package org.cishell.service.database.databasefactory;
+package org.cishell.service.database;
 
 public class DatabaseCopyException extends Exception {
 	
