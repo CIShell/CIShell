@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: CIShell Platform API
-Bundle-SymbolicName: org.cishell.framework
+Bundle-SymbolicName: org.cishell.service.database
 Bundle-Version: 1.0.0
 Bundle-Vendor: Cyberinfrastructure for Network Science Center
 Import-Package: org.cishell.framework,
