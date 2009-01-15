@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<classpath>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
-	<classpathentry kind="lib" path="/home/mwlinnem/apps/eclipse/plugins/org.eclipse.osgi.services_3.1.200.v20071203.jar"/>
-	<classpathentry kind="lib" path="/home/mwlinnem/apps/eclipse/plugins/org.eclipse.osgi_3.4.0.v20080605-1900.jar"/>
-	<classpathentry kind="output" path="bin"/>
-</classpath>
