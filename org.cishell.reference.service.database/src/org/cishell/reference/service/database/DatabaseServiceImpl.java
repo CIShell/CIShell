@@ -1,5 +1,6 @@
 package org.cishell.reference.service.database;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Dictionary;
 
@@ -88,6 +89,11 @@ public class DatabaseServiceImpl implements DatabaseService {
 	}
 	
 	public DataSource copyDatabase(DataSource database) throws DatabaseCopyException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public DataSource createDatabase(ResultSet resultSet) throws DatabaseCreationException {
 		// TODO Auto-generated method stub
 		return null;
 	}
