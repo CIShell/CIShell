@@ -81,4 +81,10 @@ public interface DataProperty {
     
     /** Says this data model is abstractly a data plot */
     public static String PLOT_TYPE = "Plot";
+    
+    /** Says this data model is a PostScript file */
+    public static String POST_SCRIPT_TYPE = "PostScript";
+    
+    /** Says this data model is a JPEG object */
+    public static String IMAGE_OBJECT_TYPE = "Image Object";
 }
