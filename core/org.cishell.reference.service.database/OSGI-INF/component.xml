@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component name="org.cishell.reference.service.database.DatabaseService.component" immediate="true">
-	<implementation class="org.cishell.reference.service.database.DatabaseServiceImpl.component"/>
+	<implementation class="org.cishell.reference.service.database.DatabaseServiceImpl"/>
 	<properties entry="OSGI-INF/service.properties"/>
 	<reference name="LOG" interface="org.osgi.service.log.LogService"/>
 		
@@ -9,6 +9,3 @@
 			"org.cishell.service.database.DatabaseService"/>
 	</service>
 </component>
-
-
-		
