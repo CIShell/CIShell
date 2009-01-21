@@ -1,7 +1,7 @@
 package org.cishell.reference.service.database;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Hashtable;
 
 import org.apache.commons.dbcp.ConnectionFactory;
 import org.apache.commons.dbcp.DriverManagerConnectionFactory;
@@ -10,15 +10,15 @@ import org.apache.commons.dbcp.PoolingDataSource;
 import org.apache.commons.pool.KeyedObjectPoolFactory;
 import org.apache.commons.pool.impl.GenericKeyedObjectPoolFactory;
 import org.apache.commons.pool.impl.GenericObjectPool;
-import org.cishell.framework.algorithm.AlgorithmExecutionException;
 import org.cishell.service.database.DataSourceWithID;
-import org.cishell.service.database.DatabaseCopyException;
 import org.cishell.service.database.DatabaseCreationException;
 import org.cishell.service.database.DatabaseService;
-import org.osgi.service.component.ComponentContext;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.log.LogService;
 
-public class DatabaseServiceImpl implements DatabaseService {
+public class DatabaseServiceImpl implements DatabaseService, BundleActivator {
 	/* TODO: These variables should be abstracted out in a Preferences page at some
 	   point (I guess).
 	*/
@@ -35,26 +35,46 @@ public class DatabaseServiceImpl implements DatabaseService {
 	 */
 	private static int dbNameCounter = 0;
 	
-	private static PoolingDataSource poolingDataSource = null;
+	private ServiceRegistration databaseServiceRegistration;
+	
+	private PoolingDataSource poolingDataSource = null;
+	// TODO: Needed?  I just want to make sure nothing goes wrong for now.
+	private DataSourceWithID myDataSource = null;
 	
 	private String driver;
-	private LogService logger;
 	
-	protected void activate(ComponentContext ctxt) {
+	public void start(BundleContext context) throws Exception {
 		this.driver = DEFAULT_DRIVER_NAME;
-		this.logger = (LogService)ctxt.locateService("LOG");
+		
+		System.err.println("starting!");
+		
+		// Register me as a service! (This doesn't work?)
+		databaseServiceRegistration = context.registerService
+			(DatabaseService.class.getName(), this, new Hashtable());
+		
+		// Get MY data source!  It's mine, and you can't have it!
+		try {
+			myDataSource = createDatabase();
+		}
+		catch (DatabaseCreationException e) {
+			System.err.println(":'( " + e.getMessage());
+			throw e;
+		}
+		
+		System.err.println("meep?");
 	}
 
-	protected void deactivate(ComponentContext ctxt) {
+	public void stop(BundleContext context) throws Exception {
 	}
 	
 	// If one hasn't been created yet, create a connection pool and return it.
-	private PoolingDataSource getConnectionPool() throws AlgorithmExecutionException
+	private PoolingDataSource getConnectionPool() throws DatabaseCreationException
 	{
 		if (poolingDataSource != null)
 			return poolingDataSource;
 		
     	try {
+    		System.err.println("Loading driver");
     		// This loads the database driver.
     		Class.forName(DEFAULT_DRIVER_NAME);
     		
@@ -66,6 +86,8 @@ public class DatabaseServiceImpl implements DatabaseService {
     		String newDatabaseConnectionURL = DEFAULT_PROTOCOL +
     										  newDatabaseName +
     										  DEFAULT_CREATE_CONNECTION_STRING;
+    		
+    		System.err.println("connection url: " + newDatabaseConnectionURL);
     		
     		// This connection factory actually uses the loaded database driver to
     		// generate connections.
@@ -96,16 +118,12 @@ public class DatabaseServiceImpl implements DatabaseService {
 				poolingDataSource.getConnection().close();
 			}
 			catch (SQLException e) {
-				this.logger.log(LogService.LOG_WARNING,
-								"Problem opening test connection.",
-								e);
-				
-				throw new AlgorithmExecutionException
+				throw new DatabaseCreationException
 					("Could not properly initiate database.", e);
 			}
 		}
     	catch (ClassNotFoundException e) {
-			throw new AlgorithmExecutionException
+			throw new DatabaseCreationException
 				("Database driver (" + driver + ") could not be found", e);
 		}
     	
@@ -113,20 +131,6 @@ public class DatabaseServiceImpl implements DatabaseService {
 	}
 
 	public DataSourceWithID createDatabase() throws DatabaseCreationException {
-		DataSourceWithID dataSource = null;
-    	
-    	return dataSource;
-	}
-	
-	public DataSourceWithID copyDatabase(DataSourceWithID database)
-			throws DatabaseCopyException {
-		// TODO Auto-generated method stub.
-		return null;
-	}
-
-	public DataSourceWithID createDatabase(ResultSet resultSet)
-			throws DatabaseCreationException {
-		// TODO Auto-generated method stub
-		return null;
+		return new DataSourceWithID(getConnectionPool());
 	}
 }
