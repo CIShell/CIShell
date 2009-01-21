@@ -6,7 +6,7 @@ import javax.sql.DataSource;
 
 public interface DatabaseService {
 
-	public DataSource createDatabase() throws DatabaseCreationException;
-	public DataSource createDatabase(ResultSet resultSet) throws DatabaseCreationException;
-	public DataSource copyDatabase(DataSource database) throws DatabaseCopyException;
+	public DataSourceWithID createDatabase() throws DatabaseCreationException;
+	public DataSourceWithID createDatabase(ResultSet resultSet) throws DatabaseCreationException;
+	public DataSourceWithID copyDatabase(DataSourceWithID database) throws DatabaseCopyException;
 }
