@@ -1,7 +1,14 @@
 package org.cishell.reference.service.database;
 
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Hashtable;
+
+import javax.sql.DataSource;
 
 import org.apache.commons.dbcp.ConnectionFactory;
 import org.apache.commons.dbcp.DriverManagerConnectionFactory;
@@ -15,8 +22,10 @@ import org.cishell.service.database.DatabaseCreationException;
 import org.cishell.service.database.DatabaseService;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.service.log.LogService;
+
+
 
 public class DatabaseServiceImpl implements DatabaseService, BundleActivator {
 	/* TODO: These variables should be abstracted out in a Preferences page at some
@@ -28,12 +37,7 @@ public class DatabaseServiceImpl implements DatabaseService, BundleActivator {
 	private static final String DEFAULT_CREATE_CONNECTION_STRING = ";create=true";
 	private static final String DEFAULT_DB_NAME = "ultra_sasquatch";
 	
-	// Give each db a unique (but meaningless) name by counting up from 0 for each
-	// new database.
-	/* TODO: Using a rolling counter like this may have bad implications later on,
-	   but it's decent for now.
-	 */
-	//Not used for now
+	//db name must be unique per running instance of the same NWB installation, otherwise they will overlap
 	private static int dbNameCounter = 0;
 	
 	private ServiceRegistration databaseServiceRegistration;
@@ -53,6 +57,17 @@ public class DatabaseServiceImpl implements DatabaseService, BundleActivator {
 		databaseServiceRegistration = context.registerService
 			(DatabaseService.class.getName(), this, new Hashtable());
 		
+		ServiceReference ref = context.getServiceReference(DatabaseService.class.getName());
+		if (ref == null) {
+			System.out.println("REEEEEEEEEEEEEEEEEEEEEEEFFFFFFF IS NUUUUUUUULLLLLLL!!@!(@!(!)!");
+		}
+		DatabaseService dbService = (DatabaseService) context.getService(ref);
+		if (dbService == null) {
+			System.out.println("DEEEBEESEERVICE IS NUUUUL!L!@L!@!@!@@!@!@L..1");
+		} else {
+			
+		}
+		
 		// Get MY data source!  It's mine, and you can't have it!
 		try {
 			myDataSource = createDatabase();
@@ -63,13 +78,43 @@ public class DatabaseServiceImpl implements DatabaseService, BundleActivator {
 		}
 		
 		System.err.println("meep?");
+		cleanOutDatabaseTables();
+	}
+	
+	private void cleanOutDatabaseTables() throws Exception {
+		//TODO: We need to be cleaning up and starting the DB correctly
+		//TODO: Clean this up
+		   DataSource ds = getDataSource();
+		   Connection c = ds.getConnection();
+		   DatabaseMetaData dmd = c.getMetaData();
+		   ResultSet tableNames = dmd.getTables(null, null, null, null);
+		   while (tableNames.next()) {
+			   for (int ii = 1; ii <= tableNames.getMetaData().getColumnCount(); ii++) {
+				   String tableContents = tableNames.getString(ii);
+				   System.out.print(tableContents + ", ");
+			   }
+			   if (tableNames.getString(2).indexOf("APP") != -1) {
+				   System.out.println("MAGOOT!");
+				   Statement s = c.createStatement();
+				   System.out.println(tableNames.getString(3));
+				   System.out.println(s.executeUpdate("DROP TABLE APP." + tableNames.getString(3)));
+				   
+			   }
+			   System.out.println("");
+		   }
 	}
 
 	public void stop(BundleContext context) throws Exception {
+		   cleanOutDatabaseTables();
+		   try {
+	       DriverManager.getConnection("jdbc:derby:;shutdown=true");
+		   } catch (Exception e) {
+			   
+		   }
 	}
 	
 	// If one hasn't been created yet, create a connection pool and return it.
-	private PoolingDataSource getConnectionPool() throws DatabaseCreationException
+	private PoolingDataSource getDataSource() throws DatabaseCreationException
 	{
 		if (poolingDataSource != null)
 			return poolingDataSource;
@@ -82,6 +127,7 @@ public class DatabaseServiceImpl implements DatabaseService, BundleActivator {
     		// We can use this later to check acceptsUrl for better error reporting.
 			// Driver jdbcDriver = (Driver) Class.forName(driver).newInstance();
     		
+    		//TODO: It may exist from before, actually. Fix this.
     		String newDatabaseName =
     			DEFAULT_DB_NAME;
     		String newDatabaseConnectionURL = DEFAULT_PROTOCOL +
@@ -132,6 +178,6 @@ public class DatabaseServiceImpl implements DatabaseService, BundleActivator {
 	}
 
 	public DataSourceWithID createDatabase() throws DatabaseCreationException {
-		return new DataSourceWithIDImpl(getConnectionPool());
+		return new DataSourceWithIDImpl(getDataSource());
 	}
 }
