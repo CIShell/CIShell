@@ -33,6 +33,7 @@ public class DatabaseServiceImpl implements DatabaseService, BundleActivator {
 	/* TODO: Using a rolling counter like this may have bad implications later on,
 	   but it's decent for now.
 	 */
+	//Not used for now
 	private static int dbNameCounter = 0;
 	
 	private ServiceRegistration databaseServiceRegistration;
@@ -82,7 +83,7 @@ public class DatabaseServiceImpl implements DatabaseService, BundleActivator {
 			// Driver jdbcDriver = (Driver) Class.forName(driver).newInstance();
     		
     		String newDatabaseName =
-    			DEFAULT_DB_NAME + Integer.toString(dbNameCounter);
+    			DEFAULT_DB_NAME;
     		String newDatabaseConnectionURL = DEFAULT_PROTOCOL +
     										  newDatabaseName +
     										  DEFAULT_CREATE_CONNECTION_STRING;
@@ -131,6 +132,6 @@ public class DatabaseServiceImpl implements DatabaseService, BundleActivator {
 	}
 
 	public DataSourceWithID createDatabase() throws DatabaseCreationException {
-		return new DataSourceWithID(getConnectionPool());
+		return new DataSourceWithIDImpl(getConnectionPool());
 	}
 }
