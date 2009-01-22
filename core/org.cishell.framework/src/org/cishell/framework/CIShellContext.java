@@ -41,8 +41,10 @@ public interface CIShellContext {
                            GUIBuilderService.class.getName()};
     
     /**
-     * Locates and returns a standard service given the service name. The 
+     * Locates and returns a service given the service name. The 
      * service name is generally the full class name of the service interface.
+     * Standard CIShell services are guaranteed to be returned, but requests
+     * for non-standard services may return null.
      * For example, <code>LogService</code>'s string is 
      * <code>org.osgi.service.log.LogService</code>.
      * 
