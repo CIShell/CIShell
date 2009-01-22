@@ -4,7 +4,9 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public interface DataSourceWithID {
+import javax.sql.DataSource;
+
+public interface DataSourceWithID extends DataSource {
 
 	public abstract int getID();
 
