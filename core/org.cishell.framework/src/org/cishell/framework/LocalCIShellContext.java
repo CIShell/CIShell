@@ -61,6 +61,7 @@ public class LocalCIShellContext implements CIShellContext {
      * @see org.cishell.framework.CIShellContext#getService(java.lang.String)
      */
     public Object getService(String service) {
+    	//check if the requested service is a standard service
         for (int i=0; i < standardServices.length; i++) {
             if (standardServices[i].equals(service)) {
                 ServiceReference ref = bContext.getServiceReference(service);
@@ -73,6 +74,12 @@ public class LocalCIShellContext implements CIShellContext {
             }
         }
         
-        return null;
+        /*
+         * if it is not a standard service, we try to retrieve it anyway,
+         * but make no guarantees as to its availability
+         */
+        
+        ServiceReference ref = bContext.getServiceReference(service);
+        return bContext.getService(ref); //may be null
     }
 }
