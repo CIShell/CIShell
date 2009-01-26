@@ -40,6 +40,7 @@ public class DerbyDatabaseService implements DatabaseService, BundleActivator {
 		"org.apache.derby.jdbc.EmbeddedDriver";
 	private static final String DERBY_PROTOCOL = "jdbc:derby:";
 	private static final String DEFAULT_CREATE_CONNECTION_STRING = ";create=true";
+	private static final String DEFAULT_SHUTDOWN_CONNECTION_STRING =";shutdown=true";
 	private static final String DEFAULT_DB_NAME = "cishell_database";
 	
 	//where the database exists on the filesystem (relative to the application root directory)
@@ -80,7 +81,9 @@ public class DerbyDatabaseService implements DatabaseService, BundleActivator {
 			//try to clean out the database and shut it down.
 			try {
 				removeAllNonSystemDatabaseTables();
-			DriverManager.getConnection("jdbc:derby:;shutdown=true");
+				String shutdownDatabaseCommand = 
+					DERBY_PROTOCOL + DEFAULT_SHUTDOWN_CONNECTION_STRING;
+				DriverManager.getConnection(shutdownDatabaseCommand);
 			} catch (Exception e) {
 				String message =
 					"An unexpected exception occurred while shutting down the internal database." +
@@ -122,6 +125,7 @@ public class DerbyDatabaseService implements DatabaseService, BundleActivator {
 		   removeTables.executeBatch();	   
 	}
 
+	
 	//TODO: It could be that we should give everyone different datasources instead of the same one
 	private PoolingDataSource getDataSource() throws DatabaseCreationException
 	{
@@ -129,7 +133,8 @@ public class DerbyDatabaseService implements DatabaseService, BundleActivator {
 		return poolingDataSource;    	
 	}
 	
-	//lazy-load the pooling data source
+	//lazy-load the pooling data source (implicitly creates the initial database connection)
+	//TODO: Make it more clear where database connection is initially established
 	private void initializePoolingDataSource() throws DatabaseCreationException {
 		if (this.poolingDataSource != null) {
 			return;
