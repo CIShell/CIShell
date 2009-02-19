@@ -135,7 +135,6 @@ public class FileLoad implements Algorithm {
 		       					"Sorry, the file format: *."+fileExtension+" is not yet supported. \n"+
 		       					"Please send your requests to cishell-developers@lists.sourceforge.net. \n"
 		       					+"Thank you.");
-		           		
 	        		}
 		       		
 	    			//<filename>[.<data model type>][.<index>]
