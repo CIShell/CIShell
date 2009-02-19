@@ -1,6 +1,5 @@
 package org.cishell.reference.gui.persistence.load;
 
-//standard java
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -34,7 +33,7 @@ public class FileLoadFactory implements AlgorithmFactory, ManagedService {
 		printPreferences(properties);
 	}
 	
-	  private void printPreferences(Dictionary properties) {
+	private void printPreferences(Dictionary properties) {
 			System.out.println("  Preferences are as follows for File Load:");
 			if (properties == null) {
 				System.out.println("    Dictionary is null!");
