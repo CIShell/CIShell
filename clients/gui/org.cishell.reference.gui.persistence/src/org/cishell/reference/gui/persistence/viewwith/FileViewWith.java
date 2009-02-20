@@ -61,7 +61,7 @@ public class FileViewWith implements Algorithm {
     		tempFile = File.createTempFile("xxx-Session-", ".txt", tempDir);
 		
     	}catch (IOException e){
-    		logger.log(LogService.LOG_ERROR, e.toString());
+    		logger.log(LogService.LOG_ERROR, e.toString(), e);
     		tempFile = new File (tempPath+File.separator+"temp"+File.separator+"temp.txt");
 
     	}
@@ -111,7 +111,7 @@ public class FileViewWith implements Algorithm {
                     copy((File)newData.getData(), tempFile);     
             		lastSaveSuccessful = true; 
             		} catch (ConversionException e) {
-            			this.logger.log(LogService.LOG_WARNING, "Error while converting to target save format. Will attempt to use other available converters.");
+            			this.logger.log(LogService.LOG_WARNING, "Error while converting to target save format. Will attempt to use other available converters.", e);
             		}
             	}
             	else {
