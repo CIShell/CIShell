@@ -77,42 +77,74 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
 	 * @see org.cishell.framework.algorithm.Algorithm#execute()
 	 */
 	public Data[] execute() {
-		AlgorithmFactory factory = getAlgorithmFactory(bContext, ref);
-		if (factory == null) return null;
-		String pid = (String) ref.getProperty(Constants.SERVICE_PID);
+		try {
+			AlgorithmFactory factory = getAlgorithmFactory(bContext, ref);
+			
+			if (factory == null)
+				return null;
+		
+			String pid = (String)ref.getProperty(Constants.SERVICE_PID);
 
-		// convert input data to the correct format
-		boolean conversionSuccessful = tryConvertingDataToRequiredFormat(data, converters);
-		if (!conversionSuccessful) return null;
-		boolean inputIsValid = testDataValidityIfPossible(factory, data);
-		if (!inputIsValid) return null;
+			// Convert input data to the correct format.
+			boolean conversionSuccessful =
+				tryConvertingDataToRequiredFormat(data, converters);
+		
+			if (!conversionSuccessful)
+				return null;
+			
+			boolean inputIsValid = testDataValidityIfPossible(factory, data);
+			
+			if (!inputIsValid)
+				return null;
 
-		// create algorithm parameters
-		String metatype_pid = getMetaTypeID(ref);
+			// Create algorithm parameters.
+			String metatype_pid = getMetaTypeID(ref);
 
-		MetaTypeProvider provider = getPossiblyMutatedMetaTypeProvider(metatype_pid, pid, factory);
-		Dictionary parameters = getUserEnteredParameters(metatype_pid, provider);
+			MetaTypeProvider provider =
+				getPossiblyMutatedMetaTypeProvider(metatype_pid, pid, factory);
+			
+			Dictionary parameters =
+				getUserEnteredParameters(metatype_pid, provider);
 
-		// check to see if the user cancelled the operation
-		if (parameters == null) return null;
+			// Check to see if the user cancelled the operation.
+			if (parameters == null)
+				return null;
 
-		printParameters(metatype_pid, provider, parameters);
+			printParameters(metatype_pid, provider, parameters);
 
-		// create the algorithm
-		algorithm = createAlgorithm(factory, data, parameters, ciContext);
-		if (algorithm == null) return null;
-		trackAlgorithmIfPossible(algorithm);
+			// Create the algorithm.
+			algorithm = createAlgorithm(factory, data, parameters, ciContext);
+			
+			if (algorithm == null)
+				return null;
+			
+			trackAlgorithmIfPossible(algorithm);
 
-		// execute the algorithm
-		Data[] outData = tryExecutingAlgorithm(algorithm);
-		if (outData == null) return null;
+			// Execute the algorithm.
+			Data[] outData = tryExecutingAlgorithm(algorithm);
+			
+			if (outData == null)
+				return null;
 
-		// process and return the algorithm's output
-		doParentage(outData);
-		outData = removeNullData(outData);
-		addDataToDataManager(outData);
+			// Process and return the algorithm's output.
+			doParentage(outData);
+			outData = removeNullData(outData);
+			addDataToDataManager(outData);
 
-		return outData;
+			return outData;
+		}
+		catch (Exception e) {
+			GUIBuilderService builder = (GUIBuilderService)ciContext.getService
+				(GUIBuilderService.class.getName());
+			
+			String errorMessage = "An error occurred while preparing to run the " +
+				"algorithm \"" + ref.getProperty(AlgorithmProperty.LABEL) + ".\"";
+			
+			builder.showError("Error!", errorMessage, e);
+			log(LogService.LOG_ERROR, errorMessage, e);
+		}
+		
+		return null;
 	}
 
 	protected AlgorithmFactory getAlgorithmFactory(BundleContext bContext, ServiceReference ref) {
@@ -259,12 +291,6 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
 				}
 			} catch (IllegalArgumentException e) {
 				log(LogService.LOG_DEBUG, pid + " has an invalid metatype id: " + metatypePID, e);
-			} catch (Exception e) {
-				GUIBuilderService builder = (GUIBuilderService) ciContext.getService(GUIBuilderService.class.getName());
-				String errorMessage = "An error occurred while preparing to run the algorithm  "
-						+ ref.getProperty(AlgorithmProperty.LABEL) + ".\"";
-				builder.showError("Error!", errorMessage, e);
-				log(LogService.LOG_ERROR, errorMessage, e);
 			}
 		}
 
