@@ -237,7 +237,7 @@ public class FileView implements Algorithm {
     		tempFile = File.createTempFile("xxx-Session-", ".csv", tempDir);
 		
     	}catch (IOException e){
-    		logger.log(LogService.LOG_ERROR, e.toString());
+    		logger.log(LogService.LOG_ERROR, e.toString(), e);
     		tempFile = new File (tempPath+File.separator+"temp"+File.separator+"temp.csv");
 
     	}
