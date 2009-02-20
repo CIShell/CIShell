@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
@@ -20,19 +21,18 @@ import org.osgi.service.log.LogListener;
  */
 public class LogToFile implements LogListener {
 	//default log directory
-	private static String default_log_dir = 
+	private static final String DEFAULT_LOG_DIR = 
 		System.getProperty("user.dir") 
 		+ File.separator + "logs";
-	private static String prefix_file_name = "user";
+	private static final String FILE_NAME_PREFIX = "user";
 	
 	private File currentDir;
 	private Logger logger;
 	
 	//Specify the default size of each log file
-	private int limit = 100000; // 100 kb
+	private static final int LIMIT = 100000; // 100 kb
 	
-	//Specify the default numbers of log files
-	private int max_Number_Of_LogFiles  = 10;
+	private static final int MAX_NUM_LOG_FILES  = 10;
 
     /**
      * Constructor
@@ -45,11 +45,11 @@ public class LogToFile implements LogListener {
     		if (currentDir != null){
     			boolean append = true;
     			String logFileName = currentDir+File.separator+
-								generateUniqueFile(prefix_file_name)+
+								generateUniqueFile(FILE_NAME_PREFIX)+
 								".%g.log";
     			
     			FileHandler handler = new FileHandler(logFileName, 
-            			limit, max_Number_Of_LogFiles, append);
+            			LIMIT, MAX_NUM_LOG_FILES, append);
     			
     			handler.setFormatter(new SimpleFormatter());
         
@@ -109,17 +109,17 @@ public class LogToFile implements LogListener {
 
     private static File getLogDirectory(){    	
     	//later, we should get the log directory from preference service
-    	File logDir = new File(default_log_dir);
+    	File logDir = new File(DEFAULT_LOG_DIR);
     	if (!logDir.exists() || !logDir.isDirectory()){  
     		try{
     			if (logDir.mkdir()){
     				return logDir;
     			} else {
-    				return new File (default_log_dir);
+    				return new File (DEFAULT_LOG_DIR);
     			}
     		}catch (Exception e){
     			e.printStackTrace();
-    			return new File (default_log_dir);
+    			return new File (DEFAULT_LOG_DIR);
     		}
     		
     	}else
@@ -130,27 +130,22 @@ public class LogToFile implements LogListener {
     /*
      * create log file with given name plus unique timestamp
      */
-    private String generateUniqueFile(String prefixFN) {
- 
-        Calendar now = Calendar.getInstance();
-        String month = (now.get(Calendar.MONTH) + 1) + ""; //zero based
-
-        if (month.length() == 1) {
-            month = "0" + month;
-        }
-
-        String day = now.get(Calendar.DAY_OF_MONTH) + "";
-
-        if (day.length() == 1) {
-            day = "0" + day;
-        }
-
-        String year = now.get(Calendar.YEAR) + "";
+    private String generateUniqueFile(String fileNamePrefix) {
         
-        String timestamp = "-" + month + "-" + day + "-" + year + "-"+
-        		System.currentTimeMillis();
-        return prefixFN+timestamp;        
+/*		
+ * 		We can set any date time format we want.
+ *     	For the legend on different formats check http://java.sun.com/j2se/1.4.2/docs/api/java/text/SimpleDateFormat.html
+*/    	
+/*		TODO Make sure that 2 files with same filename are not generated. 
+ * 		Current granularity is set at till milliseconds.
+*/
+    	
+        String dateFormat = "MM-dd-yyyy-hh-mm-a-SSS";
+        Calendar currentTemporalSnapshot = Calendar.getInstance();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat);
+        String timestamp = "-" + simpleDateFormat.format(currentTemporalSnapshot.getTime());
         
+        return fileNamePrefix + timestamp; 
     }
 
 }
