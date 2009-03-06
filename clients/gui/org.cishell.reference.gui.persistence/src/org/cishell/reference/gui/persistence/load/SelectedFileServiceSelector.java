@@ -46,12 +46,19 @@ public class SelectedFileServiceSelector extends AbstractDialog {
 	private BundleContext bundleContext;
 	private ArrayList returnList;
 
-	private static final String[] details_prop_names = 
-	{"format_name", "supported_file_extension", "format_description", 
-		"restorable_model_name", "restorable_model_description" };
-	private static final String[] details_prop_name_descriptions = 
-	{"Format name", "Supported file extension", "Format description", 
-		"Restorable model name", "Restorable model description" };
+	private static final String[] DETAILS_ITEM_KEY = 
+	{"format_name", "supported_file_extension", "format_description" };
+
+	/*
+	 * Other possible keys could be restorable_model_name, restorable_model_description
+	 * */
+	
+	private static final String[] DETAILS_ITEM_KEY_DISPLAY_VALUE = 
+	{"Format name", "Supported file extension", "Format description"};
+	
+	/*
+	 * Other possible keys display values could be "Restorable model name", "Restorable model description"
+	 * */
 
 	public SelectedFileServiceSelector(String title, File theFile, 
 			Shell parent, CIShellContext ciContext, BundleContext bContext, 
@@ -142,13 +149,13 @@ public class SelectedFileServiceSelector extends AbstractDialog {
 	private void updateDetailPane(ServiceReference persister) {
 
 		detailPane.setText("");
-		for (int i=0; i<details_prop_names.length; i++){
-			String val = (String) persister.getProperty(details_prop_names[i]);
+		for (int i=0; i<DETAILS_ITEM_KEY.length; i++){
+			String val = (String) persister.getProperty(DETAILS_ITEM_KEY[i]);
 
 			StyleRange styleRange = new StyleRange();
 			styleRange.start = detailPane.getText().length();
-			detailPane.append(details_prop_name_descriptions[i] + ":\n");                            	
-			styleRange.length = details_prop_names[i].length() + 1;
+			detailPane.append(DETAILS_ITEM_KEY_DISPLAY_VALUE[i] + ":\n");                            	
+			styleRange.length = DETAILS_ITEM_KEY[i].length() + 1;
 			styleRange.fontStyle = SWT.BOLD;
 			detailPane.setStyleRange(styleRange);
 
