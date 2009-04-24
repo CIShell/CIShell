@@ -15,6 +15,7 @@ import java.util.Map;
 import org.cishell.framework.data.Data;
 import org.cishell.framework.data.DataProperty;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
@@ -62,16 +63,16 @@ public class DataGUIItem {
         children = new ArrayList();
         
         this.brandPluginID = brandPluginID;
-        matrixIcon      = createImage("matrix.png", this.brandPluginID);
-        treeIcon        = createImage("tree.png", this.brandPluginID);
-        networkIcon     = createImage("network.png", this.brandPluginID);
-        unknownIcon     = createImage("unknown.png", this.brandPluginID);
-        textIcon 	    = createImage("text.png", this.brandPluginID);
-        plotIcon 	    = createImage("plot.png", this.brandPluginID);
-        tableIcon 	    = createImage("table.png", this.brandPluginID);
-        databaseIcon    = createImage("database.jpg", this.brandPluginID);
-        rasterImageIcon = createImage("raster_image.jpg", this.brandPluginID);
-        vectorImageIcon = createImage("vector_image.jpg", this.brandPluginID);
+        matrixIcon      = getImage("matrix.png", this.brandPluginID);
+        treeIcon        = getImage("tree.png", this.brandPluginID);
+        networkIcon     = getImage("network.png", this.brandPluginID);
+        unknownIcon     = getImage("unknown.png", this.brandPluginID);
+        textIcon 	    = getImage("text.png", this.brandPluginID);
+        plotIcon 	    = getImage("plot.png", this.brandPluginID);
+        tableIcon 	    = getImage("table.png", this.brandPluginID);
+        databaseIcon    = getImage("database.jpg", this.brandPluginID);
+        rasterImageIcon = getImage("raster_image.jpg", this.brandPluginID);
+        vectorImageIcon = getImage("vector_image.jpg", this.brandPluginID);
 
         typeToImageMapping = new HashMap();
         registerImage(DataProperty.OTHER_TYPE, unknownIcon);
@@ -157,15 +158,43 @@ public class DataGUIItem {
         typeToImageMapping.put(type, image);
     }
     
-    public static Image createImage(String name, String brandPluginID){
-        if(Platform.isRunning()){
-            return AbstractUIPlugin.
-            	imageDescriptorFromPlugin(brandPluginID, 
-            	        File.separator + "icons" + File.separator + name).
-            	        createImage();
+   
+    
+    public static Image getImage(String name, String brandPluginID){
+        if(Platform.isRunning()) {
+        	String imageLocation =  File.separator + "icons" + File.separator + name;
+            ImageDescriptor imageDescriptor = AbstractUIPlugin.imageDescriptorFromPlugin(
+            		brandPluginID, 
+            	    imageLocation);
+            if (imageDescriptor != null) {
+            	return imageDescriptor.createImage(); 
+            } else {
+            	System.err.println("Could not find the icon " +
+            			"'" + imageLocation + "'" +
+            			"in" +
+            			"'" + brandPluginID + "'." +
+            			"Using the default image instead.");
+            	return getDefaultImage();
+            }
+   
         }
         else {
-            return null;
+        	System.err.println("Could not obtain the image " +
+        			"'" + name + "'" +
+        			"in" +
+        			"'" + brandPluginID + "'" +
+        			", since the platform was not running (?)." +
+        			"Using the default image instead.");
+        	return getDefaultImage();
         }            
+    }
+    
+    private static final String DEFAULT_IMAGE_LOCATION = File.separator + "unknown.png";
+    
+    private static Image getDefaultImage() {
+    	String thisPluginID = "org.cishell.reference.gui.datamanager"; //TODO: don't hardcode this
+    	ImageDescriptor imageDescriptor = AbstractUIPlugin.imageDescriptorFromPlugin(
+    			thisPluginID, DEFAULT_IMAGE_LOCATION);
+    	return imageDescriptor.createImage();
     }
 }

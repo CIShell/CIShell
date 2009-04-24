@@ -2,126 +2,23 @@
 <!-- <?xml version="1.0" encoding="ISO-8859-1" ?> -->
 <menu_layout> 
     <top_menu name="File">
-	<menu name="Load..." pid= "org.cishell.reference.gui.persistence.load.FileLoad "/>
-	<menu name="Load CSV Files" pid= "edu.iu.nwb.preprocessing.csv.CsvAlgorithm"/>
-	<menu name="Directory Hierarchy Reader" pid= "edu.iu.nwb.preprocessing.prefuse.beta.directoryhierarchyreader.DirectoryHierarchyReaderAlgorithm"/>
-	<menu name = "Datasets" type="group">
-		<menu name="Parallel Coordinates (demo) STF Dataset" pid="org.mediavirus.parvis.sampledata/pcvis_data.txt"/>									  
-	</menu>
+	<menu name="Load..." pid= "org.cishell.reference.gui.persistence.load.FileLoad "/>								  
 	<menu type="break"/>
 	<menu name="Save..." pid= "org.cishell.reference.gui.persistence.save.Save"/>
 	<menu type="break"/>
 	<menu name="View..." pid= "org.cishell.reference.gui.persistence.view.FileView"/>
 	<menu name="View With..." pid= "org.cishell.reference.gui.persistence.viewwith.FileViewWith"/>
 	<menu type="break"/>
-	<menu name = "Test" type="group">
-		<menu name="Scheduler Tester" pid= "org.cishell.tests.ProgressTrackableAlgorithm.AlgorithmTest"/>
-	</menu>
 	<menu type="break"/>
 	<menu name="Exit" type="preserved"/>
     </top_menu>
-    <top_menu name="Preprocessing">
-	<menu name="Random Node Deletion" pid="edu.iu.iv.errortolerance.ErrorToleranceAlgorithm"/>	
-	<menu name="High Degree Node Deletion" pid="edu.iu.iv.attacktolerance.AttackToleranceAlgorithm"/>
-	<menu name="Pathfinder Network Scaling" pid="edu.iu.nwb.analysis.pathfindergraphnetworkscaling.PathfinderGraphAlgorithm"/>
-	<menu name="Multipartite Joining" pid="edu.iu.nwb.analysis.multipartitejoining.JoiningAlgorithm"/>
-	<menu type="break"/>
-	<menu name="Snowball Sampling (n nodes)" pid="edu.iu.nwb.analysis.sampling.snowball.SnowballAlgorithm"/>
-	<menu name="Node Sampling" pid="edu.iu.nwb.analysis.sampling.node.NodeAlgorithm"/>
-	<menu name="Edge Sampling" pid="edu.iu.nwb.analysis.sampling.edge.EdgeAlgorithm"/>
-    </top_menu>
-    <top_menu name="Modeling">
-	<menu name="Random Graph" pid="edu.iu.nwb.modeling.erdosrandomgraph"/>
-	<menu name="Watts-Strogatz Small World" pid="edu.iu.nwb.modeling.smallworld"/>
-	<menu name="Barabási-Albert Scale-Free" pid="edu.iu.nwb.modeling.barabasialbert"/>
-	<menu type="break"/>
-	<menu name="Can" pid="edu.iu.iv.modeling.p2p.can.CanAlgorithm"/>
-	<menu name="Chord" pid="edu.iu.iv.modeling.p2p.chord.ChordAlgorithm"/>
-	<menu name="Hypergrid" pid="edu.id.iv.modeling.p2p.hypergrid.Hypergrid"/>
-	<menu name="PRU" pid="edu.iu.iv.modeling.p2p.pru.PruAlgorithm"/>
-	<menu type="break"/>
-	<menu name="TARL" pid="edu.iu.iv.modeling.tarl.TarlAlgorithm"/>
-    </top_menu>
-
-    <top_menu name="Analysis">
-	<menu name = "Unweighted &amp;&amp; Undirected" type="group">
-		<menu name="Node Degree" pid="edu.iu.nwb.analysis.totaldegreesequence"/>
-		<menu name="Degree Distribution" pid="edu.iu.nwb.analysis.totaldegreedistribution"/>
-           	<menu type="break"/>
-		<menu name="k-Nearest Neighbor" pid="edu.iu.nwb.analysis.undirectedknn"/>
-		<menu name="Watts Strogatz Clustering Coefficient" pid="edu.iu.nwb.analysis.clustering"/>
-		<menu name="Watts Strogatz Clustering Coefficient Over k" pid="edu.iu.nwb.analysis.clustering_vs_k"/>
-	 	<menu type="break"/>	
-		<menu name="Diameter" pid="edu.iu.nwb.analysis.diameter"/>
-		<menu name="Average Shortest Path" pid="edu.iu.nwb.analysis.averageshortestpath"/>
-		<menu name="Shortest Path Distribution" pid="edu.iu.nwb.analysis.shortestpathdistr"/>
-		<menu name="Node Betweenness Centrality" pid="edu.iu.nwb.analysis.sitebetweenness"/>
-		<menu type="break"/>
-		<menu name="Connected Components" pid="edu.iu.nwb.analysis.connectedcomponents"/>
-		<menu name="Weak Component Clustering" pid="edu.iu.nwb.analysis.weakcomponentclustering.ClusteringAlgorithm"/>				
-	</menu>
-
-	<menu name = "Unweighted &amp;&amp; Directed" type="group">
-		<menu name="Node Indegree" pid="edu.iu.nwb.analysis.indegreesequence"/>
-         	<menu name="Node Outdegree" pid="edu.iu.nwb.analysis.outdegreesequence"/>
-       		<menu name="Indegree Distribution" pid="edu.iu.nwb.analysis.indegreedistribution"/>
-         	<menu name="Outdegree Distribution" pid="edu.iu.nwb.analysis.outdegreedistribution"/>
-       		<menu type="break"/>	
-      		<menu name="k-Nearest Neighbor" pid="edu.iu.nwb.analysis.directedknn"/>
-		<menu name="Single Node In-Out Degree Correlations" pid="edu.iu.nwb.analysis.onepointcorrelations"/>
-		<menu type="break"/>
-		<menu name="Page Rank" pid="edu.iu.nwb.analysis.pagerank"/>
-	</menu>
-
-	<menu name = "Weighted and Undirected" type="group">
-	</menu>
-	<menu name = "Weighted and Directed" type="group">
-	</menu>
-    </top_menu>
-
-    <top_menu name="Search">
-	<menu name="Can" pid="edu.iu.iv.search.p2p.can.CanSearchAlgorithm"/> 
-	<menu name="Chord" pid="edu.iu.iv.search.p2p.chord.ChordSearchAlgorithm"/> 
-	<menu name="k Random-Walk" pid="edu.iu.iv.search.p2p.randomwalk.RandomWalkAlgorithm"/> 
-	<menu name="Random Breadth First" pid="edu.iu.iv.search.p2p.bfs.BreadthFirstSearchAlgorithm"/> 
-    </top_menu>
-
-    <top_menu name="Clustering">
-	<menu name="Weak Component Clustering" pid="edu.iu.nwb.analysis.weakcomponentclustering.ClusteringAlgorithm"/>
-    </top_menu>
-
-    <top_menu name="Visualization">
- 	<menu name="Circular" pid="edu.iu.nwb.visualization.jungnetworklayout.JUNGCircleLayout"/>
-	<menu name="Specified" pid="edu.iu.nwb.visualization.prefuse.beta.specified.Specified"/>
-	<menu type="break"/>
-	<menu name="Radial Tree/Graph" pid="edu.iu.nwb.visualization.radialgraph.RadialGraph"/> 
-	<menu name="Radial Tree/Graph with Annotation" pid="edu.iu.nwb.visualization.prefuse.beta.radialgraph.RadialGraph"/>
-	<menu name="Tree Map" pid="edu.iu.nwb.visualization.prefuse.beta.treemap.TreeMap"/>
-	<menu name="Tree View" pid="edu.iu.nwb.visualization.prefuse.beta.treeview.TreeView"/>
-	<menu type="break"/>
-	<menu name="Force Directed" pid="edu.iu.nwb.visualization.prefuse.beta.graphview.GraphView"/> 
-	<menu name="Kamada-Kawai" pid="edu.iu.nwb.visualization.jungnetworklayout.JUNGKamadaKawaiLayout"/>
-	<menu name="Fruchterman-Reingold" pid="edu.iu.nwb.visualization.jungnetworklayout.JUNGFruchtermanReingoldLayout"/> 
-	<menu name="Fruchterman-Reingold with Annotation" pid="edu.iu.nwb.visualization.prefuse.beta.fruchtermanreingold.FruchtermanReingold"/>
-	<menu name="Spring" pid="edu.iu.nwb.visualization.jungnetworklayout.JUNGSpringLayout"/>
-	<menu name="Small World" pid="edu.iu.nwb.visualization.prefuse.alpha.smallworld.app.SmallWorld"/>
-	<menu type="break"/>
-	<menu name="Parallel Coordinates (demo)" pid="org.mediavirus.parvis.ParallelCoordinatesAlgorithm"/>
-    </top_menu>
 
     <top_menu name="Tools">
-      	<menu name="GnuPlot" pid="edu.iu.nwb.visualization.gnuplot"/>
 	<menu name="Scheduler" pid=""/>
     </top_menu>
 
     <top_menu name="Help">      
-	<menu name="Dataset Details" pid=""/>
-	<menu name="Algorithm Details" pid=""/>
-	<menu name="Tutorials" pid=""/>
-	<menu type="break"/>
 	<menu name="Update" pid=""/>
 	<menu name="Manage Configuration" pid=""/>
-	<menu type="break"/>
-	<menu name="About Network Workbench Tool" pid=""/>
     </top_menu>    
 </menu_layout>
