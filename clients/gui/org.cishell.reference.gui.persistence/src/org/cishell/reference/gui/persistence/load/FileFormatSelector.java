@@ -35,32 +35,32 @@ import org.osgi.service.log.LogService;
  *
  * @author Team IVC (Weixia Huang, James Ellis)
  */
-public class SelectedFileServiceSelector extends AbstractDialog {
+public class FileFormatSelector extends AbstractDialog {
 	private File selectedFile;
 	private LogService logger;
 
 	private ServiceReference[] persisterArray;
 	private List persisterList;
-	private StyledText detailPane;
+//	private StyledText detailPane;
 	private CIShellContext ciShellContext;
 	private BundleContext bundleContext;
 	private ArrayList returnList;
 
-	private static final String[] DETAILS_ITEM_KEY = 
-	{"format_name", "supported_file_extension", "format_description" };
+//	private static final String[] DETAILS_ITEM_KEY = 
+//	{"format_name", "supported_file_extension", "format_description" };
 
 	/*
 	 * Other possible keys could be restorable_model_name, restorable_model_description
 	 * */
 	
-	private static final String[] DETAILS_ITEM_KEY_DISPLAY_VALUE = 
-	{"Format name", "Supported file extension", "Format description"};
+//	private static final String[] DETAILS_ITEM_KEY_DISPLAY_VALUE = 
+//	{"Format name", "Supported file extension", "Format description"};
 	
 	/*
 	 * Other possible keys display values could be "Restorable model name", "Restorable model description"
 	 * */
 
-	public SelectedFileServiceSelector(String title, File theFile, 
+	public FileFormatSelector(String title, File theFile, 
 			Shell parent, CIShellContext ciContext, BundleContext bContext, 
 			ServiceReference[] persisterArray, ArrayList returnList){
 		super(parent, title, AbstractDialog.QUESTION);
@@ -74,8 +74,8 @@ public class SelectedFileServiceSelector extends AbstractDialog {
 		this.logger = (LogService) ciContext.getService(LogService.class.getName());
 		//shall this part be moved out of the code?
 		setDescription("The file you have selected can be loaded"
-				+ " using the following formats.\n"
-				+ "Please select one of them.");
+				+ " using one or more of the following formats.\n"
+				+ "Please select the format you would like to try.");
 		setDetails("This dialog allows the user to choose among all available " +
 				"formats for loading the selected data model.  Choose any of the formats " +
 		"to continue loading the dataset.");
@@ -85,12 +85,12 @@ public class SelectedFileServiceSelector extends AbstractDialog {
 		Composite content = new Composite(parent, SWT.NONE);
 
 		GridLayout layout = new GridLayout();
-		layout.numColumns = 2;        
+		layout.numColumns = 1;        
 		content.setLayout(layout);        
 
 		Group persisterGroup = new Group(content, SWT.NONE);
 		//shall this label be moved out of the code?
-		persisterGroup.setText("Loaded by");
+		persisterGroup.setText("Load as...");
 		persisterGroup.setLayout(new FillLayout());        
 		GridData persisterListGridData = new GridData(GridData.FILL_BOTH);
 		persisterListGridData.widthHint = 200;
@@ -104,23 +104,23 @@ public class SelectedFileServiceSelector extends AbstractDialog {
 				List list = (List)e.getSource();
 				int selection = list.getSelectionIndex();
 				if(selection != -1){                    
-					updateDetailPane(persisterArray[selection]);
+//					updateDetailPane(persisterArray[selection]);
 				}                
 			}                      
 		});
 
-		Group detailsGroup = new Group(content, SWT.NONE);
-		// shall this label be moved out of the code?    
-				detailsGroup.setText("Details");       
-				detailsGroup.setLayout(new FillLayout());        
-				GridData detailsGridData = new GridData(GridData.FILL_BOTH);
-				detailsGridData.widthHint = 200;
-				detailsGroup.setLayoutData(detailsGridData);
-
-				detailPane = initDetailPane(detailsGroup);
-
-				persisterList.setSelection(0);
-				updateDetailPane(persisterArray[0]);
+//		Group detailsGroup = new Group(content, SWT.NONE);
+//		// shall this label be moved out of the code?    
+//				detailsGroup.setText("Details");       
+//				detailsGroup.setLayout(new FillLayout());        
+//				GridData detailsGridData = new GridData(GridData.FILL_BOTH);
+//				detailsGridData.widthHint = 200;
+//				detailsGroup.setLayoutData(detailsGridData);
+//
+//				detailPane = initDetailPane(detailsGroup);
+//
+//				persisterList.setSelection(0);
+//				updateDetailPane(persisterArray[0]);
 
 				return content;
 	}
@@ -128,7 +128,7 @@ public class SelectedFileServiceSelector extends AbstractDialog {
 	private void initPersisterList(){        
 		for (int i = 0; i < persisterArray.length; ++i) {
 
-			String name = (String)persisterArray[i].getProperty("converter_name");
+			String name = (String)persisterArray[i].getProperty("label");
 
 			// if someone was sloppy enough to not provide a name, then use the
 			// name of the class instead.
@@ -139,31 +139,31 @@ public class SelectedFileServiceSelector extends AbstractDialog {
 	}
 
 
-	private StyledText initDetailPane(Group detailsGroup) {
-		StyledText detailPane = new StyledText(detailsGroup, SWT.H_SCROLL | SWT.V_SCROLL);
-		detailPane.setEditable(false);
-		detailPane.getCaret().setVisible(false);
-		return detailPane;
-	}
+//	private StyledText initDetailPane(Group detailsGroup) {
+//		StyledText detailPane = new StyledText(detailsGroup, SWT.H_SCROLL | SWT.V_SCROLL);
+//		detailPane.setEditable(false);
+//		detailPane.getCaret().setVisible(false);
+//		return detailPane;
+//	}
 
-	private void updateDetailPane(ServiceReference persister) {
-
-		detailPane.setText("");
-		for (int i=0; i<DETAILS_ITEM_KEY.length; i++){
-			String val = (String) persister.getProperty(DETAILS_ITEM_KEY[i]);
-
-			StyleRange styleRange = new StyleRange();
-			styleRange.start = detailPane.getText().length();
-			detailPane.append(DETAILS_ITEM_KEY_DISPLAY_VALUE[i] + ":\n");                            	
-			styleRange.length = DETAILS_ITEM_KEY[i].length() + 1;
-			styleRange.fontStyle = SWT.BOLD;
-			detailPane.setStyleRange(styleRange);
-
-			detailPane.append(val + "\n");               
-
-		}
-
-	}    
+//	private void updateDetailPane(ServiceReference persister) {
+//
+//		detailPane.setText("");
+//		for (int i=0; i<DETAILS_ITEM_KEY.length; i++){
+//			String val = (String) persister.getProperty(DETAILS_ITEM_KEY[i]);
+//
+//			StyleRange styleRange = new StyleRange();
+//			styleRange.start = detailPane.getText().length();
+//			detailPane.append(DETAILS_ITEM_KEY_DISPLAY_VALUE[i] + ":\n");                            	
+//			styleRange.length = DETAILS_ITEM_KEY[i].length() + 1;
+//			styleRange.fontStyle = SWT.BOLD;
+//			detailPane.setStyleRange(styleRange);
+//
+//			detailPane.append(val + "\n");               
+//
+//		}
+//
+//	}    
 
 	private void selectionMade(int selectedIndex) {
 		AlgorithmFactory persister =(AlgorithmFactory) bundleContext.getService(persisterArray[selectedIndex]);
