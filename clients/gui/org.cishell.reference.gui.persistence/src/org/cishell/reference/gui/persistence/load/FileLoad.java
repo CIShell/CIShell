@@ -21,29 +21,19 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogService;
 
-/* 
- * @author Weixia(Bonnie) Huang (huangb@indiana.edu)
- */
 public class FileLoad implements Algorithm {
 
 	private final LogService logger;
-	private final GUIBuilderService guiBuilder;
 
 	private BundleContext bundleContext;
 	private CIShellContext ciShellContext;
 	private static String defaultLoadDirectory;
-
-	private final static String FILTER_EXTENSION_ALL = "*";
-	private final static String FILTER_AMBIGUOUS = "&(type=validator)(format_name=*)(in_data=file-ext:*)";
-	private final static String FILTER_IN_DATA = "&(type=validator)(format_name=*)";
 
 	public FileLoad(CIShellContext ciContext, BundleContext bContext,
 			Dictionary prefProperties) {
 		this.ciShellContext = ciContext;
 		this.bundleContext = bContext;
 		logger = (LogService) ciContext.getService(LogService.class.getName());
-		guiBuilder = (GUIBuilderService) ciContext
-		.getService(GUIBuilderService.class.getName());
 
 		// unpack preference properties
 		if (defaultLoadDirectory == null) {
@@ -75,291 +65,158 @@ public class FileLoad implements Algorithm {
 	final class FileLoadRunnable implements Runnable {
 		boolean loadFileSuccess = false;
 		IWorkbenchWindow window;
+		
 		// this is how we return values from the runnable
-		public ArrayList selectedServicesForLoadedFileList = new ArrayList();
+		public ArrayList loadedFiles_ReturnParameter = new ArrayList();
 
 		FileLoadRunnable(IWorkbenchWindow window) {
 			this.window = window;
 		}
 
+		/*
+		 * Let the user chose which file to load,
+		 * Let the user choose the file type (if it is ambiguous),
+		 * and then actually load and validate the file.
+		 */
 		public void run() {
-			FileDialog dialog = new FileDialog(window.getShell(), SWT.OPEN);
-			// if (currentDir == null) {
-			// currentDir = new
-			// File(System.getProperty("osgi.install.area").replace("file:","")
-			// + "sampledata");
-			//                    
-			// if (!currentDir.exists()) {
-			// currentDir = new
-			// File(System.getProperty("osgi.install.area").replace("file:","")
-			// + "sampledata" +File.separator + "anything");
-			// }
-			// }
-			File currentDir = new File(defaultLoadDirectory); // ? good way to
-			// do this?
-			String absolutePath = currentDir.getAbsolutePath();
-			String name = currentDir.getName();
-			dialog.setFilterPath(absolutePath);
-			// dialog.setFilterPath(name);
-			dialog.setText("Select a File");
-			String fileName = dialog.open();
-			if (fileName == null) {
-				return;
-			}
-
-			File file = new File(fileName);
-			if (file.isDirectory()) {
-				defaultLoadDirectory = file.getAbsolutePath();
-			} else {
-
-				// File parentFile = file.getParentFile();
-				// if (parentFile != null) {
-				defaultLoadDirectory = file.getParentFile().getAbsolutePath();
-				// }
-			}
-
-			String fileExtension = getFileExtension(file).toLowerCase();
-
-			/*
-			 * This filter is used to filter out all the services which are NOT,
-			 * 1. validators 2. validators but for output file functionality
-			 * Hence only input file functionality validators are allowed.
-			 */
-
 			try {
+				// Prepare to ask the user which file to load.
 
-				// get all the service references of validators that can load
-				// this type of file.
+				FileDialog dialog = new FileDialog(window.getShell(), SWT.OPEN);
+				File currentDir = new File(defaultLoadDirectory);
+				String absolutePath = currentDir.getAbsolutePath();
+				dialog.setFilterPath(absolutePath);
+				dialog.setText("Select a File");
 
-				ServiceReference[] selectedFileServiceReferences = null;
+				// Determine which file to load.
+
+				String nameOfFileToLoad = dialog.open();
+				if (nameOfFileToLoad == null) {
+					return;
+				}
+
+				// Actually load the file.
+
+				File file = new File(nameOfFileToLoad);
+
+				if (file.isDirectory()) {
+					defaultLoadDirectory = file.getAbsolutePath();
+				} else {
+					defaultLoadDirectory = file.getParentFile().getAbsolutePath();
+				}
+
+				//Validate the loaded file, "casting" it to a certain MIME type.
 				
-				if(fileExtension != null && fileExtension.length() > 0) {
-					selectedFileServiceReferences = getApplicableServiceReferences(
-							FILTER_IN_DATA, fileExtension);	
-				}
-				
-				/*
-				 * This use case is for input files selected that are, 1.
-				 * without any file extensions 2. with file extensions that do
-				 * not match any service "in_data" field.
-				 */
+				// Extract the file's file extension.
 
-				if ((selectedFileServiceReferences == null || selectedFileServiceReferences.length == 0)) {
+				String fileExtension = getFileExtension(file).toLowerCase();
 
-					/*
-					 * This filter is used to accept only those services which
-					 * are, 1. type = validators and, 2. which have non-empty
-					 * format_name and, 3. which have non-empty in_data field.
-					 * or, 3. which have empty in_data field and non-empty
-					 * ambiguous_extension field. This is used so that all the
-					 * validators for output file functionality are filtered
-					 * out.
-					 */
+				// Get all the validators which support this file extension...
 
-					ServiceReference[] potentialValidators = null;
+				ServiceReference[] supportingValidators = getSupportingValidators(fileExtension);
 
-					/*
-					 * This is used to find validators that support ambiguous
-					 * extensions for the provided file extension. There are
-					 * good chances that the file selected does not have any
-					 * file extension, this is handled by below case.
-					 */
+				// If there are no supporting validators...
+				if (supportingValidators.length == 0) {
+					// Let the user choose from all the validators available.
 
-					if (fileExtension != null && fileExtension.length() > 0) {
+					ServiceReference[] allValidators = getAllValidators();
 
-						potentialValidators = getApplicableServiceReferences(
-								FILTER_AMBIGUOUS, fileExtension);
-
-					}
-
-					/*
-					 * If no services are found then provide for all the
-					 * validators list.
-					 */
-
-					if (potentialValidators == null
-							|| potentialValidators.length == 0) {
-
-						potentialValidators = getApplicableServiceReferences(
-								FILTER_IN_DATA, FILTER_EXTENSION_ALL);
-
-					}
-
-					/*
-					 * SelectedFileServiceSelector is used to create a GUI for
-					 * selecting a service for the selected file from a list of
-					 * applicable services. On selection of a service it calls
-					 * the validator for that service. If the validator passes
-					 * it it goes ahead and loads the file appropriately else it
-					 * throws error message asking the user to select other
-					 * service.
-					 * 
-					 * This modifies the selectedServicesForLoadedFileList,
-					 * which is the placeholder for all the verified/ applicable
-					 * services for a selected/loaded file.
-					 */
-
-					new SelectedFileServiceSelector("Load", file, window
-							.getShell(), ciShellContext, bundleContext,
-							potentialValidators,
-							selectedServicesForLoadedFileList).open();
+					new FileFormatSelector("Load", file, window.getShell(),
+							ciShellContext, bundleContext, allValidators,
+							loadedFiles_ReturnParameter).open();
 				}
 
-				/*
-				 * This use case is for input files selected that have only one
-				 * applicable service. Special case where the file extension
-				 * belongs to ambiguous file extension group like csv is also
-				 * handled. In the simple case system goes ahead and loads the
-				 * file with that service.
-				 */
-
-				else if (selectedFileServiceReferences.length == 1) {
-
-					/*
-					 * To check for the files with ambiguous file extension a
-					 * seperate list of service references is created.
-					 */
-
-					ServiceReference[] selectedFileAmbiguousValidators = getApplicableServiceReferences(
-							FILTER_AMBIGUOUS, fileExtension);
+				// If there is just one supporting validator...
+				if (supportingValidators.length == 1) {
+					// Just use that validator to validate the file.
+					
+					ServiceReference onlyPossibleValidator = supportingValidators[0];
+					AlgorithmFactory selectedValidatorExecutor = (AlgorithmFactory) bundleContext
+					.getService(onlyPossibleValidator);
+					Data[] outputDataAfterValidation;
+					Data[] inputDataForValidation = new Data[] { new BasicData(
+							file.getPath(), String.class.getName()) };
+					outputDataAfterValidation = selectedValidatorExecutor
+					.createAlgorithm(inputDataForValidation, null,
+							ciShellContext).execute();
 
 					/*
-					 * If allAmbiguousValidators is not empty then the system
-					 * provides a dialog box to select from the available
-					 * validators. In this case CSV, NSF & SCOPUS
+					 * outputDataAfterValidation = null implies that file
+					 * was not loaded properly.
 					 */
 
-					if ((selectedFileAmbiguousValidators != null && selectedFileAmbiguousValidators.length > 0)) {
-						new SelectedFileServiceSelector("Load", file, window
-								.getShell(), ciShellContext, bundleContext,
-								selectedFileAmbiguousValidators,
-								selectedServicesForLoadedFileList).open();
+					if (outputDataAfterValidation != null) {
+						loadFileSuccess = true;
+						logger.log(LogService.LOG_INFO, "Loaded: "
+								+ file.getPath());
+						for (int i = 0; i < outputDataAfterValidation.length; i++)
+							loadedFiles_ReturnParameter.
+							add(outputDataAfterValidation[i]);
 					}
-
-					/*
-					 * If allAmbiguousValidators is not empty we go forward with
-					 * normal work flow of loading the file with selected file
-					 * format.
-					 */
-
-					else {
-
-						AlgorithmFactory selectedValidatorExecutor = (AlgorithmFactory) bundleContext
-						.getService(selectedFileServiceReferences[0]);
-						Data[] outputDataAfterValidation;
-						Data[] inputDataForValidation = new Data[] { new BasicData(
-								file.getPath(), String.class.getName()) };
-						outputDataAfterValidation = selectedValidatorExecutor
-						.createAlgorithm(inputDataForValidation, null,
-								ciShellContext).execute();
-
-						/*
-						 * outputDataAfterValidation = null implies that file
-						 * was not loaded properly.
-						 */
-
-						if (outputDataAfterValidation != null) {
-							loadFileSuccess = true;
-							logger.log(LogService.LOG_INFO, "Loaded: "
-									+ file.getPath());
-							for (int i = 0; i < outputDataAfterValidation.length; i++)
-								selectedServicesForLoadedFileList
-								.add(outputDataAfterValidation[i]);
-						}
-					}
-
 				}
 
-				/*
-				 * This use case is for input files selected that have more than
-				 * one applicable services. For e.g. ".xml" can be xgmml,
-				 * graphml, treeml. This now triggers the
-				 * SelectedFileServiceSelector dialog & can be used to select
-				 * any one of the available services for that particular file
-				 * extension.
-				 */
+				// If there is more than one supporting validator...
+				if (supportingValidators.length > 1) {
+					// Let the user choose which validator they want to use.
 
-				else if (selectedFileServiceReferences.length > 1) {
-
-					new SelectedFileServiceSelector("Load", file, window
-							.getShell(), ciShellContext, bundleContext,
-							selectedFileServiceReferences,
-							selectedServicesForLoadedFileList).open();
-
+					new FileFormatSelector("Load", file, window.getShell(),
+							ciShellContext, bundleContext, supportingValidators,
+							loadedFiles_ReturnParameter).open();
 				}
-				/*
-				 * Bonnie: I commented out the following functions since when
-				 * the application failed to load an nwb file, etc, the reader
-				 * has report the error. It does not need this second error
-				 * display. But maybe not all file readers will generate the
-				 * error display if a failure occurs...
-				 */
-				/*
-				 * if (serviceRefList != null){ if(serviceRefList.length >0 &&
-				 * !loadFileSuccess){
-				 * guiBuilder.showError("Can Not Load The File",
-				 * "Sorry, it's very possible that you have a wrong file format,"
-				 * + "since the file can not be loaded to the application.",
-				 * 
-				 * "Please check Data Formats that this application can support at "
-				 * +
-				 * "https://nwb.slis.indiana.edu/community/?n=Algorithms.HomePage."
-				 * + "And send your requests or report the problem to "+
-				 * "cishell-developers@lists.sourceforge.net. \n"+"Thank you.");
-				 * }
-				 * 
-				 * }
-				 */
 
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
-
-		}// end run()
-
-		/**
-		 * @param selectedFileServiceReferencesFilter
-		 * @param fileExtensionManipulations
-		 * @return
-		 * @throws InvalidSyntaxException
-		 */
-		private ServiceReference[] getApplicableServiceReferences(
-				String selectedFileServiceReferencesFilter,
-				String fileExtensionManipulations)
-		throws InvalidSyntaxException {
-
-			String appliedValidatorFilter = getValidatorFilter(
-					selectedFileServiceReferencesFilter,
-					fileExtensionManipulations);
-
-			ServiceReference[] selectedFileServiceReferences = bundleContext
-			.getAllServiceReferences(AlgorithmFactory.class.getName(),
-					appliedValidatorFilter);
-			
-			return selectedFileServiceReferences;
-
 		}
-
-		private String getValidatorFilter(
-				String selectedFileServiceReferencesFilter,
-				String fileExtensionManipulations) {
-
-			if (selectedFileServiceReferencesFilter.equals(FILTER_IN_DATA)) {
-				return "(" + selectedFileServiceReferencesFilter
-				+ "(in_data=file-ext:" + fileExtensionManipulations
-				+ ")" +
-				")";
-
-			} else if (selectedFileServiceReferencesFilter.equals(FILTER_AMBIGUOUS)) {
-				return "(" + selectedFileServiceReferencesFilter
-				+ "(ambiguous_extension=" + fileExtensionManipulations
-				+ ")" +
-				")";
+		
+		private ServiceReference[] getSupportingValidators(String fileExtension) {
+			try {
+				String ldapQuery = "(& (type=validator)" +
+				"(|" +
+				  "(in_data=file-ext:" + fileExtension + ")" +
+				  "(also_validates=" + fileExtension + ")" + 
+				 "))";
+				 
+				ServiceReference[] supportingValidators = 
+					bundleContext.getAllServiceReferences(
+							AlgorithmFactory.class.getName(),
+							ldapQuery);
+						
+				
+				if (supportingValidators == null) {
+					//(better to return a list of length zero than null)
+					supportingValidators = new ServiceReference[]{};
+				}
+				
+				return supportingValidators;
+				
+				
+			} catch (InvalidSyntaxException e) {
+				e.printStackTrace();
+				return new ServiceReference[]{};	
 			}
-
-			return null;
 		}
-
+		
+		private ServiceReference[] getAllValidators() {
+			try {
+				ServiceReference[] allValidators = 
+					bundleContext.getAllServiceReferences(
+						AlgorithmFactory.class.getName(),
+						"(&(type=validator)(in_data=file-ext:*))");
+				
+				if (allValidators == null) {
+					//(better to return a list of length zero than null)
+					allValidators = new ServiceReference[]{};
+				}
+				
+				return allValidators;
+				
+			} catch (InvalidSyntaxException e) {
+				e.printStackTrace();
+				return new ServiceReference[]{};	
+			}
+		}
+		
 		public String getFileExtension(File theFile) {
 			String fileName = theFile.getName();
 			String extension;
@@ -369,7 +226,7 @@ public class FileLoad implements Algorithm {
 				extension = "";
 			return extension;
 		}
-	} // end class
+	} 
 
 	private IWorkbenchWindow getFirstWorkbenchWindow()
 	throws AlgorithmExecutionException {
@@ -387,11 +244,11 @@ public class FileLoad implements Algorithm {
 	throws AlgorithmExecutionException {
 		Data[] loadedFileData;
 		try {
-			if (!dataUpdater.selectedServicesForLoadedFileList.isEmpty()) {
-				int size = dataUpdater.selectedServicesForLoadedFileList.size();
+			if (!dataUpdater.loadedFiles_ReturnParameter.isEmpty()) {
+				int size = dataUpdater.loadedFiles_ReturnParameter.size();
 				loadedFileData = new Data[size];
 				for (int index = 0; index < size; index++) {
-					loadedFileData[index] = (Data) dataUpdater.selectedServicesForLoadedFileList
+					loadedFileData[index] = (Data) dataUpdater.loadedFiles_ReturnParameter
 					.get(index);
 				}
 				return loadedFileData;
