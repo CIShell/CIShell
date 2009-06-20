@@ -197,7 +197,12 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
 					.getServiceReference(DataManagerService.class.getName()));
 
 			if (outData.length != 0) {
-				dataManager.setSelectedData(outData);
+				for (int ii = 0; ii < outData.length; ii++) {
+					dataManager.addData(outData[ii]);
+				}
+				
+				Data[] dataToSelect = new Data[] { outData[0] };
+				dataManager.setSelectedData(dataToSelect);
 			}
 		}
 	}
