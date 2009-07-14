@@ -193,11 +193,7 @@ public class PrefReferenceProcessor{
     	} else {
     		String unparsedPublishedPrefsValues = (String) prefReference.getProperty(UserPrefsProperty.PREFS_PUBLISHED_KEY);
     		if (unparsedPublishedPrefsValues == null) {
-    			if (processingKey ==UserPrefsProperty.PUBLISH_PARAM_DEFAULT_PREFS_VALUE) {
-    				return true;
-    			} else {
-    				return false;
-    			}
+    			return false;
     		}
  
     		String[] publishedPrefsValues = unparsedPublishedPrefsValues.split(",");

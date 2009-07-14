@@ -349,7 +349,7 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
 	protected boolean hasParamDefaultPreferences(ServiceReference algRef) {
 		String prefsToPublish = (String) algRef.getProperty(UserPrefsProperty.PREFS_PUBLISHED_KEY);
 		if (prefsToPublish == null) {
-			return true;
+			return false;
 		}
 
 		return prefsToPublish.contains(UserPrefsProperty.PUBLISH_PARAM_DEFAULT_PREFS_VALUE);
