@@ -29,7 +29,9 @@ public class FileLoadFactory implements AlgorithmFactory, ManagedService {
     }
 
 	public void updated(Dictionary properties) throws ConfigurationException {
-		this.properties = properties;
+		if (properties != null) {
+			this.properties = properties;
+		}
 		//printPreferences(properties);
 	}
 	
