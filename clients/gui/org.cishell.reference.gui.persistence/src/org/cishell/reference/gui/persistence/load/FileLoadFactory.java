@@ -30,22 +30,22 @@ public class FileLoadFactory implements AlgorithmFactory, ManagedService {
 
 	public void updated(Dictionary properties) throws ConfigurationException {
 		this.properties = properties;
-		printPreferences(properties);
+		//printPreferences(properties);
 	}
 	
-	private void printPreferences(Dictionary properties) {
-			System.out.println("  Preferences are as follows for File Load:");
-			if (properties == null) {
-				System.out.println("    Dictionary is null!");
-			} else {
-				Enumeration propertiesKeys = properties.keys();
-				
-				while (propertiesKeys.hasMoreElements()) {
-					String propertiesKey = (String) propertiesKeys.nextElement();
-					
-					Object propertiesValue = properties.get(propertiesKey);
-					System.out.println("    " + propertiesKey + ":" + propertiesValue);
-				}
-			}
-		}
+//	private void printPreferences(Dictionary properties) {
+//			System.out.println("  Preferences are as follows for File Load:");
+//			if (properties == null) {
+//				System.out.println("    Dictionary is null!");
+//			} else {
+//				Enumeration propertiesKeys = properties.keys();
+//				
+//				while (propertiesKeys.hasMoreElements()) {
+//					String propertiesKey = (String) propertiesKeys.nextElement();
+//					
+//					Object propertiesValue = properties.get(propertiesKey);
+//					System.out.println("    " + propertiesKey + ":" + propertiesValue);
+//				}
+//			}
+//		}
 }

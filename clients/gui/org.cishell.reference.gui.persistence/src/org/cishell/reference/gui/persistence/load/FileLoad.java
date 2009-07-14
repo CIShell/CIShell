@@ -37,7 +37,17 @@ public class FileLoad implements Algorithm {
 
 		// unpack preference properties
 		if (defaultLoadDirectory == null) {
-			defaultLoadDirectory = (String) prefProperties.get("loadDir");
+			
+			/*
+			 * get the default load directory from preferences,
+			 * if it has been set. 
+			 */
+			Object result = prefProperties.get("loadDir");
+			if (result != null) {
+				defaultLoadDirectory = (String) result;
+			} else {
+				defaultLoadDirectory = "";
+			}
 		}
 	}
 
