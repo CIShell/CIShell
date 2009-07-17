@@ -3,7 +3,7 @@ package org.cishell.utilities;
 public class StringUtilities {
 	public static String implodeStringArray(String[] stringArray, String separator) {
 		final int stringArrayLength = stringArray.length;
-		StringBuilder workingResultString = new StringBuilder();
+		StringBuffer workingResultString = new StringBuffer();
 
 		for (int ii = 0; ii < stringArrayLength; ii++) {
 			workingResultString.append(stringArray[ii]);
