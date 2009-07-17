@@ -162,5 +162,11 @@
       <param name="project.name" value="/libs/jythonlib"/>
       <param name="url" value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk"/>
     </antcall>
+  	<antcall target="svn.co">
+  	      <param name="target" value="plugins"/>
+  	      <param name="element.id" value="org.cishell.utilities"/>
+  	      <param name="project.name" value="/core/org.cishell.utilities"/>
+  	      <param name="url" value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk"/>
+  	    </antcall>
   </target>
 </project>
