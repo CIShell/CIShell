@@ -1,0 +1,18 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Utilities Plug-in
+Bundle-SymbolicName: org.cishell.utilities
+Bundle-Version: 1.0.0
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Import-Package: org.cishell.framework.algorithm;version="1.0.0",
+ org.cishell.reference.service.metatype,
+ org.osgi.framework;version="1.4.0",
+ org.osgi.service.metatype;version="1.1.0",
+ prefuse,
+ prefuse.data,
+ prefuse.data.column,
+ prefuse.data.tuple,
+ prefuse.data.util,
+ prefuse.util,
+ prefuse.util.collections
+Export-Package: org.cishell.utilities
