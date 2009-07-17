@@ -167,6 +167,6 @@
   	      <param name="element.id" value="org.cishell.utilities"/>
   	      <param name="project.name" value="/core/org.cishell.utilities"/>
   	      <param name="url" value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk"/>
-  	    </antcall>
+  	</antcall>
   </target>
 </project>
