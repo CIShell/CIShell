@@ -66,6 +66,59 @@ public class TableUtilities {
 		}
 	}
 	
+	public static String formNonConflictingNewColumnName(
+			Schema schema, String[] suggestedColumnNames) 
+			throws ColumnNotFoundException {
+		List workingColumnNames = getAllColumnNames(schema);
+
+		boolean suggestedNameFound = false;
+		for(int suggestedNameIndex = 0; suggestedNameIndex < suggestedColumnNames.length; suggestedNameIndex++) {
+			for(int i = 0; i < workingColumnNames.size(); i++) {
+				if(workingColumnNames.get(i).toString().equalsIgnoreCase(suggestedColumnNames[suggestedNameIndex])) {
+					suggestedNameFound = true;
+					break;
+				}
+			}
+			/*
+			 * To ensure that whenever a suggested name is found in the original column schema, create a name.
+			 * */
+			if(suggestedNameFound) {
+				break;
+			}
+		}
+		
+		/*
+		 * If none of the suggested names are conflicting then return the first suggested name.
+		 * */
+		if(!suggestedNameFound) {
+			return suggestedColumnNames[0];
+		}
+
+		/*
+		 * This part of code will be executed only if the suggested names are already present in the 
+		 * column schema.
+		 * */
+			boolean newColumnNameFound = false;
+			int columnNameSuffix = 2;
+			while(true) {
+				/*
+				 * The pattern for new names will be taken from the first suggested column name.
+				 * */
+				String newColumnName =
+					suggestedColumnNames[0].concat("_" + columnNameSuffix);
+				for(int i = 0; i < workingColumnNames.size(); i++) {
+					if(workingColumnNames.get(i).toString().equalsIgnoreCase(newColumnName)) {
+						newColumnNameFound = true;
+						break;
+					}
+				}
+				if(!newColumnNameFound) {
+					return newColumnName;
+				}
+				columnNameSuffix++;
+			}
+	}
+	
 	public static String[] filterSchemaColumnNamesByClasses
 		(Schema schema, Class[] objectClasses) throws ColumnNotFoundException
 	{
