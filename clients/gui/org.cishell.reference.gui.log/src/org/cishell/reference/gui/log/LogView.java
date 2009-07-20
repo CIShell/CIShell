@@ -15,6 +15,9 @@
 package org.cishell.reference.gui.log;
 
 //standard java
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -166,7 +169,14 @@ public class LogView extends ViewPart implements LogListener{
          ServiceReference ref = context.getServiceReference(LogReaderService.class.getName());
          LogReaderService reader = (LogReaderService) context.getService(ref);
          if (reader != null) {
-        	 reader.addLogListener(this);               
+        	 reader.addLogListener(this);   
+        	 
+        	 Enumeration backLogEntries = reader.getLog();
+        	 
+        	 while (backLogEntries.hasMoreElements()) {
+        	 	LogEntry logEntry = (LogEntry)backLogEntries.nextElement();
+        	 	this.logged(logEntry);
+        	 }
          }
          else
         	 System.out.println("reader is null");
@@ -180,7 +190,6 @@ public class LogView extends ViewPart implements LogListener{
     }
     
     public void logged(final LogEntry entry) {
-        
     	PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() {
 			public void run() {
 				String message = entry.getMessage();
@@ -198,7 +207,6 @@ public class LogView extends ViewPart implements LogListener{
 				}
 			}
     	});
-    	
     }
     
     private boolean goodMessage(String msg) {
