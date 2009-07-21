@@ -27,7 +27,8 @@ public class ArrayListUtilities {
 			}
 		}
 		
-		for (String keyToAdd : keysToAdd) {
+		for (int ii = 0; ii < keysToAdd.length; ii++) {
+			String keyToAdd = keysToAdd[ii];
 			if (!union.contains(keyToAdd)) {
 				union.add(keyToAdd);
 			}
