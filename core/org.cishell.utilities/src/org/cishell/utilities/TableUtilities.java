@@ -125,7 +125,9 @@ public class TableUtilities {
 		ArrayList workingColumnNames = new ArrayList();
 		
 		for (int ii = 0; ii < schema.getColumnCount(); ii++) {
-			for (Class objectClass : objectClasses) {
+			for (int jj = 0; jj < objectClasses.length; jj++) {
+				Class objectClass = objectClasses[jj];
+			
 				if (objectClass.isAssignableFrom(schema.getColumnType(ii))) {
 					workingColumnNames.add(schema.getColumnName(ii));
 					

@@ -196,8 +196,9 @@ public class DateUtilities {
 	
 	public static Date parseDate(String dateString)
 			throws ParseException {
-		for (DateFormat format : ACCEPTED_DATE_FORMATS) {
+		for (int ii = 0; ii < ACCEPTED_DATE_FORMATS.length; ii++) {
 			try {
+				DateFormat format = ACCEPTED_DATE_FORMATS[ii];
 				format.setLenient(false);
 				Date date = format.parse(dateString);
 				
