@@ -30,7 +30,7 @@ public class NumberUtilities {
 				throw new NumberFormatException(EMPTY_CELL_MESSAGE);
 			}
 			else {
-				return objectAsShortArray[0].doubleValue();
+				return new Double(objectAsShortArray[0].doubleValue());
 			}
 		}
 		else if (object instanceof int[]) {
@@ -50,7 +50,7 @@ public class NumberUtilities {
 				throw new NumberFormatException(EMPTY_CELL_MESSAGE);
 			}
 			else {
-				return objectAsIntegerArray[0].doubleValue();
+				return new Double(objectAsIntegerArray[0].doubleValue());
 			}
 		}
 		else if (object instanceof long[]) {
@@ -70,7 +70,7 @@ public class NumberUtilities {
 				throw new NumberFormatException(EMPTY_CELL_MESSAGE);
 			}
 			else {
-				return objectAsLongArray[0].doubleValue();
+				return new Double(objectAsLongArray[0].doubleValue());
 			}
 		}
 		else if (object instanceof float[]) {
@@ -90,7 +90,7 @@ public class NumberUtilities {
 				throw new NumberFormatException(EMPTY_CELL_MESSAGE);
 			}
 			else {
-				return objectAsFloatArray[0].doubleValue();
+				return new Double(objectAsFloatArray[0].doubleValue());
 			}
 		}
 		else if (object instanceof double[]) {
