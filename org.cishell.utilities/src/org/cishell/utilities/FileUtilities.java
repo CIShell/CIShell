@@ -1,7 +1,10 @@
 package org.cishell.utilities;
 
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -130,6 +133,15 @@ public class FileUtilities {
    		
    		return temporaryTextFile;
     }
+    
+    public static boolean isFileEmpty(File file)
+			throws FileNotFoundException, IOException {
+		final BufferedReader reader = new BufferedReader(new FileReader(file));
+		String firstLine = reader.readLine();	
+		reader.close();
+		boolean fileIsEmpty = ( firstLine == null );
+		return fileIsEmpty;
+	}
     
     private static File ensureDirectoryExists(String directoryPath) {
     	File directory = new File(directoryPath);
