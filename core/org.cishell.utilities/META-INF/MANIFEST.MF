@@ -15,4 +15,5 @@ Import-Package: org.cishell.framework.algorithm;version="1.0.0",
  prefuse.data.util,
  prefuse.util,
  prefuse.util.collections
-Export-Package: org.cishell.utilities
+Export-Package: org.cishell.utilities,
+ org.cishell.utilities.mutateParameter
