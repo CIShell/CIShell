@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metatype:MetaData xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.0.0">
+	<OCD name="Converter Graph" id="org.cishell.algorithm.convertergraph.ConverterGraphAlgorithm.OCD"
+		 	description="Provides Graph of all the converters in the tool.">
+	</OCD>
+	<Designate pid="org.cishell.algorithm.convertergraph.ConverterGraphAlgorithm">
+		<Object ocdref="org.cishell.algorithm.convertergraph.ConverterGraphAlgorithm.OCD" />
+	</Designate>
+</metatype:MetaData>
