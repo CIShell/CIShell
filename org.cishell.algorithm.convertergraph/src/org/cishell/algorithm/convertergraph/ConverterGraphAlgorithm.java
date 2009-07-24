@@ -30,22 +30,15 @@ import org.osgi.service.log.LogService;
  * @author Chintan Tank
  */
 
-public class ConverterGraphAlgorithm implements Algorithm{
+public class ConverterGraphAlgorithm implements Algorithm {
 
-	private static final int NODE_STRENGTH_INDEX = 1;
-	private static final int NODEID_INDEX = 0;
-	private static final int CONVERTER_SERVICE_PID_INDEX = 3;
-	private static final int CONVERTER_NAME_INDEX = 2;
-	private static final int EDGE_TARGETID_INDEX = 1;
-	private static final int EDGE_SOURCEID_INDEX = 0;
-	
 	private LogService logger;
 	private BundleContext bundleContext;
 	
 	private int nodeCount, edgeCount;
 
     /**
-     * Construct with the appropriate parameters
+     * Construct with the appropriate parameters.
      * @param ciShellContext 
      * @param bundleContext  
      * @throws AlgorithmExecutionException 
@@ -56,7 +49,7 @@ public class ConverterGraphAlgorithm implements Algorithm{
 		this.logger = (LogService) ciShellContext.getService(LogService.class.getName());
     }
 
-    public Data[] execute() throws AlgorithmExecutionException{
+    public Data[] execute() throws AlgorithmExecutionException {
 		
 			try {
 				
@@ -76,7 +69,7 @@ public class ConverterGraphAlgorithm implements Algorithm{
 				 * */
 				File outputNWBFile = createOutputGraphFile(converterGraphComputation);
 				
-				return prepareOutputMetadata(new BasicData(outputNWBFile,"file:text/nwb"));
+				return prepareOutputMetadata(new BasicData(outputNWBFile, "file:text/nwb"));
 			
 			} catch (IOException e) {
 				throw new AlgorithmExecutionException(e);
@@ -134,8 +127,8 @@ public class ConverterGraphAlgorithm implements Algorithm{
 			ConverterGraphComputation converterGraphComputation,
 			ConverterGraphOutputGenerator outputGenerator) {
 		
-		for(Iterator edgeIterator = converterGraphComputation.edges.iterator(); 
-				edgeIterator.hasNext(); ) {
+		for (Iterator edgeIterator = converterGraphComputation.edges.iterator(); 
+				edgeIterator.hasNext();) {
 			
 			Edge edge = (Edge) edgeIterator.next();
 			int sourceNode = edge.source;
@@ -143,7 +136,7 @@ public class ConverterGraphAlgorithm implements Algorithm{
 			final String converterName = edge.serviceShortPID;
 			final String servicePID = edge.serviceCompletePID;
 				
-			outputGenerator.addDirectedEdge(sourceNode, targetNode, new HashMap(){{
+			outputGenerator.addDirectedEdge(sourceNode, targetNode, new HashMap() {{
 				put("converter_name", converterName);
 				put("service_pid", servicePID);
 			}});
@@ -158,16 +151,16 @@ public class ConverterGraphAlgorithm implements Algorithm{
 			ConverterGraphComputation converterGraphComputation,
 			ConverterGraphOutputGenerator outputGenerator) {
 		
-		for(Iterator nodeIterator = converterGraphComputation.nodes.entrySet().iterator(); 
-				nodeIterator.hasNext(); ) {
+		for (Iterator nodeIterator = converterGraphComputation.nodes.entrySet().iterator(); 
+				nodeIterator.hasNext();) {
 			
 			Map.Entry node = (Entry) nodeIterator.next();
 			
-			int nodeID = ((Node)node.getValue()).id;
-			final int strength = ((Node)node.getValue()).strength;
+			int nodeID = ((Node) node.getValue()).id;
+			final int strength = ((Node) node.getValue()).strength;
 			String label = node.getKey().toString();
 				
-			outputGenerator.addNode(nodeID, label, new HashMap(){{
+			outputGenerator.addNode(nodeID, label, new HashMap() {{
 				put("strength", strength);
 			}});
 		}

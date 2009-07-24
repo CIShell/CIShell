@@ -14,7 +14,7 @@ import org.osgi.service.component.ComponentContext;
  *
  */
 
-public class ConverterGraphAlgorithmFactory implements AlgorithmFactory{
+public class ConverterGraphAlgorithmFactory implements AlgorithmFactory {
 	
     private BundleContext bundleContext;
 
