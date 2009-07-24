@@ -117,9 +117,17 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, DataMa
         	logger.log(LogService.LOG_INFO, acknowledgement.toString());
     }
     
+    private String[] separateInData(String inDataString) {
+		String[] inData = ("" + inDataString).split(",");
+        for(int ii = 0; ii < inData.length; ii++) {
+        	inData[ii] = inData[ii].trim();
+        }
+		return inData;
+	}
+    
     public void dataSelected(Data[] selectedData) {        
         String inDataString = (String)ref.getProperty(IN_DATA);
-        String[] inData = ("" + inDataString).split(",");
+        String[] inData = separateInData(inDataString);
         
         if ((inData.length == 1 && inData[0].equalsIgnoreCase(NULL_DATA))) {
             data = new Data[0];
