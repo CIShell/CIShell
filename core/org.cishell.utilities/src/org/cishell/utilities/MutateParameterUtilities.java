@@ -3,105 +3,146 @@ package org.cishell.utilities;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 
-import org.cishell.reference.service.metatype.BasicAttributeDefinition;
 import org.cishell.reference.service.metatype.BasicObjectClassDefinition;
+import org.cishell.utilities.mutateParameter.AttributeDefinitionTransformer;
+import org.cishell.utilities.mutateParameter.NullDropdownTransformer;
+import org.cishell.utilities.mutateParameter.ObjectClassDefinitionTransformer;
 import org.osgi.service.metatype.AttributeDefinition;
 import org.osgi.service.metatype.ObjectClassDefinition;
 
 import prefuse.data.Table;
 
 public class MutateParameterUtilities {
-	public static AttributeDefinition formLabelAttributeDefinition
-		(AttributeDefinition oldAttributeDefinition, Table table)
-			throws ColumnNotFoundException
-	{
+	/* TODO The mutateParameter subpackage is meant to eliminate all of the loops
+	 * that invoke the formFooAttributeDefinition methods.
+	 */
+	
+	public static AttributeDefinition formLabelAttributeDefinition(
+			AttributeDefinition oldAttributeDefinition, Table table)
+				throws ColumnNotFoundException {
 		String[] validStringColumnsInTable =
 			TableUtilities.getValidStringColumnNamesInTable(table);
 	
 		AttributeDefinition labelAttributeDefinition =
-			new BasicAttributeDefinition(oldAttributeDefinition.getID(),
-										 oldAttributeDefinition.getName(),
-										 oldAttributeDefinition.getDescription(),
-										 AttributeDefinition.STRING,
-										 validStringColumnsInTable,
-										 validStringColumnsInTable);
+			cloneToDropdownAttributeDefinition(oldAttributeDefinition,
+											   validStringColumnsInTable,
+											   validStringColumnsInTable);
 	
 		return labelAttributeDefinition;
 	}
 
-	public static AttributeDefinition formDateAttributeDefinition
-		(AttributeDefinition oldAttributeDefinition, Table table)
-			throws ColumnNotFoundException
-	{
+	public static AttributeDefinition formDateAttributeDefinition(
+			AttributeDefinition oldAttributeDefinition, Table table)
+				throws ColumnNotFoundException {
 		String[] validDateColumnsInTable =
 			TableUtilities.getValidDateColumnNamesInTable(table);
 
 		AttributeDefinition dateAttributeDefinition =
-			new BasicAttributeDefinition(oldAttributeDefinition.getID(),
-										 oldAttributeDefinition.getName(),
-										 oldAttributeDefinition.getDescription(),
-										 AttributeDefinition.STRING,
-										 validDateColumnsInTable,
-										 validDateColumnsInTable);
+			cloneToDropdownAttributeDefinition(oldAttributeDefinition,
+											   validDateColumnsInTable,
+											   validDateColumnsInTable);
 
 		return dateAttributeDefinition;
 	}
 
-	public static AttributeDefinition formIntegerAttributeDefinition
-		(AttributeDefinition oldAttributeDefinition, Table table)
-			throws ColumnNotFoundException
-	{
+	public static AttributeDefinition formIntegerAttributeDefinition(
+			AttributeDefinition oldAttributeDefinition, Table table)
+				throws ColumnNotFoundException {
 		String[] validIntegerColumnsInTable =
 			TableUtilities.getValidIntegerColumnNamesInTable(table);
 
 		AttributeDefinition integerAttributeDefinition =
-			new BasicAttributeDefinition(oldAttributeDefinition.getID(),
-										 oldAttributeDefinition.getName(),
-										 oldAttributeDefinition.getDescription(),
-										 AttributeDefinition.STRING,
-										 validIntegerColumnsInTable,
-										 validIntegerColumnsInTable);
+			cloneToDropdownAttributeDefinition(oldAttributeDefinition,
+											   validIntegerColumnsInTable,
+											   validIntegerColumnsInTable);
 
 		return integerAttributeDefinition;
 	}
 	
-	public static AttributeDefinition formNumberAttributeDefinition
-		(AttributeDefinition oldAttributeDefinition, Table table)
-			throws ColumnNotFoundException {
+	public static AttributeDefinition formNumberAttributeDefinition(
+			AttributeDefinition oldAttributeDefinition, Table table)
+				throws ColumnNotFoundException {
 		String[] validNumberColumnsInTable =
 			TableUtilities.getValidNumberColumnNamesInTable(table);
 		
 		AttributeDefinition numberAttributeDefinition =
-			new BasicAttributeDefinition(oldAttributeDefinition.getID(),
-										 oldAttributeDefinition.getName(),
-										 oldAttributeDefinition.getDescription(),
-										 AttributeDefinition.STRING,
-										 validNumberColumnsInTable,
-										 validNumberColumnsInTable);
+			cloneToDropdownAttributeDefinition(oldAttributeDefinition,
+											   validNumberColumnsInTable,
+											   validNumberColumnsInTable);
 		
 		return numberAttributeDefinition;
 	}
 	
-	public static AttributeDefinition formAttributeDefinitionFromMap
-			(AttributeDefinition oldAttributeDefinition,
-			 LinkedHashMap map,
-			 String[] types,
-			 String[] keysToSkip,
-			 String[] keysToAdd) {
+	// TODO: Change LinkedHashMap to Map?
+	public static AttributeDefinition formAttributeDefinitionFromMap(
+			AttributeDefinition oldAttributeDefinition,
+			LinkedHashMap map,
+			String[] types,
+			String[] keysToSkip,
+			String[] keysToAdd) {
 		String[] validNumberKeysInMap =
 			MapUtilities.getValidKeysOfTypesInMap(
 				map, types, keysToSkip, keysToAdd);
 		
 		AttributeDefinition numberAttributeDefinition =
-			new BasicAttributeDefinition(
-				oldAttributeDefinition.getID(),
-				oldAttributeDefinition.getName(),
-				oldAttributeDefinition.getDescription(),
-				AttributeDefinition.STRING,
-				validNumberKeysInMap,
-				validNumberKeysInMap);
+			cloneToDropdownAttributeDefinition(oldAttributeDefinition,
+											   validNumberKeysInMap,
+											   validNumberKeysInMap);
 		
 		return numberAttributeDefinition;
+	}
+	
+	public static AttributeDefinition cloneToDropdownAttributeDefinition(
+			AttributeDefinition oldAD,
+			final String[] optionLabels,
+			final String[] optionValues) {
+		AttributeDefinitionTransformer transformer =
+			new NullDropdownTransformer() {
+				public boolean shouldTransform(AttributeDefinition ad) {
+					return true;
+				}
+				
+				public String[] transformOptionLabels(
+						String[] oldOptionLabels) {
+					return optionLabels;
+				}
+				
+				public String[] transformOptionValues(
+						String[] oldOptionValues) {
+					return optionValues;
+				}
+			};
+			
+		return transformer.transform(oldAD);
+	}
+	
+	/* Convenience method for a common mutation:
+	 * Replacing a parameter (identified by its ID) with a dropdown list of
+	 * options.
+	 */
+	public static BasicObjectClassDefinition mutateToDropdown(
+			ObjectClassDefinition oldOCD,
+			final String parameterID,
+			final String[] optionLabels,
+			final String[] optionValues) {
+		AttributeDefinitionTransformer dropdownTransformer =
+			new NullDropdownTransformer() {
+				public boolean shouldTransform(AttributeDefinition ad) {
+					return parameterID.equals(ad.getID());
+				}
+				
+				public String[] transformOptionLabels(
+						String[] oldOptionLabels) {
+					return optionLabels;
+				}
+				public String[] transformOptionValues(
+						String[] oldOptionValues) {
+					return optionValues;
+				}
+			};
+		
+		return ObjectClassDefinitionTransformer.apply(dropdownTransformer,
+													  oldOCD);
 	}
 	
 	public static BasicObjectClassDefinition createNewParameters(
