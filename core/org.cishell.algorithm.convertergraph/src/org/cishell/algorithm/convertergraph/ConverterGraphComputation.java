@@ -99,26 +99,29 @@ public class ConverterGraphComputation {
 	 * */
 	private void processServiceReferences() {
 		
-		for(int converterCount = 0; converterCount < allConverterServices.length; converterCount++) {
+		for (int converterCount = 0; 
+				converterCount < allConverterServices.length; 
+				converterCount++) {
 
 			int sourceNodeID, targetNodeID;
 
-			ServiceReference currentConverterServiceReference = allConverterServices[converterCount];
+			ServiceReference currentConverterServiceReference = 
+				allConverterServices[converterCount];
 
-			String sourceNodeKey = (String)currentConverterServiceReference.getProperty("in_data");
-			String targetNodeKey = (String)currentConverterServiceReference.getProperty("out_data");
+			String sourceNodeKey = 
+				(String) currentConverterServiceReference.getProperty("in_data");
+			String targetNodeKey = 
+				(String) currentConverterServiceReference.getProperty("out_data");
 			
-			if(nodes.containsKey(sourceNodeKey)) {
-				sourceNodeID = updateNode(sourceNodeKey);
-			}
-			else {
+			if (nodes.containsKey(sourceNodeKey)) {
+				sourceNodeID = updateNode(sourceNodeKey); 
+			} else {
 				sourceNodeID = createNode(sourceNodeKey);
 			}
 			
-			if(nodes.containsKey(targetNodeKey)) {
+			if (nodes.containsKey(targetNodeKey)) {
 				targetNodeID = updateNode(targetNodeKey);
-			}
-			else {
+			} else {
 				targetNodeID = createNode(targetNodeKey);
 			}
 			
@@ -152,7 +155,8 @@ public class ConverterGraphComputation {
 	 */
 	private void createEdge(int sourceNodeID, int targetNodeID,
 			ServiceReference currentConverterServiceReference) {
-		String serviceCompletePID = (String)currentConverterServiceReference.getProperty("service.pid");
+		String serviceCompletePID = 
+			(String) currentConverterServiceReference.getProperty("service.pid");
 		
 		/*
 		 * Converter name is placed in the last block of service.pid. This is used
