@@ -94,8 +94,7 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
     }
 
     /**
-     * Assemble the directed graph of converters.  Currently unweighted
-     *
+     * Assemble the directed graph of converters.  Currently unweighted.
      */
     private void assembleGraph() {    	
         try {
@@ -132,8 +131,8 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
      */
     public Converter[] findConverters(String inFormat, String outFormat) {
 //      saveGraph();
-		if (inFormat != null && inFormat.length() > 0 &&
-			outFormat != null && outFormat.length() > 0) {
+		if (inFormat != null && inFormat.length() > 0
+				&& outFormat != null && outFormat.length() > 0) {
 			
             Converter[] converters = null;
             
@@ -146,27 +145,24 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
             
 			return converters;
 		}
-		return new Converter[0];		
+		return new Converter[0];
     }
     
     /**
-     * If the final format is of type file-ext, then append the final converter to the
-     * converter list
+     * If the final format is of type file-ext, then append the final converter
+     * to the converter list
      * 
      * @param converters Current converter chain
      * @param outFormat Final data type
      * @return The edited converter chain
      */
-    private Converter[] addFinalStepConversions(Converter[] converters, String outFormat) {
+    private Converter[] addFinalStepConversions(Converter[] converters,
+    											String outFormat) {
         Collection newConverters = new HashSet();
         
         Set formats = new HashSet();
         for (int i=0; i < converters.length; i++) {
             String format = (String) converters[i].getProperties().get(OUT_DATA);
-            
-            //tmp
-            //String inFormat = (String) converters[i].getProperties().get(IN_DATA);
-            //System.out.println("Converter:"+converters.length+":"+ inFormat + "->" + format + "->" + outFormat);
             
             if (!formats.contains(format)) {
                 String filter = "(&("+ALGORITHM_TYPE+"="+TYPE_VALIDATOR+")" +
@@ -175,8 +171,10 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
                                   "("+OUT_DATA+"="+outFormat+"))";
             
                 try {
-                    ServiceReference[] refs = bContext.getServiceReferences(
-                            AlgorithmFactory.class.getName(), filter);
+                    ServiceReference[] refs =
+                    	bContext.getServiceReferences(
+                            AlgorithmFactory.class.getName(),
+                            filter);
                     
                     if (refs != null && refs.length > 0) {
                         for (int j=0; j < refs.length; j++) {
@@ -184,10 +182,12 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
                                     converters[i].getConverterChain()));
                             chain.add(refs[j]);
                             
-                            ServiceReference[] newChain = (ServiceReference[]) 
-                                chain.toArray(new ServiceReference[0]);
+                            ServiceReference[] newChain = (ServiceReference[])
+                            	chain.toArray(new ServiceReference[0]);
                             
-                            newConverters.add(new ConverterImpl(bContext, ciContext, newChain));
+                            newConverters.add(new ConverterImpl(bContext,
+                            									ciContext,
+                            									newChain));
                         }
                     
                         formats.add(format);
@@ -209,13 +209,8 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
      * @see org.cishell.service.conversion.DataConversionService#findConverters(java.lang.String, java.lang.String)
      */
     private Converter[] getConverters(String inFormat, String outFormat) {
-		String inFilter = "(&(" + ALGORITHM_TYPE + "=" + TYPE_CONVERTER + ")"
-				+ "("+IN_DATA+"="+inFormat+") " + "("+OUT_DATA+"=*)" + 
-                "(!("+IN_DATA+"=file-ext:*))" + "(!(" + REMOTE + "=*)))";
-
-		String outFilter = "(&(" + ALGORITHM_TYPE + "=" + TYPE_CONVERTER + ")"
-				+ "("+IN_DATA+"=*) " + "("+OUT_DATA+"="+outFormat+")" 
-                + "(!(" + REMOTE + "=*)))";
+		String inFilter = createConverterFilterForInFormat(inFormat);
+		String outFilter = createConverterFilterForOutFormat(outFormat);
         
         Collection converterList = new HashSet();
         
@@ -238,23 +233,24 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
 			if (inRefs != null && outRefs != null) {
 				Set inFileTypeSet = new HashSet();
 				for (int i = 0; i < inRefs.length; ++i) {
-					inFileTypeSet.add(inRefs[i]
-							.getProperty(AlgorithmProperty.IN_DATA));
+					inFileTypeSet.add(
+							inRefs[i].getProperty(AlgorithmProperty.IN_DATA));
 				}
 				Set outFileTypeSet = new HashSet();
 				for (int i = 0; i < outRefs.length; ++i) {
-					outFileTypeSet.add(outRefs[i]
-							.getProperty(AlgorithmProperty.OUT_DATA));
+					outFileTypeSet.add(
+							outRefs[i].getProperty(AlgorithmProperty.OUT_DATA));
 				}
 
 				
 				for (Iterator i = inFileTypeSet.iterator(); i.hasNext();) {
 					String srcDataType = (String) i.next();
 					for (Iterator j = outFileTypeSet.iterator(); j.hasNext();) {
-						Converter converter = getConverter(	srcDataType,
-															(String) j.next());
-						if (converter != null) 
+						Converter converter =
+							getConverter(srcDataType, (String) j.next());
+						if (converter != null) {
 							converterList.add(converter);
+						}
 					}
 				}
 			}
@@ -262,6 +258,20 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
 			e.printStackTrace();
 		}
 		return (Converter[]) converterList.toArray(new Converter[0]);
+	}
+
+	private String createConverterFilterForOutFormat(String outFormat) {
+		String outFilter = "(&(" + ALGORITHM_TYPE + "=" + TYPE_CONVERTER + ")"
+				+ "("+IN_DATA+"=*) " + "("+OUT_DATA+"="+outFormat+")" 
+                + "(!(" + REMOTE + "=*)))";
+		return outFilter;
+	}
+
+	private String createConverterFilterForInFormat(String inFormat) {
+		String inFilter = "(&(" + ALGORITHM_TYPE + "=" + TYPE_CONVERTER + ")"
+				+ "("+IN_DATA+"="+inFormat+") " + "("+OUT_DATA+"=*)" + 
+                "(!("+IN_DATA+"=file-ext:*))" + "(!(" + REMOTE + "=*)))";
+		return inFilter;
 	}
     
     /**
@@ -271,26 +281,31 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
      * @return Single converter path
      */
     private Converter getConverter(String inType, String outType) {
-		Vertex srcVertex = (Vertex)dataTypeToVertex.get(inType);
-		Vertex tgtVertex = (Vertex)dataTypeToVertex.get(outType);
+		Vertex sourceVertex = (Vertex) dataTypeToVertex.get(inType);
+		Vertex targetVertex = (Vertex) dataTypeToVertex.get(outType);
 		
-		if (srcVertex != null && tgtVertex != null) {
-			DijkstraShortestPath shortestPathAlg = new DijkstraShortestPath(graph);
-			List edgeList = shortestPathAlg.getPath(srcVertex, tgtVertex);
+		if (sourceVertex != null && targetVertex != null) {
+			DijkstraShortestPath shortestPathAlg =
+				new DijkstraShortestPath(graph);
+			List edgeList = shortestPathAlg.getPath(sourceVertex, targetVertex);
 			
 			if (edgeList.size() > 0) {
-				ServiceReference[] serviceReferenceArray = new ServiceReference[edgeList
-						.size()];
+				ServiceReference[] serviceReferenceArray =
+					new ServiceReference[edgeList.size()];
 				for (int i = 0; i < serviceReferenceArray.length; ++i) {
 					Edge edge = (Edge) edgeList.get(i);
-					AbstractList converterList = (AbstractList) edge
-							.getUserDatum(SERVICE_LIST);
-					serviceReferenceArray[i] = (ServiceReference) converterList
-							.get(0);
+					AbstractList converterList =
+						(AbstractList) edge.getUserDatum(SERVICE_LIST);
+					serviceReferenceArray[i] =
+						(ServiceReference) converterList.get(0);
 				}
-				return new ConverterImpl(bContext, ciContext,	serviceReferenceArray);
+				
+				return new ConverterImpl(bContext,
+										 ciContext,
+										 serviceReferenceArray);
 			}
 		}
+		
 		return null;
     }
 
@@ -318,10 +333,11 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
             converters = findConverters(format, outFormat);
             set.addAll(new HashSet(Arrays.asList(converters)));
         } 
-        if (!(data.getData() instanceof File) && data.getData() != null) {            
-            Iterator iter = getClassesFor(data.getData().getClass()).iterator();
-            while (iter.hasNext()) {
-                Class c = (Class) iter.next();
+        if (!(data.getData() instanceof File) && data.getData() != null) {
+        	Class dataClass = data.getData().getClass();
+            for (Iterator it = getClassesFor(dataClass).iterator();
+            		it.hasNext();) {
+                Class c = (Class) it.next();
                 converters = findConverters(c.getName(), outFormat);
                 set.addAll(new HashSet(Arrays.asList(converters)));
             }
@@ -386,8 +402,10 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
 	public void serviceChanged(ServiceEvent event) {
 		ServiceReference inServiceRef = event.getServiceReference();
 		
-		String inDataType = (String)inServiceRef.getProperty(AlgorithmProperty.IN_DATA);
-		String outDataType = (String)inServiceRef.getProperty(AlgorithmProperty.OUT_DATA);
+		String inDataType =
+			(String) inServiceRef.getProperty(AlgorithmProperty.IN_DATA);
+		String outDataType =
+			(String) inServiceRef.getProperty(AlgorithmProperty.OUT_DATA);
 
 		if (event.getType() ==  ServiceEvent.MODIFIED) {
 			removeServiceReference(inDataType, outDataType, inServiceRef);
@@ -403,31 +421,33 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
 	
 	/**
 	 * Remove a service reference in the graph
-	 * @param srcDataType The source data type of the serviceReference to remove
-	 * @param tgtDataType The target data type of the serviceReference to remove
+	 * @param sourceDataType The source data type of the serviceReference to remove
+	 * @param targetDataType The target data type of the serviceReference to remove
 	 * @param serviceReference The serviceReference to remove
 	 */
-	private void removeServiceReference(String srcDataType, String tgtDataType, ServiceReference serviceReference) {
-		if (srcDataType != null && tgtDataType != null) {
-			Vertex srcVertex = (Vertex) dataTypeToVertex.get(srcDataType);
-			Vertex tgtVertex = (Vertex) dataTypeToVertex.get(tgtDataType);
-			String pid = (String) serviceReference
-					.getProperty(Constants.SERVICE_PID);
+	private void removeServiceReference(String sourceDataType,
+										String targetDataType,
+										ServiceReference serviceReference) {
+		if (sourceDataType != null && targetDataType != null) {
+			Vertex sourceVertex = (Vertex) dataTypeToVertex.get(sourceDataType);
+			Vertex targetVertex = (Vertex) dataTypeToVertex.get(targetDataType);
+			String pid =
+				(String) serviceReference.getProperty(Constants.SERVICE_PID);
 
-			if (srcVertex != null && tgtVertex != null) {
-				Edge edge = srcVertex.findEdge(tgtVertex);
+			if (sourceVertex != null && targetVertex != null) {
+				Edge edge = sourceVertex.findEdge(targetVertex);
 				if (edge != null) {
-					AbstractList serviceList = (AbstractList) edge
-							.getUserDatum(SERVICE_LIST);
-					for (Iterator iterator = serviceList.iterator(); iterator
-							.hasNext();) {
-						ServiceReference currentServiceReference = (ServiceReference) iterator
-								.next();
-						String currentPid = (String) currentServiceReference
+					AbstractList serviceList =
+						(AbstractList) edge.getUserDatum(SERVICE_LIST);
+					for (Iterator refs = serviceList.iterator(); refs.hasNext();) {
+						ServiceReference currentServiceReference =
+							(ServiceReference) refs.next();
+						String currentPid =
+							(String) currentServiceReference
 								.getProperty(Constants.SERVICE_PID);
 
 						if (pid.equals(currentPid)) {
-							iterator.remove();
+							refs.remove();
 						}
 					}
 					if (serviceList.isEmpty()) {
@@ -440,25 +460,30 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
 	
 	/**
 	 * Add service reference to the graph
-	 * @param srcDataType The source data type
-	 * @param tgtDataType The target data type
+	 * @param sourceDataType The source data type
+	 * @param targetDataType The target data type
 	 * @param serviceReference The service reference to add
 	 */
-	private void addServiceReference(String srcDataType, String tgtDataType, ServiceReference serviceReference) {
-		if (srcDataType != null && srcDataType.length() > 0
-				&& tgtDataType != null && tgtDataType.length() > 0) {
-			Vertex srcVertex = getVertex(srcDataType);
-			Vertex tgtVertex = getVertex(tgtDataType);
+	private void addServiceReference(String sourceDataType,
+									 String targetDataType,
+									 ServiceReference serviceReference) {
+		if (sourceDataType != null && sourceDataType.length() > 0
+				&& targetDataType != null && targetDataType.length() > 0) {
+			Vertex sourceVertex = getVertex(sourceDataType);
+			Vertex targetVertex = getVertex(targetDataType);
 
-			removeServiceReference(srcDataType, tgtDataType, serviceReference);
+			removeServiceReference(
+					sourceDataType,	targetDataType, serviceReference);
 			
-			Edge directedEdge = srcVertex.findEdge(tgtVertex);
+			Edge directedEdge = sourceVertex.findEdge(targetVertex);
 			if (directedEdge == null) {
-				directedEdge = new DirectedSparseEdge(srcVertex, tgtVertex);
+				directedEdge =
+					new DirectedSparseEdge(sourceVertex, targetVertex);
 				graph.addEdge(directedEdge);
 			}
 
-			AbstractList serviceList = (AbstractList) directedEdge.getUserDatum(SERVICE_LIST);
+			AbstractList serviceList =
+				(AbstractList) directedEdge.getUserDatum(SERVICE_LIST);
 			if (serviceList == null) {
 				serviceList = new ArrayList();
 				serviceList.add(serviceReference);
@@ -475,10 +500,11 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
 	 * @return The vertex
 	 */
 	private Vertex getVertex(String dataType) {
-		Vertex vertex = (SparseVertex)dataTypeToVertex.get(dataType);
+		Vertex vertex = (SparseVertex) dataTypeToVertex.get(dataType);
 		if (vertex== null) {
 			vertex = new SparseVertex();
-			vertex.addUserDatum("label", dataType,
+			vertex.addUserDatum("label",
+								dataType,
 								new UserDataContainer.CopyAction.Shared());
 			graph.addVertex(vertex);
 			dataTypeToVertex.put(dataType, vertex);
@@ -488,16 +514,18 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
 
 	/**
 	 * Save the current converter graph to the user's home directory
-	 *
+
 	 */
 	private void saveGraph() {
 		GraphMLFile writer = new GraphMLFile();
-		Graph g = (Graph)graph.copy();
-		for (Iterator i = g.getEdges().iterator(); i.hasNext();) {
-			Edge e = (Edge)i.next();
+		Graph g = (Graph) graph.copy();
+		for (Iterator edges = g.getEdges().iterator(); edges.hasNext();) {
+			Edge e = (Edge) edges.next();
 			e.removeUserDatum(SERVICE_LIST);
 		}
-		writer.save(g, System.getProperty("user.home") + File.separator + "convertGraph.xml");
-
+		
+		writer.save(g, System.getProperty("user.home")
+						+ File.separator
+						+ "convertGraph.xml");
 	}
 }
