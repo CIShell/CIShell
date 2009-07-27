@@ -52,16 +52,11 @@ public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProp
         props.put(OUT_DATA, refs[refs.length-1].getProperty(OUT_DATA));
         props.put(LABEL, props.get(IN_DATA) + " -> " + props.get(OUT_DATA));
         
-        String lossiness = LOSSLESS;
-        for (int i=0; i < refs.length; i++) {
-            if (LOSSY.equals(refs[i].getProperty(CONVERSION))) {
-                lossiness = LOSSY;
-            }
-        }
-        //TODO: Do the same thing for complexity
+        // TODO: Do the same thing for complexity
+        String lossiness = calculateLossiness(refs);        
         props.put(CONVERSION, lossiness);
     }
-    
+
     /**
      * @see org.cishell.service.conversion.Converter#convert(org.cishell.framework.data.Data)
      */
@@ -73,10 +68,14 @@ public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProp
 
         try {
 			dm = alg.execute();
-		} catch (AlgorithmExecutionException e1) {
-			throw new ConversionException("Exception occurred while converting data \r\n" + e1.getMessage(),e1);
-		} catch (Exception e2) {
-			throw new ConversionException("Exception occurred while converting data \r\n" + e2.getMessage(), e2);
+		} catch (AlgorithmExecutionException aee) {
+			throw new ConversionException(
+					"Problem converting data: " + aee.getMessage(),
+					aee);
+		} catch (Exception e) {
+			throw new ConversionException(
+					"Problem converting data: " + e.getMessage(),
+					e);
 		}
         
         Object outData = null;
@@ -88,12 +87,14 @@ public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProp
             Dictionary props = inDM.getMetadata();
             Dictionary newProps = new Hashtable();
             
-            for (Enumeration e=props.keys(); e.hasMoreElements();) {
+            for (Enumeration e = props.keys(); e.hasMoreElements();) {
                 Object key = e.nextElement();
                 newProps.put(key, props.get(key));
             }
                
-            String outFormat = (String)getProperties().get(AlgorithmProperty.OUT_DATA);
+            String outFormat =
+            	(String) getProperties().get(AlgorithmProperty.OUT_DATA);
+            
             return new BasicData(newProps, outData, outFormat);
         } else {
             return null;
@@ -122,7 +123,9 @@ public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProp
         return props;
     }
 
-    public Algorithm createAlgorithm(Data[] dm, Dictionary parameters, CIShellContext context) {
+    public Algorithm createAlgorithm(Data[] dm,
+    								 Dictionary parameters,
+    								 CIShellContext context) {
         return new ConverterAlgorithm(dm, parameters, context);
     }
 
@@ -137,37 +140,59 @@ public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProp
     public String toString() {
     	String str ="";
     	for (int j = 0; j < refs.length; ++j) {
-    		str += refs[j].getProperty(Constants.SERVICE_ID) + " " + refs[j].getProperty(Constants.SERVICE_PID) + "-> ";
+    		str += refs[j].getProperty(Constants.SERVICE_ID);
+    		str += " ";
+    		str += refs[j].getProperty(Constants.SERVICE_PID);
+    		str += "-> ";
     	}
+    	
     	return str;
     }
 
     public boolean equals(Object o) {
-    	boolean equals = false;
+    	boolean equal = false;
     	if (o instanceof Converter) {
-	    	ServiceReference[] otherServiceReference = ((Converter)o).getConverterChain();
+	    	ServiceReference[] otherServiceReference =
+	    		((Converter) o).getConverterChain();
 	    	if (refs.length == otherServiceReference.length) {
 		    	for (int i = 0; i < otherServiceReference.length; i++) {
 		    		if (refs[i].getProperty(Constants.SERVICE_ID).equals(
-                            otherServiceReference[i].getProperty(Constants.SERVICE_ID))) {
-		    			equals = true;
+		    				otherServiceReference[i].getProperty(
+		    						Constants.SERVICE_ID))) {
+		    			equal = true;
 		    		} else {
-		    			equals = false;
+		    			equal = false;
 		    			break;
 		    		}
 		    	}
 	    	}
     	}
 	    	
-	    return equals;
+	    return equal;
     }
     
-    private class ConverterAlgorithm implements Algorithm {
+    /* The conversion chain (refs) is lossless
+	 * if and only if no conversion (ref) is lossy.
+	 */
+	private String calculateLossiness(ServiceReference[] refs) {
+		String lossiness = LOSSLESS;
+	    for (int i=0; i < refs.length; i++) {
+	        if (LOSSY.equals(refs[i].getProperty(CONVERSION))) {
+	            lossiness = LOSSY;
+	        }
+	    }
+	    
+		return lossiness;
+	}
+
+	private class ConverterAlgorithm implements Algorithm {
         Data[] inDM;
         CIShellContext context;
         Dictionary parameters;
         
-        public ConverterAlgorithm(Data[] dm, Dictionary parameters, CIShellContext context) {
+        public ConverterAlgorithm(Data[] dm,
+        						  Dictionary parameters,
+        						  CIShellContext context) {
             this.inDM = dm;
             this.parameters = parameters;
             this.context = context;
@@ -175,15 +200,18 @@ public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProp
         
         public Data[] execute() throws AlgorithmExecutionException {
             Data[] dm = inDM;
-            for (int i=0; i < refs.length; i++) {
-                AlgorithmFactory factory = (AlgorithmFactory)bContext.getService(refs[i]);
+            for (int i = 0; i < refs.length; i++) {
+                AlgorithmFactory factory =
+                	(AlgorithmFactory) bContext.getService(refs[i]);
                 
                 if (factory != null) {
-                    Algorithm alg = factory.createAlgorithm(dm, parameters, context);
+                    Algorithm alg =
+                    	factory.createAlgorithm(dm, parameters, context);
                     
                     dm = alg.execute();
                 } else {
-                    throw new AlgorithmExecutionException("Missing subconverter: " 
+                    throw new AlgorithmExecutionException(
+                    		"Missing subconverter: " 
                             + refs[i].getProperty(Constants.SERVICE_PID));
                 }
             }

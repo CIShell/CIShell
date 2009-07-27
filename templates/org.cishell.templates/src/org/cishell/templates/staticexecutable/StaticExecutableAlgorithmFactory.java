@@ -56,10 +56,8 @@ public class StaticExecutableAlgorithmFactory implements AlgorithmFactory {
         return provider;
     }
         
-    //pretty sure this isn't used by anything, but I fear deleting it.
     public StaticExecutableAlgorithmFactory(String algName, BundleContext bContext) {
     	this.algName = algName;
     	this.bContext = bContext;
     }
-
 }
