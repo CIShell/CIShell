@@ -40,10 +40,8 @@ public class NullConverter implements Converter, AlgorithmFactory, AlgorithmProp
         props.put(OUT_DATA, inData);
         props.put(LABEL, props.get(IN_DATA) + " -> " + props.get(OUT_DATA));
         
-        String lossiness = LOSSLESS;
-
         //TODO: Do the same thing for complexity
-        props.put(CONVERSION, lossiness);
+        props.put(CONVERSION, LOSSLESS);
     }
     
     /**

@@ -58,7 +58,7 @@ public interface Converter {
     /**
      * Uses this Converter to convert the given Data object to a new format. 
      * This is a convenience method that uses this Converter to convert a Data 
-     * object of the corrent format to a Data object of the defined output format.
+     * object of the current format to a Data object of the defined output format.
      * 
      * @param data The Data object with compatible format
      * @return A Data object of correct output format
