@@ -42,7 +42,7 @@ public class NewJavaAlgorithmTemplate extends BasicTemplate {
         setPageCount(5);
         //this should go on page 0
         addOption("bundleName", "Bundle Name", "My Algorithm Bundle", 1).setRequired(true);
-        addOption("bundleSymbolicName","Bundle Symbolic Name", "org.my.bundle.name", 1).setRequired(true);
+        addOption("bundleSymbolicName","Bundle Symbolic Name", "org.my.algorithm", 1).setRequired(true);
         addOption("bundleVersion", "Bundle Version", "0.0.1", 1).setRequired(true);
         
         addOption("algName", "Algorithm Name", "My Algorithm", 2).setRequired(true);
