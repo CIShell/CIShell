@@ -5,8 +5,14 @@ Bundle-SymbolicName: org.cishell.algorithm.convertergraph
 Bundle-Version: 1.0.0
 Bundle-ClassPath: .
 Bundle-Localization: plugin
-Import-Package: edu.iu.nwb.converter.nwb.common,
- edu.iu.nwb.util.nwbfile,
+Import-Package: edu.uci.ics.jung.graph,
+ edu.uci.ics.jung.graph.decorators,
+ edu.uci.ics.jung.graph.event,
+ edu.uci.ics.jung.graph.filters,
+ edu.uci.ics.jung.graph.filters.impl,
+ edu.uci.ics.jung.graph.impl,
+ edu.uci.ics.jung.graph.predicates,
+ edu.uci.ics.jung.utils,
  org.cishell.framework,
  org.cishell.framework.algorithm,
  org.cishell.framework.data,
