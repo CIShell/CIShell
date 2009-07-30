@@ -3,41 +3,44 @@
  */
 package org.cishell.algorithm.convertergraph;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogService;
 
-import edu.iu.nwb.util.nwbfile.NWBFileProperty;
+import edu.uci.ics.jung.graph.Edge;
+import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.Vertex;
+import edu.uci.ics.jung.graph.impl.DirectedSparseEdge;
+import edu.uci.ics.jung.graph.impl.DirectedSparseGraph;
+import edu.uci.ics.jung.graph.impl.DirectedSparseVertex;
+import edu.uci.ics.jung.utils.UserDataContainer;
 
 /**
  * The algorithm is used for getting information about current converters is,
  * 1. Get all the service references for converters in the system.
- * 2. Create Node Schema to be used when constructing the NWB file. In this case
- * it will be,
+ * 2. Node Schema to be used is,
  * 		id*int, label*string, strength*int
- * 3. Create Edge Schema to be used when constructing the NWB file. In this case
- * it will be,
+ * 3. Edge Schema to be used is, 
  * 		source*int, target*int, converter_name*string, service_pid*string
  * 4. Iterate over all the converter service reference one at a time.
  * 5. For collecting information for Nodes do,
  * 		(a). Get node label using service properties in_data & out_data.
- * 		(b). Check to see if this node is already present in the nodes map.
+ * 		(b). Check to see if this node is already present in the nodeLabels set.
  * 		(c). If it is present then just update the strength of node by incrementing
  * 			that node's strength by 1.
  * 		(d). Else create a new node. Provide it a default strength of 1 and update 
- * 			the node count.  
+ * 			the node count. Also create an entry in the nodeLabels for future 
+ * 			reference. 
  * 6. For collecting information about Edges do,
- * 		(a). Get the respective source & target node ids from the recently updates 
- * 			respective nodes.
+ * 		(a). Get the respective source & target node references from the recently updated 
+ * 			nodes.
  * 		(b). Get the service_pid by using service property service.pid.
  * 		(c). Get the converter_name by extracting the last block from service_pid.
- * 7. These information is then passed on to {@link ConverterGraphOutputGenerator} 
- * 		for printing it into a NWB file.
+ * 7. Since the graph is being created during the processing of each node & edge
+ * 	it just needs to be referenced on the UI. This is done by outputting the metadata. 
  *  
  * @author cdtank
  *
@@ -47,12 +50,17 @@ public class ConverterGraphComputation {
 	private LogService logger;
 	private ServiceReference[] allConverterServices;
 	
-	public Map nodes = new HashMap();
-	public LinkedHashMap nodeSchema = new LinkedHashMap();
+	private Set nodeLabels = new HashSet();
 	
-	public List edges = new ArrayList();
-	public LinkedHashMap edgeSchema = new LinkedHashMap();
+	private Graph outputGraph;
 	
+	/**
+	 * @return the outputGraph
+	 */
+	public Graph getOutputGraph() {
+		return outputGraph;
+	}
+
 	private int nodeCount;
 
 	public ConverterGraphComputation(ServiceReference[] allConverterServices,
@@ -61,37 +69,13 @@ public class ConverterGraphComputation {
 		this.nodeCount = 0;
 		this.logger = logger;
 		this.allConverterServices = allConverterServices;
-		
-		/*
-		 * Side affects nodeSchema
-		 * */
-		createNodeSchema();
-		
-		/*
-		 * Side affects edgeSchema
-		 * */
-		createEdgeSchema();
+		this.outputGraph = new DirectedSparseGraph();
 		
 		/*
 		 * Side affects nodes & edges
 		 * */
 		processServiceReferences();
 	}
-
-	private void createNodeSchema() {
-		nodeSchema.put("id", NWBFileProperty.TYPE_INT);
-		nodeSchema.put("label", NWBFileProperty.TYPE_STRING);
-		nodeSchema.put("strength", NWBFileProperty.TYPE_INT);
-	}
-	
-	private void createEdgeSchema() {
-		edgeSchema.put("source", NWBFileProperty.TYPE_INT);
-		edgeSchema.put("target", NWBFileProperty.TYPE_INT);
-		edgeSchema.put("converter_name", NWBFileProperty.TYPE_STRING);
-		edgeSchema.put("service_pid", NWBFileProperty.TYPE_STRING);
-	}
-
-
 
 	/*
 	 * Iterate over all the converter service references and process the 
@@ -103,7 +87,7 @@ public class ConverterGraphComputation {
 				converterCount < allConverterServices.length; 
 				converterCount++) {
 
-			int sourceNodeID, targetNodeID;
+			Vertex sourceNode, targetNode;
 
 			ServiceReference currentConverterServiceReference = 
 				allConverterServices[converterCount];
@@ -113,47 +97,61 @@ public class ConverterGraphComputation {
 			String targetNodeKey = 
 				(String) currentConverterServiceReference.getProperty("out_data");
 			
-			if (nodes.containsKey(sourceNodeKey)) {
-				sourceNodeID = updateNode(sourceNodeKey); 
+			if (nodeLabels.contains(sourceNodeKey)) {
+				sourceNode = updateNode(sourceNodeKey); 
 			} else {
-				sourceNodeID = createNode(sourceNodeKey);
+				sourceNode = createNode(sourceNodeKey);
 			}
 			
-			if (nodes.containsKey(targetNodeKey)) {
-				targetNodeID = updateNode(targetNodeKey);
+			if (nodeLabels.contains(targetNodeKey)) {
+				targetNode = updateNode(targetNodeKey);
 			} else {
-				targetNodeID = createNode(targetNodeKey);
+				targetNode = createNode(targetNodeKey);
 			}
 			
-			createEdge(sourceNodeID, targetNodeID, currentConverterServiceReference);
+			createEdge(sourceNode, targetNode, currentConverterServiceReference);
 		}
 	}
 	
-	private int updateNode(String currentNodeKey) {
-		int sourceNodeID;
-		Node sourceNodeValue = (Node) nodes.get(currentNodeKey);
-		sourceNodeID = sourceNodeValue.id;
-		sourceNodeValue.strength += 1;
-		return sourceNodeID;
+	private Vertex updateNode(String currentNodeKey) {
+		
+		for (Iterator nodeIterator = outputGraph.getVertices().iterator(); 
+				nodeIterator.hasNext();) {
+			Vertex currentVertex = (Vertex) nodeIterator.next();
+			if (currentVertex.getUserDatum("label").toString()
+					.equalsIgnoreCase(currentNodeKey)) {
+				int currentVertexStrength = 
+					((Integer) currentVertex.getUserDatum("strength")).intValue();
+				currentVertex.setUserDatum("strength", ++currentVertexStrength, 
+						new UserDataContainer.CopyAction.Shared());
+				return currentVertex;
+			}
+		}
+		return new DirectedSparseVertex();
 	}
 
-	private int createNode(String nodeKey) {
+	private Vertex createNode(String nodeKey) {
 		nodeCount++;
-		Node nodeValue = new Node();
-		nodeValue.id = nodeCount;
-		nodeValue.strength = 1;
 		
-		nodes.put(nodeKey, nodeValue);
-		return nodeCount;
+		Vertex node = new DirectedSparseVertex();
+		
+		node.addUserDatum("id", nodeCount, new UserDataContainer.CopyAction.Shared());
+		node.addUserDatum("strength", 1, new UserDataContainer.CopyAction.Shared());
+		node.addUserDatum("label", nodeKey, new UserDataContainer.CopyAction.Shared());
+		
+		outputGraph.addVertex(node);
+		nodeLabels.add(nodeKey);
+		
+		return node;
 	}
 
 	/**
 	 * Create an edge based on source id, target id & other information.
-	 * @param sourceNodeID
-	 * @param targetNodeID
+	 * @param sourceNode
+	 * @param targetNode
 	 * @param currentConverterServiceReference
 	 */
-	private void createEdge(int sourceNodeID, int targetNodeID,
+	private void createEdge(Vertex sourceNode, Vertex targetNode,
 			ServiceReference currentConverterServiceReference) {
 		String serviceCompletePID = 
 			(String) currentConverterServiceReference.getProperty("service.pid");
@@ -166,15 +164,16 @@ public class ConverterGraphComputation {
 		String serviceShortPID = serviceCompletePID.substring(startIndexForConverterName);
 		
 		/*
-		 * Build the actual edge tuple.
+		 * Build the actual edge & attach it to the graph.
 		 * */
-		Edge edge = new Edge();
-		edge.source = sourceNodeID;
-		edge.target = targetNodeID;
-		edge.serviceShortPID = serviceShortPID;
-		edge.serviceCompletePID = serviceCompletePID;
+		Edge edge = new DirectedSparseEdge(sourceNode, targetNode);
 		
-		edges.add(edge);
+		edge.addUserDatum("converter_name", serviceShortPID, 
+				new UserDataContainer.CopyAction.Shared());
+		edge.addUserDatum("service_pid", serviceCompletePID, 
+				new UserDataContainer.CopyAction.Shared());
+		
+		outputGraph.addEdge(edge);
 	}
 
 }
