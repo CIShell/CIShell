@@ -1,5 +1,8 @@
 *Nodes
 id*int label*string
+# TODO Shouldn't the file:application/pajek MIME type be deprecated?
+# If so, regenerate this graph with only pajeknet and pajekmat
+# MIME types floating around. 
 1 "file:application/pajek"
 2 "file:text/nwb"
 3 "file:text/edge"
