@@ -25,6 +25,7 @@ import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -41,6 +42,8 @@ import org.osgi.service.metatype.ObjectClassDefinition;
  * @author Bruce Herr (bh2@bh2.net)
  */
 public class SWTGui implements GUI, UpdateListener {    
+	private static final int MAXIMUM_INITIAL_DIALOGUE_HEIGHT = 400;
+
 	public static final int TEXT_WRAP_LENGTH = 350;
 	
     private Shell shell;
@@ -60,7 +63,9 @@ public class SWTGui implements GUI, UpdateListener {
         
         ObjectClassDefinition ocd = provider.getObjectClassDefinition(id, null);
         shell.setText(ocd.getName());
-                
+        
+        
+        
         GridLayout gridLayout = new GridLayout();
         gridLayout.numColumns = 1;
         shell.setLayout(gridLayout);
@@ -76,9 +81,7 @@ public class SWTGui implements GUI, UpdateListener {
             GridData labelData = new GridData();
             labelData.horizontalAlignment = GridData.CENTER;
             labelData.grabExcessHorizontalSpace = true;
-            System.out.println(msg.getSize().x);
             if (msg.getSize().x > TEXT_WRAP_LENGTH) {
-            	System.out.println(msg.getSize().x);
             	labelData.widthHint = TEXT_WRAP_LENGTH;
             }
             msg.setLayoutData(labelData);
@@ -163,8 +166,18 @@ public class SWTGui implements GUI, UpdateListener {
         shell.getDisplay().syncExec(new Runnable() {
             public void run() {
                 shell.pack();
+                resizeShell(shell);
                 shell.open();
-            }});
+            }
+
+			private void resizeShell(Shell shell) {
+				Point shellSize = shell.getSize();
+				shell.setSize(shellSize.x, calculateNewDialogHeight(shellSize.y));
+			}
+
+			private int calculateNewDialogHeight(int proposedHeight) {
+				return Math.min(MAXIMUM_INITIAL_DIALOGUE_HEIGHT, proposedHeight);
+			}});
     }
 
     /**

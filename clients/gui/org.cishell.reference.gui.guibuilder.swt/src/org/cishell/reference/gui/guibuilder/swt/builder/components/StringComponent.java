@@ -13,8 +13,6 @@
  * ***************************************************************************/
 package org.cishell.reference.gui.guibuilder.swt.builder.components;
 
-import java.util.Arrays;
-
 import org.cishell.reference.gui.guibuilder.swt.builder.AbstractComponent;
 import org.cishell.reference.gui.guibuilder.swt.builder.StringConverter;
 import org.eclipse.swt.SWT;
