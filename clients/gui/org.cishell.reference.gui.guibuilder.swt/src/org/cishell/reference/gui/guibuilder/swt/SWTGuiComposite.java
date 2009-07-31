@@ -26,6 +26,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -45,8 +46,8 @@ public class SWTGuiComposite implements UpdateListener {
     protected Set listeners;
     
     private Composite parent;
-    private Composite userArea;
-    private ScrolledComposite userScroll;
+    private Composite parameterArea;
+    private ScrolledComposite scroll;
     private int style;
 
     public SWTGuiComposite(Composite parent, int style, 
@@ -69,7 +70,7 @@ public class SWTGuiComposite implements UpdateListener {
             GUIComponent component = ComponentProvider.getInstance().createComponent(attrs[i]);
             
             component.setAttributeDefinition(attrs[i]);
-            component.createGUI(userArea, style);
+            component.createGUI(parameterArea, style);
             idToComponentMap.put(attrs[i].getID(), component);
             component.addUpdateListener(this);
             
@@ -81,24 +82,32 @@ public class SWTGuiComposite implements UpdateListener {
             }
         }
         
-        userArea.addDisposeListener(new DisposeListener() {
+        setScrollDimensions(scroll, parameterArea);
+        
+        parameterArea.addDisposeListener(new DisposeListener() {
             public void widgetDisposed(DisposeEvent e) {
                 enteredResponses = getEnteredResponses();
             }});
     }
+
+	private void setScrollDimensions(ScrolledComposite scroll, Composite innards) {
+		Point parameterAreaSize = innards.computeSize(SWT.DEFAULT, SWT.DEFAULT);
+        scroll.setMinWidth(parameterAreaSize.x);
+        scroll.setMinHeight(parameterAreaSize.y);
+	}
     
     private void setupGUI() {
-        userScroll = new ScrolledComposite(parent, style);
-        userScroll.setLayout(new GridLayout(1, true));
-        userScroll.setExpandHorizontal(true);
-        userScroll.setExpandVertical(true);
-        userScroll.setAlwaysShowScrollBars(false);
+        scroll = new ScrolledComposite(parent, SWT.H_SCROLL | SWT.V_SCROLL);
+        scroll.setLayout(new GridLayout(1, true));
+        scroll.setExpandHorizontal(true);
+        scroll.setExpandVertical(true);
+        scroll.setAlwaysShowScrollBars(false);
         
-        userArea = new Composite(userScroll, SWT.NONE);
-        userArea.setLayout(new GridLayout(GUIComponent.MAX_SPAN+1,false));
+        parameterArea = new Composite(scroll, SWT.NONE);
+        parameterArea.setLayout(new GridLayout(GUIComponent.MAX_SPAN+1,false));
         
         GridData gd = new GridData(SWT.FILL,SWT.FILL,true,true);
-        userArea.setLayoutData(gd);
+        parameterArea.setLayoutData(gd);
         
         GridData userData = new GridData();
         userData.grabExcessVerticalSpace = true;
@@ -106,8 +115,8 @@ public class SWTGuiComposite implements UpdateListener {
         userData.verticalAlignment = SWT.FILL;
         userData.horizontalAlignment = SWT.FILL;
         
-        userScroll.setLayoutData(userData);
-        userScroll.setContent(userArea);   
+        scroll.setLayoutData(userData);
+        scroll.setContent(parameterArea);   
     }
     
     
@@ -138,11 +147,11 @@ public class SWTGuiComposite implements UpdateListener {
      * @return the composite
      */
     public Composite getUserArea() {        
-        return userArea;
+        return parameterArea;
     }
     
     public Composite getComposite() {
-        return userScroll;
+        return scroll;
     }
     
     public String validate() {
