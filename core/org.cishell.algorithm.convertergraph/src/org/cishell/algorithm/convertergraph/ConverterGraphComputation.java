@@ -134,8 +134,7 @@ public class ConverterGraphComputation {
 		nodeCount++;
 		
 		Vertex node = new DirectedSparseVertex();
-		
-		node.addUserDatum("id", nodeCount, new UserDataContainer.CopyAction.Shared());
+
 		node.addUserDatum("strength", 1, new UserDataContainer.CopyAction.Shared());
 		node.addUserDatum("label", nodeKey, new UserDataContainer.CopyAction.Shared());
 		
