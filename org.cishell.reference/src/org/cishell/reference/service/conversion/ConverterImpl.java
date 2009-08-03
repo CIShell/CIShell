@@ -29,73 +29,69 @@ import org.cishell.service.conversion.Converter;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.log.LogService;
 import org.osgi.service.metatype.MetaTypeProvider;
 
-/**
- * 
- * @author Bruce Herr (bh2@bh2.net)
- */
 public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProperty {
     private ServiceReference[] refs;
     private BundleContext bContext;
-    private Dictionary props;
+    private Dictionary properties;
     private CIShellContext ciContext;
+	
     
     public ConverterImpl(BundleContext bContext, CIShellContext ciContext, ServiceReference[] refs) {
         this.bContext = bContext;
         this.ciContext = ciContext;
         this.refs = refs;
         
-        props = new Hashtable();
         
-        props.put(IN_DATA, refs[0].getProperty(IN_DATA));
-        props.put(OUT_DATA, refs[refs.length-1].getProperty(OUT_DATA));
-        props.put(LABEL, props.get(IN_DATA) + " -> " + props.get(OUT_DATA));
+        properties = new Hashtable();
+        
+        properties.put(IN_DATA, refs[0].getProperty(IN_DATA));
+        properties.put(OUT_DATA, refs[refs.length-1].getProperty(OUT_DATA));
+        properties.put(LABEL, properties.get(IN_DATA) + " -> " + properties.get(OUT_DATA));
         
         // TODO: Do the same thing for complexity
         String lossiness = calculateLossiness(refs);        
-        props.put(CONVERSION, lossiness);
+        properties.put(CONVERSION, lossiness);
     }
 
     /**
      * @see org.cishell.service.conversion.Converter#convert(org.cishell.framework.data.Data)
      */
-    public Data convert(Data inDM) throws ConversionException {
-        Data[] dm = new Data[]{inDM};
+    public Data convert(Data inData) throws ConversionException {
+        Data[] data = new Data[]{inData};
         
         AlgorithmFactory factory = getAlgorithmFactory();
-        Algorithm alg = factory.createAlgorithm(dm, new Hashtable(), ciContext);
+        Algorithm algorithm = factory.createAlgorithm(data, new Hashtable(), ciContext);
 
         try {
-			dm = alg.execute();
-		} catch (AlgorithmExecutionException aee) {
-			throw new ConversionException(
-					"Problem converting data: " + aee.getMessage(),
-					aee);
+			data = algorithm.execute();
+		} catch (AlgorithmExecutionException e) {
+			throw new ConversionException(e.getMessage(), e);
 		} catch (Exception e) {
 			throw new ConversionException(
-					"Problem converting data: " + e.getMessage(),
-					e);
+					"Unexpected error: " + e.getMessage(), e);
 		}
         
         Object outData = null;
-        if (dm != null && dm.length > 0) {
-            outData = dm[0].getData();
+        if (data != null && data.length > 0) {
+            outData = data[0].getData();
         }
         
         if (outData != null) {
-            Dictionary props = inDM.getMetadata();
-            Dictionary newProps = new Hashtable();
+            Dictionary properties = inData.getMetadata();
+            Dictionary newProperties = new Hashtable();
             
-            for (Enumeration e = props.keys(); e.hasMoreElements();) {
-                Object key = e.nextElement();
-                newProps.put(key, props.get(key));
+            for (Enumeration propertyKeys = properties.keys(); propertyKeys.hasMoreElements();) {
+                Object key = propertyKeys.nextElement();
+                newProperties.put(key, properties.get(key));
             }
                
             String outFormat =
             	(String) getProperties().get(AlgorithmProperty.OUT_DATA);
             
-            return new BasicData(newProps, outData, outFormat);
+            return new BasicData(newProperties, outData, outFormat);
         } else {
             return null;
         }
@@ -120,7 +116,7 @@ public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProp
      * @see org.cishell.service.conversion.Converter#getProperties()
      */
     public Dictionary getProperties() {
-        return props;
+        return properties;
     }
 
     public Algorithm createAlgorithm(Data[] dm,
@@ -186,37 +182,141 @@ public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProp
 	}
 
 	private class ConverterAlgorithm implements Algorithm {
-        Data[] inDM;
-        CIShellContext context;
-        Dictionary parameters;
+        public static final String FILE_EXTENSION_PREFIX = "file-ext:";
+		public static final String MIME_TYPE_PREFIX = "file:";
+		
+		private Data[] inData;        
+        private Dictionary parameters;
+        private CIShellContext context;
+        private LogService log;
         
-        public ConverterAlgorithm(Data[] dm,
+        
+        public ConverterAlgorithm(Data[] inData,
         						  Dictionary parameters,
         						  CIShellContext context) {
-            this.inDM = dm;
+            this.inData = inData;
             this.parameters = parameters;
             this.context = context;
+            this.log =
+            	(LogService) context.getService(LogService.class.getName());
         }
         
+        
         public Data[] execute() throws AlgorithmExecutionException {
-            Data[] dm = inDM;
-            for (int i = 0; i < refs.length; i++) {
+            Data[] convertedData = inData;
+            
+            // For each converter in the converter chain (refs)
+            for (int ii = 0; ii < refs.length; ii++) {
                 AlgorithmFactory factory =
-                	(AlgorithmFactory) bContext.getService(refs[i]);
+                	(AlgorithmFactory) bContext.getService(refs[ii]);
                 
                 if (factory != null) {
                     Algorithm alg =
-                    	factory.createAlgorithm(dm, parameters, context);
+                    	factory.createAlgorithm(convertedData, parameters, context);
                     
-                    dm = alg.execute();
+                    try {
+                    	convertedData = alg.execute();
+                    } catch(AlgorithmExecutionException e) {
+                    	boolean isLastStep = (ii == refs.length - 1);
+                    	if (isLastStep && isHandler(refs[ii])) {
+                    		/* If the last step of the converter chain is a
+                    		 * handler and it is the first (and so only) step
+                    		 * to fail, just log a warning and return the
+                    		 * un-handled data.
+                    		 */
+                    		String warningMessage =
+                    			"Warning: Attempting to convert data without " 
+                    			+ "validating the output since the validator failed " 
+                    			+ "with this problem:\n    " 
+                    			+ createErrorMessage(refs[ii], e);
+                    		
+            				log.log(LogService.LOG_WARNING, warningMessage, e);
+                    		
+                    		return convertedData;
+                    	} else {                    	
+	                   		throw new AlgorithmExecutionException(
+	                   				createErrorMessage(refs[ii], e), e);
+                    	}
+                    }
                 } else {
                     throw new AlgorithmExecutionException(
-                    		"Missing subconverter: " 
-                            + refs[i].getProperty(Constants.SERVICE_PID));
+                    		"Missing subconverter: "
+                            + refs[ii].getProperty(Constants.SERVICE_PID));
                 }
             }
             
-            return dm;
+            return convertedData;
+        }
+        
+        private boolean isHandler(ServiceReference ref) {
+        	/* For some reason, handlers are often referred to as validators,
+             * though strictly speaking, validators are for reading in data and
+             * handlers are for writing out data.
+             */
+        	String algorithmType =
+        		(String) ref.getProperty(AlgorithmProperty.ALGORITHM_TYPE);
+        	boolean algorithmTypeIsValidator =
+        		AlgorithmProperty.TYPE_VALIDATOR.equals(algorithmType);
+        	
+        	String inDataType =
+        		(String) ref.getProperty(AlgorithmProperty.IN_DATA);
+        	boolean inDataTypeIsFile = inDataType.startsWith(MIME_TYPE_PREFIX);
+        	
+        	String outDataType =
+        		(String) ref.getProperty(AlgorithmProperty.OUT_DATA);
+        	boolean outDataTypeIsFileExt =
+        		outDataType.startsWith(FILE_EXTENSION_PREFIX);
+        	
+        	return (algorithmTypeIsValidator
+        			&& inDataTypeIsFile
+        			&& outDataTypeIsFileExt);
+    	}
+        
+        private String createErrorMessage(ServiceReference ref, Throwable e) {
+        	String inType = (String) properties.get(IN_DATA);
+        	String preProblemType =	(String) ref.getProperty(IN_DATA);
+        	String postProblemType = (String) ref.getProperty(OUT_DATA);
+        	String outType = (String) properties.get(OUT_DATA);
+        	
+        	/* Only report the intermediate conversion if it is different
+        	 * from the overall conversion.
+        	 */        	
+        	if (inType.equals(preProblemType)
+        			&& outType.equals(postProblemType)) {
+        		return "Problem converting data from "
+        				+ prettifyDataType(inType)
+        				+ " to " + prettifyDataType(outType)
+        				+ " (See the log file for more details).:\n        "
+        				+ e.getMessage();
+        	}
+        	else {        	
+	        	return "Problem converting data from "
+			        	+ prettifyDataType(inType) + " to "
+			        	+ prettifyDataType(outType)
+			        	+ " during the necessary intermediate conversion from "
+			        	+ prettifyDataType(preProblemType) + " to "
+			        	+ prettifyDataType(postProblemType)
+			        	+ " (See the log file for more details):\n        "
+			        	+ e.getMessage();
+        	}
+        }
+        
+        private String prettifyDataType(String dataType) {
+        	if (dataType.startsWith(MIME_TYPE_PREFIX)) {
+        		return withoutFirstCharacters(
+        				dataType, MIME_TYPE_PREFIX.length());
+        	}
+        	else if(dataType.startsWith(FILE_EXTENSION_PREFIX)) {
+        		return "." + withoutFirstCharacters(
+        				dataType, FILE_EXTENSION_PREFIX.length());
+        	}
+        	else {
+        		return dataType;
+        	}
+        }
+        
+        public String withoutFirstCharacters(String s, int n) {
+        	return s.substring(n);
         }
     }
 }
