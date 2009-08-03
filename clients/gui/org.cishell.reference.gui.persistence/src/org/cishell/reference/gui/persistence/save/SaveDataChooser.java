@@ -308,12 +308,12 @@ public class SaveDataChooser extends AbstractDialog implements AlgorithmProperty
      * of opening the FileSaver and saving the model.
      * @param selectedIndex The chosen converter
      */
-    protected void selectionMade(int selectedIndex){
+    protected void selectionMade(int selectedIndex) {
     	try {
-        getShell().setVisible(false);
-        final Converter converter = converterArray[selectedIndex];
-        final FileSaver saver = new FileSaver(getShell(), context);
-        close(saver.save(converter, data));
+	        getShell().setVisible(false);
+	        final Converter converter = converterArray[selectedIndex];
+	        final FileSaver saver = new FileSaver(getShell(), context);
+	        close(saver.save(converter, data));
     	} catch (Exception e) {
         	throw new RuntimeException(e);
         }
@@ -328,34 +328,38 @@ public class SaveDataChooser extends AbstractDialog implements AlgorithmProperty
     public void createDialogButtons(Composite parent) {
         Button select = new Button(parent, SWT.PUSH);
         select.setText("Select");
-        select.addSelectionListener(new SelectionAdapter() {
+        select.addSelectionListener(
+        	new SelectionAdapter() {
                 public void widgetSelected(SelectionEvent e) {
                     int index = converterList.getSelectionIndex();
-                    
+
                     if (index != -1) {
                         selectionMade(index);
                     }
                 }
-            });
+            }
+        );
 
         Button cancel = new Button(parent, SWT.NONE);
         cancel.setText("Cancel");
-        cancel.addSelectionListener(new SelectionAdapter() {
+        cancel.addSelectionListener(
+        	new SelectionAdapter() {
                 public void widgetSelected(SelectionEvent e) {
                     close(false);
                 }
-            });
+            }
+        );
     }
 
     /**
      * Checks for the number of file savers.  If there is one
-     * converter then it will save directly, otherwise intialize the chooser.
+     * converter then it will save directly, otherwise initialize the chooser.
      * 
      * @param parent The parent GUI for new dialog windows.
      */
     public Composite createContent(Composite parent) {
     	if (converterArray.length == 1) {
-            final FileSaver saver = new FileSaver((Shell)parent, context);
+            final FileSaver saver = new FileSaver((Shell) parent, context);
             close(saver.save(converterArray[0], data));
             return parent;
     	}
@@ -365,31 +369,30 @@ public class SaveDataChooser extends AbstractDialog implements AlgorithmProperty
     }
     
     private class CompareAlphabetically implements Comparator {
-
     	public int compare(Object o1, Object o2) {
-					if (o1 instanceof Converter && o2 instanceof Converter) {
-						Converter c1 = (Converter) o1;
-						String c1Label = getLabel(c1);
-						
-						Converter c2 = (Converter) o2;
-						String c2Label = getLabel(c2);
-						
-						if (c1Label != null && c2Label != null) {
-							return c1Label.compareTo(c2Label);
-						} else if (c1Label == null) {
-							//c1 > c2
-							return 1;
-						} else if (c2Label == null) {
-							//c1 < c2
-							return -1;
-						} else {
-							//c1 == c2
-							return 0;
-						}
-					} else {
-						throw new IllegalArgumentException("Can only " +
-								"compare Converters");
-					}
+			if (o1 instanceof Converter && o2 instanceof Converter) {
+				Converter c1 = (Converter) o1;
+				String c1Label = getLabel(c1);
+				
+				Converter c2 = (Converter) o2;
+				String c2Label = getLabel(c2);
+				
+				if (c1Label != null && c2Label != null) {
+					return c1Label.compareTo(c2Label);
+				} else if (c1Label == null) {
+					//c1 > c2
+					return 1;
+				} else if (c2Label == null) {
+					//c1 < c2
+					return -1;
+				} else {
+					//c1 == c2
+					return 0;
+				}
+			} else {
+				throw new IllegalArgumentException("Can only " +
+						"compare Converters");
+			}
     	}
 					
 		private String getLabel(Converter c) {

@@ -51,8 +51,10 @@ public class FileUtil {
     
     public static String extractExtension(String format) {
     	String extension = "";
-		//TODO: We should really have explicit piece of metadata that says what the extension is, 
-		//TODO: as this method is not guaranteed to yield the correct extension
+		/* TODO: We should really have explicit piece of metadata that says what
+		 * the extension is, as this method is not guaranteed to yield the
+		 * correct extension.
+		 */
 		if (format.startsWith("file:text/")) {
 			extension = "." + format.substring("file:text/".length());
 		} else if (format.startsWith("file-ext:")) {

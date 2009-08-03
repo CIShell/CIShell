@@ -24,14 +24,13 @@ import org.osgi.service.log.LogService;
  * @author bmarkine
  */
 public class Save implements Algorithm {
-    Data[] data;
-    Dictionary parameters;
-    CIShellContext context;
-    Shell parentShell;
+    public static final String ANY_FILE_EXTENSION = "file-ext:*";
+	public static final String SAVE_DIALOG_TITLE = "Save";
+	private Data[] data;
+    private CIShellContext context;
+    private Shell parentShell;
     
-    private GUIBuilderService guiBuilder;    
     private DataConversionService conversionManager;
-    private LogService log;
     
     /**
      * Sets up default services for the algorithm
@@ -42,101 +41,65 @@ public class Save implements Algorithm {
      */
     public Save(Data[] data, Dictionary parameters, CIShellContext context) {
         this.data = data;
-        this.parameters = parameters;
         this.context = context;
         
-        this.conversionManager = (DataConversionService) context.getService(
-        		DataConversionService.class.getName());
-        
-        this.log = (LogService) context.getService(LogService.class.getName());
-        this.guiBuilder = (GUIBuilderService)context.getService(GUIBuilderService.class.getName());
+        this.conversionManager = (DataConversionService)
+        	context.getService(DataConversionService.class.getName());
     }
 
     /**
-     * Executes the algorithm
-     * 
-     * @return Null for this algorithm
+     * @return Null when successful
      */
     public Data[] execute() throws AlgorithmExecutionException {
-    	//NOTE: A "converter" here is actually a converter path
-    	//starting with the format for the data we want to save
-    	//and ending in a output format
-    	Data dataToSave = data[0];
+    	Data outData = data[0];
+
+    	tryToSave(outData, ANY_FILE_EXTENSION);
     	
-    	//first, try to save the normal way, which is using validators to validate the output.
-    	String saveThroughValidators = "file-ext:*";
-    	Object firstAttemptResult = tryToSave(dataToSave, saveThroughValidators);
-    	if (firstAttemptResult instanceof Boolean) {
-    		boolean succeeded = ((Boolean) firstAttemptResult).booleanValue();
-    		if (succeeded) {
-    			System.out.println("Success");
-    			return null; //FILE SAVED SUCCESSFULLY. DONE.
-    		} else {
-    			System.out.println("No converter");
-    			this.log.log(LogService.LOG_WARNING, "No converters found that can save file through a validator." +
-    					" Attempting to save without validating.");
-    		}
-    	} else { //result instanceof Exception
-    		Exception reasonForFailure = (Exception) firstAttemptResult;
-    		this.log.log(LogService.LOG_WARNING, "Exception occurred while attempting to save" +
-    				" file using a validator. Attempting to save without validating.", reasonForFailure);
-    		System.out.println("Exception");
-    	}
-    	
-    	System.out.println("Trying without validators");
-    	
-    	//if saving with validators didn't work, try to save it without using validators
-    	String saveWithoutValidators = "file:*";
-    	Object secondAttemptResult = tryToSave(dataToSave, saveWithoutValidators);
-    	if (secondAttemptResult instanceof Boolean) {
-    		boolean succeeded = ((Boolean) secondAttemptResult).booleanValue();
-    		if (succeeded) {
-    			return null; //FILE SAVED SUCCESSFULLY. DONE.
-    		} else {
-    			throw new AlgorithmExecutionException("No converters found that could save file. Save failed");
-    		}
-    	} else { //result instanceof Exception
-    		Exception reasonForFailure2 = (Exception) secondAttemptResult;
-    		throw new AlgorithmExecutionException("Exception occurred while attempting to save", reasonForFailure2);
-    	}   	
+		return null;
 	}
 
-	//returns True if save was successful
-    //return False if there are no converter chains available to save to the given format
-    //return an Exception if an exception occurred while attempting to save
-    private Object tryToSave(final Data dataToSave, String formatToSaveTo) {
-    	final Converter[] converters = conversionManager.findConverters(dataToSave, formatToSaveTo);
-    	if (converters.length == 0) {return new Boolean(false);};
-    	
-    	parentShell = PlatformUI.getWorkbench().getWorkbenchWindows()[0].getShell();
-    	if (parentShell.isDisposed()) {return makeParentShellDisposedException();};
-    	
-    	try {
-    	guiRun(new Runnable() {
-    		public void run() {
-    			if (converters.length == 1){
-    				//only one possible choice in how to save data. Just do it.
-    				Converter onlyConverter = converters[0];
-    				final FileSaver saver = new FileSaver(parentShell, context);
-    				saver.save(onlyConverter, dataToSave);
-    			} else { //converters.length > 1
-    				//multiple ways to save the data. Let user choose.
-    				SaveDataChooser saveChooser = new SaveDataChooser(dataToSave,
-    						parentShell, converters, "Save", context);
-    					saveChooser.createContent(new Shell(parentShell));
-    					saveChooser.open(); 
-    				}
-    			}});
-    	} catch (Exception e) {
-    		return e;
+    private void tryToSave(final Data outData, String outFormat)
+    		throws AlgorithmExecutionException {
+    	final Converter[] converters =
+    		conversionManager.findConverters(outData, outFormat);
+    	if (converters.length == 0) {
+    		throw new AlgorithmExecutionException(
+    				"Error: Calculated an empty converter chain.");
     	}
     	
-    	return new Boolean(true);
+    	parentShell =
+    		PlatformUI.getWorkbench().getWorkbenchWindows()[0].getShell();
+    	if (parentShell.isDisposed()) {
+    		throw new AlgorithmExecutionException(
+    				"Attempted to use disposed parent shell.");
+    	}
+    	
+    	try {
+	    	guiRun(new Runnable() {
+	    		public void run() {
+	    			if (converters.length == 1) {
+	    				// Only one possible choice in how to save data.  Do it.
+	    				Converter onlyConverter = converters[0];
+	    				final FileSaver saver =
+	    					new FileSaver(parentShell, context);
+	    				saver.save(onlyConverter, outData);
+	    			} else {
+	    				// Multiple ways to save the data. Let user choose.
+	    				SaveDataChooser saveChooser =
+	    					new SaveDataChooser(outData,
+	    										parentShell,
+	    										converters,
+	    										SAVE_DIALOG_TITLE,
+	    										context);
+						saveChooser.createContent(new Shell(parentShell));
+						saveChooser.open();
+	    			}
+	    		}
+	    	});
+    	} catch (Exception e) {
+    		throw new AlgorithmExecutionException(e.getMessage(), e);
+    	}
     }
-    
-    private AlgorithmExecutionException makeParentShellDisposedException() {
-		return new AlgorithmExecutionException("Attempted to use disposed parent shell");
-	}
     
 	private void guiRun(Runnable run) {
         if (Thread.currentThread() == Display.getDefault().getThread()) {
@@ -144,30 +107,5 @@ public class Save implements Algorithm {
         } else {
             parentShell.getDisplay().syncExec(run);
         }
-    }
-    
-    private class NoConversionConverter implements Converter {
-            Dictionary props = new Hashtable();
-
-            public Data convert(Data data) {
-                return data;
-            }
-
-            public AlgorithmFactory getAlgorithmFactory() {
-                return null;
-            }
-
-            public ServiceReference[] getConverterChain() {
-                return null;
-            }
-
-            public Dictionary getProperties() {
-                props.put(AlgorithmProperty.OUT_DATA, "file:*");
-                return props;
-            }
-    }
-    
-    private Data removeExtension(Data data) {
-    	return new BasicData(data.getMetadata(), data, "");
     }
 }

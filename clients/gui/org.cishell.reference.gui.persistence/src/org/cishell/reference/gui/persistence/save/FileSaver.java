@@ -28,7 +28,9 @@ import org.osgi.service.log.LogService;
  * @author Team 
  */
 public class FileSaver {
-    private static File currentDir;
+    public static final String FILE_EXTENSION_PREFIX = "file-ext:";
+
+	private static File currentDir;
 
     private Shell parent;
     
@@ -87,25 +89,28 @@ public class FileSaver {
      * @return Whether or not the save was successful
      */
     public boolean save(Converter converter, Data data) {
-    	String outDataStr = (String)converter.getProperties().get(AlgorithmProperty.OUT_DATA);
+    	String outDataStr =
+    		(String) converter.getProperties().get(AlgorithmProperty.OUT_DATA);
 
     	String ext = "";
-    	if (outDataStr.startsWith("file-ext:")) {
-    		ext = outDataStr.substring(outDataStr.indexOf(':')+1);
+    	if (outDataStr.startsWith(FILE_EXTENSION_PREFIX)) {
+    		ext = outDataStr.substring(FILE_EXTENSION_PREFIX.length());
     	}
     	
-        if ((""+ext).startsWith(".")) {
+    	// Skip any initial "." if present.
+        if (ext.startsWith(".")) {
             ext = ext.substring(1);
         }
         
         FileDialog dialog = new FileDialog(parent, SWT.SAVE);
         
         if (currentDir == null) {
-            currentDir = new File(System.getProperty("user.home") + File.separator + "anything");
+            currentDir = new File(System.getProperty("user.home") + File.separator 
+            		+ "anything");
         }
         dialog.setFilterPath(currentDir.getPath());
         
-     
+        
         if (ext != null && !ext.equals("*")) {
             dialog.setFilterExtensions(new String[]{"*." + ext});
         }
@@ -128,38 +133,46 @@ public class FileSaver {
             String fileName = dialog.open();
             if (fileName != null) {
                 File selectedFile = new File(fileName);
-                if (!isSaveFileValid(selectedFile))
+                if (!isSaveFileValid(selectedFile)) {
                     continue;
-                if (ext != null && ext.length() != 0)
-                    if (!selectedFile.getPath().endsWith(ext) && !ext.equals("*"))
-                        selectedFile = new File(selectedFile.getPath()+'.'+ ext);
-                try {
-                Data newData = converter.convert(data);
-				
-               
-                copy((File)newData.getData(), selectedFile);
-                
-                if (selectedFile.isDirectory()) {
-                	currentDir = new File(selectedFile + File.separator + "anything");
-                } else {
-                	currentDir = new File(selectedFile.getParent() + File.separator + "anything");
                 }
-                    
-                done = true;
-                } catch (ConversionException e1) {
-                	this.log.log(LogService.LOG_ERROR, "Error occurred while converting data to saved format.", e1);
+                
+                if (ext != null && ext.length() != 0) {
+                    if (!selectedFile.getPath().endsWith(ext) && !ext.equals("*")) {
+                        selectedFile = new File(selectedFile.getPath()+'.'+ ext);
+                    }
+                }
+                
+                try {
+                	Data newData = converter.convert(data);
+                	
+	                copy((File) newData.getData(), selectedFile);
+	                
+	                if (selectedFile.isDirectory()) {
+	                	currentDir = new File(selectedFile + File.separator + "anything");
+	                } else {
+	                	currentDir = new File(selectedFile.getParent() + File.separator + "anything");
+	                }
+	                    
+	                done = true;
+                }
+                catch (ConversionException e) {
+                	log.log(LogService.LOG_ERROR, "Error occurred while converting data to saved format:\n    " + e.getMessage(), e);
                 	return false;
                 }
+                
                 log.log(LogService.LOG_INFO, "Saved: " + selectedFile.getPath());
             } else {
                 done = true;
                 return false;
-            }            
+            }
         }
         return true;
     }
-    
-    /**
+
+	
+
+	/**
      * Converter puts it into a temporary directory, this copies it over
      * 
      * @param in The temp file to copy

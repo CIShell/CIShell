@@ -161,7 +161,7 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
         Collection newConverters = new HashSet();
         
         Set formats = new HashSet();
-        for (int i=0; i < converters.length; i++) {
+        for (int i = 0; i < converters.length; i++) {
             String format = (String) converters[i].getProperties().get(OUT_DATA);
             
             if (!formats.contains(format)) {
