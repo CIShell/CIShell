@@ -74,8 +74,8 @@ public class FileUtilities {
     	
     	// If the creation of the temporary file failed, throw an exception.
     	if (temporaryFile == null) {
-    		throw new IOException
-    			("Failed to generate a file in the temporary directory.");
+    		throw new IOException(
+    				"Failed to generate a file in the temporary directory.");
     	}
     	
     	return temporaryFile;
