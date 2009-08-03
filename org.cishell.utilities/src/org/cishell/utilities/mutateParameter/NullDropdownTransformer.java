@@ -10,9 +10,7 @@ import org.osgi.service.metatype.AttributeDefinition;
  * transformOptionLabels, and transformOptionValues.
  */
 public abstract class NullDropdownTransformer extends DropdownTransformer {
-	public boolean shouldTransform(AttributeDefinition ad) {
-		return false;
-	}
+	public abstract boolean shouldTransform(AttributeDefinition ad);
 
 	public String transformID(String oldID) {
 		return oldID;

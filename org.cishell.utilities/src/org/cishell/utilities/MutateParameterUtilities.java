@@ -1,6 +1,7 @@
 package org.cishell.utilities;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 
 import org.cishell.reference.service.metatype.BasicObjectClassDefinition;
@@ -114,6 +115,17 @@ public class MutateParameterUtilities {
 			};
 			
 		return transformer.transform(oldAD);
+	}
+	
+	public static BasicObjectClassDefinition mutateToDropdown(
+			ObjectClassDefinition oldOCD,
+			final String parameterID,
+			Collection optionLabels,
+			Collection optionValues) {
+		return mutateToDropdown(oldOCD,
+								parameterID,
+								(String[]) optionLabels.toArray(new String[0]),
+								(String[]) optionValues.toArray(new String[0]));
 	}
 	
 	/* Convenience method for a common mutation:
