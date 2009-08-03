@@ -28,11 +28,13 @@ public class ViewWithDataChooser extends SaveDataChooser {
 
 	protected void selectionMade(int selectedIndex){
 		try {
-		getShell().setVisible(false);
-        final Converter converter = converterArray[selectedIndex];
-        Data newData = converter.convert(theData);    
-        isSaved = FileViewWith.copy((File)newData.getData(), tempFile);
-      	close(true);
+			getShell().setVisible(false);
+	        final Converter converter = converterArray[selectedIndex];
+	        Data newData = converter.convert(theData);    
+	        isSaved = FileViewWith.copy((File)newData.getData(), tempFile);
+	      	close(true);
+		} catch (ConversionException e) {
+			throw new RuntimeException("Error: Unable to view data:\n    " + e.getMessage(), e);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

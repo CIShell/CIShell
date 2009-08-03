@@ -107,11 +107,11 @@ public class FileViewWith implements Algorithm {
              		//If length=1, use the unique path to save it directly 
             		//and bring the text editor.
             		try {
-            	    Data newData = converters[0].convert(data[i]);
-                    copy((File)newData.getData(), tempFile);     
-            		lastSaveSuccessful = true; 
+	            	    Data newData = converters[0].convert(data[i]);
+	                    copy((File)newData.getData(), tempFile);     
+	            		lastSaveSuccessful = true; 
             		} catch (ConversionException e) {
-            			this.logger.log(LogService.LOG_WARNING, "Error while converting to target save format. Will attempt to use other available converters.", e);
+            			this.logger.log(LogService.LOG_WARNING, "Warning: Unable to convert to target save format (" + e.getMessage() + ").  Will attempt to use other available converters.", e);
             		}
             	}
             	else {
