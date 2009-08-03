@@ -1,6 +1,8 @@
 package org.cishell.utilities;
 
 import org.cishell.framework.algorithm.AlgorithmFactory;
+import org.cishell.framework.data.BasicData;
+import org.cishell.framework.data.Data;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
@@ -44,5 +46,11 @@ public class AlgorithmUtilities {
 		String filter = "(service.pid=" + pid + ")";
 		
 		return getAlgorithmFactoryByFilter(filter, bundleContext);
+	}
+	
+	public static Data[] cloneSingletonData(Data[] data) {
+		return new Data[]{ new BasicData(data[0].getMetadata(),
+										 data[0].getData(),
+										 data[0].getFormat()) };
 	}
 }

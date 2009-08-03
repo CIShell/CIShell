@@ -36,9 +36,9 @@ public class ObjectClassDefinitionTransformer {
 	/* Convenience method for batching transformations.
 	 * TODO Untested
 	 */
-	public static BasicObjectClassDefinition transform(
-			BasicObjectClassDefinition oldOCD, List transformers) {
-		BasicObjectClassDefinition newOCD = oldOCD;
+	public static ObjectClassDefinition transform(
+			ObjectClassDefinition ocd, List transformers) {
+		ObjectClassDefinition newOCD = ocd;
 		
 		for ( Iterator it = transformers.iterator(); it.hasNext(); ) {
 			AttributeDefinitionTransformer transformer =
