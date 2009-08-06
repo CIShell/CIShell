@@ -1,7 +1,11 @@
 package org.cishell.templates.wizards.pagepanels;
 
+import java.util.Map;
+
 import org.cishell.templates.guibuilder.BuilderDelegate;
 import org.cishell.templates.guibuilder.ListBuilder;
+import org.cishell.templates.wizards.staticexecutable.InputDataItem;
+import org.cishell.templates.wizards.staticexecutable.OutputDataItem;
 import org.cishell.templates.wizards.staticexecutable.StaticExecutableOutputDataDelegate;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Device;
@@ -10,14 +14,16 @@ import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Layout;
+import org.eclipse.swt.widgets.TableItem;
 
 public class AddOutputDataPanel extends Composite {
 	public static final String OUTPUT_DATA_LABEL_TEXT = "Output Data";
 	
 	private ListBuilder listBuilder;
-    private BuilderDelegate delegate;
+    private StaticExecutableOutputDataDelegate delegate;
 	
 	public AddOutputDataPanel(Composite parent, int style) {
 		super(parent, style);
@@ -38,6 +44,19 @@ public class AddOutputDataPanel extends Composite {
 	
 	public BuilderDelegate getDelegate() {
 		return this.delegate;
+	}
+	
+	public OutputDataItem[] getOutputDataItems() {
+		Display display = Display.getDefault();
+        
+        if (display != null) {
+            GetOutputDataAction action = new GetOutputDataAction();
+            display.syncExec(action);
+            
+            return action.inputDataItems;
+        } else {
+            return new OutputDataItem[0];
+        }
 	}
 	
 	private Layout createLayoutForThis() {
@@ -76,4 +95,19 @@ public class AddOutputDataPanel extends Composite {
 		
 		return new Font(device, newFontData);
 	}
+	
+	private class GetOutputDataAction implements Runnable {
+        OutputDataItem[] inputDataItems;
+
+        public void run() {
+            TableItem[] tableItems = listBuilder.getTable().getItems();
+            inputDataItems = new OutputDataItem[tableItems.length];
+            Map idToInputDataItemMap = delegate.getIDToOutputDataItemMap();
+		
+			for (int ii = 0; ii < tableItems.length; ii++) {
+				inputDataItems[ii] = (OutputDataItem)
+					idToInputDataItemMap.get(tableItems[ii].getText(0));
+			}
+        }
+    }
 }

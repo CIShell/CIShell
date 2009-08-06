@@ -1,9 +1,11 @@
 package org.cishell.templates.wizards.pages;
 
 import org.cishell.templates.staticexecutable.providers.InputDataProvider;
+import org.cishell.templates.staticexecutable.providers.OutputDataProvider;
 import org.cishell.templates.wizards.pagepanels.AddInputDataPanel;
 import org.cishell.templates.wizards.pagepanels.AddOutputDataPanel;
 import org.cishell.templates.wizards.staticexecutable.InputDataItem;
+import org.cishell.templates.wizards.staticexecutable.OutputDataItem;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -12,7 +14,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Layout;
 
 public class SpecifyInAndOutDataPage extends WizardPage
-		implements InputDataProvider {
+		implements InputDataProvider, OutputDataProvider {
 	private AddInputDataPanel addInputDataPanel;
 	private AddOutputDataPanel addOutputDataPanel;
 	
@@ -68,5 +70,73 @@ public class SpecifyInAndOutDataPage extends WizardPage
 	
 	public InputDataItem[] getInputDataItems() {
 		return this.addInputDataPanel.getInputDataItems();
+	}
+	
+	public String formServicePropertiesInputDataString() {
+		InputDataItem[] inputDataItems = getInputDataItems();
+		
+		StringBuffer inputDataStringInProgress = new StringBuffer();
+		
+		if (inputDataItems.length != 0) {
+			inputDataStringInProgress.append(
+				"file:" + inputDataItems[0].getMimeType());
+			
+			for (int ii = 1; ii < inputDataItems.length; ii++) {
+				inputDataStringInProgress.append(
+					",file:" + inputDataItems[0].getMimeType());
+			}
+		}
+		
+		String inputDataString = inputDataStringInProgress.toString();
+		
+		return inputDataString;
+	}
+	
+	public OutputDataItem[] getOutputDataItems() {
+		return this.addOutputDataPanel.getOutputDataItems();
+	}
+	
+	public String formServicePropertiesOutputDataString() {
+		OutputDataItem[] outputDataItems = getOutputDataItems();
+		
+		StringBuffer outputDataStringInProgress = new StringBuffer();
+		
+		if (outputDataItems.length != 0) {
+			outputDataStringInProgress.append(
+				"file:" + outputDataItems[0].getMimeType());
+			
+			for (int ii = 1; ii < outputDataItems.length; ii++) {
+				outputDataStringInProgress.append(
+					",file:" + outputDataItems[0].getMimeType());
+			}
+		}
+		
+		String outputDataString = outputDataStringInProgress.toString();
+		
+		return outputDataString;
+	}
+	
+	public String formConfigPropertiesOutFilesString() {
+		OutputDataItem[] outputDataItems = getOutputDataItems();
+		
+		StringBuffer outputFilesStringInProgress = new StringBuffer();
+		
+		for (int ii = 0; ii < outputDataItems.length; ii++) {
+			String outFileBase = "outFile[" + ii + "]";
+			outputFilesStringInProgress.append(
+				outFileBase + "=" + outputDataItems[ii].getFileName() + "\n");
+			outputFilesStringInProgress.append(
+				outFileBase + ".label=" +
+				outputDataItems[ii].getLabel() +
+				"\n");
+			outputFilesStringInProgress.append(
+				outFileBase + ".type=" +
+				outputDataItems[ii].getDataType() +
+				"\n");
+		}
+		
+		String outputDataString = outputFilesStringInProgress.toString();
+		
+		return outputDataString;
 	}
 }

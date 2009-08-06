@@ -13,6 +13,8 @@
  * ***************************************************************************/
 package org.cishell.templates.wizards.staticexecutable;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -137,6 +139,15 @@ public class NewStaticExecutableAlgorithmTemplate extends BasicTemplate
 	public static final String REMOTABLE_LABEL = "Remotable?";
 	public static final boolean DEFAULT_REMOTABLE_VALUE = true;
 	
+	public static final String IN_DATA_ID = "inData";
+	public static final String HAS_IN_DATA_ID = "hasInData";
+	
+	public static final String OUT_DATA_ID = "outData";
+	public static final String HAS_OUT_DATA_ID = "hasOutData";
+	public static final String OUT_FILES_ID = "outFiles";
+	public static final String OUT_FILE_LABELS_ID = "outFileLabels";
+	public static final String OUT_FILE_TYPES_ID = "outFileTypes";
+	
 	public static final String BASE_EXECUTABLE_FILE_OPTION_NAME =
 		"executableFileOption";
 	public static final String BASE_RELATED_FILE_OPTION_NAME =
@@ -223,7 +234,44 @@ public class NewStaticExecutableAlgorithmTemplate extends BasicTemplate
     	handleEmptyOption(REFERENCE_URL_ID, HAS_REFERENCE_URL_ID, "");
     	handleEmptyOption(DOCUMENTATION_URL_ID, HAS_DOCUMENTATION_URL_ID, "");
     	handleEmptyOption(WRITTEN_IN_ID, HAS_WRITTEN_IN_ID, "");
-    
+    	
+    	// Project Parameters Page
+    	
+    	setValue("attributeDefinitions",
+    			 this.projectParametersPage.toOutputString());
+    	
+    	// In and Out Data Page
+    	try{
+    	addOption(IN_DATA_ID,
+    			  "",
+    			  this.inputAndOutputDataPage.
+    			  	formServicePropertiesInputDataString(),
+    			  SPECIFY_INPUT_AND_OUTPUT_DATA_PAGE_NUMBER);
+    	handleEmptyOption(IN_DATA_ID, HAS_IN_DATA_ID, "");
+
+    	addOption(OUT_DATA_ID,
+    			  "",
+    			  this.inputAndOutputDataPage.
+    			  	formServicePropertiesOutputDataString(),
+    			  SPECIFY_INPUT_AND_OUTPUT_DATA_PAGE_NUMBER);
+    	handleEmptyOption(OUT_DATA_ID, HAS_OUT_DATA_ID, "");
+    	
+    	addOption(OUT_FILES_ID,
+    			  "",
+    			  this.inputAndOutputDataPage.
+    			  	formConfigPropertiesOutFilesString(),
+    			  SPECIFY_INPUT_AND_OUTPUT_DATA_PAGE_NUMBER);
+    	}
+    	catch (Exception e1) {
+    		try {
+			FileWriter fstream = new FileWriter("C:/Documents and Settings/pataphil/Desktop/out.txt", true);
+			BufferedWriter out = new BufferedWriter(fstream);
+			out.write("exception: \'" + e1.toString() + "\'\n");
+			out.close();
+		} catch (Exception e) {
+			System.err.println("Error: " + e.getMessage());
+		}
+    	}
     	super.execute(project, model, monitor);
     }
 
@@ -440,7 +488,8 @@ public class NewStaticExecutableAlgorithmTemplate extends BasicTemplate
     
     private void handleEmptyOption(
     		String optionID, String isEmptyOptionID, String compareTo) {
-    	if (getOption(optionID).getValue().toString().equals(compareTo)) {
+    	if (getOption(optionID).getValue() == null ||
+    			getOption(optionID).getValue().toString().equals(compareTo)) {
     		setValue(isEmptyOptionID, "#");
     	} else {
     		setValue(isEmptyOptionID, "");
