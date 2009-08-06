@@ -65,7 +65,7 @@ public class SpecifyTemplateStringPanel extends Composite
 						   " (" +
 						   inputParameters[ii].getDescription() +
 						   ")";
-			String value = "\"${" + inputParameters[ii].getName() + "}\"";
+			String value = "\"${" + inputParameters[ii].getID() + "}\"";
 			addTableItem(label, value);
 		}
 		
