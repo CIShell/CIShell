@@ -24,10 +24,6 @@ import org.eclipse.pde.core.plugin.IPluginReference;
 import org.eclipse.pde.ui.templates.OptionTemplateSection;
 import org.eclipse.pde.ui.templates.TemplateOption;
 
-/**
- * 
- * @author Bruce Herr (bh2@bh2.net)
- */
 public abstract class BasicTemplate extends OptionTemplateSection {
     protected final String sectionID;
     protected Map valueMap;

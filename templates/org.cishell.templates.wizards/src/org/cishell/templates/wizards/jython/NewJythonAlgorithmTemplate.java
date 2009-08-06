@@ -36,7 +36,7 @@ public class NewJythonAlgorithmTemplate extends BasicTemplate {
     }
     
     public void addPages(Wizard wizard) {
-        WizardPage page = new WizardNewProjectCreationPage("projectPage");
+        WizardPage page = new WizardNewProjectCreationPage("createProjectPage");
         page.setTitle("Project Properties");
         page.setDescription("Enter the project name and location");
         wizard.addPage(page);

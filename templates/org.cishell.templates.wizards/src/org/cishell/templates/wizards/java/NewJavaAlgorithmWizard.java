@@ -48,10 +48,6 @@ import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.ISetSelectionTarget;
 
-/**
- * 
- * @author Bruce Herr (bh2@bh2.net)
- */
 public class NewJavaAlgorithmWizard extends NewPluginTemplateWizard implements IWorkbenchWizard {
     NewJavaAlgorithmTemplate template;
 

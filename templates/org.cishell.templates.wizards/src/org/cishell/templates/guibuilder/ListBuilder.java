@@ -31,9 +31,9 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
 public class ListBuilder {
-    protected BuilderDelegate delegate;
-    protected Table table;
-    protected Composite panel;
+    private BuilderDelegate delegate;
+    private Table table;
+    private Composite panel;
     
     public ListBuilder(Composite parent, BuilderDelegate delegate) {
         this(parent, SWT.NONE, delegate);
@@ -41,91 +41,104 @@ public class ListBuilder {
     
     public ListBuilder(Composite parent, int style, BuilderDelegate delegate) {
         this.delegate = delegate;
+        
         createGUI(parent, style);
     }
 
     private void createGUI(Composite parent, int style) {
         panel = new Composite(parent, style);
         
-        GridLayout gridLayout = new GridLayout(2, false);
-        panel.setLayout(gridLayout);
+        GridLayout panelLayout = new GridLayout(2, false);
+        panel.setLayout(panelLayout);
         
-        GridData gridData = new GridData(GridData.FILL, GridData.FILL, true, true);
-        gridData.verticalSpan = 10;
+        GridData tableData =
+        	new GridData(GridData.FILL, GridData.FILL, true, true);
+        tableData.verticalSpan = 10;
         
         table = createTable(panel);
-        table.setLayoutData(gridData);
+        table.setLayoutData(tableData);
         setupTableDoubleClicking();
         setupTableDeleteKey();
         
-        gridData = new GridData(GridData.FILL, GridData.BEGINNING, false, false);
-        Button add = createAddButton(panel);
-        add.setLayoutData(gridData);
+        GridData addButtonLayoutData =
+        	new GridData(GridData.FILL, GridData.BEGINNING, false, false);
+        Button addButton = createAddButton(panel);
+        addButton.setLayoutData(addButtonLayoutData);
         
-        gridData = new GridData(GridData.FILL, GridData.BEGINNING, false, false);
-        Button edit = createEditButton(panel);
-        edit.setLayoutData(gridData);
+        GridData editButtonLayoutData =
+        	new GridData(GridData.FILL, GridData.BEGINNING, false, false);
+        Button editButton = createEditButton(panel);
+        editButton.setLayoutData(editButtonLayoutData);
         
-        gridData = new GridData(GridData.FILL, GridData.BEGINNING, false, false);
-        Button remove = createRemoveButton(panel);
-        remove.setLayoutData(gridData);
+        GridData removeButtonLayoutData =
+        	new GridData(GridData.FILL, GridData.BEGINNING, false, false);
+        Button removeButton = createRemoveButton(panel);
+        removeButton.setLayoutData(removeButtonLayoutData);
         
-        new Label(panel, SWT.NONE); //filler label
+        // This is a filler label.
+        new Label(panel, SWT.NONE);
         
-        gridData = new GridData(GridData.FILL, GridData.BEGINNING, false, false);
-        Button up = createUpButton(panel);
-        up.setLayoutData(gridData);
+        GridData moveUpButtonLayoutData =
+        	new GridData(GridData.FILL, GridData.BEGINNING, false, false);
+        Button moveUpButton = createMoveUpButton(panel);
+        moveUpButton.setLayoutData(moveUpButtonLayoutData);
         
-        gridData = new GridData(GridData.FILL, GridData.BEGINNING, false, false);
-        Button down = createDownButton(panel);
-        down.setLayoutData(gridData);
+        GridData moveDownButtonLayoutData =
+        	new GridData(GridData.FILL, GridData.BEGINNING, false, false);
+        Button moveDownButton = createMoveDownButton(panel);
+        moveDownButton.setLayoutData(moveDownButtonLayoutData);
     }
     
     private Button createAddButton(Composite parent) {
-        Button button = new Button(parent, SWT.FLAT);
-        button.setText("Add...");
-        button.addSelectionListener(new SelectionListener() {
-            public void widgetDefaultSelected(SelectionEvent e) {
-                widgetSelected(e);
+        Button addButton = new Button(parent, SWT.PUSH);
+        addButton.setText("Add...");
+        
+        addButton.addSelectionListener(new SelectionListener() {
+            public void widgetDefaultSelected(SelectionEvent selectionEvent) {
+                widgetSelected(selectionEvent);
             }
 
-            public void widgetSelected(SelectionEvent e) {
+            public void widgetSelected(SelectionEvent selectionEvent) {
                 String[] item = delegate.createItem();
                 
-                if (item != null) add(item);
-            }});
-        
-        return button;
-    }
-    
-    private Button createEditButton(Composite parent) {
-        Button button = new Button(parent, SWT.FLAT);
-        button.setText("Edit...");
-        button.addSelectionListener(new SelectionListener() {
-            public void widgetDefaultSelected(SelectionEvent e) {
-                widgetSelected(e);
-            }
-
-            public void widgetSelected(SelectionEvent e) {
-                TableItem[] items = table.getSelection();
-                
-                if (items.length > 0) {
-                    delegate.edit(items[0]);
+                if (item != null) {
+                	addItem(item);
                 }
             }});
         
-        return button;
+        return addButton;
+    }
+    
+    private Button createEditButton(Composite parent) {
+        Button editButton = new Button(parent, SWT.PUSH);
+        editButton.setText("Edit...");
+        
+        editButton.addSelectionListener(new SelectionListener() {
+            public void widgetDefaultSelected(SelectionEvent selectionEvent) {
+                widgetSelected(selectionEvent);
+            }
+
+            public void widgetSelected(SelectionEvent selectionEvent) {
+                TableItem[] tableItems = table.getSelection();
+                
+                if (tableItems.length > 0) {
+                    delegate.edit(tableItems[0]);
+                }
+            }});
+        
+        return editButton;
     }
     
     private Button createRemoveButton(Composite parent) {
-        Button button = new Button(parent, SWT.FLAT);
-        button.setText("Remove");
-        button.addSelectionListener(new SelectionListener() {
-            public void widgetDefaultSelected(SelectionEvent e) {
-                widgetSelected(e);
+        Button removeButton = new Button(parent, SWT.PUSH);
+        removeButton.setText("Remove");
+        
+        removeButton.addSelectionListener(new SelectionListener() {
+            public void widgetDefaultSelected(SelectionEvent selectionEvent) {
+                widgetSelected(selectionEvent);
             }
 
-            public void widgetSelected(SelectionEvent e) {
+            public void widgetSelected(SelectionEvent selectionEvent) {
                 int index = table.getSelectionIndex();
                 
                 if (index != -1) {
@@ -133,11 +146,11 @@ public class ListBuilder {
                 }
             }});
         
-        return button;
+        return removeButton;
     }
     
-    private Button createUpButton(Composite parent) {
-        Button button = new Button(parent, SWT.FLAT);
+    private Button createMoveUpButton(Composite parent) {
+        Button button = new Button(parent, SWT.PUSH);
         button.setText("Up");
         button.addSelectionListener(new SelectionListener() {
             public void widgetDefaultSelected(SelectionEvent e) {
@@ -161,8 +174,8 @@ public class ListBuilder {
         return button;
     }
 
-    private Button createDownButton(Composite parent) {
-        Button button = new Button(parent, SWT.FLAT);
+    private Button createMoveDownButton(Composite parent) {
+        Button button = new Button(parent, SWT.PUSH);
         button.setText("Down");
         button.addSelectionListener(new SelectionListener() {
             public void widgetDefaultSelected(SelectionEvent e) {
@@ -204,7 +217,7 @@ public class ListBuilder {
         return table;
     }
     
-    private void add(String[] item) {
+    private void addItem(String[] item) {
         int index = table.getSelectionIndex();
         TableItem row;
         if (index == -1) {
