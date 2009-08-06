@@ -13,11 +13,16 @@
  * ***************************************************************************/
 package org.cishell.templates.wizards.staticexecutable;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.lang.reflect.InvocationTargetException;
 
+import org.cishell.templates.staticexecutable.providers.PlatformOption;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -30,6 +35,10 @@ import org.eclipse.pde.internal.core.bundle.BundlePluginBase;
 import org.eclipse.pde.internal.core.bundle.BundlePluginModelBase;
 import org.eclipse.pde.ui.templates.ITemplateSection;
 import org.eclipse.pde.ui.templates.NewPluginTemplateWizard;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
@@ -41,12 +50,52 @@ import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.ISetSelectionTarget;
 
-/**
- * 
- * @author Bruce Herr (bh2@bh2.net)
- */
+
 public class NewStaticExecutableAlgorithmWizard extends NewPluginTemplateWizard
         implements IWorkbenchWizard {
+	// TODO: Different label string?
+	public static final String DEFAULT_LABEL = "Common to All";
+	public static final String DEFAULT_PATH = "/default/";
+	
+	public static final String LINUX_X86_32_LABEL = "Linux x86 (32 bit)";
+	public static final String LINUX_X86_32_PATH = "/linux.x86/";
+	
+	public static final String LINUX_X86_64_LABEL = "Linux x86 (64 bit)";
+	public static final String LINUX_X86_64_PATH = "/linux.x86_64/";
+	
+	public static final String MAC_OSX_PPC_LABEL = "Mac OSX PPC";
+	public static final String MAC_OSX_PPC_PATH = "/macosx.ppc/";
+	
+	public static final String MAC_OSX_X86_LABEL = "Mac OSX x86";
+	public static final String MAC_OSX_X86_PATH = "/macosx.x86/";
+	
+	public static final String SOLARIS_SPARC_LABEL = "Solaris Sparc";
+	public static final String SOLARIS_SPARC_PATH = "/solaris.sparc/";
+	
+	public static final String WIN_32_LABEL = "Windows (32 bit)";
+	public static final String WIN_32_PATH = "/win32/";
+	
+	// TODO: This should be improved.
+	public static final String[] PLATFORM_LABELS = new String[] {
+		DEFAULT_LABEL,
+		LINUX_X86_32_LABEL,
+		LINUX_X86_64_LABEL,
+		MAC_OSX_PPC_LABEL,
+		MAC_OSX_X86_LABEL,
+		SOLARIS_SPARC_LABEL,
+		WIN_32_LABEL
+	};
+	
+	public static final String[] PLATFORM_PATHS = new String[] {
+		DEFAULT_PATH,
+		LINUX_X86_32_PATH,
+		LINUX_X86_64_PATH,
+		MAC_OSX_PPC_PATH,
+		MAC_OSX_X86_PATH,
+		SOLARIS_SPARC_PATH,
+		WIN_32_PATH
+	};
+
     NewStaticExecutableAlgorithmTemplate template;
     
     /**
@@ -59,14 +108,22 @@ public class NewStaticExecutableAlgorithmWizard extends NewPluginTemplateWizard
 
     public boolean performFinish() {
     	
-    	//prepare all the files necessary to call the 3-argument version of performFinish, which executes
-    	//each of the templates we provided in the "createTemplateSections()" method above.
+    	/*
+    	 * Prepare all the files necessary to call the 3-argument version of
+    	 * performFinish, which executes each of the templates we provided in
+    	 * the "createTemplateSections()" method above.
+    	 */
     	
         final IProject project = template.getProjectHandle();
-        final IProjectDescription description = ResourcesPlugin.getWorkspace().newProjectDescription(project.getName());
+        final IProjectDescription description =
+        	ResourcesPlugin.getWorkspace().newProjectDescription(
+        		project.getName());
         
         WorkspaceModifyOperation op = new WorkspaceModifyOperation() {
-            protected void execute(IProgressMonitor monitor) throws CoreException, InvocationTargetException, InterruptedException {
+            protected void execute(IProgressMonitor monitor)
+            		throws CoreException,
+            			   InvocationTargetException,
+            			   InterruptedException {
                 monitor.beginTask("", 2500);
                 project.create(description, monitor);
                 project.open(monitor);
@@ -83,6 +140,26 @@ public class NewStaticExecutableAlgorithmWizard extends NewPluginTemplateWizard
                     }};
                 
                 performFinish(project, model, monitor);
+                
+                for (int ii = 0; ii < PLATFORM_LABELS.length; ii++) {
+                	String directoryPath = "ALGORITHM" + PLATFORM_PATHS[ii];
+                	
+                	if (ii != 0) {
+                		PlatformOption executableFileOption =
+                			template.getExecutableFileOption(
+                				PLATFORM_LABELS[ii]);
+                		copyPlatformOptionFile(
+                			executableFileOption, directoryPath, project);
+                	}
+                	
+                	PlatformOption[] relatedFileOptions =
+                		template.getRelatedFileOptions(PLATFORM_LABELS[ii]);
+                	
+                	for (int jj = 0; jj < relatedFileOptions.length; jj++) {
+                		copyPlatformOptionFile(
+                			relatedFileOptions[jj], directoryPath, project);
+                	}
+                }
                 
                 monitor.done();
             }
@@ -125,5 +202,51 @@ public class NewStaticExecutableAlgorithmWizard extends NewPluginTemplateWizard
      */
     public void init(IWorkbench workbench, IStructuredSelection selection) {
         
+    }
+    
+    private void copyPlatformOptionFile(PlatformOption platformOption,
+    									String directoryPath,
+    									IProject project)
+    		throws CoreException {
+    	String sourceFilePath = platformOption.getText();
+    	
+    	if (sourceFilePath == null || "".equals(sourceFilePath)) {
+    		return;
+    	}
+    	                	
+    	File sourceFile = new File(sourceFilePath);
+    	String targetFilePath = directoryPath + sourceFile.getName();
+    	File targetFile =
+    		project.getLocation().append(targetFilePath).toFile();
+    	
+    	copyFile(sourceFile, targetFile);
+    	
+    	project.refreshLocal(IResource.DEPTH_INFINITE, null);
+    }
+    
+    private void copyFile(File sourceFile, File targetFile) {
+    	FileInputStream sourceFileStream;
+    	FileOutputStream targetFileStream;
+    	
+    	try {
+    		sourceFileStream = new FileInputStream(sourceFile);
+    		targetFileStream = new FileOutputStream(targetFile);
+    		byte[] buffer = new byte[4096];
+    		int bytesRead = sourceFileStream.read(buffer);
+    		
+    		while (bytesRead != -1) {
+    			targetFileStream.write(buffer, 0, bytesRead);
+    			bytesRead = sourceFileStream.read(buffer);
+    		}
+    		
+    		sourceFileStream.close();
+    		targetFileStream.close();
+    	} catch (Exception exception) {
+    		MessageBox messageBox = new MessageBox(new Shell(new Display()), SWT.OK);
+    		messageBox.setMessage(exception.toString());
+    		messageBox.open();
+    		
+    		throw new RuntimeException(exception);
+    	}
     }
 }

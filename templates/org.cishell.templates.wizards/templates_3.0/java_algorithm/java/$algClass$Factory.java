@@ -8,7 +8,9 @@ import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.data.Data;
 
 public class $algClass$Factory implements AlgorithmFactory {
-    public Algorithm createAlgorithm(Data[] data, Dictionary parameters, CIShellContext context) {
-        return new $algClass$(data, parameters, context);
+    public Algorithm createAlgorithm(Data[] data,
+    								 Dictionary parameters,
+    								 CIShellContext ciShellContext) {
+        return new $algClass$(data, parameters, ciShellContext);
     }
 }

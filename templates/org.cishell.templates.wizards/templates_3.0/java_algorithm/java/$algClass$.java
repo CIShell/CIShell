@@ -10,12 +10,14 @@ import org.cishell.framework.data.Data;
 public class $algClass$ implements Algorithm {
     private Data[] data;
     private Dictionary parameters;
-    private CIShellContext context;
+    private CIShellContext ciShellContext;
     
-    public $algClass$(Data[] data, Dictionary parameters, CIShellContext context) {
+    public $algClass$(Data[] data,
+    				  Dictionary parameters,
+    				  CIShellContext ciShellContext) {
         this.data = data;
         this.parameters = parameters;
-        this.context = context;
+        this.ciShellContext = ciShellContext;
     }
 
     public Data[] execute() throws AlgorithmExecutionException {

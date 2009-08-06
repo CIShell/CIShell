@@ -59,7 +59,7 @@ public class NewJavaAlgorithmTemplate extends BasicTemplate {
     }
     
     public void addPages(Wizard wizard) {
-        projectPage = new WizardNewProjectCreationPage("projectPage");
+        projectPage = new WizardNewProjectCreationPage("createProjectPage");
         WizardPage page = projectPage;
         page.setTitle("Project Properties");
         page.setDescription("Enter the project name and location");

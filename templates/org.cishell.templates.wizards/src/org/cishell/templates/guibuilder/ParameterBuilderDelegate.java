@@ -1,16 +1,3 @@
-/* **************************************************************************** 
- * CIShell: Cyberinfrastructure Shell, An Algorithm Integration Framework.
- * 
- * All rights reserved. This program and the accompanying materials are made
- * available under the terms of the Apache License v2.0 which accompanies
- * this distribution, and is available at:
- * http://www.apache.org/licenses/LICENSE-2.0.html
- * 
- * Created on Aug 16, 2006 at Indiana University.
- * 
- * Contributors:
- *     Indiana University - 
- * ***************************************************************************/
 package org.cishell.templates.guibuilder;
 
 import java.util.HashMap;
@@ -21,97 +8,91 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TableItem;
 import org.osgi.service.metatype.AttributeDefinition;
 
-/**
- * 
- * @author Bruce Herr (bh2@bh2.net)
- */
 public class ParameterBuilderDelegate implements BuilderDelegate {
-    protected static final String[] COLUMN_LABELS = new String[]{"id","Type","Label"};
-    protected Map idToAttrMap;
-    protected int lastID;
-    protected Composite parent;
+    public static final String[] COLUMN_LABELS = new String[] {
+    	"id", "Type", "Label"
+    };
+    
+    private Map idToAttributeMap;
+    private int lastID;
+    private Composite parent;
     
     public ParameterBuilderDelegate(Composite parent) {
         this.parent = parent;
-        idToAttrMap = new HashMap();
+        idToAttributeMap = new HashMap();
         lastID = 0;
     }
 
-    /**
-     * @see org.cishell.templates.guibuilder.BuilderDelegate#createItem()
-     */
     public String[] createItem() {
-        EditableAttributeDefinition attr = new EditableAttributeDefinition();
+        EditableAttributeDefinition attribute = new EditableAttributeDefinition();
         lastID++;
-        attr.setID(""+lastID);
-        attr.setName("Parameter Label");
-        attr.setDescription("Parameter Description");
-        attr.setDefaultValue(new String[]{"Default value"});
-        attr.setType(AttributeDefinition.STRING);
+        attribute.setID("" + lastID);
+        attribute.setName("Parameter Label");
+        attribute.setDescription("Parameter Description");
+        attribute.setDefaultValue(new String[] { "Default value" });
+        attribute.setType(AttributeDefinition.STRING);
         
-        boolean success = edit(attr);
+        boolean success = edit(attribute);
         
         if (success) {
-            idToAttrMap.put(attr.getID(), attr);
+            idToAttributeMap.put(attribute.getID(), attribute);
             
             String[] item = new String[]{
-                    attr.getID(),
-                    getTypeString(attr.getType()),
-                    attr.getName()
+                    attribute.getID(),
+                    getTypeString(attribute.getType()),
+                    attribute.getName()
             };
+            
             return item;
         } else {
             return null;
         }
     }
 
-    /**
-     * @see org.cishell.templates.guibuilder.BuilderDelegate#edit(org.eclipse.swt.widgets.TableItem)
-     */
     public void edit(TableItem item) {
-        String id = item.getText(0);
+        String itemID = item.getText(0);
         
-        EditableAttributeDefinition attr = 
-            (EditableAttributeDefinition) idToAttrMap.get(id);
+        EditableAttributeDefinition attribute = 
+            (EditableAttributeDefinition)idToAttributeMap.get(itemID);
         
-        edit(attr);
+        edit(attribute);
 
-        item.setText(0, attr.getID());
-        item.setText(1, getTypeString(attr.getType()));
-        item.setText(2, attr.getName());
+        item.setText(0, attribute.getID());
+        item.setText(1, getTypeString(attribute.getType()));
+        item.setText(2, attribute.getName());
     }
     
-    protected boolean edit(EditableAttributeDefinition attr) {
-        AttributeDefinitionEditor editor = new AttributeDefinitionEditor(parent, attr);
-        int returnCode = editor.open();
+    protected boolean edit(EditableAttributeDefinition attribute) {
+        AttributeDefinitionEditor attributeDefinitionEditor =
+        	new AttributeDefinitionEditor(parent, attribute);
+        int returnCode = attributeDefinitionEditor.open();
         
         if (returnCode == Dialog.OK) {
-            idToAttrMap.put(attr.getID(), attr);
+            idToAttributeMap.put(attribute.getID(), attribute);
         }
         
         return returnCode == Dialog.OK;
     }
 
     protected String getTypeString(int type) {
-        String str = "Unknown";
+        String typeString = "Unknown";
         
-        for (int i=0; i < AttributeDefinitionEditor.TYPE_VALUES.length; i++) {
-            if (AttributeDefinitionEditor.TYPE_VALUES[i] == type) {
-                str = AttributeDefinitionEditor.TYPE_LABELS[i];
+        for (int ii = 0;
+        		ii < AttributeDefinitionEditor.TYPE_VALUES.length;
+        		ii++) {
+            if (AttributeDefinitionEditor.TYPE_VALUES[ii] == type) {
+                typeString = AttributeDefinitionEditor.TYPE_LABELS[ii];
                 break;
             }
         }
         
-        return str;
+        return typeString;
     }
     
     public EditableAttributeDefinition getAttributeDefinition(String id) {
-        return (EditableAttributeDefinition) idToAttrMap.get(id);
+        return (EditableAttributeDefinition)idToAttributeMap.get(id);
     }
-    
-    /**
-     * @see org.cishell.templates.guibuilder.BuilderDelegate#getColumns()
-     */
+
     public String[] getColumns() {
         return COLUMN_LABELS;
     }
