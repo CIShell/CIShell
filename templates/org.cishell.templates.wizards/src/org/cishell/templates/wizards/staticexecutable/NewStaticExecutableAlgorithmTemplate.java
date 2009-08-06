@@ -85,6 +85,7 @@ public class NewStaticExecutableAlgorithmTemplate extends BasicTemplate
 	public static final String MENU_PATH_ID = "menuPath";
 	public static final String MENU_PATH_LABEL = "Menu Path (Optional)";
 	public static final String DEFAULT_MENU_PATH = "menu_path";
+	public static final String FULL_MENU_PATH = "fullMenuPath";
 	
 	public static final String MENU_GROUP_ID = "menuGroup";
 	public static final String MENU_GROUP_LABEL = "Menu Item Placement";
@@ -141,6 +142,9 @@ public class NewStaticExecutableAlgorithmTemplate extends BasicTemplate
 	
 	public static final String IN_DATA_ID = "inData";
 	public static final String HAS_IN_DATA_ID = "hasInData";
+	
+	public static final String ATTRIBUTE_DEFINITIONS_ID =
+		"attributeDefinitions";
 	
 	public static final String OUT_DATA_ID = "outData";
 	public static final String HAS_OUT_DATA_ID = "hasOutData";
@@ -235,9 +239,28 @@ public class NewStaticExecutableAlgorithmTemplate extends BasicTemplate
     	handleEmptyOption(DOCUMENTATION_URL_ID, HAS_DOCUMENTATION_URL_ID, "");
     	handleEmptyOption(WRITTEN_IN_ID, HAS_WRITTEN_IN_ID, "");
     	
+    	String menuPath = (String)getValue(MENU_PATH_ID);
+        if (!menuPath.endsWith("/")) {
+            menuPath += "/";
+        }
+        
+        String choice = (String)getOption(MENU_GROUP_ID).getValue();
+
+        for (int ii = 0; ii < GROUP_CHOICES.length; ii++) {
+            if (GROUP_CHOICES[ii][1].equals(choice) ||
+            		GROUP_CHOICES[ii][0].equals(choice)) {
+                menuPath += GROUP_CHOICES[ii][0];
+                
+                break;
+            }
+            
+        }
+        
+        setValue(FULL_MENU_PATH, menuPath);
+    	
     	// Project Parameters Page
     	
-    	setValue("attributeDefinitions",
+    	setValue(ATTRIBUTE_DEFINITIONS_ID,
     			 this.projectParametersPage.toOutputString());
     	
     	// In and Out Data Page
