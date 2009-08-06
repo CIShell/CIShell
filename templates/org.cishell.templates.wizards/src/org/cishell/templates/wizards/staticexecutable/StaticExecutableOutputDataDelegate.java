@@ -38,6 +38,10 @@ public class StaticExecutableOutputDataDelegate
     public Composite getParent() {
     	return this.parent;
     }
+    
+    public Map getIDToOutputDataItemMap() {
+    	return this.idToOutputDataItemMap;
+    }
 
     public String[] createItem() {
         OutputDataItem outputDataItem = new OutputDataItem();

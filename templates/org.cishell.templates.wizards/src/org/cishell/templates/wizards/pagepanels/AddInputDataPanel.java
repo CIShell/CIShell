@@ -3,6 +3,7 @@ package org.cishell.templates.wizards.pagepanels;
 import java.util.Map;
 
 import org.cishell.templates.guibuilder.BuilderDelegate;
+import org.cishell.templates.guibuilder.EditableAttributeDefinition;
 import org.cishell.templates.guibuilder.ListBuilder;
 import org.cishell.templates.wizards.staticexecutable.InputDataItem;
 import org.cishell.templates.wizards.staticexecutable.StaticExecutableInputDataDelegate;
@@ -13,6 +14,7 @@ import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.TableItem;
@@ -44,16 +46,16 @@ public class AddInputDataPanel extends Composite {
 	}
 	
 	public InputDataItem[] getInputDataItems() {
-		TableItem[] tableItems = this.listBuilder.getTable().getItems();
-		InputDataItem[] inputDataItems = new InputDataItem[tableItems.length];
-		Map idToInputDataItemMap = this.delegate.getIDToInputDataItemMap();
-		
-		for (int ii = 0; ii < tableItems.length; ii++) {
-			inputDataItems[ii] = (InputDataItem)
-				idToInputDataItemMap.get(tableItems[ii].getText(0));
-		}
-		
-		return inputDataItems;
+		Display display = Display.getDefault();
+        
+        if (display != null) {
+            GetInputDataAction action = new GetInputDataAction();
+            display.syncExec(action);
+            
+            return action.inputDataItems;
+        } else {
+            return new InputDataItem[0];
+        }
 	}
 	
 	private Layout createLayoutForThis() {
@@ -94,4 +96,19 @@ public class AddInputDataPanel extends Composite {
 		
 		return new Font(device, newFontData);
 	}
+	
+	private class GetInputDataAction implements Runnable {
+        InputDataItem[] inputDataItems;
+
+        public void run() {
+            TableItem[] tableItems = listBuilder.getTable().getItems();
+            inputDataItems = new InputDataItem[tableItems.length];
+            Map idToInputDataItemMap = delegate.getIDToInputDataItemMap();
+		
+			for (int ii = 0; ii < tableItems.length; ii++) {
+				inputDataItems[ii] = (InputDataItem)
+					idToInputDataItemMap.get(tableItems[ii].getText(0));
+			}
+        }
+    }
 }
