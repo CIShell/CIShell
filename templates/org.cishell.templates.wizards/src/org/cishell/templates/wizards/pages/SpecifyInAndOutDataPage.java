@@ -13,6 +13,13 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Layout;
 
+/*
+ * This page allows users the specify input and output data.
+ * Input data is handled in
+ *  org.cishell.templates.wizards.pagepanels.AddInputDataPanel, and output data
+ *  is handled in
+ *  org.cishell.templates.wizards.pagepanels.AddOutputDataPanel.
+ */
 public class SpecifyInAndOutDataPage extends WizardPage
 		implements InputDataProvider, OutputDataProvider {
 	private AddInputDataPanel addInputDataPanel;
@@ -42,19 +49,19 @@ public class SpecifyInAndOutDataPage extends WizardPage
 		return layout;
 	}
 	
-	private AddInputDataPanel createAndSetupInputDataPanel(Composite container,
-											  final Composite parent) {
+	private AddInputDataPanel createAndSetupInputDataPanel(
+			Composite container, final Composite parent) {
 		AddInputDataPanel addInputDataPanel =
-			new AddInputDataPanel(container, SWT.BORDER);
+			new AddInputDataPanel(container, SWT.NONE);
 		addInputDataPanel.setLayoutData(createPanelLayoutData());
 		
 		return addInputDataPanel;
 	}
 	
-	private AddOutputDataPanel createAndSetupOutputDataPanel(Composite container,
-											   final Composite parent) {
+	private AddOutputDataPanel createAndSetupOutputDataPanel(
+			Composite container, final Composite parent) {
 		AddOutputDataPanel addOutputDataPanel =
-			new AddOutputDataPanel(container, SWT.BORDER);
+			new AddOutputDataPanel(container, SWT.NONE);
 		addOutputDataPanel.setLayoutData(createPanelLayoutData());
 		
 		return addOutputDataPanel;

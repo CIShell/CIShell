@@ -13,8 +13,6 @@
  * ***************************************************************************/
 package org.cishell.templates.wizards.staticexecutable;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -23,6 +21,7 @@ import org.cishell.templates.staticexecutable.providers.PlatformOption;
 import org.cishell.templates.staticexecutable.providers.PlatformOptionProvider;
 import org.cishell.templates.wizards.BasicTemplate;
 import org.cishell.templates.wizards.pages.ChooseExecutableFilesPage;
+import org.cishell.templates.wizards.pages.ChooseSourceCodeFilesPage;
 import org.cishell.templates.wizards.pages.ParameterListBuilderPage;
 import org.cishell.templates.wizards.pages.SpecifyInAndOutDataPage;
 import org.cishell.templates.wizards.pages.SpecifyTemplateStringPage;
@@ -57,6 +56,8 @@ public class NewStaticExecutableAlgorithmTemplate extends BasicTemplate
 		"specifyInAndOutDataPage";
 	public static final String SPECIFY_TEMPLATE_STRING_PAGE_ID =
 		"specifyTemplateStringPage";
+	public static final String CHOOSE_SOURCE_CODE_FILES_PAGE_ID =
+		"chooseSoureCodeFilesPage";
 	
 	public static final String BUNDLE_NAME_ID = "bundleName";
 	public static final String BUNDLE_NAME_LABEL = "Bundle Name";
@@ -171,6 +172,10 @@ public class NewStaticExecutableAlgorithmTemplate extends BasicTemplate
 	public static final String TEMPLATE_STRING_LABEL = "";
 	public static final String DEFAULT_TEMPLATE_STRING = "";
 	
+	public static final String CHOOSE_SOURCE_CODE_FILES_ID = "sourceCodeFiles";
+	public static final String CHOOSE_SOURCE_CODE_FILES_LABEL =
+		"Choose an archive file that contains your source code files";
+	
 	public static final String[][] GROUP_CHOICES = new String[][] {
 		{ MENU_START_LABEL, MENU_START_DESCRIPTION },
 		{ MENU_ADDITIONS_LABEL, MENU_ADDITIONS_DESCRIPTION },
@@ -178,19 +183,20 @@ public class NewStaticExecutableAlgorithmTemplate extends BasicTemplate
 	};
 	
     private WizardNewProjectCreationPage createProjectPage;
-    private ChooseExecutableFilesPage chooseExecutableFilesPage;
     private WizardPage bundlePropertiesPage;
+    private ChooseExecutableFilesPage chooseExecutableFilesPage;
     private WizardPage projectPropertiesPage;
     private ParameterListBuilderPage projectParametersPage;
     private SpecifyInAndOutDataPage inputAndOutputDataPage;
     private SpecifyTemplateStringPage specifyTemplateStringPage;
-    private WizardPage sourceCodeFilesPage;
+    private ChooseSourceCodeFilesPage sourceCodeFilesPage;
     
     private TemplateOption executableNameOption;
     private Map platformExecutableOptions = new HashMap();
     private MultiHashMapWithCounts relatedFileOptions =
     	new MultiHashMapWithCounts();
     private TemplateOption templateStringOption;
+    private TemplateOption sourceCodeFilesOption;
 
     public NewStaticExecutableAlgorithmTemplate() {
         super("static_executable");
@@ -207,19 +213,47 @@ public class NewStaticExecutableAlgorithmTemplate extends BasicTemplate
         setupSourceCodeFilesPage();
     }
     
+    public TemplateOption getSourceCodeFilesTemplateOption() {
+    	return this.sourceCodeFilesOption;
+    }
+    
     public void addPages(Wizard wizard) {
-        wizard.addPage(createCreateProjectPage());
-        createBundlePropertiesPage(wizard);
-        createChooseExecutableFilesPage(wizard);
-        createProjectPropertiesPage(wizard);
-        createProjectParametersPage(wizard);
-        createInputAndOutputDataPage(wizard);
-        createTemplateStringPage(wizard);
-        createSourceCodeFilesPage(wizard);
+        this.createProjectPage = createCreateProjectPage();
+        wizard.addPage(this.createProjectPage);
+        
+        this.bundlePropertiesPage = createBundlePropertiesPage();
+        wizard.addPage(this.bundlePropertiesPage);
+        
+        this.chooseExecutableFilesPage = createChooseExecutableFilesPage();
+        wizard.addPage(this.chooseExecutableFilesPage);
+        
+        this.projectPropertiesPage = createProjectPropertiesPage();
+        wizard.addPage(this.projectPropertiesPage);
+        
+        this.projectParametersPage = createProjectParametersPage();
+        wizard.addPage(this.projectParametersPage);
+        
+        this.inputAndOutputDataPage = createInputAndOutputDataPage();
+        wizard.addPage(this.inputAndOutputDataPage);
+        
+        this.specifyTemplateStringPage = createTemplateStringPage();
+        wizard.addPage(this.specifyTemplateStringPage);
+        
+        this.sourceCodeFilesPage = createSourceCodeFilesPage();
+        wizard.addPage(this.sourceCodeFilesPage);
         
         markPagesAdded();
     }
     
+    /*
+     * execute is basically called when the user clicks the Finish button in
+     *  the wizard.  This is where all of the template options should be
+     *  processed and/or created.
+     * Template options are basically key/value string pairs.  If a template
+     *  option's key is found in the project template files (in the
+     *  templates_3.0 directory), it is replaced with the template option's
+     *  value.
+     */
     public void execute(IProject project,
     					IPluginModelBase model,
     					IProgressMonitor monitor) throws CoreException {
@@ -229,6 +263,7 @@ public class NewStaticExecutableAlgorithmTemplate extends BasicTemplate
     	
     	// Project Properties Page
     	
+    	// See comments on handleEmptyOption.
     	handleEmptyOption(ON_MENU_ID, IS_ON_MENU_ID, Boolean.TRUE);
     	handleEmptyOption(LABEL_ID, HAS_LABEL_ID, "");
     	handleEmptyOption(DESCRIPTION_ID, HAS_DESCRIPTION_ID, "");
@@ -264,7 +299,12 @@ public class NewStaticExecutableAlgorithmTemplate extends BasicTemplate
     			 this.projectParametersPage.toOutputString());
     	
     	// In and Out Data Page
-    	try{
+    	
+    	/*
+    	 * These options are not tied directly to input fields on any of the
+    	 *  pages.  Their values are derviced from the input fields that ARE on
+    	 *  the pages.
+    	 */
     	addOption(IN_DATA_ID,
     			  "",
     			  this.inputAndOutputDataPage.
@@ -284,17 +324,7 @@ public class NewStaticExecutableAlgorithmTemplate extends BasicTemplate
     			  this.inputAndOutputDataPage.
     			  	formConfigPropertiesOutFilesString(),
     			  SPECIFY_INPUT_AND_OUTPUT_DATA_PAGE_NUMBER);
-    	}
-    	catch (Exception e1) {
-    		try {
-			FileWriter fstream = new FileWriter("C:/Documents and Settings/pataphil/Desktop/out.txt", true);
-			BufferedWriter out = new BufferedWriter(fstream);
-			out.write("exception: \'" + e1.toString() + "\'\n");
-			out.close();
-		} catch (Exception e) {
-			System.err.println("Error: " + e.getMessage());
-		}
-    	}
+
     	super.execute(project, model, monitor);
     }
 
@@ -326,81 +356,93 @@ public class NewStaticExecutableAlgorithmTemplate extends BasicTemplate
         return createProjectPage.getProjectHandle();
     }
     
-    private WizardPage createCreateProjectPage() {
-    	this.createProjectPage =
+    private WizardNewProjectCreationPage createCreateProjectPage() {
+    	WizardNewProjectCreationPage createProjectPage =
     		new WizardNewProjectCreationPage(CREATE_PROJECT_PAGE_ID);
-        this.createProjectPage.setTitle(
+        createProjectPage.setTitle(
         	"Create a New Static Executable Project");
-        this.createProjectPage.setDescription("Enter the project name");
+        createProjectPage.setDescription("Enter the project name");
         
         return createProjectPage;
     }
     
-    private void createBundlePropertiesPage(Wizard wizard) {
-    	this.bundlePropertiesPage =
+    private WizardPage createBundlePropertiesPage() {
+    	WizardPage bundlePropertiesPage =
     		createPage(PROJECT_BUNDLE_PROPERTIES_PAGE_NUMBER);
-        this.bundlePropertiesPage.setTitle("Bundle Properties");
-        this.bundlePropertiesPage.setDescription(
+        bundlePropertiesPage.setTitle("Bundle Properties");
+        bundlePropertiesPage.setDescription(
         	"Enter the bundle name, and bundle version");
-        wizard.addPage(this.bundlePropertiesPage);
+        
+        return bundlePropertiesPage;
     }
     
-    private void createChooseExecutableFilesPage(Wizard wizard) {
-    	this.chooseExecutableFilesPage = new ChooseExecutableFilesPage(
-    		CHOOSE_EXECUTABLE_FILES_PAGE_ID, this.executableNameOption, this);
-        this.chooseExecutableFilesPage.setTitle("Choose Executable Files");
-        this.chooseExecutableFilesPage.setDescription(
+    private ChooseExecutableFilesPage createChooseExecutableFilesPage() {
+    	ChooseExecutableFilesPage chooseExecutableFilesPage =
+    		new ChooseExecutableFilesPage(CHOOSE_EXECUTABLE_FILES_PAGE_ID,
+    									  this.executableNameOption,
+    									  this);
+        chooseExecutableFilesPage.setTitle("Choose Executable Files");
+        chooseExecutableFilesPage.setDescription(
         	"Choose the executable files and any files they depend on");
-        wizard.addPage(this.chooseExecutableFilesPage);
+        
+        return chooseExecutableFilesPage;
     }
     
-    private void createProjectPropertiesPage(Wizard wizard) {
-    	this.projectPropertiesPage =
+    private WizardPage createProjectPropertiesPage() {
+    	WizardPage projectPropertiesPage =
     		createPage(PROJECT_PROPERTIES_PAGE_NUMBER);
-        this.projectPropertiesPage.setTitle("Project Properties");
-        this.projectPropertiesPage.setDescription("Enter project properties");
-        wizard.addPage(this.projectPropertiesPage);
+        projectPropertiesPage.setTitle("Project Properties");
+        projectPropertiesPage.setDescription("Enter project properties");
+        
+        return projectPropertiesPage;
     }
     
-    private void createProjectParametersPage(Wizard wizard) {
-    	this.projectParametersPage =
+    private ParameterListBuilderPage createProjectParametersPage() {
+    	ParameterListBuilderPage projectParametersPage =
     		new ParameterListBuilderPage(SETUP_PARAMETERS_PAGE_ID);
-        this.projectParametersPage.setTitle("Project Parameters");
-        this.projectParametersPage.setDescription("Enter project parameters");
-        wizard.addPage(this.projectParametersPage);
+        projectParametersPage.setTitle("Project Parameters");
+        projectParametersPage.setDescription("Enter project parameters");
+        
+        return projectParametersPage;
     }
     
-    private void createInputAndOutputDataPage(Wizard wizard) {
-    	this.inputAndOutputDataPage =
+    private SpecifyInAndOutDataPage createInputAndOutputDataPage() {
+    	SpecifyInAndOutDataPage inputAndOutputDataPage =
     		new SpecifyInAndOutDataPage(SPECIFY_IN_AND_OUT_DATA_PAGE_ID);
-        this.inputAndOutputDataPage.setTitle("Input and Output Data");
-        this.inputAndOutputDataPage.setDescription(
+        inputAndOutputDataPage.setTitle("Input and Output Data");
+        inputAndOutputDataPage.setDescription(
         	"Enter the input and output data");
-        wizard.addPage(this.inputAndOutputDataPage);
+
+        return inputAndOutputDataPage;
     }
     
-    private void createTemplateStringPage(Wizard wizard) {
-    	this.specifyTemplateStringPage = new SpecifyTemplateStringPage(
-    		SPECIFY_TEMPLATE_STRING_PAGE_ID,
-    		projectParametersPage,
-    		inputAndOutputDataPage,
-    		this.templateStringOption);
-        this.specifyTemplateStringPage.setTitle("Template String");
-        this.specifyTemplateStringPage.setDescription(
+    private SpecifyTemplateStringPage createTemplateStringPage() {
+    	SpecifyTemplateStringPage specifyTemplateStringPage =
+    		new SpecifyTemplateStringPage(
+    			SPECIFY_TEMPLATE_STRING_PAGE_ID,
+    			projectParametersPage,
+    			inputAndOutputDataPage,
+    			this.templateStringOption);
+        specifyTemplateStringPage.setTitle("Template String");
+        specifyTemplateStringPage.setDescription(
         	"Enter the template string used to execute your program");
-        wizard.addPage(this.specifyTemplateStringPage);
+
+        return specifyTemplateStringPage;
     }
     
-    private void createSourceCodeFilesPage(Wizard wizard) {
-    	this.sourceCodeFilesPage = createPage(SOURCE_CODE_FILES_PAGE_NUMBER);
-        this.sourceCodeFilesPage.setTitle("Source Code Files (Optional)");
-        this.sourceCodeFilesPage.setDescription(
+    private ChooseSourceCodeFilesPage createSourceCodeFilesPage() {
+    	ChooseSourceCodeFilesPage sourceCodeFilesPage =
+    		new ChooseSourceCodeFilesPage(
+    			CHOOSE_SOURCE_CODE_FILES_PAGE_ID,
+    			this.sourceCodeFilesOption);
+        sourceCodeFilesPage.setTitle("Source Code Files (Optional)");
+        sourceCodeFilesPage.setDescription(
         	"Enter the source code files for your program");
-        wizard.addPage(this.sourceCodeFilesPage);
+
+        return sourceCodeFilesPage;
     }
     
-    private void setupCreateProjectPage() {
-    }
+    private void setupCreateProjectPage() { }
     
     private void setupBundlePropertiesPage() {
     	addOption(BUNDLE_NAME_ID,
@@ -491,11 +533,9 @@ public class NewStaticExecutableAlgorithmTemplate extends BasicTemplate
     			  PROJECT_PROPERTIES_PAGE_NUMBER).setRequired(true);
     }
     
-    private void setupProjectParametersPage() {
-    }
+    private void setupProjectParametersPage() { }
     
-    private void setupInputAndOutputDataPage() {
-    }
+    private void setupInputAndOutputDataPage() { }
     
     private void setupTemplateStringPage() {
     	this.templateStringOption = addOption(
@@ -507,8 +547,29 @@ public class NewStaticExecutableAlgorithmTemplate extends BasicTemplate
     }
     
     private void setupSourceCodeFilesPage() {
+    	this.sourceCodeFilesOption = addOption(
+    		CHOOSE_SOURCE_CODE_FILES_ID,
+    		CHOOSE_SOURCE_CODE_FILES_LABEL + ":",
+    		"",
+    		SOURCE_CODE_FILES_PAGE_NUMBER);
+    	this.sourceCodeFilesOption.setRequired(false);
     }
     
+    /*
+     * As far as I know, there are no conditionals in the templating langauge
+     *  used when processing the new project templates (in the templates_3.0
+     *  directory).
+     * To avoid having empty values in the properties files, the templates must
+     *  be setup to comment out key/value lines in case the values are empty.
+     * What handleEmptyOption does is check if the value of the option optionID
+     *  is NOT equal to compareTo, and if so, it sets the "comment-out"
+     *  template option isEmptyOptionID to have the value "#", which will
+     *  comment out the line if it's placed accordingly in the template.
+     * For example, if there were the line
+     *   $isOptionEmpty$key=$value$
+     *  the template option isOptionEmpty would be set to "#" if the template
+     *  option value is empty.
+     */
     private void handleEmptyOption(
     		String optionID, String isEmptyOptionID, String compareTo) {
     	if (getOption(optionID).getValue() == null ||
@@ -592,9 +653,15 @@ public class NewStaticExecutableAlgorithmTemplate extends BasicTemplate
     		relatedFileOption.getPlatformName(), relatedFileOption);
     }
     
-    public void removeRelatedFileOption(PlatformOption relatedFileOption) {
-    	this.relatedFileOptions.removeValue(
-    		relatedFileOption.getPlatformName(), relatedFileOption);
+    public void removeRelatedFileOption(TemplateOption relatedFileOption) {
+    	if (relatedFileOption instanceof PlatformOption) {
+    		PlatformOption relatedFilePlatformOption =
+    			(PlatformOption)relatedFileOption;
+    		
+    		this.relatedFileOptions.removeValue(
+    			relatedFilePlatformOption.getPlatformName(),
+    			relatedFilePlatformOption);
+    	}
     }
     
     public PlatformOption createRelatedFileOption(String platformName,

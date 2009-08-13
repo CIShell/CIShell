@@ -9,6 +9,10 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Layout;
 
+/*
+ * This widget allows the user to choose one file, which is intended to be the
+ *  executable file for the provided platform (name and path).
+ */
 public class ChooseExecutableFileWidget extends Composite {
 	public static final String CHOOSE_EXECUTABLE_FILE_LABEL =
 		"Choose Executable File";

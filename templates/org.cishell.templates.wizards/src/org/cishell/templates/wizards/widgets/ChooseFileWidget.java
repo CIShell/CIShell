@@ -1,6 +1,6 @@
 package org.cishell.templates.wizards.widgets;
 
-import org.cishell.templates.staticexecutable.providers.PlatformOption;
+import org.eclipse.pde.ui.templates.TemplateOption;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -13,6 +13,14 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.Text;
 
+/*
+ * This widget allows the user the choose a file off of his/her hard drive.
+ * It ties the chosen file's path to a provided TemplateOption so the chosen
+ *  files can be processed upon the wizard's completion.
+ * This widget can optionally call back upon it being filled or its Remove
+ *  button being selected to allow its parent component handle any appropriate
+ *  actions.
+ */
 public class ChooseFileWidget extends Composite implements SelectionListener {
 	public static final String BROWSE_FILES_BUTTON_LABEL = "Browse";
 	public static final String REMOVE_FILE_LABEL_TEXT = "Remove?";
@@ -24,14 +32,15 @@ public class ChooseFileWidget extends Composite implements SelectionListener {
 	
 	private Text filePathText;
 	private Button browseFilesButton;
+	// TODO: Make these listeners of an interface.
 	private ChooseRelatedFilesWidget fileChosenListener;
 	private ChooseRelatedFilesWidget removeElementListener;
-	private PlatformOption platformOption;
+	private TemplateOption platformOption;
 	
 	public ChooseFileWidget(Composite parent,
 							int style,
 							int parentParentWidth,
-							PlatformOption stringOption) {
+							TemplateOption stringOption) {
 		this(parent, style, true, parentParentWidth, stringOption);
 	}
 	
@@ -39,7 +48,7 @@ public class ChooseFileWidget extends Composite implements SelectionListener {
 							int style,
 							boolean hasRemoveButton,
 							int parentParentWidth,
-							PlatformOption platformOption) {
+							TemplateOption platformOption) {
 		super(parent, style);
 		
 		this.platformOption = platformOption;
@@ -49,24 +58,20 @@ public class ChooseFileWidget extends Composite implements SelectionListener {
 		Composite container =
 			createContainer(hasRemoveButton, parentParentWidth);
 		this.platformOption.createControl(container, 2);
-//		this.filePathText = createFilePathText();
 		this.browseFilesButton = createBrowseFilesButton();
 		createRemoveElement(hasRemoveButton);
-		
-		// fixFilePathTextWidth(widthForFilePathText);
 	}
 	
-	public PlatformOption getPlatformOption() {
+	public TemplateOption getPlatformOption() {
 		return this.platformOption;
 	}
 	
 	public String getFilePath() {
-		return this.platformOption.getText();
-		// return this.filePathText.getText();
+		return this.platformOption.getValue().toString();
 	}
 	
 	public void setFilePath(String filePath) {
-		this.platformOption.setText(filePath);
+		this.platformOption.setValue(filePath);
 	}
 	
 	public void widgetDefaultSelected(SelectionEvent selectionEvent) {
@@ -133,13 +138,6 @@ public class ChooseFileWidget extends Composite implements SelectionListener {
 		return container;
 	}
 	
-	private Text createFilePathText() {
-		Text filePathText = new Text(this, SWT.BORDER);
-		filePathText.setEditable(true);
-		
-		return filePathText;
-	}
-	
 	private Button createBrowseFilesButton() {
 		Button browseFilesButton = new Button(this, SWT.PUSH);
 		browseFilesButton.setLayoutData(createBrowseFilesButtonLayoutData());
@@ -161,11 +159,6 @@ public class ChooseFileWidget extends Composite implements SelectionListener {
 			removeLabel.setText(REMOVE_FILE_LABEL_TEXT);
 			removeLabel.setVisible(false);
 		}
-	}
-	
-	private void fixFilePathTextWidth(int widthForFilePathText) {
-		this.filePathText.setLayoutData(
-			createFilePathTextLayoutData(widthForFilePathText));
 	}
 	
 	private void browseButtonSelected(SelectionEvent selectionEvent) {

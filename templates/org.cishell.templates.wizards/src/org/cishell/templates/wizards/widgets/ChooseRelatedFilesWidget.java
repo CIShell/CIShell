@@ -11,6 +11,15 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Layout;
 
+/*
+ * This widget the user to choose and remove one or more files related to the
+ *  executable file for the provided platform (name and path).
+ * As soon as the last file selector is filled with a file path, this widget
+ *  provides an additional file selector for the user to continue providing
+ *  additional related files.
+ * All related file selectors besides the first one can be removed in this
+ *  widget.
+ */
 public class ChooseRelatedFilesWidget extends ResizeCompositeHackWidget {
 	public static final String CHOOSE_RELATED_FILES_LABEL_TEXT =
 		"Choose Related Files";
@@ -45,7 +54,6 @@ public class ChooseRelatedFilesWidget extends ResizeCompositeHackWidget {
 		this.firstFileSelector = createAndSetupFileSelector(false);
 	}
 	
-	// TODO: How to get the file paths out?
 	public ChooseFileWidget getFirstFileSelector() {
 		return this.firstFileSelector;
 	}

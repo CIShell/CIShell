@@ -15,11 +15,15 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.Text;
 
+/*
+ * This panel contains several platform setup widgets
+ *  (org.cishell.templates.wizards.widgets.PlatformSetupWidget).  There is one
+ *  platform setup widget per (operating system) platform and a special
+ *  platform setup widget for files common to all (operating system) platforms.
+ */
 public class SetupPlatformsPanel extends ResizeCompositeHackWidget {
 	public static final String SPECIFY_EXECUTABLE_NAME_LABEL =
 		"Executable Name";
-	
-	// public static final int SPECIFY_EXECUTABLE_NAME_TEXT_WIDTH = 350;
 	
 	private ArrayList platformSetupWidgets;
 
@@ -50,22 +54,6 @@ public class SetupPlatformsPanel extends ResizeCompositeHackWidget {
 	private void createExecutableNameOptionWidget(
 			TemplateOption executableNameOption) {
 		executableNameOption.createControl(this, 2);
-	}
-	
-	private void createSpecifyExecutableNameLabel() {
-		Label specifyExecutableNameLabel = new Label(this, SWT.NONE);
-		specifyExecutableNameLabel.setLayoutData(
-			createSpecifyExecutableNameLableLayoutData());
-		specifyExecutableNameLabel.setText(
-			SPECIFY_EXECUTABLE_NAME_LABEL + ":");
-	}
-	
-	private Text createSpecifyExecutableNameText() {
-		Text specifyExecutableNameText = new Text(this, SWT.BORDER);
-		specifyExecutableNameText.setLayoutData(
-			createSpecifyExecutableNameTextLayoutData());
-		
-		return specifyExecutableNameText;
 	}
 	
 	private ArrayList createPlatformSetupWidgets(
@@ -101,21 +89,6 @@ public class SetupPlatformsPanel extends ResizeCompositeHackWidget {
 		}
 		
 		return platformSetupWidgets;
-	}
-	
-	private Object createSpecifyExecutableNameLableLayoutData() {
-		GridData data = new GridData();
-		
-		return data;
-	}
-	
-	private Object createSpecifyExecutableNameTextLayoutData() {
-		GridData data = new GridData();
-		data.horizontalAlignment = SWT.FILL;
-		data.grabExcessHorizontalSpace = true;
-		// data.widthHint = SPECIFY_EXECUTABLE_NAME_TEXT_WIDTH;
-		
-		return data;
 	}
 	
 	private Object createPlatformSetupWidgetLayoutData() {

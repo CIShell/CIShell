@@ -1,5 +1,7 @@
 package org.cishell.templates.staticexecutable.providers;
 
+import org.eclipse.pde.ui.templates.TemplateOption;
+
 public interface PlatformOptionProvider {
 	public PlatformOption getExecutableFileOption(String platformName);
 	public PlatformOption[] getExecutableFileOptions();
@@ -10,7 +12,7 @@ public interface PlatformOptionProvider {
 	
 	public PlatformOption[] getRelatedFileOptions(String platformName);
 	public void addRelatedFileOption(PlatformOption relatedFileOption);
-	public void removeRelatedFileOption(PlatformOption relatedFileOption);
+	public void removeRelatedFileOption(TemplateOption relatedFileOption);
 	public PlatformOption createRelatedFileOption(
 		String platformName, String platformPath);
 	public String formRelatedFileOptionName(String platformName);

@@ -10,6 +10,10 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+/*
+ * This editor provides the user with an interface to edit input data items
+ *  (InputDataItem).
+ */
 public class InputDataItemEditor extends Dialog {
 	private Text mimeTypeText;
 	private InputDataItem inputDataItem;

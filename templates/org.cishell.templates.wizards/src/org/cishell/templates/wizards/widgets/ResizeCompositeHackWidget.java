@@ -5,6 +5,12 @@ import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 
+/*
+ * This "widget" ensures that both it and its parent component get resized
+ *  appropriate when its size is set.
+ * It handles the case where its parent component is a ScrolledComposite, so
+ *  scrolling happens properly.
+ */
 public class ResizeCompositeHackWidget extends Composite {
 	public ResizeCompositeHackWidget(Composite parent, int style) {
 		super(parent, style);

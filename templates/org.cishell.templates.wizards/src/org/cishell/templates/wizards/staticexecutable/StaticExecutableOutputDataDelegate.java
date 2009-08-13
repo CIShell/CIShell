@@ -53,7 +53,8 @@ public class StaticExecutableOutputDataDelegate
         boolean success = editOutputDataItem(outputDataItem);
         
         if (success) {
-            idToOutputDataItemMap.put("" + this.lastID, outputDataItem);
+            idToOutputDataItemMap.put(Integer.toString(this.lastID),
+            						  outputDataItem);
             
             String[] item = new String[] {
             	"" + this.lastID,
