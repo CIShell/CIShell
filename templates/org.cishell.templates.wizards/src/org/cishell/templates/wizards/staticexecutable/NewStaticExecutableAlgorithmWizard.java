@@ -35,6 +35,7 @@ import org.eclipse.pde.internal.core.bundle.BundlePluginBase;
 import org.eclipse.pde.internal.core.bundle.BundlePluginModelBase;
 import org.eclipse.pde.ui.templates.ITemplateSection;
 import org.eclipse.pde.ui.templates.NewPluginTemplateWizard;
+import org.eclipse.pde.ui.templates.TemplateOption;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
@@ -53,7 +54,6 @@ import org.eclipse.ui.part.ISetSelectionTarget;
 
 public class NewStaticExecutableAlgorithmWizard extends NewPluginTemplateWizard
         implements IWorkbenchWizard {
-	// TODO: Different label string?
 	public static final String DEFAULT_LABEL = "Common to All";
 	public static final String DEFAULT_PATH = "/default/";
 	
@@ -75,25 +75,24 @@ public class NewStaticExecutableAlgorithmWizard extends NewPluginTemplateWizard
 	public static final String WIN_32_LABEL = "Windows (32 bit)";
 	public static final String WIN_32_PATH = "/win32/";
 	
-	// TODO: This should be improved.
 	public static final String[] PLATFORM_LABELS = new String[] {
 		DEFAULT_LABEL,
+		WIN_32_LABEL,
+		MAC_OSX_X86_LABEL,
+		MAC_OSX_PPC_LABEL,
 		LINUX_X86_32_LABEL,
 		LINUX_X86_64_LABEL,
-		MAC_OSX_PPC_LABEL,
-		MAC_OSX_X86_LABEL,
-		SOLARIS_SPARC_LABEL,
-		WIN_32_LABEL
+		SOLARIS_SPARC_LABEL
 	};
 	
 	public static final String[] PLATFORM_PATHS = new String[] {
 		DEFAULT_PATH,
+		WIN_32_PATH,
+		MAC_OSX_X86_PATH,
+		MAC_OSX_PPC_PATH,
 		LINUX_X86_32_PATH,
 		LINUX_X86_64_PATH,
-		MAC_OSX_PPC_PATH,
-		MAC_OSX_X86_PATH,
-		SOLARIS_SPARC_PATH,
-		WIN_32_PATH
+		SOLARIS_SPARC_PATH
 	};
 
     NewStaticExecutableAlgorithmTemplate template;
@@ -148,7 +147,7 @@ public class NewStaticExecutableAlgorithmWizard extends NewPluginTemplateWizard
                 		PlatformOption executableFileOption =
                 			template.getExecutableFileOption(
                 				PLATFORM_LABELS[ii]);
-                		copyPlatformOptionFile(
+                		copyTemplateOptionFile(
                 			executableFileOption, directoryPath, project);
                 	}
                 	
@@ -156,10 +155,17 @@ public class NewStaticExecutableAlgorithmWizard extends NewPluginTemplateWizard
                 		template.getRelatedFileOptions(PLATFORM_LABELS[ii]);
                 	
                 	for (int jj = 0; jj < relatedFileOptions.length; jj++) {
-                		copyPlatformOptionFile(
+                		copyTemplateOptionFile(
                 			relatedFileOptions[jj], directoryPath, project);
                 	}
                 }
+                
+                String sourceCodeDirectoryPath = "src/";
+                TemplateOption sourceCodeFilesTemplateOption =
+                	template.getSourceCodeFilesTemplateOption();
+                copyTemplateOptionFile(sourceCodeFilesTemplateOption,
+                					   sourceCodeDirectoryPath,
+                					   project);
                 
                 monitor.done();
             }
@@ -204,11 +210,11 @@ public class NewStaticExecutableAlgorithmWizard extends NewPluginTemplateWizard
         
     }
     
-    private void copyPlatformOptionFile(PlatformOption platformOption,
+    private void copyTemplateOptionFile(TemplateOption templateOption,
     									String directoryPath,
     									IProject project)
     		throws CoreException {
-    	String sourceFilePath = platformOption.getText();
+    	String sourceFilePath = templateOption.getValue().toString();
     	
     	if (sourceFilePath == null || "".equals(sourceFilePath)) {
     		return;

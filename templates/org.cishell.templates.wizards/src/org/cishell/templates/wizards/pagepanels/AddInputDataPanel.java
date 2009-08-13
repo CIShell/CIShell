@@ -3,7 +3,6 @@ package org.cishell.templates.wizards.pagepanels;
 import java.util.Map;
 
 import org.cishell.templates.guibuilder.BuilderDelegate;
-import org.cishell.templates.guibuilder.EditableAttributeDefinition;
 import org.cishell.templates.guibuilder.ListBuilder;
 import org.cishell.templates.wizards.staticexecutable.InputDataItem;
 import org.cishell.templates.wizards.staticexecutable.StaticExecutableInputDataDelegate;
@@ -19,6 +18,18 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.TableItem;
 
+/*
+ * This panel provides the user an interface for managing input data via
+ *  org.cishell.templates.guibuilder.ListBuilder, an appropriate delegate
+ *  (org.cishell.templates.wizards.staticexecutable.
+ *  StaticExecutableInputDataDelegate), and an appropriate editor
+ *  (org.cishell.templates.wizards.staticexecutable.InputDataItemEditor).
+ * The ListBuilder manages the GUI table and associated buttons.
+ * The delegate provides the ListBuilder and editor the appropriate columns
+ *  that represent the data items being managed.  It also stores the input data
+ *  items.
+ * The editor provides an interface for the user to edit the actual data items.
+ */
 public class AddInputDataPanel extends Composite {
 	public static final String INPUT_DATA_LABEL_TEXT = "Input Data";
 	

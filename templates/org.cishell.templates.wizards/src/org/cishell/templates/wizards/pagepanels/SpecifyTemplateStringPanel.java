@@ -16,9 +16,10 @@ import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.swt.widgets.Text;
 import org.osgi.service.metatype.AttributeDefinition;
 
+/*
+ */
 public class SpecifyTemplateStringPanel extends Composite
 		implements SelectionListener {
 	public static final String PLACEHOLDER_LABEL =
@@ -100,11 +101,13 @@ public class SpecifyTemplateStringPanel extends Composite
 			createPlaceholderTableLabelLayoutData());
 		placeholderTableLabel.setText(PLACEHOLDER_LABEL);
 		
-		Label insertButtonLabel = new Label(this, SWT.NONE);
-		insertButtonLabel.setLayoutData(
+		// This is to keep the layout manager happy and make everything line up
+		// the way it should.
+		Label dummyLabel = new Label(this, SWT.NONE);
+		dummyLabel.setLayoutData(
 			createInsertPlaceholderButtonLayoutData());
-		insertButtonLabel.setText(INSERT_PLACEHOLDER_BUTTON_LABEL);
-		insertButtonLabel.setVisible(false);
+		dummyLabel.setText(INSERT_PLACEHOLDER_BUTTON_LABEL);
+		dummyLabel.setVisible(false);
 		
 		// To accomodate for the option label control.
 		new Label(this, SWT.NONE).setLayoutData(new GridData());

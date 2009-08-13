@@ -1,5 +1,17 @@
 package org.cishell.templates.wizards.staticexecutable;
 
+/*
+ * For static executable algorithms, output data items are always files.  It is
+ *  up to the algorithm creators to make the names the output files their
+ *  programs create and the names specified in the static executable algorithm
+ *  match up, so CIShell can find the files.
+ * Labels can be specified for the output files.
+ * Output files for static executable algorithms also contain data types, which
+ *   determine the icon CIShell uses for the associated data item in the Data
+ *   Manager.
+ *  Example data types are Network and Plot.
+ * Output files must also specify appropriate mime types.
+ */
 public class OutputDataItem {
 	private String fileName = "";
 	private String label = "";

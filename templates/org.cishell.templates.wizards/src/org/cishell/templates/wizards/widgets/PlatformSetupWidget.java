@@ -7,6 +7,15 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Layout;
 
+/*
+ * This widget contains a header, which is a PlatformSetupHeaderWidget object,
+ *  and it is associated with an operating system platform via its platformName
+ *  and platformPath member variables.
+ * There is also optionally a widget for choosing an executable file for the
+ *  associated platform, which is of type ChooseExecutableFileWidget.
+ * There is always a widget for choosing and removing one or more related
+ *  files, which is of the type ChooseRelatedFilesWidget.
+ */
 public class PlatformSetupWidget extends ResizeCompositeHackWidget {
 	public static final int WIDGET_WIDTH = 454;
 	public static final int WIDGET_HEIGHT = 317;
@@ -101,8 +110,6 @@ public class PlatformSetupWidget extends ResizeCompositeHackWidget {
 		GridData data = new GridData();
 		data.horizontalSpan = 2;
 		data.grabExcessHorizontalSpace = true;
-//		data.horizontalAlignment = SWT.CENTER;
-//		data.verticalAlignment = SWT.CENTER;
 		
 		return data;
 	}
@@ -125,13 +132,11 @@ public class PlatformSetupWidget extends ResizeCompositeHackWidget {
 		
 		data.horizontalAlignment = GridData.FILL;
 		data.verticalAlignment = GridData.FILL;
-		// data.widthHint = WIDGET_WIDTH;
 		data.grabExcessHorizontalSpace = true;
 		data.grabExcessVerticalSpace = true;
 		
 		if (!shouldSpanEntireWidth) {
 			data.horizontalAlignment = GridData.FILL;
-			// data.widthHint = WIDGET_WIDTH;
 			data.grabExcessHorizontalSpace = true;
 			data.horizontalSpan = 2;
 		} else {

@@ -47,7 +47,7 @@ public class StaticExecutableInputDataDelegate
             idToInputDataItemMap.put("" + this.lastID, inputDataItem);
             
             String[] item = new String[] {
-            	"" + this.lastID,
+            	Integer.toString(this.lastID),
             	inputDataItem.getMimeType()
             };
             

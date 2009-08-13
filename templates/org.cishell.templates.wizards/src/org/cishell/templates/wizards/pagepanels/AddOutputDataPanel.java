@@ -4,7 +4,6 @@ import java.util.Map;
 
 import org.cishell.templates.guibuilder.BuilderDelegate;
 import org.cishell.templates.guibuilder.ListBuilder;
-import org.cishell.templates.wizards.staticexecutable.InputDataItem;
 import org.cishell.templates.wizards.staticexecutable.OutputDataItem;
 import org.cishell.templates.wizards.staticexecutable.StaticExecutableOutputDataDelegate;
 import org.eclipse.swt.SWT;
@@ -19,6 +18,18 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.TableItem;
 
+/*
+ * This panel provides the user an interface for managing output data via
+ *  org.cishell.templates.guibuilder.ListBuilder, an appropriate delegate
+ *  (org.cishell.templates.wizards.staticexecutable.
+ *  StaticExecutableOutputDataDelegate), and an appropriate editor
+ *  (org.cishell.templates.wizards.staticexecutable.OutputDataItemEditor).
+ * The ListBuilder manages the GUI table and associated buttons.
+ * The delegate provides the ListBuilder and editor the appropriate columns
+ *  that represent the data items being managed.  It also stores the output
+ *  data items.
+ * The editor provides an interface for the user to edit the actual data items.
+ */
 public class AddOutputDataPanel extends Composite {
 	public static final String OUTPUT_DATA_LABEL_TEXT = "Output Data";
 	

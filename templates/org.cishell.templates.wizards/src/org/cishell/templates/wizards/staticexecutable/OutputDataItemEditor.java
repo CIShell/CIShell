@@ -11,7 +11,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 public class OutputDataItemEditor extends Dialog {
-	private Text idText;
 	private Text fileNameText;
 	private Text labelText;
 	private Text dataTypeText;

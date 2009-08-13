@@ -8,6 +8,14 @@ import org.eclipse.pde.ui.templates.TemplateOption;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
+/*
+ * This page provides algorithm creators with a list of possible "placeholders"
+ *  that can be used in the template string.
+ * The template string is the string used when invoking the static executable
+ *  on the command line.  As such, it specifies all program arguments.
+ * The placeholders possible are the input data items and algorithm parameters
+ *  that the algorithm creator specified.
+ */
 public class SpecifyTemplateStringPage extends WizardPage {
 	private SpecifyTemplateStringPanel specifyTemplateStringPanel;
 	private InputParameterProvider inputParameterProvider;

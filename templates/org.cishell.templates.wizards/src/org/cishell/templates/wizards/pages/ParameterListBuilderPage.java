@@ -27,7 +27,10 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.osgi.service.metatype.AttributeDefinition;
 
-
+/*
+ * This page provides algorithm creators with an interface for specifying the
+ *  GUI-based input parameters that their algorithms accept.
+ */
 public class ParameterListBuilderPage extends WizardPage
 		implements InputParameterProvider {
     ParameterListBuilder builder;

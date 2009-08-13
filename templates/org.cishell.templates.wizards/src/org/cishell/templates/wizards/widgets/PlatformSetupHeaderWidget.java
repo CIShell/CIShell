@@ -9,6 +9,10 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
+/*
+ * This widget contains any appropriate header widgets for a
+ *  PlatformSetupWidget.
+ */
 public class PlatformSetupHeaderWidget extends Composite {
 	public static final String PLATFORM_LABEL = "Platform";
 	

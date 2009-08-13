@@ -10,6 +10,13 @@ import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.widgets.Composite;
 
+/*
+ * This page allows users to specify the name of the executable file (which
+ *  should be the same across all platforms), the actual executable files for
+ *  the various platforms, and the related files for the various platforms.
+ * The logic for this page is spread out in several locations, but for a start,
+ *  check  org.cishell.templates.wizards.pagepanels.SetupPlatformsPanel .
+ */
 public class ChooseExecutableFilesPage extends WizardPage {
 	private SetupPlatformsPanel setupPlatformsPanel;
 	private TemplateOption executableNameOption;
