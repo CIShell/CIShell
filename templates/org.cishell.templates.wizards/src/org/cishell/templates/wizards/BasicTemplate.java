@@ -46,6 +46,7 @@ import org.eclipse.pde.internal.ui.wizards.templates.ControlStack;
 import org.eclipse.pde.ui.templates.OptionTemplateSection;
 import org.eclipse.pde.ui.templates.TemplateOption;
 
+// TODO Could we safely reduce some of the method visibilities here?
 public abstract class BasicTemplate extends OptionTemplateSection {
     protected final String sectionID;
     protected Map valueMap;
@@ -125,6 +126,10 @@ public abstract class BasicTemplate extends OptionTemplateSection {
         return value;
     }
     
+    public boolean shouldProcessFile(File file) {
+    	return true;
+    }
+    
     public void execute(IProject project,
     					IPluginModelBase model,
     					IProgressMonitor monitor) throws CoreException {
@@ -134,12 +139,12 @@ public abstract class BasicTemplate extends OptionTemplateSection {
 		updateModel(monitor);
 	}
     
-    public void generateFiles(IProgressMonitor progressMonitor)
+    protected void generateFiles(IProgressMonitor progressMonitor)
     		throws CoreException {
 		generateFiles(progressMonitor, getTemplateLocation());
 	}
     
-    public void generateFiles(IProgressMonitor progressMonitor,
+    protected void generateFiles(IProgressMonitor progressMonitor,
     						  URL locationURL) throws CoreException {
 		progressMonitor.setTaskName(
 			PDEUIMessages.AbstractTemplateSection_generating);
@@ -167,8 +172,12 @@ public abstract class BasicTemplate extends OptionTemplateSection {
 				return;
 			}
 			
-			generateFiles(
-				templateDirectory, project, true, false, progressMonitor);
+			generateFiles(templateDirectory,
+						  project,
+						  true,
+						  false,
+						  true,
+						  progressMonitor);
 		} else if ("jar".equals(resolvedLocationURLProtocol)) {
 			int exclamationIndex = resolvedLocationURLFileName.indexOf('!');
 			
@@ -223,16 +232,20 @@ public abstract class BasicTemplate extends OptionTemplateSection {
 		progressMonitor.worked(1);
 	}
     
-    private void generateFiles(
+    protected void generateFiles(
     		File sourceFile,
     		IContainer destinationContainer,
     		boolean isFirstLevel,
     		boolean isBinaryFile,
+    		boolean shouldProcessAsTemplate,
     		IProgressMonitor progressMonitor) throws CoreException {
 		File[] sourceSubFiles = sourceFile.listFiles();
 
 		for (int ii = 0; ii < sourceSubFiles.length; ii++) {
 			File sourceSubFile = sourceSubFiles[ii];
+			
+			boolean shouldProcessSubFileAsTemplate =
+				shouldProcessAsTemplate && shouldProcessFile(sourceSubFile);
 			
 			if (sourceSubFile.isDirectory()) {
 				IContainer subDestinationContainer = null;
@@ -260,8 +273,15 @@ public abstract class BasicTemplate extends OptionTemplateSection {
 						continue;
 					}
 					
-					String folderName = getProcessedString(
-						sourceSubFile.getName(), sourceSubFile.getName());
+					String folderName;
+					
+					if (shouldProcessSubFileAsTemplate) {
+						folderName = getProcessedString(
+							sourceSubFile.getName(), sourceSubFile.getName());
+					} else {
+						folderName = sourceSubFile.getName();
+					}
+					
 					subDestinationContainer =
 						destinationContainer.getFolder(new Path(folderName));
 				}
@@ -276,6 +296,7 @@ public abstract class BasicTemplate extends OptionTemplateSection {
 							  subDestinationContainer,
 							  false,
 							  isBinaryFile,
+							  shouldProcessSubFileAsTemplate,
 							  progressMonitor);
 			} else {
 				if (isOkToCreateFile(sourceSubFile)) {
@@ -291,6 +312,7 @@ public abstract class BasicTemplate extends OptionTemplateSection {
 								 inputStream,
 								 destinationContainer,
 								 isBinaryFile,
+								 shouldProcessSubFileAsTemplate,
 								 progressMonitor);
 					} catch (IOException ioException1) {
 					} finally {
@@ -306,7 +328,7 @@ public abstract class BasicTemplate extends OptionTemplateSection {
 		}
 	}
     
-    private void generateFiles(
+    protected void generateFiles(
     		ZipFile zipFile,
     		IPath filePath,
     		IContainer destinationContainer,
@@ -314,8 +336,9 @@ public abstract class BasicTemplate extends OptionTemplateSection {
     		boolean isBinary,
     		IProgressMonitor progressMonitor) throws CoreException {
 		int pathLength = filePath.segmentCount();
-		// Immidiate children
-		Map childZipEntries = new HashMap(); // "dir/" or "dir/file.java"
+		// Immediate children.
+		// "dir/" or "dir/file.java"
+		Map childZipEntries = new HashMap();
 
 		for (Enumeration zipEntries = zipFile.entries();
 				zipEntries.hasMoreElements();) {
@@ -327,7 +350,7 @@ public abstract class BasicTemplate extends OptionTemplateSection {
 			}
 			
 			if (!filePath.isPrefixOf(entryPath)) {
-				// not a descendant
+				// Not a descendant.
 				continue;
 			}
 			
@@ -404,6 +427,7 @@ public abstract class BasicTemplate extends OptionTemplateSection {
 								 inputStream,
 								 destinationContainer,
 								 isBinary,
+								 true,
 								 progressMonitor);
 					} catch (IOException ioException1) {
 					} finally {
@@ -457,7 +481,7 @@ public abstract class BasicTemplate extends OptionTemplateSection {
 			return source;
 		}
 		
-		int location = -1;
+		int locationIndex = -1;
 		StringBuffer buffer = new StringBuffer();
 		boolean shouldReplace = false;
 		
@@ -466,7 +490,7 @@ public abstract class BasicTemplate extends OptionTemplateSection {
 			
 			if (currentCharacter == '$') {
 				if (shouldReplace) {
-					String key = source.substring(location, ii);
+					String key = source.substring(locationIndex, ii);
 					String value;
 					
 					if (key.length() == 0) {
@@ -479,7 +503,7 @@ public abstract class BasicTemplate extends OptionTemplateSection {
 					shouldReplace = false;
 				} else {
 					shouldReplace = true;
-					location = ii + 1;
+					locationIndex = ii + 1;
 					
 					continue;
 				}
@@ -495,16 +519,29 @@ public abstract class BasicTemplate extends OptionTemplateSection {
     		InputStream inputStream,
     		IContainer destinationContainer,
     		boolean isBinary,
+    		boolean shouldProcessSubFileAsTemplate,
     		IProgressMonitor progressMonitor) throws CoreException {
-		String targetFileName = getProcessedString(fileName, fileName);
+		String targetFileName;
+		
+		if (shouldProcessSubFileAsTemplate) {
+			targetFileName = getProcessedString(fileName, fileName);
+		} else {
+			targetFileName = fileName;
+		}
 
 		progressMonitor.subTask(targetFileName);
 		IFile destinationFile =
 			destinationContainer.getFile(new Path(targetFileName));
 
 		try {
-			InputStream processedInputStream =
-				getProcessedStream(fileName, inputStream, isBinary);
+			InputStream processedInputStream;
+			
+			if (shouldProcessSubFileAsTemplate) {
+				processedInputStream =
+					getProcessedStream(fileName, inputStream, isBinary);
+			} else {
+				processedInputStream = inputStream;
+			}
 			
 			if (destinationFile.exists()) {
 				destinationFile.setContents(
