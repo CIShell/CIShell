@@ -102,7 +102,8 @@ public class NewStaticExecutableAlgorithmWizard extends NewPluginTemplateWizard
      */
     public ITemplateSection[] createTemplateSections() {
         template = new NewStaticExecutableAlgorithmTemplate();
-        return new ITemplateSection[]{template};
+        
+        return new ITemplateSection[] { template };
     }
 
     public boolean performFinish() {
@@ -206,9 +207,7 @@ public class NewStaticExecutableAlgorithmWizard extends NewPluginTemplateWizard
     /**
      * @see org.eclipse.ui.IWorkbenchWizard#init(org.eclipse.ui.IWorkbench, org.eclipse.jface.viewers.IStructuredSelection)
      */
-    public void init(IWorkbench workbench, IStructuredSelection selection) {
-        
-    }
+    public void init(IWorkbench workbench, IStructuredSelection selection) {}
     
     private void copyTemplateOptionFile(TemplateOption templateOption,
     									String directoryPath,

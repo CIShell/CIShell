@@ -13,6 +13,9 @@
  * ***************************************************************************/
 package org.cishell.templates.wizards.staticexecutable;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -182,6 +185,18 @@ public class NewStaticExecutableAlgorithmTemplate extends BasicTemplate
 		{ MENU_END_LABEL, MENU_END_DESCRIPTION }
 	};
 	
+	public static final String[] IGNORED_REPLACEMENT_STRING_FILES =
+			new String[] {
+		"ant.sh",
+		"build.xml"
+	};
+	
+	public static final String[] IGNORED_REPLACEMENT_STRING_DIRECTORIES =
+			new String[] {
+		"l10n",
+		"lib"
+	};
+	
     private WizardNewProjectCreationPage createProjectPage;
     private WizardPage bundlePropertiesPage;
     private ChooseExecutableFilesPage chooseExecutableFilesPage;
@@ -326,6 +341,32 @@ public class NewStaticExecutableAlgorithmTemplate extends BasicTemplate
     			  SPECIFY_INPUT_AND_OUTPUT_DATA_PAGE_NUMBER);
 
     	super.execute(project, model, monitor);
+    }
+    
+    public boolean shouldProcessFile(File file) {
+    	String fileName = file.getName();
+    	String filePath = file.getParent();
+    	
+    	for (int ii = 0; ii < IGNORED_REPLACEMENT_STRING_FILES.length; ii++) {
+    		if (IGNORED_REPLACEMENT_STRING_FILES[ii].equals(fileName)) {
+    			return false;
+    		}
+    	}
+    	
+    	/* TODO What if the path happens to include an ignored string,
+    	 * like "lib", but without the meaning intended here?
+    	 * Like ".../workspace/reginald_libby/...".
+    	 */
+    	for (int ii = 0;
+    			ii < IGNORED_REPLACEMENT_STRING_DIRECTORIES.length;
+    			ii++) {
+    		if (filePath.contains(
+    				IGNORED_REPLACEMENT_STRING_DIRECTORIES[ii])) {
+    			return false;
+    		}
+    	}
+    	
+    	return true;
     }
 
     protected void updateModel(IProgressMonitor monitor) throws CoreException {
