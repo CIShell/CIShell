@@ -18,7 +18,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.lang.reflect.InvocationTargetException;
 
-import org.cishell.templates.staticexecutable.providers.PlatformOption;
+import org.cishell.templates.staticexecutable.optiontypes.PlatformOption;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;

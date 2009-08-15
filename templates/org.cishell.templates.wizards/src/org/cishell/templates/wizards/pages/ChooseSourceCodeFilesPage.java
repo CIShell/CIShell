@@ -1,8 +1,8 @@
 package org.cishell.templates.wizards.pages;
 
+import org.cishell.templates.staticexecutable.optiontypes.CustomStringOption;
 import org.cishell.templates.wizards.pagepanels.ChooseSourceCodeFilesPanel;
 import org.eclipse.jface.wizard.WizardPage;
-import org.eclipse.pde.ui.templates.TemplateOption;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
@@ -12,11 +12,11 @@ import org.eclipse.swt.widgets.Composite;
  */
 public class ChooseSourceCodeFilesPage extends WizardPage {
 	private ChooseSourceCodeFilesPanel chooseSourceCodeFilesPanel;
-	private TemplateOption sourceCodeFilesLocationOption;
+	private CustomStringOption sourceCodeFilesLocationOption;
 	
 	public ChooseSourceCodeFilesPage(
 			String pageName,
-			TemplateOption sourceCodeFilesLocationOption) {
+			CustomStringOption sourceCodeFilesLocationOption) {
 		super(pageName);
 		
 		this.sourceCodeFilesLocationOption = sourceCodeFilesLocationOption;

@@ -13,14 +13,13 @@
  * ***************************************************************************/
 package org.cishell.templates.wizards.staticexecutable;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.cishell.templates.staticexecutable.providers.PlatformOption;
+import org.cishell.templates.staticexecutable.optiontypes.CustomStringOption;
+import org.cishell.templates.staticexecutable.optiontypes.PlatformOption;
 import org.cishell.templates.staticexecutable.providers.PlatformOptionProvider;
 import org.cishell.templates.wizards.BasicTemplate;
 import org.cishell.templates.wizards.pages.ChooseExecutableFilesPage;
@@ -210,8 +209,8 @@ public class NewStaticExecutableAlgorithmTemplate extends BasicTemplate
     private Map platformExecutableOptions = new HashMap();
     private MultiHashMapWithCounts relatedFileOptions =
     	new MultiHashMapWithCounts();
-    private TemplateOption templateStringOption;
-    private TemplateOption sourceCodeFilesOption;
+    private CustomStringOption templateStringOption;
+    private CustomStringOption sourceCodeFilesOption;
 
     public NewStaticExecutableAlgorithmTemplate() {
         super("static_executable");
@@ -579,20 +578,22 @@ public class NewStaticExecutableAlgorithmTemplate extends BasicTemplate
     private void setupInputAndOutputDataPage() { }
     
     private void setupTemplateStringPage() {
-    	this.templateStringOption = addOption(
+    	this.templateStringOption = new CustomStringOption(
+    		this,
     		TEMPLATE_STRING_ID,
-    		TEMPLATE_STRING_LABEL,
+    		TEMPLATE_STRING_LABEL);
+    	registerOption(
+    		this.templateStringOption,
     		DEFAULT_TEMPLATE_STRING,
     		SPECIFY_TEMPLATE_STRING_PAGE_NUMBER);
     	this.templateStringOption.setRequired(true);
     }
     
     private void setupSourceCodeFilesPage() {
-    	this.sourceCodeFilesOption = addOption(
-    		CHOOSE_SOURCE_CODE_FILES_ID,
-    		CHOOSE_SOURCE_CODE_FILES_LABEL + ":",
-    		"",
-    		SOURCE_CODE_FILES_PAGE_NUMBER);
+    	this.sourceCodeFilesOption = new CustomStringOption(
+    		this, CHOOSE_SOURCE_CODE_FILES_ID, CHOOSE_SOURCE_CODE_FILES_LABEL);
+    	registerOption(
+    		this.sourceCodeFilesOption, "", SOURCE_CODE_FILES_PAGE_NUMBER);
     	this.sourceCodeFilesOption.setRequired(false);
     }
     

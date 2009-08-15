@@ -1,4 +1,4 @@
-package org.cishell.templates.staticexecutable.providers;
+package org.cishell.templates.staticexecutable.optiontypes;
 
 import org.eclipse.pde.ui.templates.BaseOptionTemplateSection;
 import org.eclipse.pde.ui.templates.TemplateOption;
@@ -10,38 +10,30 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-public class PlatformOption extends TemplateOption {
+public class CustomStringOption extends TemplateOption {
 	public final static int DEFAULT_STYLE = SWT.SINGLE | SWT.BORDER;
 	
-	private String platformName;
-	private String platformPath;
-	private Text textWidget;
-	private Label labelWidget;
-	private boolean shouldIgnoreListener;
-	private int style;
+	protected Text textWidget;
+	protected Label labelWidget;
+	protected boolean shouldIgnoreListener;
+	protected int style;
 	
-	public PlatformOption(BaseOptionTemplateSection section,
-						  String name,
-						  String label,
-						  String platformName,
-						  String platformPath) {
+	public CustomStringOption(
+			BaseOptionTemplateSection section, String name, String label) {
 		super(section, name, label);
 		
 		this.style = DEFAULT_STYLE;
 		setRequired(true);
-		
-		this.platformName = platformName;
-		this.platformPath = platformPath;
 	}
 	
-	public String getPlatformName() {
-		return this.platformName;
+	public Text getTextWidget() {
+		return this.textWidget;
 	}
 	
-	public String getPlatformPath() {
-		return this.platformPath;
+	public Label getLabelWidget() {
+		return this.labelWidget;
 	}
-
+	
 	public void setReadOnly(boolean readOnly) {
 		if (readOnly) {
 			this.style = DEFAULT_STYLE | SWT.READ_ONLY;
@@ -80,8 +72,17 @@ public class PlatformOption extends TemplateOption {
 	}
 
 	public void createControl(Composite parent, int span) {
-		this.labelWidget = createLabel(parent, 1);
-		this.labelWidget.setEnabled(isEnabled());
+		int textWidgetHorizontalSpan;
+		
+		if (span >= 0) {
+			this.labelWidget = createLabel(parent, 1);
+			this.labelWidget.setEnabled(isEnabled());
+		
+			textWidgetHorizontalSpan = span - 1;
+		} else {
+			textWidgetHorizontalSpan = -span;
+		}
+		
 		this.textWidget = new Text(parent, style);
 		
 		if (getValue() != null) {
@@ -89,19 +90,19 @@ public class PlatformOption extends TemplateOption {
 		}
 		
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.horizontalSpan = span - 1;
+		gridData.horizontalSpan = textWidgetHorizontalSpan;
 		this.textWidget.setLayoutData(gridData);
 		this.textWidget.setEnabled(isEnabled());
 		
 		this.textWidget.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent modifyEvent) {
-				if (PlatformOption.this.shouldIgnoreListener) {
+				if (CustomStringOption.this.shouldIgnoreListener) {
 					return;
 				}
 				
-				PlatformOption.super.setValue(
-					PlatformOption.this.textWidget.getText());
-				getSection().validateOptions(PlatformOption.this);
+				CustomStringOption.super.setValue(
+					CustomStringOption.this.textWidget.getText());
+				getSection().validateOptions(CustomStringOption.this);
 			}
 		});
 	}

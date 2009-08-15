@@ -1,5 +1,6 @@
 package org.cishell.templates.wizards.pagepanels;
 
+import org.cishell.templates.staticexecutable.optiontypes.CustomStringOption;
 import org.cishell.templates.wizards.widgets.ChooseFileWidget;
 import org.eclipse.pde.ui.templates.TemplateOption;
 import org.eclipse.swt.SWT;
@@ -13,7 +14,7 @@ public class ChooseSourceCodeFilesPanel extends Composite {
 	public ChooseSourceCodeFilesPanel(
 			Composite parent,
 			int style,
-			TemplateOption sourceCodeFilesLocationOption) {
+			CustomStringOption sourceCodeFilesLocationOption) {
 		super(parent, style);
 		
 		setLayout(createLayoutForThis());
@@ -28,7 +29,7 @@ public class ChooseSourceCodeFilesPanel extends Composite {
 	}
 	
 	private void createChooseSourceCodeFilesWidget(
-			TemplateOption sourceCodeFilesLocationOption) {
+			CustomStringOption sourceCodeFilesLocationOption) {
 		int parentWidth =
 			this.getParent().computeSize(SWT.DEFAULT, SWT.DEFAULT).x;
 		ChooseFileWidget fileSelector = new ChooseFileWidget(
