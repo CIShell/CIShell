@@ -1,12 +1,13 @@
 package org.cishell.templates.wizards.pagepanels;
 
+import org.cishell.templates.staticexecutable.optiontypes.CustomStringOption;
 import org.cishell.templates.staticexecutable.providers.InputDataProvider;
 import org.cishell.templates.staticexecutable.providers.InputParameterProvider;
 import org.cishell.templates.wizards.staticexecutable.InputDataItem;
-import org.eclipse.pde.ui.templates.TemplateOption;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -16,6 +17,7 @@ import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.swt.widgets.Text;
 import org.osgi.service.metatype.AttributeDefinition;
 
 /*
@@ -35,12 +37,11 @@ public class SpecifyTemplateStringPanel extends Composite
 	public static final int TABLE_HEIGHT = 300;
 	
 	private Table placeholderTable;
-	private Button insertPlaceholderButton;
-	private TemplateOption templateStringOption;
+	private CustomStringOption templateStringOption;
 	
 	public SpecifyTemplateStringPanel(Composite parent,
 									  int style,
-									  TemplateOption templateStringOption) {
+									  CustomStringOption templateStringOption) {
 		super(parent, style);
 		
 		this.templateStringOption = templateStringOption;
@@ -49,7 +50,7 @@ public class SpecifyTemplateStringPanel extends Composite
 		
 		createHeader();
 		this.placeholderTable = createPlaceholderTable();
-		this.insertPlaceholderButton = createInsertPlaceholderButton();
+		createInsertPlaceholderButton();
 		createTemplateStringText();
 	}
 	
@@ -140,14 +141,12 @@ public class SpecifyTemplateStringPanel extends Composite
 		return placeholderTable;
 	}
 	
-	private Button createInsertPlaceholderButton() {
+	private void createInsertPlaceholderButton() {
 		Button insertPlaceholderButton = new Button(this, SWT.PUSH);
 		insertPlaceholderButton.setLayoutData(
 			createInsertPlaceholderButtonLayoutData());
 		insertPlaceholderButton.setText(INSERT_PLACEHOLDER_BUTTON_LABEL);
 		insertPlaceholderButton.addSelectionListener(this);
-		
-		return insertPlaceholderButton;
 	}
 	
 	private void createTemplateStringText() {
@@ -202,32 +201,66 @@ public class SpecifyTemplateStringPanel extends Composite
 	}
 	
 	private void insertPlaceholder(String placeholder) {
-		/*if (!this.templateStringOption.getSelectionText().equals("")) {
-			// If there is a selection, replace the selection with the
-			// placeholder.
-			this.templateStringText.insert(placeholder);
+		Text textWidget = this.templateStringOption.getTextWidget();
+		Point textWidgetSelection = textWidget.getSelection();
+		String templateStringOptionText =
+			this.templateStringOption.getText();
+		
+		if (templateStringOptionText.equals("")) {
+			// There's nothing in the widget yet.
+		
+			this.templateStringOption.setText(placeholder);
+			int placeholderLength = placeholder.length();
+			textWidget.setSelection(placeholderLength, placeholderLength);
+		} else if (textWidgetSelection.x != textWidgetSelection.y) {
+			// There's a selection, so just replace it.
+		
+			textWidget.insert(placeholder);
+			this.templateStringOption.setText(textWidget.getText());
 		} else {
-			// Otherwise, insert the placeholder at the fixedCaretPosition.
-			int caretPosition = this.templateStringText.getCaretPosition();
-			int fixedCaretPosition = fixCaretPosition(caretPosition);
-			this.templateStringText.setSelection(fixedCaretPosition);
-			this.templateStringText.insert(" " + placeholder + " ");
-		}*/
-	
-		this.templateStringOption.setValue(
-			this.templateStringOption.getValue().toString() +
-			" " +
-			placeholder);
+			/*
+			 * We have to fix the caret position so we insert the new
+			 *  placeholder after the current word the caret is in, if it's
+			 *  in one.
+			 */
+			int caretPosition = textWidget.getCaretPosition();
+			int fixedCaretPosition = fixCaretPosition(
+				caretPosition, this.templateStringOption.getText());
+		
+			String preCaretString =
+				templateStringOptionText.substring(0, fixedCaretPosition);
+			String postCaretString;
+			
+			if (fixedCaretPosition < templateStringOptionText.length()) {
+				postCaretString = templateStringOptionText.substring(
+					fixedCaretPosition + 1);
+			} else {
+				postCaretString = "";
+			}
+			
+			String preCaretWithPlaceholderString =
+				preCaretString + " " + placeholder + " ";
+			String newText = preCaretWithPlaceholderString + postCaretString;
+			this.templateStringOption.setText(newText);
+			
+			int newCaretPosition = preCaretWithPlaceholderString.length();
+			textWidget.setSelection(newCaretPosition, newCaretPosition);
+		}
 	}
 	
-	/*private int fixCaretPosition(int caretPosition) {
-		int fixedCaretPosition = caretPosition;
-		String templateStringText = this.templateStringText.getText();
+	private int fixCaretPosition(
+			int caretPosition, String templateStringText) {
+		int templateStringTextLength = templateStringText.length();
 		
-		if (fixedCaretPosition == 0 || templateStringText.length() == 0) {
-			return fixedCaretPosition;
+		if (templateStringTextLength == 0) {
+			return 0;
+		} else if ((caretPosition < 0) ||
+				(caretPosition >= templateStringTextLength)) {
+			return templateStringText.length();
 		} else {
-			char currentCharacter = templateStringText.charAt(fixedCaretPosition);
+			int fixedCaretPosition = caretPosition;
+			char currentCharacter =
+				templateStringText.charAt(fixedCaretPosition);
 			
 			while (!Character.isWhitespace(currentCharacter) &&
 				   fixedCaretPosition < templateStringText.length()) {
@@ -235,8 +268,8 @@ public class SpecifyTemplateStringPanel extends Composite
 				currentCharacter =
 					templateStringText.charAt(fixedCaretPosition);
 			}
+			
+			return fixedCaretPosition;
 		}
-		
-		return fixedCaretPosition;
-	}*/
+	}
 }

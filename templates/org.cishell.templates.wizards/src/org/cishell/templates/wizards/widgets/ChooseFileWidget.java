@@ -1,5 +1,6 @@
 package org.cishell.templates.wizards.widgets;
 
+import org.cishell.templates.staticexecutable.optiontypes.CustomStringOption;
 import org.eclipse.pde.ui.templates.TemplateOption;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -9,9 +10,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.FileDialog;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Layout;
-import org.eclipse.swt.widgets.Text;
 
 /*
  * This widget allows the user the choose a file off of his/her hard drive.
@@ -24,23 +23,24 @@ import org.eclipse.swt.widgets.Text;
 public class ChooseFileWidget extends Composite implements SelectionListener {
 	public static final String BROWSE_FILES_BUTTON_LABEL = "Browse";
 	public static final String REMOVE_FILE_LABEL_TEXT = "Remove?";
+	public static final String CLEAR_FILE_LABEL_TEXT = "Clear?";
 	
 	public static final int PADDING_FOR_FILE_PATH_TEXT_WITHOUT_REMOVE_BUTTON =
-		75;
+		5;
 	public static final int PADDING_FOR_FILE_PATH_TEXT_WITH_REMOVE_BUTTON =
-		135;
+		5;
 	
-	private Text filePathText;
 	private Button browseFilesButton;
 	// TODO: Make these listeners of an interface.
 	private ChooseRelatedFilesWidget fileChosenListener;
 	private ChooseRelatedFilesWidget removeElementListener;
-	private TemplateOption platformOption;
+	private CustomStringOption platformOption;
+	private boolean canBeRemoved;
 	
 	public ChooseFileWidget(Composite parent,
 							int style,
 							int parentParentWidth,
-							TemplateOption stringOption) {
+							CustomStringOption stringOption) {
 		this(parent, style, true, parentParentWidth, stringOption);
 	}
 	
@@ -48,16 +48,15 @@ public class ChooseFileWidget extends Composite implements SelectionListener {
 							int style,
 							boolean hasRemoveButton,
 							int parentParentWidth,
-							TemplateOption platformOption) {
+							CustomStringOption platformOption) {
 		super(parent, style);
 		
 		this.platformOption = platformOption;
+		this.canBeRemoved = hasRemoveButton;
 		
 		setLayout(createLayoutForThis());
-		
-		Composite container =
-			createContainer(hasRemoveButton, parentParentWidth);
-		this.platformOption.createControl(container, 2);
+
+		createControlForTextWidget(hasRemoveButton, parentParentWidth);
 		this.browseFilesButton = createBrowseFilesButton();
 		createRemoveElement(hasRemoveButton);
 	}
@@ -114,8 +113,8 @@ public class ChooseFileWidget extends Composite implements SelectionListener {
 		return layout;
 	}
 	
-	private Composite createContainer(boolean hasRemoveButton,
-									  int parentParentWidth) {
+	private void createControlForTextWidget(boolean hasRemoveButton,
+											int parentParentWidth) {
 		int widthForFilePathText;
 		
 		if (hasRemoveButton) {
@@ -125,17 +124,14 @@ public class ChooseFileWidget extends Composite implements SelectionListener {
 			widthForFilePathText = parentParentWidth -
 				PADDING_FOR_FILE_PATH_TEXT_WITHOUT_REMOVE_BUTTON;
 		}
-		
-		// TODO: Fix the layout so the buttons aren't vertically offset
-		// above this!
-		Composite container = new Composite(this, SWT.NONE);
-		container.setLayoutData(createFilePathTextLayoutData(widthForFilePathText));
-		GridLayout layout = new GridLayout();
-		layout.marginWidth = 0;
-		layout.marginHeight = 0;
-		container.setLayout(layout);
-		
-		return container;
+
+		if (hasRemoveButton) {
+			this.platformOption.createControl(this, -1);
+		} else {
+			this.platformOption.createControl(this, -1);
+		}
+		this.platformOption.getTextWidget().setLayoutData(
+			createFilePathTextLayoutData(widthForFilePathText));
 	}
 	
 	private Button createBrowseFilesButton() {
@@ -148,16 +144,15 @@ public class ChooseFileWidget extends Composite implements SelectionListener {
 	}
 	
 	private void createRemoveElement(boolean hasRemoveButton) {
+		// TODO: Make the first one say Clear.;
+		Button removeButton = new Button(this, SWT.PUSH);
+		removeButton.setLayoutData(createRemoveElementLayoutData());
+		removeButton.addSelectionListener(this);
+		
 		if (hasRemoveButton) {
-			Button removeButton = new Button(this, SWT.PUSH);
-			removeButton.setLayoutData(createRemoveElementLayoutData());
 			removeButton.setText(REMOVE_FILE_LABEL_TEXT);
-			removeButton.addSelectionListener(this);
 		} else {
-			Label removeLabel = new Label(this, SWT.NONE);
-			removeLabel.setLayoutData(createRemoveElementLayoutData());
-			removeLabel.setText(REMOVE_FILE_LABEL_TEXT);
-			removeLabel.setVisible(false);
+			removeButton.setText(CLEAR_FILE_LABEL_TEXT);
 		}
 	}
 	
@@ -168,7 +163,6 @@ public class ChooseFileWidget extends Composite implements SelectionListener {
 		
 		if (filePath != null) {
 			setFilePath(filePath);
-			// this.filePathText.setText(filePath);
 			
 			if (this.fileChosenListener != null) {
 				this.fileChosenListener.fileWasChosen(this, filePath);
@@ -177,8 +171,12 @@ public class ChooseFileWidget extends Composite implements SelectionListener {
 	}
 	
 	private void removeButtonSelected(SelectionEvent selectionEvent) {
-		if (this.removeElementListener != null) {
-			this.removeElementListener.removeButtonWasSelected(this);
+		if (this.canBeRemoved) {
+			if (this.removeElementListener != null) {
+				this.removeElementListener.removeButtonWasSelected(this);
+			}
+		} else {
+			setFilePath("");
 		}
 	}
 	
@@ -199,6 +197,7 @@ public class ChooseFileWidget extends Composite implements SelectionListener {
 	
 	private GridData createRemoveElementLayoutData() {
 		GridData data = new GridData();
+		data.widthHint = 56;
 		
 		return data;
 	}

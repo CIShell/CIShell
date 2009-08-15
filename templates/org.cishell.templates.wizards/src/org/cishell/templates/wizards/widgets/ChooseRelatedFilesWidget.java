@@ -2,7 +2,7 @@ package org.cishell.templates.wizards.widgets;
 
 import java.util.ArrayList;
 
-import org.cishell.templates.staticexecutable.providers.PlatformOption;
+import org.cishell.templates.staticexecutable.optiontypes.PlatformOption;
 import org.cishell.templates.staticexecutable.providers.PlatformOptionProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;

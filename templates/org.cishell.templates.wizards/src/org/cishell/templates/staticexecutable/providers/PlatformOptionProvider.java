@@ -1,5 +1,6 @@
 package org.cishell.templates.staticexecutable.providers;
 
+import org.cishell.templates.staticexecutable.optiontypes.PlatformOption;
 import org.eclipse.pde.ui.templates.TemplateOption;
 
 public interface PlatformOptionProvider {
