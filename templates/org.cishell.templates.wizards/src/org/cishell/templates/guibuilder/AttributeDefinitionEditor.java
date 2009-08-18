@@ -1,5 +1,6 @@
 package org.cishell.templates.guibuilder;
 
+import org.cishell.templates.wizards.utilities.ParameterUtilities;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -12,90 +13,165 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.osgi.service.metatype.AttributeDefinition;
 
 public class AttributeDefinitionEditor extends Dialog {
-    public static final String[] TYPE_LABELS = new String[]{
-        "String","Integer","Long","Short","Double","Float","Boolean", "Char", 
-        "Byte", "File", "Directory"
-    };
-    public static final int[] TYPE_VALUES = new int[] {
-        1,3,2,4,7,8,11,5,6,1,1
-    };
+    private EditableAttributeDefinition attributeDefinition;
+    private Text idText;
+    private Text nameText;
+    private Text descriptionText;
+    private Text defaultValueText;
+    private Text minimumValueText;
+    private Text maximumValueText;
+    private Combo selectedTypeCombo;
     
-    private EditableAttributeDefinition attribute;
-    private Text id;
-    private Text name;
-    private Text description;
-    private Text defaultValue;
-    private Combo type;
-    
-    public AttributeDefinitionEditor(Composite parent, EditableAttributeDefinition attr) {
-        this(parent.getShell(), attr);
+    public AttributeDefinitionEditor(
+    		Composite parent,
+    		EditableAttributeDefinition attributeDefinition) {
+        this(parent.getShell(), attributeDefinition);
     }
     
-    private AttributeDefinitionEditor(Shell parentShell, EditableAttributeDefinition attr) {
+    private AttributeDefinitionEditor(
+    		Shell parentShell,
+    		EditableAttributeDefinition attributeDefinition) {
         super(parentShell);
 
-        this.attribute = attr;
+        this.attributeDefinition = attributeDefinition;
     }
 
     protected Control createDialogArea(Composite parent) {
-        Composite composite = (Composite) super.createDialogArea(parent);
+        Composite composite = (Composite)super.createDialogArea(parent);
         
         Composite panel = new Composite(composite, SWT.NONE);
         GridLayout gridLayout = new GridLayout(2, false);
         panel.setLayout(gridLayout);
         
-        id = newTextInput(panel, "Unique ID");
-        id.setText(attribute.getID());
+        this.idText = createNewTextInput(panel, ParameterUtilities.ID_LABEL);
+        this.idText.setText(attributeDefinition.getID());
         
-        name = newTextInput(panel, "Name");
-        name.setText(attribute.getName());
+        this.nameText = createNewTextInput(panel, ParameterUtilities.NAME_LABEL);
+        this.nameText.setText(attributeDefinition.getName());
         
-        description = newTextInput(panel, "Description");
-        description.setText(attribute.getDescription());
+        this.selectedTypeCombo =
+        	newListInput(panel, ParameterUtilities.INPUT_TYPE_LABEL);
+        this.selectedTypeCombo.setItems(ParameterUtilities.TYPE_LABELS);
         
-        defaultValue = newTextInput(panel, "Default Value");
-        defaultValue.setText(attribute.getDefaultValue()[0]);
+        this.descriptionText =
+        	createNewTextInput(panel, ParameterUtilities.DESCRIPTION_LABEL);
+        this.descriptionText.setText(attributeDefinition.getDescription());
         
-        type = newListInput(panel, "Input Type");
-        type.setItems(TYPE_LABELS);
+        this.defaultValueText =
+        	createNewTextInput(panel, ParameterUtilities.DEFAULT_VALUE_LABEL);
+        this.defaultValueText.setText(
+        	attributeDefinition.getActualDefaultValue());
         
-        type.addSelectionListener(new SelectionListener(){
-            public void widgetDefaultSelected(SelectionEvent e) {
-                widgetSelected(e);
+        this.minimumValueText =
+        	createNewTextInput(panel, ParameterUtilities.MINIMUM_VALUE_LABEL);
+        this.minimumValueText.setText(attributeDefinition.getMinValue());
+        
+        this.maximumValueText =
+        	createNewTextInput(panel, ParameterUtilities.MAXIMUM_VALUE_LABEL);
+        this.maximumValueText.setText(attributeDefinition.getMaxValue());
+        
+        this.selectedTypeCombo.addSelectionListener(new SelectionListener() {
+            public void widgetDefaultSelected(SelectionEvent selectionEvent) {
+                widgetSelected(selectionEvent);
             }
 
-            public void widgetSelected(SelectionEvent e) {
-                int i = type.getSelectionIndex();
-                if (i == 9) { //file
-                    defaultValue.setText("file:");
+            public void widgetSelected(SelectionEvent selectionEvent) {
+                int selectionIndex = selectedTypeCombo.getSelectionIndex();
+                
+                boolean hadFileOrDirectoryType =
+                	ParameterUtilities.attributeHasFileOrDirectoryType(
+                		AttributeDefinitionEditor.this.attributeDefinition);
+                
+                if (selectionIndex ==
+                		ParameterUtilities.TYPE_VALUE_INDEX_FILE) {
+                    AttributeDefinitionEditor.this.defaultValueText.setText(
+                    	ParameterUtilities.DEFAULT_FILE_VALUE);
+                } else if (selectionIndex ==
+                		ParameterUtilities.TYPE_VALUE_INDEX_DIRECTORY) {
+                    AttributeDefinitionEditor.this.defaultValueText.setText(
+                    	ParameterUtilities.DEFAULT_DIRECTORY_VALUE);
+                } else if (hadFileOrDirectoryType) {
+                	AttributeDefinitionEditor.this.defaultValueText.setText(
+                		"");
                 }
-                if (i == 10) { //directory
-                    defaultValue.setText("directory:");
-                }
-                defaultValue.setEnabled(i != 9 && i != 10);
-            }});
-        
-        for (int i=0; i < TYPE_VALUES.length; i++) {
-            if (TYPE_VALUES[i] == attribute.getType()) {
-                type.select(i);
-                break;
+                
+                /*
+                 * Enable the default value if the selectedTypeCombo of value
+                 *  is not file or directory.
+                 */
+                boolean defaultValueTextEnabledStatus =
+                	shouldEnableDefaultValueTextBasedOnSelectionIndex(
+                		selectionIndex);
+                AttributeDefinitionEditor.this.defaultValueText.setEnabled(
+                	defaultValueTextEnabledStatus);
+                
+                /*
+                 * Enable the minimum and maximum values if the
+                 *  selectedTypeCombo of value is numeric.
+                 */
+                boolean minAndMaxTextsEnabledStatus =
+                	shouldEnableMinAndMaxTextsBasedOnSelectionIndex(
+                		selectionIndex);
+                AttributeDefinitionEditor.this.minimumValueText.setEnabled(
+                	minAndMaxTextsEnabledStatus);
+                AttributeDefinitionEditor.this.maximumValueText.setEnabled(
+                	minAndMaxTextsEnabledStatus);
             }
+		});
+        
+        if (ParameterUtilities.attributeHasFileType(
+        		this.attributeDefinition)) {
+        	this.selectedTypeCombo.select(
+        		ParameterUtilities.TYPE_VALUE_INDEX_FILE);
+        } else if (ParameterUtilities.attributeHasDirectoryType(
+        		this.attributeDefinition)) {
+        	this.selectedTypeCombo.select(
+        		ParameterUtilities.TYPE_VALUE_INDEX_DIRECTORY);
+        } else {
+        	for (int ii = 0;
+        			ii < ParameterUtilities.TYPE_VALUES.length;
+        			ii++) {
+            	if (ParameterUtilities.TYPE_VALUES[ii] ==
+            			this.attributeDefinition.getType()) {
+                	this.selectedTypeCombo.select(ii);
+
+                	break;
+            	}
+        	}
         }
+        
+        /*
+         * This is necessary because the
+         *  this.selectedTypeCombo.select(ii);
+         *  line above doesn't actually fire the selected event.
+         */
+        boolean defaultValueTextEnabledStatus =
+        	shouldEnableDefaultValueTextBasedOnAttribute(
+        		this.attributeDefinition);
+        this.defaultValueText.setEnabled(defaultValueTextEnabledStatus);
+        boolean minAndMaxTextsEnabledStatus =
+        	shouldEnableMinAndMaxTextsBasedOnAttribute(
+        		this.attributeDefinition);
+        AttributeDefinitionEditor.this.minimumValueText.setEnabled(
+        	minAndMaxTextsEnabledStatus);
+        AttributeDefinitionEditor.this.maximumValueText.setEnabled(
+        	minAndMaxTextsEnabledStatus);
         
         composite.getShell().setText("Parameter Editor");
         
         return composite;
     }
     
-    private Text newTextInput(Composite panel, String text) {
+    private Text createNewTextInput(Composite panel, String text) {
         Label label = new Label(panel, SWT.NONE);
         label.setText(text);
         GridData data = new GridData(SWT.LEFT, SWT.BEGINNING, false, false);
         label.setLayoutData(data);
         
-        Text input = new Text(panel, SWT.NONE);
+        Text input = new Text(panel, SWT.BORDER);
         data = new GridData(SWT.FILL, SWT.BEGINNING, true, false);
         input.setLayoutData(data);
         
@@ -113,24 +189,88 @@ public class AttributeDefinitionEditor extends Dialog {
         return list;
     }
     
+    /*
+     * TODO: Validate the default, min, and max fields depending on the type.
+     *  This may require setting up a non-editable string field for errors and
+     *  throwing an exception back to here from the validation methods,
+     *  or something.
+     */
     protected void okPressed() {
-        attribute.setID(cleanText(id.getText()));
-        attribute.setName(cleanText(name.getText()));
-        String desc = cleanText(description.getText());
-        if (desc.length() == 0) {
-            desc = " ";
-        }
-        attribute.setDescription(desc);
-        attribute.setDefaultValue(new String[]{cleanText(defaultValue.getText())});
-        attribute.setType(TYPE_VALUES[type.getSelectionIndex()]);
+        this.attributeDefinition.setID(cleanText(this.idText.getText()));
+        this.attributeDefinition.setName(cleanText(this.nameText.getText()));
+        this.attributeDefinition.setType(
+        	ParameterUtilities.TYPE_VALUES[
+				this.selectedTypeCombo.getSelectionIndex()]);
+        this.attributeDefinition.setDescription(
+        	cleanText(this.descriptionText.getText(), false));
+        // TODO: cleanDefaultValue
+        this.attributeDefinition.setDefaultValue(
+        	cleanText(this.defaultValueText.getText()));
+        // TODO: cleanNumberValue
+        this.attributeDefinition.setMinValue(
+        	cleanText(this.minimumValueText.getText()));
+        this.attributeDefinition.setMaxValue(
+        	cleanText(this.maximumValueText.getText()));
         
         super.okPressed();
     }
     
     private String cleanText(String text) {
-        text = text.replaceAll("<", "&lt;");
-        text = text.replaceAll(">", "&gt;");
-        
-        return text;
+        return cleanText(text, true);
+    }
+    
+    private String cleanText(String text, boolean canHaveZeroLength) {
+    	String cleanedText =
+    		text.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+    	
+    	if (!canHaveZeroLength && cleanedText.length() == 0) {
+    		return " ";
+    	} else {
+    		return cleanedText;
+    	}
+    }
+    
+    private static boolean shouldEnableDefaultValueTextBasedOnSelectionIndex(
+    		int selectionIndex) {
+    	switch (selectionIndex) {
+    	default:
+    		return true;
+    	case ParameterUtilities.TYPE_VALUE_INDEX_FILE:
+    	case ParameterUtilities.TYPE_VALUE_INDEX_DIRECTORY:
+    		return false;
+    	}
+    }
+    
+    private static boolean shouldEnableDefaultValueTextBasedOnAttribute(
+    		EditableAttributeDefinition attribute) {
+    	return !ParameterUtilities.attributeHasFileOrDirectoryType(attribute);
+    }
+    
+    private static boolean shouldEnableMinAndMaxTextsBasedOnSelectionIndex(
+    		int selectionIndex) {
+    	switch (selectionIndex) {
+    	default:
+    		return true;
+    	case ParameterUtilities.TYPE_VALUE_INDEX_STRING:
+    	case ParameterUtilities.TYPE_VALUE_INDEX_BOOLEAN:
+    	case ParameterUtilities.TYPE_VALUE_INDEX_CHARACTER:
+    	case ParameterUtilities.TYPE_VALUE_INDEX_BYTE:
+    	case ParameterUtilities.TYPE_VALUE_INDEX_FILE:
+    	case ParameterUtilities.TYPE_VALUE_INDEX_DIRECTORY:
+    		return false;
+    	}
+    }
+    
+    private static boolean shouldEnableMinAndMaxTextsBasedOnAttribute(
+    		EditableAttributeDefinition attribute) {
+    	switch (attribute.getType()) {
+    	default:
+    		return true;
+    	case AttributeDefinition.STRING:
+    	case AttributeDefinition.BOOLEAN:
+    	case AttributeDefinition.CHARACTER:
+    	case AttributeDefinition.BYTE:
+    		return false;
+    	}
     }
 }

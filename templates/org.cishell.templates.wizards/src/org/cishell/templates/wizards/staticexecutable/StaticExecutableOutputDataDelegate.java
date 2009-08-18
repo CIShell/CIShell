@@ -3,8 +3,8 @@ package org.cishell.templates.wizards.staticexecutable;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.cishell.templates.guibuilder.AttributeDefinitionEditor;
 import org.cishell.templates.guibuilder.BuilderDelegate;
+import org.cishell.templates.wizards.utilities.ParameterUtilities;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TableItem;
@@ -103,11 +103,9 @@ public class StaticExecutableOutputDataDelegate
     protected String getTypeString(int type) {
         String typeString = "Unknown";
         
-        for (int ii = 0;
-        		ii < AttributeDefinitionEditor.TYPE_VALUES.length;
-        		ii++) {
-            if (AttributeDefinitionEditor.TYPE_VALUES[ii] == type) {
-                typeString = AttributeDefinitionEditor.TYPE_LABELS[ii];
+        for (int ii = 0; ii < ParameterUtilities.TYPE_VALUES.length; ii++) {
+            if (ParameterUtilities.TYPE_VALUES[ii] == type) {
+                typeString = ParameterUtilities.TYPE_LABELS[ii];
                 break;
             }
         }

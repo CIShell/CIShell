@@ -3,6 +3,7 @@ package org.cishell.templates.guibuilder;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.cishell.templates.wizards.utilities.ParameterUtilities;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TableItem;
@@ -10,8 +11,25 @@ import org.osgi.service.metatype.AttributeDefinition;
 
 public class ParameterBuilderDelegate implements BuilderDelegate {
     public static final String[] COLUMN_LABELS = new String[] {
-    	"id", "Type", "Label"
+    	"ID",
+    	"Label",
+    	"Type",
+    	"Description",
+    	"Default",
+    	"Minimum Value (Number Types Only)",
+    	"Maximum Value (Number Types Only)"
     };
+    
+    public static final String DEFAULT_ATTRIBUTE_DEFINITION_NAME =
+    	"Parameter Label";
+    public static final String DEFAULT_ATTRIBUTE_DEFINITION_DESCRIPTION =
+    	"Parameter Description";
+    public static final String DEFAULT_ATTRIBUTE_DEFINITION_VALUE =
+    	"Default Value";
+    public static final int DEFAULT_ATTRIBUTE_DEFINITION_TYPE =
+    	AttributeDefinition.STRING;
+    public static final String DEFAULT_ATTRIBUTE_DEFINITION_MINIMUM_VALUE = "";
+    public static final String DEFAULT_ATTRIBUTE_DEFINITION_MAXIMUM_VALUE = "";
     
     private Map idToAttributeMap;
     private int lastID;
@@ -19,28 +37,42 @@ public class ParameterBuilderDelegate implements BuilderDelegate {
     
     public ParameterBuilderDelegate(Composite parent) {
         this.parent = parent;
-        idToAttributeMap = new HashMap();
-        lastID = 0;
+        this.idToAttributeMap = new HashMap();
+        this.lastID = 0;
     }
 
     public String[] createItem() {
-        EditableAttributeDefinition attribute = new EditableAttributeDefinition();
-        lastID++;
-        attribute.setID("" + lastID);
-        attribute.setName("Parameter Label");
-        attribute.setDescription("Parameter Description");
-        attribute.setDefaultValue(new String[] { "Default value" });
-        attribute.setType(AttributeDefinition.STRING);
+        EditableAttributeDefinition attributeDefinition =
+        	new EditableAttributeDefinition();
+        this.lastID++;
         
-        boolean success = edit(attribute);
+        attributeDefinition.setID(Integer.toString(lastID));
+        attributeDefinition.setName(DEFAULT_ATTRIBUTE_DEFINITION_NAME);
+        attributeDefinition.setType(DEFAULT_ATTRIBUTE_DEFINITION_TYPE);
+        attributeDefinition.setDescription(
+        	DEFAULT_ATTRIBUTE_DEFINITION_DESCRIPTION);
+        attributeDefinition.setDefaultValue(
+        	DEFAULT_ATTRIBUTE_DEFINITION_VALUE);
+        attributeDefinition.setMinValue(
+        	DEFAULT_ATTRIBUTE_DEFINITION_MINIMUM_VALUE);
+        attributeDefinition.setMaxValue(
+        	DEFAULT_ATTRIBUTE_DEFINITION_MAXIMUM_VALUE);
         
-        if (success) {
-            idToAttributeMap.put(attribute.getID(), attribute);
+        boolean newItemWasCreated =
+        	editAttributeDefinition(attributeDefinition);
+        
+        if (newItemWasCreated) {
+            idToAttributeMap.put(attributeDefinition.getID(),
+            					 attributeDefinition);
             
             String[] item = new String[]{
-                    attribute.getID(),
-                    getTypeString(attribute.getType()),
-                    attribute.getName()
+                    attributeDefinition.getID(),
+                    attributeDefinition.getName(),
+                    getTypeString(attributeDefinition),
+                    attributeDefinition.getDescription(),
+                    attributeDefinition.getActualDefaultValue(),
+                    attributeDefinition.getMinValue(),
+                    attributeDefinition.getMaxValue()
             };
             
             return item;
@@ -55,14 +87,19 @@ public class ParameterBuilderDelegate implements BuilderDelegate {
         EditableAttributeDefinition attribute = 
             (EditableAttributeDefinition)idToAttributeMap.get(itemID);
         
-        edit(attribute);
-
-        item.setText(0, attribute.getID());
-        item.setText(1, getTypeString(attribute.getType()));
-        item.setText(2, attribute.getName());
+        if (editAttributeDefinition(attribute)) {
+        	item.setText(0, attribute.getID());
+        	item.setText(1, attribute.getName());
+        	item.setText(2, getTypeString(attribute));
+        	item.setText(3, attribute.getDescription());
+        	item.setText(4, attribute.getActualDefaultValue());
+        	item.setText(5, attribute.getMinValue());
+        	item.setText(6, attribute.getMaxValue());
+        }
     }
     
-    protected boolean edit(EditableAttributeDefinition attribute) {
+    protected boolean editAttributeDefinition(
+    		EditableAttributeDefinition attribute) {
         AttributeDefinitionEditor attributeDefinitionEditor =
         	new AttributeDefinitionEditor(parent, attribute);
         int returnCode = attributeDefinitionEditor.open();
@@ -74,19 +111,23 @@ public class ParameterBuilderDelegate implements BuilderDelegate {
         return returnCode == Dialog.OK;
     }
 
-    protected String getTypeString(int type) {
-        String typeString = "Unknown";
+    protected String getTypeString(EditableAttributeDefinition attribute) {
+    	if (ParameterUtilities.attributeHasFileType(attribute)) {
+    		return "File";
+    	} else if (ParameterUtilities.attributeHasDirectoryType(
+    			attribute)) {
+    		return "Directory";
+    	} else {
+    		int type = attribute.getType();
+    		
+        	for (int ii = 0; ii < ParameterUtilities.TYPE_VALUES.length; ii++) {
+            	if (ParameterUtilities.TYPE_VALUES[ii] == type) {
+                	return ParameterUtilities.TYPE_LABELS[ii];
+            	}
+        	}
+    	}
         
-        for (int ii = 0;
-        		ii < AttributeDefinitionEditor.TYPE_VALUES.length;
-        		ii++) {
-            if (AttributeDefinitionEditor.TYPE_VALUES[ii] == type) {
-                typeString = AttributeDefinitionEditor.TYPE_LABELS[ii];
-                break;
-            }
-        }
-        
-        return typeString;
+        return "Unknown Type";
     }
     
     public EditableAttributeDefinition getAttributeDefinition(String id) {
