@@ -19,15 +19,18 @@ public class EditableAttributeDefinition implements AttributeDefinition {
     String id;
     String name;
     String description;
-    String[] defaultValue;
+    String defaultValue;
     int type;
     String minValue;
     String maxValue;
     
     public EditableAttributeDefinition() {}
     
-    public EditableAttributeDefinition(String id, String name, String description, 
-            String[] defaultValue, int type) {
+    public EditableAttributeDefinition(String id,
+    								   String name,
+    								   String description, 
+    								   String defaultValue,
+    								   int type) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -52,7 +55,11 @@ public class EditableAttributeDefinition implements AttributeDefinition {
     }
 
     public String[] getDefaultValue() {
-        return defaultValue;
+        return new String[] { defaultValue };
+    }
+    
+    public String getActualDefaultValue() {
+    	return defaultValue;
     }
 
     public String getDescription() {
@@ -72,7 +79,11 @@ public class EditableAttributeDefinition implements AttributeDefinition {
     }
 
     public void setDefaultValue(String[] defaultValue) {
-        this.defaultValue = defaultValue;
+        this.defaultValue = defaultValue[0];
+    }
+    
+    public void setDefaultValue(String defaultValue) {
+    	this.defaultValue = defaultValue;
     }
 
     public void setDescription(String description) {

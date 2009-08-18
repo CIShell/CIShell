@@ -13,10 +13,10 @@
  * ***************************************************************************/
 package org.cishell.templates.wizards.pages;
 
-import org.cishell.templates.guibuilder.AttributeDefinitionEditor;
 import org.cishell.templates.guibuilder.EditableAttributeDefinition;
 import org.cishell.templates.guibuilder.ParameterListBuilder;
 import org.cishell.templates.staticexecutable.providers.InputParameterProvider;
+import org.cishell.templates.wizards.utilities.ParameterUtilities;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
@@ -58,13 +58,34 @@ public class ParameterListBuilderPage extends WizardPage
         EditableAttributeDefinition[] attributes = getAttributeDefinitions();
         String output = "";
         
-        for (int ii =0; ii < attributes.length; ii++) {
+        for (int ii = 0; ii < attributes.length; ii++) {
             output +=
             	"\t\t<AD name=\"" + attributes[ii].getName()+"\" " +
             	"id=\"" + attributes[ii].getID() + "\" " +
             	"type=\"" + getTypeString(attributes[ii]) + "\" " +
             	"description=\"" + attributes[ii].getDescription() + "\" " +
-            	"default=\"" + attributes[ii].getDefaultValue()[0] + "\"/>\n";
+            	"default=\"" + attributes[ii].getActualDefaultValue() + "\"";
+            
+            switch (attributes[ii].getType()) {
+            /*TODO: make explicit comment
+             * There are more number types than non-number types, so make
+             *  switching on number types the default.
+             */
+            case AttributeDefinition.BOOLEAN:
+            case AttributeDefinition.CHARACTER:
+            case AttributeDefinition.STRING:
+            	break;
+            default:
+            	if (!attributes[ii].getMinValue().equals("")) {
+            		output += " min=\"" + attributes[ii].getMinValue() + "\"";
+            	}
+            
+            	if (!attributes[ii].getMaxValue().equals("")) {
+            		output += " max=\"" + attributes[ii].getMaxValue() + "\"";
+            	}
+            }
+            
+            output += "/>\n";
         }
         
         return output;
@@ -74,11 +95,9 @@ public class ParameterListBuilderPage extends WizardPage
         String typeString = "Unknown";
         int type = attribute.getType();
         
-        for (int ii = 0;
-        		ii < AttributeDefinitionEditor.TYPE_VALUES.length;
-        		ii++) {
-            if (AttributeDefinitionEditor.TYPE_VALUES[ii] == type) {
-                typeString = AttributeDefinitionEditor.TYPE_LABELS[ii];
+        for (int ii = 0; ii < ParameterUtilities.TYPE_VALUES.length; ii++) {
+            if (ParameterUtilities.TYPE_VALUES[ii] == type) {
+                typeString = ParameterUtilities.TYPE_LABELS[ii];
                 
                 break;
             }
