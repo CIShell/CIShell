@@ -86,26 +86,43 @@ public class DropdownMutator {
 			});
 	}
 	
-	private static List swapToFront(List list, String item) {
-		if (list.contains(item)) {
-			int index = list.indexOf(item);
-			String displacedItem = (String) list.get(0);
-			list.set(0, item);
-			list.set(index, displacedItem);
-		}
+	private static List swapToFront(List list, String target) {
 		
-		return list;
+				
+		if (list.contains(target)) {
+			int targetIndex = list.indexOf(target);
+			
+			List swappedList = new ArrayList(list.size());
+			
+			for (int ii = 0; ii < list.size(); ii++) {
+				swappedList.set(ii, list.get(ii));
+			}
+			
+			swappedList.set(0, (String) list.get(targetIndex));
+			swappedList.set(targetIndex, (String) list.get(0));	
+			
+			return swappedList;
+		} else {
+			return list;
+		}
 	}
 	
-	private static String[] swapToFront(String[] array, String item) {
-		int index = ArrayUtilities.indexOf(array, item);
+	private static String[] swapToFront(String[] array, String target) {
+		int targetIndex = ArrayUtilities.indexOf(array, target);
 		
-		if (index != -1) {
-			String displacedItem = array[0];
-			array[0] = item;
-			array[index] = displacedItem;
+		if (targetIndex != -1) {
+			String[] swappedArray = new String[array.length];
+			
+			for (int ii = 0; ii < array.length; ii++) {
+				swappedArray[ii] = array[ii];
+			}
+			
+			swappedArray[0] = array[targetIndex];
+			swappedArray[targetIndex] = array[0];
+			
+			return swappedArray;
+		} else {
+			return array;
 		}
-		
-		return array;
 	}
 }
