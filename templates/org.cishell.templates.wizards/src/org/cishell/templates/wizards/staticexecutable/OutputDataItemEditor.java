@@ -47,7 +47,7 @@ public class OutputDataItemEditor extends Dialog {
         this.mimeTypeText = createTextInput(panel, "Mime Type");
         this.mimeTypeText.setText(this.outputDataItem.getMimeType());
         
-        composite.getShell().setText("Input Data Item Editor");
+        composite.getShell().setText("Output Data Item Editor");
         
         return composite;
     }

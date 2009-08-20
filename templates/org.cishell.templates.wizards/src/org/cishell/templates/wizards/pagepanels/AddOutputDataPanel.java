@@ -64,7 +64,7 @@ public class AddOutputDataPanel extends Composite {
             GetOutputDataAction action = new GetOutputDataAction();
             display.syncExec(action);
             
-            return action.inputDataItems;
+            return action.outputDataItems;
         } else {
             return new OutputDataItem[0];
         }
@@ -108,16 +108,16 @@ public class AddOutputDataPanel extends Composite {
 	}
 	
 	private class GetOutputDataAction implements Runnable {
-        OutputDataItem[] inputDataItems;
+        OutputDataItem[] outputDataItems;
 
         public void run() {
             TableItem[] tableItems = listBuilder.getTable().getItems();
-            inputDataItems = new OutputDataItem[tableItems.length];
-            Map idToInputDataItemMap = delegate.getIDToOutputDataItemMap();
+            outputDataItems = new OutputDataItem[tableItems.length];
+            Map idToOutputDataItemMap = delegate.getIDToOutputDataItemMap();
 		
 			for (int ii = 0; ii < tableItems.length; ii++) {
-				inputDataItems[ii] = (OutputDataItem)
-					idToInputDataItemMap.get(tableItems[ii].getText(0));
+				outputDataItems[ii] = (OutputDataItem)
+					idToOutputDataItemMap.get(tableItems[ii].getText(0));
 			}
         }
     }
