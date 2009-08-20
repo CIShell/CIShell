@@ -411,7 +411,7 @@ public class NewStaticExecutableAlgorithmTemplate extends BasicTemplate
     		createPage(PROJECT_BUNDLE_PROPERTIES_PAGE_NUMBER);
         bundlePropertiesPage.setTitle("Bundle Properties");
         bundlePropertiesPage.setDescription(
-        	"Enter the bundle name, and bundle version");
+        	"Enter the Bundle Name, Bundle Symbolic Name, and Bundle Version");
         
         return bundlePropertiesPage;
     }
@@ -432,7 +432,7 @@ public class NewStaticExecutableAlgorithmTemplate extends BasicTemplate
     	WizardPage projectPropertiesPage =
     		createPage(PROJECT_PROPERTIES_PAGE_NUMBER);
         projectPropertiesPage.setTitle("Project Properties");
-        projectPropertiesPage.setDescription("Enter project properties");
+        projectPropertiesPage.setDescription("Enter Project Properties");
         
         return projectPropertiesPage;
     }
@@ -440,8 +440,8 @@ public class NewStaticExecutableAlgorithmTemplate extends BasicTemplate
     private ParameterListBuilderPage createProjectParametersPage() {
     	ParameterListBuilderPage projectParametersPage =
     		new ParameterListBuilderPage(SETUP_PARAMETERS_PAGE_ID);
-        projectParametersPage.setTitle("Project Parameters");
-        projectParametersPage.setDescription("Enter project parameters");
+        projectParametersPage.setTitle("Algorithm Parameters");
+        projectParametersPage.setDescription("Enter Project Parameters");
         
         return projectParametersPage;
     }
@@ -451,7 +451,7 @@ public class NewStaticExecutableAlgorithmTemplate extends BasicTemplate
     		new SpecifyInAndOutDataPage(SPECIFY_IN_AND_OUT_DATA_PAGE_ID);
         inputAndOutputDataPage.setTitle("Input and Output Data");
         inputAndOutputDataPage.setDescription(
-        	"Enter the input and output data");
+        	"Enter the Input and Output Data");
 
         return inputAndOutputDataPage;
     }
@@ -465,7 +465,7 @@ public class NewStaticExecutableAlgorithmTemplate extends BasicTemplate
     			this.templateStringOption);
         specifyTemplateStringPage.setTitle("Template String");
         specifyTemplateStringPage.setDescription(
-        	"Enter the template string used to execute your program");
+        	"Enter the Template String Used to Execute Your Program");
 
         return specifyTemplateStringPage;
     }
@@ -477,7 +477,7 @@ public class NewStaticExecutableAlgorithmTemplate extends BasicTemplate
     			this.sourceCodeFilesOption);
         sourceCodeFilesPage.setTitle("Source Code Files (Optional)");
         sourceCodeFilesPage.setDescription(
-        	"Enter the source code files for your program");
+        	"Enter the Source Code Files for Your Program");
 
         return sourceCodeFilesPage;
     }
