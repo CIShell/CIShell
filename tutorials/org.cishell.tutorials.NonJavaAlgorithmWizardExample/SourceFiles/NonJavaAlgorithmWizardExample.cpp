@@ -4,30 +4,34 @@
 
 
 #define PROGRAM_NAME "NonJavaAlgorithmWizardExample"
-#define EXPECTED_ARGUMENT_COUNT 4
+#define EXPECTED_ARGUMENT_COUNT 5
 #define USER_FILE_ARGUMENT_INDEX 1
-#define PLATFORM_FILE_ARGUMENT_INDEX 2
-#define OUTPUT_FILE_ARGUMENT_INDEX 3
+#define NWB_FILE_ARGUMENT_INDEX 2
+#define PLATFORM_FILE_ARGUMENT_INDEX 3
+#define OUTPUT_FILE_ARGUMENT_INDEX 4
 
 std::string readUserFile(const std::string& userFileName)
 	throw(std::exception);
+std::string readNWBFile(const std::string& nwbFileName) throw(std::exception);
 std::string readPlatformFile(const std::string& platformFileName)
 		throw(std::exception);
 std::string readFileContents(std::ifstream& inputFileStream);
 
 void outputCombinedContentsToFile(const std::string& userFileContents,
+								  const std::string& nwbFileContents,
 								  const std::string& platformFileContents,
 								  const std::string& fileName)
 	throw(std::exception);
 
 int main (int argumentCount, char* arguments[]) {
 	if (argumentCount < EXPECTED_ARGUMENT_COUNT) {
-		std::cerr << "You must provide " << EXPECTED_ARGUMENT_COUNT;
+		std::cerr << "You must provide " << EXPECTED_ARGUMENT_COUNT - 1;
 		std::cerr << " arguments to the program." << std::endl;
 		std::cerr << "Expected format:" << std::endl;
-		std::cerr << "user_file platform_file output_file" << std::endl;
+		std::cerr << "user_file nwb_file platform_file output_file";
+		std::cerr << std::endl;
 	} else {
-		// Process the user-specified file.
+		// Process the end-user-specified file.
 
 		std::string userFileName = arguments[USER_FILE_ARGUMENT_INDEX];
 		std::string userFileContents;
@@ -43,6 +47,23 @@ int main (int argumentCount, char* arguments[]) {
 			std::cerr << readUserFileException.what() << "\"" << std::endl;
 			
 			return 1;
+		}
+		
+		// Process the NWB file.
+		
+		std::string nwbFileName = arguments[NWB_FILE_ARGUMENT_INDEX];
+		std::string nwbFileContents;
+		
+		try {
+			nwbFileContents = readNWBFile(nwbFileName);
+			
+			std::cout << "Successfully read the NWB file you selected off of ";
+			std::cout << "the Data Manager (\'" << nwbFileName << "\').";
+			std::cout << std:: endl;
+		} catch (std::exception& readNWBFileException) {
+			std::cerr << "There was an error reading the NWB file \'";
+			std::cerr << nwbFileName << "\': \"";
+			std::cerr << readNWBFileException.what() << "\"" << std::endl;
 		}
 		
 		// Process the platform file.
@@ -71,8 +92,10 @@ int main (int argumentCount, char* arguments[]) {
 		std::string outputFileName = arguments[OUTPUT_FILE_ARGUMENT_INDEX];
 		
 		try {
-			outputCombinedContentsToFile(
-				userFileContents, platformFileContents, outputFileName);
+			outputCombinedContentsToFile(userFileContents,
+										 nwbFileContents,
+										 platformFileContents,
+										 outputFileName);
 			
 			std::cout << "Successfully wrote the combined contents to the ";
 			std::cout << "file \'" << outputFileName << "\'." << std::endl;
@@ -102,6 +125,19 @@ std::string readUserFile(const std::string& userFileName)
 	return userFileContents;
 }
 
+std::string readNWBFile(const std::string& nwbFileName) throw(std::exception) {
+	std::ifstream nwbFileStream(nwbFileName.c_str(), std::ifstream::in);
+	
+	if (!nwbFileStream.is_open()) {
+		throw std::ios_base::failure("Unable to open NWB file for reading.");
+	}
+	
+	std::string nwbFileContents = readFileContents(nwbFileStream);
+	nwbFileStream.close();
+	
+	return nwbFileContents;
+}
+
 std::string readPlatformFile(const std::string& platformFileName)
 		throw(std::exception) {
 	std::ifstream platformFileStream(platformFileName.c_str(),
@@ -129,6 +165,7 @@ std::string readFileContents(std::ifstream& inputFileStream) {
 }
 
 void outputCombinedContentsToFile(const std::string& userFileContents,
+								  const std::string& nwbFileContents,
 								  const std::string& platformFileContents,
 								  const std::string& fileName)
 		throw(std::exception) {
@@ -139,6 +176,12 @@ void outputCombinedContentsToFile(const std::string& userFileContents,
 			"Unable to open output file for writing.");
 	}
 	
+	outputFileStream << "User file contents:" << std::endl;
 	outputFileStream << userFileContents << std::endl;
+	
+	outputFileStream << "NWB file contents:" << std::endl;
+	outputFileStream << nwbFileContents << std::endl;
+	
+	outputFileStream << "Platform:" << std::endl;
 	outputFileStream << platformFileContents << std::endl;
 }
