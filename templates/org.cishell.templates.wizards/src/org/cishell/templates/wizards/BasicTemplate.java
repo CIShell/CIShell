@@ -48,6 +48,12 @@ import org.eclipse.pde.ui.templates.TemplateOption;
 
 // TODO Could we safely reduce some of the method visibilities here?
 public abstract class BasicTemplate extends OptionTemplateSection {
+	/*
+	 * TODO: This is a hack to fix a bug where File seems to exclude empty
+	 *  directories from its list of sub files on certain platforms.
+	 */
+	public static final String HACK_PLACEHOLDER_FILE_NAME = "!PLACEHOLDER!";
+	
     protected final String sectionID;
     protected Map valueMap;
     protected Map optionMap;
@@ -145,7 +151,7 @@ public abstract class BasicTemplate extends OptionTemplateSection {
 	}
     
     protected void generateFiles(IProgressMonitor progressMonitor,
-    						  URL locationURL) throws CoreException {
+    						     URL locationURL) throws CoreException {
 		progressMonitor.setTaskName(
 			PDEUIMessages.AbstractTemplateSection_generating);
 
@@ -172,12 +178,12 @@ public abstract class BasicTemplate extends OptionTemplateSection {
 				return;
 			}
 			
-			generateFiles(templateDirectory,
-						  project,
-						  true,
-						  false,
-						  true,
-						  progressMonitor);
+			generateFilesFromDirectory(templateDirectory,
+									   project,
+									   true,
+									   false,
+									   true,
+									   progressMonitor);
 		} else if ("jar".equals(resolvedLocationURLProtocol)) {
 			int exclamationIndex = resolvedLocationURLFileName.indexOf('!');
 			
@@ -209,12 +215,12 @@ public abstract class BasicTemplate extends OptionTemplateSection {
 			
 			try {
 				zipFile = new ZipFile(pluginJarFile);
-				generateFiles(zipFile,
-							  templateDirectoryPath,
-							  project,
-							  true,
-							  false,
-							  progressMonitor);
+				generateFilesFromZipFile(zipFile,
+										 templateDirectoryPath,
+										 project,
+										 true,
+										 false,
+										 progressMonitor);
 			} catch (ZipException zipException) {
 			} catch (IOException ioException1) {
 			} finally {
@@ -228,11 +234,11 @@ public abstract class BasicTemplate extends OptionTemplateSection {
 
 		}
 		
-		progressMonitor.subTask(""); //$NON-NLS-1$
+		progressMonitor.subTask("");
 		progressMonitor.worked(1);
 	}
     
-    protected void generateFiles(
+    protected void generateFilesFromDirectory(
     		File sourceFile,
     		IContainer destinationContainer,
     		boolean isFirstLevel,
@@ -243,6 +249,11 @@ public abstract class BasicTemplate extends OptionTemplateSection {
 
 		for (int ii = 0; ii < sourceSubFiles.length; ii++) {
 			File sourceSubFile = sourceSubFiles[ii];
+			
+			if (sourceSubFiles[ii].getName().equals(
+					HACK_PLACEHOLDER_FILE_NAME)) {
+				continue;
+			}
 			
 			boolean shouldProcessSubFileAsTemplate =
 				shouldProcessAsTemplate && shouldProcessFile(sourceSubFile);
@@ -269,7 +280,7 @@ public abstract class BasicTemplate extends OptionTemplateSection {
 				}
 				
 				if (subDestinationContainer == null) {
-					if (isOkToCreateFolder(sourceSubFile) == false) {
+					if (!isOkToCreateFolder(sourceSubFile)) {
 						continue;
 					}
 					
@@ -292,12 +303,12 @@ public abstract class BasicTemplate extends OptionTemplateSection {
 						true, true, progressMonitor);
 				}
 				
-				generateFiles(sourceSubFile,
-							  subDestinationContainer,
-							  false,
-							  isBinaryFile,
-							  shouldProcessSubFileAsTemplate,
-							  progressMonitor);
+				generateFilesFromDirectory(sourceSubFile,
+										   subDestinationContainer,
+										   false,
+										   isBinaryFile,
+										   shouldProcessSubFileAsTemplate,
+										   progressMonitor);
 			} else {
 				if (isOkToCreateFile(sourceSubFile)) {
 					if (isFirstLevel) {
@@ -328,7 +339,7 @@ public abstract class BasicTemplate extends OptionTemplateSection {
 		}
 	}
     
-    protected void generateFiles(
+    protected void generateFilesFromZipFile(
     		ZipFile zipFile,
     		IPath filePath,
     		IContainer destinationContainer,
@@ -407,7 +418,7 @@ public abstract class BasicTemplate extends OptionTemplateSection {
 						true, true, progressMonitor);
 				}
 				
-				generateFiles(zipFile,
+				generateFilesFromZipFile(zipFile,
 							  filePath.append(name),
 							  subDestinationContainer,
 							  false,
