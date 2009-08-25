@@ -31,7 +31,7 @@ import org.eclipse.swt.widgets.Text;
  * @author Bruce Herr (bh2@bh2.net)
  */
 public class StringComponent extends AbstractComponent {
-    protected Text text;
+    protected Text textField;
     protected Combo combo;
     protected String[] optionValues;
     
@@ -48,7 +48,6 @@ public class StringComponent extends AbstractComponent {
     	GridData gd = new GridData(SWT.FILL,SWT.CENTER,true,false);
 		gd.horizontalSpan = MAX_SPAN-1;
 		gd.minimumWidth = 100;
-		
     	optionValues = attr.getOptionValues();
 		if(optionValues != null) {
     		combo = new Combo(parent, style | SWT.DROP_DOWN | SWT.READ_ONLY);
@@ -72,23 +71,23 @@ public class StringComponent extends AbstractComponent {
     		
     		return combo;
     	} else {
-    		text = new Text(parent, style | SWT.BORDER);
-    		text.setLayoutData(gd);
+    		textField = new Text(parent, style | SWT.BORDER);
+    		textField.setLayoutData(gd);
         
-    		text.addModifyListener(new ModifyListener() {
+    		textField.addModifyListener(new ModifyListener() {
     			public void modifyText(ModifyEvent e) {
     				update();
     			}
     		}); 
         
-    		return text;
+    		return textField;
     	}
     }
 
     public Object getValue() {
     	Object value;
     	if(combo == null) {
-    		value = StringConverter.getInstance().stringToObject(attr, text.getText());
+    		value = StringConverter.getInstance().stringToObject(attr, textField.getText());
     	} else {
     		value = StringConverter.getInstance().stringToObject(attr, getListValue());
     	}
@@ -109,15 +108,15 @@ public class StringComponent extends AbstractComponent {
             return "Invalid basic value";
         }
         if(combo == null) {
-        	return attr.validate(text.getText());
+        	return attr.validate(textField.getText());
         } else {
         	return attr.validate(getListValue());
         }
     }
 
     public void setValue(Object value) {
-    	if (text != null) {
-        text.setText(value == null ? "" : value.toString());
+    	if (textField != null) {
+        textField.setText(value == null ? "" : value.toString());
     	} else if (combo != null) {
     		
     		int setComboToIndex = -1;

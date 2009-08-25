@@ -21,11 +21,13 @@ import org.eclipse.swt.widgets.DirectoryDialog;
 public class DirectoryComponent extends FileComponent {
 
     protected String getFile(String defaultPath) {
-        DirectoryDialog dialog = new DirectoryDialog(text.getShell(), SWT.OPEN);
-        dialog.setText("Select a Directory");
-        dialog.setFilterPath(defaultPath);
-
-        return dialog.open();
+        DirectoryDialog directorySelectorDialog =
+        	new DirectoryDialog(textField.getShell(), SWT.OPEN);
+        directorySelectorDialog.setText("Select a Directory");
+        directorySelectorDialog.setFilterPath(defaultPath);
+        String chosenDirectoryPath = directorySelectorDialog.open();
+        
+        return fixPath(chosenDirectoryPath);
     }
 
     protected String validate(File file) {
