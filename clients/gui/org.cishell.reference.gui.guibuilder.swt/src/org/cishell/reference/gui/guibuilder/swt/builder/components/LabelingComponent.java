@@ -155,7 +155,7 @@ public class LabelingComponent extends AbstractComponent implements UpdateListen
 
 				/*
 				 * Creation of a new description shell, which is a hover containing the 
-				 * description text.
+				 * description textField.
 				 */
 				this.descriptionShell = createDescriptionShell(descText, descriptionButton);
 				

@@ -196,7 +196,7 @@ public abstract class AbstractDialog extends Dialog {
     }
 
     /**
-     * Sets the Description of this AbstractDialog.  This is the text that is displayed in the
+     * Sets the Description of this AbstractDialog.  This is the textField that is displayed in the
      * top section of the Dialog window, giving information about the question that is being
      * asked or the information that is being given.
      *
@@ -207,7 +207,7 @@ public abstract class AbstractDialog extends Dialog {
     }
 
     /**
-     * Sets the details text of this AbstractDialog.  This is the text that is displayed in the lower
+     * Sets the details textField of this AbstractDialog.  This is the textField that is displayed in the lower
      * section of the Dialog window when the user presses the "Details >>" button.  If this String
      * is null or the empty string, the details button will be disabled.
      *
@@ -338,7 +338,7 @@ public abstract class AbstractDialog extends Dialog {
     }
 
     /*
-     * creates the details text box when the "Details >>" button is toggled
+     * creates the details textField box when the "Details >>" button is toggled
      */
     private void setupDetails() {
         detailsText = new Text(shell, SWT.BORDER | SWT.WRAP | SWT.V_SCROLL);       
@@ -357,9 +357,9 @@ public abstract class AbstractDialog extends Dialog {
      * Open a standard error dialog with OK button
      * 
      * @param parent the parent Shell of this dialog
-     * @param title the text to display in the title bar of this dialog
+     * @param title the textField to display in the title bar of this dialog
      * @param message the message to give in the dialog's body
-     * @param details the text to put in the details pane to be visible when the
+     * @param details the textField to put in the details pane to be visible when the
      *        "Details >>" button is pressed (can be null or empty, resulting
      *        in the "Details >>" button not being enabled)
      * @return true if the dialog was exited by pressing the OK button, false
@@ -373,9 +373,9 @@ public abstract class AbstractDialog extends Dialog {
      * Open a standard information dialog with OK button
      * 
      * @param parent the parent Shell of this dialog
-     * @param title the text to display in the title bar of this dialog
+     * @param title the textField to display in the title bar of this dialog
      * @param message the message to give in the dialog's body
-     * @param details the text to put in the details pane to be visible when the
+     * @param details the textField to put in the details pane to be visible when the
      *        "Details >>" button is pressed (can be null or empty, resulting
      *        in the "Details >>" button not being enabled)     * @return true if the dialog was exited by pressing the OK button, false
      * if it was cancelled by pressing the 'x' in the title bar
@@ -388,9 +388,9 @@ public abstract class AbstractDialog extends Dialog {
      * Open a standard warning dialog with OK button
      * 
      * @param parent the parent Shell of this dialog
-     * @param title the text to display in the title bar of this dialog
+     * @param title the textField to display in the title bar of this dialog
      * @param message the message to give in the dialog's body
-     * @param details the text to put in the details pane to be visible when the
+     * @param details the textField to put in the details pane to be visible when the
      *        "Details >>" button is pressed (can be null or empty, resulting
      *        in the "Details >>" button not being enabled)     * @return true if the dialog was exited by pressing the OK button, false
      * if it was cancelled by pressing the 'x' in the title bar
@@ -403,9 +403,9 @@ public abstract class AbstractDialog extends Dialog {
      * Open a standard question dialog with Yes/No buttons 
      * 
      * @param parent the parent Shell of this dialog
-     * @param title the text to display in the title bar of this dialog
+     * @param title the textField to display in the title bar of this dialog
      * @param message the message to give in the dialog's body
-     * @param details the text to put in the details pane to be visible when the
+     * @param details the textField to put in the details pane to be visible when the
      *        "Details >>" button is pressed (can be null or empty, resulting
      *        in the "Details >>" button not being enabled)     * @return true if the dialog was exited by pressing the OK button, false
      * if it was cancelled by pressing the 'x' in the title bar or pressing the 
@@ -419,9 +419,9 @@ public abstract class AbstractDialog extends Dialog {
      * Open a standard confirmation dialog with OK/Cancel buttons
      * 
      * @param parent the parent Shell of this dialog
-     * @param title the text to display in the title bar of this dialog
+     * @param title the textField to display in the title bar of this dialog
      * @param message the message to give in the dialog's body
-     * @param details the text to put in the details pane to be visible when the
+     * @param details the textField to put in the details pane to be visible when the
      *        "Details >>" button is pressed (can be null or empty, resulting
      *        in the "Details >>" button not being enabled)     * @return true if the dialog was exited by pressing the OK button, false
      * if it was cancelled by pressing the 'x' in the title bar or pressing

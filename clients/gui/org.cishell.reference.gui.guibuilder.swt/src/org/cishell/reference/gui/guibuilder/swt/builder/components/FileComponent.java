@@ -16,6 +16,8 @@ package org.cishell.reference.gui.guibuilder.swt.builder.components;
 import java.io.File;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -25,7 +27,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.FileDialog;
 
 public class FileComponent extends StringComponent {
-    protected Button browse;
+    protected Button browseButton;
     private static Object currentValue;
 
     public FileComponent() {
@@ -37,29 +39,34 @@ public class FileComponent extends StringComponent {
     }
     
     public Control createGUI(Composite parent, int style) {
-        super.createGUI(parent, style); //creates the text component
+    	// Creates the textField component.
+        super.createGUI(parent, style);
         
-        Object data = text.getLayoutData();
-        if (data != null && data instanceof GridData) {
-            GridData gd = (GridData) data;
-            gd.horizontalSpan--; //make room for the browse button
+        Object layoutData = this.textField.getLayoutData();
+        
+        if (layoutData != null && layoutData instanceof GridData) {
+            GridData gridData = (GridData)layoutData;
+            gridData.horizontalSpan--;//make room for the browseButton button
         }
         
-        browse = new Button(parent, SWT.PUSH);
-        browse.setText("Browse");
-        //when click "Browse", here is the listener
-        browse.addSelectionListener(new SelectionAdapter() {
+        this.browseButton = new Button(parent, SWT.PUSH);
+        this.browseButton.setText("Browse");
+        
+        // When click "Browse", here is the listener.
+        browseButton.addSelectionListener(new SelectionAdapter() {
             public void widgetSelected(SelectionEvent e) {
-                String fileName = getFile(text.getText());
-                //remember this new file/directory selection
-                currentValue = fileName;
+                String fileName = getFile(textField.getText());
+                
+                // Remember this new file/directory selection.
+                currentValue = fixPath(fileName);
+                
                 if (fileName != null) {
-                    text.setText(fileName);
+                    textField.setText(fileName);
                     update();
                 }
             }});  
         
-        return text;
+        return this.textField;
     }
     
     /**
@@ -68,11 +75,13 @@ public class FileComponent extends StringComponent {
      * @return the file they chose
      */
     protected String getFile(String defaultPath) {
-        FileDialog dialog = new FileDialog(text.getShell(), SWT.OPEN);
-        dialog.setText("Select a File");
-        dialog.setFilterPath(defaultPath);
-
-        return dialog.open();
+        FileDialog fileSelectorDialog =
+        	new FileDialog(textField.getShell(), SWT.OPEN);
+        fileSelectorDialog.setText("Select a File");
+        fileSelectorDialog.setFilterPath(defaultPath);
+        String chosenFilePath = fileSelectorDialog.open();
+        
+        return fixPath(chosenFilePath);
     }
     
     protected String validate(File file) {
@@ -84,7 +93,7 @@ public class FileComponent extends StringComponent {
     }
     
     public String validate() {
-        File file = new File(text.getText());
+        File file = new File(textField.getText());
         
         String valid = validate(file);
         if (valid.length() > 0) { //length > 0 means an error
@@ -96,6 +105,10 @@ public class FileComponent extends StringComponent {
     
     protected String getKeyword() {
         return "file:";
+    }
+    
+    public Object getValue() {
+    	return fixPath(super.getValue().toString());
     }
     
     public void setValue(Object value) {
@@ -114,6 +127,16 @@ public class FileComponent extends StringComponent {
            	
         }
         
-        super.setValue(value);
+        super.setValue(fixPath(value.toString()));
+    }
+    
+    public static String fixPath(String path) {
+    	if (path != null) {
+    		String fixedPath = path.replace('\\', '/');
+    		
+    		return fixedPath;
+    	} else {
+    		return null;
+    	}
     }
 }
