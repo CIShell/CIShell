@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metatype:MetaData xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.0.0">
+	<OCD name="Streaming Data Prototype" id="org.cishell.streaming.prototype.Streamer.OCD"
+		 description="Stream data. ">
+	</OCD>
+	<Designate pid="org.cishell.streaming.prototype.Streamer">
+		<Object ocdref="org.cishell.streaming.prototype.Streamer.OCD" />
+	</Designate>
+</metatype:MetaData>

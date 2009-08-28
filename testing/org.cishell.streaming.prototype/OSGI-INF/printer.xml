@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="org.cishell.streaming.prototype.Printer.component" immediate="false">
+	<implementation class="org.cishell.streaming.prototype.PrinterFactory"/>
+	<properties entry="OSGI-INF/printer.properties"/>
+	
+	<service>
+		<provide interface=
+			"org.cishell.framework.algorithm.AlgorithmFactory"/>
+	</service>
+</component>
