@@ -1,6 +1,7 @@
 package org.cishell.utilities.mutateParameter;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.cishell.utilities.ArrayUtilities;
@@ -87,20 +88,24 @@ public class DropdownMutator {
 	}
 	
 	private static List swapToFront(List list, String target) {
+		System.out.println("list is length " + list.size() + " and contains:");
+		for (Iterator listIt = list.iterator(); listIt.hasNext();) {
+			System.out.println(listIt.next());
+			
+		}
 		
-				
 		if (list.contains(target)) {
 			int targetIndex = list.indexOf(target);
 			
 			List swappedList = new ArrayList(list.size());
 			
-			for (int ii = 0; ii < list.size(); ii++) {
-				swappedList.set(ii, list.get(ii));
+			for (Iterator listIt = list.iterator(); listIt.hasNext();) {
+				swappedList.add(listIt.next());
 			}
-			
+
 			swappedList.set(0, (String) list.get(targetIndex));
 			swappedList.set(targetIndex, (String) list.get(0));	
-			
+
 			return swappedList;
 		} else {
 			return list;
