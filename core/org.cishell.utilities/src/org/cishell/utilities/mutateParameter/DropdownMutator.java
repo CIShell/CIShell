@@ -88,12 +88,6 @@ public class DropdownMutator {
 	}
 	
 	private static List swapToFront(List list, String target) {
-		System.out.println("list is length " + list.size() + " and contains:");
-		for (Iterator listIt = list.iterator(); listIt.hasNext();) {
-			System.out.println(listIt.next());
-			
-		}
-		
 		if (list.contains(target)) {
 			int targetIndex = list.indexOf(target);
 			
