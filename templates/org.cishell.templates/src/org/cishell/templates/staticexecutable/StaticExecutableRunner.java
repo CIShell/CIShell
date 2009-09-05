@@ -106,7 +106,6 @@ public class StaticExecutableRunner implements Algorithm {
 		tempDirPath = makeTempDirectory();
 
 		algDirPath = tempDirPath + File.separator + props.getProperty("Algorithm-Directory") + File.separator;
-
 	}
 
 	/**
@@ -194,15 +193,18 @@ public class StaticExecutableRunner implements Algorithm {
 		}
 	}
 
-	protected File[] executeProgram(String[] cmdarray, String baseDirPath) throws AlgorithmExecutionException {
-		//remember which files were in the directory before we ran the program
+	protected File[] executeProgram(String[] commandArray, String baseDirPath) throws AlgorithmExecutionException {
+		/*
+		 * Remember which files were in the directory before we ran
+		 *  the program.
+		 */
 		File baseDir = new File(baseDirPath);
 		String[] beforeFiles = baseDir.list();
 
 		//create and run the executing process
 		Process process = null;
 		try {
-			process = Runtime.getRuntime().exec(cmdarray, null, new File(baseDirPath));
+			process = Runtime.getRuntime().exec(commandArray, null, new File(baseDirPath));
 			process.getOutputStream().close();
 		} catch (IOException e1) {
 			throw new AlgorithmExecutionException(e1.getMessage(), e1);
@@ -440,13 +442,15 @@ public class StaticExecutableRunner implements Algorithm {
 		str = str.replaceAll("\\$\\{executable\\}", props.getProperty("executable"));
 
 		for (int i = 0; i < data.length; i++) {
-			String file = ((File) data[i].getData()).getAbsolutePath();
+			File inFile = (File)data[i].getData();
+			String filePath = inFile.getAbsolutePath();
+			System.err.println("inFile[" + i + "]: \"" + filePath + "\" exists: " + inFile.exists());
 
 			if (File.separatorChar == '\\') {
-				file = file.replace(File.separatorChar, '/');
+				filePath = filePath.replace(File.separatorChar, '/');
 			}
 
-			str = str.replaceAll("\\$\\{inFile\\[" + i + "\\]\\}", file);
+			str = str.replaceAll("\\$\\{inFile\\[" + i + "\\]\\}", filePath);
 
 			if (File.separatorChar == '\\') {
 				str = str.replace('/', File.separatorChar);
