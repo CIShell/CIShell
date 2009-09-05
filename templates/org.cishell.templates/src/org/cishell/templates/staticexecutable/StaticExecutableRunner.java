@@ -444,7 +444,6 @@ public class StaticExecutableRunner implements Algorithm {
 		for (int i = 0; i < data.length; i++) {
 			File inFile = (File)data[i].getData();
 			String filePath = inFile.getAbsolutePath();
-			System.err.println("inFile[" + i + "]: \"" + filePath + "\" exists: " + inFile.exists());
 
 			if (File.separatorChar == '\\') {
 				filePath = filePath.replace(File.separatorChar, '/');
