@@ -1,5 +1,8 @@
 package org.cishell.utilities;
 
+import java.util.Iterator;
+import java.util.List;
+
 public class ArrayUtilities {
 	public static int indexOf(Object[] array, Object target) {
 		for (int ii = 0; ii < array.length; ii++) {
@@ -9,5 +12,34 @@ public class ArrayUtilities {
 		}
 		
 		return -1;
+	}
+	
+	public static void swapFirstMatchToFront(Object[] array, List targets) {
+		for (Iterator targetsIt = targets.iterator(); targetsIt.hasNext();) {
+			Object target = (Object) targetsIt.next();
+			int index = ArrayUtilities.indexOf(array, target);
+			
+			if ( index != -1 ) {
+				swap(array, 0, index);
+				return;
+			}
+			
+		}
+	}
+	
+	public static void swap(Object[] array, int i, int j) {
+		Object temp = array[i];
+		array[i] = array[j];
+		array[j] = temp;
+	}
+	
+	public static String[] clone(String[] array) {
+		String[] clone = new String[array.length];
+		
+		for (int ii = 0; ii < array.length; ii++) {
+			clone[ii] = array[ii];
+		}
+		
+		return clone;
 	}
 }
