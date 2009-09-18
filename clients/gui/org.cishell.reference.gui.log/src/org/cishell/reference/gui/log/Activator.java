@@ -2,10 +2,9 @@ package org.cishell.reference.gui.log;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
-
+import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogListener;
 import org.osgi.service.log.LogReaderService;
-import org.osgi.framework.ServiceReference;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -23,17 +22,20 @@ public class Activator extends AbstractUIPlugin {
 		super.start(context);
 		Activator.context = context; 
 		
-		LogListener listener = new LogToFile();
-        ServiceReference ref = context.getServiceReference(LogReaderService.class.getName());
-        LogReaderService reader = (LogReaderService) context.getService(ref);
-        if (reader != null) {
-            reader.addLogListener(listener);   
+		LogListener fileLogListener = new LogToFile();
+        ServiceReference serviceReference =
+        	context.getServiceReference(LogReaderService.class.getName());
+        LogReaderService logReaderService =
+        	(LogReaderService) context.getService(serviceReference);
+        
+        if (logReaderService != null) {
+            logReaderService.addLogListener(fileLogListener);
         }
 	}
 
-	public void stop(BundleContext context) throws Exception {
+	public void stop(BundleContext bundleContext) throws Exception {
 		plugin = null;
-		super.stop(context);
+		super.stop(bundleContext);
 	}
 
 	public static Activator getDefault() {

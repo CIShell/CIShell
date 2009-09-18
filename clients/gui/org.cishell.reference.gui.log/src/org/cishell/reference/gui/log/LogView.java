@@ -16,10 +16,14 @@ package org.cishell.reference.gui.log;
 
 //standard java
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.net.URL;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
@@ -51,12 +55,11 @@ import org.osgi.service.log.LogListener;
 import org.osgi.service.log.LogReaderService;
 import org.osgi.service.log.LogService;
 
-
-/**
- * @author Weixia Huang (huangb@indiana.edu)
- *         Bruce Herr (bh2@bh2.net)
- */
-public class LogView extends ViewPart implements LogListener{    
+public class LogView extends ViewPart implements LogListener {
+	public static final String CONFIGURATION_DIRECTORY = "configuration";
+	public static final String WELCOME_TEXT_FILE_NAME = "Welcome.properties";
+	public static final String GREETING_PROPERTY = "greeting";
+	
 	private static LogView defaultView; 
 	private static Composite parent;	
 	private static StyledText text;
@@ -76,19 +79,22 @@ public class LogView extends ViewPart implements LogListener{
     static {
     	Display.getDefault().syncExec(new Runnable(){
         	public void run(){
-            	LOG_ERROR_COLOR = Display.getDefault().getSystemColor(SWT.COLOR_RED);
-            	LOG_WARNING_COLOR = new Color(Display.getDefault(), 255, 127, 0); //orange
-            	LOG_INFO_COLOR = Display.getDefault().getSystemColor(SWT.COLOR_BLACK);
-                LOG_DEBUG_COLOR = new Color(Display.getDefault(), 150, 150, 150); //gray
+            	LOG_ERROR_COLOR =
+            		Display.getDefault().getSystemColor(SWT.COLOR_RED);
+            	// Orange.
+            	LOG_WARNING_COLOR =
+            		new Color(Display.getDefault(), 255, 127, 0);
+            	LOG_INFO_COLOR =
+            		Display.getDefault().getSystemColor(SWT.COLOR_BLACK);
+            	// Gray.
+                LOG_DEBUG_COLOR =
+                	new Color(Display.getDefault(), 150, 150, 150);
                                
                 URL_COLOR = Display.getDefault().getSystemColor(SWT.COLOR_BLUE);
             }
         });
     }
-
-    /**
-     * Constructor
-     */
+    
     public LogView() {
     	defaultView = this;
     	
@@ -103,12 +109,11 @@ public class LogView extends ViewPart implements LogListener{
             currentLevel = LogService.LOG_INFO;
         }
 */
-        colorMapping = new HashMap();
-        colorMapping.put(""+LogService.LOG_DEBUG, LOG_DEBUG_COLOR);
-        colorMapping.put(""+LogService.LOG_INFO, LOG_INFO_COLOR);
-        colorMapping.put(""+LogService.LOG_WARNING, LOG_WARNING_COLOR);
-        colorMapping.put(""+LogService.LOG_ERROR, LOG_ERROR_COLOR);
-
+        this.colorMapping = new HashMap();
+        this.colorMapping.put("" + LogService.LOG_DEBUG, LOG_DEBUG_COLOR);
+        this.colorMapping.put("" + LogService.LOG_INFO, LOG_INFO_COLOR);
+        this.colorMapping.put("" + LogService.LOG_WARNING, LOG_WARNING_COLOR);
+        this.colorMapping.put("" + LogService.LOG_ERROR, LOG_ERROR_COLOR);
     }
 
     public static LogView getDefault() {
@@ -119,19 +124,18 @@ public class LogView extends ViewPart implements LogListener{
      * @see org.eclipse.ui.part.WorkbenchPart#createPartControl(org.eclipse.swt.widgets.Composite)
      */
     public void createPartControl(Composite parent) {
-   	
     	LogView.parent = parent;
-        text = new StyledText(parent,
+        this.text = new StyledText(parent,
                 SWT.BORDER | SWT.V_SCROLL | SWT.WRAP | SWT.READ_ONLY);
-        text.setEditable(false);
-        text.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
-        text.getCaret().setVisible(false);
+        this.text.setEditable(false);
+        this.text.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
+        this.text.getCaret().setVisible(false);
         
-        //handle url
-        urlListener = new URLClickedListener();
-        text.addMouseListener(urlListener);
-        urlCursorListener = new URLMouseCursorListener();
-        text.addMouseMoveListener(urlCursorListener);
+        // Handle URL.
+        this.urlListener = new URLClickedListener();
+        this.text.addMouseListener(this.urlListener);
+        this.urlCursorListener = new URLMouseCursorListener();
+        this.text.addMouseMoveListener(this.urlCursorListener);
         
         //add copy context menu when hover a block of text and right click the mouse
         Display display = Display.getDefault();
@@ -166,20 +170,57 @@ public class LogView extends ViewPart implements LogListener{
          //Get LogReaderService through BundleContext
          //Add itself to the LogReaderService as a LogListener
          BundleContext context = Activator.getContext();
-         ServiceReference ref = context.getServiceReference(LogReaderService.class.getName());
-         LogReaderService reader = (LogReaderService) context.getService(ref);
-         if (reader != null) {
-        	 reader.addLogListener(this);   
+         ServiceReference logReaderServiceReference =
+         	context.getServiceReference(LogReaderService.class.getName());
+         LogReaderService logReaderService =
+         	(LogReaderService) context.getService(logReaderServiceReference);
+         
+         if (logReaderService != null) {
+        	 logReaderService.addLogListener(this);   
         	 
-        	 Enumeration backLogEntries = reader.getLog();
+        	 Enumeration backLogEntries = logReaderService.getLog();
         	 
         	 while (backLogEntries.hasMoreElements()) {
         	 	LogEntry logEntry = (LogEntry)backLogEntries.nextElement();
         	 	this.logged(logEntry);
         	 }
          }
-         else
+         else {
         	 System.out.println("reader is null");
+         }
+         
+         ServiceReference logServiceReference =
+         	context.getServiceReference(LogService.class.getName());
+         LogService logService =
+         	(LogService)context.getService(logServiceReference);
+         
+         if (logService != null) {
+         	try {
+         		String welcomeTextFilePath = CONFIGURATION_DIRECTORY +
+         									 File.separator +
+         									 WELCOME_TEXT_FILE_NAME;
+         		URL welcomeTextFileURL = new File(welcomeTextFilePath).toURL();
+         		Properties properties = new Properties();
+         		properties.load(welcomeTextFileURL.openStream());
+         		String greetingText =
+         			properties.getProperty(GREETING_PROPERTY, null);
+         		logService.log(LogService.LOG_INFO, greetingText);
+         	} catch (IOException ioException) {
+         		System.err.println("Error reading Welcome properties file: " +
+         						   ioException.getMessage());
+         	}
+         }
+         else {
+         	try {
+         		FileWriter fstream = new FileWriter("WelcomeTextError.txt", true);
+         		BufferedWriter out = new BufferedWriter(fstream);
+         		out.write("The Log Service cannot be found.\r\n");
+         		out.close();
+         	} catch (Exception exception) {
+         		System.err.println("Error writing to file: " +
+         						   exception.getMessage());
+         	}
+         }
     }
 
     /**
