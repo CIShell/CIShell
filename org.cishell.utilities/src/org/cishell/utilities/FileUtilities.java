@@ -11,10 +11,17 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class FileUtilities {
-	// Return a File pointing to the directory specified in temporaryDirectoryPath,
-    // creating the directory if it doesn't already exist.
-    private static File createTemporaryDirectory(String temporaryDirectoryPath) {
-    	return ensureDirectoryExists(temporaryDirectoryPath + File.separator + "temp");
+	public static final int READ_TEXT_FILE_BUFFER_SIZE = 1024;
+	
+	/*
+	 * Return a File pointing to the directory specified in
+	 *  temporaryDirectoryPath, creating the directory if it doesn't
+	 *  already exist.
+	 */
+    private static File createTemporaryDirectory(
+    		String temporaryDirectoryPath) {
+    	return ensureDirectoryExists(
+    		temporaryDirectoryPath + File.separator + "temp");
     }
     
     // Attempt to create a temporary file on disk whose name is passed in.
@@ -28,9 +35,10 @@ public class FileUtilities {
     	File temporaryFile;
     	
     	try {
-    		temporaryFile = File.createTempFile("NWB-Session-" + temporaryFileName,
-    											"." + temporaryFileExtension,
-    											temporaryDirectory);
+    		temporaryFile =
+    			File.createTempFile("NWB-Session-" + temporaryFileName,
+    								"." + temporaryFileExtension,
+    								temporaryDirectory);
     	}
     	catch (IOException e) {
     		// We couldn't make the temporary file in the temporary directory
@@ -142,6 +150,28 @@ public class FileUtilities {
 		boolean fileIsEmpty = ( firstLine == null );
 		return fileIsEmpty;
 	}
+    
+    /*
+     * This is basically copied off of:
+     *  http://www.javazoid.com/foj_file.html
+     */
+    public static String readEntireTextFile(File file)
+    		throws IOException {
+    	StringBuffer readTextStringBuffer = new StringBuffer();
+    	BufferedReader fileReader = new BufferedReader(
+    		new FileReader(file));
+    	char[] readInCharacters = new char[1];
+    	int readCharacterCount = fileReader.read(readInCharacters);
+    	
+    	while (readCharacterCount > -1) {
+    		readTextStringBuffer.append(String.valueOf(readInCharacters));
+    		readCharacterCount = fileReader.read(readInCharacters);
+    	}
+    	
+    	fileReader.close();
+    	
+    	return readTextStringBuffer.toString();
+    }
     
     private static File ensureDirectoryExists(String directoryPath) {
     	File directory = new File(directoryPath);
