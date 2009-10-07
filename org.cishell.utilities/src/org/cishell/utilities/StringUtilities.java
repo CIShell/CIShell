@@ -1,9 +1,11 @@
 package org.cishell.utilities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StringUtilities {
-	public static String implodeStringArray(String[] stringArray, String separator) {
+	public static String implodeStringArray(String[] stringArray,
+											String separator) {
 		final int stringArrayLength = stringArray.length;
 		StringBuffer workingResultString = new StringBuffer();
 
@@ -32,5 +34,31 @@ public class StringUtilities {
 		}
 		
 		return workingResultString.toString();
+	}
+	
+	public static String[] filterStringsByPattern(String[] stringsToFilter,
+												  String pattern) {
+		ArrayList filteredStrings = new ArrayList();
+		
+		for (int ii = 0; ii < stringsToFilter.length; ii++) {
+			if (!stringsToFilter[ii].matches(pattern)) {
+				filteredStrings.add(stringsToFilter[ii]);
+			}
+		}
+		
+		return (String[])filteredStrings.toArray(new String[0]);
+	}
+	
+	public static String[] filterEmptyStrings(String[] stringsToFilter) {
+		// TODO: This maybe should use filterStringsByPattern?
+		ArrayList filteredStrings = new ArrayList();
+		
+		for (int ii = 0; ii < stringsToFilter.length; ii++) {
+			if (!stringsToFilter[ii].equals("")) {
+				filteredStrings.add(stringsToFilter[ii]);
+			}
+		}
+		
+		return (String[])filteredStrings.toArray(new String[0]);
 	}
 }
