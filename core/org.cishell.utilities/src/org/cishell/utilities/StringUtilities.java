@@ -54,7 +54,7 @@ public class StringUtilities {
 		ArrayList filteredStrings = new ArrayList();
 		
 		for (int ii = 0; ii < stringsToFilter.length; ii++) {
-			if (!stringsToFilter[ii].equals("")) {
+			if (!"".equals(stringsToFilter[ii])) {
 				filteredStrings.add(stringsToFilter[ii]);
 			}
 		}
