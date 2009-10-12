@@ -6,10 +6,9 @@ import java.io.IOException;
 import org.osgi.service.log.LogService;
 
 public class FileUtil {
-
 	private static int uniqueIntForTempFile = 1;
 	
-    public static File getTempFile(String fileName, String extension, LogService logger){
+    public static File getTempFile(String fileName, String extension, LogService logger) {
     	File tempFile;
     
     	if (fileName == null || fileName.equals("")) {

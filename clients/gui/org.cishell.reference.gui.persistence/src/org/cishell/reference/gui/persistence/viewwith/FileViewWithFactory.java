@@ -71,6 +71,7 @@ public class FileViewWithFactory implements AlgorithmFactory, ParameterMutator {
                 
             }});
 	    
+        //TODO: what the hell?
 		System.err.println(definition.getID());
 		
 		String[] defValStringArray = null; //doesn't actually work yet...
@@ -113,7 +114,7 @@ public class FileViewWithFactory implements AlgorithmFactory, ParameterMutator {
 		}
 		
 		
-		AttributeDefinition ad = new BasicAttributeDefinition("viewWith", "View file as", "Type of viewer", AttributeDefinition.STRING /*string*/, 0, defValStringArray/*String[] defaultValue*/, null /*validator*/, myOptionLabels, myOptionValues);
+		AttributeDefinition ad = new BasicAttributeDefinition("viewWith", "View file as", "Type of viewer", AttributeDefinition.STRING, 0, defValStringArray, null, myOptionLabels, myOptionValues);
 		definition.addAttributeDefinition(ObjectClassDefinition.REQUIRED, ad);
 
 		return definition;
