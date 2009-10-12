@@ -426,8 +426,6 @@ public class FileViewer {
 	private final static class DataViewer implements Runnable {
 		public static final String VIEW_DIALOG_TITLE = "View";
 		private Shell shellWindow;
-		/*private boolean isSaved;
-		private File outputFile;*/
 		private Converter selectedConverter;
 		private Data data;
 		private Converter[] converters;
@@ -470,8 +468,6 @@ public class FileViewer {
 				this.ciShellContext,
 				this.logger);
 			viewDataChooser.open();
-			/*isSaved = viewDataChooser.isSaved();
-			outputFile = viewDataChooser.getOutputFile();*/
 			this.selectedConverter = viewDataChooser.getSelectedConverter();
 		}
 	}
