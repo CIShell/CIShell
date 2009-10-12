@@ -7,7 +7,6 @@ import org.cishell.framework.CIShellContext;
 import org.cishell.framework.data.Data;
 import org.cishell.framework.data.DataProperty;
 import org.cishell.reference.gui.persistence.FileUtil;
-import org.cishell.reference.gui.persistence.view.ViewDataChooser;
 import org.cishell.reference.gui.persistence.view.core.exceptiontypes.ConvertDataForViewingException;
 import org.cishell.reference.gui.persistence.view.core.exceptiontypes.FileViewingException;
 import org.cishell.reference.gui.persistence.view.core.exceptiontypes.NoProgramFoundException;
@@ -39,8 +38,8 @@ public class FileViewer {
 	public static void viewDataFile(Data data,
 									CIShellContext ciShellContext,
 									DataConversionService conversionManager)
-			throws ConversionException, FileViewingException {
-		viewDataFileWithProgram(data, null, ciShellContext, conversionManager);
+			throws FileViewingException {
+		viewDataFileWithProgram(data, "", ciShellContext, conversionManager);
 	}
 	
 	public static void viewDataFileWithProgram(
@@ -134,7 +133,7 @@ public class FileViewer {
 			FileWithExtension fileWithExtension, String customFileExtension)
 			throws FileViewingException {
 		try {
-			final Program program = selectProgramForFileExtension(
+			final Program program = selectChosenProgramForFileExtension(
 				fileWithExtension.fileExtension, customFileExtension);
 
 			executeProgramWithFile(program, fileWithExtension.file);
@@ -326,37 +325,41 @@ public class FileViewer {
 		}
 	}
 	
-	private static Program selectProgramForFileExtension(
-			final String fileExtension, final String customFileExtension)
+	private static Program selectChosenProgramForFileExtension(
+			final String defaultFileExtension,
+			final String customFileExtension)
 			throws NoProgramFoundException {
 		String chosenFileExtension = null;
 		
-		if ((customFileExtension == null) || customFileExtension.equals("")) {
-			chosenFileExtension = fileExtension;
+		if (customFileExtension.equals("")) {
+			chosenFileExtension = defaultFileExtension;
 		} else {
 			chosenFileExtension = customFileExtension;
 		}
 		
-		final Program[] programHolder = new Program[1];
+		Program chosenProgram =
+			getProgramForFileExtension(chosenFileExtension);
 		
-		Display.getDefault().syncExec(new Runnable() {
-			public void run() {
-				programHolder[0] =
-					Program.findProgram(fileExtension);
-			}
-		});
-		
-		Program program = programHolder[0];
-		
-		if (program != null) {
-			return program;
+		if (chosenProgram != null) {
+			return chosenProgram;
 		} else {
-			String exceptionMessage =
-				"You do not have a valid viewer for the ." +
-				chosenFileExtension +
-				"file installed.";
-						
-			throw new NoProgramFoundException(exceptionMessage);
+			/*
+			 * The chosen program doesn't exist, so try to get the
+			 *  default viewer.
+			 */
+			Program defaultProgram = 
+				getProgramForFileExtension(defaultFileExtension);
+			
+			if (defaultProgram != null) {
+				return defaultProgram;
+			} else {
+				String exceptionMessage =
+					"You do not have a valid viewer for the ." +
+					chosenFileExtension +
+					"file installed.";
+					
+				throw new NoProgramFoundException(exceptionMessage);
+			}
 		}
 	}
 	
@@ -421,6 +424,20 @@ public class FileViewer {
 			throw new UserCanceledDataViewSelectionException(
 				exceptionMessage);
 		}
+	}
+	
+	private static Program getProgramForFileExtension(
+			final String fileExtension) {
+		final Program[] programHolder = new Program[1];
+		
+		Display.getDefault().syncExec(new Runnable() {
+			public void run() {
+				programHolder[0] =
+					Program.findProgram(fileExtension);
+			}
+		});
+		
+		return programHolder[0];
 	}
 	
 	private final static class DataViewer implements Runnable {

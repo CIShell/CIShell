@@ -6,42 +6,44 @@ import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
 import org.cishell.framework.algorithm.AlgorithmExecutionException;
 import org.cishell.framework.data.Data;
+import org.cishell.framework.data.DataProperty;
 import org.cishell.reference.gui.persistence.view.core.FileViewer;
-import org.cishell.service.conversion.ConversionException;
+import org.cishell.reference.gui.persistence.view.core.exceptiontypes.FileViewingException;
 import org.cishell.service.conversion.DataConversionService;
+import org.osgi.service.log.LogService;
 
 public class FileView implements Algorithm {
 	private Data[] dataToView;
 	private CIShellContext ciShellContext;
 	private DataConversionService conversionManager;
+	private LogService logger;
 
-	public FileView(Data[] data, Dictionary parameters, CIShellContext context) {
+	public FileView(
+			Data[] data, Dictionary parameters, CIShellContext context) {
 		this.dataToView = data;
 		this.ciShellContext = context;
 
-		this.conversionManager = (DataConversionService) context
-				.getService(DataConversionService.class.getName());
+		this.conversionManager = (DataConversionService)context.getService(
+			DataConversionService.class.getName());
+		this.logger = (LogService)context.getService(LogService.class.getName());
 	}
 
-	
-	// Show the contents of a file to the user.
 	public Data[] execute() throws AlgorithmExecutionException {
-		try {
-			for (int ii = 0; ii < this.dataToView.length; ii++) {
+		for (int ii = 0; ii < this.dataToView.length; ii++) {
+			try {
 				FileViewer.viewDataFile(this.dataToView[ii],
 										this.ciShellContext,
 										this.conversionManager);
+			} catch (FileViewingException fileViewingException) {
+				String logMessage =
+    				"Error: Unable to view data \"" +
+    				this.dataToView[ii].getMetadata().get(DataProperty.LABEL) +
+    				"\".";
+    			
+    			this.logger.log(LogService.LOG_ERROR, logMessage);
 			}
-			
-			return null;
-		} catch (ConversionException conversionException) {
-			String exceptionMessage = "Error: Unable to view data:\n    " +
-									  conversionException.getMessage();
-			
-			throw new AlgorithmExecutionException(
-				exceptionMessage, conversionException);
-		} catch (Throwable thrownObject) {
-			throw new AlgorithmExecutionException(thrownObject);
 		}
+		
+		return new Data[0];
 	}
 }
