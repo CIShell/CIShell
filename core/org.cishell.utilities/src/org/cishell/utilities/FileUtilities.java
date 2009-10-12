@@ -3,10 +3,13 @@ package org.cishell.utilities;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.channels.FileChannel;
 
 import javax.imageio.ImageIO;
 
@@ -171,6 +174,55 @@ public class FileUtilities {
     	fileReader.close();
     	
     	return readTextStringBuffer.toString();
+    }
+    
+    public static void copyFile(File sourceFile, File targetFile)
+    		throws FileCopyingException {
+		try {
+			FileInputStream inputStream = new FileInputStream(sourceFile);
+			FileOutputStream outputStream = new FileOutputStream(targetFile);
+
+			FileChannel readableChannel = inputStream.getChannel();
+			FileChannel writableChannel = outputStream.getChannel();
+
+			writableChannel.truncate(0);
+			writableChannel.transferFrom(
+				readableChannel, 0, readableChannel.size());
+			inputStream.close();
+			outputStream.close();
+		} catch (IOException ioException) {
+			String exceptionMessage =
+				"An error occurred when copying from the file \"" +
+				sourceFile.getAbsolutePath() +
+				"\" to the file \"" +
+				targetFile.getAbsolutePath() +
+				"\".";
+			
+			throw new FileCopyingException(exceptionMessage, ioException);
+		}
+	}
+    
+    public static File createTemporaryFileCopy(
+    		File sourceFile, String fileName, String fileExtension)
+    		throws FileCopyingException {
+    	try {
+    		File temporaryTargetFile =
+    			createTemporaryFileInDefaultTemporaryDirectory(
+    				fileName, fileExtension);
+    		
+    		copyFile(sourceFile, temporaryTargetFile);
+    		
+    		return temporaryTargetFile;
+    	} catch (IOException temporaryFileCreationException) {
+    		String exceptionMessage =
+    			"An error occurred when trying to create the temporary file " +
+    			"with file name \"" + fileName + "\" " +
+    			"and file extension \"" + fileExtension + "\" " +
+    			"for copying file \"" + sourceFile.getAbsolutePath() + "\".";
+    		
+    		throw new FileCopyingException(
+    			exceptionMessage, temporaryFileCreationException);
+    	}
     }
     
     private static File ensureDirectoryExists(String directoryPath) {
