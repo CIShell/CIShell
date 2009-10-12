@@ -26,20 +26,22 @@ import org.osgi.service.log.LogService;
  * @author Felix Terkhorn (terkhorn@gmail.com), Weixia Huang (huangb@indiana.edu)
  */
 public class FileViewWith implements Algorithm {
-    Data[] data;
-    Dictionary parameters;
-    CIShellContext context;
-    DataConversionService conversionManager;
-    static GUIBuilderService guiBuilder;
-    LogService logger;
-    Program program;
-    Program programTwo;
-    Program programThree;
-    Program programFour; //TC181
-    File tempFile;
+	public static final String VIEW_WITH_PARAMETER_KEY = "viewWith";
+	
+    private Data[] dataToView;
+    private Dictionary parameters;
+    private CIShellContext context;
+    private DataConversionService conversionManager;
+    private static GUIBuilderService guiBuilder;
+    private LogService logger;
+    private Program textProgram;
+    private Program wordProgram;
+    private Program webBrowserProgram;
+    private Program spreadsheetProgram;
+    private File temporaryFile;
      
     public FileViewWith(Data[] data, Dictionary parameters, CIShellContext context) {
-        this.data = data;
+        this.dataToView = data;
         this.parameters = parameters;
         this.context = context;
         
@@ -50,150 +52,192 @@ public class FileViewWith implements Algorithm {
         guiBuilder = (GUIBuilderService)context.getService(GUIBuilderService.class.getName());
 
     }
+    
     public File getTempFile(){
     	File tempFile;
     
     	String tempPath = System.getProperty("java.io.tmpdir");
-    	File tempDir = new File(tempPath+File.separator+"temp");
-    	if(!tempDir.exists())
+    	File tempDir = new File(tempPath + File.separator + "temp");
+    	
+    	if (!tempDir.exists()) {
     		tempDir.mkdir();
-    	try{
+    	}
+    	
+    	try {
     		tempFile = File.createTempFile("xxx-Session-", ".txt", tempDir);
 		
-    	}catch (IOException e){
-    		logger.log(LogService.LOG_ERROR, e.toString(), e);
-    		tempFile = new File (tempPath+File.separator+"temp"+File.separator+"temp.txt");
+    	} catch (IOException ioException) {
+    		logger.log(
+    			LogService.LOG_ERROR, ioException.toString(), ioException);
+    		
+    		String separator = File.separator;
+    		String temporaryFileName =
+    			tempPath + separator + "temp" + separator + "temp.txt";
+    		tempFile = new File(temporaryFileName);
 
     	}
+    	
     	return tempFile;
     }
 
     public Data[] execute() throws AlgorithmExecutionException {
-        boolean lastSaveSuccessful = false;
+    	// TODO: Refactor this code so it and FileView use the same code.
+        boolean temporaryFileWasCreated = false;
         String format;
         
-        String viewWith = (String) parameters.get("viewWith");
+        String viewWithType = (String)parameters.get(VIEW_WITH_PARAMETER_KEY);
         
         Display display;
         IWorkbenchWindow[] windows;
         final Shell parentShell;
         
         windows = PlatformUI.getWorkbench().getWorkbenchWindows();
-        if (windows.length == 0){
+        
+        if (windows.length == 0) {
         	return null;
         }
+        
         parentShell = windows[0].getShell();
         display = PlatformUI.getWorkbench().getDisplay();
-        tempFile = getTempFile();
+        temporaryFile = getTempFile();
                
-        for (int i = 0; i < data.length; i++){
-        	Object theData = data[i].getData();
-        	format = data[i].getFormat();
+        for (int ii = 0; ii < this.dataToView.length; ii++){
+        	Data data = this.dataToView[ii];
+        	Object theData = data.getData();
+        	format = data.getFormat();
+        	
         	if (theData instanceof File ||
         		format.startsWith("file:text/") || 
         		format.startsWith("file-ext:")){
-           		copy((File)data[i].getData(), tempFile);
-        		lastSaveSuccessful = true;    
-        	}else{
-        		final Converter[] converters = conversionManager.findConverters(data[i], "file-ext:*");
+           		copy((File)data.getData(), temporaryFile);
+        		temporaryFileWasCreated = true;    
+        	} else {
+        		final Converter[] converters =
+        			conversionManager.findConverters(data, "file-ext:*");
 
-            	if (converters.length < 1) {
-            		guiBuilder.showError("No Converters", 
-            				"No valid converters for data type: " + 
-            				data[i].getData().getClass().getName(), 
-            				"Please install a plugin that will save the data type to a file");
-            	}
-            	else if (converters.length == 1){
-             		//If length=1, use the unique path to save it directly 
-            		//and bring the text editor.
+        		if (converters.length == 1) {
+             		/*
+             		 * If length is 1, use the unique path to save it directly 
+            		 *  and bring the text editor.
+            		 */
+        		
             		try {
-	            	    Data newData = converters[0].convert(data[i]);
-	                    copy((File)newData.getData(), tempFile);     
-	            		lastSaveSuccessful = true; 
-            		} catch (ConversionException e) {
-            			this.logger.log(LogService.LOG_WARNING, "Warning: Unable to convert to target save format (" + e.getMessage() + ").  Will attempt to use other available converters.", e);
+	            	    Data newData = converters[0].convert(data);
+	                    copy((File)newData.getData(), temporaryFile);     
+	            		temporaryFileWasCreated = true; 
+            		} catch (ConversionException conversionException) {
+            			String warningMessage =
+            				"Warning: Unable to convert to target save " +
+            				"format (" + conversionException.getMessage() +
+            				").  Will attempt to use other " +
+            				"available converters.";
+            			this.logger.log(LogService.LOG_WARNING,
+            							warningMessage,
+            							conversionException);
             		}
-            	}
-            	else {
+            	} else if (converters.length > 1) {
              		if (!parentShell.isDisposed()) {
              			try {
-            			DataViewer dataViewer = new DataViewer(parentShell, data[i], converters);
-            			display.syncExec(dataViewer);
+            				DataViewer dataViewer =
+            					new DataViewer(parentShell, data, converters);
+            				display.syncExec(dataViewer);
              			
-             			lastSaveSuccessful = dataViewer.isSaved;
-            			tempFile = dataViewer.theFile;
-             			} catch (Throwable e1) {
-             				throw new AlgorithmExecutionException(e1);
+             				temporaryFileWasCreated = dataViewer.isSaved;
+            				temporaryFile = dataViewer.theFile;
+             			} catch (Throwable thrownObject) {
+             				throw new AlgorithmExecutionException(
+             					thrownObject);
              			}
             		}
             	}
+            	else {
+            		String errorMessage =
+            			"No valid converters for data type: " + 
+            			data.getData().getClass().getName();
+            		String errorDetail =
+            			"Please install a plugin that will save the " +
+            			"data type to a file";
+            		guiBuilder.showError(
+            			"No Converters",  errorMessage, errorDetail);
+            	}
         	}
             
-            
+            //TODO: holy code duplication, batman!
             Display.getDefault().syncExec(new Runnable() {
                 public void run() {
-                    program = Program.findProgram("txt");
+                    textProgram = Program.findProgram("txt");
                 }});
  
             Display.getDefault().syncExec(new Runnable() {
                 public void run() {
-                    programTwo = Program.findProgram("doc");
+                    wordProgram = Program.findProgram("doc");
                 }});
             
             Display.getDefault().syncExec(new Runnable() {
                 public void run() {
-                    programThree = Program.findProgram("htm");
+                    webBrowserProgram = Program.findProgram("htm");
                 }});
-            //TC181
+
             Display.getDefault().syncExec(new Runnable() {
                 public void run() {
-                    programFour = Program.findProgram("csv");
+                    spreadsheetProgram = Program.findProgram("csv");
                 }});
             
-            //TC181
-            if (program == null && programTwo == null && programThree == null && programThree == null) {
-            		guiBuilder.showError("No Viewers for TXT, DOC, or HTM", 
-    					"No valid viewers for .txt, .doc, or .htm files. " +
-    					"The file is located at: "+tempFile.getAbsolutePath(), 
-    					"Unable to open default text viewer.  File is located at: "+
-    					tempFile.getAbsolutePath());
+            if ((textProgram == null) &&
+            		(wordProgram == null) &&
+            		(webBrowserProgram == null) &&
+            		(webBrowserProgram == null)) {
+            	String errorTitle = "No Viewers for TXT, DOC, or HTM";
+            	String errorMessage =
+            		"No valid viewers for .txt, .doc, or .htm files. " +
+    				"The file is located at: " + temporaryFile.getAbsolutePath();
+            	String errorDetail =
+            		"Unable to open default text viewer.  " +
+            		"File is located at: " +
+    				temporaryFile.getAbsolutePath();
+            	guiBuilder.showError(
+            		errorTitle, errorMessage, errorDetail);
             }
             else {
-            	if (lastSaveSuccessful == true) { 
-            		if (viewWith.equals("txt")) {
+            	if (temporaryFileWasCreated) { 
+            		final String filePath = temporaryFile.getAbsolutePath();
+            		
+            		//TODO: . . . I already said "holy code duplication batman!", didn't I?
+            		if (viewWithType.equals("txt")) {
             			Display.getDefault().syncExec(new Runnable() {
             				public void run() {
-            					program.execute(tempFile.getAbsolutePath());
-            				}});
-            		} else if (viewWith.equals("doc")) {
+            					textProgram.execute(filePath);
+            				}
+            			});
+            		} else if (viewWithType.equals("doc")) {
             			Display.getDefault().syncExec(new Runnable() {
             				public void run() {
-            					programTwo.execute(tempFile.getAbsolutePath());
-            				}});
-            		} else if (viewWith.equals("html")) {
+            					wordProgram.execute(filePath);
+            				}
+            			});
+            		} else if (viewWithType.equals("html")) {
             			Display.getDefault().syncExec(new Runnable() {
             				public void run() {
-            					programThree.execute(tempFile.getAbsolutePath());
-            				}});
-            		//TC181	
-            		} else if (viewWith.equals("csv")) {
+            					webBrowserProgram.execute(filePath);
+            				}
+            			});
+            		} else if (viewWithType.equals("csv")) {
             			Display.getDefault().syncExec(new Runnable() {
             				public void run() {
-            					programFour.execute(tempFile.getAbsolutePath());
-            				}});
+            					spreadsheetProgram.execute(filePath);
+            				}
+            			});
             		} else {
-            			// Try to run it with txt viewer...
             			Display.getDefault().syncExec(new Runnable() {
             				public void run() {
-            					program.execute(tempFile.getAbsolutePath());
-            				}});
+            					textProgram.execute(filePath);
+            				}
+            			});
             		}
             	}
             }
-
-        	
-        	
         }
+        
         return null;   
     }
     
@@ -209,6 +253,7 @@ public class FileViewWith implements Algorithm {
     		writableChannel.transferFrom(readableChannel, 0, readableChannel.size());
     		fis.close();
     		fos.close();
+    		
     		return true;
     	}
     	catch (IOException ioe) {
@@ -217,7 +262,7 @@ public class FileViewWith implements Algorithm {
     	}
     }
     
-	final class DataViewer  implements Runnable {
+	final class DataViewer implements Runnable {
 		Shell shell;
 		boolean isSaved;
 		Data theData;

@@ -15,8 +15,8 @@ import org.eclipse.swt.widgets.Shell;
  */
 public class ViewWithDataChooser extends SaveDataChooser {
 	private File tempFile;
-	boolean isSaved = false;
-	Data theData;
+	private boolean isSaved = false;
+	private Data theData;
 	
 	public ViewWithDataChooser(String title, File tempFile, Shell parent, 
 					Data data, Converter[] converters, CIShellContext context){
@@ -30,10 +30,12 @@ public class ViewWithDataChooser extends SaveDataChooser {
 		try {
 			getShell().setVisible(false);
 	        final Converter converter = converterArray[selectedIndex];
-	        Data newData = converter.convert(theData);    
+	        Data newData = converter.convert(theData);
+	        //TODO: hey look, yet another copy method
 	        isSaved = FileViewWith.copy((File)newData.getData(), tempFile);
 	      	close(true);
 		} catch (ConversionException e) {
+			//TODO: RuntimeExceptioN?!?!?!
 			throw new RuntimeException("Error: Unable to view data:\n    " + e.getMessage(), e);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
