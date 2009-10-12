@@ -1,4 +1,4 @@
-package org.cishell.reference.gui.persistence.view;
+package org.cishell.reference.gui.persistence.view.core;
 
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.data.Data;
