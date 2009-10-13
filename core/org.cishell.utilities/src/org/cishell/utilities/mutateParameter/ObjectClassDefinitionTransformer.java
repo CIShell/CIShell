@@ -21,8 +21,8 @@ public class ObjectClassDefinitionTransformer {
 	public static final List ATOMIC_ATTRIBUTE_DEFINITION_FILTERS;
 	static {
 		List l = new ArrayList();
-		l.add(ObjectClassDefinition.REQUIRED);
-		l.add(ObjectClassDefinition.OPTIONAL);
+		l.add(new Integer(ObjectClassDefinition.REQUIRED));
+		l.add(new Integer(ObjectClassDefinition.OPTIONAL));
 		ATOMIC_ATTRIBUTE_DEFINITION_FILTERS = Collections.unmodifiableList(l);
 	}
 
