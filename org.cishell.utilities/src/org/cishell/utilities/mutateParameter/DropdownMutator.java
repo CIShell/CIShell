@@ -97,8 +97,8 @@ public class DropdownMutator {
 				swappedList.add(listIt.next());
 			}
 
-			swappedList.set(0, (String) list.get(targetIndex));
-			swappedList.set(targetIndex, (String) list.get(0));	
+			swappedList.set(0, list.get(targetIndex));
+			swappedList.set(targetIndex, list.get(0));	
 
 			return swappedList;
 		} else {
