@@ -16,7 +16,7 @@ public class ArrayUtilities {
 	
 	public static void swapFirstMatchToFront(Object[] array, List targets) {
 		for (Iterator targetsIt = targets.iterator(); targetsIt.hasNext();) {
-			Object target = (Object) targetsIt.next();
+			Object target = targetsIt.next();
 			int index = ArrayUtilities.indexOf(array, target);
 			
 			if ( index != -1 ) {

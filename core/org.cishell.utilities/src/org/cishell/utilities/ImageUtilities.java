@@ -24,4 +24,4 @@ public class ImageUtilities {
 		
 		return bufferedImage;
 	}
-};
+}

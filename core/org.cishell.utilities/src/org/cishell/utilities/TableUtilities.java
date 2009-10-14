@@ -2,10 +2,12 @@ package org.cishell.utilities;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import prefuse.data.Schema;
 import prefuse.data.Table;
+import prefuse.data.Tuple;
 import prefuse.util.collections.IntIterator;
 
 public class TableUtilities {
@@ -231,6 +233,9 @@ public class TableUtilities {
 												possibleNumberClasses);
 	}
 	
+	/**
+	 * @deprecated Replace calls with schema.instantiate().
+	 */
 	public static Table createTableUsingSchema(Schema tableSchema) {
 		final int numTableColumns = tableSchema.getColumnCount();
 		Table table = new Table();
@@ -291,6 +296,18 @@ public class TableUtilities {
 			}
 		}
 
+		return newTable;
+	}
+
+	public static Table copyTable(Table oldTable) {
+		Schema oldSchema = oldTable.getSchema();
+		Table newTable = oldSchema.instantiate();
+		
+		for (Iterator rowIt = oldTable.tuples(); rowIt.hasNext();) {
+			Tuple row = (Tuple) rowIt.next();			
+			newTable.addTuple(row);
+		}		
+		
 		return newTable;
 	}
 }

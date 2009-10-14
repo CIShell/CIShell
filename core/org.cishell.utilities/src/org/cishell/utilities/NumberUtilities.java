@@ -20,7 +20,7 @@ public class NumberUtilities {
 				throw new NumberFormatException(EMPTY_CELL_MESSAGE);
 			}
 			else {
-				return new Double((double)objectAsShortArray[0]);
+				return new Double(objectAsShortArray[0]);
 			}
 		}
 		else if (object instanceof Short[]) {
@@ -40,7 +40,7 @@ public class NumberUtilities {
 				throw new NumberFormatException(EMPTY_CELL_MESSAGE);
 			}
 			else {
-				return new Double((double)objectAsIntArray[0]);
+				return new Double(objectAsIntArray[0]);
 			}
 		}
 		else if (object instanceof Integer[]) {
@@ -60,7 +60,7 @@ public class NumberUtilities {
 				throw new NumberFormatException(EMPTY_CELL_MESSAGE);
 			}
 			else {
-				return new Double((double)objectAsLongArray[0]);
+				return new Double(objectAsLongArray[0]);
 			}
 		}
 		else if (object instanceof Long[]) {
@@ -80,7 +80,7 @@ public class NumberUtilities {
 				throw new NumberFormatException(EMPTY_CELL_MESSAGE);
 			}
 			else {
-				return new Double((double)objectAsFloatArray[0]);
+				return new Double(objectAsFloatArray[0]);
 			}
 		}
 		else if (object instanceof Float[]) {
