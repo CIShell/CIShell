@@ -12,7 +12,9 @@ import java.util.GregorianCalendar;
  * @copyright 2004 Paul Hill
  */
 public class FAQCalendar extends GregorianCalendar {  
-    /**
+	private static final long serialVersionUID = 1L;
+
+	/**
      * All minutes have this many milliseconds except the last minute of the day on a day defined with
      * a leap second.
      */
