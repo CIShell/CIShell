@@ -67,12 +67,20 @@ public class StringUtilities {
 	 * Prefuse table columns are typed.  If a column contains a null cell,
 	 *  Prefuse types that column as an array type, and it then represents
 	 *  null values with arrays of length 0.
+	 * To handle this, this method returns:
+	 *  null if the object is actually null or array of length 0;
+	 *  just the first element of the array; or
+	 *  the result of the object's toString method.
 	 */
+	// TODO: Rename to interpretAsString.
+	// TODO: Move these things to TableUtilities.
+	// TODO: Handle all cases, including all primitive array types and
+	//  perhaps primitive box types (i.e. Integer).
 	public static String interpretObjectAsString(Object object) {
 		if (object == null) {
 			return null;
 		} else if (object instanceof String[]) {
-			String[] objectAsStringArray = (String[])object;
+			String[] objectAsStringArray = (String[]) object;
 			
 			if (objectAsStringArray.length == 0) {
 				return null;
