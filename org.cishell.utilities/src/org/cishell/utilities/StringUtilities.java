@@ -61,4 +61,33 @@ public class StringUtilities {
 		
 		return (String[])filteredStrings.toArray(new String[0]);
 	}
+	
+	/*
+	 * This method is really meant to simplify working with Prefuse tables.
+	 * Prefuse table columns are typed.  If a column contains a null cell,
+	 *  Prefuse types that column as an array type, and it then represents
+	 *  null values with arrays of length 0.
+	 */
+	public static String interpretObjectAsString(Object object) {
+		if (object == null) {
+			return null;
+		} else if (object instanceof String[]) {
+			String[] objectAsStringArray = (String[])object;
+			
+			if (objectAsStringArray.length == 0) {
+				return null;
+			} else {
+				return objectAsStringArray[0];
+			}
+		} else {
+			return object.toString();
+		}
+	}
+	
+	// TODO Think about instead using a Pattern, "\s*".  Don't have to though.
+	public static boolean isEmptyOrWhiteSpace(String test) {
+		String trimmed = test.trim();
+		
+		return (trimmed.length() == 0);
+	}
 }
