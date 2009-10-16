@@ -82,7 +82,7 @@ public class DateUtilities {
 													  endDate.getMonth(),
 													  endDate.getDate());
 		
-		return (int)startDateCalendar.diffDayPeriods(endDateCalendar);
+		return (int) startDateCalendar.diffDayPeriods(endDateCalendar);
 	}
 	
 	public static int calculateMonthsBetween(Date startDate, Date endDate) {
