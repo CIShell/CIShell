@@ -10,10 +10,10 @@ import java.util.GregorianCalendar;
 
 // TODO: Fix this class.
 public class DateUtilities {
-	public static final String MONTH_DAY_DATE_FORMAT =
-		"Month-Then-Day Date Format";
-	public static final String DAY_MONTH_DATE_FORMAT =
-		"Day-Then-Month Date Format";
+	public static final String MONTH_DAY_YEAR_DATE_FORMAT =
+		"Month-Day-Year Date Format";
+	public static final String DAY_MONTH_YEAR_DATE_FORMAT =
+		"Day-Month-Year Date Format";
 	
 	public final static double AVERAGE_MILLIS_PER_MONTH =
 		(365.24 * 24 * 60 * 60 * 1000 / 12);
@@ -225,11 +225,11 @@ public class DateUtilities {
 	public static Date parseDate(String dateString, String suggestedDateFormat)
 			throws ParseException {
 		/*System.err.println("suggestedDateFormat: " + suggestedDateFormat);
-		System.err.println("MONTH_DAY_DATE_FORMAT: " + MONTH_DAY_DATE_FORMAT);
-		System.err.println("DAY_MONTH_DATE_FORMAT: " + DAY_MONTH_DATE_FORMAT);*/
-		if (MONTH_DAY_DATE_FORMAT.equals(suggestedDateFormat)) {
+		System.err.println("MONTH_DAY_YEAR_DATE_FORMAT: " + MONTH_DAY_YEAR_DATE_FORMAT);
+		System.err.println("DAY_MONTH_YEAR_DATE_FORMAT: " + DAY_MONTH_YEAR_DATE_FORMAT);*/
+		if (MONTH_DAY_YEAR_DATE_FORMAT.equals(suggestedDateFormat)) {
 			return parseDate(dateString, MONTH_DAY_DATE_FORMATS);
-		} else if (DAY_MONTH_DATE_FORMAT.equals(suggestedDateFormat)) {
+		} else if (DAY_MONTH_YEAR_DATE_FORMAT.equals(suggestedDateFormat)) {
 			return parseDate(dateString, DAY_MONTH_DATE_FORMATS);
 		} else {
 			DateFormat[] dateFormats = new DateFormat[] {
