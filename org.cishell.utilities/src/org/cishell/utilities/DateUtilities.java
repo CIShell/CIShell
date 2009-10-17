@@ -10,6 +10,11 @@ import java.util.GregorianCalendar;
 
 // TODO: Fix this class.
 public class DateUtilities {
+	public static final String MONTH_DAY_DATE_FORMAT =
+		"Month-Then-Day Date Format";
+	public static final String DAY_MONTH_DATE_FORMAT =
+		"Day-Then-Month Date Format";
+	
 	public final static double AVERAGE_MILLIS_PER_MONTH =
 		(365.24 * 24 * 60 * 60 * 1000 / 12);
 	
@@ -170,7 +175,30 @@ public class DateUtilities {
 	}
 	
 	//TODO: These should be sorted so the first format checked is the most likely format, etc...
-	private static final DateFormat[] ACCEPTED_DATE_FORMATS = { 
+	private static final DateFormat[] MONTH_DAY_DATE_FORMATS = { 
+		new SimpleDateFormat("MM-d-yy"),
+		new SimpleDateFormat("MM-d-yyyy"),
+		new SimpleDateFormat("MM-dd-yy"),
+		new SimpleDateFormat("MM-dd-yyyy"),
+		new SimpleDateFormat("MM/d/yy"),
+		new SimpleDateFormat("MM/dd/yy"),
+		new SimpleDateFormat("MM/d/yyyy"),
+		new SimpleDateFormat("MMM/dd/yyyy"),
+		new SimpleDateFormat("MMM-d-yy"),
+		new SimpleDateFormat("MMM-d-yyyy"),
+		new SimpleDateFormat("MMM-dd-yy"),
+		new SimpleDateFormat("MMM-dd-yyyy"),
+		new SimpleDateFormat("MMM/d/yy"),
+		new SimpleDateFormat("MMM/dd/yy"),
+		new SimpleDateFormat("MMM/d/yyyy"),
+		new SimpleDateFormat("MMM/dd/yyyy"),
+		new SimpleDateFormat("yyyy"),
+		DateFormat.getDateInstance(DateFormat.SHORT),
+		DateFormat.getDateInstance(DateFormat.MEDIUM),
+		DateFormat.getDateInstance(DateFormat.LONG),
+	};
+	
+	private static final DateFormat[] DAY_MONTH_DATE_FORMATS = { 
 		DateFormat.getDateInstance(DateFormat.FULL),
 		new SimpleDateFormat("d-MM-yy"),
 		new SimpleDateFormat("d-MM-yyyy"),
@@ -194,11 +222,29 @@ public class DateUtilities {
 		DateFormat.getDateInstance(DateFormat.LONG),
 	};
 	
-	public static Date parseDate(String dateString)
+	public static Date parseDate(String dateString, String suggestedDateFormat)
 			throws ParseException {
-		for (int ii = 0; ii < ACCEPTED_DATE_FORMATS.length; ii++) {
+		/*System.err.println("suggestedDateFormat: " + suggestedDateFormat);
+		System.err.println("MONTH_DAY_DATE_FORMAT: " + MONTH_DAY_DATE_FORMAT);
+		System.err.println("DAY_MONTH_DATE_FORMAT: " + DAY_MONTH_DATE_FORMAT);*/
+		if (MONTH_DAY_DATE_FORMAT.equals(suggestedDateFormat)) {
+			return parseDate(dateString, MONTH_DAY_DATE_FORMATS);
+		} else if (DAY_MONTH_DATE_FORMAT.equals(suggestedDateFormat)) {
+			return parseDate(dateString, DAY_MONTH_DATE_FORMATS);
+		} else {
+			DateFormat[] dateFormats = new DateFormat[] {
+				new SimpleDateFormat(suggestedDateFormat)
+			};
+			
+			return parseDate(dateString, dateFormats);
+		}
+	}
+	
+	public static Date parseDate(String dateString, DateFormat[] dateFormats)
+			throws ParseException {
+		for (int ii = 0; ii < dateFormats.length; ii++) {
 			try {
-				DateFormat format = ACCEPTED_DATE_FORMATS[ii];
+				DateFormat format = dateFormats[ii];
 				format.setLenient(false);
 				Date date = format.parse(dateString);
 				
@@ -221,7 +267,12 @@ public class DateUtilities {
 	}
 	
 	public static Date interpretObjectAsDate(Object object)
-			throws ParseException{
+			throws ParseException {
+		return interpretObjectAsDate(object, "");
+	}
+	
+	public static Date interpretObjectAsDate(Object object, String dateFormat)
+			throws ParseException {
 		final String EMPTY_DATE_MESSAGE = "An empty date was found.";
 		
 		String objectAsString = object.toString();
@@ -303,12 +354,12 @@ public class DateUtilities {
 			}
 		}
 		
-		return parseDate(objectAsString);
+		return parseDate(objectAsString, dateFormat);
 	}
 	
 //	private java.util.Date parseDate(String dateString) 
 //		throws AlgorithmExecutionException {
-//		for (DateFormat format : ACCEPTED_DATE_FORMATS) {
+//		for (DateFormat format : MONTH_DAY_DATE_FORMATS) {
 //			try {
 //				format.setLenient(false);
 //				java.util.Date date = format.parse(dateString);
@@ -333,4 +384,15 @@ public class DateUtilities {
 //			" as a date. Aborting the algorithm.";
 //		throw new AlgorithmExecutionException(exceptionMessage);
 //	}
+	
+	private static Date fixDateYear(Date date) {
+		if (date.getYear() < 1900) {
+			Date fixedDate = (Date)date.clone();
+			fixedDate.setYear(date.getYear() + 1900);
+			
+			return fixedDate;
+		} else {
+			return date;
+		}
+	}
 }
