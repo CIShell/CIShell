@@ -175,7 +175,7 @@ public class DateUtilities {
 	}
 	
 	//TODO: These should be sorted so the first format checked is the most likely format, etc...
-	private static final DateFormat[] MONTH_DAY_DATE_FORMATS = { 
+	private static final DateFormat[] MONTH_DAY_YEAR_DATE_FORMATS = { 
 		new SimpleDateFormat("MM-d-yy"),
 		new SimpleDateFormat("MM-d-yyyy"),
 		new SimpleDateFormat("MM-dd-yy"),
@@ -198,7 +198,7 @@ public class DateUtilities {
 		DateFormat.getDateInstance(DateFormat.LONG),
 	};
 	
-	private static final DateFormat[] DAY_MONTH_DATE_FORMATS = { 
+	private static final DateFormat[] DAY_MONTH_YEAR_DATE_FORMATS = { 
 		DateFormat.getDateInstance(DateFormat.FULL),
 		new SimpleDateFormat("d-MM-yy"),
 		new SimpleDateFormat("d-MM-yyyy"),
@@ -222,15 +222,16 @@ public class DateUtilities {
 		DateFormat.getDateInstance(DateFormat.LONG),
 	};
 	
+	public static Date parseDate(String dateString) throws ParseException {
+		return (parseDate(dateString, MONTH_DAY_YEAR_DATE_FORMATS));
+	}
+	
 	public static Date parseDate(String dateString, String suggestedDateFormat)
 			throws ParseException {
-		/*System.err.println("suggestedDateFormat: " + suggestedDateFormat);
-		System.err.println("MONTH_DAY_YEAR_DATE_FORMAT: " + MONTH_DAY_YEAR_DATE_FORMAT);
-		System.err.println("DAY_MONTH_YEAR_DATE_FORMAT: " + DAY_MONTH_YEAR_DATE_FORMAT);*/
 		if (MONTH_DAY_YEAR_DATE_FORMAT.equals(suggestedDateFormat)) {
-			return parseDate(dateString, MONTH_DAY_DATE_FORMATS);
+			return parseDate(dateString, MONTH_DAY_YEAR_DATE_FORMATS);
 		} else if (DAY_MONTH_YEAR_DATE_FORMAT.equals(suggestedDateFormat)) {
-			return parseDate(dateString, DAY_MONTH_DATE_FORMATS);
+			return parseDate(dateString, DAY_MONTH_YEAR_DATE_FORMATS);
 		} else {
 			DateFormat[] dateFormats = new DateFormat[] {
 				new SimpleDateFormat(suggestedDateFormat)
@@ -359,7 +360,7 @@ public class DateUtilities {
 	
 //	private java.util.Date parseDate(String dateString) 
 //		throws AlgorithmExecutionException {
-//		for (DateFormat format : MONTH_DAY_DATE_FORMATS) {
+//		for (DateFormat format : MONTH_DAY_YEAR_DATE_FORMATS) {
 //			try {
 //				format.setLenient(false);
 //				java.util.Date date = format.parse(dateString);
