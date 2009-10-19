@@ -98,4 +98,31 @@ public class StringUtilities {
 		
 		return (trimmed.length() == 0);
 	}
+	
+	public static int countOccurrencesOfChar(
+			CharSequence characters, char target) {
+		int count = 0;
+		
+		for (int ii = 0; ii < characters.length(); ii++) {
+			if (characters.charAt(ii) == target) {
+				count++;
+			}
+		}
+		
+		return count;
+	}
+	
+	public static String multiply(String target, int count) {
+		if (count < 1) {
+			return "";
+		} else {
+			StringBuffer stringInProgress = new StringBuffer();
+			
+			for (int ii = 0; ii < count; ii ++) {
+				stringInProgress.append(target);
+			}
+			
+			return stringInProgress.toString();
+		}
+	}
 }
