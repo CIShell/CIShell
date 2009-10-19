@@ -119,7 +119,9 @@ public class FileSaver {
         
         String fileLabel = (String)data.getMetadata().get(DataProperty.LABEL);
         String suggestedFileName = FileUtil.extractFileName(fileLabel);
-        dialog.setFileName(suggestedFileName + "." + ext);
+        String cleanedSuggestedFileName =
+        	FileUtil.replaceInvalidFilenameCharacters(suggestedFileName);
+        dialog.setFileName(cleanedSuggestedFileName + "." + ext);
         
 //        if (fileLabel == null) {
 //        	dialog.setFileName("*." + ext);

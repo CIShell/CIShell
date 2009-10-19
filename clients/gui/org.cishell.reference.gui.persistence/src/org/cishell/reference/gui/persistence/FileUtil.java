@@ -2,10 +2,37 @@ package org.cishell.reference.gui.persistence;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
 
 import org.osgi.service.log.LogService;
 
 public class FileUtil {
+	public static final char FILENAME_CHARACTER_REPLACEMENT = '#';
+	
+	/* Attempt to enumerate characters which cannot be used to name a file.
+	 * For our purposes, this should be as aggressive as sensible.
+	 * This includes all such characters for modern Windows systems, plus %.
+	 * Please add any others.
+	 */
+	public static final Collection INVALID_FILENAME_CHARACTERS;
+	static {
+		Collection s = new HashSet();
+		s.add(new Character('\\'));
+		s.add(new Character('/'));
+		s.add(new Character(':'));
+		s.add(new Character('*'));
+		s.add(new Character('?'));
+		s.add(new Character('"'));
+		s.add(new Character('<'));
+		s.add(new Character('>'));
+		s.add(new Character('|'));
+		s.add(new Character('%'));
+		INVALID_FILENAME_CHARACTERS = Collections.unmodifiableCollection(s);
+	}
+	
 	private static int uniqueIntForTempFile = 1;
 	
     public static File getTempFile(String fileName, String extension, LogService logger) {
@@ -64,9 +91,22 @@ public class FileUtil {
 		
 		return extension;
     }
-    
-    public static String extractFileName(String fileLabel) {
+
+    public static String replaceInvalidFilenameCharacters(String filename) {
+    	String cleanedFilename = filename;
     	
+    	for (Iterator invalidCharacters = INVALID_FILENAME_CHARACTERS.iterator();
+    			invalidCharacters.hasNext();) {
+    		char invalidCharacter = ((Character) invalidCharacters.next()).charValue();
+			
+			cleanedFilename =
+				cleanedFilename.replace(invalidCharacter, FILENAME_CHARACTER_REPLACEMENT);
+		}
+    	
+    	return cleanedFilename;
+    }
+
+    public static String extractFileName(String fileLabel) {    	
     	//index variables will be -1 if index is not found.
     	int descriptionEndIndex = fileLabel.lastIndexOf(":");
     	int filePathEndIndex = fileLabel.lastIndexOf(File.separator);
@@ -75,8 +115,7 @@ public class FileUtil {
     	//zero and none of the string will be cut off the front.
     	int startIndex = Math.max(descriptionEndIndex, filePathEndIndex) + 1;
     	
-    	String fileNameWithExtension = fileLabel.substring(startIndex);
-    	
+    	String fileNameWithExtension = fileLabel.substring(startIndex);    	
     	
     	//find the first character of the file name extension.
     	int extensionBeginIndex = fileNameWithExtension.lastIndexOf(".");
@@ -93,8 +132,16 @@ public class FileUtil {
     	}
     	
     	String fileNameWithoutExtension = fileNameWithExtension.substring(0, endIndex);
-   	
-    	String fileName = fileNameWithoutExtension;
-    	return fileName;
+    	
+    	return fileNameWithoutExtension;
     }
+    
+    public static void main(String[] args) {
+//		String s = "Input data: CSV file: C:\\Documents and Settings\\katy\\Desktop\\NIH-Demo\\nih\\NIH-data\\NIH-NIGMS-PPBC-R01s,-FY08-Publications.csv";
+		String s = "a\\b/c:d*e?f\"g<h>i|j";
+		
+		System.out.println(replaceInvalidFilenameCharacters(s));		
+		
+    	System.exit(0);
+	}
 }
