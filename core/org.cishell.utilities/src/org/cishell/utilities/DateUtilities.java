@@ -223,25 +223,42 @@ public class DateUtilities {
 	};
 	
 	public static Date parseDate(String dateString) throws ParseException {
+		return parseDate(dateString, true);
+	}
+	
+	public static Date parseDate(String dateString, boolean fixYear)
+			throws ParseException {
 		return (parseDate(dateString, MONTH_DAY_YEAR_DATE_FORMATS));
 	}
 	
 	public static Date parseDate(String dateString, String suggestedDateFormat)
 			throws ParseException {
+		return parseDate(dateString, suggestedDateFormat, true);
+	}
+	
+	public static Date parseDate(
+			String dateString, String suggestedDateFormat, boolean fixYear)
+			throws ParseException {
 		if (MONTH_DAY_YEAR_DATE_FORMAT.equals(suggestedDateFormat)) {
-			return parseDate(dateString, MONTH_DAY_YEAR_DATE_FORMATS);
+			return parseDate(dateString, MONTH_DAY_YEAR_DATE_FORMATS, fixYear);
 		} else if (DAY_MONTH_YEAR_DATE_FORMAT.equals(suggestedDateFormat)) {
-			return parseDate(dateString, DAY_MONTH_YEAR_DATE_FORMATS);
+			return parseDate(dateString, DAY_MONTH_YEAR_DATE_FORMATS, fixYear);
 		} else {
 			DateFormat[] dateFormats = new DateFormat[] {
 				new SimpleDateFormat(suggestedDateFormat)
 			};
 			
-			return parseDate(dateString, dateFormats);
+			return parseDate(dateString, dateFormats, fixYear);
 		}
 	}
 	
 	public static Date parseDate(String dateString, DateFormat[] dateFormats)
+			throws ParseException {
+		return parseDate(dateString, dateFormats, true);
+	}
+	
+	public static Date parseDate(
+			String dateString, DateFormat[] dateFormats, boolean fixYear)
 			throws ParseException {
 		for (int ii = 0; ii < dateFormats.length; ii++) {
 			try {
@@ -249,7 +266,7 @@ public class DateUtilities {
 				format.setLenient(false);
 				Date date = format.parse(dateString);
 				
-				if (date.getYear() < 1900) {
+				if (fixYear && (date.getYear() < 1900)) {
 					date.setYear(date.getYear() + 1900);
 				}
 				
@@ -273,6 +290,12 @@ public class DateUtilities {
 	}
 	
 	public static Date interpretObjectAsDate(Object object, String dateFormat)
+			throws ParseException {
+		return interpretObjectAsDate(object, dateFormat, true);
+	}
+	
+	public static Date interpretObjectAsDate(
+			Object object, String dateFormat, boolean fixYear)
 			throws ParseException {
 		final String EMPTY_DATE_MESSAGE = "An empty date was found.";
 		
@@ -355,36 +378,8 @@ public class DateUtilities {
 			}
 		}
 		
-		return parseDate(objectAsString, dateFormat);
+		return parseDate(objectAsString, dateFormat, fixYear);
 	}
-	
-//	private java.util.Date parseDate(String dateString) 
-//		throws AlgorithmExecutionException {
-//		for (DateFormat format : MONTH_DAY_YEAR_DATE_FORMATS) {
-//			try {
-//				format.setLenient(false);
-//				java.util.Date date = format.parse(dateString);
-//				//WE PARSED THE DATE SUCCESSFULLY (if we get to this point)!
-//				//Finish up our processing and return the date.
-//				
-//				//TODO: Methinks this is a hack we should eliminate
-//				if (date.getYear() < 1900)
-//					date.setYear(date.getYear() + 1900);
-//				java.sql.Date dateForSQL = new java.sql.Date(date.getTime());
-//				return dateForSQL;
-//			} catch (ParseException e) {
-//				continue;
-//			}
-//		}
-//		
-//		//we could not parse the date with any of the accepted formats.
-//		
-//		String exceptionMessage = 
-//			"Could not parse the field " + 
-//			"'" + dateString + "'" +
-//			" as a date. Aborting the algorithm.";
-//		throw new AlgorithmExecutionException(exceptionMessage);
-//	}
 	
 	private static Date fixDateYear(Date date) {
 		if (date.getYear() < 1900) {
