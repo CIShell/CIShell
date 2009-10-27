@@ -18,4 +18,6 @@ Import-Package: org.cishell.framework;version="1.0.0",
  prefuse.util,
  prefuse.util.collections
 Export-Package: org.cishell.utilities,
- org.cishell.utilities.mutateParameter
+ org.cishell.utilities.mutateParameter,
+ org.cishell.utilities.mutateParameter.defaultvalue,
+ org.cishell.utilities.mutateParameter.dropdown

@@ -2,9 +2,8 @@ package org.cishell.utilities.mutateParameter;
 
 import org.osgi.service.metatype.AttributeDefinition;
 
-/* There would be one implementation of this interface for each useful
- * constructor of BasicAttributeDefinition, where the transform is defined as in
- * DropdownTransformer.
+/**
+ * This interface and its sub-interfaces correspond to constructors of BasicObjectClassDefinition.
  */
 public interface AttributeDefinitionTransformer {
 	public boolean shouldTransform(AttributeDefinition ad);	
