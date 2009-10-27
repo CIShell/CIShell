@@ -16,7 +16,6 @@ public class ObjectClassDefinitionTransformer {
 	 * "Atomic" to exclude blanket filters like ObjectClassDefinition.ALL.
 	 * @see ObjectClassDefinition#REQUIRED
 	 * @see ObjectClassDefinition#OPTIONAL
-	 * @see ObjectClassDefinition#ALL
 	 */
 	public static final List ATOMIC_ATTRIBUTE_DEFINITION_FILTERS;
 	static {

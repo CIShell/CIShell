@@ -1,10 +1,11 @@
-package org.cishell.utilities.mutateParameter;
+package org.cishell.utilities.mutateParameter.dropdown;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import org.cishell.utilities.ArrayUtilities;
+import org.cishell.utilities.mutateParameter.ObjectClassDefinitionTransformer;
 import org.osgi.service.metatype.AttributeDefinition;
 import org.osgi.service.metatype.ObjectClassDefinition;
 
@@ -72,7 +73,7 @@ public class DropdownMutator {
 					final String[] optionLabels,
 					final String[] optionValues) {
 		transforms.add(
-			new NullDropdownTransformer() {
+			new DefaultDropdownTransformer() {
 				public boolean shouldTransform(AttributeDefinition ad) {
 					return id.equals(ad.getID());
 				}

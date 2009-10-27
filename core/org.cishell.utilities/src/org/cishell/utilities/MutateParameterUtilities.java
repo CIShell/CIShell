@@ -6,15 +6,16 @@ import java.util.LinkedHashMap;
 
 import org.cishell.reference.service.metatype.BasicObjectClassDefinition;
 import org.cishell.utilities.mutateParameter.AttributeDefinitionTransformer;
-import org.cishell.utilities.mutateParameter.NullDropdownTransformer;
 import org.cishell.utilities.mutateParameter.ObjectClassDefinitionTransformer;
+import org.cishell.utilities.mutateParameter.defaultvalue.DefaultDefaultValueTransformer;
+import org.cishell.utilities.mutateParameter.dropdown.DefaultDropdownTransformer;
 import org.osgi.service.metatype.AttributeDefinition;
 import org.osgi.service.metatype.ObjectClassDefinition;
 
 import prefuse.data.Table;
 
 public class MutateParameterUtilities {
-	/* TODO The mutateParameter subpackage is meant to eliminate all of the loops
+	/* TODO The mutateParameter subpackage is meant to replace most of the loops
 	 * that invoke the formFooAttributeDefinition methods.
 	 */
 	
@@ -98,7 +99,7 @@ public class MutateParameterUtilities {
 			final String[] optionLabels,
 			final String[] optionValues) {
 		AttributeDefinitionTransformer transformer =
-			new NullDropdownTransformer() {
+			new DefaultDropdownTransformer() {
 				public boolean shouldTransform(AttributeDefinition ad) {
 					return true;
 				}
@@ -138,9 +139,9 @@ public class MutateParameterUtilities {
 			final String[] optionLabels,
 			final String[] optionValues) {
 		AttributeDefinitionTransformer dropdownTransformer =
-			new NullDropdownTransformer() {
+			new DefaultDropdownTransformer() {
 				public boolean shouldTransform(AttributeDefinition ad) {
-					return parameterID.equals(ad.getID());
+					return ad.getID().equals(parameterID);
 				}
 				
 				public String[] transformOptionLabels(
@@ -153,8 +154,25 @@ public class MutateParameterUtilities {
 				}
 			};
 		
-		return ObjectClassDefinitionTransformer.apply(dropdownTransformer,
-													  oldOCD);
+		return ObjectClassDefinitionTransformer.apply(dropdownTransformer, oldOCD);
+	}
+	
+	public static BasicObjectClassDefinition mutateDefaultValue(
+			ObjectClassDefinition oldOCD,
+			final String parameterID,
+			final String defaultValue) {
+		AttributeDefinitionTransformer transformer =
+			new DefaultDefaultValueTransformer() {
+				public boolean shouldTransform(AttributeDefinition ad) {
+					return ad.getID().equals(parameterID);
+				}
+
+				public String transformDefaultValue(String[] oldDefaultValue) {
+					return defaultValue;
+				}
+			};
+		
+		return ObjectClassDefinitionTransformer.apply(transformer, oldOCD);
 	}
 	
 	public static BasicObjectClassDefinition createNewParameters(
