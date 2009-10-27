@@ -1,10 +1,14 @@
-package org.cishell.utilities.mutateParameter;
+package org.cishell.utilities.mutateParameter.dropdown;
 
 import org.cishell.reference.service.metatype.BasicAttributeDefinition;
+import org.cishell.utilities.mutateParameter.AttributeDefinitionTransformer;
 import org.osgi.service.metatype.AttributeDefinition;
 
 public abstract class DropdownTransformer
 		implements AttributeDefinitionTransformer {
+	/**
+	 * @see BasicAttributeDefinition#BasicAttributeDefinition(String, String, String, int, String[], String[])
+	 */
 	public AttributeDefinition transform(AttributeDefinition oldAD) {
 		if (shouldTransform(oldAD)) {
 			return 
