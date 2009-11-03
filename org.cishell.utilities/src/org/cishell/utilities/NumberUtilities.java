@@ -119,7 +119,7 @@ public class NumberUtilities {
 	 */
 	public static String convertToDecimalNotation(String numberAsString) {
 		// Check for a scientific notation delimiter.
-		if (numberAsString.contains("E") || numberAsString.contains("e")) {
+		if (numberAsString.indexOf("E") != -1 || numberAsString.indexOf("e") != -1) {
 			Format format =
 				new DecimalFormat(UNROUNDED_DECIMAL_PATTERN);
 			
