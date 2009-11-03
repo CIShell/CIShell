@@ -32,6 +32,17 @@ public class BasicDataPlus extends BasicData {
 	}
 	
 	/**
+	 * The type of inner is assumed to be the toString value of its Class.
+	 * 
+	 * @param inner		The object wrapped by this Data.
+	 * @param parent	The parent of inner.
+	 */
+	public BasicDataPlus(Object inner, Data parent) {
+		this(inner);
+		setParent(parent);
+	}
+	
+	/**
 	 * 
 	 * @param inner		The object wrapped by this Data.
 	 * @param type		The _TYPE constant from {@link DataProperty}
