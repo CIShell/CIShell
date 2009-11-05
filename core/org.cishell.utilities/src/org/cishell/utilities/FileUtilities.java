@@ -9,6 +9,8 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.channels.FileChannel;
 
 import javax.imageio.ImageIO;
@@ -223,6 +225,13 @@ public class FileUtilities {
     		throw new FileCopyingException(
     			exceptionMessage, temporaryFileCreationException);
     	}
+    }
+    
+    public static File loadFileFromClassPath(Class clazz, String filePath)
+    		throws URISyntaxException {
+    	URL fileURL = clazz.getResource(filePath);
+    	
+    	return new File(fileURL.toURI());
     }
     
     private static File ensureDirectoryExists(String directoryPath) {
