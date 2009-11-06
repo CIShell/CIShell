@@ -122,7 +122,7 @@ public class ConverterGraphComputation {
 					.equalsIgnoreCase(currentNodeKey)) {
 				int currentVertexStrength = 
 					((Integer) currentVertex.getUserDatum("strength")).intValue();
-				currentVertex.setUserDatum("strength", ++currentVertexStrength, 
+				currentVertex.setUserDatum("strength", new Integer(++currentVertexStrength), 
 						new UserDataContainer.CopyAction.Shared());
 				return currentVertex;
 			}
@@ -134,8 +134,7 @@ public class ConverterGraphComputation {
 		nodeCount++;
 		
 		Vertex node = new DirectedSparseVertex();
-
-		node.addUserDatum("strength", 1, new UserDataContainer.CopyAction.Shared());
+		node.addUserDatum("strength", new Integer(1), new UserDataContainer.CopyAction.Shared());
 		node.addUserDatum("label", nodeKey, new UserDataContainer.CopyAction.Shared());
 		
 		outputGraph.addVertex(node);
