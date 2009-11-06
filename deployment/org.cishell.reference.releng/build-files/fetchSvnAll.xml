@@ -90,6 +90,7 @@
       <param name="project.name" value="/deployment/org.cishell.reference.gui.feature"/>
       <param name="url" value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk"/>
     </antcall>
+  	
   	<antcall target="svn.co">
       <param name="target" value="features"/>
       <param name="element.id" value="org.cishell.reference.gui.brand.feature"/>
@@ -150,6 +151,12 @@
       <param name="project.name" value="/clients/gui/org.cishell.reference.gui.scheduler"/>
       <param name="url" value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk"/>
     </antcall>
+  	<antcall target="svn.co">
+  	      <param name="target" value="plugins"/>
+  	      <param name="element.id" value="org.cishell.algorithm.convertergraph"/>
+  	      <param name="project.name" value="org.cishell.algorithm.convertergraph"/>
+  	      <param name="url" value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk/core/"/>
+  	</antcall>
 	<antcall target="svn.co">
       <param name="target" value="plugins"/>
       <param name="element.id" value="org.prefuse.lib"/>
