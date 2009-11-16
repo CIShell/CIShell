@@ -61,7 +61,7 @@ public class Activator implements BundleActivator {
         dir.delete();
     }
 
-    public static File getTempDirectory() {
+    public synchronized static File getTempDirectory() {
         if (tempDirectory == null) {
             try {
                 tempDirectory = File.createTempFile("CIShell-Session-", "");
