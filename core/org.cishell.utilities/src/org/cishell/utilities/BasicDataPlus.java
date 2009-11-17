@@ -45,13 +45,11 @@ public class BasicDataPlus extends BasicData {
 	/**
 	 * 
 	 * @param inner		The object wrapped by this Data.
-	 * @param type		The _TYPE constant from {@link DataProperty}
-	 * 						that best characterizes the type of inner.
+	 * @param format	The format of inner (like a MIME type, file extension, or class name).
 	 * @param parent	The parent of inner.
 	 */
-	public BasicDataPlus(Object inner, String type, Data parent) {
-		this(inner);
-		setType(type);
+	public BasicDataPlus(Object inner, String format, Data parent) {
+		this(inner, format);
 		setParent(parent);
 	}
 
