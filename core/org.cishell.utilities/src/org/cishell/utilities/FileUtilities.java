@@ -9,6 +9,8 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URL;
 import java.nio.channels.FileChannel;
@@ -155,27 +157,33 @@ public class FileUtilities {
 		boolean fileIsEmpty = ( firstLine == null );
 		return fileIsEmpty;
 	}
+
+    public static String readEntireTextFile(File file) throws IOException {
+    	return extractReaderContents(new BufferedReader(new FileReader(file)));
+    }
     
+    // stream must be guaranteed to end.
+    public static String readEntireInputStream(InputStream stream) throws IOException {
+    	return extractReaderContents(new BufferedReader(new InputStreamReader(stream)));
+    }
+
     /*
      * This is basically copied off of:
      *  http://www.javazoid.com/foj_file.html
      */
-    public static String readEntireTextFile(File file)
-    		throws IOException {
-    	StringBuffer readTextStringBuffer = new StringBuffer();
-    	BufferedReader fileReader = new BufferedReader(
-    		new FileReader(file));
+    public static String extractReaderContents(BufferedReader bufferedReader) throws IOException {
+    	StringBuffer contents = new StringBuffer();
     	char[] readInCharacters = new char[1];
-    	int readCharacterCount = fileReader.read(readInCharacters);
+    	int readCharacterCount = bufferedReader.read(readInCharacters);
     	
     	while (readCharacterCount > -1) {
-    		readTextStringBuffer.append(String.valueOf(readInCharacters));
-    		readCharacterCount = fileReader.read(readInCharacters);
+    		contents.append(String.valueOf(readInCharacters));
+    		readCharacterCount = bufferedReader.read(readInCharacters);
     	}
     	
-    	fileReader.close();
+    	bufferedReader.close();
     	
-    	return readTextStringBuffer.toString();
+    	return contents.toString();
     }
     
     public static void copyFile(File sourceFile, File targetFile)
