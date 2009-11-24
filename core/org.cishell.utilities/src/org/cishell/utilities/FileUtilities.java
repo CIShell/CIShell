@@ -11,6 +11,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.URI;
 import java.net.URL;
 import java.nio.channels.FileChannel;
@@ -19,6 +20,7 @@ import javax.imageio.ImageIO;
 
 public class FileUtilities {
 	public static final int READ_TEXT_FILE_BUFFER_SIZE = 1024;
+	public static final String DEFAULT_STREAM_TO_FILE_NAME = "stream_";
 	
 	/*
 	 * Return a File pointing to the directory specified in
@@ -173,6 +175,7 @@ public class FileUtilities {
      */
     public static String extractReaderContents(BufferedReader bufferedReader) throws IOException {
     	StringBuffer contents = new StringBuffer();
+    	// TODO: Use READ_TEXT_FILE_BUFFER_SIZE as the size instead of 1?
     	char[] readInCharacters = new char[1];
     	int readCharacterCount = bufferedReader.read(readInCharacters);
     	
@@ -239,6 +242,53 @@ public class FileUtilities {
     	URL fileURL = clazz.getResource(filePath);
     	
     	return new File(URI.create(fileURL.toString()));
+    }
+    
+    public static File safeLoadFileFromClasspath(Class clazz, String filePath) throws IOException {
+    	InputStream input = clazz.getResourceAsStream(filePath);
+    	String fileExtension = getFileExtension(filePath);
+    	
+    	return writeEntireStreamToTemporaryFile(input, fileExtension);
+    }
+    
+    public static File writeEntireStreamToTemporaryFile(InputStream stream, String fileExtension)
+    		throws IOException {
+    	return writeEntireStreamToTemporaryFile(
+    		stream, DEFAULT_STREAM_TO_FILE_NAME, fileExtension);
+    }
+    
+    public static File writeEntireStreamToTemporaryFile(
+    		InputStream input, String fileName, String fileExtension) throws IOException {
+    	File temporaryFile =
+    		createTemporaryFileInDefaultTemporaryDirectory(fileName, fileExtension);
+    	OutputStream output = new FileOutputStream(temporaryFile);
+    	// TODO: Use READ_TEXT_FILE_BUFFER_SIZE.
+    	byte[] readCharacters = new byte[1];
+    	int readCharacterCount = input.read(readCharacters);
+    	
+    	while (readCharacterCount > 0) {
+    		output.write(readCharacters, 0, readCharacterCount);
+    		readCharacterCount = input.read(readCharacters);
+    	}
+    	
+    	output.close();
+    	input.close();
+    	
+    	return temporaryFile;
+    }
+    
+    public static String getFileExtension(File file) {
+    	return getFileExtension(file.getAbsolutePath());
+    }
+    
+    public static String getFileExtension(String filePath) {
+    	int periodPosition = filePath.lastIndexOf(".");
+    	
+    	if ((periodPosition != -1) && ((periodPosition + 1) < filePath.length())) {
+    		return filePath.substring(periodPosition);
+    	} else {
+    		return "";
+    	}
     }
     
     private static File ensureDirectoryExists(String directoryPath) {
