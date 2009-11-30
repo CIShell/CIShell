@@ -21,6 +21,8 @@ import org.cishell.service.conversion.Converter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
@@ -37,36 +39,39 @@ import org.osgi.framework.ServiceReference;
 
 /**
  * SaveDataChooser is a simple user interface to allow for selection
- * among several Persisters that support the selected model, in the event
+ * among several persisters that support the selected model, in the event
  * that more than one is found.
- *
- * @author Team IVC
  */
 public class SaveDataChooser extends AbstractDialog implements AlgorithmProperty {
+	public static final Image QUESTION_ICON =
+    	Display.getCurrent().getSystemImage(SWT.ICON_QUESTION);
+
     protected Data data;
-    protected Converter[] converterArray;
-    private List converterList;
+    protected Converter[] converters;
+    private List converterListComponent;
     private StyledText detailPane;
-    //private Shell parent;
-    CIShellContext context;
-    public static final Image QUESTION = Display.getCurrent().getSystemImage(SWT.ICON_QUESTION);
+    CIShellContext ciShellContext;
 
     /**
      * Creates a new SaveChooser object.
      *
      * @param data The data object to save
      * @param parent The parent shell
-     * @param converterArray The array of converters to persist the data
+     * @param converters The array of converters to persist the data
      * @param title Title of the Window
      * @param brandPluginID The plugin that supplies the branding
-     * @param context The CIShellContext to retrieve available services
+     * @param ciShellContext The CIShellContext to retrieve available services
      */
-    public SaveDataChooser(Data data, Shell parent, Converter[] converterArray,
-    						String title, CIShellContext context) {
-    	super(parent, title, QUESTION);
+    public SaveDataChooser(
+    		Data data,
+    		Shell parent,
+    		Converter[] converters,
+    		String title,
+    		CIShellContext ciShellContext) {
+    	super(parent, title, QUESTION_ICON);
         this.data = data;        
-        this.converterArray = alphabetizeConverters(filterConverters(converterArray));
-        this.context = context;
+        this.converters = alphabetizeConverters(filterConverters(converters));
+        this.ciShellContext = ciShellContext;
     }   
 
     /**
@@ -74,12 +79,11 @@ public class SaveDataChooser extends AbstractDialog implements AlgorithmProperty
      * @param parent The parent window
      * @return The new window containing the chooser
      */
-    private Composite initGUI(Composite parent) {
+    private Composite initializeGUI(Composite parent) {
         Composite content = new Composite(parent, SWT.NONE);
         GridLayout layout = new GridLayout();
         layout.numColumns = 2;
         content.setLayout(layout);
-        //parent.setLayout(layout);                
 
         Group converterGroup = new Group(content, SWT.NONE);
         converterGroup.setText("Pick the Output Data Type");
@@ -88,18 +92,29 @@ public class SaveDataChooser extends AbstractDialog implements AlgorithmProperty
         persisterData.widthHint = 200;
         converterGroup.setLayoutData(persisterData);
 
-        converterList = new List(converterGroup, SWT.H_SCROLL | SWT.V_SCROLL | SWT.SINGLE);
-        initConverterList();
-        converterList.addSelectionListener(new SelectionAdapter() {
-                public void widgetSelected(SelectionEvent e) {
-                    List list = (List) e.getSource();
-                    int selection = list.getSelectionIndex();
+        converterListComponent =
+        	new List(converterGroup, SWT.H_SCROLL | SWT.V_SCROLL | SWT.SINGLE);
+        initializeConverterListComponent();
+        converterListComponent.addMouseListener(new MouseAdapter() {
+        	public void mouseDoubleClick(MouseEvent mouseEvent) {
+        		List list = (List)mouseEvent.getSource();
+        		int selection = list.getSelectionIndex();
+        		
+        		if (selection != -1) {
+        			selectionMade(selection);
+        		}
+        	}
+        });
+        converterListComponent.addSelectionListener(new SelectionAdapter() {
+        	public void widgetSelected(SelectionEvent selectionEvent) {
+        		List list = (List)selectionEvent.getSource();
+        		int selection = list.getSelectionIndex();
 
-                    if (selection != -1) {
-                        updateDetailPane(converterArray[selection]);
-                    }
-                }
-            });
+        		if (selection != -1) {
+        			updateDetailPane(converters[selection]);
+        		}
+        	}
+        });
 
         Group detailsGroup = new Group(content, SWT.NONE);
         detailsGroup.setText("Details");
@@ -107,45 +122,47 @@ public class SaveDataChooser extends AbstractDialog implements AlgorithmProperty
         GridData detailsData = new GridData(GridData.FILL_BOTH);
         detailsData.widthHint = 200;
         detailsGroup.setLayoutData(detailsData);
-        
-        detailPane = initDetailPane(detailsGroup);
 
-        //select the first item by default
-        converterList.setSelection(0);
-        updateDetailPane(converterArray[0]);
-        
+        detailPane = initializeDetailPane(detailsGroup);
+
+        // Select the first item by default.
+        converterListComponent.setSelection(0);
+        updateDetailPane(converters[0]);
+
         return content;
     }
 
     /**
      * Initialize the Listbox of Persisters using the stored Persister array
      */
-    private void initConverterList() {
-        for (int i = 0; i < converterArray.length; ++i) {
-			if (converterArray[i] != null) {
-				Dictionary dict = converterArray[i].getProperties();
+    private void initializeConverterListComponent() {
+        for (int ii = 0; ii < converters.length; ii++) {
+			if (converters[ii] != null) {
+				Dictionary converterProperties = converters[ii].getProperties();
 
-				// get the name of the persister from the property map
+				// Get the name of the persister from the property map.
 				String outData = null;
                 
-                ServiceReference[] refs = converterArray[i].getConverterChain();
-                if (refs != null && refs.length > 0) {
-                    outData = (String) refs[refs.length-1].getProperty(
-                            AlgorithmProperty.LABEL);
-                }
-                    
-                if (outData == null) {
-                    outData = (String) dict.get(AlgorithmProperty.LABEL);
+                ServiceReference[] serviceReferences = converters[ii].getConverterChain();
+
+                if ((serviceReferences != null) && (serviceReferences.length > 0)) {
+                    outData = (String)serviceReferences[serviceReferences.length - 1].getProperty(
+                    	AlgorithmProperty.LABEL);
                 }
 
-				// if someone was sloppy enough to not provide a name, then use
-				// the
-				// name of the class instead.
+                if (outData == null) {
+                    outData = (String)converterProperties.get(AlgorithmProperty.LABEL);
+                }
+
+				/*
+				 * If someone was sloppy enough to not provide a name, then use the name of the
+				 *  class instead.
+				 */
 				if ((outData == null) || (outData.length() == 0)) {
-					outData = converterArray[i].getClass().getName();
+					outData = converters[ii].getClass().getName();
 				}
 
-				converterList.add(outData);
+				converterListComponent.add(outData);
 			}
 		}
     }
@@ -158,7 +175,7 @@ public class SaveDataChooser extends AbstractDialog implements AlgorithmProperty
 	 *            The detail pane to init
 	 * @return A style of the text
 	 */
-    private StyledText initDetailPane(Group detailsGroup) {
+    private StyledText initializeDetailPane(Group detailsGroup) {
         StyledText detailPane = new StyledText(detailsGroup, SWT.H_SCROLL | SWT.V_SCROLL);
         detailPane.setEditable(false);
         detailPane.getCaret().setVisible(false);
@@ -172,14 +189,14 @@ public class SaveDataChooser extends AbstractDialog implements AlgorithmProperty
      * @param converter A converter that contains the properties for the detail pane
      */
     private void updateDetailPane(Converter converter) {
-        Dictionary dict = converter.getProperties();
-        Enumeration keysEnum = dict.keys();
+        Dictionary converterProperties = converter.getProperties();
+        Enumeration converterPropertiesKeys = converterProperties.keys();
 
         detailPane.setText("");
 
-        while (keysEnum.hasMoreElements()) {
-            Object key = keysEnum.nextElement();
-            Object val = dict.get(key);
+        while (converterPropertiesKeys.hasMoreElements()) {
+            Object key = converterPropertiesKeys.nextElement();
+            Object value = converterProperties.get(key);
 	
             StyleRange styleRange = new StyleRange();
             styleRange.start = detailPane.getText().length();
@@ -188,7 +205,7 @@ public class SaveDataChooser extends AbstractDialog implements AlgorithmProperty
             styleRange.fontStyle = SWT.BOLD;
             detailPane.setStyleRange(styleRange);
 	
-            detailPane.append(val + "\n");
+            detailPane.append(value + "\n");
         }
     }
     
@@ -209,26 +226,23 @@ public class SaveDataChooser extends AbstractDialog implements AlgorithmProperty
     private Converter[] filterConverters(Converter[] allConverters) {
     	Map lastInDataToConverter = new HashMap();
     	
-    	for (int i = 0; i < allConverters.length; i++) {
-    		Converter converter = allConverters[i];
-    		
-    		
-    		
-    		//for .xml files, to uniquely identify it 
-    		//we need to know what kind of xml it was
-    		//so we look at the in_data type of the 
-    		//last converter
-    		String lastInData = getLastConverterInData(converter);
-    		
-    		//if we already have a converter with this out data type...
-    		if (lastInDataToConverter.containsKey(lastInData)) {
-    			Converter alreadyStoredConverter = (Converter) lastInDataToConverter.get(lastInData);
-    			
-    			Converter chosenConverter = returnPreferredConverter(converter,alreadyStoredConverter);
-    			
-    			lastInDataToConverter.put(lastInData, chosenConverter);
+    	for (int ii = 0; ii < allConverters.length; ii++) {
+    		Converter converter = allConverters[ii];
+
+    		/*
+    		 * To uniquely identify an XML file, we need to know what kind of XML it was so we look
+    		 *  at the input data type of the last converter.
+    		 */
+    		String lastInputData = getLastConverterInData(converter);
+
+    		if (lastInDataToConverter.containsKey(lastInputData)) {
+    			Converter alreadyStoredConverter =
+    				(Converter)lastInDataToConverter.get(lastInputData);
+    			Converter chosenConverter =
+    				returnPreferredConverter(converter, alreadyStoredConverter);
+    			lastInDataToConverter.put(lastInputData, chosenConverter);
     		} else {
-    			lastInDataToConverter.put(lastInData, converter);
+    			lastInDataToConverter.put(lastInputData, converter);
     		}
     	}
     	
@@ -237,11 +251,11 @@ public class SaveDataChooser extends AbstractDialog implements AlgorithmProperty
     
     private String getLastConverterInData(Converter converter) {
     	ServiceReference[] convChain = converter.getConverterChain();
+
     	if (convChain.length >= 1) {
-    		ServiceReference lastConv = convChain[convChain.length - 1];
-    	
-    		String lastInData = (String) lastConv.getProperty("in_data");
-    	
+    		ServiceReference lastConverter = convChain[convChain.length - 1];
+    		String lastInData = (String) lastConverter.getProperty("in_data");
+
     		return lastInData;
     	} else {
     		return "";
@@ -251,87 +265,88 @@ public class SaveDataChooser extends AbstractDialog implements AlgorithmProperty
     /**
      * Returns whichever converter is better to show to the user in the chooser,
      * based on lossiness, and length of converter chain
-     * @param c1 A converter with the same out_data type as the other
-     * @param c2 A converter with the same out_data type as the other
+     * @param converter1 A converter with the same out_data type as the other
+     * @param converter2 A converter with the same out_data type as the other
      * @return The preferred converter of the two
      */
-    private Converter returnPreferredConverter(Converter c1, Converter c2) {
-    	Dictionary c1Dict = c1.getProperties();
-    	String c1Lossiness = (String) c1Dict.get(CONVERSION);
-    	int c1Quality = determineQuality(c1Lossiness);
+    private Converter returnPreferredConverter(Converter converter1, Converter converter2) {
+    	Dictionary converter1Properties = converter1.getProperties();
+    	String converter1Lossiness = (String)converter1Properties.get(CONVERSION);
+    	int converter1Quality = determineQuality(converter1Lossiness);
+
+    	Dictionary converter2Properties = converter2.getProperties();
+    	String converter2Lossiness = (String)converter2Properties.get(CONVERSION);
+    	int converter2Quality = determineQuality(converter2Lossiness);
     	
-    	
-    	
-    	Dictionary c2Dict = c2.getProperties();
-    	String c2Lossiness = (String) c2Dict.get(CONVERSION);
-    	int c2Quality = determineQuality(c2Lossiness);
-    	
-    	if (c1Quality > c2Quality) {
-    		return c1;
-    	} else if (c2Quality > c1Quality) {
-    		return c2;
+    	if (converter1Quality > converter2Quality) {
+    		return converter1;
+    	} else if (converter2Quality > converter1Quality) {
+    		return converter2;
     	} else {
-    		//they are tied. Look at converter chain length
+    		// They are tied. Look at converter chain length.
     		
-    		int c1Length = c1.getConverterChain().length;
-    		int c2Length = c2.getConverterChain().length;
-    		//return the shortest
-    		if (c1Length > c2Length) {
-    			return c2;
-    		} else if (c2Length > c1Length) {
-    			return c1;
+    		int converter1Length = converter1.getConverterChain().length;
+    		int converter2Length = converter2.getConverterChain().length;
+
+    		if (converter1Length > converter2Length) {
+    			return converter2;
+    		} else if (converter2Length > converter1Length) {
+    			return converter1;
     		} else {
-    			//both have the same lossiness and same length
-    			//arbitrary pick the first
-    			return c1;
+    			/*
+    			 * Both have the same lossiness and same length.
+    			 * Arbitrary pick the first.
+    			 */
+    			return converter1;
     		}
     	}
     }
-    
+
     private int determineQuality(String lossiness) {
     	if (lossiness == LOSSY) {
     		return 0;
     	} else if (lossiness == null) {
     		return 1;
-    	} else { //lossiness == LOSSLESS 
+    	// Lossiness == LOSSLESS.
+    	} else { 
     		return 2;
     	}
     }
-    
-    private Converter[] alphabetizeConverters(Converter[] cs) {
-    	Arrays.sort(cs, new CompareAlphabetically());
-    	return cs;
+
+    private Converter[] alphabetizeConverters(Converter[] converters) {
+    	Arrays.sort(converters, new CompareAlphabetically());
+
+    	return converters;
     }
 
     /**
      * When a Persister is chosen to Persist this model, this method handles the job
      * of opening the FileSaver and saving the model.
-     * @param selectedIndex The chosen converter
+     * @param selectedIndex The chosen converter.
      */
     protected void selectionMade(int selectedIndex) {
     	try {
 	        getShell().setVisible(false);
-	        final Converter converter = converterArray[selectedIndex];
-	        final FileSaver saver = new FileSaver(getShell(), context);
+	        final Converter converter = converters[selectedIndex];
+	        final FileSaver saver = new FileSaver(getShell(), ciShellContext);
 	        close(saver.save(converter, data));
-    	} catch (Exception e) {
-        	throw new RuntimeException(e);
+    	} catch (Exception exception) {
+        	throw new RuntimeException(exception);
         }
     }
 
     /**
-     * Create the buttons for either cancelling or continuing with
-     * the save
+     * Create the buttons for either cancelling or continuing with the save.
      * 
-     * @param parent The GUI to place the buttons
+     * @param parent The GUI to place the buttons.
      */
     public void createDialogButtons(Composite parent) {
         Button select = new Button(parent, SWT.PUSH);
         select.setText("Select");
         select.addSelectionListener(
         	new SelectionAdapter() {
-                public void widgetSelected(SelectionEvent e) {
-                    int index = converterList.getSelectionIndex();
+                public void widgetSelected(SelectionEvent selectionEvent) {
+                    int index = converterListComponent.getSelectionIndex();
 
                     if (index != -1) {
                         selectionMade(index);
@@ -339,12 +354,13 @@ public class SaveDataChooser extends AbstractDialog implements AlgorithmProperty
                 }
             }
         );
+        select.setFocus();
 
         Button cancel = new Button(parent, SWT.NONE);
         cancel.setText("Cancel");
         cancel.addSelectionListener(
         	new SelectionAdapter() {
-                public void widgetSelected(SelectionEvent e) {
+                public void widgetSelected(SelectionEvent selectionEvent) {
                     close(false);
                 }
             }
@@ -352,55 +368,53 @@ public class SaveDataChooser extends AbstractDialog implements AlgorithmProperty
     }
 
     /**
-     * Checks for the number of file savers.  If there is one
-     * converter then it will save directly, otherwise initialize the chooser.
+     * Checks for the number of file savers.  If there is one converter then it will save directly,
+     *  otherwise initialize the chooser.
      * 
      * @param parent The parent GUI for new dialog windows.
      */
     public Composite createContent(Composite parent) {
-    	if (converterArray.length == 1) {
-            final FileSaver saver = new FileSaver((Shell) parent, context);
-            close(saver.save(converterArray[0], data));
+    	if (converters.length == 1) {
+            final FileSaver saver = new FileSaver((Shell) parent, ciShellContext);
+            close(saver.save(converters[0], data));
+
             return parent;
     	}
     	else {
-    		return initGUI(parent);
+    		return initializeGUI(parent);
     	}
     }
     
     private class CompareAlphabetically implements Comparator {
-    	public int compare(Object o1, Object o2) {
-			if (o1 instanceof Converter && o2 instanceof Converter) {
-				Converter c1 = (Converter) o1;
-				String c1Label = getLabel(c1);
+    	public int compare(Object object1, Object object2) {
+			if ((object1 instanceof Converter) && (object2 instanceof Converter)) {
+				Converter converter1 = (Converter)object1;
+				String converter1Label = getLabel(converter1);
 				
-				Converter c2 = (Converter) o2;
-				String c2Label = getLabel(c2);
+				Converter converter2 = (Converter)object2;
+				String converter2Label = getLabel(converter2);
 				
-				if (c1Label != null && c2Label != null) {
-					return c1Label.compareTo(c2Label);
-				} else if (c1Label == null) {
-					//c1 > c2
+				if ((converter1Label != null) && (converter2Label != null)) {
+					return converter1Label.compareTo(converter2Label);
+				} else if (converter1Label == null) {
 					return 1;
-				} else if (c2Label == null) {
-					//c1 < c2
+				} else if (converter2Label == null) {
 					return -1;
 				} else {
-					//c1 == c2
 					return 0;
 				}
 			} else {
-				throw new IllegalArgumentException("Can only " +
-						"compare Converters");
+				throw new IllegalArgumentException("Can only compare Converters");
 			}
     	}
-					
-		private String getLabel(Converter c) {
-			 String label = "";
-            ServiceReference[] refs = c.getConverterChain();
-            if (refs != null && refs.length > 0) {
-                label = (String) refs[refs.length-1].getProperty(
-                        AlgorithmProperty.LABEL);
+
+		private String getLabel(Converter converter) {
+			String label = "";
+            ServiceReference[] serviceReferences = converter.getConverterChain();
+
+            if ((serviceReferences != null) && (serviceReferences.length > 0)) {
+                label = (String)serviceReferences[serviceReferences.length - 1].getProperty(
+                	AlgorithmProperty.LABEL);
             }
             
             return label;

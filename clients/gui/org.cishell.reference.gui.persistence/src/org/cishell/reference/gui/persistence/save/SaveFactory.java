@@ -20,8 +20,8 @@ public class SaveFactory implements AlgorithmFactory {
     private CIShellContext ciShellContext;	
 
     /**
-     * Create a local CIShell context
-     * @param componentContext The current CIShell context
+     * Create a local CIShell ciShellContext
+     * @param componentContext The current CIShell ciShellContext
      */
     protected void activate(ComponentContext componentContext) {
         ciShellContext =

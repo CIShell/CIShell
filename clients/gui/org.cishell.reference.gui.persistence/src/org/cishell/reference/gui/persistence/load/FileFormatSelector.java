@@ -15,8 +15,8 @@ import org.cishell.framework.data.BasicData;
 import org.cishell.framework.data.Data;
 import org.cishell.reference.gui.common.AbstractDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
@@ -100,19 +100,14 @@ public class FileFormatSelector extends AbstractDialog {
 
 		this.persisterList = new List(persisterGroup, SWT.H_SCROLL |SWT.V_SCROLL | SWT.SINGLE);
 		// initPersisterArray();
-		initPersisterList();
-		this.persisterList.addMouseListener(new MouseListener() {
-			public void mouseUp(MouseEvent mouseEvent) {
-			}
-
-			public void mouseDown(MouseEvent mouseEvent) {
-			}
-
+		initializePersisterList();
+		this.persisterList.addMouseListener(new MouseAdapter() {
 			public void mouseDoubleClick(MouseEvent mouseEvent) {
-				int index = FileFormatSelector.this.persisterList.getSelectionIndex();
+				List list = (List)mouseEvent.getSource();
+				int selection = list.getSelectionIndex();
 
-				if (index != -1) {
-					selectionMade(index);
+				if (selection != -1) {
+					selectionMade(selection);
 				}
 			}
 		});
@@ -127,6 +122,8 @@ public class FileFormatSelector extends AbstractDialog {
 				}                
 			}                      
 		});
+		
+		persisterList.setSelection(0);
 
 		/* Group detailsGroup = new Group(content, SWT.NONE);
 		// Shall this label be moved out of the code?    
@@ -144,7 +141,7 @@ public class FileFormatSelector extends AbstractDialog {
 		return content;
 	}
 
-	private void initPersisterList() {        
+	private void initializePersisterList() {        
 		for (int ii = 0; ii < this.persisterArray.length; ++ii) {
 			String name = (String)this.persisterArray[ii].getProperty("label");
 
@@ -230,6 +227,7 @@ public class FileFormatSelector extends AbstractDialog {
 				}
 			}
 		});
+		select.setFocus();
 
 		Button cancel = new Button(parent, SWT.NONE);
 		cancel.setText("Cancel");
