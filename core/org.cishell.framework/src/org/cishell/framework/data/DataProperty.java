@@ -90,4 +90,7 @@ public interface DataProperty {
     
     /** Says this data model is a JPEG object */
     public static String RASTER_IMAGE_TYPE = "Raster Image";
+    
+    /** Says this data model is a 'model' object */
+    public static String MODEL_TYPE = "Model";
 }
