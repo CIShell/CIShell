@@ -37,7 +37,7 @@ public class Save implements Algorithm {
      * 
      * @param data The data array to persist
      * @param parameters Parameters for the algorithm
-     * @param context Provides services to CIShell services
+     * @param ciShellContext Provides services to CIShell services
      */
     public Save(Data[] data, Dictionary parameters, CIShellContext context) {
         this.data = data;

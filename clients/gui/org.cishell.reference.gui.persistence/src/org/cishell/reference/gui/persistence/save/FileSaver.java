@@ -42,7 +42,7 @@ public class FileSaver {
      * Initializes services to output messages
      * 
      * @param parent
-     * @param context
+     * @param ciShellContext
      */
     public FileSaver(Shell parent, CIShellContext context){
         this.parent = parent;

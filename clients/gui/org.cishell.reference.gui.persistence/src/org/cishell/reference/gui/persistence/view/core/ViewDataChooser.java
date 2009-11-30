@@ -21,7 +21,7 @@ public class ViewDataChooser extends SaveDataChooser {
 
 	protected void selectionMade(int selectedIndex) {
         getShell().setVisible(false);
-        this.selectedConverter = converterArray[selectedIndex];
+        this.selectedConverter = converters[selectedIndex];
         close(true);
 	}
 	
