@@ -48,6 +48,7 @@ public interface AlgorithmProperty {
     public static final String ADDITIONS_GROUP = "additions";
     public static final String START_GROUP = "start";
     public static final String END_GROUP = "end";
+    public static final String SHORTCUT = "shortcut";
     
     public static final String CONVERSION = "conversion";
     public static final String LOSSY = "lossy";
