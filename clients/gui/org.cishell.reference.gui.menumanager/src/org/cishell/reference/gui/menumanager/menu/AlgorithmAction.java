@@ -40,23 +40,13 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, DataMa
     protected Data[] originalData;
     protected Converter[][] converters;
     
-    public AlgorithmAction(ServiceReference ref, BundleContext bContext, CIShellContext ciContext) {
-        this.ref = ref;
-        this.ciContext = ciContext;
-        this.bContext = bContext;
-        
-        setText((String)ref.getProperty(LABEL));
-        setToolTipText((String)ref.getProperty(AlgorithmProperty.DESCRIPTION));
-        
-        DataManagerService dataManager = (DataManagerService) 
-            bContext.getService(bContext.getServiceReference(
-                    DataManagerService.class.getName()));
-        
-        dataManager.addDataManagerListener(this);
-        dataSelected(dataManager.getSelectedData());
+    public AlgorithmAction(
+    		ServiceReference ref, BundleContext bContext, CIShellContext ciContext) {
+    	this((String)ref.getProperty(LABEL), ref, bContext, ciContext);
     }
     
-    public AlgorithmAction(String label, ServiceReference ref, BundleContext bContext, CIShellContext ciContext) {
+    public AlgorithmAction(
+    		String label, ServiceReference ref, BundleContext bContext, CIShellContext ciContext) {
         this.ref = ref;
         this.ciContext = ciContext;
         this.bContext = bContext;
@@ -80,48 +70,68 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, DataMa
             SchedulerService scheduler = (SchedulerService) getService(SchedulerService.class);
             
             scheduler.schedule(algorithm, ref);
-        } catch (Throwable e) {
-        	//Just in case an uncaught exception occurs. Eclipse will swallow errors thrown here...
-            e.printStackTrace();
+        } catch (Throwable exception) {
+        	// Just in case an uncaught exception occurs. Eclipse will swallow errors thrown here.
+            exception.printStackTrace();
         }
     }
     
     private void printAlgorithmInformation(ServiceReference ref, CIShellContext ciContext) {
-        //adjust to log the whole acknowledgement in one block
+        // Adjust to log the whole acknowledgement in one block.
         LogService logger = (LogService) ciContext.getService(LogService.class.getName());
         StringBuffer acknowledgement = new StringBuffer();
         String label = (String)ref.getProperty(LABEL);
-        if (label != null){
-        	acknowledgement.append("..........\n"+label+" was selected.\n");
+
+        if (label != null) {
+        	acknowledgement.append("..........\n" + label + " was selected.\n");
         }
+
         String authors = (String)ref.getProperty(AUTHORS);
-        if (authors != null)
-        	acknowledgement.append("Author(s): "+authors+"\n"); 
+
+        if (authors != null) {
+        	acknowledgement.append("Author(s): " + authors + "\n");
+        }
+
         String implementers = (String)ref.getProperty(IMPLEMENTERS);
-        if (implementers != null)
-        	acknowledgement.append("Implementer(s): "+implementers+"\n");    
+
+        if (implementers != null) {
+        	acknowledgement.append("Implementer(s): " + implementers + "\n");
+        }
+
         String integrators = (String)ref.getProperty(INTEGRATORS);
-        if (integrators != null)
-            acknowledgement.append("Integrator(s): "+integrators+"\n");
+
+        if (integrators != null) {
+            acknowledgement.append("Integrator(s): " + integrators + "\n");
+        }
+
         String reference = (String)ref.getProperty(REFERENCE);
         String reference_url = (String)ref.getProperty(REFERENCE_URL);            
-        if (reference != null && reference_url != null )
-            acknowledgement.append("Reference: "+reference+
-                    " ("+reference_url+")\n"); 
-        else if (reference != null && reference_url == null )
-        	acknowledgement.append("Reference: "+reference+"\n");                     
+
+        if ((reference != null) && (reference_url != null)) {
+            acknowledgement.append(
+            	"Reference: " + reference + " (" + reference_url + ")\n");
+        } else if ((reference != null) && (reference_url == null)) {
+        	acknowledgement.append("Reference: " + reference + "\n");
+        }
+
         String docu = (String)ref.getProperty(DOCUMENTATION_URL);
-        if (docu != null)
-        	acknowledgement.append("Documentation: "+docu+"\n");
-        if(acknowledgement.length()>1)
+
+        if (docu != null) {
+        	acknowledgement.append("Documentation: " + docu + "\n");
+        }
+
+        if (acknowledgement.length() > 1) {
         	logger.log(LogService.LOG_INFO, acknowledgement.toString());
+        }
     }
     
     private String[] separateInData(String inDataString) {
 		String[] inData = ("" + inDataString).split(",");
-        for(int ii = 0; ii < inData.length; ii++) {
+
+        for (int ii = 0; ii < inData.length; ii++) {
         	inData[ii] = inData[ii].trim();
         }
+
 		return inData;
 	}
     

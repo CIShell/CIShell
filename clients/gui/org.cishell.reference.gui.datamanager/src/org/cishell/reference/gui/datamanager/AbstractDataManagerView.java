@@ -68,49 +68,34 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogService;
 
-/**
- * 
- * @author Bruce Herr (bh2@bh2.net)
- */
-public abstract class AbstractDataManagerView extends ViewPart implements
-		DataManagerListener, BundleListener {
+public abstract class AbstractDataManagerView
+		extends ViewPart
+		implements DataManagerListener, BundleListener {
 	private String brandPluginID;
-
 	private DataManagerService manager;
-
 	private TreeViewer viewer;
-
 	private TreeEditor editor;
-
+	// TODO: Finish cleaning this file up.
 	private Text newEditor;
-
 	private DataGUIItem rootItem;
-
-	// flag to notify if a tree item is currently being updated so there
-	// isnt a conflict among various listeners
+	/*
+	 * Flag to notify if a tree item is currently being updated so there isnt a conflict among
+	 *  various listeners.
+	 */
 	private boolean updatingTreeItem;
-
 	private Tree tree;
-
 	private Menu menu;
-
 	private Map dataToDataGUIItemMap;
-	
 	private AlgorithmFactory saveFactory;
 	private AlgorithmFactory viewFactory;
 	private AlgorithmFactory viewWithFactory;
-	
-
 	private DiscardListener discardListener;
-
 	private SaveListener saveListener;
 	private ViewListener viewListener;
 	private ViewWithListener viewWithListener;
 	private LogService log;
 
 	public AbstractDataManagerView(String brandPluginID) {
-		
-		
 		this.brandPluginID = brandPluginID;
 		dataToDataGUIItemMap = new HashMap();
 		
@@ -124,9 +109,12 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 		}
 	}
 
-	private String getItemID(ServiceReference ref) {
-    	return ref.getProperty("PID:" + Constants.SERVICE_PID) + "-SID:" + 
-                                ref.getProperty(Constants.SERVICE_ID);
+	private String getItemID(ServiceReference serviceReference) {
+    	return serviceReference.getProperty(
+    		"PID:" +
+    		Constants.SERVICE_PID) +
+    		"-SID:" +
+    		serviceReference.getProperty(Constants.SERVICE_ID);
     }
     
 	
@@ -134,19 +122,18 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 	 * @see org.eclipse.ui.part.WorkbenchPart#createPartControl(org.eclipse.swt.widgets.Composite)
 	 */
 	public void createPartControl(Composite parent) {
-
 		// Label label = new Label(parent, SWT.NONE);
 		// label.setText("Data Manager");
-		viewer = new TreeViewer(parent);
-		viewer.setContentProvider(new DataTreeContentProvider());
-		viewer.setLabelProvider(new DataTreeLabelProvider());
+		this.viewer = new TreeViewer(parent);
+		this.viewer.setContentProvider(new DataTreeContentProvider());
+		this.viewer.setLabelProvider(new DataTreeLabelProvider());
 
 		rootItem = new DataGUIItem(null, null, this.brandPluginID);
-		viewer.setInput(rootItem);
-		viewer.expandAll();
+		this.viewer.setInput(rootItem);
+		this.viewer.expandAll();
 
 		// grab the tree and add the appropriate listeners
-		tree = viewer.getTree();
+		tree = this.viewer.getTree();
 		tree.addSelectionListener(new DatamodelSelectionListener());
 		tree.addMouseListener(new ContextMenuListener());
 
@@ -183,22 +170,21 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 		discardItem.addListener(SWT.Selection, discardListener);
 		tree.setMenu(menu);
 
-		// allow cells to be edited on double click or when pressing enter on
-		// them
-		editor = new TreeEditor(tree);
-		editor.horizontalAlignment = SWT.LEFT;
-		editor.grabHorizontal = true;
-		editor.minimumWidth = 50;
+		// Allow cells to be edited on double click or when pressing enter on them.
+		this.editor = new TreeEditor(tree);
+		this.editor.horizontalAlignment = SWT.LEFT;
+		this.editor.grabHorizontal = true;
+		this.editor.minimumWidth = 50;
 		
 		// listen to OSGi for models being added by plugins
-		if (manager != null) {
-			manager.addDataManagerListener(this);
-		}
-		else {
+		if (this.manager != null) {
+			this.manager.addDataManagerListener(this);
+		} else {
 			Activator.getBundleContext().addBundleListener(this);
-			manager = Activator.getDataManagerService();
-			if (manager != null) {
-				manager.addDataManagerListener(this);
+			this.manager = Activator.getDataManagerService();
+
+			if (this.manager != null) {
+				this.manager.addDataManagerListener(this);
 			}
 		}
 
@@ -207,9 +193,10 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 	
 	public void bundleChanged(BundleEvent event) {
 		if (event.getType() == BundleEvent.STARTED) {
-			manager = Activator.getDataManagerService();
-			if (manager != null) {
-				manager.addDataManagerListener(this);				
+			this.manager = Activator.getDataManagerService();
+
+			if (this.manager != null) {
+				this.manager.addDataManagerListener(this);				
 			}
 		}
 	}
@@ -218,7 +205,7 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 	 * @see org.eclipse.ui.part.WorkbenchPart#setFocus()
 	 */
 	public void setFocus() {
-		viewer.getControl().setFocus();
+		this.viewer.getControl().setFocus();
 	}
 
 	public void dataAdded(final Data newData, String label) {
@@ -246,12 +233,12 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 			public void run() {
 				if (!tree.isDisposed()) {
 					// update the TreeView
-					viewer.refresh();
+					AbstractDataManagerView.this.viewer.refresh();
 					// context menu may need to have options enabled/disabled
 					// based on the new selection
 					updateContextMenu(newData);
 					// update the global selection
-					viewer.expandToLevel(newItem, 0);
+					AbstractDataManagerView.this.viewer.expandToLevel(newItem, 0);
 					manager.setSelectedData((Data[]) selection.toArray(new Data[0]));
 				}
 			}
@@ -390,7 +377,7 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 				modelArray[i] = model;
 			}
 
-			manager.setSelectedData(modelArray);
+			AbstractDataManagerView.this.manager.setSelectedData(modelArray);
 		}
 	}
 
@@ -401,7 +388,7 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 	 */
 	private void handleInput() {
 		// Clean up any previous editor control
-		Control oldEditor = editor.getEditor();
+		Control oldEditor = this.editor.getEditor();
 
 		if (oldEditor != null) {
 			oldEditor.dispose();
@@ -428,7 +415,8 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 			public void focusLost(FocusEvent e) {
 				if (!updatingTreeItem) {
 					//updateText(newEditor.getText(), item);
-					manager.setLabel(((DataGUIItem)item.getData()).getModel(), newEditor.getText());
+					AbstractDataManagerView.this.manager.setLabel(
+						((DataGUIItem)item.getData()).getModel(), newEditor.getText());
 					// FELIX.  This is not > stupidness.
 				}
 			}
@@ -446,7 +434,7 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 		});
 		newEditor.selectAll();
 		newEditor.setFocus();
-		editor.setEditor(newEditor, item);
+		this.editor.setEditor(newEditor, item);
 	}
 
 	/*
@@ -460,7 +448,7 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 			newLabel = newLabel.substring(1);
 		
 	
-		editor.getItem().setText(newLabel);
+		this.editor.getItem().setText(newLabel);
 
 		DataGUIItem treeItem = (DataGUIItem) item.getData();
 		Data model = treeItem.getModel();
@@ -581,11 +569,11 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 				}
 
 				dataToDataGUIItemMap.remove(item.getModel());
-				manager.removeData(item.getModel());
+				AbstractDataManagerView.this.manager.removeData(item.getModel());
 			}
 
-			manager.setSelectedData(new Data[0]);
-			viewer.refresh();
+			AbstractDataManagerView.this.manager.setSelectedData(new Data[0]);
+			AbstractDataManagerView.this.viewer.refresh();
 		}
 	}
 
@@ -638,7 +626,7 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 		public void setSelection(ISelection selection) {
 			if (selection != this.selection) {
 				this.selection = selection;
-				viewer.refresh(true);
+				AbstractDataManagerView.this.viewer.refresh(true);
 
 				if (selection != null
 						&& selection instanceof IStructuredSelection) {
@@ -652,7 +640,7 @@ public abstract class AbstractDataManagerView extends ViewPart implements
 							TreeItem result = getTreeItem((Data) next, tree
 									.getItems());
 							newTreeSelection[i] = result;
-							viewer.expandToLevel(
+							AbstractDataManagerView.this.viewer.expandToLevel(
 									dataToDataGUIItemMap.get(next), 0);
 						}
 						i++;
