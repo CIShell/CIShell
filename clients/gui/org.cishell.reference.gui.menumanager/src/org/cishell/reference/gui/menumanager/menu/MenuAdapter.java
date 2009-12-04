@@ -13,9 +13,7 @@
  * ***************************************************************************/
 package org.cishell.reference.gui.menumanager.menu;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -55,243 +53,297 @@ import org.xml.sax.SAXException;
 
 
 public class MenuAdapter implements AlgorithmProperty {
-    private IMenuManager menuBar;
+	public static final String DEFAULT_MENU_FILE_NAME = "default_menu.xml";
+
+	// Tags in DEFAULT_MENU_FILE_NAME.
+    public static final String TAG_TOP_MENU = "top_menu";
+    public static final String TAG_MENU = "menu";    
+    public static final String TYPE_ATTRIBUTE = "type";
+    public static final String NAME_ATTRIBUTE = "name";
+    public static final String PID_ATTRIBUTE = "pid";
+    public static final String PRESERVED_GROUP = "group";
+    public static final String PRESERVED_BREAK = "break";
+    public static final String PRESERVED_EXIT = "Exit";
+    public static final String PRESERVED_SERVICE_PID = "service.pid";
+    public static final String PRESERVED = "preserved";
+
+    private IMenuManager menuManager;
     private Shell shell;
-    private BundleContext bContext;
-    private CIShellContext ciContext;
-    private Map algorithmToItemMap;
-    private Map itemToParentMap;
-    private ContextListener listener;
-    private IWorkbenchWindow window;
-    
+    private BundleContext bundleContext;
+    private CIShellContext ciShellContext;
+    private Map algorithmsToItems;
+    private Map itemsToParents;
+    private ContextListener contextListener;
+    private IWorkbenchWindow workbenchWindow;
+    private LogService logger;
     /*
-     * This map holds a pid as a key and the corresponding 
-     * ServiceReference as a value. It is built when 
-     * preprocessServiceBundles() is invoked. Then the entries 
-     * are gradually removed when the pids are specified in
-     * the defaul_menu.xml. If any entries are left, in 
-     * processLeftServiceBundles(), those plug-ins that have 
-     * specified the menu_path and label but are not listed in
-     * default_menu.xml will be added on to the menu.
+     * This map holds a pid as a key and the corresponding ServiceReference as a value.
+     * It is built when preprocessServiceBundles() is invoked.
+     * Then the entries are gradually removed when the pids are specified in
+     *  DEFAULT_MENU_FILE_NAME.
+     * If any entries are left, in processLeftServiceBundles(), those plug-ins that have specified
+     *  the menu_path and label but are not listed in DEFAULT_MENU_FILE_NAME will be added on to
+     *  the menu.
      */
-    private Map pidToServiceReferenceMap;
+    private Map pidsToServiceReferences;
     /*
-     * This is the exactly same copy of pidToServiceReferenceMap. 
-     * Since some plug-ins could display on menu more than once, it 
-     * provides a map between a pid and a ref while in pidToServiceReferenceMap
-     * that pid has been removed. 
+     * This is the exactly same copy of pidsToServiceReferences. 
+     * Since some plug-ins could display on menu more than once, it provides a map between a pid
+     *  and a ref while in pidsToServiceReferences that pid has been removed. 
      */
-    private Map pidToServiceReferenceMapCopy;
-    private Document dom;
-    private static String DEFAULT_MENU_FILE_NAME = "default_menu.xml";
-    
-    /*
-     * The following section specify the tags in the default_menu.xml
-     */
-    private static String TAG_TOP_MENU = "top_menu";
-    private static String TAG_MENU = "menu";    
-    private static String ATTR_TYPE = "type";
-    private static String ATTR_NAME = "name";
-    private static String ATTR_PID = "pid";
-    private static String PRESERVED_GROUP = "group";
-    private static String PRESERVED_BREAK = "break";
-    private static String PRESERVED_EXIT = "Exit";
-    private static String PRESERVED_SERVICE_PID="service.pid";
-    private static String PRESERVED = "preserved";
-    
+    private Map pidsToServiceReferencesCopy;
+    private Document documentObjectModel;
 
+    private Runnable updateAction = new Runnable() {
+        public void run() {
+            MenuAdapter.this.menuManager.updateAll(true);
+        }
+    };
 
-    
-    public MenuAdapter(IMenuManager menu, Shell shell, 
-            BundleContext bContext,CIShellContext ciContext,
-            IWorkbenchWindow window) {
-    	//basic initialization
-        this.menuBar = menu;
+    private Runnable stopAction = new Runnable() {
+        public void run() {
+            String[] algorithmKeys =
+            	(String[])MenuAdapter.this.algorithmsToItems.keySet().toArray(new String[]{});
+            
+            for (int ii = 0; ii < algorithmKeys.length; ii++) {
+                Action item = (Action)algorithmsToItems.get(algorithmKeys[ii]);
+                IMenuManager targetMenu = (IMenuManager)MenuAdapter.this.itemsToParents.get(item);
+                
+                targetMenu.remove(item.getId());
+                MenuAdapter.this.algorithmsToItems.remove(algorithmKeys[ii]);
+                MenuAdapter.this.itemsToParents.remove(item);
+            }
+        }        
+    };
+
+    public MenuAdapter(
+    		IMenuManager menuManager,
+    		Shell shell, 
+            BundleContext bundleContext,
+            CIShellContext ciShellContext,
+            IWorkbenchWindow workbenchWindow) {
+        this.menuManager = menuManager;
         this.shell = shell;
-        this.bContext = bContext;
-        this.ciContext = ciContext;
-        this.window = window;
-        
-        this.algorithmToItemMap = new HashMap();
-        this.itemToParentMap = new HashMap();
-        
-        pidToServiceReferenceMap = new HashMap();
-        pidToServiceReferenceMapCopy = new HashMap();
-        
-        //appears to add a listener which updates the menu item whenever a 
-        //corresponding change occurs in the bundle (registers, unregisters, etc...)
-        String filter = "(" + Constants.OBJECTCLASS + 
-                        "=" + AlgorithmFactory.class.getName() + ")";
-        listener = new ContextListener();
-       
-        
+        this.bundleContext = bundleContext;
+        this.ciShellContext = ciShellContext;
+        this.workbenchWindow = workbenchWindow;
+        this.algorithmsToItems = new HashMap();
+        this.itemsToParents = new HashMap();
+        this.pidsToServiceReferences = new HashMap();
+        this.pidsToServiceReferencesCopy = new HashMap();
+        this.logger = (LogService)this.ciShellContext.getService(LogService.class.getName());
+
+        /*
+    	 * The intention of this clearShortcuts was to programmatically clear all of the
+    	 *  bound shortcuts, so any found in our own plugins wouldn't have conflicts.
+    	 * Doing this doesn't immediately seem very possible, though there may be some promise in
+    	 *  "redirecting" the actions taken by the shortcuts.
+    	 * (See: http://dev.eclipse.org/newslists/news.eclipse.platform/msg79882.html )
+    	 * As a note, the keyboard shortcuts are actually called accelerator key codes, and the
+    	 *  machinery that makes them work is very deeply ingrained in Eclipse.
+    	 * The difficulties I faced with trying to clear already-bound shortcuts has led me to
+    	 *  suspect three possible things:
+    	 *   We may be "abusing" Eclipse by using it as the foundation for our own applications.
+    	 *   There may be a way to customize/configure (or interface with) the culprit plugin
+    	 *    that's binding the shortcuts before us (org.eclipse.ui.workbench).  This seems to be
+    	 *    highly-likely, and more research on the matter can probably be justified at
+    	 *    some point.
+    	 *   The intended way TO work around the shortcuts already being bound is to redirect the
+    	 *    actions taken by them, as mentioned above.
+    	 * Either way, to get these shortcuts working, I'm just going to use non-standard key
+    	 *  combinations.
+    	 */
+        //clearShortcuts();
+
+        /*
+         * Appears to add a context listener which updates the menu item whenever a corresponding
+         *  change occurs in the bundle (registers, unregisters, etc...).
+         */
+        String filter = "(" + Constants.OBJECTCLASS + "=" + AlgorithmFactory.class.getName() + ")";
+        this.contextListener = new ContextListener();
+
         try {
-        
-            bContext.addServiceListener(listener, filter);
+            bundleContext.addServiceListener(this.contextListener, filter);
             preprocessServiceBundles();
-            String app_location = System.getProperty("osgi.configuration.area");
+            String applicationLocation = System.getProperty("osgi.configuration.area");
          
-            //Comments below refer to problems with earlier versions of this document.
-            //Keeping these around for now, as well as the system.out.printlns,
-            //until we are sure that the current fix works.
+            /*
+             * Comments below refer to problems with earlier versions of this document.
+             * Keeping these around for now, as well as the system.out.printlns, until we are sure
+             *  that the current fix works.
+             */
             
             /*
-             * This is a temporary fix. A bit complex to explain the observation 
-             * I got so far. On Windows XP 
-             * app_location = file:/C:/Documents and Settings/huangb/Desktop/
-             * nwb-sept4/nwb/configuration/
+             * This is a temporary fix. A bit complex to explain the observation I got so far.
+             * On Windows XP, 
+             *  app_location =
+             *   file:/C:/Documents and Settings/huangb/Desktop/nwb-sept4/nwb/configuration/
              * If I didn't trim "file:/", on some windows machines 
-             * new File(fileFullpath).exists() will return false, and 
-             * initializaMenu() will be invoked. When initializaMenu() is invoked,
-             * not all required top menus will show up. So either Bruce code 
-             * or Tim's fix has some problems. Can not append top menu such as 
-             * Tools-->Scheduler if Tools is not specified in the XML
-             * If pass trimed file path C:/Documents and Settings/huangb/Desktop/
-             * nwb-sept4/nwb/configuration/ to createMenuFromXML, on some machines,
-             * URL =  C:/Documents and Settings/huangb/Desktop/nwb-sept4/nwb/configuration/ 
-             * is a bad one, and can not create a document builder instance and the
-             * DOM representation of the XML file.
+             *  new File(fileFullpath).exists()
+             *  will return false, and initializaMenu() will be invoked.
+             * When initializaMenu() is invoked, not all required top menus will show up.
+             * So either Bruce code or Tim's fix has some problems. Can not append top menu such as 
+             *  Tools-->Scheduler if Tools is not specified in the XML.
+             * If pass trimmed file path
+             *  C:/Documents and Settings/huangb/Desktop/nwb-sept4/nwb/configuration/
+             *  to createMenuFromXML, on some machines,
+             *  URL = C:/Documents and Settings/huangb/Desktop/nwb-sept4/nwb/configuration/ 
+             *  is a bad one, and can not create a document builder instance and the
+             *  DOM representation of the XML file.
              * 
              * This piece of code needs to be reviewed and refactored!!!
 			 */
             
-            //Better to use System.err, since it prints the stream immediately instead of storing it in a buffer which might be lost if there is a crash.
-            System.err.println(">>>app_location = "+app_location);
-            String fileFullPath = app_location + DEFAULT_MENU_FILE_NAME; 
-            System.err.println(">>>fileFullPath = " + fileFullPath);
+            /*
+             * Better to use System.err, since it prints the stream immediately instead of storing
+             *  it in a buffer which might be lost if there is a crash.
+             */
+            String fileFullPath = applicationLocation + DEFAULT_MENU_FILE_NAME; 
             URL configurationDirectoryURL = new URL(fileFullPath);
-            System.err.println(">>>URL = " + configurationDirectoryURL.toString());
+
             try {
             	configurationDirectoryURL.getContent();
-            	System.out.println(">>>config.ini Exists!");
+            	//System.out.println(">>>config.ini Exists!");
             	createMenuFromXML(fileFullPath);
             	processLeftServiceBundles();  
-            } catch (IOException e) {
-            	e.printStackTrace();
-            	System.err.println("config.ini does not exist... Reverting to backup plan");
+            } catch (IOException ioException) {
+            	ioException.printStackTrace();
+            	//System.err.println("config.ini does not exist... Reverting to backup plan");
             	initializeMenu();
             }
-            Display.getDefault().asyncExec(updateAction);
-     
-        } catch (InvalidSyntaxException e) {
-            getLog().log(LogService.LOG_DEBUG, "Invalid Syntax", e);
-        } catch (Throwable e) {
-        	//Should catch absolutely everything catchable. Will hopefully reveal the error coming out of the URI constructor.
-        	//No time to test today, just commiting this for testing later.
-        	e.printStackTrace();
+
+            Display.getDefault().asyncExec(this.updateAction);
+        } catch (InvalidSyntaxException invalidSyntaxException) {
+        	// TODO: Improve this error message.  "Invalid Syntax" is terrible!
+            this.logger.log(LogService.LOG_DEBUG, "Invalid Syntax", invalidSyntaxException);
+        } catch (Throwable exception) {
+        	/*
+        	 * TODO: Improve this.
+        	 * Should catch absolutely everything catchable. Will hopefully reveal the error coming
+        	 *  out of the URI constructor.
+        	 * No time to test today, just commiting this for testing later.
+        	 */
+        	exception.printStackTrace();
         }
     }
         
     /*
-     * This method scans all service bundles. If a bundle specifies 
-     * menu_path and label, get service.pid of this bundle (key), let the service
-     * reference as the value, and put key/value pair 
-     * to pidToServiceReferenceMap for further processing.
-     * 
+     * This method scans all service bundles. If a bundle specifies  menu_path and label,
+     *  get service.pid of this bundle (key), let the service reference as the value, and put
+     *  key/value pair  to pidsToServiceReferences for further processing.
      */
-    private void preprocessServiceBundles() throws InvalidSyntaxException{
-        ServiceReference[] refs = bContext.getAllServiceReferences(
-                AlgorithmFactory.class.getName(), null);
-        if (refs != null){
-        	for (int i=0; i < refs.length; i++) {
-        		String path = (String)refs[i].getProperty(MENU_PATH);
-        		String label = (String)refs[i].getProperty(LABEL);
-        		if (path == null){
+    private void preprocessServiceBundles() throws InvalidSyntaxException {
+        ServiceReference[] serviceReferences =
+        	this.bundleContext.getAllServiceReferences(AlgorithmFactory.class.getName(), null);
+
+        if (serviceReferences != null){
+        	for (int ii = 0; ii < serviceReferences.length; ii++) {
+        		String path = (String)serviceReferences[ii].getProperty(MENU_PATH);
+
+        		if (path == null) {
         			continue;
-        		}
-        		else{       
-        			String pid = (String)refs[i].getProperty(PRESERVED_SERVICE_PID);
-        			pidToServiceReferenceMap.put(pid.toLowerCase().trim(), refs[i]);
-        			pidToServiceReferenceMapCopy.put(pid.toLowerCase().trim(), refs[i]);
+        		} else {       
+        			String pid = (String)serviceReferences[ii].getProperty(PRESERVED_SERVICE_PID);
+        			pidsToServiceReferences.put(pid.toLowerCase().trim(), serviceReferences[ii]);
+        			pidsToServiceReferencesCopy.put(
+        				pid.toLowerCase().trim(), serviceReferences[ii]);
         		}
         	}
         }
     }
     /*
-     * Parse default_menu.xml file. For each menu node, get the value of the attribut "pid"
-     * check if the pid exists in pidToServiceReferenceMap. If so, get the action and add to the parent menu
-     * If not, ignore this menu. At the end of each top menu or subgroup menu or before help menu, 
-     * add "additions" so that new algorithms can be added on later 
+     * Parse DEFAULT_MENU_FILE_NAME file.
+     * For each menu node, get the value of the attribute pid.
+     * Check if the pid exists in pidsToServiceReferences.
+     * If so, get the action and add to the parent menu.
+     * If not, ignore this menu.
+     * At the end of each top menu or subgroup menu or before help menu,  add "additions" so that
+     *  new algorithms can be added on later. 
      * 
      * What is the reasonable logic?
-     * If a plug-in has been specified in the default_menu.xml, always use that menu layout
-     * If a plug-in has not been specified in the default_menu.xml, use the menu_path 
-     * specified in the properties file.
+     * If a plug-in has been specified in the DEFAULT_MENU_FILE_NAME, always use that menu layout
+     * If a plug-in specified in the DEFAULT_MENU_FILE_NAME, use the menu_path specified in the
+     *  properties file.
      * If a plug-in specifies a label in the properties file, always use it.
-     *
      */
     private void createMenuFromXML(String menuFilePath) throws InvalidSyntaxException{
-    	parseXmlFile(menuFilePath);    	
-    	//get the root elememt
-		Element docEle = dom.getDocumentElement();
+    	parseXMLFile(menuFilePath);    	
+    	// Get the root elememt.
+		Element documentElement = this.documentObjectModel.getDocumentElement();
 			
-		//get a nodelist of the top menu elements
-		NodeList topMenuList = docEle.getElementsByTagName(TAG_TOP_MENU);
-		if(topMenuList != null && topMenuList.getLength() > 0) {
-			for(int i = 0 ; i < topMenuList.getLength();i++) {				
-				Element el = (Element)topMenuList.item(i);
-				processTopMenu(el);				
+		// Get a nodelist of the top menu elements.
+		NodeList topMenuList = documentElement.getElementsByTagName(TAG_TOP_MENU);
+
+		if ((topMenuList != null) && (topMenuList.getLength() > 0)) {
+			for (int ii = 0; ii < topMenuList.getLength(); ii++) {				
+				Element element = (Element)topMenuList.item(ii);
+				processTopMenu(element);				
 			}
 		}    	
     }  
     
-    private void processTopMenu (Element topMenuNode){    	
-    	MenuManager topMenuBar = null;    	
-    
+    private void processTopMenu(Element topMenuNode) {
     	/*	
-    	 * The File and Help menus are created in ApplicationActionBarAdvisor.java
-    	 * This function now parses the XML file and appends the new menus/menu items to the correct group
-    	 * We first check to see if the menu already exists in our MenuBar. If it does, we modify the already
-    	 * existing menu. If not, then we create a new Menu.
+    	 * The File and Help menus are created in ApplicationActionBarAdvisor.java.
+    	 * This function now parses the XML file and appends the new menus/menu items to the
+    	 *  correct group.
+    	 * We first check to see if the menu already exists in our MenuBar.
+    	 * If it does, we modify the already existing menu. If not, then we create a new Menu.
     	 * 
-    	 * Modified by: Tim Kelley
-    	 * Date: May 8-9, 2007
     	 * Additional code at: org.cishell.reference.gui.workspace.ApplicationActionBarAdvisor.java
     	 */
     	
-    	String topMenuName = topMenuNode.getAttribute(ATTR_NAME);
-    	if((topMenuBar = (MenuManager)menuBar.findUsingPath(topMenuName)) == null){  		//Check to see if menu exists
-    		topMenuBar= new MenuManager(topMenuName, topMenuName.toLowerCase());    		//Create a new menu if it doesn't
-    		menuBar.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, topMenuBar);
+    	String topMenuName = topMenuNode.getAttribute(NAME_ATTRIBUTE);
+    	MenuManager topMenuBar = (MenuManager)this.menuManager.findUsingPath(topMenuName);
+
+    	if (topMenuBar == null) {
+    		topMenuBar = new MenuManager(topMenuName, topMenuName.toLowerCase());
+    		this.menuManager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, topMenuBar);
     	}
     	
-    	//Second process submenu
+    	// Second process submenu.
     	processSubMenu(topMenuNode, topMenuBar);
     }
     
     /*
-     * Recursively process sub menu and group menu
+     * Recursively process sub menu and group menu.
      */
-    private void processSubMenu (Element menuNode, MenuManager parentMenuBar){
-       	
+    private void processSubMenu(Element menuNode, MenuManager parentMenuBar){
     	NodeList subMenuList =  menuNode.getElementsByTagName(TAG_MENU);
-    	if(subMenuList != null && subMenuList.getLength() > 0) {
-    		for(int i = 0 ; i < subMenuList.getLength();i++) {			
-				Element el = (Element)subMenuList.item(i);
+
+    	if ((subMenuList != null) && (subMenuList.getLength() > 0)) {
+    		for (int ii = 0; ii < subMenuList.getLength(); ii++) {			
+				Element element = (Element)subMenuList.item(ii);
 				
-				//only process direct children nodes and
-				//drop all grand or grand of grand children nodes
-				if (!el.getParentNode().equals(menuNode))
+				/*
+				 * Only process direct children nodes and drop all grand or grand of grand
+				 *  children nodes.
+				 * TODO: Why?
+				 */
+				if (!element.getParentNode().equals(menuNode)) {
 					continue;
-				
-				String menu_type = el.getAttribute(ATTR_TYPE);
-				String pid=el.getAttribute(ATTR_PID);
-				if ((menu_type == null || menu_type.length()==0)&& pid !=null){
-					processAMenuNode(el, parentMenuBar);
-				}				
-				else if (menu_type.equalsIgnoreCase(PRESERVED_GROUP)){
-					String groupName = el.getAttribute(ATTR_NAME);
+				}
+
+				String menuType = element.getAttribute(TYPE_ATTRIBUTE);
+				String algorithmPID = element.getAttribute(PID_ATTRIBUTE);
+
+				if (((menuType == null) || (menuType.length() == 0)) && (algorithmPID != null)) {
+					processAMenuNode(element, parentMenuBar);
+				} else if (menuType.equalsIgnoreCase(PRESERVED_GROUP)) {
+					String groupName = element.getAttribute(NAME_ATTRIBUTE);
 					MenuManager groupMenuBar = new MenuManager(groupName, groupName.toLowerCase());
 					parentMenuBar.add(groupMenuBar);
-					processSubMenu(el, groupMenuBar);					
+					processSubMenu(element, groupMenuBar);					
 				}				
-				else if (menu_type.equalsIgnoreCase(PRESERVED_BREAK)){	
-					//It seems that Framework automatically takes care of issues
-					//such as double separators, a separator at the top or bottom					
+				else if (menuType.equalsIgnoreCase(PRESERVED_BREAK)){	
+					/*
+					 * It seems that the framework automatically takes care of issues such as
+					 *  double separators and a separator at the top or bottom.
+					 */					
 					parentMenuBar.add(new Separator());
 				}
-				else if (menu_type.equalsIgnoreCase(PRESERVED)){
-					String menuName = el.getAttribute(ATTR_NAME);
+				else if (menuType.equalsIgnoreCase(PRESERVED)){
+					String menuName = element.getAttribute(NAME_ATTRIBUTE);
 					if(menuName.equalsIgnoreCase(PRESERVED_EXIT) ){
 					  //allow to add more menu before "File/Exit"	
 					  if(parentMenuBar.getId().equalsIgnoreCase(IWorkbenchActionConstants.M_FILE)){
@@ -299,7 +351,7 @@ public class MenuAdapter implements AlgorithmProperty {
 						parentMenuBar.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
 						parentMenuBar.add(new GroupMarker(END_GROUP));
 					  }
-					  IWorkbenchAction exitAction = ActionFactory.QUIT.create(window);
+					  IWorkbenchAction exitAction = ActionFactory.QUIT.create(workbenchWindow);
 					  parentMenuBar.add(new Separator());
 					  parentMenuBar.add(exitAction);						
 					}
@@ -314,152 +366,166 @@ public class MenuAdapter implements AlgorithmProperty {
 				parentMenuBar.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
 				parentMenuBar.add(new GroupMarker(END_GROUP));
 			}
-			
-    	} 
- 	
+    	}
     }
 
     /*
-     * process a menu (algorithm)	
+     * TODO: Better name?
+     * Process a menu (algorithm).	
      */
-    private void processAMenuNode(Element menuNode, MenuManager parentMenuBar ){
- 		String menuName = menuNode.getAttribute(ATTR_NAME);
-		String pid = menuNode.getAttribute(ATTR_PID);
-		if (pid == null || pid.length()==0){
-			//check if the name is one of the preserved one
-			//if so add the default action
-		}
-		else{
-			//check if the pid has registered in pidToServiceReferenceMap
-			if (pidToServiceReferenceMapCopy.containsKey(pid.toLowerCase().trim())){
-				ServiceReference ref = (ServiceReference) pidToServiceReferenceMapCopy.
-											get(pid.toLowerCase().trim());
-				pidToServiceReferenceMap.remove(pid.toLowerCase().trim());
-    			AlgorithmAction action = new AlgorithmAction(ref, bContext, ciContext); 
-    			String menuLabel = (String)ref.getProperty(LABEL);
-    			if(menuName!= null && menuName.trim().length()>0){
-    				//use the name specified in the xml to overwrite the label
+    private void processAMenuNode(Element menuNode, MenuManager parentMenuBar) {
+ 		String menuName = menuNode.getAttribute(NAME_ATTRIBUTE);
+		String pid = menuNode.getAttribute(PID_ATTRIBUTE);
+
+		if ((pid == null) || (pid.length() == 0)) {
+			/*
+			 * TODO: Check if the name is one of the preserved one, and add the default action if
+			 *  it is?
+			 */
+		} else {
+			// Check if the PID has registered in pidsToServiceReferences.
+			if (this.pidsToServiceReferencesCopy.containsKey(pid.toLowerCase().trim())){
+				ServiceReference serviceReference =
+					(ServiceReference)this.pidsToServiceReferencesCopy.get(
+						pid.toLowerCase().trim());
+				this.pidsToServiceReferences.remove(pid.toLowerCase().trim());
+    			AlgorithmAction action =
+    				new AlgorithmAction(serviceReference, this.bundleContext, this.ciShellContext); 
+    			String menuLabel = (String)serviceReference.getProperty(LABEL);
+
+    			if ((menuName!= null) && (menuName.trim().length() > 0)) {
+    				// Use the name specified in the XML to overwrite the label.
     				action.setText(menuName);
-    				action.setId(getItemID(ref));
+    				action.setId(getItemID(serviceReference));
     				parentMenuBar.add(action);
-    			}
-    			else{
-    				if (menuLabel!= null && menuLabel.trim().length()>0){
+    				handleActionAccelerator(action, parentMenuBar, serviceReference);
+    			} else {
+    				if ((menuLabel != null) && (menuLabel.trim().length() > 0)) {
     					action.setText(menuLabel);
-    					action.setId(getItemID(ref));
-        				parentMenuBar.add(action);
-    				}
-    				else {
-    					//this is a problem -- no label is specified in the plug-in's properties file
-    					//and no name is specified in the xml file.
+    					action.setId(getItemID(serviceReference));
+    					parentMenuBar.add(action);
+    					handleActionAccelerator(action, parentMenuBar, serviceReference);
+    				} else {
+    					/*
+    					 * TODO: This is a problem: No label is specified in the plug-in's
+    					 *  properties file and no name is specified in the XML file.
+    					 */
     				}
     			}
 				
-			}
-			else{
-				//otherwise log the error
-				getLog().log(LogService.LOG_DEBUG, 
-	                    "Oops! Network Workbench tried to place an algorithm with the id '" + pid + "' on the menu, but the algorithm could not be found.");
-				getLog().log(LogService.LOG_DEBUG, "If you see this error, please contact nwb-helpdesk@googlegroups.com, or post a ticket on our bug tracker at " +
-						"http://cns-trac.slis.indiana.edu/trac/nwb  .");
+			} else {
+				String algorithmNotFoundMessage =
+					"Oops! Network Workbench tried to place an algorithm with the id '" +
+					pid +
+					"' on the menu, but the algorithm could not be found.";
+				String contactInformationMessage =
+					"If you see this error, please contact nwb-helpdesk@googlegroups.com, or " +
+					"post a ticket on our bug tracker at: " +
+					"http://cns-trac.slis.indiana.edu/trac/nwb .";
+				this.logger.log(LogService.LOG_DEBUG, algorithmNotFoundMessage);
+				this.logger.log(LogService.LOG_DEBUG, contactInformationMessage);
 			}
 		}
     }    
     
-    private void parseXmlFile(String menuFilePath){
-		//get the factory
-		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-		dbf.setCoalescing(true);
-		try {			
-			//Using factory get an instance of document builder
-			DocumentBuilder db = dbf.newDocumentBuilder();
-			
-			//parse using builder to get DOM representation of the XML file	        
-	        dom = db.parse(menuFilePath);	
-	    // printElementAttributes(dom);
+    private void parseXMLFile(String menuFilePath){
+		DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+		documentBuilderFactory.setCoalescing(true);
 
-		}catch(ParserConfigurationException pce) {
-			pce.printStackTrace();
-		}catch(SAXException se) {
-			se.printStackTrace();
-		}catch(IOException ioe) {
-			ioe.printStackTrace();
+		try {
+			DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+        
+	        this.documentObjectModel = documentBuilder.parse(menuFilePath);	
+
+		} catch(ParserConfigurationException parserConfigurationException) {
+			parserConfigurationException.printStackTrace();
+		} catch(SAXException saxException) {
+			saxException.printStackTrace();
+		} catch(IOException ioException) {
+			ioException.printStackTrace();
 		}
 	}
     
     /*
      * Handle some service bundles that have specified the menu_path and label
-     * but not specified in the default_menu.xml
+     * but not specified in the DEFAULT_MENU_FILE_NAME
      */
-    private void processLeftServiceBundles(){
-    	if (!pidToServiceReferenceMap.isEmpty()){
-    		Object[] keys = pidToServiceReferenceMap.keySet().toArray();
-    		for (int i=0; i<keys.length; i++){
-    			ServiceReference ref= (ServiceReference) 
-    						pidToServiceReferenceMap.get((String)keys[i]);
-    			makeMenuItem(ref);
+    private void processLeftServiceBundles() {
+    	if (!this.pidsToServiceReferences.isEmpty()){
+    		Object[] keys = this.pidsToServiceReferences.keySet().toArray();
+
+    		for (int ii = 0; ii < keys.length; ii++) {
+    			ServiceReference serviceReference =
+    				(ServiceReference)this.pidsToServiceReferences.get((String)keys[ii]);
+    			makeMenuItem(serviceReference);
     		}    		
     	}    		
     }
-    
 
     private void initializeMenu() throws InvalidSyntaxException{   
-        ServiceReference[] refs = bContext.getAllServiceReferences(
-                AlgorithmFactory.class.getName(), null);
+        ServiceReference[] serviceReferences = this.bundleContext.getAllServiceReferences(
+        	AlgorithmFactory.class.getName(), null);
      
- 		if (refs != null) {
-            for (int i=0; i < refs.length; i++) {
-                makeMenuItem(refs[i]);
+ 		if (serviceReferences != null) {
+            for (int ii = 0; ii < serviceReferences.length; ii++) {
+                makeMenuItem(serviceReferences[ii]);
             }
         }
+    }
 
-    }    
-
-    
     private class ContextListener implements ServiceListener {
         public void serviceChanged(ServiceEvent event) {
             switch (event.getType()) {
             case ServiceEvent.REGISTERED:
                 makeMenuItem(event.getServiceReference());
+
                 break;
             case ServiceEvent.UNREGISTERING:
                 removeMenuItem(event.getServiceReference());
+
                 break;
             case ServiceEvent.MODIFIED:
                 updateMenuItem(event.getServiceReference());
+
                 break;
             }
         }
     }
     
-    private void makeMenuItem(ServiceReference ref) {
-        String path = (String)ref.getProperty(MENU_PATH);
-        String[] items = (path == null) ? null : path.split("/");
+    private void makeMenuItem(ServiceReference serviceReference) {
+        String path = (String)serviceReference.getProperty(MENU_PATH);
+        String[] items = null;
+
+        if (path != null) {
+        	items = path.split("/");
+        }
+
         IMenuManager menu = null;
-        if (items != null && items.length > 1) {
-            AlgorithmAction action = new AlgorithmAction(ref, bContext, ciContext);
-            action.setId(getItemID(ref));
+
+        if ((items != null) && (items.length > 1)) {
+            AlgorithmAction action =
+            	new AlgorithmAction(serviceReference, this.bundleContext, this.ciShellContext);
+            action.setId(getItemID(serviceReference));
             
-            IMenuManager targetMenu = menuBar;
-            String group = items[items.length-1];
+            IMenuManager targetMenu = this.menuManager;
+            String group = items[items.length - 1];
             
-            for (int i=0; i < items.length-1; i++) {
-            
-                menu = targetMenu.findMenuUsingPath(items[i]);
+            for (int ii = 0; ii < items.length - 1; ii++) {
+                menu = targetMenu.findMenuUsingPath(items[ii]);
  
-                if (menu == null && items[i] != null) {
-                    menu = targetMenu.findMenuUsingPath(items[i].toLowerCase());                  
+                if ((menu == null) && (items[ii] != null)) {
+                    menu = targetMenu.findMenuUsingPath(items[ii].toLowerCase());                  
                 }
                 
                 if (menu == null) {                	
-                    menu = createMenu(items[i],items[i]);
+                    menu = createMenu(items[ii], items[ii]);
                     targetMenu.appendToGroup(ADDITIONS_GROUP, menu);
                 }
                 
                 targetMenu = menu;
             }
             
-            group = items[items.length-1];
+            group = items[items.length - 1];
             IContributionItem groupItem = targetMenu.find(group);
             
             if (groupItem == null) {
@@ -468,98 +534,124 @@ public class MenuAdapter implements AlgorithmProperty {
             }
             
             targetMenu.appendToGroup(group, action);
+            handleActionAccelerator(action, targetMenu, serviceReference);
             targetMenu.appendToGroup(group, new Separator());
-            algorithmToItemMap.put(getItemID(ref), action);
-            itemToParentMap.put(action, targetMenu);
+            algorithmsToItems.put(getItemID(serviceReference), action);
+            itemsToParents.put(action, targetMenu);
             
-            Display.getDefault().asyncExec(updateAction);
+            Display.getDefault().asyncExec(this.updateAction);
         } else {
-            getLog().log(LogService.LOG_DEBUG, 
-                    "Bad menu path for Algorithm: " + ref.getProperty(LABEL));
+            this.logger.log(
+            	LogService.LOG_DEBUG,
+            	"Bad menu path for Algorithm: " + serviceReference.getProperty(LABEL));
         }
     }
     
-    private Runnable updateAction = new Runnable() {
-        public void run() {
-            menuBar.updateAll(true);
-        }
-    };
-    
-    private String getItemID(ServiceReference ref) {
-    	return ref.getProperty("PID:" + Constants.SERVICE_PID) + "-SID:" + 
-                                ref.getProperty(Constants.SERVICE_ID);
+    private String getItemID(ServiceReference serviceReference) {
+    	return
+    		serviceReference.getProperty("PID:" + Constants.SERVICE_PID) +
+    		"-SID:" +
+    		serviceReference.getProperty(Constants.SERVICE_ID);
     }
-    
+
     private MenuManager createMenu(String name, String id){
         MenuManager menu = new MenuManager(name, id);
         menu.add(new GroupMarker(START_GROUP));
         menu.add(new GroupMarker(ADDITIONS_GROUP));
         menu.add(new GroupMarker(END_GROUP));
+
         return menu;
     }
-    
-    private void updateMenuItem(ServiceReference ref) {
-        Action item = (Action) algorithmToItemMap.get(getItemID(ref));
+
+    private void updateMenuItem(ServiceReference serviceReference) {
+        Action item = (Action)this.algorithmsToItems.get(getItemID(serviceReference));
         
-        if (item != null) 
-            item.setText(""+ref.getProperty(LABEL));
+        if (item != null) {
+        	this.logger.log(
+        		LogService.LOG_DEBUG, "updateMenuItem for " + getItemID(serviceReference));
+            item.setText("" + serviceReference.getProperty(LABEL));
+        }
     }
     
-    private void removeMenuItem(ServiceReference ref) {
-        String path = (String)ref.getProperty(MENU_PATH);
-        final Action item = (Action) algorithmToItemMap.get(getItemID(ref));
+    private void removeMenuItem(ServiceReference serviceReference) {
+        String path = (String)serviceReference.getProperty(MENU_PATH);
+        final Action item = (Action)this.algorithmsToItems.get(getItemID(serviceReference));
         
-        if (path != null && item != null) {
+        if ((path != null) && (item != null)) {
             int index = path.lastIndexOf('/');
+
             if (index != -1) {
                 path = path.substring(0, index);
-                
-                final IMenuManager targetMenu = menuBar.findMenuUsingPath(path);
+                final IMenuManager targetMenu = this.menuManager.findMenuUsingPath(path);
 
                 if (targetMenu != null) {
-                    
-                    if (!shell.isDisposed()) {
-                        shell.getDisplay().syncExec(new Runnable() {
-                            public void run() {
-                                targetMenu.remove(item.getId());
-                            }});
+                	if (!this.shell.isDisposed()) {
+                		this.shell.getDisplay().syncExec(new Runnable() {
+                			public void run() {
+                				targetMenu.remove(item.getId());
+                			}
+                		});
                     }
-                    
-                    
-                    algorithmToItemMap.remove(getItemID(ref));
-                    itemToParentMap.remove(item);
+
+                    this.algorithmsToItems.remove(getItemID(serviceReference));
+                    this.itemsToParents.remove(item);
                 }
             }   
         }
     }
-    
-    private Runnable stopAction = new Runnable() {
-        public void run() {
-            String[] algs = (String[])
-                    algorithmToItemMap.keySet().toArray(new String[]{});
-            
-            for (int i=0; i < algs.length; i++) {
-                Action item = (Action)algorithmToItemMap.get(algs[i]);
-                IMenuManager targetMenu = (IMenuManager)itemToParentMap.get(item);
-                
-                targetMenu.remove(item.getId());
-                algorithmToItemMap.remove(algs[i]);
-                itemToParentMap.remove(item);
-            }
-        }        
-    };
-    
+
     public void stop() {
-        bContext.removeServiceListener(listener);
+        this.bundleContext.removeServiceListener(this.contextListener);
         
-        if (!shell.isDisposed()) {
-            shell.getDisplay().syncExec(stopAction);
+        if (!this.shell.isDisposed()) {
+            this.shell.getDisplay().syncExec(this.stopAction);
         }
     }
-    
-    private LogService getLog() {
-        return (LogService) ciContext.getService(LogService.class.getName());
-    }   
+
+    //private void clearShortcuts() {
+    	/*IWorkbench workbench = this.window.getWorkbench();
+    	IBindingService bindingService =
+    		(IBindingService)workbench.getService(IBindingService.class);
+    	Binding[] bindings = bindingService.getBindings();
+    	IHandlerService handlerService =
+    		(IHandlerService)workbench.getService(IHandlerService.class);*/
+    	//getLog().log(LogService.LOG_WARNING, "handlerService: " + handlerService);
+    	//for (int ii = 0; ii < bindings.length; ii++) {
+    		// getLog().log(LogService.LOG_INFO, "Binding[" + ii + "]: " + bindings[ii]);
+    		/*String bindingInfo =
+    			"\tcontextID: " + bindings[ii].getContextId() + "\n" +
+    			"\tparameterized command: " + bindings[ii].getParameterizedCommand() + "\n" +
+    			"\ttrigger sequence: " + bindings[ii].getTriggerSequence().format();
+    		getLog().log(LogService.LOG_INFO, "Binding:\n" + bindingInfo);*/
+    		
+    		/*KeyBinding(
+    			bindings[ii].getTriggerSequence(),
+    			null,
+    			bindings[ii].getSchemeId(),
+    			bindings[ii].getContextId(),
+    			null,
+    			null,
+    			null,
+    			Binding.SYSTEM);*/
+    	//}
+    //}
+
+    private void handleActionAccelerator(
+    		Action action, IMenuManager parentMenuBar, ServiceReference serviceReference) {
+    	action.setAccelerator(determineActionAcceleratorKeyCode(serviceReference, action));
+    }
+
+    private static int determineActionAcceleratorKeyCode(
+    		ServiceReference serviceReference, Action action) {
+    	String shortcutString = (String)serviceReference.getProperty(SHORTCUT);
+
+        if (shortcutString != null) {
+        	return action.convertAccelerator(shortcutString);
+        } else {
+        	return 0;
+        }
+    }
+
     /*
      * printElementAttributes takes in a xml document, gets the nodes, then prints the attributes.
      * Copied from Java Tutorial on XML Parsing by Tim Kelley for debugging purposes.

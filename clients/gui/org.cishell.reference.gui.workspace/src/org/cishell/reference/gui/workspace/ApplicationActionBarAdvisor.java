@@ -1,7 +1,11 @@
 package org.cishell.reference.gui.workspace;
 
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+
 import org.eclipse.jface.action.GroupMarker;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
@@ -79,8 +83,18 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor{
         menu.add(new GroupMarker("start"));
         menu.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
         menu.add(new GroupMarker("end"));
-        //System.out.println(IWorkbenchActionConstants.MB_ADDITIONS);
+
         return menu;
     }
-    
+
+//	protected void register(IAction action) {
+//		try {
+//			FileWriter fstream = new FileWriter("C:/Documents and Settings/pataphil/Desktop/out.txt", true);
+//			BufferedWriter out = new BufferedWriter(fstream);
+//			out.write("action: " + action + "\r\n");
+//			out.close();
+//		} catch (Exception e) {
+//			System.err.println("Error: " + e.getMessage());
+//		}
+//	}
 }
