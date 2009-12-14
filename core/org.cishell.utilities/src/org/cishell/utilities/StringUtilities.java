@@ -125,4 +125,18 @@ public class StringUtilities {
 			return stringInProgress.toString();
 		}
 	}
+
+	public static String emptyStringIfNull(Object object) {
+		if (object == null) {
+			return "";
+		} else {
+			return object.toString();
+		}
+	}
+
+	public static String simpleClean(String string) {
+		String guaranteedToNotBeNull = emptyStringIfNull(string);
+
+		return guaranteedToNotBeNull.trim();
+	}
 }
