@@ -139,4 +139,26 @@ public class StringUtilities {
 
 		return guaranteedToNotBeNull.trim();
 	}
+
+	public static final String[] simpleCleanStrings(String[] strings) {
+		List cleanedStrings = new ArrayList();
+
+		for (int ii = 0; ii < strings.length; ii ++) {
+			cleanedStrings.add(StringUtilities.simpleClean(strings[ii]));
+		}
+
+		return (String[])cleanedStrings.toArray(new String[0]);
+	}
+
+	public static String toSentenceCase(String word) {
+		String cleanedWord = simpleClean(word);
+
+		if (cleanedWord.length() == 0) {
+			return "";
+		} else {
+			return
+				Character.toUpperCase(cleanedWord.charAt(0)) +
+				cleanedWord.substring(1).toLowerCase();
+		}
+	}
 }
