@@ -5,3 +5,4 @@ Bundle-SymbolicName: org.cishell.service.database
 Bundle-Version: 1.0.0
 Bundle-RequiredExecutionEnvironment: J2SE-1.4
 Export-Package: org.cishell.service.database
+Import-Package: org.apache.commons.dbcp
