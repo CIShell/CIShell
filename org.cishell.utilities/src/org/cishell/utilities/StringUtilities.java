@@ -161,4 +161,18 @@ public class StringUtilities {
 				cleanedWord.substring(1).toLowerCase();
 		}
 	}
+
+	public static int prefixIndex(String target, String[] prefixes) {
+		/*
+		 * Look for the prefixes in reverse order (so a longer one will win out over a shorter one
+		 *  if they both have a beginning in common).
+		 */
+		for (int ii = (prefixes.length - 1); ii >= 0; ii--) {
+			if (target.startsWith(prefixes[ii])) {
+				return ii;
+			}
+		}
+
+		return -1;
+	}
 }
