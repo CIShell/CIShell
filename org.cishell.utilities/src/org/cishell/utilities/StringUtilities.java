@@ -175,4 +175,32 @@ public class StringUtilities {
 
 		return -1;
 	}
+
+	public static boolean validAndEquivalent(String string1, String string2) {
+		return (!isEmptyOrWhiteSpace(string1) && (string1.compareTo(string2) == 0));
+	}
+
+	public static boolean validAndEquivalentIgnoreCase(String string1, String string2) {
+		return (!isEmptyOrWhiteSpace(string1) && (string1.compareToIgnoreCase(string2) == 0));
+	}
+
+	// TODO: New Name.
+	public static String simpleMerge(String string1, String string2) {
+		if (!isEmptyOrWhiteSpace(string1)) {
+			if (!isEmptyOrWhiteSpace(string2)) {
+				if (string1.length() >= string2.length()) {
+					return string1;
+				} else {
+					return string2;
+				}
+			} else {
+				return string1;
+			}
+		}
+		else if (!isEmptyOrWhiteSpace(string2)) {
+			return string2;
+		}
+
+		return string1;
+	}
 }
