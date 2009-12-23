@@ -26,7 +26,5 @@ public class InternalDerbyDatabase implements Database {
 				DerbyDatabaseService.DERBY_PROTOCOL 
 				+ DerbyDatabaseService.DEFAULT_SHUTDOWN_CONNECTION_STRING;
 				DriverManager.getConnection(shutdownDatabaseCommand);
-
-
 	}
 }
