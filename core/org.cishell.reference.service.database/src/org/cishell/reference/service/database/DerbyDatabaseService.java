@@ -3,10 +3,10 @@ package org.cishell.reference.service.database;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -45,7 +45,7 @@ public class DerbyDatabaseService implements DatabaseService, BundleActivator {
 	 * internal databases are created when requested by outside services,
 	 * and are cleaned and shut down when this service is stopped.
 	 */
-	private List internalDatabases = new ArrayList();
+	private List<InternalDerbyDatabase> internalDatabases = new ArrayList<InternalDerbyDatabase>();
 	
 	public final void start(BundleContext context) throws Exception {
 		
@@ -55,7 +55,7 @@ public class DerbyDatabaseService implements DatabaseService, BundleActivator {
 		 */
 		System.setProperty("derby.system.home", DATABASE_DIRECTORY);
 		
-		//allow the database service to be found by other services/plugins
+		//Allow the database service to be found by other services/plugins
 		databaseServiceRegistration = context.registerService(
 				DatabaseService.class.getName(), this, new Hashtable());
 	}
@@ -64,10 +64,9 @@ public class DerbyDatabaseService implements DatabaseService, BundleActivator {
 			//disallow the database service to be found by other services/plugins
 			this.databaseServiceRegistration.unregister();
 			
-			//try to clean out the internal databases and shut them down.
+			//Clean out the internal databases and shut them down.
 			try {
-				for (Iterator it = internalDatabases.iterator(); it.hasNext();) {
-					InternalDerbyDatabase internalDatabase = (InternalDerbyDatabase) it.next();
+				for (InternalDerbyDatabase internalDatabase : internalDatabases) {
 					Connection internalDatabaseConnection = internalDatabase.getConnection();
 					removeAllNonSystemDatabaseTables(internalDatabaseConnection);
 					internalDatabase.shutdown();
@@ -90,7 +89,7 @@ public class DerbyDatabaseService implements DatabaseService, BundleActivator {
 		try {
 		//connect to and create a 'new' database
 		String databaseName = INTERNAL_DB_NAME_PREFIX + id;
-		Database db =  new InternalDerbyDatabase(createNewInternalDataSource(databaseName));
+		InternalDerbyDatabase db =  new InternalDerbyDatabase(createNewInternalDataSource(databaseName));
 		
 		//if this database existed on disk from a previous session, clean it to be like new
 		removeAllNonSystemDatabaseTables(db.getConnection());
@@ -160,7 +159,8 @@ public class DerbyDatabaseService implements DatabaseService, BundleActivator {
 	private static final int TABLE_NAME_INDEX = 3;
 	private static final String NONSYSTEM_SCHEMA_NAME = "APP";
 	
-	private void removeAllNonSystemDatabaseTables(Connection dbConnection) throws Exception {
+	//(removes all non-system tables from the provided databases)
+	private void removeAllNonSystemDatabaseTables(Connection dbConnection) throws SQLException  {
 		   DatabaseMetaData dbMetadata = dbConnection.getMetaData();
 		   ResultSet allTableNames = dbMetadata.getTables(null, null, null, null);
 		   
@@ -168,10 +168,8 @@ public class DerbyDatabaseService implements DatabaseService, BundleActivator {
 		   
 		   while (allTableNames.next()) {
 			   if (!hasSystemSchema(allTableNames.getString(SCHEMA_NAME_INDEX))) {
-					 String removeTableSQL = 
-						  "DROP TABLE " 
-						  + NONSYSTEM_SCHEMA_NAME + "." + allTableNames.getString(TABLE_NAME_INDEX);
-					 removeTables.addBatch(removeTableSQL);
+					 String dropTableQuery = allTableNames.getString(TABLE_NAME_INDEX);
+					 removeTables.addBatch(dropTableQuery);
 			   }
 		   }
 		   
@@ -180,5 +178,12 @@ public class DerbyDatabaseService implements DatabaseService, BundleActivator {
 	
 	private boolean hasSystemSchema(String tableSchemaName) {
 		return tableSchemaName.indexOf(NONSYSTEM_SCHEMA_NAME) == -1;
+	}
+	
+	private String formDropTableQuery(String tableName) {
+		String removeTableSQL = 
+			  "DROP TABLE " 
+			  + NONSYSTEM_SCHEMA_NAME + "." + tableName;
+		return removeTableSQL;
 	}
 }
