@@ -10,11 +10,9 @@ import org.cishell.service.database.Database;
 
 public class InternalDerbyDatabase implements Database {
 	
-	private String name;
 	private DataSource dataSource;
 	
-	public InternalDerbyDatabase(String name, DataSource dataSource) {
-		this.name = name;
+	public InternalDerbyDatabase(DataSource dataSource) {
 		this.dataSource = dataSource;
 	}
 
@@ -25,8 +23,8 @@ public class InternalDerbyDatabase implements Database {
 	
 	public void shutdown() throws SQLException {
 			String shutdownDatabaseCommand = 
-				DerbyDatabaseService.DERBY_PROTOCOL + 
-				DerbyDatabaseService.DEFAULT_SHUTDOWN_CONNECTION_STRING;
+				DerbyDatabaseService.DERBY_PROTOCOL 
+				+ DerbyDatabaseService.DEFAULT_SHUTDOWN_CONNECTION_STRING;
 				DriverManager.getConnection(shutdownDatabaseCommand);
 
 
