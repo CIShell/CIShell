@@ -60,7 +60,7 @@ public class FileViewer {
 			throws FileViewingException {
 		try {
 			String dataFormat = data.getFormat();
-			
+			//TODO: Add image viewing support here (shouldn't be too hard)
 			if (isCSVFormat(data)) {
 				/*
 				 * The data is already a CSV file, so it just needs to
