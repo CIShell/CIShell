@@ -24,7 +24,7 @@ public class ExternalDatabase implements Database {
 	 * Will want to discuss security implications here.
 	 */
 	public Connection getConnection(String username, String password) 
-		throws SQLException {
+			throws SQLException {
 		return dataSource.getConnection(username, password);
 	}
 }
