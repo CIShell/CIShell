@@ -139,11 +139,17 @@ public class DerbyDatabaseService implements DatabaseService, BundleActivator {
 					connectionFactory, connectionPool, stmtPool, null, false, true);
 			DataSource dataSource = new PoolingDataSource(connectionPool);
 			
+			//test the connection (this will throw an exception if the connection is faulty)
+		
+			dataSource.getConnection();
+			
 			//return that data source.
     		return dataSource;
 			} catch (ClassNotFoundException e) {
     			throw new DatabaseCreationException(
     					"Database driver '" + driver + "' could not be found", e);
+    		} catch (SQLException e) {
+    			throw new DatabaseCreationException(e.getMessage(), e);
     		}
 	}
 	
