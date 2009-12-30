@@ -132,4 +132,28 @@ public class NumberUtilities {
 			return numberAsString;
 		}
 	}
+
+	public static boolean isEven(long number) {
+		return ((number % 2) == 0);
+	}
+
+	public static boolean isEven(float number) {
+		return ((number % 2) == 0);
+	}
+
+	public static boolean isEven(double number) {
+		return ((number % 2) == 0);
+	}
+
+	public static boolean isOdd(long target) {
+		return !isEven(target);
+	}
+
+	public static boolean isOdd(float target) {
+		return !isEven(target);
+	}
+
+	public static boolean isOdd(double target) {
+		return !isEven(target);
+	}
 }
