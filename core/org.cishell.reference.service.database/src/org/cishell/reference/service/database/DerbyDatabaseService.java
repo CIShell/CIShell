@@ -140,7 +140,6 @@ public class DerbyDatabaseService implements DatabaseService, BundleActivator {
 			DataSource dataSource = new PoolingDataSource(connectionPool);
 			
 			//test the connection (this will throw an exception if the connection is faulty)
-		
 			dataSource.getConnection();
 			
 			//return that data source.
