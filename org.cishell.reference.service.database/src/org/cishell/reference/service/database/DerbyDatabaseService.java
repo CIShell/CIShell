@@ -89,7 +89,9 @@ public class DerbyDatabaseService implements DatabaseService, BundleActivator {
 		try {
 		//connect to and create a 'new' database
 		String databaseName = INTERNAL_DB_NAME_PREFIX + id;
-		InternalDerbyDatabase db =  new InternalDerbyDatabase(createNewInternalDataSource(databaseName));
+		InternalDerbyDatabase db =  
+			new InternalDerbyDatabase(createNewInternalDataSource(databaseName));
+		
 		
 		//if this database existed on disk from a previous session, clean it to be like new
 		removeAllNonSystemDatabaseTables(db.getConnection());
@@ -115,7 +117,8 @@ public class DerbyDatabaseService implements DatabaseService, BundleActivator {
 		throws DatabaseCreationException {
 		DataSource dataSource = 
 			createNewDataSource(driver, url, username, password);
-		Database db = new ExternalDatabase(dataSource);
+		//TODO: See if we can get the default schema as a property somehow. 
+		Database db = new ExternalDatabase(dataSource, "APP"); 
 		return db;
 	}
 	
