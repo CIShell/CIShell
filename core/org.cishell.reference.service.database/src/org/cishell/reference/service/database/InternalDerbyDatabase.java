@@ -27,4 +27,10 @@ public class InternalDerbyDatabase implements Database {
 				+ DerbyDatabaseService.DEFAULT_SHUTDOWN_CONNECTION_STRING;
 				DriverManager.getConnection(shutdownDatabaseCommand);
 	}
+
+
+	//TODO: We might want to expose our different 'databases' as different schemas at some point instead.
+	public String getApplicationSchemaName() {
+		return "APP";
+	}
 }
