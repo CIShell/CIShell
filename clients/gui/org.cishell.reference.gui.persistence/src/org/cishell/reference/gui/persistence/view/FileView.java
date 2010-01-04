@@ -33,7 +33,8 @@ public class FileView implements Algorithm {
 			try {
 				FileViewer.viewDataFile(this.dataToView[ii],
 										this.ciShellContext,
-										this.conversionManager);
+										this.conversionManager,
+										this.logger);
 			} catch (FileViewingException fileViewingException) {
 				String logMessage =
     				"Error: Unable to view data \"" +
