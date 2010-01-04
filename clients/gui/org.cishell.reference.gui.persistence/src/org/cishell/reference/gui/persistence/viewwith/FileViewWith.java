@@ -41,7 +41,8 @@ public class FileViewWith implements Algorithm {
 					this.dataToView[ii],
 					viewWithType,
 					this.ciShellContext,
-					this.conversionManager);
+					this.conversionManager,
+					this.logger);
     		} catch (FileViewingException fileViewingException) {
     			String logMessage =
     				"Error: Unable to view data \"" +

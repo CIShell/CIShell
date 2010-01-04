@@ -12,6 +12,7 @@ Import-Package: org.cishell.app.service.datamanager,
  org.cishell.reference.service.conversion,
  org.cishell.reference.service.metatype,
  org.cishell.service.conversion;version="1.0.0",
+ org.cishell.service.database,
  org.cishell.service.guibuilder;version="1.0.0",
  org.cishell.utilities,
  org.osgi.framework;version="1.3.0",
@@ -24,4 +25,4 @@ X-AutoStart: true
 Service-Component: OSGI-INF/load.xml, OSGI-INF/save.xml, OSGI-INF/view.xml, OSGI-INF/viewwith.xml
 Require-Bundle: org.eclipse.swt,
  org.eclipse.ui
-Bundle-RequiredExecutionEnvironment: J2SE-1.4
+Bundle-RequiredExecutionEnvironment: J2SE-1.5

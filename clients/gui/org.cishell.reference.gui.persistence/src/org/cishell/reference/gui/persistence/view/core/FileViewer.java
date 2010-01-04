@@ -14,6 +14,7 @@ import org.cishell.reference.gui.persistence.view.core.exceptiontypes.UserCancel
 import org.cishell.service.conversion.ConversionException;
 import org.cishell.service.conversion.Converter;
 import org.cishell.service.conversion.DataConversionService;
+import org.cishell.service.database.Database;
 import org.cishell.utilities.FileCopyingException;
 import org.cishell.utilities.FileUtilities;
 import org.eclipse.swt.program.Program;
@@ -32,35 +33,57 @@ public class FileViewer {
 	public static final String CSV_MIME_TYPE = "file:text/csv";
 	public static final String TEMPORARY_CSV_FILE_NAME = "xxx-Session-";
 	public static final String CSV_FILE_EXTENSION = "csv";
+	public static final String TXT_FILE_EXTENSION = "txt";
 	public static final String ANY_FILE_FORMAT_PATTERN =
 		"(file:.*)|(file-ext:.*)";
 	
 	public static void viewDataFile(Data data,
 									CIShellContext ciShellContext,
-									DataConversionService conversionManager)
+									DataConversionService conversionManager,
+									LogService logger)
 			throws FileViewingException {
-		viewDataFileWithProgram(data, "", ciShellContext, conversionManager);
+		viewDataFileWithProgram(data, "", ciShellContext, conversionManager, logger);
 	}
 	
 	public static void viewDataFileWithProgram(
 			Data data,
 			String customFileExtension,
 			CIShellContext ciShellContext,
-			DataConversionService converterManager)
+			DataConversionService converterManager,
+			LogService logger)
 			throws FileViewingException {
 		FileWithExtension fileWithExtension =
-			convertDataForViewing(data, ciShellContext, converterManager);
+			convertDataForViewing(data, ciShellContext, converterManager,
+					logger);
 		viewFileWithExtension(fileWithExtension, customFileExtension);
 	}
 	
 	private static FileWithExtension convertDataForViewing(
 			Data data,
 			CIShellContext ciShellContext,
-			DataConversionService converterManager)
-			throws FileViewingException {
+			DataConversionService converterManager,
+			LogService logger) throws FileViewingException {
 		try {
 			String dataFormat = data.getFormat();
 			//TODO: Add image viewing support here (shouldn't be too hard)
+			if (dataIsDB(data, converterManager)) {
+				try {
+				Data genericDBData = converterManager.convert(data, Database.GENERIC_DB_MIME_TYPE);
+				Database genericDatabase = (Database) genericDBData.getData();
+				
+				File dbSchemaOverview = 
+					DatabaseSchemaOverviewGenerator.generateDatabaseSchemaOverview(genericDatabase);
+				
+				return new FileWithExtension(dbSchemaOverview, TXT_FILE_EXTENSION);
+				} catch (ConversionException e) {
+					//continue attempts to view for other formats
+				} catch (Exception e) {
+					String message = "Unexpected error occurred while generating "
+						+ "database schema overview. Attempting to view the data item"
+						+ "by other means.";
+					logger.log(LogService.LOG_WARNING, message, e);
+				}
+			}
 			if (isCSVFormat(data)) {
 				/*
 				 * The data is already a CSV file, so it just needs to
@@ -97,7 +120,7 @@ public class FileViewer {
 				 *  text-viewing program.
 				 */
 				return new FileWithExtension(
-					prepareTextFileForViewing(data), "txt");
+					prepareTextFileForViewing(data), TXT_FILE_EXTENSION);
 			} else if (convertersExist(
 				data, ANY_FILE_EXTENSION_FILTER, converterManager)) {
 				/*
@@ -174,6 +197,21 @@ public class FileViewer {
 		} else {
 			return false;
 		}
+	}
+	
+	private static boolean dataIsDB (
+			Data data,
+			DataConversionService converterManager) {
+		if (has_DB_MimeType_Prefix(data) ||
+				convertersExist(data, Database.GENERIC_DB_MIME_TYPE, converterManager)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	private static boolean has_DB_MimeType_Prefix(Data data) {
+		return data.getFormat().startsWith(Database.DB_MIME_TYPE_PREFIX);
 	}
 	
 	private static boolean dataIsFile(Data data, String dataFormat) {
