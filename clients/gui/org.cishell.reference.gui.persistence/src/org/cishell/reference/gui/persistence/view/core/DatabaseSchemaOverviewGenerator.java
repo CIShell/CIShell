@@ -1,7 +1,6 @@
 package org.cishell.reference.gui.persistence.view.core;
 
 import java.io.File;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;

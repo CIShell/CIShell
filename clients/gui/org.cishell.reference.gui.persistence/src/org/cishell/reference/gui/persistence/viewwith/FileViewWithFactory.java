@@ -8,7 +8,6 @@ import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.algorithm.ParameterMutator;
 import org.cishell.framework.data.Data;
 import org.cishell.reference.service.metatype.BasicAttributeDefinition;
-import org.cishell.reference.service.metatype.BasicMetaTypeProvider;
 import org.cishell.reference.service.metatype.BasicObjectClassDefinition;
 import org.eclipse.swt.program.Program;
 import org.eclipse.swt.widgets.Display;
