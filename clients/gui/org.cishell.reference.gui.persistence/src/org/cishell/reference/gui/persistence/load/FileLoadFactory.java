@@ -1,7 +1,6 @@
 package org.cishell.reference.gui.persistence.load;
 
 import java.util.Dictionary;
-import java.util.Enumeration;
 import java.util.Hashtable;
 
 import org.cishell.framework.CIShellContext;

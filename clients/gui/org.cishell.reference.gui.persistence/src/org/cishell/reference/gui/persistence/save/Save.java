@@ -1,23 +1,16 @@
 package org.cishell.reference.gui.persistence.save;
 
 import java.util.Dictionary;
-import java.util.Hashtable;
 
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
 import org.cishell.framework.algorithm.AlgorithmExecutionException;
-import org.cishell.framework.algorithm.AlgorithmFactory;
-import org.cishell.framework.algorithm.AlgorithmProperty;
-import org.cishell.framework.data.BasicData;
 import org.cishell.framework.data.Data;
 import org.cishell.service.conversion.Converter;
 import org.cishell.service.conversion.DataConversionService;
-import org.cishell.service.guibuilder.GUIBuilderService;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
-import org.osgi.framework.ServiceReference;
-import org.osgi.service.log.LogService;
 /**
  * Save algorithm for persisting a data object
  * 
