@@ -7,6 +7,8 @@ import org.cishell.framework.LocalCIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
 import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.data.Data;
+import org.osgi.service.cm.ConfigurationException;
+import org.osgi.service.cm.ManagedService;
 import org.osgi.service.component.ComponentContext;
 
 /**
@@ -16,7 +18,7 @@ import org.osgi.service.component.ComponentContext;
  * no final file:X->file-ext:* converter.
  *
  */
-public class SaveFactory implements AlgorithmFactory {
+public class SaveFactory implements AlgorithmFactory, ManagedService {
     private CIShellContext ciShellContext;	
 
     /**
@@ -26,6 +28,9 @@ public class SaveFactory implements AlgorithmFactory {
     protected void activate(ComponentContext componentContext) {
         ciShellContext =
         	new LocalCIShellContext(componentContext.getBundleContext());
+    }
+    
+    public void updated(Dictionary properties) throws ConfigurationException {
     }
 
     /**

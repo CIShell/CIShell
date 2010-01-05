@@ -6,7 +6,7 @@
 	<reference name="MTS" interface="org.osgi.service.metatype.MetaTypeService"/>
 	
 	<service>
-		<provide interface=
-			"org.cishell.framework.algorithm.AlgorithmFactory"/>
+		<provide interface="org.cishell.framework.algorithm.AlgorithmFactory"/>
+		<provide interface="org.osgi.service.cm.ManagedService"/>
 	</service>
 </component>
