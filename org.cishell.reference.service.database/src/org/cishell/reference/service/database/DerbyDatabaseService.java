@@ -170,28 +170,28 @@ public class DerbyDatabaseService implements DatabaseService, BundleActivator {
 	//(removes all non-system tables from the provided databases)
 	private void removeAllNonSystemDatabaseTables(Connection dbConnection) throws SQLException  {
 		   DatabaseMetaData dbMetadata = dbConnection.getMetaData();
-		   ResultSet allTableNames = dbMetadata.getTables(null, null, null, null);
+		   //using the TABLE type means we get no system tables.
+		   ResultSet allTableNames = dbMetadata.getTables(null, null, null, new String[]{"TABLE"});
 		   
 		   Statement removeTables = dbConnection.createStatement();
 		   
 		   while (allTableNames.next()) {
-			   if (!hasSystemSchema(allTableNames.getString(SCHEMA_NAME_INDEX))) {
-					 String dropTableQuery = formDropTableQuery(allTableNames.getString(TABLE_NAME_INDEX));
-					 removeTables.addBatch(dropTableQuery);
-			   }
+				String dropTableQuery = formDropTableQuery(allTableNames.getString(SCHEMA_NAME_INDEX),
+											allTableNames.getString(TABLE_NAME_INDEX));
+				removeTables.addBatch(dropTableQuery);
 		   }
 		   
 		   removeTables.executeBatch();	   
 	}
 	
-	private boolean hasSystemSchema(String tableSchemaName) {
-		return tableSchemaName.indexOf(NONSYSTEM_SCHEMA_NAME) == -1;
-	}
-	
-	private String formDropTableQuery(String tableName) {
+	private String formDropTableQuery(String schema, String tableName) {
+		String schemaPrefix = "";
+		if(schema != null && !"".equals(schema)) {
+			schemaPrefix = schema + ".";
+		}
 		String removeTableSQL = 
 			  "DROP TABLE " 
-			  + NONSYSTEM_SCHEMA_NAME + "." + tableName;
+			  + schemaPrefix + "." + tableName;
 		return removeTableSQL;
 	}
 }
