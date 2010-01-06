@@ -176,7 +176,7 @@ public class DerbyDatabaseService implements DatabaseService, BundleActivator {
 		   
 		   while (allTableNames.next()) {
 			   if (!hasSystemSchema(allTableNames.getString(SCHEMA_NAME_INDEX))) {
-					 String dropTableQuery = allTableNames.getString(TABLE_NAME_INDEX);
+					 String dropTableQuery = formDropTableQuery(allTableNames.getString(TABLE_NAME_INDEX));
 					 removeTables.addBatch(dropTableQuery);
 			   }
 		   }
