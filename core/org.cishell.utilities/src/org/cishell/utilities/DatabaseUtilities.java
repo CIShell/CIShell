@@ -15,13 +15,13 @@ public class DatabaseUtilities {
 		}
 	}
 
-	public static Connection connect(Database database)
+	public static Connection connect(Database database, String messageIfError)
 	throws AlgorithmExecutionException {
 		Connection connection;
 		try {
 			connection = database.getConnection();
 		} catch (SQLException e) {
-			throw new AlgorithmExecutionException("Unable to communicate with the database.", e);
+			throw new AlgorithmExecutionException(messageIfError, e);
 		}
 		return connection;
 	}
