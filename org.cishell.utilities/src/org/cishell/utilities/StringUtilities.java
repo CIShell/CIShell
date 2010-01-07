@@ -126,6 +126,13 @@ public class StringUtilities {
 		}
 	}
 
+	public static String multiplyWithSeparator(String target, String separator, int count) {
+		String multipliedWithExtraSeparator = multiply(target + separator, count);
+
+		return multipliedWithExtraSeparator.substring(
+			0, multipliedWithExtraSeparator.length() - separator.length());
+	}
+
 	public static String emptyStringIfNull(Object object) {
 		if (object == null) {
 			return "";
