@@ -98,6 +98,16 @@ public class StringUtilities {
 		
 		return (trimmed.length() == 0);
 	}
+
+	public static boolean allAreEmptyOrWhiteSpace(String... tests) {
+		for (String test : tests) {
+			if (!isEmptyOrWhiteSpace(test)) {
+				return false;
+			}
+		}
+
+		return true;
+	}
 	
 	public static int countOccurrencesOfChar(
 			CharSequence characters, char target) {
