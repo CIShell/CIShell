@@ -18,6 +18,7 @@ import org.apache.commons.dbcp.PoolingDataSource;
 import org.apache.commons.pool.KeyedObjectPoolFactory;
 import org.apache.commons.pool.impl.GenericKeyedObjectPoolFactory;
 import org.apache.commons.pool.impl.GenericObjectPool;
+import org.cishell.reference.service.database.utility.DatabaseCleaner;
 import org.cishell.service.database.Database;
 import org.cishell.service.database.DatabaseCreationException;
 import org.cishell.service.database.DatabaseService;
@@ -68,7 +69,7 @@ public class DerbyDatabaseService implements DatabaseService, BundleActivator {
 			try {
 				for (InternalDerbyDatabase internalDatabase : internalDatabases) {
 					Connection internalDatabaseConnection = internalDatabase.getConnection();
-					removeAllNonSystemDatabaseTables(internalDatabaseConnection);
+					//DatabaseCleaner.cleanDatabase(internalDatabaseConnection, false);
 					internalDatabase.shutdown();
 				}
 			} catch (Exception e) {
@@ -94,7 +95,7 @@ public class DerbyDatabaseService implements DatabaseService, BundleActivator {
 		
 		
 		//if this database existed on disk from a previous session, clean it to be like new
-		removeAllNonSystemDatabaseTables(db.getConnection());
+		DatabaseCleaner.cleanDatabase(db.getConnection(), false);
 		
 		//keep track of our new database for this CIShell session
 		internalDatabases.add(db);
@@ -167,31 +168,31 @@ public class DerbyDatabaseService implements DatabaseService, BundleActivator {
 	private static final int TABLE_NAME_INDEX = 3;
 	private static final String NONSYSTEM_SCHEMA_NAME = "APP";
 	
-	//(removes all non-system tables from the provided databases)
-	private void removeAllNonSystemDatabaseTables(Connection dbConnection) throws SQLException  {
-		   DatabaseMetaData dbMetadata = dbConnection.getMetaData();
-		   //using the TABLE type means we get no system tables.
-		   ResultSet allTableNames = dbMetadata.getTables(null, null, null, new String[]{"TABLE"});
-		   
-		   Statement removeTables = dbConnection.createStatement();
-		   
-		   while (allTableNames.next()) {
-				String dropTableQuery = formDropTableQuery(allTableNames.getString(SCHEMA_NAME_INDEX),
-											allTableNames.getString(TABLE_NAME_INDEX));
-				removeTables.addBatch(dropTableQuery);
-		   }
-		   
-		   removeTables.executeBatch();	   
+//	//(removes all non-system tables from the provided databases)
+//	private void removeAllNonSystemDatabaseTables(Connection dbConnection) throws SQLException  {
+//		   DatabaseMetaData dbMetadata = dbConnection.getMetaData();
+//		   ResultSet allTableNames = dbMetadata.getTables(null, null, null, null);
+//		   
+//		   Statement removeTables = dbConnection.createStatement();
+//		   
+//		   while (allTableNames.next()) {
+//			   if (!hasSystemSchema(allTableNames.getString(SCHEMA_NAME_INDEX))) {
+//					 String dropTableQuery = formDropTableQuery(allTableNames.getString(TABLE_NAME_INDEX));
+//					 removeTables.addBatch(dropTableQuery);
+//			   }
+//		   }
+//		   
+//		   removeTables.executeBatch();	   
+//	}
+	
+	private boolean hasSystemSchema(String tableSchemaName) {
+		return tableSchemaName.indexOf(NONSYSTEM_SCHEMA_NAME) == -1;
 	}
 	
-	private String formDropTableQuery(String schema, String tableName) {
-		String schemaPrefix = "";
-		if(schema != null && !"".equals(schema)) {
-			schemaPrefix = schema + ".";
-		}
+	private String formDropTableQuery(String tableName) {
 		String removeTableSQL = 
 			  "DROP TABLE " 
-			  + schemaPrefix + "." + tableName;
+			  + NONSYSTEM_SCHEMA_NAME + "." + tableName;
 		return removeTableSQL;
 	}
 }
