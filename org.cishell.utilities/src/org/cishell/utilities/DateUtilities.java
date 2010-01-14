@@ -228,7 +228,7 @@ public class DateUtilities {
 	
 	public static Date parseDate(String dateString, boolean fixYear)
 			throws ParseException {
-		return (parseDate(dateString, MONTH_DAY_YEAR_DATE_FORMATS));
+		return (parseDate(dateString, MONTH_DAY_YEAR_DATE_FORMATS, fixYear));
 	}
 	
 	public static Date parseDate(String dateString, String suggestedDateFormat)
