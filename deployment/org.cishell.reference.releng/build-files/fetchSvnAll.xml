@@ -175,5 +175,26 @@
   	      <param name="project.name" value="/core/org.cishell.utilities"/>
   	      <param name="url" value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk"/>
   	</antcall>
+  	
+  	 <antcall target="svn.co">
+  	  	  	      <param name="target" value="plugins"/>
+  	  	  	      <param name="element.id" value="org.cishell.reference.service.database"/>
+  	  	  	      <param name="project.name" value="/core/org.cishell.reference.service.database"/>
+  	  	  	      <param name="url" value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk"/>
+  	  	  	    </antcall>
+  	  	
+  	  	<antcall target="svn.co">
+  	  	  	      <param name="target" value="plugins"/>
+  	  	  	      <param name="element.id" value="org.cishell.service.database"/>
+  	  	  	      <param name="project.name" value="/core/org.cishell.service.database"/>
+  	  	  	      <param name="url" value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk"/>
+  	  	  	    </antcall>
+  	  	
+  	  	 <antcall target="svn.co">
+  	  	  	      <param name="target" value="plugins"/>
+  	  	  	      <param name="element.id" value="org.cishell.templates.database"/>
+  	  	  	      <param name="project.name" value="/templates/org.cishell.templates.database"/>
+  	  	  	      <param name="url" value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk"/>
+  	  	  	    </antcall>
   </target>
 </project>
