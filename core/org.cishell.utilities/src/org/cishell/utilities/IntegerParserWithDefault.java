@@ -1,9 +1,9 @@
 package org.cishell.utilities;
 
 public class IntegerParserWithDefault {
-	public static final int DEFAULT = -1;
+	public static final Integer DEFAULT = null;
 
-	public static int parse(String target) {
+	public static Integer parse(String target) {
 		try {
 			return Integer.parseInt(target);
 		} catch (Exception e) {

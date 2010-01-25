@@ -42,4 +42,26 @@ public class ArrayUtilities {
 		
 		return clone;
 	}
+
+	// TODO: Find a better place to put this?
+	public static <T> boolean allAreNull(T... objects) {
+		for (T object : objects) {
+			if (object != null) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	// TODO: Find a better place to put this?
+	public static <T> boolean allAreNotNull(T... objects) {
+		for (T object : objects) {
+			if (object == null) {
+				return false;
+			}
+		}
+
+		return true;
+	}
 }

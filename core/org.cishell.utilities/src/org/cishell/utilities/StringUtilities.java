@@ -93,15 +93,53 @@ public class StringUtilities {
 	}
 	
 	// TODO Think about instead using a Pattern, "\s*".  Don't have to though.
-	public static boolean isEmptyOrWhiteSpace(String test) {
-		String trimmed = test.trim();
+	public static boolean isEmptyOrWhitespace(String string) {
+		String trimmed = string.trim();
 		
 		return (trimmed.length() == 0);
 	}
 
-	public static boolean allAreEmptyOrWhiteSpace(String... tests) {
-		for (String test : tests) {
-			if (!isEmptyOrWhiteSpace(test)) {
+	public static boolean allAreEmptyOrWhitespace(String... strings) {
+		for (String string : strings) {
+			if (!isEmptyOrWhitespace(string)) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	public static boolean allAreNeitherEmptyNorWhitespace(String... strings) {
+		for (String string : strings) {
+			if (isEmptyOrWhitespace(string)) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	public static boolean isNull_Empty_OrWhitespace(String string) {
+		if (string == null) {
+			return true;
+		}
+
+		return isEmptyOrWhitespace(string);
+	}
+
+	public static boolean allAreNull_Empty_OrWhitespace(String... strings) {
+		for (String string : strings) {
+			if (!isNull_Empty_OrWhitespace(string)) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	public static boolean allAreNeitherNullNorEmptyNorWhitespace(String... strings) {
+		for (String string : strings) {
+			if (isNull_Empty_OrWhitespace(string)) {
 				return false;
 			}
 		}
@@ -167,6 +205,14 @@ public class StringUtilities {
 		return (String[])cleanedStrings.toArray(new String[0]);
 	}
 
+	public static String trimIfNotNull(String string) {
+		if (string == null) {
+			return null;
+		}
+
+		return string.trim();
+	}
+
 	public static String toSentenceCase(String word) {
 		String cleanedWord = simpleClean(word);
 
@@ -193,18 +239,25 @@ public class StringUtilities {
 		return -1;
 	}
 
-	public static boolean validAndEquivalent(String string1, String string2) {
-		return (!isEmptyOrWhiteSpace(string1) && (string1.compareTo(string2) == 0));
+	/* TODO Perhaps make a "hasContent" method in here and apply that terminology throughout. */
+	public static boolean areValidAndEqual(String string1, String string2) {
+		return (
+			!isNull_Empty_OrWhitespace(string1) &&
+			!isNull_Empty_OrWhitespace(string2) &&
+			(string1.equals(string2)));
 	}
 
-	public static boolean validAndEquivalentIgnoreCase(String string1, String string2) {
-		return (!isEmptyOrWhiteSpace(string1) && (string1.compareToIgnoreCase(string2) == 0));
+	public static boolean areValidAndEqualIgnoreCase(String string1, String string2) {
+		return (
+			!isNull_Empty_OrWhitespace(string1) &&
+			!isNull_Empty_OrWhitespace(string2) &&
+			string1.equalsIgnoreCase(string2));
 	}
 
 	// TODO: New Name.
 	public static String simpleMerge(String string1, String string2) {
-		if (!isEmptyOrWhiteSpace(string1)) {
-			if (!isEmptyOrWhiteSpace(string2)) {
+		if (!isNull_Empty_OrWhitespace(string1)) {
+			if (!isNull_Empty_OrWhitespace(string2)) {
 				if (string1.length() >= string2.length()) {
 					return string1;
 				} else {
@@ -214,7 +267,7 @@ public class StringUtilities {
 				return string1;
 			}
 		}
-		else if (!isEmptyOrWhiteSpace(string2)) {
+		else if (!isNull_Empty_OrWhitespace(string2)) {
 			return string2;
 		}
 
