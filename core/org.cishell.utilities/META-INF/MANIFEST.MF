@@ -20,6 +20,7 @@ Import-Package: org.cishell.framework;version="1.0.0",
  prefuse.util,
  prefuse.util.collections
 Export-Package: org.cishell.utilities,
+ org.cishell.utilities.dictionary,
  org.cishell.utilities.database,
  org.cishell.utilities.mutateParameter,
  org.cishell.utilities.mutateParameter.defaultvalue,
