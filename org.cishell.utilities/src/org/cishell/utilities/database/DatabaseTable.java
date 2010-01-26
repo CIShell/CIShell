@@ -145,7 +145,7 @@ public final class DatabaseTable {
 
 	private String constructDeleteStatement(List<String> columns,
 			List<Map<String, Object>> otherEntities) {
-		return "DELETE FROM " + this.toString() + " WHERE " + DatabaseUtilities.getInExpression(columns, otherEntities);
+		return "DELETE FROM " + this.toString() + " WHERE " + DatabaseUtilities.createSQLInExpression(columns, otherEntities);
 	}
 
 	public void duplicateTable(Connection originalConnection,
