@@ -37,7 +37,7 @@ public final class ForeignKey {
 	private String constructUpdateQuery(List<Map<String, Object>> from,
 			Map<String, Object> to) {
 		return "UPDATE " + otherTable.toString() + " SET "+ formatUpdates(to) + " WHERE "
-				+ DatabaseUtilities.getInExpression(getForeignColumnNames(), translateToForeignNames(from));
+				+ DatabaseUtilities.createSQLInExpression(getForeignColumnNames(), translateToForeignNames(from));
 	}
 
 	
