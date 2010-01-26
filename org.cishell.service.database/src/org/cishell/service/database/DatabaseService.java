@@ -7,4 +7,5 @@ public interface DatabaseService {
 	public Database connectToExistingDatabase(
 			String driver, String url, String username, String password)
 		throws DatabaseCreationException;
+	public Database copyDatabase(Database originalDatabase) throws DatabaseCopyException;
 }

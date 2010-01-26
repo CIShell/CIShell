@@ -11,7 +11,8 @@ import org.cishell.service.database.Database;
 public class InternalDerbyDatabase implements Database {
 	
 	private DataSource dataSource;
-	
+	private String databaseName;
+	// TODO: Should this be public?
 	public InternalDerbyDatabase(DataSource dataSource) {
 		this.dataSource = dataSource;
 	}
@@ -32,5 +33,14 @@ public class InternalDerbyDatabase implements Database {
 	//TODO: We might want to expose our different 'databases' as different schemas at some point instead.
 	public String getApplicationSchemaName() {
 		return "APP";
+	}
+
+
+	protected void setName(String databaseName) {
+		this.databaseName = databaseName;
+	}
+	
+	protected String getName() {
+		return databaseName;
 	}
 }
