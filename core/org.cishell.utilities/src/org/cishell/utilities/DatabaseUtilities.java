@@ -31,8 +31,8 @@ public class DatabaseUtilities {
 		}
 		return connection;
 	}
-	
-	public static String getInExpression(List<String> columns, List<Map<String, Object>> valueMaps) {
+	// TODO: I'd prefer something like createSQLInExpression
+	public static String createSQLInExpression(List<String> columns, List<Map<String, Object>> valueMaps) {
 		String columnNames = implodeAndWrap(columns);
 		
 		List<String> values = new ArrayList<String>();
@@ -62,6 +62,7 @@ public class DatabaseUtilities {
 		}
 	}
 	
+	//TODO: Consider abstracting what you're wrapping with and making this a StringUtility.
 	public static String implodeAndWrap(List<String> values) {
 		return "(" + StringUtilities.implodeList(values, ", ") + ")";
 	}
