@@ -2,6 +2,7 @@ package org.cishell.utilities;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +32,44 @@ public class DatabaseUtilities {
 		}
 		return connection;
 	}
-	// TODO: I'd prefer something like createSQLInExpression
+
+	public static Statement createStatement(Connection connection, String messageIfError)
+	throws AlgorithmExecutionException {
+		try {
+			return connection.createStatement();
+		} catch (SQLException e) {
+			throw new AlgorithmExecutionException(messageIfError, e);
+		}
+	}
+
+	public static Statement createStatement(
+			Connection connection,
+			int resultSetType,
+			int resultSetConcurrency,
+			String messageIfError)
+	throws AlgorithmExecutionException {
+		try {
+			return connection.createStatement(resultSetType, resultSetConcurrency);
+		} catch (SQLException e) {
+			throw new AlgorithmExecutionException(messageIfError, e);
+		}
+	}
+
+	public static Statement createStatement(
+			Connection connection,
+			int resultSetType,
+			int resultSetConcurrency,
+			int resultSetHoldability,
+			String messageIfError)
+	throws AlgorithmExecutionException {
+		try {
+			return connection.createStatement(
+				resultSetType, resultSetConcurrency, resultSetHoldability);
+		} catch (SQLException e) {
+			throw new AlgorithmExecutionException(messageIfError, e);
+		}
+	}
+
 	public static String createSQLInExpression(List<String> columns, List<Map<String, Object>> valueMaps) {
 		String columnNames = implodeAndWrap(columns);
 		
