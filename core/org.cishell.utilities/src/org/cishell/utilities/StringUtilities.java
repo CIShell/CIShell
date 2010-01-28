@@ -247,6 +247,14 @@ public class StringUtilities {
 			(string1.equals(string2)));
 	}
 
+	public static boolean bothAreEqualOrNull(String string1, String string2) {
+		if (string1 != null) {
+			return string1.equals(string2);
+		} else {
+			return (string2 == null);
+		}
+	}
+
 	public static boolean areValidAndEqualIgnoreCase(String string1, String string2) {
 		return (
 			!isNull_Empty_OrWhitespace(string1) &&
