@@ -56,6 +56,9 @@ public class ComponentProvider {
                 } else if (defaultValue[0].startsWith("directory:")) {
                     component = new DirectoryComponent();
                     break;
+                } else if(defaultValue[0].startsWith("textarea:")) {
+                	component = new StringComponent(true);
+                	break;
                 }
             }
         case (AttributeDefinition.BYTE):
