@@ -42,7 +42,7 @@ import org.osgi.service.metatype.ObjectClassDefinition;
  * @author Bruce Herr (bh2@bh2.net)
  */
 public class SWTGui implements GUI, UpdateListener {    
-	private static final int MAXIMUM_INITIAL_DIALOGUE_HEIGHT = 400;
+	private static final int MAXIMUM_INITIAL_DIALOGUE_HEIGHT = 500;
 
 	public static final int TEXT_WRAP_LENGTH = 350;
 	
