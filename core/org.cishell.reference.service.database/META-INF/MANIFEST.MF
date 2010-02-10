@@ -8,7 +8,6 @@ X-AutoStart: true
 Import-Package: org.apache.commons.dbcp,
  org.apache.commons.pool,
  org.apache.commons.pool.impl,
- org.apache.derby,
  org.apache.derby.jdbc,
  org.cishell.framework.algorithm;version="1.0.0",
  org.cishell.service.database,
