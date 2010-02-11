@@ -281,4 +281,22 @@ public class StringUtilities {
 
 		return string1;
 	}
+
+	public static Object alternativeIfNotNull_Empty_OrWhitespace(
+			String string, Object alternative) {
+		if (!isNull_Empty_OrWhitespace(string)) {
+			return string;
+		} else {
+			return alternative;
+		}
+	}
+
+	public static Object alternativeIfNotNull_Empty_OrWhitespace_IgnoreCase(
+			String string, Object alternative) {
+		if (!isNull_Empty_OrWhitespace(string)) {
+			return string.toLowerCase();
+		} else {
+			return alternative;
+		}
+	}
 }
