@@ -1,7 +1,7 @@
 package org.cishell.utilities.database;
 
-import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -25,12 +25,10 @@ public final class ForeignKey {
 	}
 
 	public void repoint(List<Map<String, Object>> from,
-			Map<String, Object> to, Connection connection) throws SQLException {
+			Map<String, Object> to, Statement statement) throws SQLException {
 		
 		String updateQuery = constructUpdateQuery(from, to);
-		//TODO: remove
-		System.err.println("Issuing update: " + updateQuery);
-		connection.createStatement().executeUpdate(updateQuery);
+		statement.addBatch(updateQuery);
 		
 	}
 
