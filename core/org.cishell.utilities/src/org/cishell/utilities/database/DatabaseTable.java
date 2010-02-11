@@ -2,8 +2,8 @@ package org.cishell.utilities.database;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -134,60 +134,17 @@ public final class DatabaseTable {
 		return columnNames.toArray(new String[]{});
 	}
 
-	public void deleteRowsByColumns(List<Map<String, Object>> otherEntities, Connection connection) throws SQLException {
+	public void deleteRowsByColumns(List<Map<String, Object>> otherEntities, Statement statement) throws SQLException {
 		if(otherEntities.size() == 0) {
 			return;
 		}
 		List<String> columns = new ArrayList<String>(otherEntities.get(0).keySet());
 		String deleteStatement = constructDeleteStatement(columns, otherEntities);
-		connection.createStatement().executeUpdate(deleteStatement);
+		statement.addBatch(deleteStatement);
 	}
 
 	private String constructDeleteStatement(List<String> columns,
 			List<Map<String, Object>> otherEntities) {
 		return "DELETE FROM " + this.toString() + " WHERE " + DatabaseUtilities.createSQLInExpression(columns, otherEntities);
-	}
-
-	public void duplicateTable(Connection originalConnection,
-			Connection newConnection) throws SQLException {
-		this.duplicateTableStructure(originalConnection, newConnection);
-		//TODO: finish
-		
-	}
-
-	public void duplicateTableStructure(Connection originalConnection,
-			Connection newConnection) throws SQLException {		
-		Column[] columns = getColumns(originalConnection);
-		String createStatement = createCreateStatement(columns);
-		newConnection.createStatement().executeUpdate(createStatement);
-	}
-
-	private String createCreateStatement(Column[] columns) {
-		List<String> definitions = new ArrayList<String>();
-		for(int ii = 0; ii < columns.length; ii++) {
-			definitions.add(columns[ii].getDefinition());
-		}
-		return "CREATE TABLE " + this.toString() + DatabaseUtilities.implodeAndWrap(definitions);
-	}
-
-	private Column[] getColumns(Connection connection) throws SQLException {
-		ResultSet results = connection.getMetaData().getColumns(this.catalog, this.schema, this.name, null);
-		List<Column> columns = new ArrayList<Column>();
-		while(results.next()) {
-			columns.add(new Column(results.getString(4), results.getInt(5), results.getInt(7)));
-		}
-		return columns.toArray(new Column[]{});
-	}
-
-	public void transferPrimaryKey(Connection originalConnection,
-			Connection newConnection) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void pointForeignKeys(Connection originalConnection,
-			Connection newConnection) {
-		// TODO Auto-generated method stub
-		
 	}
 }
