@@ -73,8 +73,8 @@ public interface ProgressMonitor {
     /**
      * Notifies that a certain number of units of work has been completed
      * 
-     * @param work The number of units of work completed 
-     *             since last notification
+     * @param work The number of units of work completed, total.
+     *             
      */
     public void worked(int work);
     
