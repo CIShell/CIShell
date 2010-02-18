@@ -20,4 +20,5 @@ public final class ColumnPair {
 	public int hashCode() {
 		return local.hashCode() * 31 + foreign.hashCode();
 	}
+
 }

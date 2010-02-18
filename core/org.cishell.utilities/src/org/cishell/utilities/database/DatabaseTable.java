@@ -1,6 +1,7 @@
 package org.cishell.utilities.database;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -10,8 +11,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
 
 import org.cishell.utilities.DatabaseUtilities;
+import org.cishell.utilities.StringUtilities;
+
+import com.google.common.collect.ImmutableSortedMap;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 public final class DatabaseTable {
 	public final String catalog;
@@ -146,5 +153,38 @@ public final class DatabaseTable {
 	private String constructDeleteStatement(List<String> columns,
 			List<Map<String, Object>> otherEntities) {
 		return "DELETE FROM " + this.toString() + " WHERE " + DatabaseUtilities.createSQLInExpression(columns, otherEntities);
+	}
+	
+	private String formatDeleteEquals(Connection connection, String separator) throws SQLException {
+		//sorting is necessary to ensure keys and values match up
+		SortedSet<String> keys = Sets.newTreeSet();
+		String[] primaryKeys = getPrimaryKeyColumns(connection);
+		for(String key : primaryKeys) {
+			keys.add(key + " = ?");
+		}
+		return StringUtilities.implodeList(Lists.newArrayList(keys), separator);
+	}
+
+	public Remover constructRemover(Connection connection) throws SQLException {
+		String deleteSql = "DELETE FROM " + this.toString() + " WHERE " + formatDeleteEquals(connection, " AND ");
+		final PreparedStatement statement = connection.prepareStatement(deleteSql);
+		return new Remover() {
+			public void remove(Map<String, Object> values) throws SQLException {
+				int index = 1;
+				for(Object value : ImmutableSortedMap.copyOf(values).values()) {
+					statement.setObject(index, value);
+					index++;
+				}
+				statement.addBatch();
+			}
+			public int apply() throws SQLException {
+				int removed = 0;
+				int[] updates = statement.executeBatch();
+				for(int ii = 0; ii < updates.length; ii++) {
+					removed += updates[ii];
+				}
+				return removed;	
+			}
+		};
 	}
 }
