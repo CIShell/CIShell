@@ -281,7 +281,8 @@ public class StringUtilities {
 
 		return string1;
 	}
-
+	
+	//TODO: Make this not exist (a check for 'Null Empty or Whitespace' can stay. Use ! for negated cases)
 	public static Object alternativeIfNotNull_Empty_OrWhitespace(
 			String string, Object alternative) {
 		if (!isNull_Empty_OrWhitespace(string)) {
@@ -297,6 +298,21 @@ public class StringUtilities {
 			return string.toLowerCase();
 		} else {
 			return alternative;
+		}
+	}
+
+	public static String getNthToken(
+			String originalString,
+			String separator,
+			int index,
+			boolean trim) {
+
+		String[] tokens = originalString.split(separator);
+
+		if (trim) {
+			return tokens[index].trim();
+		} else {
+			return tokens[index];
 		}
 	}
 }
