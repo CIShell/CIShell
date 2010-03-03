@@ -133,6 +133,13 @@ public class NumberUtilities {
 		}
 	}
 
+	public static double roundToNDecimalPlaces(double original, int decimalPlaceCount) {
+		String formatString = "#." + StringUtilities.multiply("#", decimalPlaceCount);
+		DecimalFormat format = new DecimalFormat(formatString);
+
+		return Double.valueOf(format.format(original));
+	}
+	
 	public static boolean isEven(long number) {
 		return ((number % 2) == 0);
 	}

@@ -5,12 +5,10 @@ import java.util.Map;
 
 import org.osgi.service.log.LogService;
 
-// TODO: Get reviewed.
-// TODO: Make 1.4 compatible and move to cishell utilities?
 public class LogMessageHandler {
 	private LogService logger;
-	private Map<MessageTypeIndicator, MessageType> messageTypes =
-		new HashMap<MessageTypeIndicator, MessageType>();
+	private Map<MessageTypeDescriptor, MessageType> messageTypes =
+		new HashMap<MessageTypeDescriptor, MessageType>();
 
 	public LogMessageHandler(LogService logger) {
 		this.logger = logger;
@@ -20,82 +18,65 @@ public class LogMessageHandler {
 	 * If typeIndicator is already an added message type, its count will be
 	 * reset and maximum count overridden.
 	 */
-	public MessageTypeIndicator addMessageType(
-			String description, int maximumCount) {
-		MessageTypeIndicator typeIndicator = new MessageTypeIndicator();
-		this.messageTypes.put(
-			typeIndicator, new MessageType(description, maximumCount));
+	public MessageTypeDescriptor addMessageType(String description, int maximumCount) {
+		MessageTypeDescriptor typeIndicator = new MessageTypeDescriptor();
+		this.messageTypes.put(typeIndicator, new MessageType(description, maximumCount));
 
 		return typeIndicator;
 	}
 
-	/**
-	 * logMessage will always be logged if typeIndicator has not been added
-	 * prior to calling this.
-	 */
-	public void logMessage(
-			MessageTypeIndicator typeIndicator,
-			int logLevel,
-			String logMessage) {
+	/// message will always be logged if typeIndicator has not been added prior to calling this.
+	public void handleMessage(MessageTypeDescriptor typeIndicator, int logLevel, String message) {
 		MessageType messageType = this.messageTypes.get(typeIndicator);
 
 		if (messageType != null) {
-			if (messageType.messageLogged()) {
-				this.logger.log(logLevel, logMessage);
-			}
+			messageType.logMessage(logLevel, message, this.logger);
 		} else {
-			this.logger.log(logLevel, logMessage);
+			this.logger.log(logLevel, message);
 		}
 	}
 
 	public void printOverloadedMessageTypes(int logLevel) {
 		for (MessageType messageType : this.messageTypes.values()) {
-			if (messageType.wasOverloaded()) {
-				this.logger.log(logLevel, messageType.toString());
+			if (messageType.isOverloaded()) {
+				this.logger.log(logLevel, messageType.reportOverloads());
 			}
 		}
 	}
 
-	public class MessageTypeIndicator {}
+	// TODO: Javadoc what this is all about.  (I will later.)
+	public class MessageTypeDescriptor {}
 
-	private class MessageType {
+	private static class MessageType {
 		private String description;
 		private int maximumCount;
 		private int foundCount = 0;
-		private int overLoadedCount = 0;
+		private int overloadedCount = 0;
 
 		public MessageType(String description, int maximumCount) {
 			this.description = description;
 			this.maximumCount = maximumCount;
 		}
 
-		public boolean hasAnyLeft() {
-			return this.foundCount != this.maximumCount;
-		}
-
-		public boolean wasOverloaded() {
-			return this.overLoadedCount > 0;
-		}
-
-		public boolean messageLogged() {
-			if (hasAnyLeft()) {
+		public void logMessage(int logLevel, String message, LogService logger) {
+			if (shouldStillLog()) {
+				logger.log(logLevel, message);
 				this.foundCount++;
-
-				return true;
 			} else {
-				this.overLoadedCount++;
-
-				return false;
+				this.overloadedCount++;
 			}
 		}
 
-		public String toString() {
-			return
-				"Found " +
-				this.overLoadedCount +
-				" more " +
-				this.description +
-				".";
+		public String reportOverloads() {
+			return "Found " + this.overloadedCount + " more " + this.description + ".";
+		}
+
+		private boolean shouldStillLog() {
+			return this.foundCount < this.maximumCount;
+		}
+
+		private boolean isOverloaded() {
+			return this.overloadedCount > 0;
 		}
 	}
 }
