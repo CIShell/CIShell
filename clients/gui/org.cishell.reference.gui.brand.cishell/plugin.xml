@@ -54,6 +54,19 @@
                  relative="org.cishell.reference.gui.log.LogView"
                  visible="true"/>
       </perspectiveExtension>
+      
+      <perspectiveExtension
+            targetID="org.cishell.reference.gui.workspace.Perspective">
+         <view
+               closeable="false"
+               id="org.cishell.reference.gui.workflow.WorkflowView"
+               moveable="true"
+               ratio="0.75"
+               relationship="top"
+               relative="org.cishell.reference.gui.log.LogView"
+               visible="true">
+         </view>
+      </perspectiveExtension>
 	
       <perspectiveExtension targetID="org.cishell.reference.gui.workspace.Perspective">
            <view id="org.cishell.reference.gui.datamanager.DataManagerView"
