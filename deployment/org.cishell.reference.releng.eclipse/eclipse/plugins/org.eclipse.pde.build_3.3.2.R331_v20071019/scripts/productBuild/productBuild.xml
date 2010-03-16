@@ -37,6 +37,7 @@
 <!-- already, use preSetup or postSetup to fetch it if necessary           -->
 <!-- ===================================================================== -->
 <target name="generateFeature">
+	<echo message="building the features '%{featureList}'"/>
 	<eclipse.generateFeature
 		featureId="org.eclipse.pde.build.container.feature"
 		buildDirectory="${buildDirectory}"
