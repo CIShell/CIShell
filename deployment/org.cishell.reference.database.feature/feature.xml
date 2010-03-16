@@ -81,4 +81,17 @@ Dr. Katy Borner (katy@indiana.edu)
          install-size="0"
          version="0.0.0"/>
 
+   <plugin
+         id="org.cishell.utilities"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="google_collections"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
 </feature>
