@@ -89,7 +89,19 @@
   	      <param name="element.id" value="commons_pool"/>
   	      <param name="project.name" value="/libs/commons_pool"/>
   	      <param name="url" value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk"/>
-  	    </antcall>	
+  	    </antcall>
+  	<antcall target="svn.co">
+  	  	      <param name="target" value="plugins"/>
+  	  	      <param name="element.id" value="derbylib"/>
+  	  	      <param name="project.name" value="/libs/derbylib"/>
+  	  	      <param name="url" value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk"/>
+  	  	    </antcall>
+  	<antcall target="svn.co">
+  	  	  	      <param name="target" value="plugins"/>
+  	  	  	      <param name="element.id" value="hsqldb"/>
+  	  	  	      <param name="project.name" value="/libs/hsqldb"/>
+  	  	  	      <param name="url" value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk"/>
+  	  	  	    </antcall>	
     <antcall target="svn.co">
       <param name="target" value="plugins"/>
       <param name="element.id" value="cern.colt"/>
