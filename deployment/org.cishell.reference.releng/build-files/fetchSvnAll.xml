@@ -78,6 +78,18 @@
       <param name="project.name" value="/libs/org.apache.commons.collections"/>
       <param name="url" value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk"/>
     </antcall>
+  	<antcall target="svn.co">
+  	      <param name="target" value="plugins"/>
+  	      <param name="element.id" value="commons_dbcp"/>
+  	      <param name="project.name" value="/libs/commons_dbcp"/>
+  	      <param name="url" value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk"/>
+  	    </antcall>
+  	<antcall target="svn.co">
+  	      <param name="target" value="plugins"/>
+  	      <param name="element.id" value="commons_pool"/>
+  	      <param name="project.name" value="/libs/commons_pool"/>
+  	      <param name="url" value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk"/>
+  	    </antcall>	
     <antcall target="svn.co">
       <param name="target" value="plugins"/>
       <param name="element.id" value="cern.colt"/>
