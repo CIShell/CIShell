@@ -22,6 +22,10 @@
 			<property name="type" value="feature" />
 			<property name="id" value="org.cishell.reference.gui.feature" />
 		</ant>
+		<ant antfile="${genericTargets}" target="${target}">
+					<property name="type" value="feature" />
+					<property name="id" value="org.cishell.reference.database.feature" />
+		</ant>
 		
 	</target>
 
