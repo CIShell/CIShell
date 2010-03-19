@@ -57,6 +57,11 @@
 			<property name="zipargs" value="" />
 		</ant>
 	</target>
+	<target name="assemble.org.cishell.reference.database.feature">
+			<ant antfile="${assembleScriptName}" dir="${buildDirectory}">
+				<property name="zipargs" value="" />
+			</ant>
+		</target>
 
 	
 	<!-- assmble targets for RCP build -->	
