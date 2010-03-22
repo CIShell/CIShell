@@ -2,8 +2,9 @@ package org.cishell.utilities.mutateParameter.dropdown;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.cishell.utilities.ArrayUtilities;
 import org.cishell.utilities.mutateParameter.ObjectClassDefinitionTransformer;
@@ -19,13 +20,15 @@ import org.osgi.service.metatype.ObjectClassDefinition;
  */
 public class DropdownMutator {
 	private List transforms;
+	private Set<String> attributesToIgnore = new HashSet<String>();
 
 	public DropdownMutator() {
 		transforms = new ArrayList();
 	}
 	
 	public ObjectClassDefinition mutate(ObjectClassDefinition ocd) {
-		return ObjectClassDefinitionTransformer.transform(ocd, transforms);
+		return ObjectClassDefinitionTransformer.transform(
+			ocd, transforms, this.attributesToIgnore);
 	}
 
 	public void add(String id, List options, String defaultOption) {
@@ -36,20 +39,23 @@ public class DropdownMutator {
 		add(id, options, options);
 	}
 	
-	public void add(String id,
-					List optionLabels,
-					String defaultOptionLabel,
-					List optionValues,
-					String defaultOptionValue) {
-		add(id,
-				swapToFront(optionLabels, defaultOptionLabel),
-				swapToFront(optionValues, defaultOptionValue));
+	public void add(
+			String id,
+			List optionLabels,
+			String defaultOptionLabel,
+			List optionValues,
+			String defaultOptionValue) {
+		add(
+			id,
+			swapToFront(optionLabels, defaultOptionLabel),
+			swapToFront(optionValues, defaultOptionValue));
 	}
 	
 	public void add(String id, List optionLabels, List optionValues) {
-		add(id,
-				(String[]) optionLabels.toArray(new String[0]),
-				(String[]) optionValues.toArray(new String[0]));
+		add(
+			id,
+			(String[]) optionLabels.toArray(new String[0]),
+			(String[]) optionValues.toArray(new String[0]));
 	}
 	
 	public void add(String id, String[] options, String defaultOption) {
@@ -60,33 +66,48 @@ public class DropdownMutator {
 		add(id, options, options);
 	}
 	
-	public void add(final String id,
-					final String[] optionLabels,
-					String defaultOptionLabel,
-					final String[] optionValues,
-					String defaultOptionValue) {
-		add(id,
+	public void add(
+			final String id,
+			final String[] optionLabels,
+			String defaultOptionLabel,
+			final String[] optionValues,
+			String defaultOptionValue) {
+		if (!shouldIgnore(id)) {
+			add(
+				id,
 				swapToFront(optionLabels, defaultOptionLabel),
 				swapToFront(optionValues, defaultOptionValue));
+		}
 	}
 	
-	public void add(final String id,
-					final String[] optionLabels,
-					final String[] optionValues) {
-		transforms.add(
-			new DefaultDropdownTransformer() {
-				public boolean shouldTransform(AttributeDefinition ad) {
-					return id.equals(ad.getID());
-				}
-				
-				public String[] transformOptionLabels(String[] oldOptionLabels) {
-					return optionLabels;
-				}
-				
-				public String[] transformOptionValues(String[] oldOptionValues) {
-					return optionValues;
-				}
-			});
+	public void add(
+			final String id,
+			final String[] optionLabels,
+			final String[] optionValues) {
+		if (!shouldIgnore(id)) {
+			transforms.add(
+				new DefaultDropdownTransformer() {
+					public boolean shouldTransform(AttributeDefinition ad) {
+						return id.equals(ad.getID());
+					}
+
+					public String[] transformOptionLabels(String[] oldOptionLabels) {
+						return optionLabels;
+					}
+
+					public String[] transformOptionValues(String[] oldOptionValues) {
+						return optionValues;
+					}
+				});
+		}
+	}
+
+	public void ignore(String id) {
+		this.attributesToIgnore.add(id);
+	}
+
+	public boolean shouldIgnore(String id) {
+		return this.attributesToIgnore.contains(id);
 	}
 	
 	private static List swapToFront(List list, String target) {

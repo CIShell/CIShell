@@ -1,6 +1,7 @@
 package org.cishell.utilities;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 
@@ -154,7 +155,8 @@ public class MutateParameterUtilities {
 				}
 			};
 		
-		return ObjectClassDefinitionTransformer.apply(dropdownTransformer, oldOCD);
+		return ObjectClassDefinitionTransformer.apply(
+			dropdownTransformer, oldOCD, new ArrayList<String>());
 	}
 	
 	public static BasicObjectClassDefinition mutateDefaultValue(
@@ -172,7 +174,8 @@ public class MutateParameterUtilities {
 				}
 			};
 		
-		return ObjectClassDefinitionTransformer.apply(transformer, oldOCD);
+		return ObjectClassDefinitionTransformer.apply(
+			transformer, oldOCD, new ArrayList<String>());
 	}
 	
 	public static BasicObjectClassDefinition createNewParameters(
