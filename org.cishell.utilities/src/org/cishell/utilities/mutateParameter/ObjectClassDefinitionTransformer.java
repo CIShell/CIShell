@@ -1,6 +1,7 @@
 package org.cishell.utilities.mutateParameter;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -30,7 +31,8 @@ public class ObjectClassDefinitionTransformer {
 	 */
 	public static BasicObjectClassDefinition apply(
 			AttributeDefinitionTransformer transformer,
-			ObjectClassDefinition oldOCD) {		
+			ObjectClassDefinition oldOCD,
+			Collection<String> attributesToIgnore) {		
 		BasicObjectClassDefinition newOCD =
 			MutateParameterUtilities.createNewParameters(oldOCD);
 		
@@ -44,9 +46,10 @@ public class ObjectClassDefinitionTransformer {
 				oldOCD.getAttributeDefinitions(filter);
 			
 			for (int ii = 0; ii < oldADs.length; ii++) {
-				newOCD.addAttributeDefinition(
-							filter,
-							transformer.transform(oldADs[ii]));
+				if (!attributesToIgnore.contains(oldADs[ii].getID())) {
+					newOCD.addAttributeDefinition(
+						filter, transformer.transform(oldADs[ii]));
+				}
 			}
 		}
 		
@@ -55,14 +58,14 @@ public class ObjectClassDefinitionTransformer {
 	
 	// Convenience method for batching transformations.
 	public static ObjectClassDefinition transform(
-			ObjectClassDefinition ocd, List transformers) {
+			ObjectClassDefinition ocd, List transformers, Collection<String> attributesToIgnore) {
 		ObjectClassDefinition newOCD = ocd;
 		
 		for (Iterator it = transformers.iterator(); it.hasNext();) {
 			AttributeDefinitionTransformer transformer =
 				(AttributeDefinitionTransformer) it.next();
 			
-			newOCD = apply(transformer, newOCD);
+			newOCD = apply(transformer, newOCD, attributesToIgnore);
 		}
 		
 		return newOCD;
