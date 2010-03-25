@@ -60,6 +60,7 @@ public class DerbyDatabaseService implements DatabaseService, BundleActivator {
 		System.setProperty("derby.system.home", DATABASE_DIRECTORY);
 
 		//Allow the database service to be found by other services/plugins
+		//TODO: figure out why this throws a concurrentmodificationerror on startup
 		databaseServiceRegistration = context.registerService(
 				DatabaseService.class.getName(), this, new Hashtable());
 	}
