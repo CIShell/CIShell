@@ -10,6 +10,7 @@ import org.cishell.framework.algorithm.AlgorithmExecutionException;
 import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.data.BasicData;
 import org.cishell.framework.data.Data;
+import org.cishell.framework.data.DataProperty;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
@@ -48,6 +49,19 @@ public class FileLoad implements Algorithm {
 				defaultLoadDirectory = "";
 			}
 		}
+	}
+	
+	protected static void relabelWithFilename(Data data, File file) {
+		File absoluteFile = file.getAbsoluteFile();
+		File parent = absoluteFile.getParentFile();
+		String prefix;
+		String parentName = parent.getName();
+		if(parentName.trim().length() == 0) {
+			prefix = File.separator;
+		} else {
+			prefix = "..." + File.separator + parentName + File.separator;
+		}
+		data.getMetadata().put(DataProperty.LABEL, prefix + absoluteFile.getName());
 	}
 
 	public Data[] execute() throws AlgorithmExecutionException {
@@ -158,9 +172,11 @@ public class FileLoad implements Algorithm {
 						loadFileSuccess = true;
 						logger.log(LogService.LOG_INFO, "Loaded: "
 								+ file.getPath());
-						for (int i = 0; i < outputDataAfterValidation.length; i++)
-							loadedFiles_ReturnParameter.
-							add(outputDataAfterValidation[i]);
+						for (int i = 0; i < outputDataAfterValidation.length; i++) {
+							Data data = outputDataAfterValidation[i];
+							relabelWithFilename(data, file);
+							loadedFiles_ReturnParameter.add(data);
+						}
 					}
 				}
 
@@ -177,6 +193,8 @@ public class FileLoad implements Algorithm {
 				throw new RuntimeException(e);
 			}
 		}
+
+		
 		
 		private ServiceReference[] getSupportingValidators(String fileExtension) {
 			try {
