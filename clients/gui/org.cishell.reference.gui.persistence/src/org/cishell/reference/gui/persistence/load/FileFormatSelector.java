@@ -13,6 +13,7 @@ import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.data.BasicData;
 import org.cishell.framework.data.Data;
+import org.cishell.framework.data.DataProperty;
 import org.cishell.reference.gui.common.AbstractDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
@@ -206,7 +207,9 @@ public class FileFormatSelector extends AbstractDialog {
 			this.logger.log(LogService.LOG_INFO, "Loaded: " + this.selectedFile.getPath());
 
 			for (int ii = 0; ii < data.length; ii++) {
-				this.returnList.add(data[ii]);
+				Data dataItem = data[ii];
+				FileLoad.relabelWithFilename(dataItem, selectedFile);
+				this.returnList.add(dataItem);
 			}
 
 			close(true); 
