@@ -6,7 +6,6 @@ import java.io.IOException;
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.data.Data;
 import org.cishell.framework.data.DataProperty;
-import org.cishell.reference.gui.persistence.FileUtil;
 import org.cishell.reference.gui.persistence.view.core.exceptiontypes.ConvertDataForViewingException;
 import org.cishell.reference.gui.persistence.view.core.exceptiontypes.FileViewingException;
 import org.cishell.reference.gui.persistence.view.core.exceptiontypes.NoProgramFoundException;
@@ -251,7 +250,7 @@ public class FileViewer {
 				FILE_EXTENSION_MIME_TYPE_PREFIX + fileExtension;
 			File convertedFile = convertToFile(
 				originalData, fileExtensionMimeType, converterManager);
-			String fileName = FileUtil.extractFileName(dataLabel);
+			String fileName = FileUtilities.extractFileName(dataLabel);
 			
 			return FileUtilities.createTemporaryFileCopy(
 				convertedFile, fileName, fileExtension);
@@ -279,8 +278,8 @@ public class FileViewer {
 		String dataLabel =
 			(String)originalData.getMetadata().get(DataProperty.LABEL);
 		String dataFormat = originalData.getFormat();
-		String fileName = FileUtil.extractFileName(dataLabel);
-		String fileExtension = FileUtil.extractExtension(dataFormat);
+		String fileName = FileUtilities.extractFileName(dataLabel);
+		String fileExtension = FileUtilities.extractExtension(dataFormat);
 
 		try {
 			File fileToView = FileUtilities.

@@ -13,10 +13,10 @@ import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.AlgorithmProperty;
 import org.cishell.framework.data.Data;
 import org.cishell.framework.data.DataProperty;
-import org.cishell.reference.gui.persistence.FileUtil;
 import org.cishell.service.conversion.ConversionException;
 import org.cishell.service.conversion.Converter;
 import org.cishell.service.guibuilder.GUIBuilderService;
+import org.cishell.utilities.FileUtilities;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
@@ -118,9 +118,9 @@ public class FileSaver {
         dialog.setText("Choose File");
         
         String fileLabel = (String)data.getMetadata().get(DataProperty.LABEL);
-        String suggestedFileName = FileUtil.extractFileName(fileLabel);
+        String suggestedFileName = FileUtilities.extractFileName(fileLabel);
         String cleanedSuggestedFileName =
-        	FileUtil.replaceInvalidFilenameCharacters(suggestedFileName);
+        	FileUtilities.replaceInvalidFilenameCharacters(suggestedFileName);
         dialog.setFileName(cleanedSuggestedFileName + "." + ext);
         
 //        if (fileLabel == null) {
