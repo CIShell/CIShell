@@ -196,10 +196,7 @@ public class LogView extends ViewPart implements LogListener {
          
          if (logService != null) {
          	try {
-         		String welcomeTextFilePath = CONFIGURATION_DIRECTORY +
-         									 File.separator +
-         									 WELCOME_TEXT_FILE_NAME;
-         		URL welcomeTextFileURL = new File(welcomeTextFilePath).toURL();
+         		URL welcomeTextFileURL = new URL(new URL(System.getProperty("osgi.configuration.area")), WELCOME_TEXT_FILE_NAME);
          		Properties properties = new Properties();
          		properties.load(welcomeTextFileURL.openStream());
          		String greetingText =
