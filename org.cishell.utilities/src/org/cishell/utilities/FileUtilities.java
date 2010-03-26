@@ -433,4 +433,8 @@ public static final char FILENAME_CHARACTER_REPLACEMENT = '#';
     	
     	return fileNameWithoutExtension;
     }
+
+    public static String extractFileNameWithExtension(String fileLabel) {
+    	return extractFileName(fileLabel) + getFileExtension(fileLabel);
+    }
 }
