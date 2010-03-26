@@ -486,7 +486,7 @@ public class ConverterGraph {
 		if(!tempDir.exists())
 			tempDir.mkdir();
 		try{
-			tempFile = File.createTempFile("NWB-Session-", ".nwb", tempDir);
+			tempFile = File.createTempFile("ConverterTester-", ".nwb", tempDir);
 
 		}catch (IOException e){
 			
