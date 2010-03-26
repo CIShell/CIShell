@@ -45,7 +45,7 @@ public class FileUtilities {
     	
     	try {
     		temporaryFile =
-    			File.createTempFile("NWB-Session-" + temporaryFileName,
+    			File.createTempFile(temporaryFileName,
     								"." + temporaryFileExtension,
     								temporaryDirectory);
     	}
@@ -120,7 +120,7 @@ public class FileUtilities {
 	    String temporaryDirectoryPath = getDefaultTemporaryDirectory();
 	    File temporaryImageFile =
 	    	createTemporaryFileInTemporaryDirectory(temporaryDirectoryPath,
-	    											"nwb-temp",
+	    											"image-",
 	    											imageType);
 
 	    // Attempt to write the image to the temporary file on disk.
@@ -140,7 +140,7 @@ public class FileUtilities {
 	    String temporaryDirectoryPath = getDefaultTemporaryDirectory();
 	    File temporaryTextFile =
 	    	createTemporaryFileInTemporaryDirectory(temporaryDirectoryPath,
-	    											"nwb-temp",
+	    											"text-",
 	    											fileExtension);
 
 	    FileWriter textFileWriter = new FileWriter(temporaryTextFile);
