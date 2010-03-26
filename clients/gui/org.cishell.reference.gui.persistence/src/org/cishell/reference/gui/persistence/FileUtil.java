@@ -135,13 +135,4 @@ public class FileUtil {
     	
     	return fileNameWithoutExtension;
     }
-    
-    public static void main(String[] args) {
-//		String s = "Input data: CSV file: C:\\Documents and Settings\\katy\\Desktop\\NIH-Demo\\nih\\NIH-data\\NIH-NIGMS-PPBC-R01s,-FY08-Publications.csv";
-		String s = "a\\b/c:d*e?f\"g<h>i|j";
-		
-		System.out.println(replaceInvalidFilenameCharacters(s));		
-		
-    	System.exit(0);
-	}
 }

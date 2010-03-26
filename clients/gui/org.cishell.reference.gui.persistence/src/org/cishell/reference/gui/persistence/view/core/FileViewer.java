@@ -31,7 +31,7 @@ public class FileViewer {
 	public static final String ANY_MIME_TYPE = "file:";
 	public static final String CSV_FILE_EXT = "file-ext:csv";
 	public static final String CSV_MIME_TYPE = "file:text/csv";
-	public static final String TEMPORARY_CSV_FILE_NAME = "xxx-Session-";
+	public static final String TEMPORARY_CSV_FILE_NAME = "CSV-";
 	public static final String CSV_FILE_EXTENSION = "csv";
 	public static final String TXT_FILE_EXTENSION = "txt";
 	public static final String ANY_FILE_FORMAT_PATTERN =
