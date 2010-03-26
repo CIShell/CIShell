@@ -1,6 +1,7 @@
 package org.cishell.reference.gui.persistence.load;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Dictionary;
 
@@ -52,8 +53,18 @@ public class FileLoad implements Algorithm {
 	}
 	
 	protected static void relabelWithFilename(Data data, File file) {
-		File absoluteFile = file.getAbsoluteFile();
-		File parent = absoluteFile.getParentFile();
+		File absoluteFile;
+		try {
+			absoluteFile = file.getCanonicalFile();
+		} catch (IOException e) {
+			absoluteFile = file.getAbsoluteFile();
+		}
+		File parent;
+		try {
+			parent = absoluteFile.getParentFile().getCanonicalFile();
+		} catch (IOException e) {
+			parent = absoluteFile.getParentFile().getAbsoluteFile();
+		}
 		String prefix;
 		String parentName = parent.getName();
 		if(parentName.trim().length() == 0) {
