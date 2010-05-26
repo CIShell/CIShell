@@ -431,7 +431,7 @@ public static final char FILENAME_CHARACTER_REPLACEMENT = '#';
     	
     	String fileNameWithoutExtension = fileNameWithExtension.substring(0, endIndex);
     	
-    	return fileNameWithoutExtension;
+    	return fileNameWithoutExtension.trim(); //no spaces on either end
     }
 
     public static String extractFileNameWithExtension(String fileLabel) {
