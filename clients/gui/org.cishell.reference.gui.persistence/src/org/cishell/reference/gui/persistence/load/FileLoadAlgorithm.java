@@ -1,7 +1,6 @@
 package org.cishell.reference.gui.persistence.load;
 
 import java.io.File;
-import java.util.Collection;
 import java.util.Dictionary;
 
 import org.cishell.framework.CIShellContext;
@@ -43,35 +42,11 @@ public class FileLoadAlgorithm implements Algorithm, ProgressTrackable {
 	}
 
 	public Data[] execute() throws AlgorithmExecutionException {
-		// Prepare to run load dialog in GUI thread.
-
 		IWorkbenchWindow window = getFirstWorkbenchWindow();
 		Display display = PlatformUI.getWorkbench().getDisplay();
-		FileLoadUserInputRunnable userInputGetter = new FileLoadUserInputRunnable(
-			window, this.bundleContext, this.ciShellContext);
+		File file = getFileToLoadFromUser(window, display);
 
-		// Run load dialog in GUI thread.
-
-		if (Thread.currentThread() != display.getThread()) {
-			display.syncExec(userInputGetter);
-		} else {
-			userInputGetter.run();
-		}
-
-		// Return loaded file data.
-
-		File file = userInputGetter.getFile();
-		AlgorithmFactory validator = userInputGetter.getValidator();
-
-		if ((file == null) || (validator == null)) {
-			String logMessage = "File loading canceled";
-			this.logger.log(LogService.LOG_WARNING, logMessage);
-
-			return null;
-		} else {
-			return FileValidator.validateFile(
-				file, validator, this.progressMonitor, this.ciShellContext, this.logger);
-		}
+		return validateFile(window, display, file);
 	}
 
 	public ProgressMonitor getProgressMonitor() {
@@ -86,7 +61,7 @@ public class FileLoadAlgorithm implements Algorithm, ProgressTrackable {
 		return StringUtilities.emptyStringIfNull(preferences.get(LOAD_DIRECTORY_PREFERENCE_KEY));
 	}
 
-	private static IWorkbenchWindow getFirstWorkbenchWindow() throws AlgorithmExecutionException {
+	private IWorkbenchWindow getFirstWorkbenchWindow() throws AlgorithmExecutionException {
 		final IWorkbenchWindow[] windows = PlatformUI.getWorkbench().getWorkbenchWindows();
 
 		if (windows.length == 0) {
@@ -95,5 +70,60 @@ public class FileLoadAlgorithm implements Algorithm, ProgressTrackable {
 		} else {
 			return windows[0];
 		}
+	}
+
+	private File getFileToLoadFromUser(IWorkbenchWindow window, Display display) {
+		FileSelectorRunnable fileSelector = new FileSelectorRunnable(window);
+
+		if (Thread.currentThread() != display.getThread()) {
+			display.syncExec(fileSelector);
+		} else {
+			fileSelector.run();
+		}
+
+		return fileSelector.getFile();
+	}
+
+	private Data[] validateFile(IWorkbenchWindow window, Display display, File file)
+			throws AlgorithmExecutionException {
+		AlgorithmFactory validator = null;
+		boolean shouldTryValidator = true;
+
+		while (shouldTryValidator) {
+			try {
+				validator = getValidatorFromUser(window, display, file);
+
+				if ((file == null) || (validator == null)) {
+					String logMessage = "File loading canceled";
+					this.logger.log(LogService.LOG_WARNING, logMessage);
+
+					shouldTryValidator = false;
+				} else {
+					return FileValidator.validateFile(
+						file, validator, this.progressMonitor, this.ciShellContext, this.logger);
+				}
+			} catch (Throwable e) {
+				String logMessage =
+					"The chosen file is not compatible with the chosen file.  " +
+					"Please try a different format or cancel.";
+				this.logger.log(LogService.LOG_ERROR, logMessage);
+			}
+		}
+
+		return null;
+	}
+
+	private AlgorithmFactory getValidatorFromUser(
+			IWorkbenchWindow window, Display display, File file) {
+		ValidatorSelectorRunnable validatorSelector =
+			new ValidatorSelectorRunnable(window, this.bundleContext, file);
+
+		if (Thread.currentThread() != display.getThread()) {
+			display.syncExec(validatorSelector);
+		} else {
+			validatorSelector.run();
+		}
+
+		return validatorSelector.getValidator();
 	}
 }
