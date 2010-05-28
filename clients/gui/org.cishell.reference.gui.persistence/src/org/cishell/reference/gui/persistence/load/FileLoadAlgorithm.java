@@ -69,7 +69,8 @@ public class FileLoadAlgorithm implements Algorithm, ProgressTrackable {
 
 			return null;
 		} else {
-			return FileValidator.validateFile(file, validator, this.ciShellContext, this.logger);
+			return FileValidator.validateFile(
+				file, validator, this.progressMonitor, this.ciShellContext, this.logger);
 		}
 	}
 
