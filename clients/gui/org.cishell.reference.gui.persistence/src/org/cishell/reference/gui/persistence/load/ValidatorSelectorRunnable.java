@@ -2,32 +2,25 @@ package org.cishell.reference.gui.persistence.load;
 
 import java.io.File;
 
-import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.utilities.FileUtilities;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 
-public final class FileLoadUserInputRunnable implements Runnable {
+public final class ValidatorSelectorRunnable implements Runnable {
 	private IWorkbenchWindow window;
 	private BundleContext bundleContext;
-	private CIShellContext ciShellContext;
+
 	private File file;
 	private AlgorithmFactory validator;
 
-	public FileLoadUserInputRunnable(
-			IWorkbenchWindow window, BundleContext bundleContext, CIShellContext ciShellContext) {
+	public ValidatorSelectorRunnable(
+			IWorkbenchWindow window, BundleContext bundleContext, File file) {
 		this.window = window;
 		this.bundleContext = bundleContext;
-		this.ciShellContext = ciShellContext;
-	}
-
-	public File getFile() {
-		return this.file;
+		this.file = file;
 	}
 
 	public AlgorithmFactory getValidator() {
@@ -35,26 +28,8 @@ public final class FileLoadUserInputRunnable implements Runnable {
 	}
 
 	public void run() {
-		this.file = getFileFromUser();
-
-		if (file == null) {
-			return;
-		} else if (this.file.isDirectory()) {
-			FileLoadAlgorithm.defaultLoadDirectory = this.file.getAbsolutePath();
-		} else {
-			FileLoadAlgorithm.defaultLoadDirectory = this.file.getParentFile().getAbsolutePath();
-		}
-
-		// Validate the loaded file, "casting" it to a certain MIME type.
-
-		// Extract the file's file extension.
-
 		String fileExtension =
 			FileUtilities.getFileExtension(this.file).toLowerCase().substring(1);
-
-		// TODO split here?
-		
-		// Get all the validators which support this file extension...
 
 		ServiceReference[] supportingValidators = getSupportingValidators(fileExtension);
 
@@ -80,27 +55,6 @@ public final class FileLoadUserInputRunnable implements Runnable {
 			validatorSelector.open();
 			this.validator = validatorSelector.getValidator();
 		}
-	}
-
-	private File getFileFromUser() {
-		FileDialog fileDialog = createFileDialog();
-		String fileName = fileDialog.open();
-
-		if (fileName == null) {
-			return null;
-		} else {
-			return new File(fileName);
-		}
-	}
-
-	private FileDialog createFileDialog() {
-		File currentDirectory = new File(FileLoadAlgorithm.defaultLoadDirectory);
-		String absolutePath = currentDirectory.getAbsolutePath();
-		FileDialog fileDialog = new FileDialog(this.window.getShell(), SWT.OPEN);
-		fileDialog.setFilterPath(absolutePath);
-		fileDialog.setText("Select a File");
-
-		return fileDialog;
 	}
 
 	private ServiceReference[] getSupportingValidators(String fileExtension) {
