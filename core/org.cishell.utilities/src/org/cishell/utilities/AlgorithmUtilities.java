@@ -7,6 +7,8 @@ import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
 import org.cishell.framework.algorithm.AlgorithmExecutionException;
 import org.cishell.framework.algorithm.AlgorithmFactory;
+import org.cishell.framework.algorithm.ProgressMonitor;
+import org.cishell.framework.algorithm.ProgressTrackable;
 import org.cishell.framework.data.BasicData;
 import org.cishell.framework.data.Data;
 import org.cishell.framework.data.DataProperty;
@@ -123,12 +125,19 @@ public class AlgorithmUtilities {
 	@SuppressWarnings("unchecked")	// Dictionary<String, Object>
 	public static Data[] executeAlgorithm(
 			AlgorithmFactory algorithmFactory,
+			ProgressMonitor progressMonitor,
+			Data[] data,
 			Dictionary parameters,
-			CIShellContext ciShellContext,
-			Data[] data)
+			CIShellContext ciShellContext)
     		throws AlgorithmExecutionException {
     	Algorithm algorithm =
     		algorithmFactory.createAlgorithm(data, parameters, ciShellContext);
+
+    	if ((progressMonitor != null) && (algorithm instanceof ProgressTrackable)) {
+    		ProgressTrackable progressTrackable = (ProgressTrackable)algorithm;
+    		progressTrackable.setProgressMonitor(progressMonitor);
+    	}
+
     	Data[] result = algorithm.execute();
 
     	return result;
