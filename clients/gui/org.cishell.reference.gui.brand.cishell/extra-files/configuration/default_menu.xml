@@ -2,7 +2,7 @@
 <!-- <?xml version="1.0" encoding="ISO-8859-1" ?> -->
 <menu_layout> 
     <top_menu name="File">
-	<menu name="Load..." pid= "org.cishell.reference.gui.persistence.load.FileLoad "/>								  
+	<menu name="Load..." pid= "org.cishell.reference.gui.persistence.load.FileLoadAlgorithm "/>								  
 	<menu type="break"/>
 	<menu name="Save..." pid= "org.cishell.reference.gui.persistence.save.Save"/>
 	<menu type="break"/>
