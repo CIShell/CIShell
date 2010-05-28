@@ -3,6 +3,9 @@ package org.cishell.utilities;
 import java.io.File;
 import java.util.Dictionary;
 
+import org.cishell.framework.CIShellContext;
+import org.cishell.framework.algorithm.Algorithm;
+import org.cishell.framework.algorithm.AlgorithmExecutionException;
 import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.data.BasicData;
 import org.cishell.framework.data.Data;
@@ -116,4 +119,18 @@ public class AlgorithmUtilities {
 			return guessSourceDataFilename(parent);
 		}
 	}
+
+	@SuppressWarnings("unchecked")	// Dictionary<String, Object>
+	public static Data[] executeAlgorithm(
+			AlgorithmFactory algorithmFactory,
+			Dictionary parameters,
+			CIShellContext ciShellContext,
+			Data[] data)
+    		throws AlgorithmExecutionException {
+    	Algorithm algorithm =
+    		algorithmFactory.createAlgorithm(data, parameters, ciShellContext);
+    	Data[] result = algorithm.execute();
+
+    	return result;
+    }
 }
