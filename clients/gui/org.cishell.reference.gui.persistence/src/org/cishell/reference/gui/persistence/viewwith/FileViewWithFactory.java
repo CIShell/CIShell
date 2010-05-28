@@ -69,13 +69,8 @@ public class FileViewWithFactory implements AlgorithmFactory, ParameterMutator {
                 programCsv = Program.findProgram("csv");
                 
             }});
-	    
-        //TODO: what the hell?
-		System.err.println(definition.getID());
 		
 		String[] defValStringArray = null; //doesn't actually work yet...
-		//String[] myOptionLabels = new String[] {programTxt.getName(),programDoc.getName(),programHtml.getName()};
-		//String[] myOptionValues = new String[] {"txt","doc","html"};
 		
 		int possiblePrograms = 0;
 		int counter = 0;

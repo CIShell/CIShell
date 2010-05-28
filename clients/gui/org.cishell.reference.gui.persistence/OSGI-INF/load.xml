@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<component name="org.cishell.reference.gui.persistence.load.FileLoad.component" immediate="false">
+<component name="org.cishell.reference.gui.persistence.load.FileLoadAlgorithm.component" immediate="false">
 	<implementation class="org.cishell.reference.gui.persistence.load.FileLoadFactory"/>
 	<properties entry="OSGI-INF/load.properties"/>
 	<reference name="LOG" interface="org.osgi.service.log.LogService"/>

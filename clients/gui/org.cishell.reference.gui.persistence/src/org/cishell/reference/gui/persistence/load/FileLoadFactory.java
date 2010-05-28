@@ -12,19 +12,17 @@ import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
 import org.osgi.service.component.ComponentContext;
 
-/* 
- * @author Weixia(Bonnie) Huang (huangb@indiana.edu)
- */
 public class FileLoadFactory implements AlgorithmFactory, ManagedService {
-    private BundleContext bcontext;
+    private BundleContext bundleContext;
     private Dictionary properties = new Hashtable();
 
-    protected void activate(ComponentContext ctxt) {
-        bcontext = ctxt.getBundleContext();
+    protected void activate(ComponentContext componentContext) {
+        bundleContext = componentContext.getBundleContext();
     }
     
-    public Algorithm createAlgorithm(Data[] data, Dictionary parameters, CIShellContext context) {
-        return new FileLoad(context, bcontext, properties);
+    public Algorithm createAlgorithm(
+    		Data[] data, Dictionary parameters, CIShellContext ciShellContext) {
+        return new FileLoadAlgorithm(ciShellContext, this.bundleContext, this.properties);
     }
 
 	public void updated(Dictionary properties) throws ConfigurationException {
@@ -35,18 +33,18 @@ public class FileLoadFactory implements AlgorithmFactory, ManagedService {
 	}
 	
 //	private void printPreferences(Dictionary properties) {
-//			System.out.println("  Preferences are as follows for File Load:");
-//			if (properties == null) {
-//				System.out.println("    Dictionary is null!");
-//			} else {
-//				Enumeration propertiesKeys = properties.keys();
+//		System.out.println("  Preferences are as follows for File Load:");
+//		if (properties == null) {
+//			System.out.println("    Dictionary is null!");
+//		} else {
+//			Enumeration propertiesKeys = properties.keys();
+//			
+//			while (propertiesKeys.hasMoreElements()) {
+//				String propertiesKey = (String) propertiesKeys.nextElement();
 //				
-//				while (propertiesKeys.hasMoreElements()) {
-//					String propertiesKey = (String) propertiesKeys.nextElement();
-//					
-//					Object propertiesValue = properties.get(propertiesKey);
-//					System.out.println("    " + propertiesKey + ":" + propertiesValue);
-//				}
+//				Object propertiesValue = properties.get(propertiesKey);
+//				System.out.println("    " + propertiesKey + ":" + propertiesValue);
 //			}
 //		}
+//	}
 }
