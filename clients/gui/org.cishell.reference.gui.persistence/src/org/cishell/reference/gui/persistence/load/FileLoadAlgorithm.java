@@ -45,8 +45,12 @@ public class FileLoadAlgorithm implements Algorithm, ProgressTrackable {
 		IWorkbenchWindow window = getFirstWorkbenchWindow();
 		Display display = PlatformUI.getWorkbench().getDisplay();
 		File file = getFileToLoadFromUser(window, display);
-
-		return validateFile(window, display, file);
+		
+		if (file != null) {
+			return validateFile(window, display, file);
+		} else {
+			return null;
+		}
 	}
 
 	public ProgressMonitor getProgressMonitor() {
