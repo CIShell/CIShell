@@ -3,7 +3,7 @@ package org.cishell.utilities;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.cishell.reference.service.metatype.BasicObjectClassDefinition;
 import org.cishell.utilities.mutateParameter.AttributeDefinitionTransformer;
@@ -22,112 +22,96 @@ public class MutateParameterUtilities {
 	
 	public static AttributeDefinition formLabelAttributeDefinition(
 			AttributeDefinition oldAttributeDefinition, Table table)
-				throws ColumnNotFoundException {
+			throws ColumnNotFoundException {
 		String[] validStringColumnsInTable =
 			TableUtilities.getValidStringColumnNamesInTable(table);
 	
-		AttributeDefinition labelAttributeDefinition =
-			cloneToDropdownAttributeDefinition(oldAttributeDefinition,
-											   validStringColumnsInTable,
-											   validStringColumnsInTable);
-	
+		AttributeDefinition labelAttributeDefinition = cloneToDropdownAttributeDefinition(
+			oldAttributeDefinition, validStringColumnsInTable, validStringColumnsInTable);
+
 		return labelAttributeDefinition;
 	}
 
 	public static AttributeDefinition formDateAttributeDefinition(
 			AttributeDefinition oldAttributeDefinition, Table table)
-				throws ColumnNotFoundException {
-		String[] validDateColumnsInTable =
-			TableUtilities.getValidDateColumnNamesInTable(table);
+			throws ColumnNotFoundException {
+		String[] validDateColumnsInTable = TableUtilities.getValidDateColumnNamesInTable(table);
 
-		AttributeDefinition dateAttributeDefinition =
-			cloneToDropdownAttributeDefinition(oldAttributeDefinition,
-											   validDateColumnsInTable,
-											   validDateColumnsInTable);
+		AttributeDefinition dateAttributeDefinition = cloneToDropdownAttributeDefinition(
+			oldAttributeDefinition, validDateColumnsInTable, validDateColumnsInTable);
 
 		return dateAttributeDefinition;
 	}
 
 	public static AttributeDefinition formIntegerAttributeDefinition(
 			AttributeDefinition oldAttributeDefinition, Table table)
-				throws ColumnNotFoundException {
+			throws ColumnNotFoundException {
 		String[] validIntegerColumnsInTable =
 			TableUtilities.getValidIntegerColumnNamesInTable(table);
 
-		AttributeDefinition integerAttributeDefinition =
-			cloneToDropdownAttributeDefinition(oldAttributeDefinition,
-											   validIntegerColumnsInTable,
-											   validIntegerColumnsInTable);
+		AttributeDefinition integerAttributeDefinition = cloneToDropdownAttributeDefinition(
+			oldAttributeDefinition, validIntegerColumnsInTable, validIntegerColumnsInTable);
 
 		return integerAttributeDefinition;
 	}
-	
+
 	public static AttributeDefinition formNumberAttributeDefinition(
 			AttributeDefinition oldAttributeDefinition, Table table)
-				throws ColumnNotFoundException {
+			throws ColumnNotFoundException {
 		String[] validNumberColumnsInTable =
 			TableUtilities.getValidNumberColumnNamesInTable(table);
 		
-		AttributeDefinition numberAttributeDefinition =
-			cloneToDropdownAttributeDefinition(oldAttributeDefinition,
-											   validNumberColumnsInTable,
-											   validNumberColumnsInTable);
+		AttributeDefinition numberAttributeDefinition = cloneToDropdownAttributeDefinition(
+			oldAttributeDefinition, validNumberColumnsInTable, validNumberColumnsInTable);
 		
 		return numberAttributeDefinition;
 	}
-	
-	// TODO: Change LinkedHashMap to Map?
+
 	public static AttributeDefinition formAttributeDefinitionFromMap(
 			AttributeDefinition oldAttributeDefinition,
-			LinkedHashMap map,
+			Map<String, String> map,
 			String[] types,
 			String[] keysToSkip,
 			String[] keysToAdd) {
-		String[] validNumberKeysInMap =
-			MapUtilities.getValidKeysOfTypesInMap(
-				map, types, keysToSkip, keysToAdd);
+		String[] validNumberKeysInMap = MapUtilities.getValidKeysOfTypesInMap(
+			map, types, keysToSkip, keysToAdd);
 		
-		AttributeDefinition numberAttributeDefinition =
-			cloneToDropdownAttributeDefinition(oldAttributeDefinition,
-											   validNumberKeysInMap,
-											   validNumberKeysInMap);
+		AttributeDefinition numberAttributeDefinition = cloneToDropdownAttributeDefinition(
+			oldAttributeDefinition, validNumberKeysInMap, validNumberKeysInMap);
 		
 		return numberAttributeDefinition;
 	}
-	
+
 	public static AttributeDefinition cloneToDropdownAttributeDefinition(
-			AttributeDefinition oldAD,
-			final String[] optionLabels,
-			final String[] optionValues) {
-		AttributeDefinitionTransformer transformer =
-			new DefaultDropdownTransformer() {
-				public boolean shouldTransform(AttributeDefinition ad) {
-					return true;
-				}
-				
-				public String[] transformOptionLabels(
-						String[] oldOptionLabels) {
-					return optionLabels;
-				}
-				
-				public String[] transformOptionValues(
-						String[] oldOptionValues) {
-					return optionValues;
-				}
-			};
+			AttributeDefinition oldAD, final String[] optionLabels, final String[] optionValues) {
+		AttributeDefinitionTransformer transformer = new DefaultDropdownTransformer() {
+			public boolean shouldTransform(AttributeDefinition ad) {
+				return true;
+			}
+
+			public String[] transformOptionLabels(String[] oldOptionLabels) {
+				return optionLabels;
+			}
+
+			public String[] transformOptionValues(String[] oldOptionValues) {
+				return optionValues;
+			}
+		};
 			
 		return transformer.transform(oldAD);
 	}
 	
+	@SuppressWarnings("unchecked")	// Raw Collection
 	public static BasicObjectClassDefinition mutateToDropdown(
 			ObjectClassDefinition oldOCD,
 			final String parameterID,
 			Collection optionLabels,
 			Collection optionValues) {
-		return mutateToDropdown(oldOCD,
-								parameterID,
-								(String[]) optionLabels.toArray(new String[0]),
-								(String[]) optionValues.toArray(new String[0]));
+		return mutateToDropdown(
+			oldOCD,
+			parameterID,
+			(String[])optionLabels.toArray(new String[0]),
+			(String[])optionValues.toArray(new String[0]));
 	}
 	
 	/* Convenience method for a common mutation:
@@ -139,21 +123,20 @@ public class MutateParameterUtilities {
 			final String parameterID,
 			final String[] optionLabels,
 			final String[] optionValues) {
-		AttributeDefinitionTransformer dropdownTransformer =
-			new DefaultDropdownTransformer() {
-				public boolean shouldTransform(AttributeDefinition ad) {
-					return ad.getID().equals(parameterID);
-				}
-				
-				public String[] transformOptionLabels(
-						String[] oldOptionLabels) {
-					return optionLabels;
-				}
-				public String[] transformOptionValues(
-						String[] oldOptionValues) {
-					return optionValues;
-				}
-			};
+		AttributeDefinitionTransformer dropdownTransformer = new DefaultDropdownTransformer() {
+			public boolean shouldTransform(AttributeDefinition ad) {
+				return ad.getID().equals(parameterID);
+			}
+			
+			public String[] transformOptionLabels(
+					String[] oldOptionLabels) {
+				return optionLabels;
+			}
+			public String[] transformOptionValues(
+					String[] oldOptionValues) {
+				return optionValues;
+			}
+		};
 		
 		return ObjectClassDefinitionTransformer.apply(
 			dropdownTransformer, oldOCD, new ArrayList<String>());
@@ -163,16 +146,15 @@ public class MutateParameterUtilities {
 			ObjectClassDefinition oldOCD,
 			final String parameterID,
 			final String defaultValue) {
-		AttributeDefinitionTransformer transformer =
-			new DefaultDefaultValueTransformer() {
-				public boolean shouldTransform(AttributeDefinition ad) {
-					return ad.getID().equals(parameterID);
-				}
+		AttributeDefinitionTransformer transformer = new DefaultDefaultValueTransformer() {
+			public boolean shouldTransform(AttributeDefinition ad) {
+				return ad.getID().equals(parameterID);
+			}
 
-				public String transformDefaultValue(String[] oldDefaultValue) {
-					return defaultValue;
-				}
-			};
+			public String transformDefaultValue(String[] oldDefaultValue) {
+				return defaultValue;
+			}
+		};
 		
 		return ObjectClassDefinitionTransformer.apply(
 			transformer, oldOCD, new ArrayList<String>());
@@ -181,17 +163,18 @@ public class MutateParameterUtilities {
 	public static BasicObjectClassDefinition createNewParameters(
 			ObjectClassDefinition oldParameters) {
 		try {
-			return
-				new BasicObjectClassDefinition(oldParameters.getID(),
-											   oldParameters.getName(),
-											   oldParameters.getDescription(),
-											   oldParameters.getIcon(16));
+			return new BasicObjectClassDefinition(
+				oldParameters.getID(),
+				oldParameters.getName(),
+				oldParameters.getDescription(),
+				oldParameters.getIcon(16));
 		}
 		catch (IOException e) {
-			return new BasicObjectClassDefinition
-				(oldParameters.getID(),
-				 oldParameters.getName(),
-				 oldParameters.getDescription(), null);
+			return new BasicObjectClassDefinition(
+				oldParameters.getID(),
+				oldParameters.getName(),
+				oldParameters.getDescription(),
+				null);
 		}
 	}
 }
