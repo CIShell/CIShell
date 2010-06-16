@@ -1,6 +1,7 @@
 package org.cishell.reference.gui.persistence.load;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.util.Dictionary;
 
 import org.cishell.framework.CIShellContext;
@@ -88,30 +89,38 @@ public class FileLoadAlgorithm implements Algorithm, ProgressTrackable {
 		return fileSelector.getFile();
 	}
 
-	private Data[] validateFile(IWorkbenchWindow window, Display display, File file)
-			throws AlgorithmExecutionException {
+	private Data[] validateFile(IWorkbenchWindow window, Display display, File file) {
 		AlgorithmFactory validator = null;
-		boolean shouldTryValidator = true;
 
-		while (shouldTryValidator) {
-			try {
-				validator = getValidatorFromUser(window, display, file);
+		try {
+			validator = getValidatorFromUser(window, display, file);
 
-				if ((file == null) || (validator == null)) {
-					String logMessage = "File loading canceled";
-					this.logger.log(LogService.LOG_WARNING, logMessage);
-
-					shouldTryValidator = false;
-				} else {
+			if ((file == null) || (validator == null)) {
+				String logMessage = "File loading canceled";
+				this.logger.log(LogService.LOG_WARNING, logMessage);
+			} else {
+				try {
 					return FileValidator.validateFile(
-						file, validator, this.progressMonitor, this.ciShellContext, this.logger);
+							file, validator, this.progressMonitor, this.ciShellContext, this.logger);
+				} catch (AlgorithmExecutionException e) {
+					if (e.getCause() != null
+							&& e.getCause() instanceof UnsupportedEncodingException) {
+						String logMessage =
+							"This file cannot be loaded; it uses the unsupported character encoding "
+							+ e.getCause().getMessage() + ".";
+						this.logger.log(LogService.LOG_ERROR, logMessage);
+					} else {						
+						throw e;
+					}
 				}
-			} catch (Throwable e) {
-				String logMessage =
-					"The chosen file is not compatible with the chosen file.  " +
-					"Please try a different format or cancel.";
-				this.logger.log(LogService.LOG_ERROR, logMessage);
 			}
+		} catch (Throwable e) {
+			String logMessage =
+				"The chosen file is not compatible with this format.  " +
+				"Check that your file is correctly formatted or try another validator.  " +
+				"The reason is: " + e.getMessage();
+			e.printStackTrace(); // TODO remove
+			this.logger.log(LogService.LOG_ERROR, logMessage);
 		}
 
 		return null;
