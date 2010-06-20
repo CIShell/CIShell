@@ -162,7 +162,7 @@ public final class DatabaseTable {
 		for(String key : primaryKeys) {
 			keys.add(key + " = ?");
 		}
-		return StringUtilities.implodeList(Lists.newArrayList(keys), separator);
+		return StringUtilities.implodeItems(Lists.newArrayList(keys), separator);
 	}
 
 	public Remover constructRemover(Connection connection) throws SQLException {

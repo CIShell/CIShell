@@ -102,6 +102,6 @@ public class DatabaseUtilities {
 	
 	//TODO: Consider abstracting what you're wrapping with and making this a StringUtility.
 	public static String implodeAndWrap(List<String> values) {
-		return "(" + StringUtilities.implodeList(values, ", ") + ")";
+		return "(" + StringUtilities.implodeItems(values, ", ") + ")";
 	}
 }

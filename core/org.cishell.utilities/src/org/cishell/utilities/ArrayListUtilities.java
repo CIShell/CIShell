@@ -79,8 +79,7 @@ public class ArrayListUtilities {
 				
 				List prefixList = list.subList(0, requestedPrefixSize);
 				if (!prefixList.isEmpty()) {
-					affixes.add(
-							StringUtilities.implodeList(prefixList, separator));
+					affixes.add(StringUtilities.implodeItems(prefixList, separator));
 				}
 				
 				affixes.add(ellipsis);
@@ -91,13 +90,13 @@ public class ArrayListUtilities {
 							list.size());
 				if (!suffixList.isEmpty()) {
 					affixes.add(
-							StringUtilities.implodeList(suffixList, separator));
+							StringUtilities.implodeItems(suffixList, separator));
 				}
 	
-				return StringUtilities.implodeList(affixes, separator);
+				return StringUtilities.implodeItems(affixes, separator);
 			} else {
 				// Just implode the list.
-				return StringUtilities.implodeList(list, separator);
+				return StringUtilities.implodeItems(list, separator);
 			}
 		}
 	}

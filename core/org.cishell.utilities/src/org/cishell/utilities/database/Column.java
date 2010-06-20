@@ -13,7 +13,7 @@ public class Column {
 	public final int type;
 	public final int size;
 	
-	public static final Map<Integer, String> TYPE_MAP  = constructTypeMap();
+	public static final Map<Integer, String> TYPE_MAP = constructTypeMap();
 	public static final Set<Integer> SIZED_TYPES = constructSizedTypes();
 	
 	private static Map<Integer, String> constructTypeMap() { //if this ever gets derby specific, it shouldn't go here

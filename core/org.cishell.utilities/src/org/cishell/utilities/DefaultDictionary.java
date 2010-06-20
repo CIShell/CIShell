@@ -4,30 +4,29 @@ import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
-public class DefaultDictionary extends Dictionary {
-	Object defaultValue;
-	Dictionary wrappedDictionary;
+public class DefaultDictionary<K, V> extends Dictionary<K, V> {
+	V defaultValue;
+	Dictionary<K, V> wrappedDictionary;
 	
-	public DefaultDictionary(
-			Object defaultValue, Dictionary wrappedDictionary) {
+	public DefaultDictionary(V defaultValue, Dictionary<K, V> wrappedDictionary) {
 		this.defaultValue = defaultValue;
 		this.wrappedDictionary = wrappedDictionary;
 	}
 	
-	public DefaultDictionary(Object defaultValue) {
-		this(defaultValue, new Hashtable());
+	public DefaultDictionary(V defaultValue) {
+		this(defaultValue, new Hashtable<K, V>());
 	}
 	
 	public Object getDefaultValue() {
 		return this.defaultValue;
 	}
 
-	public Enumeration elements() {
+	public Enumeration<V> elements() {
 		return this.wrappedDictionary.elements();
 	}
 
-	public Object get(Object key) {
-		Object wrappedDictionaryGetResult = this.wrappedDictionary.get(key);
+	public V get(Object key) {
+		V wrappedDictionaryGetResult = this.wrappedDictionary.get(key);
 		
 		if (wrappedDictionaryGetResult == null)
 			return this.defaultValue;
@@ -39,15 +38,15 @@ public class DefaultDictionary extends Dictionary {
 		return this.wrappedDictionary.isEmpty();
 	}
 
-	public Enumeration keys() {
+	public Enumeration<K> keys() {
 		return this.wrappedDictionary.keys();
 	}
 
-	public Object put(Object key, Object value) {
+	public V put(K key, V value) {
 		return this.wrappedDictionary.put(key, value);
 	}
 
-	public Object remove(Object key) {
+	public V remove(Object key) {
 		return this.wrappedDictionary.remove(key);
 	}
 
