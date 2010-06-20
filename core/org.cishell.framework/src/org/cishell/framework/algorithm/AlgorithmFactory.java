@@ -51,7 +51,6 @@ public interface AlgorithmFactory {
      *                   standard CIShell services
      * @return An <code>Algorithm</code> primed for execution
      */
-    public Algorithm createAlgorithm(Data[] data, 
-                                     Dictionary parameters,
-                                     CIShellContext context);
+    public Algorithm createAlgorithm(
+    		Data[] data, Dictionary<String, Object> parameters, CIShellContext context);
 }
