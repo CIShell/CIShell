@@ -20,26 +20,21 @@ public class AlgorithmUtilities {
 	// TODO: ISILoadAndCleanAlgorithmFactory should use this?
 	// It's copied directly from it (and cleaned up a little bit)...
 	public static AlgorithmFactory getAlgorithmFactoryByFilter(
-			String filter, BundleContext bundleContext)
-			throws AlgorithmNotFoundException {
+			String filter, BundleContext bundleContext) throws AlgorithmNotFoundException {
 		ServiceReference[] algorithmFactoryReferences;
-		
+
 		try {
 			algorithmFactoryReferences = bundleContext.getServiceReferences(
 				AlgorithmFactory.class.getName(), filter);
 		} catch (InvalidSyntaxException invalidSyntaxException) {
 			throw new AlgorithmNotFoundException(invalidSyntaxException);
 		}
-    	
-    	if (algorithmFactoryReferences != null &&
-    			algorithmFactoryReferences.length != 0) {
-    		ServiceReference algorithmFactoryReference =
-    			algorithmFactoryReferences[0];
-    		
-    		AlgorithmFactory algorithmFactory =
-    			(AlgorithmFactory)bundleContext.getService(
-    				algorithmFactoryReference);
-    		
+
+    	if (algorithmFactoryReferences != null && algorithmFactoryReferences.length != 0) {
+    		ServiceReference algorithmFactoryReference = algorithmFactoryReferences[0];
+    		AlgorithmFactory algorithmFactory = (AlgorithmFactory)bundleContext.getService(
+    			algorithmFactoryReference);
+
     		return algorithmFactory;
     	}
     	else {
@@ -47,19 +42,18 @@ public class AlgorithmUtilities {
     			"algorithm that satisfied the following filter:\n" + filter);
     	}
 	}
-	
+
 	public static AlgorithmFactory getAlgorithmFactoryByPID(
-			String pid, BundleContext bundleContext)
-			throws AlgorithmNotFoundException {
+			String pid, BundleContext bundleContext) throws AlgorithmNotFoundException {
 		String filter = "(service.pid=" + pid + ")";
-		
+
 		return getAlgorithmFactoryByFilter(filter, bundleContext);
 	}
 	
 	public static Data[] cloneSingletonData(Data[] data) {
-		return new Data[]{ new BasicData(data[0].getMetadata(),
-										 data[0].getData(),
-										 data[0].getFormat()) };
+		return new Data[] {
+			new BasicData(data[0].getMetadata(), data[0].getData(), data[0].getFormat())
+		};
 	}
 	
 	/**
@@ -82,29 +76,30 @@ public class AlgorithmUtilities {
 	 * receiving a new data item, the Data Manager algorithm would set this new
 	 * property to the data item's label if not set already.
 	 */
+	@SuppressWarnings("unchecked")	// Raw Dictionary
 	public static String guessSourceDataFilename(Data data) {
 		if (data == null) {
 			return "";
 		}
-		
+
 		Dictionary metadata = data.getMetadata();
 		String label = (String) metadata.get(DataProperty.LABEL);
 		Data parent = (Data) metadata.get(DataProperty.PARENT);
-		
+
 		if (label != null && label.indexOf(File.separator) != -1) {
 			/* If fileSeparator is a single backslash,
 			 * escape it for the split() regular expression.
 			 */
 			String escapedFileSeparator = File.separator;
+
 			if ("\\".equals(escapedFileSeparator)) {
 				escapedFileSeparator = "\\\\";
 			}			
-			
+
 			String[] pathTokens = label.split(escapedFileSeparator);
-
 			String guessedFilename = pathTokens[pathTokens.length - 1];
-
 			int lastExtensionSeparatorIndex = guessedFilename.lastIndexOf(".");
+
 			if (lastExtensionSeparatorIndex != -1) {
 				// Part before the extension ("foo" for "foo.bar").
 				String guessedNameProper =
@@ -130,8 +125,7 @@ public class AlgorithmUtilities {
 			Dictionary parameters,
 			CIShellContext ciShellContext)
     		throws AlgorithmExecutionException {
-    	Algorithm algorithm =
-    		algorithmFactory.createAlgorithm(data, parameters, ciShellContext);
+    	Algorithm algorithm = algorithmFactory.createAlgorithm(data, parameters, ciShellContext);
 
     	if ((progressMonitor != null) && (algorithm instanceof ProgressTrackable)) {
     		ProgressTrackable progressTrackable = (ProgressTrackable)algorithm;
