@@ -59,7 +59,7 @@ public final class ForeignKey {
 			String foreignColumn = pair.foreign;
 			updateStatements.add(foreignColumn + " = ?");
 		}
-		return StringUtilities.implodeList(Lists.newArrayList(updateStatements), separator);
+		return StringUtilities.implodeItems(Lists.newArrayList(updateStatements), separator);
 	}
 
 	public Repointer constructRepointer(Connection connection) throws SQLException {

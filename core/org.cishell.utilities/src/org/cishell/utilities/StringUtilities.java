@@ -1,11 +1,14 @@
 package org.cishell.utilities;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.StringTokenizer;
 
 public class StringUtilities {
-	public static String implodeStringArray(String[] stringArray,
-											String separator) {
+	// TODO: Make this wrap implodeItems.
+	public static String implodeStringArray(String[] stringArray, String separator) {
 		final int stringArrayLength = stringArray.length;
 		StringBuffer workingResultString = new StringBuffer();
 
@@ -18,16 +21,25 @@ public class StringUtilities {
 		
 		return workingResultString.toString();
 	}
-	
+
+	/* TODO: This is a wrapper for implodeItems.  All new/updated code should refer to implodeItems
+	 *  from now on.
+	 */
+	@SuppressWarnings("unchecked")	// Raw List.
 	public static String implodeList(List list, String separator) {
+		return implodeItems(list, separator);
+	}
+
+	public static<T> String implodeItems(Collection<T> items, String separator) {
 		StringBuffer workingResultString = new StringBuffer();
-		
-		final int listLength = list.size();
-		
-		for (int ii = 0; ii < listLength; ii++) {
-			workingResultString.append(list.get(ii));
+
+		for (Iterator<T> it = items.iterator(); it.hasNext(); ) {
+//		for (int ii = 0; ii < listLength; ii++) {
+//			workingResultString.append(list.get(ii));
+			workingResultString.append(it.next());
 			
-			boolean isLastElement = (ii == listLength - 1);
+//			boolean isLastElement = (ii == listLength - 1);
+			boolean isLastElement = !it.hasNext();
 			if (!isLastElement) {
 				workingResultString.append(separator);
 			}
@@ -36,9 +48,8 @@ public class StringUtilities {
 		return workingResultString.toString();
 	}
 	
-	public static String[] filterStringsByPattern(String[] stringsToFilter,
-												  String pattern) {
-		ArrayList filteredStrings = new ArrayList();
+	public static String[] filterStringsByPattern(String[] stringsToFilter, String pattern) {
+		ArrayList<String> filteredStrings = new ArrayList<String>();
 		
 		for (int ii = 0; ii < stringsToFilter.length; ii++) {
 			if (!stringsToFilter[ii].matches(pattern)) {
@@ -51,7 +62,7 @@ public class StringUtilities {
 	
 	public static String[] filterEmptyStrings(String[] stringsToFilter) {
 		// TODO: This maybe should use filterStringsByPattern?
-		ArrayList filteredStrings = new ArrayList();
+		ArrayList<String> filteredStrings = new ArrayList<String>();
 		
 		for (int ii = 0; ii < stringsToFilter.length; ii++) {
 			if (!"".equals(stringsToFilter[ii])) {
@@ -147,8 +158,7 @@ public class StringUtilities {
 		return true;
 	}
 	
-	public static int countOccurrencesOfChar(
-			CharSequence characters, char target) {
+	public static int countOccurrencesOfChar(CharSequence characters, char target) {
 		int count = 0;
 		
 		for (int ii = 0; ii < characters.length(); ii++) {
@@ -196,7 +206,7 @@ public class StringUtilities {
 	}
 
 	public static final String[] simpleCleanStrings(String[] strings) {
-		List cleanedStrings = new ArrayList();
+		List<String> cleanedStrings = new ArrayList<String>();
 
 		for (int ii = 0; ii < strings.length; ii ++) {
 			cleanedStrings.add(StringUtilities.simpleClean(strings[ii]));
@@ -302,17 +312,36 @@ public class StringUtilities {
 	}
 
 	public static String getNthToken(
-			String originalString,
-			String separator,
-			int index,
-			boolean trim) {
+			String originalString, String separator, int index, boolean trim) {
+		return getAllTokens(originalString, separator, trim)[index];
+	}
 
+	public static String[] getAllTokens(
+			String originalString, String separator, boolean trim) {
 		String[] tokens = originalString.split(separator);
 
 		if (trim) {
-			return tokens[index].trim();
+			String[] trimmedTokens = new String[tokens.length];
+
+			for (int ii = 0; ii < tokens.length; ii++) {
+				trimmedTokens[ii] = tokens[ii].trim();
+			}
+
+			return trimmedTokens;
 		} else {
-			return tokens[index];
+			return tokens;
 		}
+	}
+
+	public static String[] tokenizeByWhitespace(String originalString) {
+		StringTokenizer tokenizer = new StringTokenizer(originalString);
+		int tokenCount = tokenizer.countTokens();
+		String[] tokens = new String[tokenCount];
+
+		for (int ii = 0; ii < tokenCount; ii++) {
+			tokens[ii] = tokenizer.nextToken();
+		}
+
+		return tokens;
 	}
 }
