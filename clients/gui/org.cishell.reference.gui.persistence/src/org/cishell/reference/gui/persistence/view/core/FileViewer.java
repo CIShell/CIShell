@@ -278,20 +278,22 @@ public class FileViewer {
 		String dataLabel =
 			(String)originalData.getMetadata().get(DataProperty.LABEL);
 		String dataFormat = originalData.getFormat();
-		String fileName = FileUtilities.extractFileName(dataLabel);
+		String suggestedFileName = FileUtilities.extractFileName(dataLabel);
+		String cleanedSuggestedFileName =
+			FileUtilities.replaceInvalidFilenameCharacters(suggestedFileName);
 		String fileExtension = FileUtilities.extractExtension(dataFormat);
 
 		try {
 			File fileToView = FileUtilities.
 				createTemporaryFileInDefaultTemporaryDirectory(
-					fileName, fileExtension);
+						cleanedSuggestedFileName, fileExtension);
 			FileUtilities.copyFile((File)originalData.getData(), fileToView);
 			
 			return fileToView;
 		} catch (IOException temporaryFileCreationException) {
 			String exceptionMessage =
 				"An IOException occurred when creating the temporary file \"" +
-				fileName + "." + fileExtension +
+				cleanedSuggestedFileName + "." + fileExtension +
 				"\" for viewing the data \"" + dataLabel + "\".";
 			
 			throw new ConvertDataForViewingException(
