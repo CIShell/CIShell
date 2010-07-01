@@ -35,4 +35,7 @@ Export-Package: org.cishell.utilities,
  org.cishell.utilities.mutateParameter,
  org.cishell.utilities.mutateParameter.defaultvalue,
  org.cishell.utilities.mutateParameter.dropdown,
- org.cishell.utilities.osgi.logging
+ org.cishell.utilities.osgi.logging,
+ org.cishell.utilities.swt
+Require-Bundle: org.eclipse.ui;resolution:=optional,
+ org.eclipse.core.runtime;resolution:=optional
