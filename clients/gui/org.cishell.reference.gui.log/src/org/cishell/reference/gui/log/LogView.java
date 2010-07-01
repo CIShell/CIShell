@@ -14,32 +14,27 @@
  * ***************************************************************************/
 package org.cishell.reference.gui.log;
 
-//standard java
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import org.cishell.utilities.swt.SWTUtilities;
+import org.cishell.utilities.swt.URLClickedListener;
+import org.cishell.utilities.swt.URLMouseCursorListener;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
-import org.eclipse.swt.events.MouseAdapter;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Cursor;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.program.Program;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
@@ -59,45 +54,43 @@ public class LogView extends ViewPart implements LogListener {
 	public static final String CONFIGURATION_DIRECTORY = "configuration";
 	public static final String WELCOME_TEXT_FILE_NAME = "Welcome.properties";
 	public static final String GREETING_PROPERTY = "greeting";
+
+	public static final Color URL_COLOR = getSystemColor(SWT.COLOR_BLUE);
+	public static final Color LOG_ERROR_COLOR = getSystemColor(SWT.COLOR_RED);
+	public static final Color LOG_WARNING_COLOR = new Color(Display.getDefault(), 255, 127, 0);
+	public static final Color LOG_INFO_COLOR = getSystemColor(SWT.COLOR_BLACK);
+	public static final Color LOG_DEBUG_COLOR = new Color(Display.getDefault(), 150, 150, 150);
+
+	private static Color getSystemColor(final int swtColor) {
+		final Color[] color = new Color[1];
+
+		Display.getDefault().syncExec(new Runnable() {
+			public void run() {
+				color[0] = Display.getDefault().getSystemColor(swtColor);
+			}
+		});
+
+		return color[0];
+	}
 	
-	private static LogView defaultView; 
-	private static Composite parent;	
-	private static StyledText text;
-	
-	private static Map colorMapping;
-	private static Color URL_COLOR;
-	private static Color LOG_ERROR_COLOR;
-	private static Color LOG_WARNING_COLOR;
-	//FOR ALGORITHM INFO
-	private static Color LOG_INFO_COLOR;
-	//FOR ACTIVITY INFO
-	private static Color LOG_DEBUG_COLOR;
-	   
-	private static URLClickedListener urlListener;
-    private static URLMouseCursorListener urlCursorListener;
-    
-    static {
-    	Display.getDefault().syncExec(new Runnable(){
-        	public void run(){
-            	LOG_ERROR_COLOR =
-            		Display.getDefault().getSystemColor(SWT.COLOR_RED);
-            	// Orange.
-            	LOG_WARNING_COLOR =
-            		new Color(Display.getDefault(), 255, 127, 0);
-            	LOG_INFO_COLOR =
-            		Display.getDefault().getSystemColor(SWT.COLOR_BLACK);
-            	// Gray.
-                LOG_DEBUG_COLOR =
-                	new Color(Display.getDefault(), 150, 150, 150);
-                               
-                URL_COLOR = Display.getDefault().getSystemColor(SWT.COLOR_BLUE);
-            }
-        });
-    }
+	public static final Map<String, Color> COLOR_MAPPING = getColorMapping();
+
+	private static Map<String, Color> getColorMapping() {
+		Map<String, Color> colorMapping = new HashMap<String, Color>();
+        colorMapping.put("" + LogService.LOG_DEBUG, LOG_DEBUG_COLOR);
+        colorMapping.put("" + LogService.LOG_INFO, LOG_INFO_COLOR);
+        colorMapping.put("" + LogService.LOG_WARNING, LOG_WARNING_COLOR);
+        colorMapping.put("" + LogService.LOG_ERROR, LOG_ERROR_COLOR);
+
+        return Collections.unmodifiableMap(colorMapping);
+	}
+
+	private Composite parent;	
+	private StyledText textField;
+	private URLClickedListener urlListener;
+    private URLMouseCursorListener urlCursorListener;
     
     public LogView() {
-    	defaultView = this;
-    	
         //TODO: Need to set the log level based on preferences service
  /*       Configuration cfg = IVC.getInstance().getConfiguration();
         boolean showAll = cfg.getBoolean(IVCPreferences.SHOW_ALL_ERRORS_PREFERENCE);
@@ -109,66 +102,56 @@ public class LogView extends ViewPart implements LogListener {
             currentLevel = LogService.LOG_INFO;
         }
 */
-        this.colorMapping = new HashMap();
-        this.colorMapping.put("" + LogService.LOG_DEBUG, LOG_DEBUG_COLOR);
-        this.colorMapping.put("" + LogService.LOG_INFO, LOG_INFO_COLOR);
-        this.colorMapping.put("" + LogService.LOG_WARNING, LOG_WARNING_COLOR);
-        this.colorMapping.put("" + LogService.LOG_ERROR, LOG_ERROR_COLOR);
-    }
-
-    public static LogView getDefault() {
-    	return defaultView;
     }
 
     /**
      * @see org.eclipse.ui.part.WorkbenchPart#createPartControl(org.eclipse.swt.widgets.Composite)
      */
+    // TODO: Refactor this.  Do we even need the member variables?
+    @SuppressWarnings("unchecked")
     public void createPartControl(Composite parent) {
-    	LogView.parent = parent;
-        this.text = new StyledText(parent,
-                SWT.BORDER | SWT.V_SCROLL | SWT.WRAP | SWT.READ_ONLY);
-        this.text.setEditable(false);
-        this.text.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
-        this.text.getCaret().setVisible(false);
+    	this.parent = parent;
+        this.textField = new StyledText(parent, SWT.BORDER | SWT.V_SCROLL | SWT.WRAP | SWT.READ_ONLY);
+        this.textField.setEditable(false);
+        this.textField.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
+        this.textField.getCaret().setVisible(false);
         
         // Handle URL.
-        this.urlListener = new URLClickedListener();
-        this.text.addMouseListener(this.urlListener);
-        this.urlCursorListener = new URLMouseCursorListener();
-        this.text.addMouseMoveListener(this.urlCursorListener);
+        this.urlListener = new URLClickedListener(textField);
+        this.textField.addMouseListener(this.urlListener);
+        this.urlCursorListener = new URLMouseCursorListener(this.parent, this.textField);
+        this.textField.addMouseMoveListener(this.urlCursorListener);
         
-        //add copy context menu when hover a block of text and right click the mouse
+        // Add copy context menu when hover a block of textField and right click the mouse.
         Display display = Display.getDefault();
-        final Clipboard cb = new Clipboard(display);
-        final Menu menu = new Menu(text);
+        final Clipboard clipboard = new Clipboard(display);
+        final Menu menu = new Menu(textField);
         menu.setVisible(false);
 
         MenuItem actionItem = new MenuItem(menu, SWT.PUSH);
         actionItem.setText("Copy");
-        actionItem.addListener(SWT.Selection,
-                new Listener() {
-                    public void handleEvent(Event event) {
-                        String textData = text.getSelectionText();
-                        TextTransfer textTransfer = TextTransfer.getInstance();
-                        cb.setContents(new Object[] { textData },
-                            new Transfer[] { textTransfer });
-                    }
-                });
+        actionItem.addListener(SWT.Selection, new Listener() {
+            public void handleEvent(Event event) {
+                String textData = LogView.this.textField.getSelectionText();
+                TextTransfer textTransfer = TextTransfer.getInstance();
+                clipboard.setContents(new Object[] { textData }, new Transfer[] { textTransfer });
+            }
+        });
 
-         text.addSelectionListener(new SelectionAdapter() {
-        	 public void widgetSelected(SelectionEvent e) {
-        		 String selection = ((StyledText) e.widget).getSelectionText();
+         textField.addSelectionListener(new SelectionAdapter() {
+        	 public void widgetSelected(SelectionEvent event) {
+        		 String selection = ((StyledText) event.widget).getSelectionText();
 
                  if (selection.equals("")) {
-                	 text.setMenu(null);
+                	 textField.setMenu(null);
                  } else {
-                	 text.setMenu(menu);
+                	 textField.setMenu(menu);
                  }
         	 }
           });
  
-         //Get LogReaderService through BundleContext
-         //Add itself to the LogReaderService as a LogListener
+         // Get LogReaderService through BundleContext.
+         // Add itself to the LogReaderService as a LogListener.
          BundleContext context = Activator.getContext();
          ServiceReference logReaderServiceReference =
          	context.getServiceReference(LogReaderService.class.getName());
@@ -191,31 +174,27 @@ public class LogView extends ViewPart implements LogListener {
          
          ServiceReference logServiceReference =
          	context.getServiceReference(LogService.class.getName());
-         LogService logService =
-         	(LogService)context.getService(logServiceReference);
+         LogService logService = (LogService) context.getService(logServiceReference);
          
          if (logService != null) {
          	try {
-         		URL welcomeTextFileURL = new URL(new URL(System.getProperty("osgi.configuration.area")), WELCOME_TEXT_FILE_NAME);
+         		URL welcomeTextFileURL = new URL(new URL(
+         			System.getProperty("osgi.configuration.area")), WELCOME_TEXT_FILE_NAME);
          		Properties properties = new Properties();
          		properties.load(welcomeTextFileURL.openStream());
-         		String greetingText =
-         			properties.getProperty(GREETING_PROPERTY, null);
+         		String greetingText = properties.getProperty(GREETING_PROPERTY, null);
          		logService.log(LogService.LOG_INFO, greetingText);
-         	} catch (IOException ioException) {
-         		System.err.println("Error reading Welcome properties file: " +
-         						   ioException.getMessage());
+         	} catch (IOException e) {
+         		System.err.println("Error reading Welcome properties file: " + e.getMessage());
          	}
-         }
-         else {
+         } else {
          	try {
          		FileWriter fstream = new FileWriter("WelcomeTextError.txt", true);
          		BufferedWriter out = new BufferedWriter(fstream);
          		out.write("The Log Service cannot be found.\r\n");
          		out.close();
-         	} catch (Exception exception) {
-         		System.err.println("Error writing to file: " +
-         						   exception.getMessage());
+         	} catch (Exception e) {
+         		System.err.println("Error writing to file: " + e.getMessage());
          	}
          }
     }
@@ -224,21 +203,27 @@ public class LogView extends ViewPart implements LogListener {
      * @see org.eclipse.ui.part.WorkbenchPart#setFocus()
      */
     public void setFocus() {
-    	text.setFocus();
+    	textField.setFocus();
     }
     
     public void logged(final LogEntry entry) {
     	PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() {
 			public void run() {
-				String message = entry.getMessage();
 				try {
+					String message = entry.getMessage();
 					if (goodMessage(message)) {
-                        //not all messages end w/ a new line, but they
-                        //need to to print properly
-						if (!message.endsWith("\n"))
+                        // Not all messages end w/ a new line, but they need to to print properly.
+						if (!message.endsWith("\n")) {
 							message += "\n";
+						}
                         
-						appendString(message, (Color) colorMapping.get(""+entry.getLevel()));						
+						SWTUtilities.appendStringWithURL(
+							LogView.this.textField,
+							LogView.this.urlListener,
+							LogView.this.urlCursorListener,
+							message,
+							COLOR_MAPPING.get("" + entry.getLevel()),
+							URL_COLOR);						
 					}
 				} catch (Throwable e) {
 					e.printStackTrace();
@@ -257,173 +242,4 @@ public class LogView extends ViewPart implements LogListener {
             return true;   
         }
     }
-    
-    /*
-     * append the given string to the console with the given color,
-     * this will do the job of checking for URLs within the string and
-     * registering the proper listeners on them as well.
-     */
-    private void appendString(String message, Color color) {
-        int index = message.indexOf("http://");
-        if (index == -1) {
-            index = message.indexOf("https://");
-        }
-        if (index == -1) {
-            index = message.indexOf("www.");
-        }
-
-        if (index > -1) {
-            String url = message.substring(index);
-            if (url.indexOf(") ") > -1) {
-                url = url.substring(0, url.indexOf(") "));
-            }
-            else if (url.indexOf(" ") > -1) {
-                url = url.substring(0, url.indexOf(" "));
-                if (url.trim().endsWith(".") ){
-                	url=url.substring(0, url.length()-1);
-                }
-            }
-            if (url.endsWith(".\n") || url.endsWith(".\t")){
-            	url=url.substring(0, url.length()-2);
-            }
-            if (url.indexOf("\n") > -1) {
-                url = url.substring(0, url.indexOf("\n"));
-            }
-            if (url.indexOf("\t") > -1) {
-                url = url.substring(0, url.indexOf("\n"));
-            }
-               
-
-            printHelper(message.substring(0, index), color, SWT.NORMAL);
-            urlListener.addUrl(text.getText().length(), url);
-            urlCursorListener.addUrl(text.getText().length(), url);
-            printHelper(url, URL_COLOR, SWT.BOLD);
-            appendString(message.substring(index + url.length()), color);
-        } else {
-            printHelper(message, color, SWT.NORMAL);
-        }
-    }
-    
-    /*
-     * helper to actually format the string with a style range and
-     * append it to the StyledText control
-     */
-    private static void printHelper(final String inText, final Color color, final int style) {        
-        Display.getDefault().syncExec(new Runnable(){
-            public void run(){
-		        if (!text.isDisposed()) {
-		            text.append(inText);
-		
-		            StyleRange sr = new StyleRange();
-		            sr.start = text.getText().length() - inText.length();
-		            sr.length = inText.length();
-		            sr.foreground = color;
-		            sr.fontStyle = style;
-		            text.setStyleRange(sr);
-		
-		            //autoscroll
-		            text.setTopIndex(text.getLineCount());
-		        }
-            }
-        });
-    }
-
-    
-    /*
-     * class that monitors the mouse and changes the cursor when it is
-     * over a URL
-     */
-    private class URLMouseCursorListener implements MouseMoveListener {
-        Map offsetToUrlMap = new HashMap();
-
-        public void addUrl(int offset, String url) {
-            offsetToUrlMap.put(new Integer(offset), url);
-        }
-
-        public void mouseMove(MouseEvent e) {
-            int position = -1;
-
-            try {
-                position = text.getOffsetAtLocation(new Point(e.x, e.y));
-            } catch (IllegalArgumentException ex) {
-                Cursor cursor = new Cursor(parent.getDisplay(), SWT.CURSOR_ARROW);
-                text.setCursor(cursor);
-            }
-
-            if (position < 0) {
-                return;
-            }
-
-            Integer[] offsets = new Integer[1];
-            offsets = (Integer[]) offsetToUrlMap.keySet().toArray(offsets);
-
-            boolean overURL = false;
-
-            for (int i = 0; i < offsets.length; i++) {
-                Integer offset = offsets[i];
-                String url = (String) offsetToUrlMap.get(offset);
-
-                if (offset != null && url != null && (position >= offset.intValue()) &&
-                        (position <= (offset.intValue() + url.length()))) {
-                    overURL = true;
-
-                    break;
-                }
-            }
-            
-            if (overURL) {
-                Cursor cursor = new Cursor(parent.getDisplay(), SWT.CURSOR_HAND);
-                text.setCursor(cursor);
-            } else {
-                Cursor cursor = new Cursor(parent.getDisplay(), SWT.CURSOR_ARROW);
-                text.setCursor(cursor);
-            }
-        }
-    }
-
-    /*
-     * class that listens for clicks on urls and launches a browser appropriatly
-     */
-    private class URLClickedListener extends MouseAdapter {
-        Map offsetToUrlMap = new HashMap();
-
-        public void addUrl(int offset, String url) {           
-            offsetToUrlMap.put(new Integer(offset), url);
-        }
-
-        public void mouseDown(MouseEvent e) {
-            if (e.button != 1) {
-                return;
-            }
-
-            int clicked = -1;
-
-            try {
-                clicked = text.getOffsetAtLocation(new Point(e.x, e.y));
-            } catch (IllegalArgumentException ex) {
-            }
-
-            if (clicked < 0) {
-                return;
-            }
-
-            Integer[] offsets = new Integer[1];
-            offsets = (Integer[]) offsetToUrlMap.keySet().toArray(offsets);
-
-            for (int i = 0; i < offsets.length; i++) {
-                Integer offset = offsets[i];
-                String url = (String) offsetToUrlMap.get(offset);
-
-                if (url != null && (clicked >= offset.intValue()) &&
-                        (clicked <= (offset.intValue() + url.length()))) {
-                    try {
-                        Program.launch(url);
-                    } catch (Exception e1) {
-                    }
-                }
-            }
-        }
-    }
-
-
 }
