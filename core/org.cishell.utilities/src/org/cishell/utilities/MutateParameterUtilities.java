@@ -74,9 +74,11 @@ public class MutateParameterUtilities {
 			Map<String, String> attributes,
 			Collection<String> types,
 			Collection<String> keysToSkip,
-			String[] keysToAdd) {
+			Collection<String> keysToAddToFront) {
 		Collection<String> validNumberKeysInMap =
 			MapUtilities.getValidKeysOfTypesInMap(attributes, types, keysToSkip);
+		validNumberKeysInMap =
+			ArrayListUtilities.unionCollections(keysToAddToFront, validNumberKeysInMap, null);
 		
 		AttributeDefinition numberAttributeDefinition = cloneToDropdownAttributeDefinition(
 			oldAttributeDefinition, validNumberKeysInMap, validNumberKeysInMap);
