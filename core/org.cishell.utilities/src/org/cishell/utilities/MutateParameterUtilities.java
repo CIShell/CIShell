@@ -2,6 +2,7 @@ package org.cishell.utilities;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 
@@ -23,8 +24,8 @@ public class MutateParameterUtilities {
 	public static AttributeDefinition formLabelAttributeDefinition(
 			AttributeDefinition oldAttributeDefinition, Table table)
 			throws ColumnNotFoundException {
-		String[] validStringColumnsInTable =
-			TableUtilities.getValidStringColumnNamesInTable(table);
+		Collection<String> validStringColumnsInTable =
+			Arrays.asList(TableUtilities.getValidStringColumnNamesInTable(table));
 	
 		AttributeDefinition labelAttributeDefinition = cloneToDropdownAttributeDefinition(
 			oldAttributeDefinition, validStringColumnsInTable, validStringColumnsInTable);
@@ -35,7 +36,8 @@ public class MutateParameterUtilities {
 	public static AttributeDefinition formDateAttributeDefinition(
 			AttributeDefinition oldAttributeDefinition, Table table)
 			throws ColumnNotFoundException {
-		String[] validDateColumnsInTable = TableUtilities.getValidDateColumnNamesInTable(table);
+		Collection<String> validDateColumnsInTable =
+			Arrays.asList(TableUtilities.getValidDateColumnNamesInTable(table));
 
 		AttributeDefinition dateAttributeDefinition = cloneToDropdownAttributeDefinition(
 			oldAttributeDefinition, validDateColumnsInTable, validDateColumnsInTable);
@@ -46,8 +48,8 @@ public class MutateParameterUtilities {
 	public static AttributeDefinition formIntegerAttributeDefinition(
 			AttributeDefinition oldAttributeDefinition, Table table)
 			throws ColumnNotFoundException {
-		String[] validIntegerColumnsInTable =
-			TableUtilities.getValidIntegerColumnNamesInTable(table);
+		Collection<String> validIntegerColumnsInTable =
+			Arrays.asList(TableUtilities.getValidIntegerColumnNamesInTable(table));
 
 		AttributeDefinition integerAttributeDefinition = cloneToDropdownAttributeDefinition(
 			oldAttributeDefinition, validIntegerColumnsInTable, validIntegerColumnsInTable);
@@ -58,8 +60,8 @@ public class MutateParameterUtilities {
 	public static AttributeDefinition formNumberAttributeDefinition(
 			AttributeDefinition oldAttributeDefinition, Table table)
 			throws ColumnNotFoundException {
-		String[] validNumberColumnsInTable =
-			TableUtilities.getValidNumberColumnNamesInTable(table);
+		Collection<String> validNumberColumnsInTable =
+			Arrays.asList(TableUtilities.getValidNumberColumnNamesInTable(table));
 		
 		AttributeDefinition numberAttributeDefinition = cloneToDropdownAttributeDefinition(
 			oldAttributeDefinition, validNumberColumnsInTable, validNumberColumnsInTable);
@@ -69,12 +71,12 @@ public class MutateParameterUtilities {
 
 	public static AttributeDefinition formAttributeDefinitionFromMap(
 			AttributeDefinition oldAttributeDefinition,
-			Map<String, String> map,
-			String[] types,
-			String[] keysToSkip,
+			Map<String, String> attributes,
+			Collection<String> types,
+			Collection<String> keysToSkip,
 			String[] keysToAdd) {
-		String[] validNumberKeysInMap = MapUtilities.getValidKeysOfTypesInMap(
-			map, types, keysToSkip, keysToAdd);
+		Collection<String> validNumberKeysInMap =
+			MapUtilities.getValidKeysOfTypesInMap(attributes, types, keysToSkip);
 		
 		AttributeDefinition numberAttributeDefinition = cloneToDropdownAttributeDefinition(
 			oldAttributeDefinition, validNumberKeysInMap, validNumberKeysInMap);
@@ -83,18 +85,20 @@ public class MutateParameterUtilities {
 	}
 
 	public static AttributeDefinition cloneToDropdownAttributeDefinition(
-			AttributeDefinition oldAD, final String[] optionLabels, final String[] optionValues) {
+			AttributeDefinition oldAD,
+			final Collection<String> optionLabels,
+			final Collection<String> optionValues) {
 		AttributeDefinitionTransformer transformer = new DefaultDropdownTransformer() {
 			public boolean shouldTransform(AttributeDefinition ad) {
 				return true;
 			}
 
 			public String[] transformOptionLabels(String[] oldOptionLabels) {
-				return optionLabels;
+				return optionLabels.toArray(new String[0]);
 			}
 
 			public String[] transformOptionValues(String[] oldOptionValues) {
-				return optionValues;
+				return optionValues.toArray(new String[0]);
 			}
 		};
 			

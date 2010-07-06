@@ -2,8 +2,8 @@ package org.cishell.utilities.mutateParameter.dropdown;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.cishell.utilities.ArrayUtilities;
@@ -19,31 +19,31 @@ import org.osgi.service.metatype.ObjectClassDefinition;
  * and mutate(ObjectClassDefinition)
  */
 public class DropdownMutator {
-	private List transforms;
+	private Collection<DropdownTransformer> transforms;
 	private Set<String> attributesToIgnore = new HashSet<String>();
 
 	public DropdownMutator() {
-		transforms = new ArrayList();
+		this.transforms = new ArrayList<DropdownTransformer>();
 	}
 	
-	public ObjectClassDefinition mutate(ObjectClassDefinition ocd) {
+	public ObjectClassDefinition mutate(ObjectClassDefinition objectClassDefinition) {
 		return ObjectClassDefinitionTransformer.transform(
-			ocd, transforms, this.attributesToIgnore);
+			objectClassDefinition, this.transforms, this.attributesToIgnore);
 	}
 
-	public void add(String id, List options, String defaultOption) {
+	public void add(String id, Collection<String> options, String defaultOption) {
 		add(id, swapToFront(options, defaultOption));
 	}
 	
-	public void add(String id, List options) {
+	public void add(String id, Collection<String> options) {
 		add(id, options, options);
 	}
 	
 	public void add(
 			String id,
-			List optionLabels,
+			Collection<String> optionLabels,
 			String defaultOptionLabel,
-			List optionValues,
+			Collection<String> optionValues,
 			String defaultOptionValue) {
 		add(
 			id,
@@ -51,7 +51,7 @@ public class DropdownMutator {
 			swapToFront(optionValues, defaultOptionValue));
 	}
 	
-	public void add(String id, List optionLabels, List optionValues) {
+	public void add(String id, Collection<String> optionLabels, Collection<String> optionValues) {
 		add(
 			id,
 			(String[]) optionLabels.toArray(new String[0]),
@@ -81,9 +81,7 @@ public class DropdownMutator {
 	}
 	
 	public void add(
-			final String id,
-			final String[] optionLabels,
-			final String[] optionValues) {
+			final String id, final String[] optionLabels, final String[] optionValues) {
 		if (!shouldIgnore(id)) {
 			transforms.add(
 				new DefaultDropdownTransformer() {
@@ -110,8 +108,8 @@ public class DropdownMutator {
 		return this.attributesToIgnore.contains(id);
 	}
 	
-	private static List swapToFront(List list, String target) {
-		String[] temp = (String[]) list.toArray(new String[]{});
+	private static Collection<String> swapToFront(Collection<String> items, String target) {
+		String[] temp = (String[]) items.toArray(new String[]{});
 		return Arrays.asList(swapToFront(temp, target));
 	}
 	

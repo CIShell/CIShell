@@ -1,37 +1,31 @@
 package org.cishell.utilities;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 
 public class ArrayListUtilities {
-	public static ArrayList unionArrayLists(ArrayList arrayList1,
-											ArrayList arrayList2,
-											String[] keysToSkip,
-											String[] keysToAdd) {
-		ArrayList union = new ArrayList();
-		
-		for (int ii = 0; ii < arrayList1.size(); ii++) {
-			Object element = arrayList1.get(ii);
-			
-			if (!union.contains(element) &&
-					Arrays.binarySearch(keysToSkip, element) < 0) {
+	// TODO: Move this to CollectionUtilities.
+	public static<T> Collection<T> unionCollections(
+			Collection<T> items1,
+			Collection<T> items2,
+			Collection<T> keysToSkip) {
+		Collection<T> union = new HashSet<T>();
+
+		if (keysToSkip == null) {
+			keysToSkip = new HashSet<T>();
+		}
+
+		for (T element : items1) {
+			if (!union.contains(element) && !keysToSkip.contains(element)) {
 				union.add(element);
 			}
 		}
-		
-		for (int ii = 0; ii < arrayList2.size(); ii++) {
-			Object element = arrayList2.get(ii);
-			
-			if (!union.contains(element)) {
+
+		for (T element : items2) {
+			if (!union.contains(element) && !keysToSkip.contains(element)) {
 				union.add(element);
-			}
-		}
-		
-		for (int ii = 0; ii < keysToAdd.length; ii++) {
-			String keyToAdd = keysToAdd[ii];
-			if (!union.contains(keyToAdd)) {
-				union.add(keyToAdd);
 			}
 		}
 		
