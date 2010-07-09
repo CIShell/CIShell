@@ -5,18 +5,18 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Widget;
 
-public class GUIModelField<T> {
+public class GUIModelField<T, U extends Widget, V extends ModelDataSynchronizer<T>> {
 	private String name;
 	private T defaultValue;
 	private T value;
-	private Widget widget;
-	private ModelDataSynchronizer<T> dataSynchronizer;
+	private U widget;
+	private V dataSynchronizer;
 
 	public GUIModelField(
 			String name,
 			T defaultValue,
-			Widget widget,
-			ModelDataSynchronizer<T> dataSynchronizer) {
+			U widget,
+			V dataSynchronizer) {
 		this.name = name;
 		this.defaultValue = defaultValue;
 		this.value = this.defaultValue;
@@ -39,6 +39,14 @@ public class GUIModelField<T> {
 
 	public T getValue() {
 		return this.value;
+	}
+
+	public U getWidget() {
+		return this.widget;
+	}
+
+	public V getDataSynchronizer() {
+		return this.dataSynchronizer;
 	}
 
 	public void setValue(T value) {
