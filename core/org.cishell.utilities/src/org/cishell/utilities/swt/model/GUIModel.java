@@ -2,6 +2,7 @@ package org.cishell.utilities.swt.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -63,6 +64,7 @@ public class GUIModel {
 			Composite parent,
 			int style) {
 		java.util.List<String> orderedOptionLabels = new ArrayList<String>(unorderedOptionLabels);
+		Collections.sort(orderedOptionLabels);
 		Combo dropDown = new Combo(parent, style | SWT.DROP_DOWN);
 		DropDownDataSynchronizer dataSynchronizer = new DropDownDataSynchronizer(
 			dropDown, selectedIndex, orderedOptionLabels, optionValuesByLabels);
