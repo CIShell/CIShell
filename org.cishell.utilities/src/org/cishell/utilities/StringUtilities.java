@@ -344,4 +344,9 @@ public class StringUtilities {
 
 		return tokens;
 	}
+
+	// TODO
+//	public static String escape(String unescaped) {
+//		return unescaped.replaceAll("\"", "\\\""
+//	}
 }
