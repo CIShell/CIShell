@@ -28,6 +28,7 @@ public class GUIModelField<T, U extends Widget, V extends ModelDataSynchronizer<
 				if (event.type == GUIModelField.this.dataSynchronizer.swtUpdateListenerCode()) {
 					GUIModelField.this.value =
 						GUIModelField.this.dataSynchronizer.synchronizeFromGUI();
+					System.err.println(GUIModelField.this.value);
 				}
 			}
 		});
