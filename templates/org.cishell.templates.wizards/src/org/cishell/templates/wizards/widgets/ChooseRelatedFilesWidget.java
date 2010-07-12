@@ -12,7 +12,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Layout;
 
 /*
- * This widget the user to choose and remove one or more files related to the
+ * This widget lets the user to choose and remove one or more files related to the
  *  executable file for the provided platform (name and path).
  * As soon as the last file selector is filled with a file path, this widget
  *  provides an additional file selector for the user to continue providing
@@ -20,15 +20,15 @@ import org.eclipse.swt.widgets.Layout;
  * All related file selectors besides the first one can be removed in this
  *  widget.
  */
+// TODO: Delete this and just use ExpandableScrolledComposite.
 public class ChooseRelatedFilesWidget extends ResizeCompositeHackWidget {
-	public static final String CHOOSE_RELATED_FILES_LABEL_TEXT =
-		"Choose Related Files";
-	public static final String CHOOSE_COMMON_FILES_LABEL_TEXT =
-		"Choose Common Files";
+	public static final String CHOOSE_RELATED_FILES_LABEL_TEXT = "Choose Related Files";
+	public static final String CHOOSE_COMMON_FILES_LABEL_TEXT = "Choose Common Files";
 	
 	private int parentWidth;
 	private ChooseFileWidget firstFileSelector;
-	private ArrayList remainingFileSelectors = new ArrayList();
+	private ArrayList<ChooseFileWidget> remainingFileSelectors =
+		new ArrayList<ChooseFileWidget>();
 	private String platformName;
 	private String platformPath;
 	private PlatformOptionProvider platformOptionProvider;
@@ -58,7 +58,7 @@ public class ChooseRelatedFilesWidget extends ResizeCompositeHackWidget {
 		return this.firstFileSelector;
 	}
 	
-	public ArrayList getRemainingFileSelectors() {
+	public ArrayList<ChooseFileWidget> getRemainingFileSelectors() {
 		return this.remainingFileSelectors;
 	}
 	
@@ -68,10 +68,8 @@ public class ChooseRelatedFilesWidget extends ResizeCompositeHackWidget {
 		if (remainingFileSelectorCount > 0) {
 			int lastFileSelectorIndex = remainingFileSelectorCount - 1;
 			
-			return (ChooseFileWidget)this.remainingFileSelectors.get(
-				lastFileSelectorIndex);
-		}
-		else {
+			return this.remainingFileSelectors.get(lastFileSelectorIndex);
+		} else {
 			return this.firstFileSelector;
 		}
 	}
@@ -87,8 +85,7 @@ public class ChooseRelatedFilesWidget extends ResizeCompositeHackWidget {
 		fileSelector.unsetFileChosenListener();
 		fileSelector.unsetRemoveElementListener();
 		this.remainingFileSelectors.remove(fileSelector);
-		this.platformOptionProvider.removeRelatedFileOption(
-			fileSelector.getPlatformOption());
+		this.platformOptionProvider.removeRelatedFileOption(fileSelector.getPlatformOption());
 		fileSelector.dispose();
 		
 		setSize(computeSize(SWT.DEFAULT, SWT.DEFAULT));
@@ -109,8 +106,7 @@ public class ChooseRelatedFilesWidget extends ResizeCompositeHackWidget {
 		
 		if (filesAreRelated) {
 			labelText = CHOOSE_RELATED_FILES_LABEL_TEXT + ": ";
-		}
-		else {
+		} else {
 			labelText = CHOOSE_COMMON_FILES_LABEL_TEXT + ": ";
 		}
 		
@@ -122,19 +118,16 @@ public class ChooseRelatedFilesWidget extends ResizeCompositeHackWidget {
 	private ChooseFileWidget createAndSetupFileSelector(
 			boolean hasRemoveButton) {
 		ChooseFileWidget lastFileSelector = getLastFileSelector();
+
 		if (lastFileSelector != null) {
 			lastFileSelector.unsetFileChosenListener();
 		}
 		
-		PlatformOption relatedFileOption =
-			this.platformOptionProvider.createRelatedFileOption(
-				this.platformName, this.platformPath);
+		PlatformOption relatedFileOption = this.platformOptionProvider.createRelatedFileOption(
+			this.platformName, this.platformPath);
 		
 		ChooseFileWidget fileSelector = new ChooseFileWidget(
-			this, SWT.NONE,
-			hasRemoveButton,
-			this.parentWidth,
-			relatedFileOption);
+			this, SWT.NONE, hasRemoveButton, this.parentWidth, relatedFileOption);
 		
 		fileSelector.setFileChosenListener(this);
 		
