@@ -10,7 +10,7 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.program.Program;
 
 /*
- * Listens for clicks on urls and launches a browser appropriately.
+ * Listens for clicks on urls and launches a browser.
  */
 public class URLClickedListener extends MouseAdapter {
     private Map<Integer, String> offsetsToURLs = new HashMap<Integer, String>();

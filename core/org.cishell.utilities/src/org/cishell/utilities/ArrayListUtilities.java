@@ -31,6 +31,13 @@ public class ArrayListUtilities {
 		
 		return union;
 	}
+
+	public static<T> List<T> unionCollectionsAsList(
+			Collection<T> items1,
+			Collection<T> items2,
+			Collection<T> keysToSkip) {
+		return new ArrayList<T>(unionCollections(items1, items2, keysToSkip));
+	}
 	
 	/* Implodes list to a String with the String.valueOf the elements separated
 	 * by separator and where all elements except the first prefixSize and
