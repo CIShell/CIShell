@@ -4,6 +4,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
 public class SWTUtilities {
@@ -94,5 +95,29 @@ public class SWTUtilities {
             // This makes it autoscroll.
             textField.setTopIndex(textField.getLineCount());
         }
+    }
+
+    public static void printURL(
+    		Composite parent,
+    		StyledText textField,
+    		String url,
+    		String displayURL,
+    		Color color,
+    		int style) {
+    	URLClickedListener urlClickedListener = new URLClickedListener(textField);
+		URLMouseCursorListener urlCursorListener =
+			new URLMouseCursorListener(parent, textField);
+		textField.addMouseListener(urlClickedListener);
+		textField.addMouseMoveListener(urlCursorListener);
+
+		urlClickedListener.addURL(
+        	textField.getText().length(), url, displayURL);
+        urlCursorListener.addURL(
+        	textField.getText().length(), url, displayURL);
+        SWTUtilities.styledPrint(
+        	textField,
+        	displayURL,
+        	color,
+        	style);
     }
 }

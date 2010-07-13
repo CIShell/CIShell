@@ -53,7 +53,7 @@ public class GUIModel {
 		return field;
 	}
 
-	public GUIModelField<String, Combo, DropDownDataSynchronizer> addSingleSelectionDropDown(
+	public GUIModelField<String, Combo, DropDownDataSynchronizer> addDropDown(
 			String name,
 			int selectedIndex,
 			Collection<String> unorderedOptionLabels,
@@ -117,7 +117,7 @@ public class GUIModel {
 	// TODO: addCalendar
 
 	// TODO: Test this out.
-	public GUIModelField<String, List, SingleListSelectionDataSynchronizer> addSingleSelectionList(
+	public GUIModelField<String, List, SingleListSelectionDataSynchronizer> addList(
 			String name,
 			int selectedIndex,
 			Collection<String> unorderedOptionLabels,
@@ -145,7 +145,7 @@ public class GUIModel {
 	// TODO: addSpinner
 	// TODO: addStyledText
 
-	public GUIModelField<String, Text, TextDataSynchronizer> addUnstyledText(
+	public GUIModelField<String, Text, TextDataSynchronizer> addText(
 			String name,
 			String value,
 			boolean isMultiLined,
