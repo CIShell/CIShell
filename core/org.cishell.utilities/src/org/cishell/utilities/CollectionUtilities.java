@@ -28,4 +28,8 @@ public class CollectionUtilities {
 		return selectedElements;
 	}
 
+	@SuppressWarnings("unchecked")
+	public static<T> T get(Collection<T> values, int index) {
+		return (T) values.toArray()[index];
+	}
 }
