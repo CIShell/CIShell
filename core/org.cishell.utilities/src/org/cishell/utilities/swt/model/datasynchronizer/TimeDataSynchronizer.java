@@ -1,12 +1,12 @@
 package org.cishell.utilities.swt.model.datasynchronizer;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.DateTime;
 
 public class TimeDataSynchronizer implements ModelDataSynchronizer<org.joda.time.DateTime> {
-	private DateTime timeSelector;
+	private org.eclipse.swt.widgets.DateTime timeSelector;
 
-	public TimeDataSynchronizer(DateTime timeSelector, org.joda.time.DateTime time) {
+	public TimeDataSynchronizer(
+			org.eclipse.swt.widgets.DateTime timeSelector, org.joda.time.DateTime time) {
 		this.timeSelector = timeSelector;
 		synchronizeToGUI(time);
 	}

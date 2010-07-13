@@ -17,7 +17,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
@@ -79,26 +78,38 @@ public class GUIModel {
 	// TODO: addMultiSelectionDropDown
 
 	// TODO: Test this out.
-	public GUIModelField<org.joda.time.DateTime, DateTime, DateDataSynchronizer> addDate(
-			String name, org.joda.time.DateTime date, Composite parent, int style) {
-		DateTime dateSelector = new DateTime(parent, style | SWT.DATE);
+	public GUIModelField<
+			org.joda.time.DateTime, org.eclipse.swt.widgets.DateTime, DateDataSynchronizer>
+				addDate(String name, org.joda.time.DateTime date, Composite parent, int style) {
+		org.eclipse.swt.widgets.DateTime dateSelector =
+			new org.eclipse.swt.widgets.DateTime(parent, style | SWT.DATE);
 		DateDataSynchronizer dataSynchronizer = new DateDataSynchronizer(dateSelector, date);
-		GUIModelField<org.joda.time.DateTime, DateTime, DateDataSynchronizer> field =
-			new GUIModelField<org.joda.time.DateTime, DateTime, DateDataSynchronizer>(
-				name, date, dateSelector, dataSynchronizer);
+		GUIModelField<
+			org.joda.time.DateTime, org.eclipse.swt.widgets.DateTime, DateDataSynchronizer> field =
+				new GUIModelField<
+					org.joda.time.DateTime,
+					org.eclipse.swt.widgets.DateTime,
+					DateDataSynchronizer>(
+						name, date, dateSelector, dataSynchronizer);
 		addField(field);
 
 		return field;
 	}
 
 	// TODO: Test this out.
-	public GUIModelField<org.joda.time.DateTime, DateTime, TimeDataSynchronizer> addTime(
-			String name, org.joda.time.DateTime time, Composite parent, int style) {
-		DateTime timeSelector = new DateTime(parent, style | SWT.TIME);
+	public GUIModelField<
+			org.joda.time.DateTime, org.eclipse.swt.widgets.DateTime, TimeDataSynchronizer>
+				addTime(String name, org.joda.time.DateTime time, Composite parent, int style) {
+		org.eclipse.swt.widgets.DateTime timeSelector =
+			new org.eclipse.swt.widgets.DateTime(parent, style | SWT.TIME);
 		TimeDataSynchronizer dataSynchronizer = new TimeDataSynchronizer(timeSelector, time);
-		GUIModelField<org.joda.time.DateTime, DateTime, TimeDataSynchronizer> field =
-			new GUIModelField<org.joda.time.DateTime, DateTime, TimeDataSynchronizer>(
-				name, time, timeSelector, dataSynchronizer);
+		GUIModelField<
+			org.joda.time.DateTime, org.eclipse.swt.widgets.DateTime, TimeDataSynchronizer> field =
+				new GUIModelField<
+					org.joda.time.DateTime,
+					org.eclipse.swt.widgets.DateTime,
+					TimeDataSynchronizer>(
+						name, time, timeSelector, dataSynchronizer);
 		addField(field);
 
 		return field;
