@@ -78,8 +78,6 @@ public class ExpandableComponentWidget<T> extends Composite {
 			this, this.scrolledAreaGrid, style, arguments, componentCount, this.uniqueComponentCount);
 		this.uniqueComponentCount++;
 
-//		Control componentControlHack = (Control) component;
-//		componentControlHack.setLayoutData(createComponentLayoutData());
 		fixSize();
 
 		this.components.add(component);
@@ -88,7 +86,6 @@ public class ExpandableComponentWidget<T> extends Composite {
 	}
 
 	public void removeComponent(int index) {
-//		this.components.get(index).dispose();
 		this.scrolledAreaGrid.removeRow(index);
 		this.components.remove(index);
 		fixSize();
