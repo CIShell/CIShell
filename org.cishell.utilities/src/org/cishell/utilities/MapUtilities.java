@@ -23,6 +23,7 @@ public class MapUtilities {
 		return workingKeys;
 	}
 
+	/* Maps items to themselves in a Map. */
 	public static<T> Map<T, T> mirror(Collection<T> items) {
 		Map<T, T> mirroredItems = new HashMap<T, T>();
 
