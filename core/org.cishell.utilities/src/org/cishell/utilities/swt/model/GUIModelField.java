@@ -8,6 +8,7 @@ import org.eclipse.swt.widgets.Widget;
 public class GUIModelField<T, U extends Widget, V extends ModelDataSynchronizer<T>> {
 	private String name;
 	private T defaultValue;
+	private T previousValue;
 	private T value;
 	private U widget;
 	private V dataSynchronizer;
@@ -26,9 +27,9 @@ public class GUIModelField<T, U extends Widget, V extends ModelDataSynchronizer<
 		this.widget.addListener(this.dataSynchronizer.swtUpdateListenerCode(), new Listener() {
 			public void handleEvent(Event event) {
 				if (event.type == GUIModelField.this.dataSynchronizer.swtUpdateListenerCode()) {
+					GUIModelField.this.previousValue = GUIModelField.this.value;
 					GUIModelField.this.value =
 						GUIModelField.this.dataSynchronizer.synchronizeFromGUI();
-					System.err.println(GUIModelField.this.value);
 				}
 			}
 		});
@@ -36,6 +37,10 @@ public class GUIModelField<T, U extends Widget, V extends ModelDataSynchronizer<
 
 	public String getName() {
 		return this.name;
+	}
+
+	public T getPreviousValue() {
+		return this.previousValue;
 	}
 
 	public T getValue() {
