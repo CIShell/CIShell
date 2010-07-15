@@ -2,10 +2,18 @@ package org.cishell.utilities;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
 public class ArrayListUtilities {
+	public static<T extends Comparable<T>> List<T> copyAndSort(Collection<T> items) {
+		List<T> copy = new ArrayList<T>(items);
+		Collections.sort(copy);
+
+		return copy;
+	}
+
 	// TODO: Move this to CollectionUtilities.
 	public static<T> Collection<T> unionCollections(
 			Collection<T> items1,
@@ -36,7 +44,25 @@ public class ArrayListUtilities {
 			Collection<T> items1,
 			Collection<T> items2,
 			Collection<T> keysToSkip) {
-		return new ArrayList<T>(unionCollections(items1, items2, keysToSkip));
+		List<T> union = new ArrayList<T>();
+
+		if (keysToSkip == null) {
+			keysToSkip = new ArrayList<T>();
+		}
+
+		for (T element : items1) {
+			if (!union.contains(element) && !keysToSkip.contains(element)) {
+				union.add(element);
+			}
+		}
+
+		for (T element : items2) {
+			if (!union.contains(element) && !keysToSkip.contains(element)) {
+				union.add(element);
+			}
+		}
+		
+		return union;
 	}
 	
 	/* Implodes list to a String with the String.valueOf the elements separated

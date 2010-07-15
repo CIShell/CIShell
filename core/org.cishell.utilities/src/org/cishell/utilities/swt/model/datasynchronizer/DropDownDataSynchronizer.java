@@ -14,7 +14,7 @@ import com.google.common.collect.HashBiMap;
 public class DropDownDataSynchronizer implements ModelDataSynchronizer<String> {
 	private Combo dropDown;
 	private BiMap<Integer, String> optionLabels;
-	private Map<String, String> optionValuesByLabels;
+	private BiMap<String, String> optionValuesByLabels;
 
 	public DropDownDataSynchronizer(
 			Combo dropDown,
@@ -22,10 +22,8 @@ public class DropDownDataSynchronizer implements ModelDataSynchronizer<String> {
 			List<String> optionLabels,
 			Map<String, String> optionValuesByLabels) {
 		this.dropDown = dropDown;
-		this.optionLabels = HashBiMap.create(MapUtilities.mapIndexToValues(optionLabels));
-		this.optionValuesByLabels = optionValuesByLabels;
 
-		this.dropDown.setItems(optionLabels.toArray(new String[0]));
+		setOptions(optionLabels, optionValuesByLabels);
 		this.dropDown.select(selectedIndex);
 	}
 
@@ -39,16 +37,25 @@ public class DropDownDataSynchronizer implements ModelDataSynchronizer<String> {
 	}
 
 	public String synchronizeFromGUI() {
-		return this.optionLabels.get(this.dropDown.getSelectionIndex());
+		return value();
 	}
 
 	public String synchronizeToGUI(String value) {
-		this.dropDown.select(this.optionLabels.inverse().get(value));
+		String label = this.optionValuesByLabels.inverse().get(value);
+		this.dropDown.select(this.optionLabels.inverse().get(label));
 
 		return value();
 	}
 
 	public String reset(String defaultValue) {
 		return synchronizeToGUI(defaultValue);
+	}
+
+	public void setOptions(List<String> optionLabels, Map<String, String> optionValuesByLabels) {
+		this.optionLabels = HashBiMap.create(MapUtilities.mapIndexToValues(optionLabels));
+		this.optionValuesByLabels = HashBiMap.create(optionValuesByLabels);
+
+		this.dropDown.setItems(optionLabels.toArray(new String[0]));
+		this.dropDown.select(0);
 	}
 }
