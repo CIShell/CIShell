@@ -19,40 +19,44 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
 
 public class GUIModel {
-	private Map<String, GUIModelField<?, ? extends Widget, ? extends ModelDataSynchronizer<?>>>
-		inputFieldsByName = new HashMap<
-			String, GUIModelField<?, ? extends Widget, ? extends ModelDataSynchronizer<?>>>();
+	private Map<String, GUIModelGroup> groups = new HashMap<String, GUIModelGroup>();
 
 	public GUIModel() {
 	}
 
-	public Collection<String> getFieldNames() {
-		return this.inputFieldsByName.keySet();
+	public Collection<String> getGroupNames() {
+		return this.groups.keySet();
 	}
 
-	public Collection<
-			GUIModelField<?, ? extends Widget, ? extends ModelDataSynchronizer<?>>> getFields() {
-		return this.inputFieldsByName.values();
+	public Collection<GUIModelGroup> getGroups() {
+		return this.groups.values();
 	}
 
-	public GUIModelField<
-			?, ? extends Widget, ? extends ModelDataSynchronizer<?>> getField(String name) {
-		return this.inputFieldsByName.get(name);
+	public GUIModelGroup getGroup(String name) {
+		if (!this.groups.containsKey(name)) {
+			GUIModelGroup newGroup = new GUIModelGroup(name);
+			this.groups.put(name, newGroup);
+
+			return newGroup;
+		} else {
+			return this.groups.get(name);
+		}
 	}
 
 	public GUIModelField<Boolean, Button, CheckBoxDataSynchronizer> addCheckBox(
-			String name, boolean on, Composite parent, int style) {
+			String groupName, String name, boolean on, Composite parent, int style) {
 		Button checkBox = new Button(parent, style | SWT.CHECK);
 		CheckBoxDataSynchronizer dataSynchronizer = new CheckBoxDataSynchronizer(checkBox, on);
 		GUIModelField<Boolean, Button, CheckBoxDataSynchronizer> field =
 			new GUIModelField<Boolean, Button, CheckBoxDataSynchronizer>(
 				name, on, checkBox, dataSynchronizer);
-		addField(field);
+		addField(groupName, field);
 
 		return field;
 	}
 
 	public GUIModelField<String, Combo, DropDownDataSynchronizer> addDropDown(
+			String groupName,
 			String name,
 			int selectedIndex,
 			Collection<String> unorderedOptionLabels,
@@ -69,7 +73,7 @@ public class GUIModel {
 				optionValuesByLabels.get(orderedOptionLabels.get(selectedIndex)),
 				dropDown,
 				dataSynchronizer);
-		addField(field);
+		addField(groupName, field);
 
 		return field;
 	}
@@ -119,6 +123,7 @@ public class GUIModel {
 
 	// TODO: Test this out.
 	public GUIModelField<String, List, SingleListSelectionDataSynchronizer> addList(
+			String groupName,
 			String name,
 			int selectedIndex,
 			Collection<String> unorderedOptionLabels,
@@ -133,7 +138,7 @@ public class GUIModel {
 		GUIModelField<String, List, SingleListSelectionDataSynchronizer> field =
 			new GUIModelField<String, List, SingleListSelectionDataSynchronizer>(
 				name, list.getItem(selectedIndex), list, dataSynchronizer);
-		addField(field);
+		addField(groupName, field);
 
 		return field;
 	}
@@ -147,6 +152,7 @@ public class GUIModel {
 	// TODO: addStyledText
 
 	public GUIModelField<String, Text, TextDataSynchronizer> addText(
+			String groupName,
 			String name,
 			String value,
 			boolean isMultiLined,
@@ -163,21 +169,22 @@ public class GUIModel {
 		GUIModelField<String, Text, TextDataSynchronizer> field =
 			new GUIModelField<String, Text, TextDataSynchronizer>(
 				name, value, text, dataSynchronizer);
-		addField(field);
+		addField(groupName, field);
 
 		return field;
 	}
 
 	public<T> void addField(
+			String groupName,
 			GUIModelField<T, ? extends Widget, ? extends ModelDataSynchronizer<?>> field) {
-		String fieldName = field.getName();
+		GUIModelGroup group = getGroup(groupName);
+		group.addField(field);
+	}
 
-		if (this.inputFieldsByName.containsKey(fieldName)) {
-			String exceptionMessage =
-				"A field with the name \"" + fieldName + "\" already exists.  Unable to continue.";
-			throw new ModelFieldException(exceptionMessage);
+	public<T> void removeField(
+			GUIModelField<T, ? extends Widget, ? extends ModelDataSynchronizer<?>> field) {
+		for (GUIModelGroup group : this.groups.values()) {
+			group.removeField(field);
 		}
-
-		this.inputFieldsByName.put(fieldName, field);
 	}
 }
