@@ -1,9 +1,14 @@
 package org.cishell.utilities.swt;
 
+import org.cishell.utilities.ObjectContainer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ShellEvent;
+import org.eclipse.swt.events.ShellListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 
 public class GUIBuilderUtilities {
@@ -74,5 +79,46 @@ public class GUIBuilderUtilities {
 
 	public static void clearSpacing(GridLayout layout) {
 		layout.horizontalSpacing = layout.verticalSpacing = 0;
+	}
+
+	public static void setCancelable(
+			final Shell shell, final ObjectContainer<GUICanceledException> exceptionThrown) {
+		shell.addListener(SWT.Traverse, new Listener() {
+			public void handleEvent(Event event) {
+				switch (event.detail) {
+				case SWT.TRAVERSE_ESCAPE:
+					shell.close();
+					event.detail = SWT.TRAVERSE_NONE;
+					event.doit = false;
+
+//					if (exceptionThrown != null) {
+//						String exceptionMessage = "Canceled by user.";
+//						exceptionThrown.object = new GUICanceledException(exceptionMessage);
+//					}
+
+					break;
+				}
+			}
+		});
+		shell.addShellListener(new ShellListener() {
+			public void shellActivated(ShellEvent event) {
+			}
+
+			public void shellClosed(ShellEvent event) {
+				if (exceptionThrown != null) {
+					String exceptionMessage = "Canceled by user.";
+					exceptionThrown.object = new GUICanceledException(exceptionMessage);
+				}
+			}
+
+			public void shellDeactivated(ShellEvent event) {
+			}
+
+			public void shellDeiconified(ShellEvent event) {
+			}
+
+			public void shellIconified(ShellEvent event) {
+			}
+		});
 	}
 }
