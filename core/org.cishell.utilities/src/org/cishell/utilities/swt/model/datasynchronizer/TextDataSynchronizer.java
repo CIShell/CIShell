@@ -13,7 +13,7 @@ public class TextDataSynchronizer implements ModelDataSynchronizer<String> {
 	}
 
 	public int swtUpdateListenerCode() {
-		return SWT.Selection;
+		return SWT.Modify;
 	}
 
 	public String value() {
