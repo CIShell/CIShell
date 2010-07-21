@@ -51,6 +51,9 @@ public interface AlgorithmFactory {
      *                   standard CIShell services
      * @return An <code>Algorithm</code> primed for execution
      */
+	/* TODO: Add AlgorithmCreationCanceledException and AlgorithmCreationFailedException to
+	 *  the signature, and update the entire code base to conform to it.
+	 */
     public Algorithm createAlgorithm(
     		Data[] data, Dictionary<String, Object> parameters, CIShellContext context);
 }

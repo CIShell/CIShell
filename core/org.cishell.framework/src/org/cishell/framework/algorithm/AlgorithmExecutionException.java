@@ -16,8 +16,7 @@ package org.cishell.framework.algorithm;
 /**
  * An exception which is thrown when an error occurs in the process of executing
  * an {@link Algorithm}
- * 
- * @author Bruce Herr (bh2@bh2.net)
+ *
  */
 public class AlgorithmExecutionException extends Exception {
 	private static final long serialVersionUID = 9017277008277139930L;
