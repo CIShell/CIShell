@@ -50,6 +50,8 @@ public class GUIModelGroup {
 
 	public<T> void removeField(
 			GUIModelField<T, ? extends Widget, ? extends ModelDataSynchronizer<?>> field) {
-		this.inputFieldsByName.remove(field);
+		if (this.inputFieldsByName.containsValue(field)) {
+			this.inputFieldsByName.remove(field.getName());
+		}
 	}
 }

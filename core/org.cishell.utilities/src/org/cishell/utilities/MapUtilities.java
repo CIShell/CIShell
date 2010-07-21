@@ -63,4 +63,18 @@ public class MapUtilities {
 
 		return valuesByIndex;
 	}
+
+	public static<K, V> void valuesByKeys(
+			Map<K, V> items, Collection<K> keys, Collection<V> target) {
+		for (K key : keys) {
+			target.add(items.get(key));
+		}
+	}
+
+	public static<K, V> Collection<V> valuesByKeys(Map<K, V> items, Collection<K> keys) {
+		List<V> values = new ArrayList<V>();
+		valuesByKeys(items, keys, values);
+
+		return values;
+	}
 }
