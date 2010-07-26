@@ -333,6 +333,7 @@ public class StringUtilities {
 		}
 	}
 
+	// TODO: Use StreamTokenizer?
 	public static String[] tokenizeByWhitespace(String originalString) {
 		StringTokenizer tokenizer = new StringTokenizer(originalString);
 		int tokenCount = tokenizer.countTokens();
@@ -343,6 +344,18 @@ public class StringUtilities {
 		}
 
 		return tokens;
+	}
+
+	public static String stripSurroundingQuotes(String quoted) {
+		if (quoted.startsWith("\"")) {
+			if (quoted.endsWith("\"")) {
+				return quoted.substring(1, quoted.length() - 1);
+			} else {
+				return quoted.substring(1);
+			}
+		} else {
+			return quoted;
+		}
 	}
 
 	// TODO
