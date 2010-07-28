@@ -378,7 +378,7 @@ public class DateUtilities {
 			}
 		}
 		
-		return parseDate(objectAsString, dateFormat, fixYear);
+		return parseDate(objectAsString.trim(), dateFormat, fixYear);
 	}
 	
 	private static Date fixDateYear(Date date) {
