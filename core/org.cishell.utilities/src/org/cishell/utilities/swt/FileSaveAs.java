@@ -43,15 +43,6 @@ public class FileSaveAs {
 							String.format(CONFIRMATION_DIALOG_FORMAT, selectedFilePath))) {
 						return selectedFilePath;
 					}
-//
-//					MessageDialog confirmationDialog = new MessageDialog(
-//						saveDialog.getParent(),
-//						saveDialog.getText(),
-//						null,
-//						String.format(CONFIRMATION_DIALOG_FORMAT, selectedFilePath),
-//						0,
-//						BUTTON_LABELS,
-//						0);
 				}
 			}
 		}
