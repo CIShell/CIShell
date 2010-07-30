@@ -43,6 +43,8 @@ public class FileSaveAs {
 							String.format(CONFIRMATION_DIALOG_FORMAT, selectedFilePath))) {
 						return selectedFilePath;
 					}
+				} else {
+					return selectedFilePath;
 				}
 			}
 		}
