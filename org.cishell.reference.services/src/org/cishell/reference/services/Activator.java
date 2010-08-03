@@ -15,36 +15,46 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
 public class Activator implements BundleActivator {
-    private ServiceRegistration conversionReg;
-    private ServiceRegistration schedulerReg;
-    private ServiceRegistration dataManagerReg;
+    private ServiceRegistration conversionRegistration;
+    private ServiceRegistration schedulerRegistration;
+    private ServiceRegistration dataManagerRegistration;
+//    private ServiceRegistration algorithmInvokerRegistration;
 
 	/**
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
-	public void start(BundleContext bContext) throws Exception {
-        CIShellContext ciContext = new LocalCIShellContext(bContext);
+	public void start(BundleContext bundleContext) throws Exception {
+        CIShellContext ciShellContext = new LocalCIShellContext(bundleContext);
         
-        DataConversionService conversionService = 
-            new DataConversionServiceImpl(bContext, ciContext);
-        conversionReg = bContext.registerService(
-                DataConversionService.class.getName(), conversionService, new Hashtable());
+        DataConversionService conversionService =
+        	new DataConversionServiceImpl(bundleContext, ciShellContext);
+        this.conversionRegistration = bundleContext.registerService(
+        	DataConversionService.class.getName(),
+        	conversionService,
+        	new Hashtable<String, Object>());
         
         SchedulerService scheduler = new SchedulerServiceImpl();
-        schedulerReg = bContext.registerService(
-                SchedulerService.class.getName(), scheduler, new Hashtable());
+        this.schedulerRegistration = bundleContext.registerService(
+        	SchedulerService.class.getName(), scheduler, new Hashtable<String, Object>());
 
         DataManagerService dataManager = new DataManagerServiceImpl();
-        dataManagerReg = bContext.registerService(
-                DataManagerService.class.getName(), dataManager, new Hashtable());
+        this.dataManagerRegistration = bundleContext.registerService(
+        	DataManagerService.class.getName(), dataManager, new Hashtable<String, Object>());
+
+//        AlgorithmInvocationService algorithmInvoker = new AlgorithmInvocationServiceImpl();
+//        this.algorithmInvokerRegistration = bundleContext.registerService(
+//        	AlgorithmInvocationService.class.getName(),
+//        	algorithmInvoker,
+//        	new Hashtable<String, Object>());
 	}
 
 	/**
 	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
 	 */
-	public void stop(BundleContext bContext) throws Exception {
-        conversionReg.unregister();
-        schedulerReg.unregister();
-        dataManagerReg.unregister();
+	public void stop(BundleContext bundleContext) throws Exception {
+		this.conversionRegistration.unregister();
+		this.schedulerRegistration.unregister();
+		this.dataManagerRegistration.unregister();
+//		this.algorithmInvokerRegistration.unregister();
 	}
 }

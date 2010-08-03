@@ -24,7 +24,7 @@ import java.util.Hashtable;
  * @author Bruce Herr (bh2@bh2.net)
  */
 public class BasicData implements Data {
-    private Dictionary properties;
+    private Dictionary<String, Object> properties;
     private Object data;
     private String format;
     
@@ -35,7 +35,7 @@ public class BasicData implements Data {
      * @param data The data being wrapped
      */
     public BasicData(Object data, String format) {
-        this(new Hashtable(), data, format);
+        this(new Hashtable<String, Object>(), data, format);
     }
     
     /**
@@ -44,7 +44,7 @@ public class BasicData implements Data {
      * @param properties The metadata about the data
      * @param data       The data being wrapped
      */
-    public BasicData(Dictionary properties, Object data, String format) {
+    public BasicData(Dictionary<String, Object> properties, Object data, String format) {
         this.properties = properties;
         this.data = data;
         this.format = format;
@@ -60,7 +60,7 @@ public class BasicData implements Data {
     /**
      * @see org.cishell.framework.data.Data#getMetadata()
      */
-    public Dictionary getMetadata() {
+    public Dictionary<String, Object> getMetadata() {
         return properties;
     }
 

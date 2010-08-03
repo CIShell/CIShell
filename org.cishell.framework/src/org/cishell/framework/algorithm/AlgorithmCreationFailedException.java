@@ -1,6 +1,5 @@
 package org.cishell.framework.algorithm;
 
-// TODO: Make this a regular Exception (not RuntimeException).
 public class AlgorithmCreationFailedException extends RuntimeException {
 	private static final long serialVersionUID = 9017277008277139930L;
 

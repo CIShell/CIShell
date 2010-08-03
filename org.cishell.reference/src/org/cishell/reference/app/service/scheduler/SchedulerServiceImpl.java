@@ -30,7 +30,7 @@ import org.cishell.app.service.scheduler.SchedulerListener;
 import org.cishell.app.service.scheduler.SchedulerService;
 import org.cishell.framework.algorithm.Algorithm;
 import org.cishell.framework.data.Data;
-import org.cishell.reference.app.service.scheduler.AlgorithmTask.STATE;
+import org.cishell.reference.app.service.scheduler.AlgorithmTask.AlgorithmState;
 import org.osgi.framework.ServiceReference;
 
 /**
@@ -74,156 +74,150 @@ import org.osgi.framework.ServiceReference;
  * algorithm, consider using Quartz http://www.opensymphony.com/quartz/ </li>
  * </ul>
  * 
- * @author Shashikant Penumarthy
- * @author Bruce Herr (bh2@bh2.net)
  */
-// May 8, 2006 7:05:32 PM Shashikant Penumarthy: Initial Implementation
-// July 19, 2006 10:30:00 AM Bruce Herr: Ported to new CIShell
 public class SchedulerServiceImpl implements SchedulerService {
     /**
      * This timer runs the algorithm scheduling task.
      */
-    private Timer _schedulerTimer;
+    private Timer schedulerTimer;
 
     /**
      * The task which schedules algorithms to run on the _algRunningTimer.
      */
-    private AlgSchedulerTask _algSchedulerTask;
+    private AlgorithmSchedulerTask algorithmSchedulerTask;
 
     /**
      * Convenience object for informing all the schedulers.
      */
-    private SchedulerListenerInformer _schedulerListenerInformer;
+    private SchedulerListenerInformer schedulerListenerInformer;
+
+    private boolean isShutDown = true;
     
     public SchedulerServiceImpl() {
-        _initialize();
+        initialize();
     }
 
-    public SchedulerServiceImpl(int maxSimultaneousAlgsLimit) {
+    public SchedulerServiceImpl(int maxSimultaneousAlgorithm) {
         this();
-        _algSchedulerTask.setMaxSimultaneousAlgs(maxSimultaneousAlgsLimit);
-        _isShutDown = false;
+        this.algorithmSchedulerTask.setMaxSimultaneousAlgorithms(maxSimultaneousAlgorithm);
+        this.isShutDown = false;
     }
 
-    public synchronized final void setMaxSimultaneousAlgs(int max) {
-        _algSchedulerTask.setMaxSimultaneousAlgs(max);
+    public synchronized final void setMaxSimultaneousAlgorithms(int max) {
+        this.algorithmSchedulerTask.setMaxSimultaneousAlgorithms(max);
     }
 
-    private final void _initialize() {
-        _schedulerTimer = new Timer(true);
-        _schedulerListenerInformer = new SchedulerListenerInformer();
-        _algSchedulerTask = new AlgSchedulerTask(_schedulerListenerInformer);
-        _schedulerTimer.schedule(_algSchedulerTask, 0L, 500L);
+    private final void initialize() {
+        this.schedulerTimer = new Timer(true);
+        this.schedulerListenerInformer = new SchedulerListenerInformer();
+        this.algorithmSchedulerTask = new AlgorithmSchedulerTask(this.schedulerListenerInformer);
+        this.schedulerTimer.schedule(this.algorithmSchedulerTask, 0L, 500L);
     }
 
     public synchronized final void shutDown() {
-        _algSchedulerTask.cancel();
-        _schedulerTimer.cancel();
-        _isShutDown = true;
+        this.algorithmSchedulerTask.cancel();
+        this.schedulerTimer.cancel();
+        this.isShutDown = true;
     }
 
     public final boolean isEmpty() {
-        return _algSchedulerTask.isEmpty();
+        return this.algorithmSchedulerTask.isEmpty();
     }
 
     public final boolean isRunning() {
-        return _algSchedulerTask.isRunning();
+        return this.algorithmSchedulerTask.isRunning();
     }
 
     public final int numRunning() {
-        return _algSchedulerTask.numRunning();
+        return this.algorithmSchedulerTask.numRunning();
     }
 
-    private boolean _isShutDown = true;
-
     public final boolean isShutDown() {
-        return _isShutDown;
+        return this.isShutDown;
     }
 
     public boolean reschedule(Algorithm algorithm, Calendar newTime) {
-        // Shaky method. Ideally this is done at a higher level. But still, here
-        // goes...
-        ServiceReference ref = _algSchedulerTask.getServiceReference(algorithm);
-        boolean status = false;
+        // Shaky method. Ideally this is done at a higher level. But still, here goes...
+        ServiceReference reference = this.algorithmSchedulerTask.getServiceReference(algorithm);
+        boolean canReschedule = false;
+
         try {
-            STATE algState = _algSchedulerTask.getAlgorithmState(algorithm);
+            AlgorithmState algorithmState =
+            	this.algorithmSchedulerTask.getAlgorithmState(algorithm);
             
-            // Cannot reschedule running algs
-            if (algState.equals(STATE.RUNNING)) {
-                status = false;
+            // Cannot reschedule running algorithms.
+            if (algorithmState.equals(AlgorithmState.RUNNING)) {
+                canReschedule = false;
+            } else if (algorithmState.equals(AlgorithmState.STOPPED)) {
+                this.algorithmSchedulerTask.purgeFinished();
+                this.algorithmSchedulerTask.schedule(algorithm, reference, newTime);
+                canReschedule = true;
+            } else if (algorithmState.equals(AlgorithmState.NEW)) {
+                this.algorithmSchedulerTask.cancel(algorithm);
+                this.algorithmSchedulerTask.schedule(algorithm, reference, newTime);
+            } else {
+                throw new IllegalStateException("Encountered an invalid state: " + algorithmState);
             }
-            else if (algState.equals(STATE.STOPPED)) {
-                _algSchedulerTask.purgeFinished();
-                _algSchedulerTask.schedule(algorithm, ref, newTime);
-                status = true;
-            }
-            else if (algState.equals(STATE.NEW)) {
-                _algSchedulerTask.cancel(algorithm);
-                _algSchedulerTask.schedule(algorithm, ref, newTime);
-            }
-            else {
-                throw new IllegalStateException(
-                        "Encountered an invalid state: " + algState);
-            }
-        } catch (NoSuchElementException nsee) {
-            _algSchedulerTask.schedule(algorithm, ref, newTime);
-            status = true;
+        } catch (NoSuchElementException e) {
+            this.algorithmSchedulerTask.schedule(algorithm, reference, newTime);
+            canReschedule = true;
         }
-        return status;
+        return canReschedule;
     }
 
-    public void runNow(Algorithm algorithm, ServiceReference ref) {
+    public void runNow(Algorithm algorithm, ServiceReference reference) {
         // There is currently no difference between this one and
-        // schedule(Algorithm, ref).
-        schedule(algorithm, ref);
+        // schedule(Algorithm, reference).
+        schedule(algorithm, reference);
     }
 
-    public void schedule(Algorithm algorithm, ServiceReference ref) {
-        schedule(algorithm, ref, Calendar.getInstance());
+    public void schedule(Algorithm algorithm, ServiceReference reference) {
+        schedule(algorithm, reference, Calendar.getInstance());
     }
 
-    public void schedule(Algorithm algorithm, ServiceReference ref, Calendar time) {
-        _algSchedulerTask.schedule(algorithm, ref, time);
+    public void schedule(Algorithm algorithm, ServiceReference reference, Calendar time) {
+        this.algorithmSchedulerTask.schedule(algorithm, reference, time);
     }
 
     public boolean unschedule(Algorithm algorithm) {
-        return _algSchedulerTask.cancel(algorithm);
+        return this.algorithmSchedulerTask.cancel(algorithm);
     }
 
     public void addSchedulerListener(SchedulerListener listener) {
-        _schedulerListenerInformer.addSchedulerListener(listener);
+        this.schedulerListenerInformer.addSchedulerListener(listener);
     }
 
     public void removeSchedulerListener(SchedulerListener listener) {
-        _schedulerListenerInformer.removeSchedulerListener(listener);
+        this.schedulerListenerInformer.removeSchedulerListener(listener);
     }
 
     public synchronized void clearSchedule() {
-        _algSchedulerTask.cancel();
-        _schedulerTimer.cancel();
+        this.algorithmSchedulerTask.cancel();
+        this.schedulerTimer.cancel();
         
-        _schedulerTimer = new Timer(true);
-        _algSchedulerTask = new AlgSchedulerTask(_schedulerListenerInformer);
-        _schedulerTimer.schedule(_algSchedulerTask, 0L, 500L);
+        this.schedulerTimer = new Timer(true);
+        this.algorithmSchedulerTask = new AlgorithmSchedulerTask(this.schedulerListenerInformer);
+        // TODO: Make constants for these magic numbers.
+        this.schedulerTimer.schedule(this.algorithmSchedulerTask, 0L, 500L);
         
-        _schedulerListenerInformer.schedulerCleared();
+        this.schedulerListenerInformer.schedulerCleared();
     }
 
     public Algorithm[] getScheduledAlgorithms() {
-        return _algSchedulerTask.getScheduledAlgorithms();
+        return this.algorithmSchedulerTask.getScheduledAlgorithms();
     }
 
     public Calendar getScheduledTime(Algorithm algorithm) {
-        return _algSchedulerTask.getScheduledTime(algorithm);
+        return this.algorithmSchedulerTask.getScheduledTime(algorithm);
     }
 
     public ServiceReference getServiceReference(Algorithm algorithm) {
-        return _algSchedulerTask.getServiceReference(algorithm);
+        return this.algorithmSchedulerTask.getServiceReference(algorithm);
     }
 
     public void setRunning(boolean isRunning) {
-        _algSchedulerTask.setRunning(isRunning);
-        _schedulerListenerInformer.schedulerRunStateChanged(isRunning);
+        this.algorithmSchedulerTask.setRunning(isRunning);
+        this.schedulerListenerInformer.schedulerRunStateChanged(isRunning);
     }
 }
 
@@ -238,86 +232,77 @@ public class SchedulerServiceImpl implements SchedulerService {
  * @author Team IVC
  */
 class SchedulerListenerInformer implements SchedulerListener {
-
-    private List _schedulerListeners;
+    private List<SchedulerListener> schedulerListeners;
 
     public SchedulerListenerInformer() {
-        _schedulerListeners = new ArrayList();
+        this.schedulerListeners = new ArrayList<SchedulerListener>();
     }
     
     public void addSchedulerListener(SchedulerListener listener) {
-        _schedulerListeners.add(listener);
+        this.schedulerListeners.add(listener);
     }
     
     public void removeSchedulerListener(SchedulerListener listener) {
-        _schedulerListeners.remove(listener);
+        this.schedulerListeners.remove(listener);
     }
     
     public void algorithmScheduled(Algorithm algorithm, Calendar time) {
-        for (Iterator iter = _schedulerListeners.iterator() ; iter.hasNext() ; ) {
-            SchedulerListener sl = (SchedulerListener) iter.next() ;
-            sl.algorithmScheduled(algorithm, time);
+        for (SchedulerListener schedulerListener : this.schedulerListeners) {
+            schedulerListener.algorithmScheduled(algorithm, time);
         }
     }
     
     public synchronized void algorithmStarted(Algorithm algorithm) {
-        for (Iterator iter = _schedulerListeners.iterator() ; iter.hasNext() ; ) {
-            SchedulerListener sl = (SchedulerListener) iter.next() ;
-            sl.algorithmStarted(algorithm);
+        for (SchedulerListener schedulerListener : this.schedulerListeners) {
+            schedulerListener.algorithmStarted(algorithm);
         }
     }
 
     public void algorithmError(Algorithm algorithm, Throwable error) {
-        for (Iterator iter = _schedulerListeners.iterator() ; iter.hasNext() ; ) {
-            SchedulerListener sl = (SchedulerListener) iter.next() ;
-            sl.algorithmError(algorithm, error);
+        for (SchedulerListener schedulerListener : this.schedulerListeners) {
+            schedulerListener.algorithmError(algorithm, error);
         }
     }
 
     public void algorithmFinished(Algorithm algorithm, Data[] createdDM) {
-        for (Iterator iter = _schedulerListeners.iterator() ; iter.hasNext() ; ) {
-            SchedulerListener sl = (SchedulerListener) iter.next() ;
-            sl.algorithmFinished(algorithm, createdDM);
+        for (SchedulerListener schedulerListener : this.schedulerListeners) {
+            schedulerListener.algorithmFinished(algorithm, createdDM);
         }
     }
 
     public void algorithmRescheduled(Algorithm algorithm, Calendar time) {
-        for (Iterator iter = _schedulerListeners.iterator() ; iter.hasNext() ; ) {
-            SchedulerListener sl = (SchedulerListener) iter.next() ;
-            sl.algorithmRescheduled(algorithm, time);
+        for (SchedulerListener schedulerListener : this.schedulerListeners) {
+            schedulerListener.algorithmRescheduled(algorithm, time);
         }
     }
 
     public void algorithmUnscheduled(Algorithm algorithm) {
-        for (Iterator iter = _schedulerListeners.iterator() ; iter.hasNext() ; ) {
-            SchedulerListener sl = (SchedulerListener) iter.next() ;
-            sl.algorithmUnscheduled(algorithm);
+        for (SchedulerListener schedulerListener : this.schedulerListeners) {
+            schedulerListener.algorithmUnscheduled(algorithm);
         }
     }
 
     public void schedulerCleared() {
-        for (Iterator iter = _schedulerListeners.iterator() ; iter.hasNext() ; ) {
-            SchedulerListener sl = (SchedulerListener) iter.next() ;
-            sl.schedulerCleared();
+        for (SchedulerListener schedulerListener : this.schedulerListeners) {
+            schedulerListener.schedulerCleared();
         }
     }
 
     public void schedulerRunStateChanged(boolean isRunning) {
-        for (Iterator iter = _schedulerListeners.iterator() ; iter.hasNext() ; ) {
-            SchedulerListener sl = (SchedulerListener) iter.next() ;
-            sl.schedulerRunStateChanged(isRunning);
+        for (SchedulerListener schedulerListener : this.schedulerListeners) {
+            schedulerListener.schedulerRunStateChanged(isRunning);
         }
     }
 }
 
-class AlgSchedulerTask extends TimerTask implements SchedulerListener {
-
-    private Map _algMap;
-    private Map _algServiceMap;
-    private volatile boolean _running = true;
-
-    // Default allow as many as needed
-    private int _maxSimultaneousAlgs = -1;
+class AlgorithmSchedulerTask extends TimerTask implements SchedulerListener {
+	public static final int AS_MANY_SIMULTANEOUS_ALGORITHMS_AS_NEEDED = -1;
+    private Map<Algorithm, AlgorithmTask> tasksByAlgorithms;
+    private Map<Algorithm, ServiceReference> serviceReferencesByAlgorithms;
+    private volatile boolean isRunning = true;
+    private volatile int runningTaskCount = 0;
+    private SchedulerListener schedulerListener;
+    private int maxSimultaneousAlgorithms = AS_MANY_SIMULTANEOUS_ALGORITHMS_AS_NEEDED;
 
     /**
      * Maximum number of algorithms allowed to run simultaneously. This value
@@ -325,46 +310,46 @@ class AlgSchedulerTask extends TimerTask implements SchedulerListener {
      * interpreted to mean 'no limit'.
      * 
      * @param max
-     *            The maximum number of algorithms that can be simultaneously
-     *            run.
+     *            The maximum number of algorithms that can be simultaneously run.
      */
-    public synchronized final void setMaxSimultaneousAlgs(final int max) {
-        if (max < -1)
-            this._maxSimultaneousAlgs = -1;
-        else
-            this._maxSimultaneousAlgs = max;
+    public synchronized final void setMaxSimultaneousAlgorithms(final int max) {
+        if (max < -1) {
+            this.maxSimultaneousAlgorithms = AS_MANY_SIMULTANEOUS_ALGORITHMS_AS_NEEDED;
+        } else {
+            this.maxSimultaneousAlgorithms = max;
+        }
     }
     
     public synchronized Algorithm[] getScheduledAlgorithms() {
-        return (Algorithm[]) _algMap.keySet().toArray(new Algorithm[0]);
+        return this.tasksByAlgorithms.keySet().toArray(new Algorithm[0]);
     }
 
     public synchronized final boolean isEmpty() {
-        return _algMap.size() == 0;
+        return this.tasksByAlgorithms.size() == 0;
     }
 
     public synchronized final int numRunning() {
-        return _numRunning;
+        return this.runningTaskCount;
     }
 
-    private SchedulerListener _schedulerListener;
-
-    public AlgSchedulerTask(SchedulerListener listener) {
-        _algMap = Collections.synchronizedMap(new HashMap());
-        _algServiceMap = new HashMap();
-        setSchedulerListener(listener);
+    public AlgorithmSchedulerTask(SchedulerListener listener) {
+        this.tasksByAlgorithms =
+        	Collections.synchronizedMap(new HashMap<Algorithm, AlgorithmTask>());
+        this.serviceReferencesByAlgorithms = new HashMap<Algorithm, ServiceReference>();
+        this.setSchedulerListener(listener);
     }
 
     public synchronized final void setSchedulerListener(SchedulerListener listener) {
-        _schedulerListener = listener;
+        this.schedulerListener = listener;
     }
     
     public final ServiceReference getServiceReference(Algorithm algorithm) {
-    	return (ServiceReference) _algServiceMap.get(algorithm);
+    	return this.serviceReferencesByAlgorithms.get(algorithm);
     }
     
     public synchronized final Calendar getScheduledTime(Algorithm algorithm) {
-        AlgorithmTask task = (AlgorithmTask)_algMap.get(algorithm);
+        AlgorithmTask task = this.tasksByAlgorithms.get(algorithm);
+
         if (task != null) {
             return task.getScheduledTime();
         } else {
@@ -372,10 +357,13 @@ class AlgSchedulerTask extends TimerTask implements SchedulerListener {
         }
     }
 
-    public synchronized final boolean cancel(Algorithm alg) {
-        AlgorithmTask task = (AlgorithmTask) this._algMap.get(alg);
-        if (task == null)
+    public synchronized final boolean cancel(Algorithm algorithm) {
+        AlgorithmTask task = this.tasksByAlgorithms.get(algorithm);
+
+        if (task == null) {
             return false;
+        }
+
         // The algorithm will run till the end and
         // then stop so there's no real way to cancel running algorithms.
         // Clients should always check the state of an algorithm before trying
@@ -384,23 +372,23 @@ class AlgSchedulerTask extends TimerTask implements SchedulerListener {
     }
 
     public synchronized final void schedule(Algorithm alg, ServiceReference ref, Calendar time) {
-        AlgorithmTask task = (AlgorithmTask) this._algMap.get(alg);
+        AlgorithmTask task = this.tasksByAlgorithms.get(alg);
         // If alg already exists, do some checks...
         if (task != null) {
-            STATE state = task.getState();
+            AlgorithmState state = task.getState();
             // If its still running, we can't schedule it again.
-            if (state.equals(STATE.RUNNING)) {
+            if (state.equals(AlgorithmState.RUNNING)) {
                 throw new RuntimeException(
                         "Cannot schedule running algorithm. Check state of algorithm first.");
             }
             // If its new or waiting to run, we refuse to schedule it to force
             // user to explicitly
             // cancel and reschedule.
-            else if (state.equals(STATE.NEW)) {
+            else if (state.equals(AlgorithmState.NEW)) {
                 throw new RuntimeException(
                         "Algorithm is already scheduled to run. Cancel existing schedule first.");
             }
-            else if (state.equals(STATE.STOPPED)) {
+            else if (state.equals(AlgorithmState.STOPPED)) {
                 // If it was stopped but not cleaned up yet, clean it up
                 purgeFinished();
             }
@@ -414,21 +402,21 @@ class AlgSchedulerTask extends TimerTask implements SchedulerListener {
     }
 
     public synchronized final int getMaxSimultaneousAlgs() {
-        return this._maxSimultaneousAlgs;
+        return this.maxSimultaneousAlgorithms;
     }
     
     public synchronized final void registerAlgorithmTask(Algorithm algorithm, AlgorithmTask algorithmTask) {
-    	this._algServiceMap.put(algorithm, algorithmTask.getServiceReference());
-        this._algMap.put(algorithm, algorithmTask);    	
+    	this.serviceReferencesByAlgorithms.put(algorithm, algorithmTask.getServiceReference());
+        this.tasksByAlgorithms.put(algorithm, algorithmTask);    	
     }
 
     /**
-     * @param alg
+     * @param algorithm
      *            The algorithm whose state we want to query.
      * @return State of the specified algorithm.
      */
-    public synchronized final STATE getAlgorithmState(Algorithm alg) {
-        AlgorithmTask task = (AlgorithmTask) this._algMap.get(alg);
+    public synchronized final AlgorithmState getAlgorithmState(Algorithm algorithm) {
+        AlgorithmTask task = this.tasksByAlgorithms.get(algorithm);
         if (task == null)
             throw new NoSuchElementException("Algorithm doesn't exist.");
         return task.getState();
@@ -439,92 +427,95 @@ class AlgSchedulerTask extends TimerTask implements SchedulerListener {
      */
     public synchronized final void purgeFinished() {
         synchronized (this) {
-            Iterator iter = this._algMap
-                    .entrySet().iterator();
-            while (iter.hasNext()) {
-                Map.Entry entry = (Map.Entry) iter.next();
-                AlgorithmTask task = (AlgorithmTask) entry.getValue();
-                if (task.getState() == STATE.STOPPED) {
-                    iter.remove();
-                    _algServiceMap.remove(entry.getKey());
+            Iterator<Map.Entry<Algorithm, AlgorithmTask>> entries =
+            	this.tasksByAlgorithms.entrySet().iterator();
+
+            while (entries.hasNext()) {
+                Map.Entry<Algorithm, AlgorithmTask> entry = entries.next();
+                AlgorithmTask task = entry.getValue();
+
+                if (task.getState() == AlgorithmState.STOPPED) {
+                    entries.remove();
+                    this.serviceReferencesByAlgorithms.remove(entry.getKey());
                 }
             }
         }
     }
 
-    private synchronized final boolean _limitReached() {
-        return (_maxSimultaneousAlgs != -1)
-                && (_numRunning >= _maxSimultaneousAlgs);
+    private synchronized final boolean limitReached() {
+        return
+        	(this.maxSimultaneousAlgorithms != AS_MANY_SIMULTANEOUS_ALGORITHMS_AS_NEEDED) &&
+        	(this.runningTaskCount >= this.maxSimultaneousAlgorithms);
     }
     
     
     public void setRunning(boolean isRunning) {
-        _running = isRunning;
+        this.isRunning = isRunning;
     }
     
     public boolean isRunning() {
-        return _running;
+        return this.isRunning;
     }
     
     public void run() {
-        if (_running) {
+        if (this.isRunning) {
             synchronized (this) {
                 // If we are running the max allowable, wait until next turn.
                 Date now = Calendar.getInstance().getTime();
                 // Iterate through algorithms.
-                Collection tasks = this._algMap.values();
-                for (Iterator iter = tasks.iterator() ; iter.hasNext() ;) {
-                    AlgorithmTask task = (AlgorithmTask) iter.next() ;
-                    if (_limitReached())
+                Collection<AlgorithmTask> tasks = this.tasksByAlgorithms.values();
+
+                for (AlgorithmTask task : tasks) {
+                    if (limitReached()) {
                         return;
-                    if ((task.getState() == STATE.NEW)
+                    }
+
+                    if ((task.getState() == AlgorithmState.NEW)
                             && now.compareTo(task.getScheduledTime().getTime()) >= 0) {
-                        // Run immediately
+                        // Run immediately.
                         task.start();
                     }
                 }
             }
         }
     }
-
-    private volatile int _numRunning = 0;
     
     public synchronized void algorithmScheduled(Algorithm algorithm, Calendar time) {
-        _schedulerListener.algorithmScheduled(algorithm, time);
+        this.schedulerListener.algorithmScheduled(algorithm, time);
     }
 
     public synchronized void algorithmStarted(Algorithm algorithm) {
-        _numRunning++;
-        _schedulerListener.algorithmStarted(algorithm);
+        this.runningTaskCount++;
+        this.schedulerListener.algorithmStarted(algorithm);
     }
 
     public synchronized void algorithmError(Algorithm algorithm, Throwable error) {
-        _numRunning--;
-        _schedulerListener.algorithmError(algorithm, error);
+        this.runningTaskCount--;
+        this.schedulerListener.algorithmError(algorithm, error);
         purgeFinished();
     }
 
     public synchronized void algorithmFinished(Algorithm algorithm, Data[] createdDM) {
-        _numRunning--;
-        _schedulerListener.algorithmFinished(algorithm, createdDM);
+        this.runningTaskCount--;
+        this.schedulerListener.algorithmFinished(algorithm, createdDM);
         purgeFinished();
     }
 
     public synchronized void algorithmRescheduled(Algorithm algorithm, Calendar time) {
-        _schedulerListener.algorithmRescheduled(algorithm, time);
+        this.schedulerListener.algorithmRescheduled(algorithm, time);
         
     }
 
     public synchronized void algorithmUnscheduled(Algorithm algorithm) {
-        _schedulerListener.algorithmUnscheduled(algorithm);
+        this.schedulerListener.algorithmUnscheduled(algorithm);
     }
 
     public synchronized void schedulerCleared() {
-        _schedulerListener.schedulerCleared();
+        this.schedulerListener.schedulerCleared();
     }
 
     public synchronized void schedulerRunStateChanged(boolean isRunning) {
-        _schedulerListener.schedulerRunStateChanged(isRunning);
+        this.schedulerListener.schedulerRunStateChanged(isRunning);
     }
 }
 
@@ -542,147 +533,196 @@ class AlgSchedulerTask extends TimerTask implements SchedulerListener {
 // May 8, 2006 7:19:00 PM Shashikant Penumarthy: Initial implementation.
 //July 19, 2006 10:45:00 AM Bruce Herr: Ported to new CIShell
 class AlgorithmTask implements Runnable {
-
     /**
      * The states in which algorithm tasks can exist.
      * 
      * @author Team IVC
      */
-    static final class STATE {
-        private String _name ;
-        public STATE(String name) {
-            this._name = name ;
-        }
-        public final boolean equals(Object object) {
-            if (! (object instanceof STATE))
-                return false ;
-            STATE state = (STATE) object ;
-            return state._name.compareTo(_name) == 0;
-        }
-        /** New algorithms are in this state. */
-        public static final STATE NEW = new STATE("NEW") ;
-        /** Running algorithms are in this state. */
-        public static final STATE RUNNING = new STATE("RUNNING") ;
-        /** Algorithms either cancelled or finished are in this state. */
-        public static final STATE STOPPED = new STATE("STOPPED") ;
-        /** Algorithm had an error while executing */
-        public static final STATE ERROR = new STATE("ERROR");
-    }
+	private volatile boolean isCanceled = false;
+	private final Algorithm algorithm;
 
-    private volatile boolean _noRun = false;
+    /* NOTE: TimerTask keeps its own schedule variable which can be retrieved using
+     *  scheduledExecutionTime() method. We don't use that here.
+     */
+    private final Calendar scheduledTime;
+    private final ServiceReference serviceReference;
+    private volatile AlgorithmState state;
+
+    // Execution status of the algorithm (i.e.) return value.
+    private Data[] result;
+
+    // The exception thrown, if an algorithm had one while executing.
+    private Exception exceptionThrown;
+
+    // Deliberately allow only one listener. Its not the algorithms job to do all the informing.
+    private SchedulerListener schedulerListener;
 
     public synchronized final boolean cancel() {
-        if (_noRun)
+        if (this.isCanceled) {
             return true;
-        if (_state.equals(STATE.RUNNING))
+    	}
+
+        if (this.state.equals(AlgorithmState.RUNNING)) {
             return false;
-        _state = STATE.STOPPED;
-        _noRun = true;
-        return _noRun;
+        }
+
+        this.state = AlgorithmState.STOPPED;
+        this.isCanceled = true;
+
+        return this.isCanceled;
     }
 
     public synchronized final void start() {
-        if (_noRun)
+        if (this.isCanceled) {
             return;
-        _setState(STATE.RUNNING);
+        }
+
+        setState(AlgorithmState.RUNNING);
         new Thread(this).start();
     }
 
-    private final Algorithm _alg;
+    public AlgorithmTask(
+    		Algorithm algorithm,
+    		ServiceReference serviceReference,
+    		Calendar scheduledTime,
+    		AlgorithmSchedulerTask algorithmSchedulerTask) {
+        this.algorithm = algorithm;
+        this.serviceReference = serviceReference;
+        this.scheduledTime = scheduledTime;
+        this.schedulerListener = algorithmSchedulerTask;
 
-    // NOTE: TimerTask keeps its own schedule variable which can be retrieved
-    // using scheduledExecutionTime() method. We don't use that here.
-    private final Calendar _scheduledTime;
-    
-    private final ServiceReference _ref;
-
-    private volatile STATE _state;
-
-    /**
-     * Execution status of the algorithm (i.e.) return value.
-     */
-    private Data[] _result;
-    
-    /**
-     * The error, if an algorithm had one while executing
-     */
-    private Exception _error;
-
-    /**
-     * Deliberately allow only one listener. Its not the algorithms job to do
-     * all the informing.
-     */
-    private SchedulerListener _schedulerListener;
-
-    public AlgorithmTask(Algorithm alg, ServiceReference ref, Calendar scheduledTime,
-            //SchedulerListener listener) {
-    		AlgSchedulerTask algSchedulerTask) {
-        _alg = alg;
-        _ref = ref;
-        _scheduledTime = scheduledTime;
-        _schedulerListener = algSchedulerTask;
-        algSchedulerTask.registerAlgorithmTask(alg, this);
-        _init();
+        algorithmSchedulerTask.registerAlgorithmTask(algorithm, this);
+        init();
     }
 
     public synchronized final Calendar getScheduledTime() {
-        // Do a defensive copy cuz we don't want clients changing
-        // the time using this reference!
+        /* Do a defensive copy because we don't want clients changing the time using
+         *  this reference!
+         */
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(this._scheduledTime.getTime());
+        calendar.setTime(this.scheduledTime.getTime());
+
         return calendar;
     }
     
     public synchronized final ServiceReference getServiceReference() {
-        return _ref;
+        return this.serviceReference;
     }
 
-    private final void _init() {
-        _result = null;
-        _setState(STATE.NEW);
+    private final void init() {
+        this.result = null;
+        setState(AlgorithmState.NEW);
     }
 
     public synchronized final Data[] getResult() {
-        return _result;
+        return this.result;
     }
 
-    private synchronized final void _setState(STATE state) {
-        this._state = state;
-        // Inform listeners
-        if (_schedulerListener != null) {
-            if (this._state.equals(STATE.NEW)) {
-                _schedulerListener.algorithmScheduled(_alg, _scheduledTime);
-            }
-            else if (this._state.equals(STATE.RUNNING)) {
-                _schedulerListener.algorithmStarted(_alg);
-            }
-            else if (this._state.equals(STATE.STOPPED)) {
-                _noRun = true;
-                _schedulerListener.algorithmFinished(_alg, getResult());
-            } 
-            else if (this._state.equals(STATE.ERROR)) {
-                _noRun = true;
-                _schedulerListener.algorithmError(_alg, _error);
-            }
-            else {
-                throw new IllegalStateException(
-                        "Encountered illegal algorithm state: " + _state);
-            }
+    private synchronized final void setState(AlgorithmState state) {
+        this.state = state;
+        // Inform listeners.
+        if (this.schedulerListener != null) {
+        	this.state.performAction(
+        		algorithm,
+        		this.schedulerListener,
+        		this.scheduledTime,
+        		getResult(),
+        		this.exceptionThrown);
+        	this.isCanceled = this.state.isCanceledNow();
         }
     }
 
-    public synchronized final STATE getState() {
-        return this._state;
+    public synchronized final AlgorithmState getState() {
+        return this.state;
     }
 
     public void run() {
         try {
-            _result = _alg.execute();
+            this.result = this.algorithm.execute();
         } catch (Exception e) {
-            _error = e;
-            _setState(STATE.ERROR);
+            this.exceptionThrown = e;
+            setState(AlgorithmState.ERROR);
         } finally {
-            _setState(STATE.STOPPED);
+            setState(AlgorithmState.STOPPED);
+        }
+    }
+
+    static class AlgorithmState {
+    	/** New algorithms are in this state. */
+        public static final AlgorithmState NEW = new AlgorithmState("NEW", false) {
+        	public void performAction(
+        			Algorithm algorithm,
+        			SchedulerListener schedulerListener,
+        			Calendar scheduledTime,
+        			Data[] result,
+    				Exception exceptionThrown) {
+        		schedulerListener.algorithmScheduled(algorithm, scheduledTime);
+        	}
+        };
+
+        /** Running algorithms are in this state. */
+        public static final AlgorithmState RUNNING = new AlgorithmState("RUNNING", false) {
+        	public void performAction(
+        			Algorithm algorithm,
+        			SchedulerListener schedulerListener,
+        			Calendar scheduledTime,
+        			Data[] result,
+    				Exception exceptionThrown) {
+        		schedulerListener.algorithmStarted(algorithm);
+        	}
+        };
+        /** Algorithms either cancelled or finished are in this state. */
+        public static final AlgorithmState STOPPED = new AlgorithmState("STOPPED", true) {
+        	public void performAction(
+        			Algorithm algorithm,
+        			SchedulerListener schedulerListener,
+        			Calendar scheduledTime,
+        			Data[] result,
+    				Exception exceptionThrown) {
+        		schedulerListener.algorithmFinished(algorithm, result);
+        	}
+        };
+        /** Algorithm had an exceptionThrown while executing */
+        public static final AlgorithmState ERROR = new AlgorithmState("ERROR", true) {
+        	public void performAction(
+        			Algorithm algorithm,
+        			SchedulerListener schedulerListener,
+        			Calendar scheduledTime,
+        			Data[] result,
+    				Exception exceptionThrown) {
+        		schedulerListener.algorithmError(algorithm, exceptionThrown);
+        	}
+        };
+
+        private String name;
+        private boolean isCanceled;
+
+        public AlgorithmState(String name, boolean isCanceled) {
+            this.name = name;
+            this.isCanceled = isCanceled;
+        }
+
+        public final boolean equals(Object object) {
+            if (!(object instanceof AlgorithmState)) {
+                return false;
+            }
+
+            AlgorithmState state = (AlgorithmState) object;
+
+            return state.name.compareTo(name) == 0;
+        }
+
+        public void performAction(
+        		Algorithm algorithm,
+        		SchedulerListener schedulerListener,
+        		Calendar scheduledTime,
+    			Data[] result,
+    			Exception exceptionThrown) {
+        	throw new IllegalStateException("Encountered illegal algorithm state: " + this);
+        }
+
+        public boolean isCanceledNow() {
+        	return this.isCanceled;
         }
     }
 }

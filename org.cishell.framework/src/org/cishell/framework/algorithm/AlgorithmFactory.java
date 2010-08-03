@@ -32,7 +32,6 @@ import org.osgi.service.metatype.MetaTypeService;
  * CIShell Specification 1.0</a> for documentation on the full requirements for
  * algorithm creation.
  * 
- * @author Bruce Herr (bh2@bh2.net)
  */
 public interface AlgorithmFactory {
 	
@@ -47,7 +46,7 @@ public interface AlgorithmFactory {
      * @param parameters A set of key-value pairs that were created based on 
      *                   the associated input specification published to the 
      *                   {@link MetaTypeService}
-     * @param context    The context by which the Algorithm can gain access to 
+     * @param ciShellContext    The context by which the Algorithm can gain access to 
      *                   standard CIShell services
      * @return An <code>Algorithm</code> primed for execution
      */
@@ -55,5 +54,5 @@ public interface AlgorithmFactory {
 	 *  the signature, and update the entire code base to conform to it.
 	 */
     public Algorithm createAlgorithm(
-    		Data[] data, Dictionary<String, Object> parameters, CIShellContext context);
+    		Data[] data, Dictionary<String, Object> parameters, CIShellContext ciShellContext);
 }

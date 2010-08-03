@@ -28,7 +28,6 @@ import org.osgi.framework.ServiceReference;
  * service as it is not guaranteed to be available like the standard CIShell 
  * services are.
  * 
- * @author Bruce Herr (bh2@bh2.net)
  */
 public interface SchedulerService {
 	/**
@@ -37,10 +36,9 @@ public interface SchedulerService {
 	 * enough resources to fulfill the request.
 	 * 
 	 * @param algorithm The algorithm to be run
-     * @param ref       A reference to the Algorithm's associated service, may
-     *                  be <code>null</code>
+     * @param reference A reference to the Algorithm's associated service, may be <code>null</code>
 	 */
-    public void runNow(Algorithm algorithm, ServiceReference ref);
+    public void runNow(Algorithm algorithm, ServiceReference reference);
     
     /**
      * Schedules an Algorithm to be run when convenient. This schedules an
@@ -48,10 +46,9 @@ public interface SchedulerService {
      * Algorithms will be scheduled in this way. 
      * 
      * @param algorithm The Algorithm to be scheduled
-     * @param ref       A reference to the Algorithm's associated service, may
-     *                  be <code>null</code>
+     * @param reference A reference to the Algorithm's associated service, may be <code>null</code>
      */
-    public void schedule(Algorithm algorithm, ServiceReference ref);
+    public void schedule(Algorithm algorithm, ServiceReference reference);
     
     /**
      * Schedules an Algorithm to be run at a specific time. The Algorithm will
@@ -60,11 +57,10 @@ public interface SchedulerService {
      * resources to fulfill the request.
      * 
      * @param algorithm The Algorithm to be scheduled
-     * @param ref       A reference to the Algorithm's associated service, may
-     *                  be <code>null</code>
+     * @param reference A reference to the Algorithm's associated service, may be <code>null</code>
      * @param time What time this Algorithm should be run
      */
-    public void schedule(Algorithm algorithm, ServiceReference ref, Calendar time);
+    public void schedule(Algorithm algorithm, ServiceReference reference, Calendar time);
     
     /**
      * Reschedules an already scheduled Algorithm to be run at a different time.
