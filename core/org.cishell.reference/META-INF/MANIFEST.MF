@@ -1,4 +1,3 @@
-Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: CIShell Reference Service Implementations
 Bundle-SymbolicName: org.cishell.reference
@@ -14,9 +13,11 @@ Import-Package: org.cishell.app.service.datamanager;version="1.0.0",
  org.osgi.service.log,
  org.osgi.service.metatype;version="1.1.0",
  org.osgi.service.prefs
-Export-Package: org.cishell.reference.app.service.datamanager,
+Export-Package: org.cishell.reference.app.service.algorithminvocation,
+ org.cishell.reference.app.service.datamanager,
  org.cishell.reference.app.service.scheduler,
  org.cishell.reference.service.conversion,
  org.cishell.reference.service.metatype
 Eclipse-LazyStart: true
 Require-Bundle: edu.uci.ics.jung
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
