@@ -20,8 +20,7 @@ import java.util.Dictionary;
  * A class that contains data, its format, and its metadata. This class is used 
  * to pass data between algorithms and is what algorithms optionally create when 
  * executed.
- * 
- * @author Bruce Herr (bh2@bh2.net)
+ *
  */
 public interface Data {
 	/**
@@ -30,7 +29,7 @@ public interface Data {
 	 * 
 	 * @return The data's metadata
 	 */
-    public Dictionary getMetadata();
+    public Dictionary<String, Object> getMetadata();
     
     /**
      * Returns the data stored in this Data object
