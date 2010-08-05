@@ -24,9 +24,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import org.cishell.utilities.swt.SWTUtilities;
-import org.cishell.utilities.swt.URLClickedListener;
-import org.cishell.utilities.swt.URLMouseCursorListener;
+import org.cishell.utility.swt.SWTUtilities;
+import org.cishell.utility.swt.URLClickedListener;
+import org.cishell.utility.swt.URLMouseCursorListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.dnd.Clipboard;
