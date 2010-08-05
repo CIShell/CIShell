@@ -1,4 +1,4 @@
-package org.cishell.utilities.datastructure;
+package org.cishell.utility.datastructure;
 
 public class ObjectContainer<T> {
 	public T object;
