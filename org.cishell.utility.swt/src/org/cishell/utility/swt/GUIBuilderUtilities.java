@@ -1,6 +1,6 @@
 package org.cishell.utility.swt;
 
-import org.cishell.utilities.datastructure.ObjectContainer;
+import org.cishell.utility.datastructure.ObjectContainer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ShellEvent;
 import org.eclipse.swt.events.ShellListener;
