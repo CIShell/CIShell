@@ -1,4 +1,4 @@
-package org.cishell.utilities.swt;
+package org.cishell.utility.swt;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;

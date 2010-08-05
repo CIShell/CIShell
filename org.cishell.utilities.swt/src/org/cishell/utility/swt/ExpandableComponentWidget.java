@@ -1,4 +1,4 @@
-package org.cishell.utilities.swt;
+package org.cishell.utility.swt;
 
 import java.util.ArrayList;
 import java.util.Collection;

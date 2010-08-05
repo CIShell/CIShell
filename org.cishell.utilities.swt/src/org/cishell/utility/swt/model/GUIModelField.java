@@ -1,6 +1,6 @@
-package org.cishell.utilities.swt.model;
+package org.cishell.utility.swt.model;
 
-import org.cishell.utilities.swt.model.datasynchronizer.ModelDataSynchronizer;
+import org.cishell.utility.swt.model.datasynchronizer.ModelDataSynchronizer;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Widget;

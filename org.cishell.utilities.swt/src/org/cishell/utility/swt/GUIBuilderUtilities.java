@@ -1,4 +1,4 @@
-package org.cishell.utilities.swt;
+package org.cishell.utility.swt;
 
 import org.cishell.utilities.datastructure.ObjectContainer;
 import org.eclipse.swt.SWT;

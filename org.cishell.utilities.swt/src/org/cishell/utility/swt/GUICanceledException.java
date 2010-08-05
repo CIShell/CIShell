@@ -1,4 +1,4 @@
-package org.cishell.utilities.swt;
+package org.cishell.utility.swt;
 
 public class GUICanceledException extends Exception {
 	private static final long serialVersionUID = 1L;
