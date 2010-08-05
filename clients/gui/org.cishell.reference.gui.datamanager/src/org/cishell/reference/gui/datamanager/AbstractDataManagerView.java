@@ -24,8 +24,8 @@ import java.util.Set;
 import org.cishell.app.service.datamanager.DataManagerListener;
 import org.cishell.app.service.datamanager.DataManagerService;
 import org.cishell.framework.algorithm.Algorithm;
-import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.algorithm.AlgorithmExecutionException;
+import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.data.Data;
 import org.cishell.framework.data.DataProperty;
 import org.cishell.reference.gui.workspace.CIShellApplication;
@@ -69,13 +69,11 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogService;
 
 public abstract class AbstractDataManagerView
-		extends ViewPart
-		implements DataManagerListener, BundleListener {
+		extends ViewPart implements BundleListener, DataManagerListener {
 	private String brandPluginID;
 	private DataManagerService manager;
 	private TreeViewer viewer;
 	private TreeEditor editor;
-	// TODO: Finish cleaning this file up.
 	private Text newEditor;
 	private DataGUIItem rootItem;
 	/*
@@ -85,7 +83,7 @@ public abstract class AbstractDataManagerView
 	private boolean updatingTreeItem;
 	private Tree tree;
 	private Menu menu;
-	private Map dataToDataGUIItemMap;
+	private Map<Data, DataGUIItem> dataToDataGUIItemMap;
 	private AlgorithmFactory saveFactory;
 	private AlgorithmFactory viewFactory;
 	private AlgorithmFactory viewWithFactory;
@@ -93,18 +91,17 @@ public abstract class AbstractDataManagerView
 	private SaveListener saveListener;
 	private ViewListener viewListener;
 	private ViewWithListener viewWithListener;
-	private LogService log;
+	private LogService logger;
 
 	public AbstractDataManagerView(String brandPluginID) {
 		this.brandPluginID = brandPluginID;
-		dataToDataGUIItemMap = new HashMap();
+		this.dataToDataGUIItemMap = new HashMap<Data, DataGUIItem>();
+		this.manager = Activator.getDataManagerService();
+		this.logger = Activator.getLogService();
 		
-		manager = Activator.getDataManagerService();
-		log = Activator.getLogService();
-		
-		if (manager == null) {			
-			if (log != null) {
-				log.log(LogService.LOG_ERROR, "Data Manager Service unavailable!");
+		if (this.manager == null) {			
+			if (this.logger != null) {
+				this.logger.log(LogService.LOG_ERROR, "Data Manager Service unavailable!");
 			}			
 		}
 	}
@@ -122,41 +119,39 @@ public abstract class AbstractDataManagerView
 	 * @see org.eclipse.ui.part.WorkbenchPart#createPartControl(org.eclipse.swt.widgets.Composite)
 	 */
 	public void createPartControl(Composite parent) {
-		// Label label = new Label(parent, SWT.NONE);
-		// label.setText("Data Manager");
 		this.viewer = new TreeViewer(parent);
 		this.viewer.setContentProvider(new DataTreeContentProvider());
 		this.viewer.setLabelProvider(new DataTreeLabelProvider());
 
-		rootItem = new DataGUIItem(null, null, this.brandPluginID);
-		this.viewer.setInput(rootItem);
+		this.rootItem = new DataGUIItem(null, null, this.brandPluginID);
+		this.viewer.setInput(this.rootItem);
 		this.viewer.expandAll();
 
-		// grab the tree and add the appropriate listeners
-		tree = this.viewer.getTree();
-		tree.addSelectionListener(new DatamodelSelectionListener());
-		tree.addMouseListener(new ContextMenuListener());
+		// Grab the tree and add the appropriate listeners.
+		this.tree = this.viewer.getTree();
+		this.tree.addSelectionListener(new DatamodelSelectionListener());
+		this.tree.addMouseListener(new ContextMenuListener());
 
-		// setup the context menu for the tree
-		menu = new Menu(tree);
-		menu.setVisible(false);
+		// Setup the context menu for the tree.
+		this.menu = new Menu(tree);
+		this.menu.setVisible(false);
 
-		MenuItem saveItem = new MenuItem(menu, SWT.PUSH);
+		MenuItem saveItem = new MenuItem(this.menu, SWT.PUSH);
 		saveItem.setText("Save");
-		saveListener = new SaveListener();
-		saveItem.addListener(SWT.Selection, saveListener);
+		this.saveListener = new SaveListener();
+		saveItem.addListener(SWT.Selection, this.saveListener);
 
-		MenuItem viewItem = new MenuItem(menu, SWT.PUSH);
+		MenuItem viewItem = new MenuItem(this.menu, SWT.PUSH);
 		viewItem.setText("View");
-		viewListener = new ViewListener();
-		viewItem.addListener(SWT.Selection, viewListener);
+		this.viewListener = new ViewListener();
+		viewItem.addListener(SWT.Selection, this.viewListener);
 			
-		MenuItem viewWithItem = new MenuItem(menu, SWT.PUSH);			
+		MenuItem viewWithItem = new MenuItem(this.menu, SWT.PUSH);			
 		viewWithItem.setText("View With...");
-		viewWithListener = new ViewWithListener();
-		viewWithItem.addListener(SWT.Selection, viewWithListener);		
+		this.viewWithListener = new ViewWithListener();
+		viewWithItem.addListener(SWT.Selection, this.viewWithListener);		
 		
-		MenuItem renameItem = new MenuItem(menu, SWT.PUSH);
+		MenuItem renameItem = new MenuItem(this.menu, SWT.PUSH);
 		renameItem.setText("Rename");
 		renameItem.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event event) {
@@ -164,19 +159,19 @@ public abstract class AbstractDataManagerView
 			}
 		});
 
-		MenuItem discardItem = new MenuItem(menu, SWT.PUSH);
+		MenuItem discardItem = new MenuItem(this.menu, SWT.PUSH);
 		discardItem.setText("Discard");
-		discardListener = new DiscardListener();
-		discardItem.addListener(SWT.Selection, discardListener);
-		tree.setMenu(menu);
+		this.discardListener = new DiscardListener();
+		discardItem.addListener(SWT.Selection, this.discardListener);
+		this.tree.setMenu(this.menu);
 
 		// Allow cells to be edited on double click or when pressing enter on them.
-		this.editor = new TreeEditor(tree);
+		this.editor = new TreeEditor(this.tree);
 		this.editor.horizontalAlignment = SWT.LEFT;
 		this.editor.grabHorizontal = true;
 		this.editor.minimumWidth = 50;
 		
-		// listen to OSGi for models being added by plugins
+		// Listen to OSGi for models being added by plugins.
 		if (this.manager != null) {
 			this.manager.addDataManagerListener(this);
 		} else {
@@ -210,23 +205,22 @@ public abstract class AbstractDataManagerView
 
 	public void dataAdded(final Data newData, String label) {
 		
-		//get the new data's parent GUI Item (either root or another data item)
+		// Get the new data's parent GUI Item (either root or another data item).
 		DataGUIItem parentItem = getParent(newData);
 		
-		// wrap the new data in a DataGUIItem
-		final DataGUIItem newItem = new DataGUIItem(newData, parentItem,
-				this.brandPluginID);
+		// Wrap the new data in a DataGUIItem.
+		final DataGUIItem newItem = new DataGUIItem(newData, parentItem, this.brandPluginID);
 		
-		// notify the parent DataModelGUIItem of its new child
+		// Notify the parent DataModelGUIItem of its new child.
 		parentItem.addChild(newItem);
 		
-		// keep a reference to the new model in the model->TreeItem mapping so
-		// that
-		// it can be used in the future if it has a child
-		dataToDataGUIItemMap.put(newData, newItem);
+		/* Keep a reference to the new model in the model->TreeItem mapping so that it can be used
+		 *  in the future if it has a child.
+		 */
+		this.dataToDataGUIItemMap.put(newData, newItem);
 		
 		// update the ModelManager with the new selection
-		final Set selection = new HashSet();
+		final Set<Data> selection = new HashSet<Data>();
 		selection.add(newData);
 
 		guiRun(new Runnable() {
@@ -246,20 +240,21 @@ public abstract class AbstractDataManagerView
 	}
 	
 	private DataGUIItem getParent(Data data) {
-		Dictionary modelDictionary = data.getMetadata();
+		Dictionary<String, Object> modelDictionary = data.getMetadata();
 		
 		Data parent = (Data) modelDictionary.get(DataProperty.PARENT);
 		DataGUIItem parentItem;
+
 		if (parent == null) {
-			// if it has no parent, it is a child of the root
-			parentItem = rootItem;
+			// If it has no parent, it is a child of the root.
+			parentItem = this.rootItem;
 		} else {
-			// otherwise find the associated DataModelGUIItem for the parent
-			parentItem = (DataGUIItem) dataToDataGUIItemMap.get(parent);
+			// Otherwise find the associated DataModelGUIItem for the parent.
+			parentItem = this.dataToDataGUIItemMap.get(parent);
             
-			//The parent may not be in the GUI. If its not, then use root item
+			// The parent may not be in the GUI. If its not, then use root item.
             if (parentItem == null) {
-                parentItem = rootItem;
+                parentItem = this.rootItem;
             }
 		}
 		
@@ -276,7 +271,7 @@ public abstract class AbstractDataManagerView
 
 	public void dataLabelChanged(Data data, String label) {
 		if (data != null && label != null) {
-			TreeItem[] treeItems = tree.getItems();
+			TreeItem[] treeItems = this.tree.getItems();
 			for (int i = 0; i < treeItems.length; ++i) {
 				if (((DataGUIItem)treeItems[i].getData()).getModel() == data) {
 					updateText(label, treeItems[i]);
@@ -287,20 +282,21 @@ public abstract class AbstractDataManagerView
 	}
 
 	public void dataRemoved(Data data) {
-		TreeItem[] treeItems = tree.getItems();
+		TreeItem[] treeItems = this.tree.getItems();
 		for (int i = 0; i < treeItems.length; ++i) {
 			if (((DataGUIItem)treeItems[i].getData()).getModel() == data) {
-				tree.clear(tree.indexOf(treeItems[i]), false);
+				this.tree.clear(this.tree.indexOf(treeItems[i]), false);
 			}
 		}
 	}
 
 	public void dataSelected(final Data[] data) {
 		if (data != null) {
-			//setFocus();
 			guiRun(new Runnable() {
 				public void run() {
-					Set itemSet = new HashSet();
+					// TODO: Abstract this?
+					Set<TreeItem> itemSet = new HashSet<TreeItem>();
+
 					for (int i = 0; i < data.length; ++i) {
 						TreeItem[] treeItems = tree.getItems();
 						for (int j = 0; j < treeItems.length; ++j) {
@@ -310,34 +306,39 @@ public abstract class AbstractDataManagerView
 							}
 						}
 					}
-					tree.setSelection((TreeItem[]) itemSet
-							.toArray(new TreeItem[0]));
-					getSite().getSelectionProvider().setSelection(
-							new StructuredSelection(data));
+
+					tree.setSelection(itemSet.toArray(new TreeItem[0]));
+					getSite().getSelectionProvider().setSelection(new StructuredSelection(data));
 				}
 			});
 		}
 	}
 
 	/*
-	 * enables/disables save item in the context menu based on whether or not
+	 * Enables/disables save item in the context menu based on whether or not
 	 * their is an available Persister for the given model
 	 */
 	private void updateContextMenu(Data model) {
-		saveFactory = enableMenuItemCheck(saveFactory,
-				"org.cishell.reference.gui.persistence.save.Save", model, 0);
-		viewFactory = enableMenuItemCheck(viewFactory,
-				"org.cishell.reference.gui.persistence.view.FileView", model, 1);
-		viewWithFactory = enableMenuItemCheck(viewWithFactory,
-				"org.cishell.reference.gui.persistence.viewwith.FileViewWith", model, 2);
+//			throws AlgorithmCreationCanceledException, AlgorithmCreationFailedException {
+		this.saveFactory = enableMenuItemCheck(
+			this.saveFactory, "org.cishell.reference.gui.persistence.save.Save", model, 0);
+		this.viewFactory = enableMenuItemCheck(
+			this.viewFactory, "org.cishell.reference.gui.persistence.view.FileView", model, 1);
+		this.viewWithFactory = enableMenuItemCheck(
+			this.viewWithFactory,
+			"org.cishell.reference.gui.persistence.viewwith.FileViewWith",
+			model,
+			2);
 	}
 	
 	private AlgorithmFactory enableMenuItemCheck(
-			AlgorithmFactory algorithmFactory, String service, Data model,
-			int menuNdx) {
+			AlgorithmFactory algorithmFactory, String service, Data model, int menuIndex) {
+//			throws AlgorithmCreationCanceledException, AlgorithmCreationFailedException {
 		boolean validSaveFactory = false;
+
 		if (algorithmFactory == null) {
 			algorithmFactory = Activator.getService(service);
+
 			if (algorithmFactory != null) {
 				validSaveFactory = true;
 			} 
@@ -349,13 +350,17 @@ public abstract class AbstractDataManagerView
 		
 		if (validSaveFactory) {
 			Algorithm algorithm = algorithmFactory.createAlgorithm(
-					new Data[] { model }, new Hashtable(), Activator
-							.getCIShellContext());
+				new Data[] { model },
+				new Hashtable<String, Object>(),
+				Activator.getCIShellContext());
+
 			if (algorithm != null) {
 				enabled = true;
 			}
 		}
-		menu.getItem(menuNdx).setEnabled(enabled);
+
+		this.menu.getItem(menuIndex).setEnabled(enabled);
+
 		return algorithmFactory;
 	}
 
@@ -367,7 +372,7 @@ public abstract class AbstractDataManagerView
 		public void widgetSelected(SelectionEvent e) {
 			Tree tree = (Tree) e.getSource();
 			TreeItem[] selection = tree.getSelection();
-			Set models = new HashSet();
+			Set<Data> models = new HashSet<Data>();
 			Data[] modelArray = new Data[selection.length];
 
 			for (int i = 0; i < selection.length; i++) {
@@ -396,7 +401,7 @@ public abstract class AbstractDataManagerView
 
 		// Identify the selected row, only allow input if there is a single
 		// selected row
-		TreeItem[] selection = tree.getSelection();
+		TreeItem[] selection = this.tree.getSelection();
 
 		if (selection.length != 1) {
 			return;
@@ -409,32 +414,33 @@ public abstract class AbstractDataManagerView
 		}
 
 		// The control that will be the editor must be a child of the Table
-		newEditor = new Text(tree, SWT.NONE);
-		newEditor.setText(item.getText());
-		newEditor.addFocusListener(new FocusAdapter() {
+		this.newEditor = new Text(this.tree, SWT.NONE);
+		this.newEditor.setText(item.getText());
+		this.newEditor.addFocusListener(new FocusAdapter() {
 			public void focusLost(FocusEvent e) {
 				if (!updatingTreeItem) {
 					//updateText(newEditor.getText(), item);
 					AbstractDataManagerView.this.manager.setLabel(
-						((DataGUIItem)item.getData()).getModel(), newEditor.getText());
+						((DataGUIItem) item.getData()).getModel(),
+						AbstractDataManagerView.this.newEditor.getText());
 					// FELIX.  This is not > stupidness.
 				}
 			}
 		});
 
 		// ENTER ESC
-		newEditor.addKeyListener(new KeyAdapter() {
+		this.newEditor.addKeyListener(new KeyAdapter() {
 			public void keyReleased(KeyEvent e) {
-				if ((e.character == SWT.CR) && !updatingTreeItem) {
-					updateText(newEditor.getText(), item);
+				if ((e.character == SWT.CR) && !AbstractDataManagerView.this.updatingTreeItem) {
+					updateText(AbstractDataManagerView.this.newEditor.getText(), item);
 				} else if (e.keyCode == SWT.ESC) {
-					newEditor.dispose();
+					AbstractDataManagerView.this.newEditor.dispose();
 				}
 			}
 		});
-		newEditor.selectAll();
-		newEditor.setFocus();
-		this.editor.setEditor(newEditor, item);
+		this.newEditor.selectAll();
+		this.newEditor.setFocus();
+		this.editor.setEditor(this.newEditor, item);
 	}
 
 	/*
@@ -442,7 +448,7 @@ public abstract class AbstractDataManagerView
 	 * by the TreeEditor for renaming - only if the new name is valid though
 	 */
 	private void updateText(String newLabel, TreeItem item) {
-		updatingTreeItem = true;
+		this.updatingTreeItem = true;
      
 		if (newLabel.startsWith(">"))
 			newLabel = newLabel.substring(1);
@@ -454,7 +460,7 @@ public abstract class AbstractDataManagerView
 		Data model = treeItem.getModel();
 		model.getMetadata().put(DataProperty.LABEL, newLabel);
 		viewer.refresh();
-		newEditor.dispose();
+		this.newEditor.dispose();
 	
 		updatingTreeItem = false;
 	}
@@ -466,12 +472,13 @@ public abstract class AbstractDataManagerView
 	private class ContextMenuListener extends MouseAdapter {
 		public void mouseUp(MouseEvent event) {
 			if (event.button == 3) {
-				TreeItem item = tree.getItem(new Point(event.x, event.y));
+				TreeItem item =
+					AbstractDataManagerView.this.tree.getItem(new Point(event.x, event.y));
 
 				if (item != null) {
-					tree.getMenu().setVisible(true);
+					AbstractDataManagerView.this.tree.getMenu().setVisible(true);
 				} else {
-					tree.getMenu().setVisible(false);
+					AbstractDataManagerView.this.tree.getMenu().setVisible(false);
 				}
 			}
 		}
@@ -480,27 +487,25 @@ public abstract class AbstractDataManagerView
 
 	private class SaveListener implements Listener {
 		public void handleEvent(Event event) {
-			if (saveFactory != null) {
-				Data data[] = AbstractDataManagerView.this.manager
-						.getSelectedData();
-				Algorithm algorithm = saveFactory
-						.createAlgorithm(data, new Hashtable(), Activator
-								.getCIShellContext());
-				try{
+			if (AbstractDataManagerView.this.saveFactory != null) {
+				Data data[] = AbstractDataManagerView.this.manager.getSelectedData();
+				Algorithm algorithm = AbstractDataManagerView.this.saveFactory.createAlgorithm(
+					data, new Hashtable<String, Object>(), Activator.getCIShellContext());
+
+				try {
 					algorithm.execute();
-				}catch (AlgorithmExecutionException aee)  {
-					if (log != null) {
-						log.log(LogService.LOG_ERROR, 
-								aee.getMessage(), 
-								aee);
-						aee.printStackTrace();
-					}
-					else {
-						log = Activator.getLogService();
-						log.log(LogService.LOG_ERROR, 
-								"org.cishell.framework.algorithm.AlgorithmExecutionException",
-								aee);
-						aee.printStackTrace();
+				} catch (AlgorithmExecutionException e)  {
+					if (AbstractDataManagerView.this.logger != null) {
+						AbstractDataManagerView.this.logger.log(
+							LogService.LOG_ERROR, e.getMessage(), e);
+						e.printStackTrace();
+					} else {
+						AbstractDataManagerView.this.logger = Activator.getLogService();
+						AbstractDataManagerView.this.logger.log(
+							LogService.LOG_ERROR,
+							"org.cishell.framework.algorithm.AlgorithmExecutionException",
+							e);
+						e.printStackTrace();
 					}
 				}
 			}
@@ -509,27 +514,22 @@ public abstract class AbstractDataManagerView
 
 	private class ViewListener implements Listener {
 		public void handleEvent(Event event) {
-			if (viewFactory != null) {
-				Data data[] = AbstractDataManagerView.this.manager
-						.getSelectedData();
-				Algorithm algorithm = viewFactory
-						.createAlgorithm(data, new Hashtable(), Activator
-								.getCIShellContext());
+			if (AbstractDataManagerView.this.viewFactory != null) {
+				Data data[] = AbstractDataManagerView.this.manager.getSelectedData();
+				Algorithm algorithm = AbstractDataManagerView.this.viewFactory.createAlgorithm(
+					data, new Hashtable<String, Object>(), Activator.getCIShellContext());
+
 				try {
 					algorithm.execute();
-				}catch (AlgorithmExecutionException aee)  {
-					if (log != null) {
-						log.log(LogService.LOG_ERROR,
-								aee.getMessage(),
-								aee);
+				} catch (AlgorithmExecutionException e)  {
+					if (logger != null) {
+						logger.log(LogService.LOG_ERROR, e.getMessage(), e);
+					} else {
+						logger = Activator.getLogService();
+						logger.log(LogService.LOG_ERROR, e.getMessage(), e);
 					}
-					else {
-						log = Activator.getLogService();
-						log.log(LogService.LOG_ERROR,
-								aee.getMessage(),
-								aee);
-					}
-					aee.printStackTrace();
+
+					e.printStackTrace();
 				}
 			}
 		}
@@ -539,14 +539,16 @@ public abstract class AbstractDataManagerView
 		public void handleEvent(Event event) {
 			IMenuManager topLevelMenu = CIShellApplication.getMenuManager();
 			IMenuManager fileMenu = topLevelMenu.findMenuUsingPath("File");
-			BundleContext bContext = Activator.getBundleContext();
+			BundleContext bundleContext = Activator.getBundleContext();
 			
 			try {
-				ServiceReference[] ref = bContext.getAllServiceReferences(AlgorithmFactory.class.getName(), 
-						"(service.pid=org.cishell.reference.gui.persistence.viewwith.FileViewWith)");
+				ServiceReference[] serviceReference = bundleContext.getAllServiceReferences(
+					AlgorithmFactory.class.getName(), 
+					"(service.pid=org.cishell.reference.gui.persistence.viewwith.FileViewWith)");
 				
-				if (ref != null && ref.length > 0) {
-					ActionContributionItem action = (ActionContributionItem)fileMenu.find(getItemID(ref[0]));
+				if ((serviceReference != null) && (serviceReference.length > 0)) {
+					ActionContributionItem action =
+						(ActionContributionItem) fileMenu.find(getItemID(serviceReference[0]));
 					action.getAction().run();
 				}
 			} catch (InvalidSyntaxException e) {
@@ -557,18 +559,19 @@ public abstract class AbstractDataManagerView
 	
 	private class DiscardListener implements Listener {
 		public void handleEvent(Event event) {
-			TreeItem[] selection = AbstractDataManagerView.this.tree
-					.getSelection();
+			TreeItem[] selections = AbstractDataManagerView.this.tree.getSelection();
 
-			for (int i = 0; i < selection.length; i++) {
-				DataGUIItem item = (DataGUIItem) selection[i].getData();
+			for (TreeItem selection : selections) {
+//			for (int i = 0; i < selections.length; i++) {
+//				DataGUIItem item = (DataGUIItem) selections[i].getData();
+				DataGUIItem item = (DataGUIItem) selection.getData();
 				DataGUIItem parent = item.getParent();
 
 				if (parent != null) {
 					parent.removeChild(item);
 				}
 
-				dataToDataGUIItemMap.remove(item.getModel());
+				AbstractDataManagerView.this.dataToDataGUIItemMap.remove(item.getModel());
 				AbstractDataManagerView.this.manager.removeData(item.getModel());
 			}
 
@@ -579,13 +582,11 @@ public abstract class AbstractDataManagerView
 
 
 	private class DataModelSelectionProvider implements ISelectionProvider {
-
-		private Set listeners = new HashSet();
-
+		private Set<ISelectionChangedListener> listeners =
+			new HashSet<ISelectionChangedListener>();
 		private ISelection selection;
 
-		public void addSelectionChangedListener(
-				ISelectionChangedListener listener) {
+		public void addSelectionChangedListener(ISelectionChangedListener listener) {
 			listeners.add(listener);
 		}
 
@@ -593,17 +594,19 @@ public abstract class AbstractDataManagerView
 			return selection;
 		}
 
-		public void removeSelectionChangedListener(
-				ISelectionChangedListener listener) {
+		public void removeSelectionChangedListener(ISelectionChangedListener listener) {
 			listeners.remove(listener);
 		}
 
 		private TreeItem getTreeItem(Data model, TreeItem[] items) {
 			TreeItem result = null;
 			int i = 0;
-			while (i < items.length && result == null) {
+
+			while ((i < items.length) && (result == null)) {
 				DataGUIItem data = ((DataGUIItem) items[i].getData());
-				if (data != null) { // not sure why this happens..
+
+				// TODO: Not sure why this happens...
+				if (data != null) {
 					Data item = data.getModel();
 
 					if (item == model)
@@ -628,37 +631,37 @@ public abstract class AbstractDataManagerView
 				this.selection = selection;
 				AbstractDataManagerView.this.viewer.refresh(true);
 
-				if (selection != null
-						&& selection instanceof IStructuredSelection) {
-					IStructuredSelection ss = (IStructuredSelection) selection;
-					Iterator iterator = ss.iterator();
-					TreeItem[] newTreeSelection = new TreeItem[ss.size()];
+				if ((selection != null) && (selection instanceof IStructuredSelection)) {
+					IStructuredSelection selections = (IStructuredSelection) selection;
+					Iterator<?> iterator = selections.iterator();
+					TreeItem[] newTreeSelection = new TreeItem[selections.size()];
 					int i = 0;
+
 					while (iterator.hasNext()) {
 						Object next = iterator.next();
+
 						if (next instanceof Data) {
-							TreeItem result = getTreeItem((Data) next, tree
-									.getItems());
+							TreeItem result = getTreeItem(
+								(Data) next, AbstractDataManagerView.this.tree.getItems());
 							newTreeSelection[i] = result;
 							AbstractDataManagerView.this.viewer.expandToLevel(
-									dataToDataGUIItemMap.get(next), 0);
+								AbstractDataManagerView.this.dataToDataGUIItemMap.get(next), 0);
 						}
+
 						i++;
 					}
 
-					tree.setSelection(newTreeSelection);
+					AbstractDataManagerView.this.tree.setSelection(newTreeSelection);
 				}
 
-				Iterator listenerIterator = listeners.iterator();
+				Iterator<ISelectionChangedListener> listenerIterator = listeners.iterator();
+
 				while (listenerIterator.hasNext()) {
-					ISelectionChangedListener listener = (ISelectionChangedListener) listenerIterator
-							.next();
-					SelectionChangedEvent event = new SelectionChangedEvent(
-							this, selection);
+					ISelectionChangedListener listener = listenerIterator.next();
+					SelectionChangedEvent event = new SelectionChangedEvent(this, selection);
 					listener.selectionChanged(event);
 				}
 			}
 		}
-
 	}
 }

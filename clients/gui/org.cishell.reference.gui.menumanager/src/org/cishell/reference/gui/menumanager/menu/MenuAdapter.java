@@ -89,7 +89,7 @@ public class MenuAdapter implements AlgorithmProperty {
     /*
      * This is the exactly same copy of pidsToServiceReferences. 
      * Since some plug-ins could display on menu more than once, it provides a map between a pid
-     *  and a ref while in pidsToServiceReferences that pid has been removed. 
+     *  and a serviceReference while in pidsToServiceReferences that pid has been removed. 
      */
     private Map pidsToServiceReferencesCopy;
     private Document documentObjectModel;
@@ -462,7 +462,7 @@ public class MenuAdapter implements AlgorithmProperty {
     	}    		
     }
 
-    private void initializeMenu() throws InvalidSyntaxException{   
+    private void initializeMenu() throws InvalidSyntaxException {   
         ServiceReference[] serviceReferences = this.bundleContext.getAllServiceReferences(
         	AlgorithmFactory.class.getName(), null);
      
@@ -493,7 +493,7 @@ public class MenuAdapter implements AlgorithmProperty {
     }
     
     private void makeMenuItem(ServiceReference serviceReference) {
-        String path = (String)serviceReference.getProperty(MENU_PATH);
+        String path = (String) serviceReference.getProperty(MENU_PATH);
         String[] items = null;
 
         if (path != null) {
