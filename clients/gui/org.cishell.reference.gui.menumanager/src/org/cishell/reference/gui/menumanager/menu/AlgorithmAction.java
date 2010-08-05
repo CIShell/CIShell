@@ -33,29 +33,38 @@ import org.osgi.service.log.LogService;
 
 
 public class AlgorithmAction extends Action implements AlgorithmProperty, DataManagerListener {
-    protected CIShellContext ciContext;
-    protected BundleContext bContext;
-    protected ServiceReference ref;
+    protected CIShellContext ciShellContext;
+    protected BundleContext bundleContext;
+    protected ServiceReference serviceReference;
     protected Data[] data;
     protected Data[] originalData;
     protected Converter[][] converters;
     
     public AlgorithmAction(
-    		ServiceReference ref, BundleContext bContext, CIShellContext ciContext) {
-    	this((String)ref.getProperty(LABEL), ref, bContext, ciContext);
+    		ServiceReference serviceReference,
+    		BundleContext bundleContext,
+    		CIShellContext ciShellContext) {
+    	this(
+    		(String) serviceReference.getProperty(LABEL),
+    		serviceReference,
+    		bundleContext,
+    		ciShellContext);
     }
     
     public AlgorithmAction(
-    		String label, ServiceReference ref, BundleContext bContext, CIShellContext ciContext) {
-        this.ref = ref;
-        this.ciContext = ciContext;
-        this.bContext = bContext;
+    		String label,
+    		ServiceReference serviceReference,
+    		BundleContext bundleContext,
+    		CIShellContext ciShellContext) {
+        this.serviceReference = serviceReference;
+        this.ciShellContext = ciShellContext;
+        this.bundleContext = bundleContext;
         
         setText(label);
-        setToolTipText((String)ref.getProperty(AlgorithmProperty.DESCRIPTION));
+        setToolTipText((String)serviceReference.getProperty(AlgorithmProperty.DESCRIPTION));
         
         DataManagerService dataManager = (DataManagerService) 
-            bContext.getService(bContext.getServiceReference(
+            bundleContext.getService(bundleContext.getServiceReference(
                     DataManagerService.class.getName()));
         
         dataManager.addDataManagerListener(this);
@@ -64,12 +73,18 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, DataMa
 
     public void run() {
         try {
-            printAlgorithmInformation(ref, ciContext);
-           
-            Algorithm algorithm = new AlgorithmWrapper(ref, bContext, ciContext, originalData, data, converters);
+            printAlgorithmInformation(this.serviceReference, this.ciShellContext);
+
+            Algorithm algorithm = new AlgorithmWrapper(
+            	this.serviceReference,
+            	this.bundleContext,
+            	this.ciShellContext,
+            	this.originalData,
+            	this.data,
+            	this.converters);
             SchedulerService scheduler = (SchedulerService) getService(SchedulerService.class);
             
-            scheduler.schedule(algorithm, ref);
+            scheduler.schedule(algorithm, this.serviceReference);
         } catch (Throwable exception) {
         	// Just in case an uncaught exception occurs. Eclipse will swallow errors thrown here.
             exception.printStackTrace();
@@ -134,76 +149,77 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, DataMa
 
 		return inData;
 	}
-    
+
     public void dataSelected(Data[] selectedData) {        
-        String inDataString = (String)ref.getProperty(IN_DATA);
+        String inDataString = (String) this.serviceReference.getProperty(IN_DATA);
         String[] inData = separateInData(inDataString);
         
-        if ((inData.length == 1 && inData[0].equalsIgnoreCase(NULL_DATA))) {
-            data = new Data[0];
+        if ((inData.length == 1) && inData[0].equalsIgnoreCase(NULL_DATA)) {
+            this.data = new Data[0];
         } else if (selectedData == null) {
-            data = null;
+            this.data = null;
         } else {
-            DataConversionService converter = (DataConversionService)
-                ciContext.getService(DataConversionService.class.getName());
+            DataConversionService converter =
+            	(DataConversionService) this.ciShellContext.getService(
+            		DataConversionService.class.getName());
             
-            List dataSet = new ArrayList(Arrays.asList(selectedData));
-            data = new Data[inData.length];
-            converters = new Converter[inData.length][];
+            List<Data> dataSet = new ArrayList<Data>(Arrays.asList(selectedData));
+            this.data = new Data[inData.length];
+            this.converters = new Converter[inData.length][];
             
-            for (int i=0; i < inData.length; i++) {
-                for (int j=0; j < dataSet.size(); j++) {
-                    Data datum = (Data) dataSet.get(j);
+            for (int ii = 0; ii < inData.length; ii++) {
+                for (int jj = 0; jj < dataSet.size(); jj++) {
+                    Data datum = (Data) dataSet.get(jj);
                     
                     if (datum != null) {
-                        if (isAssignableFrom(inData[i], datum)) {
-                            dataSet.remove(j);
-                            data[i] = datum;
-                            converters[i] = null;
+                        if (isAssignableFrom(inData[ii], datum)) {
+                            dataSet.remove(jj);
+                            this.data[ii] = datum;
+                            this.converters[ii] = null;
                         } else {
-                            Converter[] conversion = converter.findConverters(datum, inData[i]);
+                            Converter[] conversion = converter.findConverters(datum, inData[ii]);
                             
                             if (conversion.length > 0) {
-                                dataSet.remove(j);
-                                data[i] = datum;
-                                converters[i] = conversion;
+                                dataSet.remove(jj);
+                                this.data[ii] = datum;
+                                this.converters[ii] = conversion;
                             }
                         }
                     }
                 }
                
-                //if there isn't a converter for one of the inputs
-                //then this data isn't useful
-                if (data[i] == null) {
-                    data = null; 
+                // If there isn't a converter for one of the inputs then this data isn't useful.
+                if (this.data[ii] == null) {
+                    this.data = null;
+
                     break;
                 }
             }
         }
         
-        if (data != null) {
-            originalData = (Data[]) data.clone();
+        if (this.data != null) {
+            this.originalData = (Data[]) this.data.clone();
         } else {
-            originalData = null;
+            this.originalData = null;
         }
         
-        setEnabled(data != null);
+        setEnabled(this.data != null);
     }
     
     private boolean isAssignableFrom(String type, Data datum) {
         Object data = datum.getData();
         boolean assignable = false;
         
-        if (type != null && type.equalsIgnoreCase(datum.getFormat())) {
+        if ((type != null) && type.equalsIgnoreCase(datum.getFormat())) {
             assignable = true;
         } else if (data != null) {
             try {
-                Class c = Class.forName(type, false, data.getClass().getClassLoader());
+                Class<?> clazz = Class.forName(type, false, data.getClass().getClassLoader());
                 
-                if (c != null && c.isInstance(data)) {
+                if (clazz != null && clazz.isInstance(data)) {
                     assignable = true;
                 } 
-            } catch (ClassNotFoundException e) { /*ignore*/ }
+            } catch (ClassNotFoundException e) { /* Ignore. */ }
         }
         
         return assignable;
@@ -213,16 +229,17 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, DataMa
     public void dataLabelChanged(Data data, String label) {}
     public void dataRemoved(Data data) {}
     
-    private Object getService(Class clas) {
-    	ServiceReference ref = bContext.getServiceReference(clas.getName());
-    	if (ref != null) {
-    		return bContext.getService(ref);
+    private Object getService(Class<?> clazz) {
+    	ServiceReference serviceReference = bundleContext.getServiceReference(clazz.getName());
+
+    	if (serviceReference != null) {
+    		return bundleContext.getService(serviceReference);
     	}
     	
     	return null;
     }
     
     public ServiceReference getServiceReference(){
-    	return ref;
+    	return this.serviceReference;
     }
 }
