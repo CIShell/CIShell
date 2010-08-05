@@ -1,15 +1,15 @@
-package org.cishell.utilities.swt.model;
+package org.cishell.utility.swt.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.cishell.utilities.swt.model.datasynchronizer.CheckBoxDataSynchronizer;
-import org.cishell.utilities.swt.model.datasynchronizer.DropDownDataSynchronizer;
-import org.cishell.utilities.swt.model.datasynchronizer.ModelDataSynchronizer;
-import org.cishell.utilities.swt.model.datasynchronizer.SingleListSelectionDataSynchronizer;
-import org.cishell.utilities.swt.model.datasynchronizer.TextDataSynchronizer;
+import org.cishell.utility.swt.model.datasynchronizer.CheckBoxDataSynchronizer;
+import org.cishell.utility.swt.model.datasynchronizer.DropDownDataSynchronizer;
+import org.cishell.utility.swt.model.datasynchronizer.ModelDataSynchronizer;
+import org.cishell.utility.swt.model.datasynchronizer.SingleListSelectionDataSynchronizer;
+import org.cishell.utility.swt.model.datasynchronizer.TextDataSynchronizer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;

@@ -1,10 +1,10 @@
-package org.cishell.utilities.swt.model;
+package org.cishell.utility.swt.model;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.cishell.utilities.swt.model.datasynchronizer.ModelDataSynchronizer;
+import org.cishell.utility.swt.model.datasynchronizer.ModelDataSynchronizer;
 import org.eclipse.swt.widgets.Widget;
 
 public class GUIModelGroup {

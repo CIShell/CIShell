@@ -1,4 +1,4 @@
-package org.cishell.utilities.swt.model.datasynchronizer;
+package org.cishell.utility.swt.model.datasynchronizer;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;

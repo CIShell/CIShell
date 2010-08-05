@@ -1,4 +1,4 @@
-package org.cishell.utilities.swt.model.datasynchronizer;
+package org.cishell.utility.swt.model.datasynchronizer;
 
 public interface ModelDataSynchronizer<T> {
 	public int swtUpdateListenerCode();
