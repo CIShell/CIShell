@@ -1,12 +1,16 @@
 package org.cishell.utilities;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.regex.Pattern;
 
 public class StringUtilities {
+	public static Pattern NON_ALPHA_NUMERIC_CHARACTER_ESCAPE = Pattern.compile("([^a-zA-z0-9])");
+
 	// TODO: Make this wrap implodeItems.
 	public static String implodeStringArray(String[] stringArray, String separator) {
 		final int stringArrayLength = stringArray.length;
@@ -318,7 +322,8 @@ public class StringUtilities {
 
 	public static String[] getAllTokens(
 			String originalString, String separator, boolean trim) {
-		String[] tokens = originalString.split(separator);
+		String escapedSeparator = escapeForRegularExpression(separator);
+		String[] tokens = originalString.split(escapedSeparator);
 
 		if (trim) {
 			String[] trimmedTokens = new String[tokens.length];
@@ -356,6 +361,10 @@ public class StringUtilities {
 		} else {
 			return quoted;
 		}
+	}
+
+	public static String escapeForRegularExpression(String original) {
+		return NON_ALPHA_NUMERIC_CHARACTER_ESCAPE.matcher(original).replaceAll("\\\\$1"); 
 	}
 
 	// TODO
