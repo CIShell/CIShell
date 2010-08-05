@@ -212,6 +212,12 @@
   	      <param name="url" value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk"/>
   	</antcall>
   	<antcall target="svn.co">
+  	      <param name="target" value="plugins"/>
+  	      <param name="element.id" value="org.cishell.utility.datastructure"/>
+  	      <param name="project.name" value="/core/org.cishell.utility.datastructure"/>
+  	      <param name="url" value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk"/>
+  	</antcall>
+  	<antcall target="svn.co">
   	  	      <param name="target" value="plugins"/>
   	  	      <param name="element.id" value="google-collections"/>
   	  	      <param name="project.name" value="/libs/google-collections"/>
