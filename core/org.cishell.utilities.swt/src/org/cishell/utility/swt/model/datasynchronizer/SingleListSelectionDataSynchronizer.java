@@ -1,4 +1,4 @@
-package org.cishell.utilities.swt.model.datasynchronizer;
+package org.cishell.utility.swt.model.datasynchronizer;
 
 import java.util.Map;
 

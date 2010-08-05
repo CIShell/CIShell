@@ -1,4 +1,4 @@
-package org.cishell.utilities.swt.model;
+package org.cishell.utility.swt.model;
 
 public class ModelFieldException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
