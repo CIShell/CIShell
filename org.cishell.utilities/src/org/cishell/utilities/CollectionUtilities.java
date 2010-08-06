@@ -10,13 +10,13 @@ public class CollectionUtilities {
 	/* Return only elements of the Collection which are mapped to true in the
 	 * Dictionary
 	 */
-	public static Collection grabSelectedValues(
-			Collection elements, Dictionary selectionDictionary) {
-		Collection selectedElements = new ArrayList();
+	public static<K, V> Collection<K> grabSelectedValues(
+			Collection<K> elements, Dictionary<K, V> selectionDictionary) {
+		Collection<K> selectedElements = new ArrayList<K>();
 	
-		for (Iterator elementsIt = elements.iterator(); elementsIt.hasNext();) {
-			String element = (String) elementsIt.next();
-			Object isSelected = selectionDictionary.get(element);
+		for (Iterator<K> elementsIt = elements.iterator(); elementsIt.hasNext();) {
+			K element = elementsIt.next();
+			V isSelected = selectionDictionary.get(element);
 	
 			if ((isSelected != null) && (isSelected instanceof Boolean)) {
 				if (((Boolean) isSelected).booleanValue()) {
