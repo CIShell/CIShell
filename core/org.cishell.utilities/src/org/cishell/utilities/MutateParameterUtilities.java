@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
+import java.util.List;
 
 import org.cishell.reference.service.metatype.BasicObjectClassDefinition;
 import org.cishell.utilities.mutateParameter.AttributeDefinitionTransformer;
@@ -24,11 +25,31 @@ public class MutateParameterUtilities {
 	public static AttributeDefinition formLabelAttributeDefinition(
 			AttributeDefinition oldAttributeDefinition, Table table)
 			throws ColumnNotFoundException {
-		Collection<String> validStringColumnsInTable =
+		Collection<String> originalLabelColumnNames =
 			Arrays.asList(TableUtilities.getValidStringColumnNamesInTable(table));
 	
 		AttributeDefinition labelAttributeDefinition = cloneToDropdownAttributeDefinition(
-			oldAttributeDefinition, validStringColumnsInTable, validStringColumnsInTable);
+			oldAttributeDefinition, originalLabelColumnNames, originalLabelColumnNames);
+
+		return labelAttributeDefinition;
+	}
+	
+	/**
+	 * Support additional default labels to be added to the front.
+	 * TODO: Look at other utilities for future refactoring.  (This may not be needed.)
+	 */
+	public static AttributeDefinition formLabelAttributeDefinition(
+			AttributeDefinition oldAttributeDefinition, Table table, List<String> additionalLabels)
+			throws ColumnNotFoundException {
+		Collection<String> originalLabelColumnNames = 
+			Arrays.asList(TableUtilities.getValidStringColumnNamesInTable(table));
+
+		Collection<String> newLabelColumnNames = new ArrayList<String>();
+		newLabelColumnNames.addAll(additionalLabels);
+		newLabelColumnNames.addAll(originalLabelColumnNames);
+
+		AttributeDefinition labelAttributeDefinition = cloneToDropdownAttributeDefinition(
+			oldAttributeDefinition, newLabelColumnNames, newLabelColumnNames);
 
 		return labelAttributeDefinition;
 	}
