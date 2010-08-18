@@ -28,43 +28,38 @@ import org.osgi.service.log.LogService;
 
 import prefuse.data.Graph;
 
+// TODO: Continue refactoring this.
 public class DefaultTestRunner implements TestRunner {
+	private LogService logger;
 
-	private LogService log;
-
-	public DefaultTestRunner(LogService log) {
-		this.log = log;
+	public DefaultTestRunner(LogService logger) {
+		this.logger = logger;
 	}
 
 	public FilePassResult[] runTest(TestConfigData testData) {
-		
 		Data[][] testFileData = testData.getTestFileData();
 		ConverterPath testConverters = testData.getTestConverters();
-		ConverterPath comparisonConverters = testData
-				.getComparisonConverters();
-		
-		List testResults = new ArrayList();
+		ConverterPath comparisonConverters = testData.getComparisonConverters();
+		List<FilePassResult> testResults = new ArrayList<FilePassResult>();
 
-		for (int ii = 0; ii < testFileData.length; ii++) {
-			Data[] originalFileData = testFileData[ii];
-			
-			// test conversion phase
+		for (Data[] originalFileData : testFileData) {
+			// Test conversion phase.
 
-			ConvertResult testPhaseResult = convert(originalFileData,
-					testConverters, testData);
-
+			ConvertResult testPhaseResult = convert(originalFileData, testConverters, testData);
 			Data[][] allDataFromTestPhase = testPhaseResult.getAllData();
 			
 			if (!testPhaseResult.succeeded()) {
-				FilePassFailure failure = createFailResult(originalFileData, 
-						PassPhase.TEST_CONV_PHASE,
-						testPhaseResult.getFailInfo(),
+				FilePassFailure failure = createFailResult(
+					originalFileData, 
+					PassPhase.TEST_CONV_PHASE,
+					testPhaseResult.getFailInfo(),
 					allDataFromTestPhase,
 					null,
 					null);
 				testResults.add(failure);
 				continue;
 			}
+
 			Data[] resultFileData = testPhaseResult.getResult();
 		
 			
@@ -144,8 +139,7 @@ public class DefaultTestRunner implements TestRunner {
 			ConverterPath converters, TestConfigData testData) {
 
 		Data[] currentData = getFilePathData(startData);
-		
-		List dataSoFar = new ArrayList();
+		List<Data[]> dataSoFar = new ArrayList<Data[]>();
 		
 //    	if (startData != null) {
 //			alterMetaData(startData);
@@ -156,7 +150,7 @@ public class DefaultTestRunner implements TestRunner {
 		 * rig up fake CIShellContext so we can get ahold of
 		 * errors sent to logger.
 		 */ 		
-		FakeLogCIShellContext fakeCContext = 
+		FakeLogCIShellContext fakeCIShellContext = 
 			new FakeLogCIShellContext(testData.getContext());
 		
 
@@ -168,14 +162,15 @@ public class DefaultTestRunner implements TestRunner {
 			for (int ii = 0; ii < converters.size(); ii++) {
 				currentConverter = converters.get(ii);
 			
-				Hashtable parameters = new Hashtable(); 	//no parameters used
+				// No parameters used.
+				Hashtable<String, Object> parameters = new Hashtable<String, Object>();
 				
-				currentData = currentConverter.execute(currentData,
-						parameters, fakeCContext);
+				currentData =
+					currentConverter.execute(currentData, parameters, fakeCIShellContext);
 				
 				if (currentData != null) {
-				setMetaData(currentData, currentConverter);
-				dataSoFar.add(currentData);
+					setMetadata(currentData, currentConverter);
+					dataSoFar.add(currentData);
 				}
 
 				/*
@@ -191,9 +186,9 @@ public class DefaultTestRunner implements TestRunner {
 					String explanation = "Result of conversion was null. \r\n";
 					
 					
-					if (fakeCContext.hasLogEntries()) {
-						String logText = extractLogText(fakeCContext);
-						explanation += "Error log contains the following: \r\n" +
+					if (fakeCIShellContext.hasLogEntries()) {
+						String logText = extractLogText(fakeCIShellContext);
+						explanation += "Error logger contains the following: \r\n" +
 							logText;
 					} else {
 						explanation += "No errors logged. Cause unknown. \r\n";
@@ -202,19 +197,24 @@ public class DefaultTestRunner implements TestRunner {
 					ConvFailureInfo failInfo = new ConvFailureInfo(
 							explanation, converter);
 					
-					ConvertResult result = new ConvertResult(failInfo, (Data[][]) dataSoFar.toArray(new Data[dataSoFar.size()][]));
+					ConvertResult result = new ConvertResult(
+						failInfo, (Data[][]) dataSoFar.toArray(new Data[dataSoFar.size()][]));
+
 					return result;
 				}
 			}
 		} catch (Throwable t) {
-			ConvFailureInfo failInfo = new ConvFailureInfo(getStackTrace(t),
-					currentConverter);
-			ConvertResult result = new ConvertResult(failInfo,(Data[][]) dataSoFar.toArray(new Data[dataSoFar.size()][]));
+			ConvFailureInfo failInfo = new ConvFailureInfo(getStackTrace(t), currentConverter);
+			ConvertResult result = new ConvertResult(
+				failInfo,(Data[][]) dataSoFar.toArray(new Data[dataSoFar.size()][]));
+
 			return result;
 		}
 
 		Data[] resultData = currentData;
-		ConvertResult result = new ConvertResult(resultData,(Data[][]) dataSoFar.toArray(new Data[dataSoFar.size()][]));
+		ConvertResult result = new ConvertResult(
+			resultData,(Data[][]) dataSoFar.toArray(new Data[dataSoFar.size()][]));
+
 		return result;
 	}
 	
@@ -288,7 +288,7 @@ public class DefaultTestRunner implements TestRunner {
 			Data result = new BasicData(filePath, format);
 			return new Data[] { result };
 		} catch (IOException e) {
-			this.log.log(LogService.LOG_ERROR, "Could not get file path " +
+			this.logger.log(LogService.LOG_ERROR, "Could not get file path " +
 					"from file " + actualFile, e);
 			return null;
 		}
@@ -316,51 +316,49 @@ public class DefaultTestRunner implements TestRunner {
 		return logText;
 	}
 	
-	private void setMetaData(Data[] data, Converter converter) {
-		if (data == null || data.length < 1) {
+	private void setMetadata(Data[] data, Converter converter) {
+		if ((data == null) || (data.length < 1)) {
 			return;
 		}
 		
 		Data datum = data[0];
-		Dictionary md = datum.getMetadata();
-		if (md.get(DataProperty.LABEL) == null) {
-			md.put(DataProperty.LABEL, "result of " + converter.getShortName());
+		Dictionary<String, Object> metadata = datum.getMetadata();
+
+		if (metadata.get(DataProperty.LABEL) == null) {
+			metadata.put(DataProperty.LABEL, "result of " + converter.getShortName());
 		} else {
-			alterMetaData(data);
-			md.put(DataProperty.LABEL, md.get(DataProperty.LABEL) + ": result of " + converter.getShortName());
+			alterMetadata(data);
+			metadata.put(
+				DataProperty.LABEL,
+				metadata.get(DataProperty.LABEL) + ": result of " + converter.getShortName());
 		}
 	}
 	
 	private String getFileName(String fileLabel) {
-    	
-    	//index variables will be -1 if index is not found.
+    	// Index variables will be -1 if index is not found.
     	int descriptionEndIndex = fileLabel.lastIndexOf(":");
     	int filePathEndIndex = fileLabel.lastIndexOf(File.separator);
 
-    	//doesn't matter if either variable is -1, since startIndex will be 
-    	//zero and none of the string will be cut off the front.
+    	/* Doesn't matter if either variable is -1, since startIndex will be zero and none of the
+    	 *  string will be cut off the front.
+    	 */
     	int startIndex = Math.max(descriptionEndIndex, filePathEndIndex) + 1;
-    	
     	String fileNameWithExtension = fileLabel.substring(startIndex);
-    	
-    	
- 
-    	int endIndex = fileNameWithExtension.length(); // don't cut any off the end.
-
-    	
+    	int endIndex = fileNameWithExtension.length(); // Don't cut any off the end.
     	String fileNameWithoutExtension = fileNameWithExtension.substring(0, endIndex);
-   	
     	String fileName = fileNameWithoutExtension;
+
     	return fileName;
     }
 	
 	
-	private void alterMetaData(Data[] origFileData) {
-		Data data = origFileData[0];
-		Dictionary metadata = data.getMetadata();
+	private void alterMetadata(Data[] originalFileData) {
+		Data data = originalFileData[0];
+		Dictionary<String, Object> metadata = data.getMetadata();
 		String label = (String) metadata.get(DataProperty.LABEL);
+
 		if (label != null) {
-		metadata.put(DataProperty.LABEL, getFileName(label));
+			metadata.put(DataProperty.LABEL, getFileName(label));
 		} else {
 			metadata.put(DataProperty.LABEL, "null");
 		}

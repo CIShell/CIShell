@@ -9,87 +9,74 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogService;
 
 public class ConverterPath implements AlgorithmProperty {
+	private LogService logger;
+	private String inData = null;
+	private String outData = null;
+	private List<Converter> path;
 	
-	private BundleContext bContext;
-	private LogService log;
-	private String in_data = null;
-	private String out_data = null;
-	
-	private List path;
-	
-	public ConverterPath(BundleContext bContext, LogService log){
-		this.bContext = bContext;
-		this.log = log;
-		
-		path = new ArrayList();
+	public ConverterPath(BundleContext bundleContext, LogService logger){
+		this.logger = logger;
+		this.path = new ArrayList<Converter>();
 	}
 	
-	public ConverterPath(ConverterPath p, BundleContext bContext) {
-		this.bContext = bContext;
-
-		in_data = p.getInData();
-		out_data = p.getOutData();
-		
-		this.path = new ArrayList(p.getPath());
+	public ConverterPath(ConverterPath path, BundleContext bundleContext) {
+		this.inData = path.getInData();
+		this.outData = path.getOutData();
+		this.path = new ArrayList<Converter>(path.getPath());
 		
 	}
 	
-	public void setInData(String s){
-
-		this.in_data = s;
+	public void setInData(String inData) {
+		this.inData = inData;
 	}
 	
-	public void setOutData(String s){
-
-		this.out_data = s;
+	public void setOutData(String outData) {
+		this.outData = outData;
 	}
 	
-	public boolean add(Converter c){
-
-		boolean val = true;
-		
-		if(path.contains(c)){	
+	public boolean add(Converter converter) {
+		if (path.contains(converter)) {
 			return false;
+		} else {
+			path.add(converter);
+			this.setOutData(converter.getOutData());
+
+			return true;
 		}
-		
-		path.add(c);
-		this.setOutData(c.getOutData());
-		return val;
 	}
 	
-	public String getInData(){
-
-		return this.in_data;
+	public String getInData() {
+		return this.inData;
 	}
 	
-	public String getOutData(){
-
-		return this.out_data;
+	public String getOutData() {
+		return this.outData;
 	}
 	
 	public String getAcceptedFileFormat() {
 		if (size() > 0) {
-			return (String) getRef(0).getProperty(AlgorithmProperty.OUT_DATA);
+			return (String) getServiceReference(0).getProperty(AlgorithmProperty.OUT_DATA);
 		} else {
-			this.log.log(LogService.LOG_ERROR, "Converter Path cannot " +
+			this.logger.log(LogService.LOG_ERROR, "Converter Path cannot " +
 					"determine accepted file format if there are no " + 
 					"converters inside it. Returning null String.");
+
 			return "";
 		}
 	}
 	
-	public List getPath(){
-
+	public List<Converter> getPath() {
 		return this.path;
 	}
 	
-	//inclusive
-	public List getPathUpTo(Converter upToConv) {
+	/// Inclusive.
+	public List<Converter> getPathUpTo(Converter upToConverter) {
 		int convIndex = -1;
+
 		for (int ii = 0; ii < this.path.size(); ii++) {
 			Converter aConvInPath = get(ii);
 			
-			if (aConvInPath.equals(upToConv)) {
+			if (aConvInPath.equals(upToConverter)) {
 				convIndex = ii;
 				break;
 			}
@@ -108,50 +95,40 @@ public class ConverterPath implements AlgorithmProperty {
 		return (Converter) this.path.get(index);
 	}
 	
-	public ServiceReference getRef(int index) {
+	public ServiceReference getServiceReference(int index) {
+		Converter converter = this.path.get(index);
+		ServiceReference serviceReference = converter.getServieReference();
 
-		Converter c = (Converter) this.path.get(index);
-		ServiceReference ref = c.getRef();
-		return ref;
+		return serviceReference;
 	}
 	
-	public Converter[] getPathAsArray(){
-
+	public Converter[] getPathAsArray() {
 		return (Converter[]) this.path.toArray(new Converter[0]);
 	}
 	
 	public boolean isLossy() {
-
-		String lossiness = LOSSLESS;
-        for (int i = 0; i < this.path.size(); i++) {
-        	Converter c = (Converter) this.path.get(i);
-        	
-            if (c.isLossy()) {
-                lossiness = LOSSY;
+		for (Converter converter : this.path) {
+            if (converter.isLossy()) {
+                return true;
             }
         } 
         
-        boolean result = lossiness.equals(LOSSY);
-        return result;
+        return false;
 	}
 	
 	public boolean preservesIDs() {
-
-		//TODO: Determine this somehow.
+		// TODO: Determine this somehow.
 		return false;
 	}
 	
 	public int size() {
-
 		return this.path.size();
 	}
 	
-	public boolean containsConverterNamed(String convName) {
-		for (int ii = 0; ii < this.path.size(); ii++) {
-			Converter conv = (Converter) this.path.get(ii);
-			
-			if (conv.getShortName().equals(convName) ||
-					conv.getUniqueName().equals(convName)) {
+	public boolean containsConverterNamed(String converterName) {
+		for (Converter converter : this.path) {
+			if (converter.getShortName().equals(converterName) ||
+					converter.getUniqueName().equals(converterName)) {
 				return true;
 			}
 		}
@@ -160,6 +137,6 @@ public class ConverterPath implements AlgorithmProperty {
 	}
 	
 	public String getConverterName(int index) {
-		return (String) get(index).getUniqueName();
+		return get(index).getUniqueName();
 	}
 }

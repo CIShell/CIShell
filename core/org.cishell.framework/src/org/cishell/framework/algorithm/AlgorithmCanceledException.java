@@ -1,6 +1,6 @@
 package org.cishell.framework.algorithm;
 
-public class AlgorithmCanceledException extends Exception {
+public class AlgorithmCanceledException extends RuntimeException {
 	private static final long serialVersionUID = 9017277008277139930L;
 
 	public AlgorithmCanceledException(String message, Throwable exception) {
