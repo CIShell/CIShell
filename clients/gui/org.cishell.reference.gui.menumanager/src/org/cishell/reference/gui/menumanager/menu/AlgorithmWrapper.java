@@ -25,6 +25,7 @@ import java.util.Map;
 import org.cishell.app.service.datamanager.DataManagerService;
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
+import org.cishell.framework.algorithm.AlgorithmCanceledException;
 import org.cishell.framework.algorithm.AlgorithmExecutionException;
 import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.algorithm.AlgorithmProperty;
@@ -236,19 +237,30 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
 
 	protected Data[] tryExecutingAlgorithm(Algorithm algorithm) {
 		Data[] outData = null;
+		final String algorithmName =
+			(String) serviceReference.getProperty(AlgorithmProperty.LABEL);
+
 		try {
 			outData = algorithm.execute();
+		} catch (AlgorithmCanceledException e) {
+			String logMessage = String.format(
+				"The algorithm: \"%s\" was canceled by the user.  (Reason: %s)",
+				algorithmName,
+				e.getMessage());
+			log(LogService.LOG_WARNING, logMessage, e);
 		} catch (AlgorithmExecutionException e) {
-			log(LogService.LOG_ERROR, "The Algorithm: \""
-					+ serviceReference.getProperty(AlgorithmProperty.LABEL)
-					+ "\" had an error while executing: " + e.getMessage(), e);
+			String logMessage = String.format(
+				"The algorithm: \"%s\" had an error while executing: %s",
+				algorithmName,
+				e.getMessage());
+			log(LogService.LOG_ERROR, logMessage, e);
 		} catch (RuntimeException e) {
-			GUIBuilderService builder = (GUIBuilderService)
-				ciShellContext.getService(GUIBuilderService.class.getName());
-
-			builder.showError("Error!",
-					"An unexpected exception occurred while " + "executing \""
-					+ serviceReference.getProperty(AlgorithmProperty.LABEL) + ".\"", e);
+			GUIBuilderService builder =
+				(GUIBuilderService) ciShellContext.getService(GUIBuilderService.class.getName());
+			String errorMessage = String.format(
+				"An unxpected error occurred while executing the algorithm \"%s\".",
+				algorithmName);
+			builder.showError("Error!", errorMessage, e);
 		}
 
 		return outData;
