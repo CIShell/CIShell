@@ -33,19 +33,17 @@ import org.osgi.service.log.LogService;
 import org.osgi.service.metatype.MetaTypeProvider;
 
 public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProperty {
-    private ServiceReference[] refs;
+    private ServiceReference[] serviceReferences;
     private BundleContext bContext;
-    private Dictionary properties;
+    private Dictionary<String, Object> properties;
     private CIShellContext ciContext;
 	
     
     public ConverterImpl(BundleContext bContext, CIShellContext ciContext, ServiceReference[] refs) {
         this.bContext = bContext;
         this.ciContext = ciContext;
-        this.refs = refs;
-        
-        
-        properties = new Hashtable();
+        this.serviceReferences = refs;
+        properties = new Hashtable<String, Object>();
         
         properties.put(IN_DATA, refs[0].getProperty(IN_DATA));
         properties.put(OUT_DATA, refs[refs.length-1].getProperty(OUT_DATA));
@@ -109,7 +107,7 @@ public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProp
      * @see org.cishell.service.conversion.Converter#getConverterChain()
      */
     public ServiceReference[] getConverterChain() {
-        return refs;
+        return this.serviceReferences;
     }
 
     /**
@@ -134,25 +132,27 @@ public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProp
     }
     
     public String toString() {
-    	String str ="";
-    	for (int j = 0; j < refs.length; ++j) {
-    		str += refs[j].getProperty(Constants.SERVICE_ID);
+    	String str = "";
+
+    	for (ServiceReference serviceReference : this.serviceReferences) {
+    		str += serviceReference.getProperty(Constants.SERVICE_ID);
     		str += " ";
-    		str += refs[j].getProperty(Constants.SERVICE_PID);
+    		str += serviceReference.getProperty(Constants.SERVICE_PID);
     		str += "-> ";
     	}
     	
     	return str;
     }
 
-    public boolean equals(Object o) {
+    public boolean equals(Object compareTo) {
     	boolean equal = false;
-    	if (o instanceof Converter) {
-	    	ServiceReference[] otherServiceReference =
-	    		((Converter) o).getConverterChain();
-	    	if (refs.length == otherServiceReference.length) {
+
+    	if (compareTo instanceof Converter) {
+	    	ServiceReference[] otherServiceReference = ((Converter) compareTo).getConverterChain();
+
+	    	if (this.serviceReferences.length == otherServiceReference.length) {
 		    	for (int i = 0; i < otherServiceReference.length; i++) {
-		    		if (refs[i].getProperty(Constants.SERVICE_ID).equals(
+		    		if (this.serviceReferences[i].getProperty(Constants.SERVICE_ID).equals(
 		    				otherServiceReference[i].getProperty(
 		    						Constants.SERVICE_ID))) {
 		    			equal = true;
@@ -167,7 +167,7 @@ public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProp
 	    return equal;
     }
     
-    /* The conversion chain (refs) is lossless
+    /* The conversion chain (serviceReferences) is lossless
 	 * if and only if no conversion (ref) is lossy.
 	 */
 	private String calculateLossiness(ServiceReference[] refs) {
@@ -186,62 +186,61 @@ public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProp
 		public static final String MIME_TYPE_PREFIX = "file:";
 		
 		private Data[] inData;        
-        private Dictionary parameters;
-        private CIShellContext context;
-        private LogService log;
+        private Dictionary<String, Object> parameters;
+        private CIShellContext ciShellContext;
+        private LogService logger;
         
         
-        public ConverterAlgorithm(Data[] inData,
-        						  Dictionary parameters,
-        						  CIShellContext context) {
+        public ConverterAlgorithm(
+        		Data[] inData, Dictionary<String, Object> parameters, CIShellContext ciShellContext) {
             this.inData = inData;
             this.parameters = parameters;
-            this.context = context;
-            this.log =
-            	(LogService) context.getService(LogService.class.getName());
+            this.ciShellContext = ciShellContext;
+            this.logger =
+            	(LogService) ciShellContext.getService(LogService.class.getName());
         }
         
         
         public Data[] execute() throws AlgorithmExecutionException {
-            Data[] convertedData = inData;
+            Data[] convertedData = this.inData;
             
-            // For each converter in the converter chain (refs)
-            for (int ii = 0; ii < refs.length; ii++) {
+            // For each converter in the converter chain (serviceReferences)
+            for (int ii = 0; ii < serviceReferences.length; ii++) {
                 AlgorithmFactory factory =
-                	(AlgorithmFactory) bContext.getService(refs[ii]);
+                	(AlgorithmFactory) bContext.getService(serviceReferences[ii]);
                 
                 if (factory != null) {
-                    Algorithm alg =
-                    	factory.createAlgorithm(convertedData, parameters, context);
+                    Algorithm algorithm = factory.createAlgorithm(
+                    	convertedData, this.parameters, this.ciShellContext);
                     
                     try {
-                    	convertedData = alg.execute();
+                    	convertedData = algorithm.execute();
                     } catch(AlgorithmExecutionException e) {
-                    	boolean isLastStep = (ii == refs.length - 1);
-                    	if (isLastStep && isHandler(refs[ii])) {
+                    	boolean isLastStep = (ii == serviceReferences.length - 1);
+                    	if (isLastStep && isHandler(serviceReferences[ii])) {
                     		/* If the last step of the converter chain is a
                     		 * handler and it is the first (and so only) step
-                    		 * to fail, just log a warning and return the
+                    		 * to fail, just logger a warning and return the
                     		 * un-handled data.
                     		 */
                     		String warningMessage =
                     			"Warning: Attempting to convert data without " 
                     			+ "validating the output since the validator failed " 
                     			+ "with this problem:\n    " 
-                    			+ createErrorMessage(refs[ii], e);
+                    			+ createErrorMessage(serviceReferences[ii], e);
                     		
-            				log.log(LogService.LOG_WARNING, warningMessage, e);
+            				this.logger.log(LogService.LOG_WARNING, warningMessage, e);
                     		
                     		return convertedData;
                     	} else {                    	
 	                   		throw new AlgorithmExecutionException(
-	                   				createErrorMessage(refs[ii], e), e);
+	                   			createErrorMessage(serviceReferences[ii], e), e);
                     	}
                     }
                 } else {
                     throw new AlgorithmExecutionException(
                     		"Missing subconverter: "
-                            + refs[ii].getProperty(Constants.SERVICE_PID));
+                            + serviceReferences[ii].getProperty(Constants.SERVICE_PID));
                 }
             }
             
@@ -286,7 +285,7 @@ public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProp
         		return "Problem converting data from "
         				+ prettifyDataType(inType)
         				+ " to " + prettifyDataType(outType)
-        				+ " (See the log file for more details).:\n        "
+        				+ " (See the logger file for more details).:\n        "
         				+ e.getMessage();
         	}
         	else {        	
@@ -296,7 +295,7 @@ public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProp
 			        	+ " during the necessary intermediate conversion from "
 			        	+ prettifyDataType(preProblemType) + " to "
 			        	+ prettifyDataType(postProblemType)
-			        	+ " (See the log file for more details):\n        "
+			        	+ " (See the logger file for more details):\n        "
 			        	+ e.getMessage();
         	}
         }

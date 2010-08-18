@@ -12,31 +12,29 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
 public class Converter {
+	private BundleContext bundleContext;
+	private ServiceReference serviceReference;
 	
-	private BundleContext bContext;
-	
-	private ServiceReference ref;
-	
-	public Converter(BundleContext bContext, ServiceReference ref) {
-		this.bContext = bContext;
-		this.ref = ref;
+	public Converter(BundleContext bundleContext, ServiceReference serviceReference) {
+		this.bundleContext = bundleContext;
+		this.serviceReference = serviceReference;
 	}
 	
 	public ServiceReference getServiceReference() {
-		return this.ref;
+		return this.serviceReference;
 	}
 	
-	public ServiceReference getRef() {
-		return this.ref;
+	public ServiceReference getServieReference() {
+		return this.serviceReference;
 	}
 	
 	public boolean isLossy() {
-		String conversion = (String)
-			ref.getProperty(AlgorithmProperty.CONVERSION);
+		String conversion =
+			(String) this.serviceReference.getProperty(AlgorithmProperty.CONVERSION);
 		
 		if (conversion == null) {
 			return false; 
-			//if lossiness is not defined, assume it is not lossy.
+			// If lossiness is not defined, assume it is not lossy.
 		}
 		
 		if (conversion.equals(AlgorithmProperty.LOSSY)) {
@@ -44,17 +42,17 @@ public class Converter {
 		} else if (conversion.equals(AlgorithmProperty.LOSSLESS)) {
 			return false;
 		} else {
-			//assuming lossy by default
+			// Assuming lossy by default.
 			return true;
 		}
 	}
 	
 	public String getInData() {
-		return (String) ref.getProperty(AlgorithmProperty.IN_DATA);
+		return (String) this.serviceReference.getProperty(AlgorithmProperty.IN_DATA);
 	}
 	
 	public String getOutData() {
-		return (String) ref.getProperty(AlgorithmProperty.OUT_DATA);
+		return (String) this.serviceReference.getProperty(AlgorithmProperty.OUT_DATA);
 	}
 	
 	public String getShortName() {
@@ -62,22 +60,21 @@ public class Converter {
 	}
 	
 	public String getUniqueName() {
-		return (String) this.ref.getProperty("service.pid");
+		return (String) this.serviceReference.getProperty("service.pid");
 	}
 	
 	public String toString() {
 		return getUniqueName();
 	}
 	
-	public Data[] execute(Data[] input, Hashtable parameters,
-			CIShellContext cContext) throws AlgorithmExecutionException {
-		
-		AlgorithmFactory convAlgFactory = 
-			(AlgorithmFactory) this.bContext.getService(this.ref);
-		Algorithm convAlg = convAlgFactory.createAlgorithm(input, parameters,
-				cContext);
-		
-		Data[] output = convAlg.execute();
+	public Data[] execute(
+			Data[] input, Hashtable<String, Object> parameters, CIShellContext ciShellContext)
+			throws AlgorithmExecutionException {
+
+		AlgorithmFactory converterFactory = 
+			(AlgorithmFactory) this.bundleContext.getService(this.serviceReference);
+		Algorithm converter = converterFactory.createAlgorithm(input, parameters, ciShellContext);
+		Data[] output = converter.execute();
 		
 		return output;
 	}

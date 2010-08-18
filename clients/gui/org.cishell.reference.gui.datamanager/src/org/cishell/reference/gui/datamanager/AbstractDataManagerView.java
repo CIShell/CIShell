@@ -24,6 +24,7 @@ import java.util.Set;
 import org.cishell.app.service.datamanager.DataManagerListener;
 import org.cishell.app.service.datamanager.DataManagerService;
 import org.cishell.framework.algorithm.Algorithm;
+import org.cishell.framework.algorithm.AlgorithmCanceledException;
 import org.cishell.framework.algorithm.AlgorithmExecutionException;
 import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.data.Data;
@@ -501,11 +502,14 @@ public abstract class AbstractDataManagerView
 						e.printStackTrace();
 					} else {
 						AbstractDataManagerView.this.logger = Activator.getLogService();
-						AbstractDataManagerView.this.logger.log(
-							LogService.LOG_ERROR,
-							"org.cishell.framework.algorithm.AlgorithmExecutionException",
-							e);
-						e.printStackTrace();
+
+						if (AbstractDataManagerView.this.logger != null) {
+							AbstractDataManagerView.this.logger.log(
+								LogService.LOG_ERROR,
+								"org.cishell.framework.algorithm.AlgorithmExecutionException",
+								e);
+							e.printStackTrace();
+						}
 					}
 				}
 			}
@@ -522,11 +526,17 @@ public abstract class AbstractDataManagerView
 				try {
 					algorithm.execute();
 				} catch (AlgorithmExecutionException e)  {
-					if (logger != null) {
-						logger.log(LogService.LOG_ERROR, e.getMessage(), e);
+					if (AbstractDataManagerView.this.logger != null) {
+						AbstractDataManagerView.this.logger.log(
+							LogService.LOG_ERROR, e.getMessage(), e);
 					} else {
-						logger = Activator.getLogService();
-						logger.log(LogService.LOG_ERROR, e.getMessage(), e);
+						AbstractDataManagerView.this.logger = Activator.getLogService();
+
+						// TODO: Find occurrences of this crap happening, and make it a method.
+						if (AbstractDataManagerView.this.logger != null) {
+							AbstractDataManagerView.this.logger.log(
+								LogService.LOG_ERROR, e.getMessage(), e);
+						}
 					}
 
 					e.printStackTrace();
