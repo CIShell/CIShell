@@ -26,6 +26,8 @@ import org.cishell.app.service.datamanager.DataManagerService;
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
 import org.cishell.framework.algorithm.AlgorithmCanceledException;
+import org.cishell.framework.algorithm.AlgorithmCreationCanceledException;
+import org.cishell.framework.algorithm.AlgorithmCreationFailedException;
 import org.cishell.framework.algorithm.AlgorithmExecutionException;
 import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.algorithm.AlgorithmProperty;
@@ -100,7 +102,7 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
 			}
 			
 			boolean inputIsValid = testDataValidityIfPossible(factory, data);
-			
+
 			if (!inputIsValid) {
 				return null;
 			}
@@ -108,13 +110,28 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
 			// Create algorithm parameters.
 			String metatypePID = getMetaTypeID(serviceReference);
 
-			MetaTypeProvider provider =
-				getPossiblyMutatedMetaTypeProvider(metatypePID, pid, factory);
+			// TODO: Refactor this.
+			MetaTypeProvider provider = null;
+
+			try {
+				provider = getPossiblyMutatedMetaTypeProvider(metatypePID, pid, factory);
+			} catch (AlgorithmCreationFailedException e) {
+				String format =
+					"An error occurred when creating the algorithm \"%s\" with the data you " +
+					"provided.  (Reason: %s)";
+				String logMessage = String.format(
+					format,
+					serviceReference.getProperty(AlgorithmProperty.LABEL),
+					e.getMessage());
+				log(LogService.LOG_WARNING, logMessage, e);
+
+				return null;
+			}
 			
 			Dictionary<String, Object> parameters =
 				getUserEnteredParameters(metatypePID, provider);
 
-			// Check to see if the user cancelled the operation.
+			// Check to see if the user canceled the operation.
 			if (parameters == null) {
 				return null;
 			}
@@ -184,13 +201,31 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
 			Data[] data,
 			Dictionary<String, Object> parameters,
 			CIShellContext ciContext) {
+		final String algorithmName =
+			(String) serviceReference.getProperty(AlgorithmProperty.LABEL);
 		// TODO: Call on algorithm invocation service here.
 		try {
 			return factory.createAlgorithm(data, parameters, ciContext);
+		} catch (AlgorithmCreationCanceledException e) {
+			String logMessage = String.format(
+				"The algorithm \"%s\" was canceled by the user.",
+				algorithmName,
+				e.getMessage());
+			log(LogService.LOG_WARNING, logMessage, e);
+
+			return null;
+		} catch (AlgorithmCreationFailedException e) {
+			String format = "An error occurred when creating algorithm \"%s\".  (Reason: %s)";
+			String errorMessage = String.format(format, algorithmName, e.getMessage());
+			GUIBuilderService builder =
+				(GUIBuilderService) ciContext.getService(GUIBuilderService.class.getName());
+			builder.showError("Error!", errorMessage, e);
+			log(LogService.LOG_ERROR, errorMessage, e);
+
+			return null;
 		} catch (Exception e) {
-			String errorMessage =
-				"Unexpected error occurred while creating algorithm " + " \"" +
-				serviceReference.getProperty(AlgorithmProperty.LABEL) + ".\"";
+			String errorMessage = String.format(
+				"Unexpected error occurred while creating algorithm \"%s\".", algorithmName);
 			GUIBuilderService builder =
 				(GUIBuilderService) ciContext.getService(GUIBuilderService.class.getName());
 			// TODO: This is where uncaught exceptions are displayed.
@@ -244,7 +279,7 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
 			outData = algorithm.execute();
 		} catch (AlgorithmCanceledException e) {
 			String logMessage = String.format(
-				"The algorithm: \"%s\" was canceled by the user.  (Reason: %s)",
+				"The algorithm: \"%s\" was canceled by the user.",
 				algorithmName,
 				e.getMessage());
 			log(LogService.LOG_WARNING, logMessage, e);
@@ -327,7 +362,8 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
 	}
 
 	protected MetaTypeProvider getPossiblyMutatedMetaTypeProvider(
-			String metatypePID, String pid,	AlgorithmFactory factory) {
+			String metatypePID, String pid,	AlgorithmFactory factory)
+			throws AlgorithmCreationFailedException {
 		MetaTypeProvider provider = null;
 		MetaTypeService metaTypeService = (MetaTypeService)
 			Activator.getService(MetaTypeService.class.getName());
@@ -335,18 +371,21 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
 			provider = metaTypeService.getMetaTypeInformation(serviceReference.getBundle());
 		}
 
-		if (factory instanceof ParameterMutator && provider != null) {
+		if ((factory instanceof ParameterMutator) && (provider != null)) {
 			try {
-				ObjectClassDefinition ocd =
-					provider.getObjectClassDefinition(metatypePID, null);
-				if (ocd == null) logNullOCDWarning(pid, metatypePID);
+				ObjectClassDefinition ocd = provider.getObjectClassDefinition(metatypePID, null);
+
+				if (ocd == null) {
+					logNullOCDWarning(pid, metatypePID);
+				}
+
 				ocd = ((ParameterMutator) factory).mutateParameters(data, ocd);
+
 				if (ocd != null) {
 					provider = new BasicMetaTypeProvider(ocd);
 				}
 			} catch (IllegalArgumentException e) {
-				log(LogService.LOG_DEBUG, pid + " has an invalid metatype id: "
-						+ metatypePID, e);
+				log(LogService.LOG_DEBUG, pid + " has an invalid metatype id: " + metatypePID, e);
 			}
 		}
 
