@@ -77,4 +77,18 @@ public class MapUtilities {
 
 		return values;
 	}
+
+	public static<K> Map<K, Integer> keysToCounts(Collection<K> keys) {
+		Map<K, Integer> keysToCounts = new HashMap<K, Integer>();
+
+		for (K key : keys) {
+			if (keysToCounts.containsKey(key)) {
+				keysToCounts.put(key, keysToCounts.get(key) + 1);
+			} else {
+				keysToCounts.put(key, 1);
+			}
+		}
+
+		return keysToCounts;
+	}
 }

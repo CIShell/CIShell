@@ -6,7 +6,6 @@ import java.util.Dictionary;
 import java.util.Iterator;
 
 public class CollectionUtilities {
-
 	/* Return only elements of the Collection which are mapped to true in the
 	 * Dictionary
 	 */
