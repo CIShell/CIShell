@@ -1,5 +1,6 @@
 package org.cishell.utility.swt.model.datasynchronizer;
 
+import org.cishell.utility.datastructure.datamodel.ModelDataSynchronizer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Text;
 
@@ -12,7 +13,7 @@ public class TextDataSynchronizer implements ModelDataSynchronizer<String> {
 		this.text.setText(value);
 	}
 
-	public int swtUpdateListenerCode() {
+	public int updateListenerCode() {
 		return SWT.Modify;
 	}
 
