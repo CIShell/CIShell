@@ -1,5 +1,6 @@
 package org.cishell.utility.swt.model.datasynchronizer;
 
+import org.cishell.utility.datastructure.datamodel.ModelDataSynchronizer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;
 
@@ -11,7 +12,7 @@ public class CheckBoxDataSynchronizer implements ModelDataSynchronizer<Boolean> 
 		this.checkBox.setSelection(on);
 	}
 
-	public int swtUpdateListenerCode() {
+	public int updateListenerCode() {
 		return SWT.Selection;
 	}
 

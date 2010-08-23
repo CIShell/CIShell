@@ -1,7 +1,10 @@
-package org.cishell.utility.swt.model.datasynchronizer;
+package org.cishell.utility.datastructure.datamodel;
 
+/**
+ * 
+ */
 public interface ModelDataSynchronizer<T> {
-	public int swtUpdateListenerCode();
+	public int updateListenerCode();
 	public T value();
 	public T synchronizeFromGUI();
 	public T synchronizeToGUI(T value);
