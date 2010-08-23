@@ -65,7 +65,8 @@ public class ExpandableComponentWidget<T> extends Composite {
 		return 1;
 	}
 
-	public T addComponent(int style, Map<String, Object> arguments) {
+	public T addComponent(int style, Map<String, Object> arguments)
+			throws WidgetConstructionException {
 		// TODO: Fix this terrible hack?
 		if (this.components.size() == 0) {
 			for (Label columnLabel : this.columnLabels) {
@@ -75,7 +76,12 @@ public class ExpandableComponentWidget<T> extends Composite {
 
 		final int componentCount = this.components.size();
 		T component = this.componentFactory.constructWidget(
-			this, this.scrolledAreaGrid, style, arguments, componentCount, this.uniqueComponentCount);
+			this,
+			this.scrolledAreaGrid,
+			style,
+			arguments,
+			componentCount,
+			this.uniqueComponentCount);
 		this.uniqueComponentCount++;
 
 		fixSize();

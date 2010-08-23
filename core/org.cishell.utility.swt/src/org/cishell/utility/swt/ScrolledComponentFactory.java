@@ -9,7 +9,7 @@ public interface ScrolledComponentFactory<T> {
 			int style,
 			Map<String, Object> arguments,
 			int index,
-			int uniqueIndex);
+			int uniqueIndex) throws WidgetConstructionException;
 
 	public void reindexComponent(T component, int newIndex);
 }

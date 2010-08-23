@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.cishell.utilities.MapUtilities;
+import org.cishell.utility.datastructure.datamodel.ModelDataSynchronizer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Combo;
 
@@ -11,47 +12,47 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
 // TODO: Make this so options can change on it.
-public class DropDownDataSynchronizer implements ModelDataSynchronizer<String> {
+public class DropDownDataSynchronizer<T> implements ModelDataSynchronizer<T> {
 	private Combo dropDown;
 	private BiMap<Integer, String> optionLabels;
-	private BiMap<String, String> optionValuesByLabels;
+	private BiMap<String, T> optionValuesByLabels;
 
 	public DropDownDataSynchronizer(
 			Combo dropDown,
 			int selectedIndex,
 			List<String> optionLabels,
-			Map<String, String> optionValuesByLabels) {
+			Map<String, T> optionValuesByLabels) {
 		this.dropDown = dropDown;
 
 		setOptions(optionLabels, optionValuesByLabels);
 		this.dropDown.select(selectedIndex);
 	}
 
-	public int swtUpdateListenerCode() {
+	public int updateListenerCode() {
 		return SWT.Selection;
 	}
 
-	public String value() {
+	public T value() {
 		return this.optionValuesByLabels.get(
 			this.optionLabels.get(this.dropDown.getSelectionIndex()));
 	}
 
-	public String synchronizeFromGUI() {
+	public T synchronizeFromGUI() {
 		return value();
 	}
 
-	public String synchronizeToGUI(String value) {
+	public T synchronizeToGUI(T value) {
 		String label = this.optionValuesByLabels.inverse().get(value);
 		this.dropDown.select(this.optionLabels.inverse().get(label));
 
 		return value();
 	}
 
-	public String reset(String defaultValue) {
+	public T reset(T defaultValue) {
 		return synchronizeToGUI(defaultValue);
 	}
 
-	public void setOptions(List<String> optionLabels, Map<String, String> optionValuesByLabels) {
+	public void setOptions(List<String> optionLabels, Map<String, T> optionValuesByLabels) {
 		this.optionLabels = HashBiMap.create(MapUtilities.mapIndexToValues(optionLabels));
 		this.optionValuesByLabels = HashBiMap.create(optionValuesByLabels);
 
