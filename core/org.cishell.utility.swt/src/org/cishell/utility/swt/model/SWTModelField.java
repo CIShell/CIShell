@@ -7,11 +7,10 @@ import java.util.Set;
 
 import org.cishell.utility.datastructure.datamodel.DataModel;
 import org.cishell.utility.datastructure.datamodel.ModelDataSynchronizer;
-import org.cishell.utility.datastructure.datamodel.exception.ModelValidationException;
 import org.cishell.utility.datastructure.datamodel.field.DataModelField;
 import org.cishell.utility.datastructure.datamodel.field.DataModelFieldContainer;
-import org.cishell.utility.datastructure.datamodel.field.FieldValidationAction;
-import org.cishell.utility.datastructure.datamodel.field.FieldValidationRule;
+import org.cishell.utility.datastructure.datamodel.field.validation.FieldValidationAction;
+import org.cishell.utility.datastructure.datamodel.field.validation.FieldValidator;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
@@ -23,6 +22,7 @@ public class SWTModelField<
 			DataSynchronizerType extends ModelDataSynchronizer<ValueType>>
 		implements DataModelField<ValueType> {
 	private Set<DataModelFieldContainer> containers = new HashSet<DataModelFieldContainer>();
+	private DataModel model;
 	private String name;
 	private Composite parentComponent;
 	private ValueType defaultValue;
@@ -30,18 +30,22 @@ public class SWTModelField<
 	private ValueType value;
 	private BaseGUIComponentType widget;
 	private DataSynchronizerType dataSynchronizer;
-	private Collection<FieldValidationRule<ValueType>> validators =
-		new ArrayList<FieldValidationRule<ValueType>>();
-	private Collection<FieldValidationAction<ValueType>> validationActions =
-		new ArrayList<FieldValidationAction<ValueType>>();
+	private Collection<FieldValidator<ValueType>> validators =
+		new ArrayList<FieldValidator<ValueType>>();
+	private Collection<FieldValidator<ValueType>> otherValidators =
+		new ArrayList<FieldValidator<ValueType>>();
+	private Collection<FieldValidationAction> validationActions =
+		new HashSet<FieldValidationAction>();
+	private boolean isDisposed = false;
 
 	public SWTModelField(
-			final DataModel model,
+			DataModel model,
 			String name,
 			Composite parentComponent,
 			ValueType defaultValue,
 			BaseGUIComponentType widget,
 			DataSynchronizerType dataSynchronizer) {
+		this.model = model;
 		this.name = name;
 		this.parentComponent = parentComponent;
 		this.defaultValue = defaultValue;
@@ -55,7 +59,7 @@ public class SWTModelField<
 					SWTModelField.this.previousValue = SWTModelField.this.value;
 					SWTModelField.this.value =
 						SWTModelField.this.dataSynchronizer.synchronizeFromGUI();
-					validate(model);
+					validate();
 				}
 			}
 		});
@@ -111,63 +115,74 @@ public class SWTModelField<
 		return this.value;
 	}
 
-	public void addValidationRule(
-			FieldValidationRule<ValueType> validator, boolean validateNow, DataModel model) {
+	public void addValidator(FieldValidator<ValueType> validator) {
+		validator.addFieldToValidate(this);
 		this.validators.add(validator);
-
-		if (validateNow) {
-			validate(model);
-		}
 	}
 
-	public void addValidationAction(FieldValidationAction<ValueType> validationAction) {
-		this.validationActions.add(validationAction);
+	public void addOtherValidators(Collection<FieldValidator<ValueType>> validators) {
+		this.otherValidators.addAll(validators);
 	}
 
-	public void validate(DataModel model) {
-		Collection<ModelValidationException> reasonsInvalid = attemptValidation(model);
-		performValidationActions(model, reasonsInvalid);
+	public void addValidationAction(FieldValidationAction action) {
+		this.validationActions.add(action);
 	}
 
 	public void dispose() {
+		this.isDisposed = true;
+
 		for (DataModelFieldContainer container : this.containers) {
 			container.fieldDisposed(this);
 		}
 
-		for (FieldValidationRule<ValueType> validator : this.validators) {
+		for (FieldValidator<ValueType> validator : this.validators) {
 			validator.fieldDisposed(this);
 		}
 
-		for (FieldValidationAction<ValueType> validationAction : this.validationActions) {
-			validationAction.fieldDisposed(this);
-		}
+		validate();
 	}
 
-	private Collection<ModelValidationException> attemptValidation(DataModel model) {
-		Collection<ModelValidationException> reasonsInvalid =
-			new ArrayList<ModelValidationException>();
-
-		for (FieldValidationRule<ValueType> validator : this.validators) {
-			try {
-				validator.validateField(this, model);
-			} catch (ModelValidationException e) {
-				reasonsInvalid.add(e);
-			}
-		}
-
-		return reasonsInvalid;
+	public boolean isDisposed() {
+		return this.isDisposed;
 	}
 
-	private void performValidationActions(
-			DataModel model, Collection<ModelValidationException> reasonsInvalid) {
-		if (reasonsInvalid.size() == 0) {
-			for (FieldValidationAction<ValueType> validationAction : this.validationActions) {
-				validationAction.fieldDoesValidate(this);
+	public void validate() {
+		Collection<String> errorMessages = attemptValidation(model);
+		performValidationActions(this.model, errorMessages);
+	}
+
+	private Collection<String> attemptValidation(DataModel model) {
+		Collection<String> errorMessages = attemptValidationOnValidators(this.validators, true);
+		errorMessages.addAll(attemptValidationOnValidators(this.otherValidators, false));
+
+		return errorMessages;
+	}
+
+	private void performValidationActions(DataModel model, Collection<String> errorMessages) {
+		if (errorMessages.size() == 0) {
+			for (FieldValidationAction validationAction : this.validationActions) {
+				validationAction.doesValidate();
 			}
 		} else {
-			for (FieldValidationAction<ValueType> validationAction : this.validationActions) {
-				validationAction.fieldDoesNotValidate(this, reasonsInvalid);
+			for (FieldValidationAction validationAction : this.validationActions) {
+				validationAction.doesNotValidate(errorMessages);
 			}
 		}
+	}
+
+	private Collection<String> attemptValidationOnValidators(
+			Collection<FieldValidator<ValueType>> validators, boolean update) {
+		Collection<String> errorMessages = new ArrayList<String>();
+
+		for (FieldValidator<ValueType> validator : validators) {
+			if (update && !this.isDisposed) {
+				validator.fieldUpdated(this);
+			}
+
+			Collection<String> temporaryErrorMessage = validator.runValidation(model);
+			errorMessages.addAll(temporaryErrorMessage);
+		}
+
+		return errorMessages;
 	}
 }

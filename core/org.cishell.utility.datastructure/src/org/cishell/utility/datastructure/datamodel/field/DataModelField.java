@@ -2,7 +2,8 @@ package org.cishell.utility.datastructure.datamodel.field;
 
 import java.util.Collection;
 
-import org.cishell.utility.datastructure.datamodel.DataModel;
+import org.cishell.utility.datastructure.datamodel.field.validation.FieldValidationAction;
+import org.cishell.utility.datastructure.datamodel.field.validation.FieldValidator;
 
 /**
  * DataModelFields are the meat of DataModels.
@@ -20,10 +21,15 @@ public interface DataModelField<ValueType> {
 	public ValueType setValue(ValueType value);
 	public ValueType reset();
 
-	public void addValidationRule(
-			FieldValidationRule<ValueType> validator, boolean validateNow, DataModel model);
-	public void addValidationAction(FieldValidationAction<ValueType> validationAction);
-	public void validate(DataModel model);
+	/// Add a validator to that should validate this field.
+	public void addValidator(FieldValidator<ValueType> validator);
+	/// Add validators that should be considered when performing validation actions.
+	public void addOtherValidators(Collection<FieldValidator<ValueType>> otherValidators);
+	/// Add an action to perform, given if everything validated or not.
+	public void addValidationAction(FieldValidationAction action);
 
+	/// Notify everything that has added this field that this field has been disposed. 
 	public void dispose();
+	/// Has this field been disposed?
+	public boolean isDisposed();
 }
