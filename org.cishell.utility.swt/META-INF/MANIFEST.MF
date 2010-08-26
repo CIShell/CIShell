@@ -13,6 +13,7 @@ Import-Package: com.google.common.collect,
  org.cishell.utility.datastructure.datamodel.area,
  org.cishell.utility.datastructure.datamodel.exception,
  org.cishell.utility.datastructure.datamodel.field,
+ org.cishell.utility.datastructure.datamodel.field.validation,
  org.cishell.utility.datastructure.datamodel.group,
  org.cishell.utility.datastructure.datamodel.gui
 Export-Package: org.cishell.utility.swt,
