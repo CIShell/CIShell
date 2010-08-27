@@ -1,7 +1,6 @@
 package org.cishell.utilities;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -316,14 +315,24 @@ public class StringUtilities {
 	}
 
 	public static String getNthToken(
-			String originalString, String separator, int index, boolean trim) {
-		return getAllTokens(originalString, separator, trim)[index];
+			String originalString,
+			String separator,
+			int index,
+			boolean trim,
+			boolean escapeForRegularExpression) {
+		return getAllTokens(originalString, separator, trim, escapeForRegularExpression)[index];
 	}
 
 	public static String[] getAllTokens(
-			String originalString, String separator, boolean trim) {
-		String escapedSeparator = escapeForRegularExpression(separator);
-		String[] tokens = originalString.split(escapedSeparator);
+			String originalString,
+			String separator,
+			boolean trim,
+			boolean escapeForRegularExpression) {
+		if (escapeForRegularExpression) {
+			separator = escapeForRegularExpression(separator);
+		}
+
+		String[] tokens = originalString.split(separator);
 
 		if (trim) {
 			String[] trimmedTokens = new String[tokens.length];
