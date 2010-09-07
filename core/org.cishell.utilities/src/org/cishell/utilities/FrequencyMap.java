@@ -31,7 +31,7 @@ public class FrequencyMap <E> {
 	}
 	
 	/**
-	 * Add the given key to the map and increase the frequency by 1
+	 * Add the given key to the map and increase the frequency by 1.
 	 * @param key - key to be added
 	 */
 	public void add(E key) {
@@ -62,14 +62,14 @@ public class FrequencyMap <E> {
 	}
 	
 	/**
-	 * Retrieve a set of keys stored in this map 
+	 * Retrieve a set of keys stored in this map. 
 	 */
 	public Set<E> keySet() {
 		return itemToFrequencyMap.keySet();
 	}
 	
 	/**
-	 * Get the emergence frequency for the given key
+	 * Get the emergence frequency for the given key.
 	 * @param key - item to be lookup
 	 * @return Return number of times the key exists
 	 * if lookup success. Return zero if key not exist
