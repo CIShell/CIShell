@@ -21,15 +21,17 @@ public interface DataModelField<ValueType> {
 	public ValueType setValue(ValueType value);
 	public ValueType reset();
 
-	/// Add a validator to that should validate this field.
+	/** Add a validator that should validate this field. */
 	public void addValidator(FieldValidator<ValueType> validator);
-	/// Add validators that should be considered when performing validation actions.
+	/** Add all of the specified validators as validators that validate this field. */
+	public void addValidators(Collection<FieldValidator<ValueType>> validators);
+	/** Add validators that should be considered when performing validation actions. */
 	public void addOtherValidators(Collection<FieldValidator<ValueType>> otherValidators);
-	/// Add an action to perform, given if everything validated or not.
+	/** Add an action to perform, given if everything validated or not. */
 	public void addValidationAction(FieldValidationAction action);
 
-	/// Notify everything that has added this field that this field has been disposed. 
+	/** Notify everything that has added this field that this field has been disposed. */ 
 	public void dispose();
-	/// Has this field been disposed?
+	/** Has this field been disposed? */
 	public boolean isDisposed();
 }
