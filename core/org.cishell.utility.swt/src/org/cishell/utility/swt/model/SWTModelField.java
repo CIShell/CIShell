@@ -11,6 +11,7 @@ import org.cishell.utility.datastructure.datamodel.field.DataModelField;
 import org.cishell.utility.datastructure.datamodel.field.DataModelFieldContainer;
 import org.cishell.utility.datastructure.datamodel.field.validation.FieldValidationAction;
 import org.cishell.utility.datastructure.datamodel.field.validation.FieldValidator;
+import org.cishell.utility.swt.model.field.validation.Utilities;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
@@ -118,10 +119,19 @@ public class SWTModelField<
 	public void addValidator(FieldValidator<ValueType> validator) {
 		validator.addFieldToValidate(this);
 		this.validators.add(validator);
+		// Just in case validator was added after other validators were added.
+		this.otherValidators.remove(validator);
+	}
+
+	public void addValidators(Collection<FieldValidator<ValueType>> validators) {
+		for (FieldValidator<ValueType> validator : validators) {
+			addValidator(validator);
+		}
 	}
 
 	public void addOtherValidators(Collection<FieldValidator<ValueType>> validators) {
-		this.otherValidators.addAll(validators);
+		this.otherValidators.addAll(
+			Utilities.allFieldValidatorsExcept(validators, this.validators));
 	}
 
 	public void addValidationAction(FieldValidationAction action) {
