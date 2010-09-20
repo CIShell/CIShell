@@ -57,30 +57,30 @@ public interface DataModel extends DataModelAreaContainer {
 
 	// DataModelAreaContainer methods
 
-	/// {@inheritDoc}
+	/** {@inheritDoc} */
 	public Collection<String> getAreaNames();
-	/// {@inheritDoc}
+	/** {@inheritDoc} */
 	public Collection<DataModelArea> getAreas();
-	/// {@inheritDoc}
+	/** {@inheritDoc} */
 	public DataModelArea getArea(String name);
-	/// {@inheritDoc}
+	/** {@inheritDoc} */
 	public DataModelArea createArea(String name) throws UniqueNameException;
-	/// {@inheritDoc}
+	/** {@inheritDoc} */
 	public DataModelArea createArea(String name, Object componentForArea)
 			throws ClassCastException, ModelStructureException, UniqueNameException;
-	/// {@inheritDoc}
+	/** {@inheritDoc} */
 	public void addArea(DataModelArea area)
 			throws ClassCastException, ModelStructureException, UniqueNameException;
-	/// {@inheritDoc}
+	/** {@inheritDoc} */
 	public boolean areaDisposed(String name);
-	/// {@inheritDoc}
+	/** {@inheritDoc} */
 	public boolean areaDisposed(DataModelArea area);
 
 	// Group methods
 
-	/// @return all of the group names in this DataModel.
+	/** @return all of the group names in this DataModel. */
 	public Collection<String> getGroupNames();
-	/// @return all of the groups in this DataModel.
+	/** @return all of the groups in this DataModel. */
 	public Collection<DataModelGroup> getGroups();
 	/**
 	 * Get a group by specific name.
