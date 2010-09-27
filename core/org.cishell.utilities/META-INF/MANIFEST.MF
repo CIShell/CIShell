@@ -30,6 +30,7 @@ Import-Package: com.google.common.annotations,
  prefuse.util,
  prefuse.util.collections
 Export-Package: org.cishell.utilities,
+ org.cishell.utilities.color,
  org.cishell.utilities.database,
  org.cishell.utilities.dictionary,
  org.cishell.utilities.mutateParameter,
