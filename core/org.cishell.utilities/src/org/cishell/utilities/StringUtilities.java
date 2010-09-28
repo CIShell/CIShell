@@ -1,5 +1,8 @@
 package org.cishell.utilities;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -380,4 +383,12 @@ public class StringUtilities {
 //	public static String escape(String unescaped) {
 //		return unescaped.replaceAll("\"", "\\\""
 //	}
+
+	public static String getStackTraceAsString(Throwable e) {
+		Writer writer = new StringWriter();
+		PrintWriter printWriter = new PrintWriter(writer);
+		e.printStackTrace(printWriter);
+
+		return writer.toString();
+	}
 }
