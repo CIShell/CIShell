@@ -67,12 +67,16 @@ public class MenuAdapter implements AlgorithmProperty {
     public static final String PRESERVED_SERVICE_PID = "service.pid";
     public static final String PRESERVED = "preserved";
 
+    public static final String HELP_DESK_EMAIL_ADDRESS = "nwb-helpdesk@googlegroups.com";
+
+    private String toolName;
+    private String toolTicketURL;
     private IMenuManager menuManager;
     private Shell shell;
     private BundleContext bundleContext;
     private CIShellContext ciShellContext;
-    private Map algorithmsToItems;
-    private Map itemsToParents;
+    private Map<String, Action> algorithmsToActions;
+    private Map<Action, IMenuManager> actionsToMenuManagers;
     private ContextListener contextListener;
     private IWorkbenchWindow workbenchWindow;
     private LogService logger;
@@ -85,13 +89,13 @@ public class MenuAdapter implements AlgorithmProperty {
      *  the menu_path and label but are not listed in DEFAULT_MENU_FILE_NAME will be added on to
      *  the menu.
      */
-    private Map pidsToServiceReferences;
+    private Map<String, ServiceReference> pidsToServiceReferences;
     /*
      * This is the exactly same copy of pidsToServiceReferences. 
      * Since some plug-ins could display on menu more than once, it provides a map between a pid
      *  and a serviceReference while in pidsToServiceReferences that pid has been removed. 
      */
-    private Map pidsToServiceReferencesCopy;
+    private Map<String, ServiceReference> pidsToServiceReferencesCopy;
     private Document documentObjectModel;
 
     private Runnable updateAction = new Runnable() {
@@ -103,34 +107,38 @@ public class MenuAdapter implements AlgorithmProperty {
     private Runnable stopAction = new Runnable() {
         public void run() {
             String[] algorithmKeys =
-            	(String[])MenuAdapter.this.algorithmsToItems.keySet().toArray(new String[]{});
+            	MenuAdapter.this.algorithmsToActions.keySet().toArray(new String[]{});
             
             for (int ii = 0; ii < algorithmKeys.length; ii++) {
-                Action item = (Action)algorithmsToItems.get(algorithmKeys[ii]);
-                IMenuManager targetMenu = (IMenuManager)MenuAdapter.this.itemsToParents.get(item);
+                Action item = MenuAdapter.this.algorithmsToActions.get(algorithmKeys[ii]);
+                IMenuManager targetMenu = MenuAdapter.this.actionsToMenuManagers.get(item);
                 
                 targetMenu.remove(item.getId());
-                MenuAdapter.this.algorithmsToItems.remove(algorithmKeys[ii]);
-                MenuAdapter.this.itemsToParents.remove(item);
+                MenuAdapter.this.algorithmsToActions.remove(algorithmKeys[ii]);
+                MenuAdapter.this.actionsToMenuManagers.remove(item);
             }
         }        
     };
 
     public MenuAdapter(
+    		String toolName,
+    		String toolTicketURL,
     		IMenuManager menuManager,
     		Shell shell, 
             BundleContext bundleContext,
             CIShellContext ciShellContext,
             IWorkbenchWindow workbenchWindow) {
+    	this.toolName = toolName;
+    	this.toolTicketURL = toolTicketURL;
         this.menuManager = menuManager;
         this.shell = shell;
         this.bundleContext = bundleContext;
         this.ciShellContext = ciShellContext;
         this.workbenchWindow = workbenchWindow;
-        this.algorithmsToItems = new HashMap();
-        this.itemsToParents = new HashMap();
-        this.pidsToServiceReferences = new HashMap();
-        this.pidsToServiceReferencesCopy = new HashMap();
+        this.algorithmsToActions = new HashMap<String, Action>();
+        this.actionsToMenuManagers = new HashMap<Action, IMenuManager>();
+        this.pidsToServiceReferences = new HashMap<String, ServiceReference>();
+        this.pidsToServiceReferencesCopy = new HashMap<String, ServiceReference>();
         this.logger = (LogService)this.ciShellContext.getService(LogService.class.getName());
 
         /*
@@ -244,8 +252,8 @@ public class MenuAdapter implements AlgorithmProperty {
         			continue;
         		} else {       
         			String pid = (String)serviceReferences[ii].getProperty(PRESERVED_SERVICE_PID);
-        			pidsToServiceReferences.put(pid.toLowerCase().trim(), serviceReferences[ii]);
-        			pidsToServiceReferencesCopy.put(
+        			this.pidsToServiceReferences.put(pid.toLowerCase().trim(), serviceReferences[ii]);
+        			this.pidsToServiceReferencesCopy.put(
         				pid.toLowerCase().trim(), serviceReferences[ii]);
         		}
         	}
@@ -386,8 +394,7 @@ public class MenuAdapter implements AlgorithmProperty {
 			// Check if the PID has registered in pidsToServiceReferences.
 			if (this.pidsToServiceReferencesCopy.containsKey(pid.toLowerCase().trim())){
 				ServiceReference serviceReference =
-					(ServiceReference)this.pidsToServiceReferencesCopy.get(
-						pid.toLowerCase().trim());
+					this.pidsToServiceReferencesCopy.get(pid.toLowerCase().trim());
 				this.pidsToServiceReferences.remove(pid.toLowerCase().trim());
     			AlgorithmAction action =
     				new AlgorithmAction(serviceReference, this.bundleContext, this.ciShellContext); 
@@ -414,14 +421,24 @@ public class MenuAdapter implements AlgorithmProperty {
     			}
 				
 			} else {
+				String algorithmNotFoundFormat =
+					"Oops!  %s tried to place an algorithm with the id '%s' " +
+					"on the menu, but the algorithm could not be found.";
 				String algorithmNotFoundMessage =
-					"Oops! Network Workbench tried to place an algorithm with the id '" +
-					pid +
-					"' on the menu, but the algorithm could not be found.";
-				String contactInformationMessage =
-					"If you see this error, please contact nwb-helpdesk@googlegroups.com, or " +
-					"post a ticket on our bug tracker at: " +
-					"http://cns-trac.slis.indiana.edu/trac/nwb .";
+					String.format(algorithmNotFoundFormat, this.toolName, pid);
+//				String algorithmNotFoundMessage =
+//					"Oops! Network Workbench tried to place an algorithm with the id '" +
+//					pid +
+//					"' on the menu, but the algorithm could not be found.";
+				String contactInformationFormat =
+					"If you see this error, please contact %s, " +
+					"or post a ticket on our bug tracker at: %s .";
+				String contactInformationMessage = String.format(
+					contactInformationFormat, HELP_DESK_EMAIL_ADDRESS, this.toolTicketURL);
+//				String contactInformationMessage =
+//					"If you see this error, please contact nwb-helpdesk@googlegroups.com, or " +
+//					"post a ticket on our bug tracker at: " +
+//					"http://cns-trac.slis.indiana.edu/trac/nwb .";
 				this.logger.log(LogService.LOG_DEBUG, algorithmNotFoundMessage);
 				this.logger.log(LogService.LOG_DEBUG, contactInformationMessage);
 			}
@@ -452,13 +469,17 @@ public class MenuAdapter implements AlgorithmProperty {
      */
     private void processLeftServiceBundles() {
     	if (!this.pidsToServiceReferences.isEmpty()){
-    		Object[] keys = this.pidsToServiceReferences.keySet().toArray();
-
-    		for (int ii = 0; ii < keys.length; ii++) {
-    			ServiceReference serviceReference =
-    				(ServiceReference)this.pidsToServiceReferences.get((String)keys[ii]);
+    		for (String key : this.pidsToServiceReferences.keySet()) {
+    			ServiceReference serviceReference = this.pidsToServiceReferences.get(key);
     			makeMenuItem(serviceReference);
-    		}    		
+    		}
+//    		Object[] keys = this.pidsToServiceReferences.keySet().toArray();
+//
+//    		for (int ii = 0; ii < keys.length; ii++) {
+//    			ServiceReference serviceReference =
+//    				(ServiceReference)this.pidsToServiceReferences.get((String)keys[ii]);
+//    			makeMenuItem(serviceReference);
+//    		}    		
     	}    		
     }
 
@@ -536,8 +557,8 @@ public class MenuAdapter implements AlgorithmProperty {
             targetMenu.appendToGroup(group, action);
             handleActionAccelerator(action, targetMenu, serviceReference);
             targetMenu.appendToGroup(group, new Separator());
-            algorithmsToItems.put(getItemID(serviceReference), action);
-            itemsToParents.put(action, targetMenu);
+            algorithmsToActions.put(getItemID(serviceReference), action);
+            actionsToMenuManagers.put(action, targetMenu);
             
             Display.getDefault().asyncExec(this.updateAction);
         } else {
@@ -564,7 +585,7 @@ public class MenuAdapter implements AlgorithmProperty {
     }
 
     private void updateMenuItem(ServiceReference serviceReference) {
-        Action item = (Action)this.algorithmsToItems.get(getItemID(serviceReference));
+        Action item = (Action)this.algorithmsToActions.get(getItemID(serviceReference));
         
         if (item != null) {
         	this.logger.log(
@@ -575,7 +596,7 @@ public class MenuAdapter implements AlgorithmProperty {
     
     private void removeMenuItem(ServiceReference serviceReference) {
         String path = (String)serviceReference.getProperty(MENU_PATH);
-        final Action item = (Action)this.algorithmsToItems.get(getItemID(serviceReference));
+        final Action item = this.algorithmsToActions.get(getItemID(serviceReference));
         
         if ((path != null) && (item != null)) {
             int index = path.lastIndexOf('/');
@@ -593,8 +614,8 @@ public class MenuAdapter implements AlgorithmProperty {
                 		});
                     }
 
-                    this.algorithmsToItems.remove(getItemID(serviceReference));
-                    this.itemsToParents.remove(item);
+                    this.algorithmsToActions.remove(getItemID(serviceReference));
+                    this.actionsToMenuManagers.remove(item);
                 }
             }   
         }
@@ -646,7 +667,7 @@ public class MenuAdapter implements AlgorithmProperty {
     	String shortcutString = (String)serviceReference.getProperty(SHORTCUT);
 
         if (shortcutString != null) {
-        	return action.convertAccelerator(shortcutString);
+        	return Action.convertAccelerator(shortcutString);
         } else {
         	return 0;
         }
