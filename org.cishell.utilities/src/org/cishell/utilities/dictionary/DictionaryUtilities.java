@@ -1,6 +1,7 @@
 package org.cishell.utilities.dictionary;
 
 import java.util.Dictionary;
+import java.util.Enumeration;
 import java.util.Hashtable;
 
 public class DictionaryUtilities {
@@ -28,14 +29,20 @@ public class DictionaryUtilities {
 		return newDictionary;
 	}
 
-	public static <K, V> Dictionary<K, V> copy(Dictionary<K, V> originalDictionary) {
-		Dictionary<K, V> newDictionary = new Hashtable<K, V>();
-
-		for (DictionaryEntry<K, V> originalEntry :
-				new DictionaryIterator<K, V>(originalDictionary)) {
-			newDictionary.put(originalEntry.getKey(), originalEntry.getValue());
-		}
+	/**
+	 * Uses Hashtable for the copy.
+	 */
+	public static<K, V> Dictionary<K, V> copy(Dictionary<K, V> originalDictionary) {
+		Hashtable<K, V> newDictionary = new Hashtable<K, V>();
+		putAll(newDictionary, originalDictionary);
 
 		return newDictionary;
+	}
+
+	public static<K, V> void putAll(Dictionary<K, V> target, Dictionary<K, V> source) {
+		for (Enumeration<K> keys = source.keys(); keys.hasMoreElements(); ) {
+			K key = keys.nextElement();
+			target.put(key, source.get(key));
+		}
 	}
 }
