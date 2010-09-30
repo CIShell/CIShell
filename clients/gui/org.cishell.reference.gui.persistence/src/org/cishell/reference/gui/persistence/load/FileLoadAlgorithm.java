@@ -48,7 +48,10 @@ public class FileLoadAlgorithm implements Algorithm, ProgressTrackable {
 		File file = getFileToLoadFromUser(window, display);
 		
 		if (file != null) {
-			return validateFile(window, display, file);
+			Data[] validatedFileData = validateFile(window, display, file);
+			Data[] labeledFileData = labelFileData(file, validatedFileData);
+
+			return labeledFileData;
 		} else {
 			return null;
 		}
@@ -101,13 +104,14 @@ public class FileLoadAlgorithm implements Algorithm, ProgressTrackable {
 			} else {
 				try {
 					return FileValidator.validateFile(
-							file, validator, this.progressMonitor, this.ciShellContext, this.logger);
+						file, validator, this.progressMonitor, this.ciShellContext, this.logger);
 				} catch (AlgorithmExecutionException e) {
-					if (e.getCause() != null
-							&& e.getCause() instanceof UnsupportedEncodingException) {
-						String logMessage =
-							"This file cannot be loaded; it uses the unsupported character encoding "
-							+ e.getCause().getMessage() + ".";
+					if ((e.getCause() != null)
+							&& (e.getCause() instanceof UnsupportedEncodingException)) {
+						String format =
+							"This file cannot be loaded; it uses the unsupported character " +
+							"encoding %s.";
+						String logMessage = String.format(format, e.getCause().getMessage());
 						this.logger.log(LogService.LOG_ERROR, logMessage);
 					} else {						
 						throw e;
@@ -119,11 +123,16 @@ public class FileLoadAlgorithm implements Algorithm, ProgressTrackable {
 				"The chosen file is not compatible with this format.  " +
 				"Check that your file is correctly formatted or try another validator.  " +
 				"The reason is: " + e.getMessage();
-			e.printStackTrace(); // TODO remove
 			this.logger.log(LogService.LOG_ERROR, logMessage);
 		}
 
 		return null;
+	}
+
+	private Data[] labelFileData(File file, Data[] validatedFileData) {
+		Data[] labeledFileData = PrettyLabeler.relabelWithFileName(validatedFileData, file);
+
+		return labeledFileData;
 	}
 
 	private AlgorithmFactory getValidatorFromUser(
