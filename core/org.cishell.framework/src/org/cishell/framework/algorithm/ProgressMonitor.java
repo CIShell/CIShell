@@ -19,8 +19,6 @@ package org.cishell.framework.algorithm;
  * description of current work during execution. Except for the setter methods, 
  * the methods are generally only called by the algorithm with the CIShell 
  * application providing the progress monitor implementation.
- * 
- * @author Bruce Herr (bh2@bh2.net)
  */
 public interface ProgressMonitor {
 	/**
@@ -37,7 +35,10 @@ public interface ProgressMonitor {
 		public void setCanceled(boolean value) {}
 		public void setPaused(boolean value) {}
 		public void start(int capabilities, int totalWorkUnits) {}
-		public void worked(int work) {}};
+		public void start(int capabilities, double totalWorkUnits) {}
+		public void worked(int work) {}
+		public void worked(double work) {}
+	};
 		
 	/**
 	 * Capability constant specifying that this algorithm can 
@@ -69,6 +70,7 @@ public interface ProgressMonitor {
      *                       algorithm does not provide progress information
      */
     public void start(int capabilities, int totalWorkUnits);
+    public void start(int capabilities, double totalWorkUnits);
     
     /**
      * Notifies that a certain number of units of work has been completed
@@ -77,6 +79,7 @@ public interface ProgressMonitor {
      *             
      */
     public void worked(int work);
+    public void worked(double work);
     
     /**
      * The algorithm is finished executing
