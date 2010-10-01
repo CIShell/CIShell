@@ -18,22 +18,22 @@ import org.eclipse.swt.widgets.TableItem;
  * if it is monitorable.
  */
 public class SchedulerTableItem {
-	private Algorithm algorithm;
-	private Calendar  cal;
-	private String    algorithmLabel;
+	public static final Image CHECKED_IMAGE = Activator.createImage("check.gif");
+    public static final Image UNCHECKED_IMAGE = Activator.createImage("uncheck.gif");
+    public static final Image ERROR_IMAGE = Activator.createImage("error.gif");
+
+	private String algorithmLabel;
+	private Calendar calendar;
 	
-	private TableItem   tableItem;
+	private TableItem tableItem;
 	private TableEditor tableEditor;
-	private int         progressSelection;
+	private int progressSelection;
 	private ProgressBar progressBar;
-	
-    private static Image checkedImage	= Activator.createImage("check.gif");
-    private static Image uncheckedImage	= Activator.createImage("uncheck.gif");
-    private static Image errorImage		= Activator.createImage("error.gif");
     
     private boolean encounteredError;
 
-    private String  workBeingDone;
+    @SuppressWarnings("unused")
+    private String workBeingDone;
     private boolean cancelRequested;
     private boolean pauseRequested;
     private boolean started;
@@ -49,29 +49,24 @@ public class SchedulerTableItem {
      * Initializes flags and records the current algorithm to monitor
      * 
      * @param algorithmLabel
+     * @param calendar
      * @param algorithm
-     * @param cal
      */
-    public SchedulerTableItem(String algorithmLabel, Algorithm algorithm, Calendar cal) {
-    	this.algorithm = algorithm;
-    	this.cal = cal;
-    	
-    	this.encounteredError = false;
-    	
-    	this.cancelRequested = false;
-    	this.started         = false;
-    	this.done            = false;
-    	
-    	this.isCancellable   = false;
-    	this.isPauseable     = false;
-    	this.isWorkTrackable = false;
-    	
+    public SchedulerTableItem(String algorithmLabel, Calendar calendar, Algorithm algorithm) {
     	this.algorithmLabel = algorithmLabel;
+    	this.calendar = calendar;
 
-    	
+    	this.encounteredError = false;
+    	this.cancelRequested = false;
+    	this.started = false;
+    	this.done = false;
+    	this.isCancellable = false;
+    	this.isPauseable = false;
+    	this.isWorkTrackable = false;
+
     	if (algorithm instanceof ProgressTrackable) {
-        	algorithmProgressMonitor = new AlgorithmProgressMonitor();
-        	((ProgressTrackable)algorithm).setProgressMonitor(algorithmProgressMonitor);
+        	this.algorithmProgressMonitor = new AlgorithmProgressMonitor();
+        	((ProgressTrackable)algorithm).setProgressMonitor(this.algorithmProgressMonitor);
     	}
     }
     
@@ -80,7 +75,7 @@ public class SchedulerTableItem {
      * @param request Cancel request
      */
     public void requestCancel(boolean request) {
-    	cancelRequested = request;
+    	this.cancelRequested = request;
     }
     
     /**
@@ -88,7 +83,7 @@ public class SchedulerTableItem {
      * @param request Pause request
      */
     public void requestPause(boolean request) {
-    	pauseRequested = request;
+    	this.pauseRequested = request;
     }
     
     /**
@@ -110,16 +105,17 @@ public class SchedulerTableItem {
      * @param table The parent table
      */
     public void finishTableEntry(final Table table) {
-    	done = true;
+    	this.done = true;
 
-		if (!tableItem.isDisposed()) {
+		if (!this.tableItem.isDisposed()) {
 			guiRun(new Runnable() {
 				public void run() {
-					progressBar.dispose();
-					progressBar = new ProgressBar(table, SWT.NONE);
+					SchedulerTableItem.this.progressBar.dispose();
+					SchedulerTableItem.this.progressBar = new ProgressBar(table, SWT.NONE);
 					
-					progressSelection = progressBar.getMaximum();
-					drawTableEntry(table, table.indexOf(tableItem));
+					SchedulerTableItem.this.progressSelection =
+						SchedulerTableItem.this.progressBar.getMaximum();
+					drawTableEntry(table, table.indexOf(SchedulerTableItem.this.tableItem));
 				}
 			});
 		}
@@ -133,56 +129,65 @@ public class SchedulerTableItem {
     public void moveTableEntry(final Table table, final int tblNdx) {
 		guiRun(new Runnable() {
 			public void run() {
-				progressSelection  = progressBar.getSelection();
+				SchedulerTableItem.this.progressSelection  =
+					SchedulerTableItem.this.progressBar.getSelection();
 				drawTableEntry(table, tblNdx);
 			}
 		});    	
     }
     
     /**
-     * Draws a table entry with the current state provided
-     * the parent table and index of the new entry
-     * 
-     * @param table Parent table
-     * @param tblNdx Index into the table
+     * Draws a table entry with the current state provided the parent table and index of the
+     * new entry.
      */
-    private void drawTableEntry(final Table table, final int tblNdx) {
+    private void drawTableEntry(final Table table, final int tableIndex) {
 		guiRun(new Runnable() {
 			public void run() {
-				if (tableItem != null) {
-					tableItem.dispose();
+				if (SchedulerTableItem.this.tableItem != null) {
+					SchedulerTableItem.this.tableItem.dispose();
 				}
-				tableItem = new TableItem(table, SWT.NONE, tblNdx);
+
+				SchedulerTableItem.this.tableItem = new TableItem(table, SWT.NONE, tableIndex);
 				
-				if (done) {
-					tableItem.setImage(SchedulerView.COMPLETED_COLUMN, checkedImage);
+				if (SchedulerTableItem.this.done) {
+					SchedulerTableItem.this.tableItem.setImage(
+						SchedulerView.COMPLETED_COLUMN, CHECKED_IMAGE);
 				}
-				else if (encounteredError) {
-					tableItem.setImage(SchedulerView.COMPLETED_COLUMN, errorImage);					
+				else if (SchedulerTableItem.this.encounteredError) {
+					SchedulerTableItem.this.tableItem.setImage(
+						SchedulerView.COMPLETED_COLUMN, ERROR_IMAGE);					
 				}
 				else {
-					tableItem.setImage(SchedulerView.COMPLETED_COLUMN, uncheckedImage);
+					SchedulerTableItem.this.tableItem.setImage(
+						SchedulerView.COMPLETED_COLUMN, UNCHECKED_IMAGE);
 				}
 				
-				tableItem.setText(SchedulerView.ALGORITHM_COLUMN, algorithmLabel);
+				SchedulerTableItem.this.tableItem.setText(
+					SchedulerView.ALGORITHM_COLUMN, SchedulerTableItem.this.algorithmLabel);
 				setCalendar();
 
-				if (started) {
-					if (progressBar != null)
-						progressBar.dispose();
-					if (isWorkTrackable || done) {
-						progressBar = new ProgressBar(table, SWT.NONE);
-						progressBar.setSelection(progressSelection);
+				if (SchedulerTableItem.this.started) {
+					if (SchedulerTableItem.this.progressBar != null)
+						SchedulerTableItem.this.progressBar.dispose();
+					if (SchedulerTableItem.this.isWorkTrackable || SchedulerTableItem.this.done) {
+						SchedulerTableItem.this.progressBar = new ProgressBar(table, SWT.NONE);
+						SchedulerTableItem.this.progressBar.setSelection(
+							SchedulerTableItem.this.progressSelection);
 					} else {
-						progressBar = new ProgressBar(table, SWT.INDETERMINATE);
+						SchedulerTableItem.this.progressBar =
+							new ProgressBar(table, SWT.INDETERMINATE);
 					}
 				} else {
-					progressBar = new ProgressBar(table, SWT.NONE);
+					SchedulerTableItem.this.progressBar = new ProgressBar(table, SWT.NONE);
 				}
-				tableEditor = new TableEditor(table);
-				tableEditor.grabHorizontal = tableEditor.grabVertical = true;
-				tableEditor.setEditor(progressBar, tableItem,
-						SchedulerView.PERCENT_COLUMN);
+
+				SchedulerTableItem.this.tableEditor = new TableEditor(table);
+				SchedulerTableItem.this.tableEditor.grabHorizontal = true;
+				SchedulerTableItem.this.tableEditor.grabVertical = true;
+				SchedulerTableItem.this.tableEditor.setEditor(
+					SchedulerTableItem.this.progressBar,
+					SchedulerTableItem.this.tableItem,
+					SchedulerView.PERCENT_COLUMN);
 			}
 		});    	
     }
@@ -193,10 +198,10 @@ public class SchedulerTableItem {
     private void setCalendar() {
 		guiRun(new Runnable() {
 			public void run() {
-				final String date = getDateString(cal);
-				final String time = getTimeString(cal);
-				tableItem.setText(SchedulerView.DATE_COLUMN, date);
-				tableItem.setText(SchedulerView.TIME_COLUMN, time);
+				String date = getDateString(SchedulerTableItem.this.calendar);
+				String time = getTimeString(SchedulerTableItem.this.calendar);
+				SchedulerTableItem.this.tableItem.setText(SchedulerView.DATE_COLUMN, date);
+				SchedulerTableItem.this.tableItem.setText(SchedulerView.TIME_COLUMN, time);
 			}
 		});
 	}
@@ -207,17 +212,17 @@ public class SchedulerTableItem {
      * @param table The parent table
      */
     public void algorithmStarted(Table table) {
-    	done    = false;
-    	started = true;
-    	drawTableEntry(table, table.indexOf(tableItem));
+    	this.done = false;
+    	this.started = true;
+    	drawTableEntry(table, table.indexOf(this.tableItem));
     }
     
     /**
      * Notification of rescheduling of the algorithm
-     * @param cal The rescheduled time
+     * @param calendar The rescheduled time
      */
-    public void reschedule(Calendar cal) {
-		this.cal = cal;
+    public void reschedule(Calendar calendar) {
+		this.calendar = calendar;
 		setCalendar();
 	}
 
@@ -226,8 +231,8 @@ public class SchedulerTableItem {
      * @param table Parent table
      */
     public void errorTableEntry(Table table) {
-    	encounteredError = true;
-		drawTableEntry(table, table.indexOf(tableItem));
+    	this.encounteredError = true;
+		drawTableEntry(table, table.indexOf(this.tableItem));
     }
     
     /**
@@ -237,11 +242,14 @@ public class SchedulerTableItem {
     public void refresh() {
 		guiRun(new Runnable() {
 			public void run() {
-				if (!progressBar.isDisposed()) {
-					progressBar.setSelection(progressSelection);
-					tableEditor.grabHorizontal = tableEditor.grabVertical = true;
-					tableEditor.setEditor(progressBar, tableItem,
-							SchedulerView.PERCENT_COLUMN);
+				if (!SchedulerTableItem.this.progressBar.isDisposed()) {
+					SchedulerTableItem.this.progressBar.setSelection(SchedulerTableItem.this.progressSelection);
+					SchedulerTableItem.this.tableEditor.grabHorizontal = true;
+					SchedulerTableItem.this.tableEditor.grabVertical = true;
+					SchedulerTableItem.this.tableEditor.setEditor(
+						SchedulerTableItem.this.progressBar,
+						SchedulerTableItem.this.tableItem,
+						SchedulerView.PERCENT_COLUMN);
 				}
 			}
 		});
@@ -254,8 +262,8 @@ public class SchedulerTableItem {
     public void remove() {
 		guiRun(new Runnable() {
 			public void run() {
-				progressBar.dispose();
-				tableItem.dispose();
+				SchedulerTableItem.this.progressBar.dispose();
+				SchedulerTableItem.this.tableItem.dispose();
 			}
 		});
 	}
@@ -336,8 +344,11 @@ public class SchedulerTableItem {
 	 * @return cancellable state
 	 */
     public boolean isCancellable() {
-    	if (done) return false;
-    	return isCancellable;
+    	if (this.done) {
+    		return false;
+    	}
+
+    	return this.isCancellable;
     }
     
     /**
@@ -346,8 +357,11 @@ public class SchedulerTableItem {
      * @return Pausable state
      */
     public boolean isPausable() {
-    	if (done) return false;
-    	return isPauseable;
+    	if (this.done) {
+    		return false;
+    	}
+
+    	return this.isPauseable;
     }
     
     /**
@@ -363,7 +377,7 @@ public class SchedulerTableItem {
      * @return Paused state
      */
     public boolean isPaused() {
-    	if (algorithmProgressMonitor.isPaused() && !done) {
+    	if (this.algorithmProgressMonitor.isPaused() && !this.done) {
     		return true;
     	}
     	else {
@@ -377,7 +391,7 @@ public class SchedulerTableItem {
      * @return Running state
      */
     public boolean isRunning() {
-    	if (cancelRequested) {
+    	if (this.cancelRequested) {
     		return false;
     	}
     	return true;
@@ -388,77 +402,90 @@ public class SchedulerTableItem {
      * @return Done state
      */
     public boolean isDone() {
-    	return done;
+    	return this.done;
     }
-    
 
     /**
      * Monitors an algorithm 
-     *
      */
 	private class AlgorithmProgressMonitor implements ProgressMonitor {
-		private int totalWorkUnits;
+		private double totalWorkUnits;
 
 		public void describeWork(String currentWork) {
-			workBeingDone = currentWork;
+			SchedulerTableItem.this.workBeingDone = currentWork;
 		}
 
 		public void done() {
-			done = true;
+			SchedulerTableItem.this.done = true;
 		}
 
 		public boolean isCanceled() {
-			return cancelRequested;
+			return SchedulerTableItem.this.cancelRequested;
 		}
 
 		public boolean isPaused() {
-			return pauseRequested;
+			return SchedulerTableItem.this.pauseRequested;
 		}
 
 		public void setCanceled(boolean value) {
-			cancelRequested = value;
+			SchedulerTableItem.this.cancelRequested = value;
 		}
 
 		public void setPaused(boolean value) {
-			pauseRequested  = value;
+			SchedulerTableItem.this.pauseRequested  = value;
 		}
 
 		public void start(int capabilities, int totalWorkUnits) {
-			
+			start(capabilities, (double) this.totalWorkUnits);
+		}
+
+		public void start(int capabilities, double totalWorkUnits) {
 			if ((capabilities & ProgressMonitor.CANCELLABLE) > 0){
-				isCancellable = true;
+				SchedulerTableItem.this.isCancellable = true;
 			}
-			if ((capabilities & ProgressMonitor.PAUSEABLE) > 0){
-				isPauseable = true;
+
+			if ((capabilities & ProgressMonitor.PAUSEABLE) > 0) {
+				SchedulerTableItem.this.isPauseable = true;
 			}
-			if ((capabilities & ProgressMonitor.WORK_TRACKABLE) > 0){
+
+			if ((capabilities & ProgressMonitor.WORK_TRACKABLE) > 0) {
 				refresh();
-				isWorkTrackable = true;
+				SchedulerTableItem.this.isWorkTrackable = true;
 				guiRun(new Runnable() {
 					public void run() {
-						Table table = (Table)progressBar.getParent();
-						progressBar.dispose();
-						progressBar = new ProgressBar(table, SWT.NONE);
-						progressBar.setSelection(progressBar.getMinimum());
-						tableEditor = new TableEditor(table);
-						tableEditor.grabHorizontal = tableEditor.grabVertical = true;
-						tableEditor.setEditor(progressBar, tableItem, SchedulerView.PERCENT_COLUMN);
+						Table table = (Table) progressBar.getParent();
+						SchedulerTableItem.this.progressBar.dispose();
+						SchedulerTableItem.this.progressBar = new ProgressBar(table, SWT.NONE);
+						SchedulerTableItem.this.progressBar.setSelection(progressBar.getMinimum());
+						SchedulerTableItem.this.tableEditor = new TableEditor(table);
+						SchedulerTableItem.this.tableEditor.grabHorizontal = true;
+						SchedulerTableItem.this.tableEditor.grabVertical = true;
+						SchedulerTableItem.this.tableEditor.setEditor(
+							SchedulerTableItem.this.progressBar,
+							SchedulerTableItem.this.tableItem,
+							SchedulerView.PERCENT_COLUMN);
 					}
 				});
 			}
+
 			this.totalWorkUnits = totalWorkUnits;
 		}
 
 		public void worked(final int work) {
-			// final int totalWorkUnits = this.totalWorkUnits;
+			worked((double) work);
+		}
+
+		public void worked(final double work) {
 			guiRun(new Runnable() {
 				public void run() {
-					if (!progressBar.isDisposed()) {
-						progressSelection = (int) (progressBar.getMaximum() * ((double) work / (double) totalWorkUnits));
-						// progressBar.setSelection(progress);
+					if (!SchedulerTableItem.this.progressBar.isDisposed()) {
+						SchedulerTableItem.this.progressSelection = (int) (
+							SchedulerTableItem.this.progressBar.getMaximum() *
+							(work / AlgorithmProgressMonitor.this.totalWorkUnits));
 					}
 				}
 			});
+
 			refresh();
 		}
 	}

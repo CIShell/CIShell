@@ -338,8 +338,8 @@ public class SchedulerView extends ViewPart implements SchedulerListener {
 							.getProperty(AlgorithmProperty.LABEL);
 				}
 
-				SchedulerTableItem schedulerTableItem = new SchedulerTableItem(
-						algorithmLabel, algorithm, cal);
+				SchedulerTableItem schedulerTableItem =
+					new SchedulerTableItem(algorithmLabel, cal, algorithm);
 				schedulerTableItem.initTableEntry(table, 0);
 				algorithmToGuiItemMap.put(algorithm, schedulerTableItem);
 
