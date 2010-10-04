@@ -126,7 +126,7 @@ public class FileLoadAlgorithm implements Algorithm, ProgressTrackable {
 			this.logger.log(LogService.LOG_ERROR, logMessage);
 		}
 
-		return null;
+		return new Data[0];
 	}
 
 	private Data[] labelFileData(File file, Data[] validatedFileData) {
