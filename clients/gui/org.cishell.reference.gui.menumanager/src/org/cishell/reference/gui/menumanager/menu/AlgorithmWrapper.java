@@ -31,6 +31,7 @@ import org.cishell.framework.algorithm.AlgorithmCreationFailedException;
 import org.cishell.framework.algorithm.AlgorithmExecutionException;
 import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.algorithm.AlgorithmProperty;
+import org.cishell.framework.algorithm.AllParametersMutatedOutException;
 import org.cishell.framework.algorithm.DataValidator;
 import org.cishell.framework.algorithm.ParameterMutator;
 import org.cishell.framework.algorithm.ProgressMonitor;
@@ -373,16 +374,22 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
 
 		if ((factory instanceof ParameterMutator) && (provider != null)) {
 			try {
-				ObjectClassDefinition ocd = provider.getObjectClassDefinition(metatypePID, null);
+				ObjectClassDefinition objectClassDefinition =
+					provider.getObjectClassDefinition(metatypePID, null);
 
-				if (ocd == null) {
+				if (objectClassDefinition == null) {
 					logNullOCDWarning(pid, metatypePID);
 				}
 
-				ocd = ((ParameterMutator) factory).mutateParameters(data, ocd);
+				try {
+					objectClassDefinition =
+						((ParameterMutator) factory).mutateParameters(data, objectClassDefinition);
 
-				if (ocd != null) {
-					provider = new BasicMetaTypeProvider(ocd);
+					if (objectClassDefinition != null) {
+						provider = new BasicMetaTypeProvider(objectClassDefinition);
+					}
+				} catch (AllParametersMutatedOutException e) {
+					provider = null;
 				}
 			} catch (IllegalArgumentException e) {
 				log(LogService.LOG_DEBUG, pid + " has an invalid metatype id: " + metatypePID, e);
