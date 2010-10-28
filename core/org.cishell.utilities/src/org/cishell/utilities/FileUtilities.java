@@ -33,12 +33,13 @@ public class FileUtilities {
 	 *  temporaryDirectoryPath, creating the directory if it doesn't
 	 *  already exist.
 	 */
-    private static File createTemporaryDirectory(
-    		String temporaryDirectoryPath) {
-    	return ensureDirectoryExists(
-    		temporaryDirectoryPath + File.separator + "temp");
+    public static File createTemporaryDirectory(String temporaryDirectoryPath) {
+    	String fullDirectoryPath =
+    		String.format("%s%stemp", temporaryDirectoryPath, File.separator);
+
+    	return ensureDirectoryExists(fullDirectoryPath);
     }
-    
+
     // Attempt to create a temporary file on disk whose name is passed in.
     public static File createTemporaryFile(File temporaryDirectory,
     								 	   String temporaryDirectoryPath,
@@ -282,6 +283,27 @@ public class FileUtilities {
     	
     	return temporaryFile;
     }
+
+    public static File writeEntireStreamToTemporaryFileInDirectory(
+    		InputStream input, File directory, String fileName, String fileExtension)
+    		throws IOException {
+    	File temporaryFile =
+    		createTemporaryFile(directory, directory.getAbsolutePath(), fileName, fileExtension);
+    	OutputStream output = new FileOutputStream(temporaryFile);
+		// TODO: Use READ_TEXT_FILE_BUFFER_SIZE.
+    	byte[] readCharacters = new byte[1];
+    	int readCharacterCount = input.read(readCharacters);
+    	
+    	while (readCharacterCount > 0) {
+    		output.write(readCharacters, 0, readCharacterCount);
+    		readCharacterCount = input.read(readCharacters);
+    	}
+    	
+    	output.close();
+    	input.close();
+    	
+    	return temporaryFile;
+    }
     
     public static String getFileExtension(File file) {
     	return getFileExtension(file.getAbsolutePath());
@@ -301,14 +323,14 @@ public class FileUtilities {
     	File directory = new File(directoryPath);
     	
     	if (!directory.exists()) {
-    		directory.mkdir();
+    		directory.mkdirs();
     		directory.deleteOnExit();
     	}
     	
     	return directory;
     }
     
-public static final char FILENAME_CHARACTER_REPLACEMENT = '#';
+	public static final char FILENAME_CHARACTER_REPLACEMENT = '#';
 	
 	/* Attempt to enumerate characters which cannot be used to name a file.
 	 * For our purposes, this should be as aggressive as sensible.
