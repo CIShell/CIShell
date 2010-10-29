@@ -40,7 +40,7 @@ public class ColorSchema {
 	 * index 
 	 */
 	public Color get(int index) {
-		if (index > this.totalColors) {
+		if (index >= this.totalColors) {
 			return getDefaultColor();
 		}
 		
