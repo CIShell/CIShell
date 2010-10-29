@@ -70,13 +70,15 @@ public class ColorRegistry<K> {
 	}
 	
 	/*
-	 * Return next color index
+	 * Return next color index. This will reuse the color if it out of color
 	 */
 	private int getNextIndex() {
 		int index = currentIndex;
 		
-		if (currentIndex < colorSchema.size()) {
+		if (currentIndex < colorSchema.size() - 1) {
 			currentIndex++;
+		} else {
+			currentIndex = 0;
 		}
 		return index;
 	}
