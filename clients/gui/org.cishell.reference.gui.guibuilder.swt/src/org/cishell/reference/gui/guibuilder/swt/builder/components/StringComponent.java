@@ -129,16 +129,18 @@ public class StringComponent extends AbstractComponent {
 	}
 
 	public void setValue(Object value) {
-		if(value.toString().startsWith("textarea:")) {
-			value = value.toString().substring("textarea:".length());
-		}
-		if (textField != null) {
-			textField.setText(value == null ? "" : value.toString());
-		} else if (combo != null) {
+		String valueString = emptyStringIfNull(value);
+		valueString = fixTextFieldPrefix("textarea:", valueString);
+		valueString = fixTextFieldPrefix("file:", valueString);
+        valueString = fixTextFieldPrefix("directory:", valueString);
 
+		if (textField != null) {
+			textField.setText(valueString);
+		} else if (combo != null) {
 			int setComboToIndex = -1;
+
 			for (int i = 0; i < optionValues.length; i++) {
-				if (value.equals(optionValues[i])) {
+				if (valueString.equals(optionValues[i])) {
 					setComboToIndex = i;
 				}
 			}
@@ -146,9 +148,31 @@ public class StringComponent extends AbstractComponent {
 			if (setComboToIndex != -1) {
 				combo.select(setComboToIndex);
 			} else {
-				System.err.println("Attempted to set combo box to a value " +
-				"that didn't exist inside the combo box.");
+				/* TODO: Log this (or do something with it besides printint it to a place most
+				 * users won't see it)?
+				 */
+				String warningMessage =
+					"Attempted to set combo box to a value that didn't exist inside the " +
+					"combo box.";
+				System.err.println(warningMessage);
 			}
 		}
 	}
+
+	// TODO: Use the CIShell Utilities version, but only when that's been all refactor and stuff.
+	private String emptyStringIfNull(Object value) {
+		if (value == null) {
+			return "";
+		} else {
+			return value.toString();
+		}
+	}
+
+	private String fixTextFieldPrefix(String prefix, String value) {
+        if (value.startsWith(prefix)) {
+        	return value.substring(prefix.length());
+        } else {
+        	return value;
+        }
+    }
 }
