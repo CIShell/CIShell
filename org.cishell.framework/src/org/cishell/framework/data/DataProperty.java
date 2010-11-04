@@ -93,4 +93,7 @@ public interface DataProperty {
     
     /** Says this data model is a 'model' object */
     public static String MODEL_TYPE = "Model";
+
+    /** Says this data model is an 'R instance' object */
+    public static String R_INSTANCE_TYPE = "R Instance";
 }
