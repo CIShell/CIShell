@@ -44,6 +44,7 @@ public class DataGUIItem {
     private Image rasterImageIcon;
     private Image vectorImageIcon;
     private Image modelIcon;
+    private Image rIcon;
     
     private Map typeToImageMapping;
     
@@ -75,6 +76,7 @@ public class DataGUIItem {
         rasterImageIcon = getImage("raster_image.jpg", this.brandPluginID);
         vectorImageIcon = getImage("vector_image.jpg", this.brandPluginID);
         modelIcon       = getImage("model.jpg", this.brandPluginID);
+        rIcon = getImage("r.png", this.brandPluginID);
 
         typeToImageMapping = new HashMap();
         registerImage(DataProperty.OTHER_TYPE, unknownIcon);
@@ -96,6 +98,7 @@ public class DataGUIItem {
         registerImage(DataProperty.RASTER_IMAGE_TYPE, rasterImageIcon);
         registerImage(DataProperty.VECTOR_IMAGE_TYPE, vectorImageIcon);
         registerImage(DataProperty.MODEL_TYPE, modelIcon);
+        registerImage(DataProperty.R_INSTANCE_TYPE, rIcon);
     }
 
     /**
