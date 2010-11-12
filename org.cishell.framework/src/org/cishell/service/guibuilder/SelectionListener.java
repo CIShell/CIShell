@@ -28,7 +28,7 @@ public interface SelectionListener {
 	 * 
 	 * @param valuesEntered The data the user entered
 	 */
-    public void hitOk(Dictionary valuesEntered);
+    public void hitOk(Dictionary<String, Object> valuesEntered);
     
     /**
      * Notification that the user cancelled the operation
