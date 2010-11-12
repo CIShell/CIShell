@@ -14,7 +14,6 @@
 package org.cishell.reference.gui.guibuilder.swt.builder;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 import org.eclipse.swt.widgets.Composite;
@@ -26,51 +25,53 @@ import org.osgi.service.metatype.AttributeDefinition;
  * @author Bruce Herr (bh2@bh2.net)
  */
 public abstract class AbstractComponent implements GUIComponent {
-    protected AttributeDefinition attr;
+    protected AttributeDefinition attribute;
     protected boolean drawsLabel;
-    protected int numColumns;
-    protected Set listeners;
+    protected int columnCount;
+    protected Set<UpdateListener> listeners;
 
     public abstract void setValue(Object value);
     public abstract Object getValue();
     public abstract String validate();
     public abstract Control createGUI(Composite parent, int style);
     
-    public AbstractComponent(boolean drawsLabel, int numColumns) {
+    public AbstractComponent(boolean drawsLabel, int columnCount) {
         this.drawsLabel = drawsLabel;
-        this.numColumns = numColumns;
-        this.listeners = new HashSet();
+        this.columnCount = columnCount;
+        this.listeners = new HashSet<UpdateListener>();
     }
     
     public AttributeDefinition getAttributeDefinition() {
-        if (attr == null) {
+        if (this.attribute == null) {
             throw new IllegalStateException("AttributeDefinition has not been set");
         }
         
-        return attr;
+        return this.attribute;
     }
 
-    public void setAttributeDefinition(AttributeDefinition attr) {
-        this.attr = attr;
+    public void setAttributeDefinition(AttributeDefinition attribute) {
+        this.attribute = attribute;
     }
+
     public boolean drawsLabel() {
-        return drawsLabel;
+        return this.drawsLabel;
     }
+
     public int getColumns() {
-        return numColumns;
+        return this.columnCount;
     }
     
     protected void update() {
-        for (Iterator i=listeners.iterator(); i.hasNext(); ) {
-            ((UpdateListener) i.next()).componentUpdated(this);
+    	for (UpdateListener listener : this.listeners) {
+            listener.componentUpdated(this);
         }
     }
     
     public void addUpdateListener(UpdateListener listener) {
-        listeners.add(listener);
+        this.listeners.add(listener);
     }
 
     public void removeUpdateListener(UpdateListener listener) {
-        listeners.remove(listener);
+        this.listeners.remove(listener);
     }
 }

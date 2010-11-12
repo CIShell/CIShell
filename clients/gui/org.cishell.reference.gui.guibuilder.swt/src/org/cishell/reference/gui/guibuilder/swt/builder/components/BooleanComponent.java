@@ -32,18 +32,18 @@ public class BooleanComponent extends AbstractComponent {
     public Control createGUI(Composite parent, int style) {
         checkbox = new Button(parent, SWT.CHECK);
         
-        GridData gridData = new GridData(SWT.LEFT,SWT.CENTER,false,false);
+        GridData gridData = new GridData(SWT.LEFT, SWT.CENTER, false, false);
         gridData.horizontalSpan = MAX_SPAN;
         checkbox.setLayoutData(gridData);
 
-        String label = attr.getName();
+        String label = attribute.getName();
         if(label != null)
             checkbox.setText(label);
         else    
             checkbox.setText("");
 
         checkbox.addSelectionListener(new SelectionAdapter() {
-            public void widgetSelected(SelectionEvent e) {                    
+            public void widgetSelected(SelectionEvent event) {                    
                 update();
             }});
         
@@ -51,11 +51,11 @@ public class BooleanComponent extends AbstractComponent {
     }
 
     public Object getValue() {
-        return checkbox.getSelection() ? Boolean.TRUE : Boolean.FALSE;
+    	return Boolean.valueOf(this.checkbox.getSelection());
     }
 
     public void setValue(Object value) {
-        if (value instanceof Boolean && value != null) {
+        if ((value instanceof Boolean) && (value != null)) {
             checkbox.setSelection(((Boolean) value).booleanValue());
         } else {
             checkbox.setSelection(false);
@@ -63,6 +63,6 @@ public class BooleanComponent extends AbstractComponent {
     }
 
     public String validate() {
-        return attr.validate(""+checkbox.getSelection());
+        return attribute.validate("" + checkbox.getSelection());
     }
 }

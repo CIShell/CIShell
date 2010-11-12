@@ -54,7 +54,7 @@ public class MultiValuedComponent extends AbstractComponent {
     }
     
     protected synchronized void addComponent(int position) {
-        GUIComponent component = ComponentProvider.getInstance().createBasicComponent(attr);
+        GUIComponent component = ComponentProvider.getInstance().createBasicComponent(attribute);
         Control control = component.createGUI(panel, style);
         
         

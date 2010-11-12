@@ -50,15 +50,14 @@ public class StringComponent extends AbstractComponent {
 	}
 
 	public Control createGUI(Composite parent, int style) {
-
 		GridData gd = new GridData(SWT.FILL,SWT.CENTER,true,true);
 		gd.horizontalSpan = MAX_SPAN-1;
 		gd.minimumWidth = 100;
-		optionValues = attr.getOptionValues();
+		optionValues = attribute.getOptionValues();
 		if(optionValues != null) {
 			combo = new Combo(parent, style | SWT.DROP_DOWN | SWT.READ_ONLY);
 
-			String[] optionLabels = attr.getOptionLabels();
+			String[] optionLabels = attribute.getOptionLabels();
 			if(optionLabels == null) {
 				combo.setItems(optionValues);
 			} else {
@@ -78,18 +77,20 @@ public class StringComponent extends AbstractComponent {
 			return combo;
 		} else {
 			int flags;
-			if(multiline) {
+
+			if (multiline) {
 				flags = style | SWT.BORDER | SWT.MULTI | SWT.V_SCROLL;
 				gd.minimumHeight = 100;
 				gd.minimumWidth = 250;
 			} else {
 				flags = style | SWT.BORDER;
 			}
+
 			textField = new Text(parent, flags);
 			textField.setLayoutData(gd);
 
 			textField.addModifyListener(new ModifyListener() {
-				public void modifyText(ModifyEvent e) {
+				public void modifyText(ModifyEvent event) {
 					update();
 				}
 			}); 
@@ -101,9 +102,9 @@ public class StringComponent extends AbstractComponent {
 	public Object getValue() {
 		Object value;
 		if(combo == null) {
-			value = StringConverter.getInstance().stringToObject(attr, textField.getText());
+			value = StringConverter.getInstance().stringToObject(attribute, textField.getText());
 		} else {
-			value = StringConverter.getInstance().stringToObject(attr, getListValue());
+			value = StringConverter.getInstance().stringToObject(attribute, getListValue());
 		}
 
 		return value;
@@ -122,9 +123,9 @@ public class StringComponent extends AbstractComponent {
 			return "Invalid basic value";
 		}
 		if(combo == null) {
-			return attr.validate(textField.getText());
+			return attribute.validate(textField.getText());
 		} else {
-			return attr.validate(getListValue());
+			return attribute.validate(getListValue());
 		}
 	}
 
@@ -151,10 +152,10 @@ public class StringComponent extends AbstractComponent {
 				/* TODO: Log this (or do something with it besides printint it to a place most
 				 * users won't see it)?
 				 */
-				String warningMessage =
+				/*String warningMessage =
 					"Attempted to set combo box to a value that didn't exist inside the " +
 					"combo box.";
-				System.err.println(warningMessage);
+				System.err.println(warningMessage);*/
 			}
 		}
 	}
