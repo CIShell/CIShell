@@ -16,7 +16,6 @@ package org.cishell.reference.gui.guibuilder.swt;
 import java.util.Dictionary;
 import java.util.HashSet;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.Set;
 
 import org.cishell.reference.gui.guibuilder.swt.builder.ComponentProvider;
@@ -40,53 +39,50 @@ import org.osgi.service.metatype.ObjectClassDefinition;
  * @author Bruce Herr (bh2@bh2.net)
  */
 public class SWTGuiComposite implements UpdateListener {
-    private ObjectClassDefinition ocd;
-    private Dictionary idToComponentMap;
-    private Dictionary enteredResponses;
-    protected Set listeners;
+    private ObjectClassDefinition objectClassDefinition;
+    private Dictionary<String, GUIComponent> idToComponentMap;
+    private Dictionary<String, Object> enteredResponses;
+    protected Set<UpdateListener> updateListeners;
     
     private Composite parent;
     private Composite parameterArea;
-    private ScrolledComposite scroll;
-    private int style;
+    private ScrolledComposite scrollingArea;
 
-    public SWTGuiComposite(Composite parent, int style, 
-            String id, MetaTypeProvider provider) {
+    public SWTGuiComposite(Composite parent, int style, String id, MetaTypeProvider provider) {
         if (provider == null) {
             throw new IllegalArgumentException("Null MetaTypeProvider given");
         }
         
-        this.idToComponentMap = new Hashtable();
-        this.ocd = provider.getObjectClassDefinition(id, null);
+        this.idToComponentMap = new Hashtable<String, GUIComponent>();
+        this.objectClassDefinition = provider.getObjectClassDefinition(id, null);
         this.parent = parent;
-        this.style = style;
-        this.listeners = new HashSet();
-        this.enteredResponses = new Hashtable();
+        this.updateListeners = new HashSet<UpdateListener>();
+        this.enteredResponses = new Hashtable<String, Object>();
         
         setupGUI();
-        
-        AttributeDefinition[] attrs = ocd.getAttributeDefinitions(ObjectClassDefinition.ALL);
-        for (int i=0; i < attrs.length; i++) {
-            GUIComponent component = ComponentProvider.getInstance().createComponent(attrs[i]);
-            
-            component.setAttributeDefinition(attrs[i]);
-            component.createGUI(parameterArea, style);
-            idToComponentMap.put(attrs[i].getID(), component);
+
+        for (AttributeDefinition attribute :
+        		this.objectClassDefinition.getAttributeDefinitions(ObjectClassDefinition.ALL)) {
+            GUIComponent component = ComponentProvider.getInstance().createComponent(attribute);
+
+            component.setAttributeDefinition(attribute);
+            component.createGUI(this.parameterArea, style);
+            this.idToComponentMap.put(attribute.getID(), component);
             component.addUpdateListener(this);
             
             Object value = component.getValue();
             String valid = component.validate();
             
-            if (value != null && (valid == null || valid.length() == 0)) {
-                enteredResponses.put(component.getAttributeDefinition().getID(), value);    
+            if ((value != null) && ((valid == null) || (valid.length() == 0))) {
+                this.enteredResponses.put(component.getAttributeDefinition().getID(), value);    
             }
         }
         
-        setScrollDimensions(scroll, parameterArea);
+        setScrollDimensions(this.scrollingArea, this.parameterArea);
         
-        parameterArea.addDisposeListener(new DisposeListener() {
-            public void widgetDisposed(DisposeEvent e) {
-                enteredResponses = getEnteredResponses();
+        this.parameterArea.addDisposeListener(new DisposeListener() {
+            public void widgetDisposed(DisposeEvent event) {
+                SWTGuiComposite.this.enteredResponses = getEnteredResponses();
             }});
     }
 
@@ -97,17 +93,17 @@ public class SWTGuiComposite implements UpdateListener {
 	}
     
     private void setupGUI() {
-        scroll = new ScrolledComposite(parent, SWT.H_SCROLL | SWT.V_SCROLL);
-        scroll.setLayout(new GridLayout(1, true));
-        scroll.setExpandHorizontal(true);
-        scroll.setExpandVertical(true);
-        scroll.setAlwaysShowScrollBars(false);
+        this.scrollingArea = new ScrolledComposite(this.parent, SWT.H_SCROLL | SWT.V_SCROLL);
+        this.scrollingArea.setLayout(new GridLayout(1, true));
+        this.scrollingArea.setExpandHorizontal(true);
+        this.scrollingArea.setExpandVertical(true);
+        this.scrollingArea.setAlwaysShowScrollBars(false);
         
-        parameterArea = new Composite(scroll, SWT.NONE);
-        parameterArea.setLayout(new GridLayout(GUIComponent.MAX_SPAN+1,false));
+        this.parameterArea = new Composite(scrollingArea, SWT.NONE);
+        this.parameterArea.setLayout(new GridLayout(GUIComponent.MAX_SPAN + 1, false));
         
-        GridData gd = new GridData(SWT.FILL,SWT.FILL,true,true);
-        parameterArea.setLayoutData(gd);
+        GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
+        this.parameterArea.setLayoutData(gridData);
         
         GridData userData = new GridData();
         userData.grabExcessVerticalSpace = true;
@@ -115,23 +111,28 @@ public class SWTGuiComposite implements UpdateListener {
         userData.verticalAlignment = SWT.FILL;
         userData.horizontalAlignment = SWT.FILL;
         
-        scroll.setLayoutData(userData);
-        scroll.setContent(parameterArea);   
+        this.scrollingArea.setLayoutData(userData);
+        this.scrollingArea.setContent(this.parameterArea);   
     }
     
     
     public ObjectClassDefinition getObjectClassDefinition() {
-        return ocd;
+        return this.objectClassDefinition;
     }
     
     public Object getResponse(String id) {
-        GUIComponent component = (GUIComponent) idToComponentMap.get(id);
-        
-        return component == null ? null : component.getValue();
+        GUIComponent component = this.idToComponentMap.get(id);
+
+        if (component != null) {
+        	return component.getValue();
+        } else {
+        	return null;
+        }
+//        return component == null ? null : component.getValue();
     }
     
-    public Dictionary getEnteredResponses() {
-        return enteredResponses;
+    public Dictionary<String, Object> getEnteredResponses() {
+        return this.enteredResponses;
     }
     
     /**
@@ -139,7 +140,7 @@ public class SWTGuiComposite implements UpdateListener {
      * @return the shell
      */
     public Shell getShell() {
-        return parent.getShell();
+        return this.parent.getShell();
     }
 
     /**
@@ -147,22 +148,22 @@ public class SWTGuiComposite implements UpdateListener {
      * @return the composite
      */
     public Composite getUserArea() {        
-        return parameterArea;
+        return this.parameterArea;
     }
     
     public Composite getComposite() {
-        return scroll;
+        return this.scrollingArea;
     }
     
     public String validate() {
         String totalValid = "";
-        
-        AttributeDefinition[] attrs = ocd.getAttributeDefinitions(ObjectClassDefinition.REQUIRED);
-        
-        for (int i=0; i < attrs.length; i++) {
-            GUIComponent component = (GUIComponent) idToComponentMap.get(attrs[i].getID());
+
+        for (AttributeDefinition attribute : this.objectClassDefinition.getAttributeDefinitions(
+        		ObjectClassDefinition.REQUIRED)) {
+            GUIComponent component = this.idToComponentMap.get(attribute.getID());
             String valid = component.validate();
-            if (valid != null && valid.length() > 0) {
+
+            if ((valid != null) && (valid.length() > 0)) {
                 totalValid += "\"" + valid + "\"; ";
             }
         }
@@ -174,22 +175,22 @@ public class SWTGuiComposite implements UpdateListener {
         Object value = component.getValue();
         String valid = component.validate();
         
-        if (value != null && (valid == null || valid.length() == 0)) {
-            enteredResponses.put(component.getAttributeDefinition().getID(), value);    
+        if ((value != null) && ((valid == null) || (valid.length() == 0))) {
+            this.enteredResponses.put(component.getAttributeDefinition().getID(), value);    
         } else {
-            enteredResponses.remove(component.getAttributeDefinition().getID());
+            this.enteredResponses.remove(component.getAttributeDefinition().getID());
         }
-        
-        for (Iterator i=listeners.iterator(); i.hasNext(); ) {
-            ((UpdateListener) i.next()).componentUpdated(component);
+
+        for (UpdateListener listener : this.updateListeners) {
+            listener.componentUpdated(component);
         }
     }
     
     public void addUpdateListener(UpdateListener listener) {
-        listeners.add(listener);
+        this.updateListeners.add(listener);
     }
 
     public void removeUpdateListener(UpdateListener listener) {
-        listeners.remove(listener);
+        this.updateListeners.remove(listener);
     }
 }

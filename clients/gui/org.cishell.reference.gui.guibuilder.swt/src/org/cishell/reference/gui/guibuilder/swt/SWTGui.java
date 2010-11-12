@@ -37,10 +37,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.osgi.service.metatype.MetaTypeProvider;
 import org.osgi.service.metatype.ObjectClassDefinition;
 
-/**
- * 
- * @author Bruce Herr (bh2@bh2.net)
- */
 public class SWTGui implements GUI, UpdateListener {    
 	private static final int MAXIMUM_INITIAL_DIALOGUE_HEIGHT = 500;
 
@@ -53,8 +49,7 @@ public class SWTGui implements GUI, UpdateListener {
     
     private Button okButton;
 
-    public SWTGui(final Shell shell, int style, 
-            String id, MetaTypeProvider provider) {
+    public SWTGui(final Shell shell, int style, String id, MetaTypeProvider provider) {
         this.shell = shell;
         
         if (provider == null) {
@@ -62,20 +57,18 @@ public class SWTGui implements GUI, UpdateListener {
         }
         
         ObjectClassDefinition ocd = provider.getObjectClassDefinition(id, null);
-        shell.setText(ocd.getName());
-        
-        
-        
+        this.shell.setText(ocd.getName());
+
         GridLayout gridLayout = new GridLayout();
         gridLayout.numColumns = 1;
-        shell.setLayout(gridLayout);
+        this.shell.setLayout(gridLayout);
 
-        Font defaultFont = new Font(shell.getDisplay(), "SanSerif", 8, SWT.NONE);
+        Font defaultFont = new Font(this.shell.getDisplay(), "SanSerif", 8, SWT.NONE);
         
         //stuff to display a message
         String message = ocd.getDescription();
         if(message != null && !message.equals("")){
-            Label msg = new Label(shell, SWT.WRAP);
+            Label msg = new Label(this.shell, SWT.WRAP);
             msg.setText(message);
             msg.pack(true);
             GridData labelData = new GridData();
@@ -88,11 +81,11 @@ public class SWTGui implements GUI, UpdateListener {
         }
 
         //set up the user area where the main GUI will be set up using Parameters
-        composite = new SWTGuiComposite(shell, style, id, provider);
+        composite = new SWTGuiComposite(this.shell, style, id, provider);
         composite.addUpdateListener(this);
         
         //the group w/ ok and cancel
-        Composite buttonsGroup = new Composite(shell, SWT.NONE);
+        Composite buttonsGroup = new Composite(this.shell, SWT.NONE);
         FillLayout rowLayout = new FillLayout();
         rowLayout.spacing = 5;
         buttonsGroup.setLayout(rowLayout);
@@ -103,11 +96,11 @@ public class SWTGui implements GUI, UpdateListener {
         gridData.grabExcessHorizontalSpace = false;
         buttonsGroup.setLayoutData(gridData);
 
-        okButton = new Button(buttonsGroup, SWT.PUSH);
-        okButton.setText("OK");
-        okButton.setSize(40, 20);
-        okButton.setFont(defaultFont);
-        okButton.addSelectionListener(new SelectionAdapter() {
+        this.okButton = new Button(buttonsGroup, SWT.PUSH);
+        this.okButton.setText("OK");
+        this.okButton.setSize(40, 20);
+        this.okButton.setFont(defaultFont);
+        this.okButton.addSelectionListener(new SelectionAdapter() {
             public void widgetSelected(SelectionEvent e) {
                 hitOk = true;
                 close();
@@ -129,14 +122,14 @@ public class SWTGui implements GUI, UpdateListener {
             });
 
         
-        shell.addDisposeListener(new DisposeListener() {
+        this.shell.addDisposeListener(new DisposeListener() {
             public void widgetDisposed(DisposeEvent e) {
                 if (!hitOk && listener != null) {
                     listener.cancelled();
                 }
             }});
         
-        shell.setDefaultButton(okButton);
+        this.shell.setDefaultButton(this.okButton);
         
         validate();
     }
@@ -145,10 +138,10 @@ public class SWTGui implements GUI, UpdateListener {
      * @see org.cishell.service.guibuilder.GUI#close()
      */
     public void close() {
-        shell.getDisplay().syncExec(new Runnable() {
+        this.shell.getDisplay().syncExec(new Runnable() {
             public void run() {
-                shell.close();
-                shell.dispose();
+                SWTGui.this.shell.close();
+                SWTGui.this.shell.dispose();
             }});
     }
 
@@ -156,18 +149,18 @@ public class SWTGui implements GUI, UpdateListener {
      * @see org.cishell.service.guibuilder.GUI#isClosed()
      */
     public boolean isClosed() {
-        return shell.isDisposed();
+        return this.shell.isDisposed();
     }
 
     /**
      * @see org.cishell.service.guibuilder.GUI#open()
      */
     public void open() {
-        shell.getDisplay().syncExec(new Runnable() {
+        this.shell.getDisplay().syncExec(new Runnable() {
             public void run() {
-                shell.pack();
-                resizeShell(shell);
-                shell.open();
+                SWTGui.this.shell.pack();
+                resizeShell(SWTGui.this.shell);
+                SWTGui.this.shell.open();
             }
 
 			private void resizeShell(Shell shell) {
@@ -183,7 +176,7 @@ public class SWTGui implements GUI, UpdateListener {
     /**
      * @see org.cishell.service.guibuilder.GUI#openAndWait()
      */
-    public Dictionary openAndWait() {
+    public Dictionary<String, Object> openAndWait() {
         open();
         final Display display = shell.getDisplay();
         
@@ -201,11 +194,11 @@ public class SWTGui implements GUI, UpdateListener {
     }
     
     private static class OpenAndWaitListener implements SelectionListener {
-        Dictionary valuesEntered = null;
+        Dictionary<String, Object> valuesEntered = null;
 
         public void cancelled() {}
 
-        public void hitOk(Dictionary valuesEntered) {
+        public void hitOk(Dictionary<String, Object> valuesEntered) {
             this.valuesEntered = valuesEntered;
         }
     }
@@ -220,11 +213,11 @@ public class SWTGui implements GUI, UpdateListener {
     public String validate() {
         String valid = composite.validate();
         
-        //if valid is a string then the string is the error message
-        if (valid != null && valid.length() > 0) {
-            okButton.setEnabled(false);
+        // If valid is a string then the string is the error message.
+        if ((valid != null) && (valid.length() > 0)) {
+            this.okButton.setEnabled(false);
         } else {
-            okButton.setEnabled(true);
+            this.okButton.setEnabled(true);
         }
         
         return valid;

@@ -50,20 +50,22 @@ public class LabelingComponent extends AbstractComponent implements UpdateListen
 		setAttributeDefinition(childComponent.getAttributeDefinition());
 
 		if (!childComponent.drawsLabel()) {
-			numColumns++;
+			columnCount++;
 		}
 
-		String description = attr.getDescription();
-		if (description != null && description.length() > 0) {
-			numColumns++;
+		String description = attribute.getDescription();
+
+		if ((description != null) && (description.length() > 0)) {
+			columnCount++;
 		}
+
 		childComponent.addUpdateListener(this);
 	}
 
 	public Control createGUI(Composite parent, int style) {
 		if (drawsLabel && !childComponent.drawsLabel()) {
 
-			String labelText = attr.getName();
+			String labelText = attribute.getName();
 			if (labelText == null) {
 				labelText = "";
 			}
@@ -81,7 +83,6 @@ public class LabelingComponent extends AbstractComponent implements UpdateListen
 	}
 
 	private void createAndAddDescriptionButton(Control control, Composite parent) {
-
 		/*
 		 * Create the description button, and add it to the parent.
 		 * */
@@ -116,13 +117,80 @@ public class LabelingComponent extends AbstractComponent implements UpdateListen
 		descriptionButton.addSelectionListener(listener);
 	}
 
+
+	/**
+	 * Sets the location for a hovering shell.
+	 * 
+	 * @param descriptionShell
+	 *            the object that is to hover
+	 * @param position
+	 *            the position of a widget to hover over
+	 */
+	private void setHoverLocation(Shell descriptionShell, Point position) {
+		Rectangle displayBounds = descriptionShell.getDisplay().getBounds();
+		Rectangle shellBounds = descriptionShell.getBounds();
+		shellBounds.x = Math.max(Math.min(position.x
+				+ DESCRIPTION_SHELL_LEFT_MARGIN, displayBounds.width
+				- shellBounds.width), 0);
+
+		shellBounds.y = Math.max(Math.min(position.y, displayBounds.height
+				- shellBounds.height), 0);
+		descriptionShell.setBounds(shellBounds);
+	}
+
+	protected void setDefaultValue() {
+		String[] defaults = attribute.getDefaultValue();
+
+		if ((defaults != null) && (defaults.length > 0)) {
+			Object value = StringConverter.getInstance().stringToObject(attribute, defaults[0]);
+			setValue(value);
+		}
+	}
+
+	public Object getValue() {
+		return childComponent.getValue();
+	}
+
+	public void setValue(Object value) {
+		childComponent.setValue(value);
+	}
+
+	public String validate() {
+		String valid = childComponent.validate();
+
+		// If valid is a string then the string is the error message.
+		if ((valid != null) && (valid.length() > 0)) {
+			label.setForeground(ERROR_COLOR);
+		} else {
+			label.setForeground(null);
+		}
+
+		return valid;
+	}
+
+	public void componentUpdated(GUIComponent component) {
+		if (!childComponent.drawsLabel()) {
+			validate();
+		}
+
+		update();
+	}
+
+	private String getDescriptionText() {
+		String descriptionText = attribute.getDescription();
+		if (descriptionText == null || descriptionText.length() == 0) {
+			descriptionText = DEFAULT_DESCRIPTION_TEXT;
+		}
+
+		return descriptionText;
+	}
+
 	/*
 	 * Adds selection listener to the button. Whenever a button is pressed it triggers
 	 * the button selected event, which causes the creation of a new Description hover.
 	 * Once a button is unselected it deletes the Description hover. 
 	 * */
 	class DescriptionButtonListener implements SelectionListener {
-
 		private Shell descriptionShell = null;
 		private String descText;
 
@@ -180,7 +248,6 @@ public class LabelingComponent extends AbstractComponent implements UpdateListen
 			}
 		}
 
-		
 		private Shell createDescriptionShell(final String descText,
 				Button descriptionButton) {
 			Shell descriptionShell = new Shell(descriptionButton.getShell(), SWT.NONE);
@@ -232,71 +299,4 @@ public class LabelingComponent extends AbstractComponent implements UpdateListen
 			}
 		}
 	}
-
-	/**
-	 * Sets the location for a hovering shell.
-	 * 
-	 * @param descriptionShell
-	 *            the object that is to hover
-	 * @param position
-	 *            the position of a widget to hover over
-	 */
-	private void setHoverLocation(Shell descriptionShell, Point position) {
-		Rectangle displayBounds = descriptionShell.getDisplay().getBounds();
-		Rectangle shellBounds = descriptionShell.getBounds();
-		shellBounds.x = Math.max(Math.min(position.x
-				+ DESCRIPTION_SHELL_LEFT_MARGIN, displayBounds.width
-				- shellBounds.width), 0);
-
-		shellBounds.y = Math.max(Math.min(position.y, displayBounds.height
-				- shellBounds.height), 0);
-		descriptionShell.setBounds(shellBounds);
-	}
-
-	protected void setDefaultValue() {
-		String[] defaults = attr.getDefaultValue();
-
-		if (defaults != null && defaults.length > 0) {
-
-			Object value = StringConverter.getInstance().stringToObject(attr,
-					defaults[0]);
-			setValue(value);
-		}
-	}
-
-	public Object getValue() {
-		return childComponent.getValue();
-	}
-
-	public void setValue(Object value) {
-		childComponent.setValue(value);
-	}
-
-	public String validate() {
-		return childComponent.validate();
-	}
-
-	public void componentUpdated(GUIComponent component) {
-		if (!childComponent.drawsLabel()) {
-			String valid = validate();
-
-			// if valid is a string then the string is the error message
-			if (valid != null && valid.length() > 0) {
-				label.setForeground(ERROR_COLOR);
-			} else {
-				label.setForeground(null);
-			}
-		}
-		update();
-	}
-
-	private String getDescriptionText() {
-		String descriptionText = attr.getDescription();
-		if (descriptionText == null || descriptionText.length() == 0) {
-			descriptionText = DEFAULT_DESCRIPTION_TEXT;
-		}
-
-		return descriptionText;
-	}
-
 }
