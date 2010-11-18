@@ -158,11 +158,14 @@ public class LabelingComponent extends AbstractComponent implements UpdateListen
 	public String validate() {
 		String valid = childComponent.validate();
 
-		// If valid is a string then the string is the error message.
-		if ((valid != null) && (valid.length() > 0)) {
-			label.setForeground(ERROR_COLOR);
-		} else {
-			label.setForeground(null);
+		// TODO: HACK: label may not have been created yet.
+		if (this.label != null) {
+			// If valid is a string then the string is the error message.
+			if ((valid != null) && (valid.length() > 0)) {
+				label.setForeground(ERROR_COLOR);
+			} else {
+				label.setForeground(null);
+			}
 		}
 
 		return valid;
