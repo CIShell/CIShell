@@ -69,7 +69,7 @@ public class SWTGuiBuilderService implements GUIBuilderService {
         
         if (validParams) {
             GUICreator creator = new GUICreator(id, parameters);
-            display.syncExec(creator);
+            this.display.syncExec(creator);
             
             return creator.gui;
         } else {
@@ -96,7 +96,7 @@ public class SWTGuiBuilderService implements GUIBuilderService {
                     shell.setImage(activeShell.getImage());
                 }
                 
-                gui = new SWTGui(shell,SWT.NONE,id,parameters);
+                gui = new SWTGui(shell, SWT.NONE, id, parameters);
             } catch (IllegalArgumentException e) {}
         }
     }
