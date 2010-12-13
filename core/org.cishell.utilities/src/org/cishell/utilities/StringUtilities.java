@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.regex.Pattern;
 
@@ -390,5 +391,17 @@ public class StringUtilities {
 		e.printStackTrace(printWriter);
 
 		return writer.toString();
+	}
+
+	public static String mapToString(Map<?, ?> map, String mapSeparator, String separator) {
+		List<String> mappedStrings = new ArrayList<String>();
+
+		for (Object key : map.keySet()) {
+			String mappedString =
+				String.format("%s%s%s", key.toString(), mapSeparator, map.get(key).toString());
+			mappedStrings.add(mappedString);
+		}
+
+		return implodeList(mappedStrings, separator);
 	}
 }
