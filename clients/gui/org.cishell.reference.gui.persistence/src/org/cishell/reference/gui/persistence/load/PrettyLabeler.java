@@ -41,4 +41,44 @@ public class PrettyLabeler {
 
 		return newData.toArray(new Data[0]);
 	}
+	
+	/**
+	 * Support Hierarchy structure labeling. The algorithm will avoid labeling
+	 * on children.
+	 * @param data - data that need to relabel
+	 * @param file - file that contains filename to be used for relabeling
+	 * @return the processed data with new labels
+	 */
+	public static Data[] relabelWithFileNameHierarchy(Data[] data, File file) {
+		File absoluteFile = file.getAbsoluteFile();
+		File parent = absoluteFile.getParentFile();
+
+		String prefix;
+		String parentName = parent.getName();
+		if (parentName.trim().length() == 0) {
+			prefix = File.separator;
+		} else {
+			prefix = "..." + File.separator + parentName + File.separator;
+		}
+
+		Collection<Data> possibleParents = new ArrayList<Data>(data.length);
+
+		for (Data datum : data) {
+			Dictionary<String, Object> labeledDatumMetadata = datum.getMetadata();
+			Data dataParent = getParent(labeledDatumMetadata);
+			if (!possibleParents.contains(dataParent)) {
+				labeledDatumMetadata.put(DataProperty.LABEL, prefix + absoluteFile.getName());
+			}
+			possibleParents.add(datum);
+		}
+
+		return data;
+	}
+	
+	/*
+	 * Get the parent of the data
+	 */
+	private static Data getParent(Dictionary<String, Object> labeledDatumMetadata) {
+		return (Data) labeledDatumMetadata.get(DataProperty.PARENT);
+	}
 }

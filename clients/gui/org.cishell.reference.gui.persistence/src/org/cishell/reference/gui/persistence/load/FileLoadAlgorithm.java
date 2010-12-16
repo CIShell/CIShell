@@ -130,7 +130,8 @@ public class FileLoadAlgorithm implements Algorithm, ProgressTrackable {
 	}
 
 	private Data[] labelFileData(File file, Data[] validatedFileData) {
-		Data[] labeledFileData = PrettyLabeler.relabelWithFileName(validatedFileData, file);
+		Data[] labeledFileData = PrettyLabeler.relabelWithFileNameHierarchy(
+				validatedFileData, file);
 
 		return labeledFileData;
 	}
