@@ -117,6 +117,9 @@ public class AlgorithmUtilities {
 		}
 	}
 
+	/* 
+	 * Use this to execute algorithm with progress monitoring 
+	 */
 	@SuppressWarnings("unchecked")	// Dictionary<String, Object>
 	public static Data[] executeAlgorithm(
 			AlgorithmFactory algorithmFactory,
@@ -135,5 +138,18 @@ public class AlgorithmUtilities {
     	Data[] result = algorithm.execute();
 
     	return result;
+    }
+	
+	/* 
+	 * Use this to execute algorithm without progress monitoring 
+	 */
+	public static Data[] executeAlgorithm(
+			AlgorithmFactory algorithmFactory,
+			Data[] data,
+			Dictionary parameters,
+			CIShellContext ciShellContext)
+    		throws AlgorithmExecutionException {
+		
+		return executeAlgorithm(algorithmFactory, null,	data, parameters, ciShellContext);
     }
 }

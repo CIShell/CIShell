@@ -367,7 +367,7 @@ public class FileUtilities {
     	}
     	
     	if (!extension.startsWith(".")) {
-    		extension = extension + ".";
+    		extension = "." + extension;
     	}
     	
     	String tempPath = System.getProperty("java.io.tmpdir");
