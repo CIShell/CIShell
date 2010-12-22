@@ -24,9 +24,27 @@ import javax.imageio.ImageIO;
 
 import org.osgi.service.log.LogService;
 
+import com.google.common.collect.ImmutableMap;
+
 public class FileUtilities {
 	public static final int READ_TEXT_FILE_BUFFER_SIZE = 1024;
 	public static final String DEFAULT_STREAM_TO_FILE_NAME = "stream_";
+	
+	/** Don't bother with "file:text/foo" -> "foo", we can find those automatically. */
+	public static final ImmutableMap<String, String> MIME_TYPE_TO_FILE_EXTENSION =
+		new ImmutableMap.Builder<String, String>()
+			.put("file:application/pajekmat", "mat")
+			.put("file:application/pajeknet", "net")
+			.put("file:application/parvis", "stf") // TODO: This is a guess.
+			.put("file:text/bibtex", "bib")
+			.put("file:text/compartmentalmodel", "mdl")
+			.put("file:text/coord", "nwb")
+			.put("file:text/grace", "grace.dat")
+			.put("file:text/intsim", "int")
+			.put("file:text/plain", "txt")
+			.put("file:text/plot", "plot.dat")
+			.put("file:text/referbib", "refer")
+	        .build();
 	
 	/*
 	 * Return a File pointing to the directory specified in
@@ -395,16 +413,28 @@ public class FileUtilities {
     	return tempFile;
     }
     
+    /* TODO: We should really have explicit piece of metadata that says what
+	 * the extension is, as this method is not guaranteed to yield the
+	 * correct extension.
+	 */
     public static String extractExtension(String format) {
     	String extension = "";
-		/* TODO: We should really have explicit piece of metadata that says what
-		 * the extension is, as this method is not guaranteed to yield the
-		 * correct extension.
-		 */
-		if (format.startsWith("file:text/")) {
-			extension = "." + format.substring("file:text/".length());
-		} else if (format.startsWith("file-ext:")) {
-			extension = "." + format.substring("file-ext:".length());
+		
+    	if (format.startsWith("file-ext:")) {
+			extension = format.substring("file-ext:".length());
+		} else if (format.startsWith("file:")) {			
+			if (MIME_TYPE_TO_FILE_EXTENSION.containsKey(format)) {
+				// Unless explicitly set..
+				extension = MIME_TYPE_TO_FILE_EXTENSION.get(format);
+			} else {
+				if (format.contains("/")) {
+					// Whatever follows "/"
+					extension = format.substring(format.indexOf("/") + 1);
+				} else {
+					// Whatever follows "file:"
+					extension = format.substring("file:".length());
+				}
+			}
 		}
 		
 		extension = extension.replace('+', '.');
