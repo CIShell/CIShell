@@ -191,7 +191,7 @@
       <param name="target" value="plugins"/>
       <param name="element.id" value="org.prefuse.lib"/>
       <param name="project.name" value="/plugins/libs/prefuselib"/>
-      <param name="url" value="http://nwb.slis.indiana.edu/svn/nwb/trunk"/>
+      <param name="url" value="http://nwb.cns.iu.edu/svn/nwb/trunk"/>
     </antcall>
 	<antcall target="svn.co">
       <param name="target" value="plugins"/>
