@@ -29,5 +29,5 @@ Service-Component: OSGI-INF/component.xml
 Require-Bundle: org.eclipse.swt,
  org.eclipse.ui,
  edu.uci.ics.jung,
- org.prefuse.lib,
+ prefuse,
  org.cishell.testing.convertertester.core.new
