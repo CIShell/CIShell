@@ -11,6 +11,50 @@ import prefuse.data.Tuple;
 import prefuse.util.collections.IntIterator;
 
 public class TableUtilities {
+	public static final Class<?>[] POSSIBLE_NUMBER_CLASSES = {
+		byte.class,
+		byte[].class,
+		Byte.class,
+		Byte[].class,
+		short.class,
+		short[].class,
+		Short.class,
+		Short[].class,
+		int.class,
+		int[].class,
+		Integer.class,
+		Integer[].class,
+		long.class,
+		long[].class,
+		Long.class,
+		Long[].class,
+		float.class,
+		float[].class,
+		Float.class,
+		Float[].class,
+		double.class,
+		double[].class,
+		Double.class,
+		Double[].class
+	};
+
+	public static final Class<?>[] POSSIBLE_INTEGER_CLASSES = {
+		int.class,
+		Integer.class,
+		int[].class,
+		Integer[].class
+	};
+
+	public static final Class<?>[] POSSIBLE_DATE_CLASSES = {
+		Date.class,
+		int.class,
+		Integer.class,
+		String.class,
+		int[].class,
+		Integer[].class,
+		String[].class,
+	};
+
 	public static Table copyTable(Table oldTable) {
 		Schema oldSchema = oldTable.getSchema();
 		Table newTable = oldSchema.instantiate();
@@ -87,61 +131,17 @@ public class TableUtilities {
 
 	public static String[] getValidNumberColumnNamesInTable(Table table)
 			throws ColumnNotFoundException {
-		Class<?>[] possibleNumberClasses = {
-			byte.class,
-			byte[].class,
-			Byte.class,
-			Byte[].class,
-			short.class,
-			short[].class,
-			Short.class,
-			Short[].class,
-			int.class,
-			int[].class,
-			Integer.class,
-			Integer[].class,
-			long.class,
-			long[].class,
-			Long.class,
-			Long[].class,
-			float.class,
-			float[].class,
-			Float.class,
-			Float[].class,
-			double.class,
-			double[].class,
-			Double.class,
-			Double[].class
-		};
-		
-		return filterSchemaColumnNamesByClasses(table.getSchema(), possibleNumberClasses);
+		return filterSchemaColumnNamesByClasses(table.getSchema(), POSSIBLE_NUMBER_CLASSES);
 	}
 
 	public static String[] getValidIntegerColumnNamesInTable(Table table)
 			throws ColumnNotFoundException {
-		Class<?>[] possibleIntegerClasses = {
-			int.class,
-			Integer.class,
-			int[].class,
-			Integer[].class
-		};
-		
-    	return filterSchemaColumnNamesByClasses(table.getSchema(), possibleIntegerClasses);
+    	return filterSchemaColumnNamesByClasses(table.getSchema(), POSSIBLE_INTEGER_CLASSES);
     }
 
 	public static String[] getValidDateColumnNamesInTable(Table table)
 			throws ColumnNotFoundException {
-		Class<?>[] possibleDateClasses = {
-			Date.class,
-			int.class,
-			Integer.class,
-			String.class,
-			int[].class,
-			Integer[].class,
-			String[].class,
-		};
-		
-    	return filterSchemaColumnNamesByClasses(table.getSchema(), possibleDateClasses);
+    	return filterSchemaColumnNamesByClasses(table.getSchema(), POSSIBLE_DATE_CLASSES);
     }
 
 	public static String[] filterSchemaColumnNamesByClasses(
