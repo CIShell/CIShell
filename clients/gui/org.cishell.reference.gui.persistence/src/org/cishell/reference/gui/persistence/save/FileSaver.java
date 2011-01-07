@@ -22,11 +22,6 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.osgi.service.log.LogService;
 
-/**
- * Persist the file to disk for the user
- * 
- * @author Team 
- */
 public class FileSaver {
     public static final String FILE_EXTENSION_PREFIX = "file-ext:";
 
@@ -37,17 +32,11 @@ public class FileSaver {
     private GUIBuilderService guiBuilder;
     private LogService log;
 
-
-    /**
-     * Initializes services to output messages
-     * 
-     * @param parent
-     * @param ciShellContext
-     */
-    public FileSaver(Shell parent, CIShellContext context){
+    public FileSaver(Shell parent, CIShellContext ciShellContext) {
         this.parent = parent;
-        this.guiBuilder = (GUIBuilderService)context.getService(GUIBuilderService.class.getName());
-        this.log = (LogService) context.getService(LogService.class.getName());
+        this.guiBuilder =
+        	(GUIBuilderService) ciShellContext.getService(GUIBuilderService.class.getName());
+        this.log = (LogService) ciShellContext.getService(LogService.class.getName());
     }       
 
     /**
@@ -69,15 +58,17 @@ public class FileSaver {
      */
     private boolean isSaveFileValid(File file) {
         boolean valid = false;
+
         if (file.isDirectory()) {
             String message = "Destination cannot be a directory. Please choose a file";
             guiBuilder.showError("Invalid Destination", message, "");
             valid = false;
         } else if (file.exists()) {
             valid = confirmFileOverwrite(file);
+        } else {
+            valid = true;
         }
-        else
-            valid = true ;
+
         return valid;
     }
 
@@ -89,10 +80,10 @@ public class FileSaver {
      * @return Whether or not the save was successful
      */
     public boolean save(Converter converter, Data data) {
-    	String outDataStr =
-    		(String) converter.getProperties().get(AlgorithmProperty.OUT_DATA);
+    	String outDataStr = (String) converter.getProperties().get(AlgorithmProperty.OUT_DATA);
 
     	String ext = "";
+
     	if (outDataStr.startsWith(FILE_EXTENSION_PREFIX)) {
     		ext = outDataStr.substring(FILE_EXTENSION_PREFIX.length());
     	}
@@ -103,14 +94,13 @@ public class FileSaver {
         }
         
         FileDialog dialog = new FileDialog(parent, SWT.SAVE);
-        
+
         if (currentDir == null) {
-            currentDir = new File(System.getProperty("user.home") + File.separator 
-            		+ "anything");
+            currentDir = new File(System.getProperty("user.home") + File.separator + "anything");
         }
+
         dialog.setFilterPath(currentDir.getPath());
-        
-        
+
         if (ext != null && !ext.equals("*")) {
             dialog.setFilterExtensions(new String[]{"*." + ext});
         }

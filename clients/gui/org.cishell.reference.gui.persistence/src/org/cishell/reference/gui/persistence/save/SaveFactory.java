@@ -3,13 +3,10 @@ package org.cishell.reference.gui.persistence.save;
 import java.util.Dictionary;
 
 import org.cishell.framework.CIShellContext;
-import org.cishell.framework.LocalCIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
 import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.data.Data;
-import org.osgi.service.cm.ConfigurationException;
-import org.osgi.service.cm.ManagedService;
-import org.osgi.service.component.ComponentContext;
+import org.cishell.service.conversion.DataConversionService;
 
 /**
  * Create a Save object
@@ -18,32 +15,14 @@ import org.osgi.service.component.ComponentContext;
  * no final file:X->file-ext:* converter.
  *
  */
-public class SaveFactory implements AlgorithmFactory, ManagedService {
-    private CIShellContext ciShellContext;	
+public class SaveFactory implements AlgorithmFactory {	
+    public Algorithm createAlgorithm(
+    		Data[] data, Dictionary<String, Object> parameters, CIShellContext ciShellContext) {
+    	Data inputData = data[0];
+    	DataConversionService conversionManager =
+    		(DataConversionService) ciShellContext.getService(
+    			DataConversionService.class.getName());
 
-    /**
-     * Create a local CIShell ciShellContext
-     * @param componentContext The current CIShell ciShellContext
-     */
-    protected void activate(ComponentContext componentContext) {
-        ciShellContext =
-        	new LocalCIShellContext(componentContext.getBundleContext());
-    }
-    
-    public void updated(Dictionary properties) throws ConfigurationException {
-    }
-
-    /**
-     * Create a Save algorithm
-     * @param data The data objects to save
-     * @param parameters The parameters for the algorithm
-     * @param ciShellContext Reference to services provided by CIShell
-     * @return An instance of the Save algorithm
-     */
-    public Algorithm createAlgorithm(Data[] data,
-    								 Dictionary parameters,
-    								 CIShellContext ciShellContext) {
-        this.ciShellContext = ciShellContext;
-        return new Save(data, parameters, ciShellContext);
+        return new Save(inputData, ciShellContext, conversionManager);
     }
 }

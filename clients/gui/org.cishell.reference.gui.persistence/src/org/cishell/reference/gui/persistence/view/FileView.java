@@ -1,7 +1,5 @@
 package org.cishell.reference.gui.persistence.view;
 
-import java.util.Dictionary;
-
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
 import org.cishell.framework.algorithm.AlgorithmExecutionException;
@@ -19,27 +17,25 @@ public class FileView implements Algorithm {
 	private LogService logger;
 
 	public FileView(
-			Data[] data, Dictionary parameters, CIShellContext context) {
+			Data[] data,
+			CIShellContext ciShellContext,
+			DataConversionService conversionManager,
+			LogService logger) {
 		this.dataToView = data;
-		this.ciShellContext = context;
-
-		this.conversionManager = (DataConversionService)context.getService(
-			DataConversionService.class.getName());
-		this.logger = (LogService)context.getService(LogService.class.getName());
+		this.ciShellContext = ciShellContext;
+		this.conversionManager = conversionManager;
+		this.logger = logger;
 	}
 
 	public Data[] execute() throws AlgorithmExecutionException {
-		for (int ii = 0; ii < this.dataToView.length; ii++) {
+		for (Data data : this.dataToView) {
 			try {
-				FileViewer.viewDataFile(this.dataToView[ii],
-										this.ciShellContext,
-										this.conversionManager,
-										this.logger);
+				FileViewer.viewDataFile(
+					data, this.ciShellContext, this.conversionManager, this.logger);
 			} catch (FileViewingException fileViewingException) {
-				String logMessage =
-    				"Error: Unable to view data \"" +
-    				this.dataToView[ii].getMetadata().get(DataProperty.LABEL) +
-    				"\".";
+				String logMessage = String.format(
+					"Error: Unable to view data \"%s\".",
+					data.getMetadata().get(DataProperty.LABEL));
     			
     			this.logger.log(LogService.LOG_ERROR, logMessage);
 			}
