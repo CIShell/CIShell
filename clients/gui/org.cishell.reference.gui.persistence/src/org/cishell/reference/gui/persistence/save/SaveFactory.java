@@ -7,6 +7,8 @@ import org.cishell.framework.algorithm.Algorithm;
 import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.data.Data;
 import org.cishell.service.conversion.DataConversionService;
+import org.osgi.service.cm.ConfigurationException;
+import org.osgi.service.cm.ManagedService;
 
 /**
  * Create a Save object
@@ -15,7 +17,7 @@ import org.cishell.service.conversion.DataConversionService;
  * no final file:X->file-ext:* converter.
  *
  */
-public class SaveFactory implements AlgorithmFactory {	
+public class SaveFactory implements AlgorithmFactory, ManagedService {	
     public Algorithm createAlgorithm(
     		Data[] data, Dictionary<String, Object> parameters, CIShellContext ciShellContext) {
     	Data inputData = data[0];
@@ -25,4 +27,7 @@ public class SaveFactory implements AlgorithmFactory {
 
         return new Save(inputData, ciShellContext, conversionManager);
     }
+
+    @SuppressWarnings("unchecked")
+	public void updated(Dictionary properties) throws ConfigurationException {}
 }
