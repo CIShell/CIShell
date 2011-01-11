@@ -52,6 +52,10 @@ import org.osgi.service.log.LogService;
  * @author Bruce Herr (bh2@bh2.net)
  */
 public class StaticExecutableRunner implements Algorithm {
+	public static final String EXECUTABLE_PLACEHOLDER = "executable";
+	public static final String DATA_LABEL_PLACEHOLDER = "data_label";
+	public static final String IN_FILE_PLACEHOLDER = "inFile";
+
 	private String ALGORITHM;
 	private String ALGORITHM_MACOSX_PPC;
 	private String MACOSX;
@@ -439,17 +443,23 @@ public class StaticExecutableRunner implements Algorithm {
 	// (real names of files instead of inFile[i], for instance)
 	// (also, real values like "6" or "dog" instead of placeholders for parameters)
 	protected String substituteVars(String str, Data[] data, Dictionary parameters) {
-		str = str.replaceAll("\\$\\{executable\\}", props.getProperty("executable"));
+		str = str.replaceAll(
+			"\\$\\{" + EXECUTABLE_PLACEHOLDER + "\\}", props.getProperty(EXECUTABLE_PLACEHOLDER));
 
-		for (int i = 0; i < data.length; i++) {
-			File inFile = (File)data[i].getData();
+		for (int ii = 0; ii < data.length; ii++) {
+			String label = data[0].getMetadata().get(DataProperty.LABEL).toString();
+			String escapedLabel = label.replaceAll("\\\\", "/");
+			str = str.replaceAll(
+				"\\$\\{" + DATA_LABEL_PLACEHOLDER + "\\[" + ii + "\\]\\}", escapedLabel);
+
+			File inFile = (File)data[ii].getData();
 			String filePath = inFile.getAbsolutePath();
 
 			if (File.separatorChar == '\\') {
 				filePath = filePath.replace(File.separatorChar, '/');
 			}
 
-			str = str.replaceAll("\\$\\{inFile\\[" + i + "\\]\\}", filePath);
+			str = str.replaceAll("\\$\\{" + IN_FILE_PLACEHOLDER + "\\[" + ii + "\\]\\}", filePath);
 
 			if (File.separatorChar == '\\') {
 				str = str.replace('/', File.separatorChar);
