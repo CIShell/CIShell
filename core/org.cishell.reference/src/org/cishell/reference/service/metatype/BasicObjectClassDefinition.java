@@ -10,8 +10,9 @@ import org.osgi.service.metatype.ObjectClassDefinition;
 
 public class BasicObjectClassDefinition implements ObjectClassDefinition {
 	
-	List attributeDefinitionsOptional = new ArrayList();
-	List attributeDefinitionsRequired = new ArrayList();
+	List<AttributeDefinition> optionalAttributeDefinitions = new ArrayList<AttributeDefinition>();
+	List<AttributeDefinition> requiredAttributeDefinitions = new ArrayList<AttributeDefinition>();
+	List<AttributeDefinition> allAttributeDefinitions = new ArrayList<AttributeDefinition>();
 	private String ID;
 	private String name;
 	private String description;
@@ -25,38 +26,31 @@ public class BasicObjectClassDefinition implements ObjectClassDefinition {
 	}
 	
 	public void addAttributeDefinition(int flag, AttributeDefinition definition) {
-		if(flag == REQUIRED) {
-			this.attributeDefinitionsRequired.add(definition);
-		} else if(flag == OPTIONAL) {
-			this.attributeDefinitionsOptional.add(definition);
+		if (flag == REQUIRED) {
+			this.requiredAttributeDefinitions.add(definition);
+		} else if (flag == OPTIONAL) {
+			this.optionalAttributeDefinitions.add(definition);
 		}
+
+		this.allAttributeDefinitions.add(definition);
 	}
-	
-	
+
 	public AttributeDefinition[] getAttributeDefinitions(int flag) {
+		List<AttributeDefinition> results = new ArrayList<AttributeDefinition>();
 		
-		List results = new ArrayList();
-		
-		if(flag == REQUIRED || flag == ALL) {
-			results.addAll(this.attributeDefinitionsRequired);
-		}
-		
-		if(flag == OPTIONAL || flag == ALL) {
-			results.addAll(this.attributeDefinitionsOptional);
-			
+		if (flag == REQUIRED) {
+			results.addAll(this.requiredAttributeDefinitions);
+		} else if (flag == OPTIONAL) {
+			results.addAll(this.optionalAttributeDefinitions);
+		} else {
+			results.addAll(this.allAttributeDefinitions);
 		}
 		
 		return makeArray(results);
 	}
 	
-	private AttributeDefinition[] makeArray(List definitions) {
-		AttributeDefinition[] result = new AttributeDefinition[definitions.size()];
-		
-		for(int ii = 0; ii < definitions.size(); ii++) {
-			result[ii] = (AttributeDefinition) definitions.get(ii);
-		}
-		
-		return result;
+	private AttributeDefinition[] makeArray(List<AttributeDefinition> definitions) {
+		return definitions.toArray(new AttributeDefinition[0]);
 	}
 
 	public String getDescription() {
