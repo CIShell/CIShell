@@ -66,8 +66,10 @@ public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProp
         try {
 			data = algorithm.execute();
 		} catch (AlgorithmExecutionException e) {
+			e.printStackTrace();
 			throw new ConversionException(e.getMessage(), e);
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new ConversionException(
 					"Unexpected error: " + e.getMessage(), e);
 		}
