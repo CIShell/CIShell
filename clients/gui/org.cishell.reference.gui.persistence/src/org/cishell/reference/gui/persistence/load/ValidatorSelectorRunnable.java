@@ -40,7 +40,7 @@ public final class ValidatorSelectorRunnable implements Runnable {
 			ServiceReference[] allValidators = getAllValidators();
 
 			FileFormatSelector validatorSelector = new FileFormatSelector(
-				"Load", window.getShell(), this.bundleContext, allValidators);
+				"Load", window.getShell(), this.bundleContext, allValidators, this.file);
 			validatorSelector.open();
 			this.validator = validatorSelector.getValidator();
 		} else if (supportingValidators.length == 1) {
@@ -51,7 +51,7 @@ public final class ValidatorSelectorRunnable implements Runnable {
 
 		if (supportingValidators.length > 1) {
 			FileFormatSelector validatorSelector = new FileFormatSelector(
-				"Load", window.getShell(), this.bundleContext, supportingValidators);
+				"Load", window.getShell(), this.bundleContext, supportingValidators, this.file);
 			validatorSelector.open();
 			this.validator = validatorSelector.getValidator();
 		}
