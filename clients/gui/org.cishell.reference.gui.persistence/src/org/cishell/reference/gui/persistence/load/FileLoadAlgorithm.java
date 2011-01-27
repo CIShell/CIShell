@@ -2,6 +2,8 @@ package org.cishell.reference.gui.persistence.load;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Dictionary;
 
 import org.cishell.framework.CIShellContext;
@@ -45,13 +47,21 @@ public class FileLoadAlgorithm implements Algorithm, ProgressTrackable {
 	public Data[] execute() throws AlgorithmExecutionException {
 		IWorkbenchWindow window = getFirstWorkbenchWindow();
 		Display display = PlatformUI.getWorkbench().getDisplay();
-		File file = getFileToLoadFromUser(window, display);
+		File[] files = getFilesToLoadFromUser(window, display);
 		
-		if (file != null) {
-			Data[] validatedFileData = validateFile(window, display, file);
-			Data[] labeledFileData = labelFileData(file, validatedFileData);
+		if ((files != null) && (files.length != 0)) {
+			Collection<Data> finalLabeledFileData = new ArrayList<Data>();
 
-			return labeledFileData;
+			for (File file : files) {
+				Data[] validatedFileData = validateFile(window, display, file);
+				Data[] labeledFileData = labelFileData(file, validatedFileData);
+
+				for (Data data : labeledFileData) {
+					finalLabeledFileData.add(data);
+				}
+			}
+
+			return finalLabeledFileData.toArray(new Data[0]);
 		} else {
 			return null;
 		}
@@ -80,7 +90,7 @@ public class FileLoadAlgorithm implements Algorithm, ProgressTrackable {
 		}
 	}
 
-	private File getFileToLoadFromUser(IWorkbenchWindow window, Display display) {
+	private File[] getFilesToLoadFromUser(IWorkbenchWindow window, Display display) {
 		FileSelectorRunnable fileSelector = new FileSelectorRunnable(window);
 
 		if (Thread.currentThread() != display.getThread()) {
@@ -89,7 +99,7 @@ public class FileLoadAlgorithm implements Algorithm, ProgressTrackable {
 			fileSelector.run();
 		}
 
-		return fileSelector.getFile();
+		return fileSelector.getFiles();
 	}
 
 	private Data[] validateFile(IWorkbenchWindow window, Display display, File file) {

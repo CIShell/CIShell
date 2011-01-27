@@ -6,8 +6,9 @@
  */
 package org.cishell.reference.gui.persistence.load;
 
+import java.io.File;
+
 import org.cishell.framework.algorithm.AlgorithmFactory;
-import org.cishell.framework.data.DataProperty;
 import org.cishell.reference.gui.common.AbstractDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
@@ -50,16 +51,17 @@ public class FileFormatSelector extends AbstractDialog {
 			String title,
 			Shell parent,
 			BundleContext bundleContext,
-			ServiceReference[] validatorReferences) {
+			ServiceReference[] validatorReferences,
+			File file) {
 		super(parent, title, AbstractDialog.QUESTION);
 		this.bundleContext = bundleContext;
 		this.validatorReferences = validatorReferences;
 
 		// Shall this part be moved out of the code?
-		setDescription(
-			"The file you have selected can be loaded" +
-			" using one or more of the following formats.\n" +
-			"Please select the format you would like to try.");
+		String descriptionFormat =
+			"The file \'%s\' can be loaded using one or more of the following formats.%s" +
+			"Please select the format you would like to try.";
+		setDescription(String.format(descriptionFormat, file.getAbsolutePath()));
 		setDetails(
 			"This dialog allows the user to choose among all available " +
 			"formats for loading the selected data model.  Choose any of the formats " +

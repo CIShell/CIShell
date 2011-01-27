@@ -9,45 +9,57 @@ import org.eclipse.ui.IWorkbenchWindow;
 public final class FileSelectorRunnable implements Runnable {
 	private IWorkbenchWindow window;
 	
-	private File file;
+	private File[] files;
 
 	public FileSelectorRunnable(IWorkbenchWindow window) {
 		this.window = window;
 	}
 
-	public File getFile() {
-		return this.file;
+	public File[] getFiles() {
+		return this.files;
 	}
 
 	public void run() {
-		this.file = getFileFromUser();
+		this.files = getFilesFromUser();
 
-		if (this.file == null) {
+		if (this.files.length == 0) {
 			return;
-		} else if (this.file.isDirectory()) {
-			FileLoadAlgorithm.defaultLoadDirectory = this.file.getAbsolutePath();
+		/*} else if (this.files[0].isDirectory()) {
+			// TODO Can we kill this branch?
+			FileLoadAlgorithm.defaultLoadDirectory = this.files[0].getAbsolutePath(); */
 		} else {
-			FileLoadAlgorithm.defaultLoadDirectory = this.file.getParentFile().getAbsolutePath();
+			FileLoadAlgorithm.defaultLoadDirectory =
+				this.files[0].getParentFile().getAbsolutePath();
 		}
 	}
 
-	private File getFileFromUser() {
+	private File[] getFilesFromUser() {
 		FileDialog fileDialog = createFileDialog();
-		String fileName = fileDialog.open();
+		fileDialog.open();
+		String path = fileDialog.getFilterPath();
+		String[] fileNames = fileDialog.getFileNames();
+		// TODO: Ask Angela about the order here, i.e. should they be sorted alphabetically?
 
-		if (fileName == null) {
-			return null;
+		if ((fileNames == null) || (fileNames.length == 0)) {
+			return new File[0];
 		} else {
-			return new File(fileName);
+			File[] files = new File[fileNames.length];
+
+			for (int ii = 0; ii < fileNames.length; ii++) {
+				String fullFileName = path + File.separator + fileNames[ii];
+				files[ii] = new File(fullFileName);
+			}
+
+			return files;
 		}
 	}
 
 	private FileDialog createFileDialog() {
 		File currentDirectory = new File(FileLoadAlgorithm.defaultLoadDirectory);
 		String absolutePath = currentDirectory.getAbsolutePath();
-		FileDialog fileDialog = new FileDialog(this.window.getShell(), SWT.OPEN);
+		FileDialog fileDialog = new FileDialog(this.window.getShell(), SWT.OPEN | SWT.MULTI);
 		fileDialog.setFilterPath(absolutePath);
-		fileDialog.setText("Select a File");
+		fileDialog.setText("Select Files");
 
 		return fileDialog;
 	}
