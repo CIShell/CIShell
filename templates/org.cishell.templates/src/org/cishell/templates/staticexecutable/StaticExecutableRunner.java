@@ -57,7 +57,7 @@ public class StaticExecutableRunner implements Algorithm {
 	public static final String IN_FILE_PLACEHOLDER = "inFile";
 
 	private String ALGORITHM;
-	private String ALGORITHM_MACOSX_PPC;
+	private String macOSX_PPC_DirectoryPath;
 	private String MACOSX;
 	private String ALGORITHM_WIN32;
 	private String WIN32;
@@ -65,51 +65,68 @@ public class StaticExecutableRunner implements Algorithm {
 	private String LINUX;
 	private String ALGORITHM_DEFAULT;
 
-	protected final String algDirPath;
-	protected final String tempDirPath;
-	protected final Data[] data;
-	protected Dictionary parameters;
-	protected Properties props;
-	protected CIShellContext ciContext;
-	protected ProgressMonitor monitor;
-	protected BundleContext bContext;
-	protected String algName;
+	private String algorithmDirectoryPath;
+	private String temporaryDirectoryPath;
+	private Data[] data;
+	private Dictionary<String, Object> parameters;
+	private Properties properties;
+	private CIShellContext ciShellContext;
+	private ProgressMonitor monitor;
+	private BundleContext bundleContext;
+	private String algorithmName;
 
-	public StaticExecutableRunner(BundleContext bContext, CIShellContext ciContext, Properties props,
-			Dictionary parameters, Data[] data, ProgressMonitor monitor, String algName) throws IOException {
+	public StaticExecutableRunner(
+			BundleContext bundleContext,
+			CIShellContext ciShellContext,
+			Properties properties,
+			Dictionary<String, Object> parameters,
+			Data[] data,
+			ProgressMonitor monitor,
+			String algorithmName) throws IOException {
+		// Assign normal member variables.
 
-		// assign normal member-variables
-
-		this.bContext = bContext;
-		this.ciContext = ciContext;
-		this.props = props;
+		this.bundleContext = bundleContext;
+		this.ciShellContext = ciShellContext;
+		this.properties = properties;
 		this.parameters = parameters;
 		this.data = data;
 		this.monitor = monitor;
-		this.algName = algName;
+		this.algorithmName = algorithmName;
 
-		// determine directory paths for each platform, based on algName
+		// Determine directory paths for each platform, based on algorithmName.
 
-		ALGORITHM = algName + "/";
-		ALGORITHM_MACOSX_PPC = ALGORITHM + "macosx.ppc/";
-		MACOSX = "macosx";
-		ALGORITHM_WIN32 = ALGORITHM + "win32/";
-		WIN32 = "win32";
-		ALGORITHM_LINUX_X86 = ALGORITHM + "linux.x86/";
-		LINUX = "linux";
-		ALGORITHM_DEFAULT = ALGORITHM + "default/";
+		this.ALGORITHM = algorithmName + "/";
+		this.macOSX_PPC_DirectoryPath = ALGORITHM + "macosx.ppc/";
+		this.MACOSX = "macosx";
+		this.ALGORITHM_WIN32 = ALGORITHM + "win32/";
+		this.WIN32 = "win32";
+		this.ALGORITHM_LINUX_X86 = ALGORITHM + "linux.x86/";
+		this.LINUX = "linux";
+		this.ALGORITHM_DEFAULT = ALGORITHM + "default/";
 
 		// if a constructor variable was null, use a null object version of it if possible
 
-		if (monitor == null) this.monitor = ProgressMonitor.NULL_MONITOR;
-		if (data == null) data = new Data[0];
-		if (parameters == null) parameters = new Hashtable();
+		if (this.monitor == null) {
+			this.monitor = ProgressMonitor.NULL_MONITOR;
+		}
 
-		// make a temporary directory to run the executable in
+		if (this.data == null) {
+			this.data = new Data[0];
+		}
 
-		tempDirPath = makeTempDirectory();
+		if (this.parameters == null) {
+			this.parameters = new Hashtable<String, Object>();
+		}
 
-		algDirPath = tempDirPath + File.separator + props.getProperty("Algorithm-Directory") + File.separator;
+		// Make a temporary directory to run the executable in.
+
+		this.temporaryDirectoryPath = makeTemporaryDirectory();
+		this.algorithmDirectoryPath = String.format(
+			"%s%s%s%s",
+			temporaryDirectoryPath,
+			File.separator,
+			properties.getProperty("Algorithm-Directory"),
+			File.separator);
 	}
 
 	/**
@@ -117,18 +134,19 @@ public class StaticExecutableRunner implements Algorithm {
 	 */
 	public Data[] execute() throws AlgorithmExecutionException {
 		copyFilesUsedByExecutableIntoDir(getTempDirectory());
-		makeDirExecutable(algDirPath);
+		makeDirExecutable(algorithmDirectoryPath);
 		
-		String[] commandLineArguments = createCommandLineArguments(algDirPath, data, parameters);
+		String[] commandLineArguments =
+			createCommandLineArguments(algorithmDirectoryPath, this.data, this.parameters);
 		
-		File[] rawOutput = executeProgram(commandLineArguments, algDirPath);
+		File[] rawOutput = executeProgram(commandLineArguments, algorithmDirectoryPath);
 
 		return formatAsData(rawOutput);
 	}
 
 	private void copyFilesUsedByExecutableIntoDir(File dir) throws AlgorithmExecutionException {
 		try {
-			Enumeration e = bContext.getBundle().getEntryPaths("/" + algName);
+			Enumeration e = bundleContext.getBundle().getEntryPaths("/" + algorithmName);
 
 			Set entries = new HashSet();
 
@@ -140,11 +158,11 @@ public class StaticExecutableRunner implements Algorithm {
 				}
 			}
 
-			dir = new File(dir.getPath() + File.separator + algName);
+			dir = new File(dir.getPath() + File.separator + algorithmName);
 			dir.mkdirs();
 
-			String os = bContext.getProperty("osgi.os");
-			String arch = bContext.getProperty("osgi.arch");
+			String os = bundleContext.getProperty("osgi.os");
+			String arch = bundleContext.getProperty("osgi.arch");
 
 			String path = null;
 
@@ -159,8 +177,8 @@ public class StaticExecutableRunner implements Algorithm {
 			// but override with platform idiosyncracies
 			if (os.equals(WIN32) && entries.contains(ALGORITHM_WIN32)) {
 				path = ALGORITHM_WIN32;
-			} else if (os.equals(MACOSX) && entries.contains(ALGORITHM_MACOSX_PPC)) {
-				path = ALGORITHM_MACOSX_PPC;
+			} else if (os.equals(MACOSX) && entries.contains(macOSX_PPC_DirectoryPath)) {
+				path = macOSX_PPC_DirectoryPath;
 			} else if (os.equals(LINUX) && entries.contains(ALGORITHM_LINUX_X86)) {
 				path = ALGORITHM_LINUX_X86;
 			}
@@ -187,7 +205,7 @@ public class StaticExecutableRunner implements Algorithm {
 		// FIXME: Surely java has a way to do this!!!!
 		if (new File("/bin/chmod").exists()) {
 			try {
-				String executable = baseDir + props.getProperty("executable");
+				String executable = baseDir + properties.getProperty("executable");
 				Runtime.getRuntime().exec("/bin/chmod +x " + executable).waitFor();
 			} catch (IOException e) {
 				throw new AlgorithmExecutionException(e);
@@ -295,7 +313,7 @@ public class StaticExecutableRunner implements Algorithm {
 	}
 
 	protected Data[] formatAsData(File[] files) {
-		String outData = (String) props.get(AlgorithmProperty.OUT_DATA);
+		String outData = (String) properties.get(AlgorithmProperty.OUT_DATA);
 
 		// if out data is null then it returns no data
 		if (("" + outData).trim().equalsIgnoreCase(AlgorithmProperty.NULL_DATA)) {
@@ -317,7 +335,7 @@ public class StaticExecutableRunner implements Algorithm {
 		}
 
 		for (int i = 0; i < data.length; i++) {
-			String file = props.getProperty("outFile[" + i + "]", null);
+			String file = properties.getProperty("outFile[" + i + "]", null);
 
 			if (i < formats.length) {
 				File f = (File) nameToFileMap.remove(file);
@@ -325,10 +343,10 @@ public class StaticExecutableRunner implements Algorithm {
 				if (f != null) {
 					data[i] = new BasicData(f, formats[i]);
 
-					String label = props.getProperty("outFile[" + i + "].label", f.getName());
+					String label = properties.getProperty("outFile[" + i + "].label", f.getName());
 					data[i].getMetadata().put(DataProperty.LABEL, label);
 
-					String type = props.getProperty("outFile[" + i + "].type", DataProperty.OTHER_TYPE);
+					String type = properties.getProperty("outFile[" + i + "].type", DataProperty.OTHER_TYPE);
 					type = type.trim();
 					if (type.equalsIgnoreCase(DataProperty.MATRIX_TYPE)) {
 						type = DataProperty.MATRIX_TYPE;
@@ -387,7 +405,7 @@ public class StaticExecutableRunner implements Algorithm {
 
 	protected StringBuffer log(int logLevel, StringBuffer buffer) {
 		if (buffer.indexOf("\n") != -1) { // any new newlines to output?
-			LogService log = (LogService) ciContext.getService(LogService.class.getName());
+			LogService log = (LogService) ciShellContext.getService(LogService.class.getName());
 
 			int lastGoodIndex = 0;
 			int fromIndex = 0;
@@ -420,23 +438,25 @@ public class StaticExecutableRunner implements Algorithm {
 		return buffer;
 	}
 
-	protected String[] createCommandLineArguments(String algDir, Data[] data, Dictionary parameters) {
-		String template = "" + props.getProperty("template");
-		String[] cmdarray = template.split("\\s");
+	protected String[] createCommandLineArguments(
+			String algorithmDirectory, Data[] data, Dictionary<String, Object> parameters) {
+		String template = "" + this.properties.getProperty("template");
+		String[] commands = template.split("\\s");
 
-		for (int i = 0; i < cmdarray.length; i++) {
-			cmdarray[i] = substituteVars(cmdarray[i], data, parameters);
+		for (int ii = 0; ii < commands.length; ii++) {
+			commands[ii] = substituteVars(commands[ii], data, parameters);
 		}
 
 		// TODO: Expanded later to support .cmd and other extensions
-		if (!new File(algDir + cmdarray[0]).exists()) {
-			if (new File(algDir + cmdarray[0] + ".bat").exists()) {
-				cmdarray[0] = cmdarray[0] + ".bat";
+		if (!new File(algorithmDirectory + commands[0]).exists()) {
+			if (new File(algorithmDirectory + commands[0] + ".bat").exists()) {
+				commands[0] = commands[0] + ".bat";
 			}
 		}
-		cmdarray[0] = algDir + cmdarray[0];
 
-		return cmdarray;
+		commands[0] = algorithmDirectory + commands[0];
+
+		return commands;
 	}
 
 	// replaces place-holder variables in the template with the actual arguments the executable needs to work.
@@ -444,9 +464,10 @@ public class StaticExecutableRunner implements Algorithm {
 	// (also, real values like "6" or "dog" instead of placeholders for parameters)
 	protected String substituteVars(String str, Data[] data, Dictionary parameters) {
 		str = str.replaceAll(
-			"\\$\\{" + EXECUTABLE_PLACEHOLDER + "\\}", props.getProperty(EXECUTABLE_PLACEHOLDER));
+			"\\$\\{" + EXECUTABLE_PLACEHOLDER + "\\}", properties.getProperty(EXECUTABLE_PLACEHOLDER));
 
 		for (int ii = 0; ii < data.length; ii++) {
+			System.err.println(data[0]);
 			String label = data[0].getMetadata().get(DataProperty.LABEL).toString();
 			String escapedLabel = label.replaceAll("\\\\", "/");
 			str = str.replaceAll(
@@ -479,10 +500,10 @@ public class StaticExecutableRunner implements Algorithm {
 	}
 
 	public File getTempDirectory() {
-		return new File(tempDirPath);
+		return new File(temporaryDirectoryPath);
 	}
 
-	protected String makeTempDirectory() throws IOException {
+	protected String makeTemporaryDirectory() throws IOException {
 		File sessionDir = Activator.getTempDirectory();
 		File dir = File.createTempFile("StaticExecutableRunner-", "", sessionDir);
 
@@ -493,7 +514,7 @@ public class StaticExecutableRunner implements Algorithm {
 	}
 
 	private void copyDir(File dir, String dirPath, int depth) throws IOException {
-		Enumeration e = bContext.getBundle().getEntryPaths(dirPath);
+		Enumeration e = bundleContext.getBundle().getEntryPaths(dirPath);
 
 		// dirPath = dirPath.replace('/', File.separatorChar);
 
@@ -515,7 +536,7 @@ public class StaticExecutableRunner implements Algorithm {
 	}
 
 	private void copyFile(File dir, String path) throws IOException {
-		URL entry = bContext.getBundle().getEntry(path);
+		URL entry = bundleContext.getBundle().getEntry(path);
 
 		// path = path.replace('/', File.separatorChar);
 		String file = getName(path);
