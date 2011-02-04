@@ -59,7 +59,7 @@ public class FileFormatSelector extends AbstractDialog {
 
 		// Shall this part be moved out of the code?
 		String descriptionFormat =
-			"The file \'%s\' can be loaded using one or more of the following formats.%s" +
+			"The file \'%s\' can be loaded using one or more of the following formats.%n" +
 			"Please select the format you would like to try.";
 		setDescription(String.format(descriptionFormat, file.getAbsolutePath()));
 		setDetails(
