@@ -1,5 +1,8 @@
 package org.cishell.utility.swt;
 
+import java.util.Collection;
+import java.util.HashSet;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
@@ -8,15 +11,35 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
 public class SWTUtilities {
+	public static final Color DEFAULT_BACKGROUND_COLOR =
+		new Color(Display.getDefault(), 255, 255, 255);
 	/*
      * Append the given string to the console with the given color, this will do the job of
      *  checking for URLs within the string and registering the proper listeners on them as well.
      */
-    public static void appendStringWithURL(
+	public static Collection<StyleRange> appendStringWithURL(
     		StyledText textField,
     		URLClickedListener urlListener,
     		URLMouseCursorListener urlCursorListener,
     		String message,
+    		Color normalColor,
+    		Color urlColor) {
+		return appendStringWithURL(
+			textField,
+			urlListener,
+			urlCursorListener,
+			message,
+			DEFAULT_BACKGROUND_COLOR,
+			normalColor,
+			urlColor);
+	}
+
+    public static Collection<StyleRange> appendStringWithURL(
+    		StyledText textField,
+    		URLClickedListener urlListener,
+    		URLMouseCursorListener urlCursorListener,
+    		String message,
+    		Color backgroundColor,
     		Color normalColor,
     		Color urlColor) {
     
@@ -52,18 +75,46 @@ public class SWTUtilities {
             }
                
 
-            syncedStyledPrint(textField, message.substring(0, index), normalColor, SWT.NORMAL);
+            StyleRange preURLStyle = syncedStyledPrint(
+            	textField, message.substring(0, index), backgroundColor, normalColor, SWT.NORMAL);
             urlListener.addURL(textField.getText().length(), url);
             urlCursorListener.addURL(textField.getText().length(), url);
-            syncedStyledPrint(textField, url, urlColor, SWT.BOLD);
-            appendStringWithURL(
+            StyleRange urlStyle =
+            	syncedStyledPrint(textField, url, backgroundColor, urlColor, SWT.BOLD);
+            Collection<StyleRange> postURLStyles = appendStringWithURL(
             	textField,
             	urlListener,
             	urlCursorListener,
             	message.substring(index + url.length()),
-            	normalColor,urlColor);
+            	backgroundColor,
+            	normalColor,
+            	urlColor);
+
+            Collection<StyleRange> finalStyles = new HashSet<StyleRange>();
+
+            if (preURLStyle != null) {
+            	finalStyles.add(preURLStyle);
+            }
+
+            if (urlStyle != null) {
+            	finalStyles.add(urlStyle);
+            }
+
+            finalStyles.addAll(postURLStyles);
+
+            return finalStyles;
         } else {
-            syncedStyledPrint(textField, message, normalColor, SWT.NORMAL);
+            StyleRange style = syncedStyledPrint(
+            	textField, message, backgroundColor, normalColor, SWT.NORMAL);
+
+            if (style != null) {
+            	Collection<StyleRange> finalStyles = new HashSet<StyleRange>();
+            	finalStyles.add(style);
+
+            	return finalStyles;
+            } else {
+            	return new HashSet<StyleRange>();
+            }
         }
     }
 
@@ -72,16 +123,29 @@ public class SWTUtilities {
      * append it to the StyledText control.
      */
 
-    public static void syncedStyledPrint(
-    		final StyledText textField, final String message, final Color color, final int style) {        
-        Display.getDefault().syncExec(new Runnable() {
-            public void run(){
-		        styledPrint(textField, message, color, style);
-            }
-        });
+    public static StyleRange syncedStyledPrint(
+    		StyledText textField, String message, Color color, int style) {
+    	return syncedStyledPrint(textField, message, DEFAULT_BACKGROUND_COLOR, color, style);
     }
 
-    public static void styledPrint(StyledText textField, String message, Color color, int style) {
+    public static StyleRange syncedStyledPrint(
+    		final StyledText textField,
+    		final String message,
+    		final Color backgroundColor,
+    		final Color color,
+    		final int style) {
+    	final StyleRange[] styleRange = new StyleRange[1];
+        Display.getDefault().syncExec(new Runnable() {
+            public void run() {
+		        styleRange[0] = styledPrint(textField, message, color, style);
+            }
+        });
+
+        return styleRange[0];
+    }
+
+    public static StyleRange styledPrint(
+    		StyledText textField, String message, Color color, int style) {
     	if (!textField.isDisposed()) {
             textField.append(message);
 
@@ -94,10 +158,14 @@ public class SWTUtilities {
 
             // This makes it autoscroll.
             textField.setTopIndex(textField.getLineCount());
+
+            return styleRange;
+        } else {
+        	return null;
         }
     }
 
-    public static void printURL(
+    public static StyleRange printURL(
     		Composite parent,
     		StyledText textField,
     		String url,
@@ -105,19 +173,13 @@ public class SWTUtilities {
     		Color color,
     		int style) {
     	URLClickedListener urlClickedListener = new URLClickedListener(textField);
-		URLMouseCursorListener urlCursorListener =
-			new URLMouseCursorListener(parent, textField);
+		URLMouseCursorListener urlCursorListener = new URLMouseCursorListener(parent, textField);
 		textField.addMouseListener(urlClickedListener);
 		textField.addMouseMoveListener(urlCursorListener);
 
-		urlClickedListener.addURL(
-        	textField.getText().length(), url, displayURL);
-        urlCursorListener.addURL(
-        	textField.getText().length(), url, displayURL);
-        SWTUtilities.styledPrint(
-        	textField,
-        	displayURL,
-        	color,
-        	style);
+		urlClickedListener.addURL(textField.getText().length(), url, displayURL);
+        urlCursorListener.addURL(textField.getText().length(), url, displayURL);
+
+        return styledPrint(textField, displayURL, color, style);
     }
 }
