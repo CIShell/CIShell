@@ -66,7 +66,16 @@ public class FileLoaderServiceImpl implements FileLoaderService, ManagedService 
 			LogService logger,
 			ProgressMonitor progressMonitor,
 			File[] files) throws FileLoadException {
-		return loadFilesInternal(bundleContext, ciShellContext, logger, progressMonitor, files);
+		Data[] loadedFileData =
+			loadFilesInternal(bundleContext, ciShellContext, logger, progressMonitor, files);
+
+		for (File file : files) {
+			for (FileLoadListener listener : this.listeners) {
+				listener.fileLoaded(file);
+			}
+		}
+
+		return loadedFileData;
 	}
 
 	public Data[] loadFile(
