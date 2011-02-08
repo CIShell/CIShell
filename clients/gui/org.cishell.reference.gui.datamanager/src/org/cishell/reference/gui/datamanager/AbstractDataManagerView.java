@@ -13,6 +13,9 @@
  * ***************************************************************************/
 package org.cishell.reference.gui.datamanager;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -23,13 +26,16 @@ import java.util.Set;
 
 import org.cishell.app.service.datamanager.DataManagerListener;
 import org.cishell.app.service.datamanager.DataManagerService;
+import org.cishell.framework.LocalCIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
-import org.cishell.framework.algorithm.AlgorithmCanceledException;
 import org.cishell.framework.algorithm.AlgorithmExecutionException;
 import org.cishell.framework.algorithm.AlgorithmFactory;
+import org.cishell.framework.data.BasicData;
 import org.cishell.framework.data.Data;
 import org.cishell.framework.data.DataProperty;
 import org.cishell.reference.gui.workspace.CIShellApplication;
+import org.cishell.utilities.AlgorithmUtilities;
+import org.cishell.utilities.StringUtilities;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.viewers.ISelection;
@@ -41,6 +47,12 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.TreeEditor;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.DropTarget;
+import org.eclipse.swt.dnd.DropTargetAdapter;
+import org.eclipse.swt.dnd.DropTargetEvent;
+import org.eclipse.swt.dnd.FileTransfer;
+import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.KeyAdapter;
@@ -185,6 +197,88 @@ public abstract class AbstractDataManagerView
 		}
 
 		getSite().setSelectionProvider(new DataModelSelectionProvider());
+
+		DropTarget dropTarget =
+    		new DropTarget(parent.getParent(), DND.DROP_DEFAULT | DND.DROP_MOVE);
+    	dropTarget.setTransfer(new Transfer[] { FileTransfer.getInstance() });
+    	dropTarget.addDropListener(new DropTargetAdapter() {
+    		@Override
+    		public void drop(DropTargetEvent event) {
+    			String fileNames[] = null;
+    			FileTransfer fileTransfer = FileTransfer.getInstance();
+
+    			if (fileTransfer.isSupportedType(event.currentDataType)) {
+    				fileNames = (String[]) event.data;
+    				Collection<File> flattenedFileStructure =
+    					flattenDraggedFileStructures(fileNames);
+    				Collection<Data> dataForProcessing = new ArrayList<Data>();
+
+    				for (File file : flattenedFileStructure) {
+    					dataForProcessing.add(new BasicData(file, ""));
+    				}
+
+    				AlgorithmFactory fileLoaderFactory =
+    					AlgorithmUtilities.getAlgorithmFactoryByPID(
+    						"org.cishell.reference.gui.persistence.load.FileLoaderAlgorithm",
+    						Activator.context);
+    				DataManagerService dataManager =
+    					(DataManagerService) Activator.context.getService(
+    						Activator.context.getServiceReference(
+    							DataManagerService.class.getName()));
+
+    				try {
+    					Data[] inputData = fileLoaderFactory.createAlgorithm(
+    						dataForProcessing.toArray(new Data[0]),
+    						new Hashtable<String, Object>(),
+    						new LocalCIShellContext(Activator.context)).execute();
+
+    					for (Data inputDatum : inputData) {
+    						dataManager.addData(inputDatum);
+    					}
+    				} catch (Throwable e) {
+    					String format =
+    						"An error occurred when loading your files.%n" +
+    						"Please include the following when reporting this:%n%s";
+    					String logMessage =
+    						String.format(format, StringUtilities.getStackTraceAsString(e));
+    					AbstractDataManagerView.this.logger.log(LogService.LOG_ERROR, logMessage);
+    				}
+    			}
+    		}
+    	});
+	}
+
+	private Collection<File> flattenDraggedFileStructures(String[] fileNames) {
+		Collection<File> flattenedFileStructure = new ArrayList<File>();
+
+		for (String fileName : fileNames) {
+			flattenedFileStructure.addAll(flattenDraggedFileStructure(fileName));
+		}
+
+		return flattenedFileStructure;
+	}
+
+	private Collection<File> flattenDraggedFileStructure(String fileName) {
+		File file = new File(fileName);
+
+		if (file.isFile()) {
+			Collection<File> flattenedFileStructure = new ArrayList<File>();
+			flattenedFileStructure.add(file);
+
+			return flattenedFileStructure;
+		} else if (file.isDirectory()) {
+			Collection<File> flattenedFileStructure = new ArrayList<File>();
+
+			for (String childFileName : file.list()) {
+				String completeChildFileName = String.format(
+					"%s%s%s", fileName, File.separator, childFileName);
+				flattenedFileStructure.addAll(flattenDraggedFileStructure(completeChildFileName));
+			}
+
+			return flattenedFileStructure;
+		} else {
+			return new ArrayList<File>();
+		}
 	}
 	
 	public void bundleChanged(BundleEvent event) {
