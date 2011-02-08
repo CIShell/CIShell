@@ -7,6 +7,7 @@ Bundle-Activator: org.cishell.reference.gui.datamanager.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime
 Import-Package: org.cishell.app.service.datamanager;version="1.0.0",
+ org.cishell.app.service.fileloader,
  org.cishell.framework;version="1.0.0",
  org.cishell.framework.algorithm;version="1.0.0",
  org.cishell.framework.data;version="1.0.0",

@@ -52,31 +52,6 @@ public class FileLoadAlgorithm implements Algorithm, ProgressTrackable {
 		} catch (FileLoadException e) {
 			throw new AlgorithmExecutionException(e.getMessage(), e);
 		}
-//		IWorkbenchWindow window = getFirstWorkbenchWindow();
-//		Display display = PlatformUI.getWorkbench().getDisplay();
-//		File[] files = getFilesToLoadFromUser(window, display);
-//
-//		if (files != null) {
-////			try {
-//				return new FileLoaderAlgorithm(
-//					this.bundleContext,
-//					files,
-//					this.ciShellContext,
-//					this.logger,
-//					this.progressMonitor).execute();
-////			} catch (Throwable e) {
-////				String format =
-////					"The chosen file is not compatible with this format.  " +
-////					"Check that your file is correctly formatted or try another validator.  " +
-////					"The reason is: %s";
-////				String logMessage = String.format(format, e.getMessage());
-////				this.logger.log(LogService.LOG_ERROR, logMessage, e);
-////
-////				return null;
-////			}
-//		} else {
-//			return null;
-//		}
 	}
 
 	public ProgressMonitor getProgressMonitor() {

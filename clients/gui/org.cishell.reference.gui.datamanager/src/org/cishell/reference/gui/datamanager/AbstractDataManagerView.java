@@ -26,15 +26,18 @@ import java.util.Set;
 
 import org.cishell.app.service.datamanager.DataManagerListener;
 import org.cishell.app.service.datamanager.DataManagerService;
+import org.cishell.app.service.fileloader.FileLoaderService;
+import org.cishell.framework.CIShellContext;
+import org.cishell.framework.CIShellContextDelegate;
 import org.cishell.framework.LocalCIShellContext;
+import org.cishell.framework.ServiceReferenceDelegate;
 import org.cishell.framework.algorithm.Algorithm;
 import org.cishell.framework.algorithm.AlgorithmExecutionException;
 import org.cishell.framework.algorithm.AlgorithmFactory;
-import org.cishell.framework.data.BasicData;
+import org.cishell.framework.algorithm.ProgressMonitor;
 import org.cishell.framework.data.Data;
 import org.cishell.framework.data.DataProperty;
 import org.cishell.reference.gui.workspace.CIShellApplication;
-import org.cishell.utilities.AlgorithmUtilities;
 import org.cishell.utilities.StringUtilities;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IMenuManager;
@@ -198,6 +201,10 @@ public abstract class AbstractDataManagerView
 
 		getSite().setSelectionProvider(new DataModelSelectionProvider());
 
+		setupDataManagerViewForDragAndDrop(parent);
+	}
+
+	private void setupDataManagerViewForDragAndDrop(Composite parent) {
 		DropTarget dropTarget =
     		new DropTarget(parent.getParent(), DND.DROP_DEFAULT | DND.DROP_MOVE);
     	dropTarget.setTransfer(new Transfer[] { FileTransfer.getInstance() });
@@ -211,37 +218,55 @@ public abstract class AbstractDataManagerView
     				fileNames = (String[]) event.data;
     				Collection<File> flattenedFileStructure =
     					flattenDraggedFileStructures(fileNames);
-    				Collection<Data> dataForProcessing = new ArrayList<Data>();
 
-    				for (File file : flattenedFileStructure) {
-    					dataForProcessing.add(new BasicData(file, ""));
-    				}
-
-    				AlgorithmFactory fileLoaderFactory =
-    					AlgorithmUtilities.getAlgorithmFactoryByPID(
-    						"org.cishell.reference.gui.persistence.load.FileLoaderAlgorithm",
-    						Activator.context);
+    				ServiceReference fileLoaderServiceReference =
+    					Activator.context.getServiceReference(FileLoaderService.class.getName());
+    				FileLoaderService fileLoader =
+    					(FileLoaderService) Activator.context.getService(
+    						fileLoaderServiceReference);
     				DataManagerService dataManager =
     					(DataManagerService) Activator.context.getService(
     						Activator.context.getServiceReference(
     							DataManagerService.class.getName()));
 
-    				try {
-    					Data[] inputData = fileLoaderFactory.createAlgorithm(
-    						dataForProcessing.toArray(new Data[0]),
-    						new Hashtable<String, Object>(),
-    						new LocalCIShellContext(Activator.context)).execute();
+    				ServiceReference dataManagerServiceReference =
+						Activator.context.getServiceReference(DataManagerService.class.getName());
 
-    					for (Data inputDatum : inputData) {
-    						dataManager.addData(inputDatum);
+    				for (File file : flattenedFileStructure) {
+    					/* TODO: Eventually use the AlgorithmInvocationService for this
+					 	 * kind of stuff?
+					 	 */
+    					ServiceReference uniqueServiceReference = new ServiceReferenceDelegate(
+							dataManagerServiceReference);
+						CIShellContext ciShellContext = new CIShellContextDelegate(
+							uniqueServiceReference, new LocalCIShellContext(Activator.context));
+						LogService uniqueLogger =
+							(LogService) ciShellContext.getService(LogService.class.getName());
+
+    					try {
+    						Data[] inputData = fileLoader.loadFile(
+    							Activator.context,
+    							ciShellContext,
+    							uniqueLogger,
+    							ProgressMonitor.NULL_MONITOR,
+    							file);
+
+    						for (Data inputDatum : inputData) {
+    							inputDatum.getMetadata().put(
+    								DataProperty.SERVICE_REFERENCE, uniqueServiceReference);
+    							dataManager.addData(inputDatum);
+    						}
+    					} catch (Throwable e) {
+    						String format =
+    							"An error occurred when loading your files.%n" +
+    							"Please include the following when reporting this:%n%s";
+    						String logMessage =
+    							String.format(format, StringUtilities.getStackTraceAsString(e));
+    						/* TODO: This is a spot where we might need to use a different
+    						 * LogService object (for when we want log highlighting).
+    						 */
+    						uniqueLogger.log(LogService.LOG_ERROR, logMessage);
     					}
-    				} catch (Throwable e) {
-    					String format =
-    						"An error occurred when loading your files.%n" +
-    						"Please include the following when reporting this:%n%s";
-    					String logMessage =
-    						String.format(format, StringUtilities.getStackTraceAsString(e));
-    					AbstractDataManagerView.this.logger.log(LogService.LOG_ERROR, logMessage);
     				}
     			}
     		}
