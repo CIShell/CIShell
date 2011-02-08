@@ -1,15 +1,13 @@
 package org.cishell.reference.gui.persistence.load;
 
 import java.io.File;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Dictionary;
 
+import org.cishell.app.service.fileloader.FileLoadException;
+import org.cishell.app.service.fileloader.FileLoaderService;
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
 import org.cishell.framework.algorithm.AlgorithmExecutionException;
-import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.algorithm.ProgressMonitor;
 import org.cishell.framework.algorithm.ProgressTrackable;
 import org.cishell.framework.data.Data;
@@ -26,6 +24,7 @@ public class FileLoadAlgorithm implements Algorithm, ProgressTrackable {
 	public static String defaultLoadDirectory;
 
 	private final LogService logger;
+	private FileLoaderService fileLoader;
 	private BundleContext bundleContext;
 	private CIShellContext ciShellContext;
 	private ProgressMonitor progressMonitor = ProgressMonitor.NULL_MONITOR;
@@ -34,7 +33,9 @@ public class FileLoadAlgorithm implements Algorithm, ProgressTrackable {
 			CIShellContext ciShellContext,
 			BundleContext bundleContext,
 			Dictionary<String, Object> preferences) {
-		this.logger = (LogService)ciShellContext.getService(LogService.class.getName());
+		this.logger = (LogService) ciShellContext.getService(LogService.class.getName());
+		this.fileLoader =
+			(FileLoaderService) ciShellContext.getService(FileLoaderService.class.getName());
 		this.ciShellContext = ciShellContext;
 		this.bundleContext = bundleContext;
 
@@ -45,26 +46,37 @@ public class FileLoadAlgorithm implements Algorithm, ProgressTrackable {
 	}
 
 	public Data[] execute() throws AlgorithmExecutionException {
-		IWorkbenchWindow window = getFirstWorkbenchWindow();
-		Display display = PlatformUI.getWorkbench().getDisplay();
-		File[] files = getFilesToLoadFromUser(window, display);
-		
-		if ((files != null) && (files.length != 0)) {
-			Collection<Data> finalLabeledFileData = new ArrayList<Data>();
-
-			for (File file : files) {
-				Data[] validatedFileData = validateFile(window, display, file);
-				Data[] labeledFileData = labelFileData(file, validatedFileData);
-
-				for (Data data : labeledFileData) {
-					finalLabeledFileData.add(data);
-				}
-			}
-
-			return finalLabeledFileData.toArray(new Data[0]);
-		} else {
-			return null;
+		try {
+			return this.fileLoader.loadFilesFromUserSelection(
+				this.bundleContext, this.ciShellContext, this.logger, this.progressMonitor);
+		} catch (FileLoadException e) {
+			throw new AlgorithmExecutionException(e.getMessage(), e);
 		}
+//		IWorkbenchWindow window = getFirstWorkbenchWindow();
+//		Display display = PlatformUI.getWorkbench().getDisplay();
+//		File[] files = getFilesToLoadFromUser(window, display);
+//
+//		if (files != null) {
+////			try {
+//				return new FileLoaderAlgorithm(
+//					this.bundleContext,
+//					files,
+//					this.ciShellContext,
+//					this.logger,
+//					this.progressMonitor).execute();
+////			} catch (Throwable e) {
+////				String format =
+////					"The chosen file is not compatible with this format.  " +
+////					"Check that your file is correctly formatted or try another validator.  " +
+////					"The reason is: %s";
+////				String logMessage = String.format(format, e.getMessage());
+////				this.logger.log(LogService.LOG_ERROR, logMessage, e);
+////
+////				return null;
+////			}
+//		} else {
+//			return null;
+//		}
 	}
 
 	public ProgressMonitor getProgressMonitor() {
@@ -100,63 +112,5 @@ public class FileLoadAlgorithm implements Algorithm, ProgressTrackable {
 		}
 
 		return fileSelector.getFiles();
-	}
-
-	private Data[] validateFile(IWorkbenchWindow window, Display display, File file) {
-		AlgorithmFactory validator = null;
-
-		try {
-			validator = getValidatorFromUser(window, display, file);
-
-			if ((file == null) || (validator == null)) {
-				String logMessage = "File loading canceled";
-				this.logger.log(LogService.LOG_WARNING, logMessage);
-			} else {
-				try {
-					return FileValidator.validateFile(
-						file, validator, this.progressMonitor, this.ciShellContext, this.logger);
-				} catch (AlgorithmExecutionException e) {
-					if ((e.getCause() != null)
-							&& (e.getCause() instanceof UnsupportedEncodingException)) {
-						String format =
-							"This file cannot be loaded; it uses the unsupported character " +
-							"encoding %s.";
-						String logMessage = String.format(format, e.getCause().getMessage());
-						this.logger.log(LogService.LOG_ERROR, logMessage);
-					} else {						
-						throw e;
-					}
-				}
-			}
-		} catch (Throwable e) {
-			String logMessage =
-				"The chosen file is not compatible with this format.  " +
-				"Check that your file is correctly formatted or try another validator.  " +
-				"The reason is: " + e.getMessage();
-			this.logger.log(LogService.LOG_ERROR, logMessage);
-		}
-
-		return new Data[0];
-	}
-
-	private Data[] labelFileData(File file, Data[] validatedFileData) {
-		Data[] labeledFileData = PrettyLabeler.relabelWithFileNameHierarchy(
-				validatedFileData, file);
-
-		return labeledFileData;
-	}
-
-	private AlgorithmFactory getValidatorFromUser(
-			IWorkbenchWindow window, Display display, File file) {
-		ValidatorSelectorRunnable validatorSelector =
-			new ValidatorSelectorRunnable(window, this.bundleContext, file);
-
-		if (Thread.currentThread() != display.getThread()) {
-			display.syncExec(validatorSelector);
-		} else {
-			validatorSelector.run();
-		}
-
-		return validatorSelector.getValidator();
 	}
 }

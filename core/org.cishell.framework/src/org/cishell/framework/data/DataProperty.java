@@ -60,6 +60,9 @@ public interface DataProperty {
      * it. The type associated with this property is of type {@link Boolean}.
      */
     public static final String MODIFIED = "Modified";
+
+    // TODO: Document me.
+    public static final String SERVICE_REFERENCE = "ServiceReference";
     
     /** Says this data model is abstractly a matrix */
     public static String MATRIX_TYPE = "Matrix";

@@ -13,6 +13,7 @@ Import-Package: org.cishell.app.service.datamanager;version="1.0.0",
  org.cishell.reference.gui.datamanager,
  org.cishell.reference.gui.workspace,
  org.cishell.service.guibuilder;version="1.0.0",
+ org.cishell.utilities,
  org.osgi.service.log;version="1.3.0"
 Export-Package: org.cishell.reference.gui.datamanager
 Bundle-ActivationPolicy: lazy

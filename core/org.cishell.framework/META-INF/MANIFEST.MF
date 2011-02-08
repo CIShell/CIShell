@@ -5,11 +5,13 @@ Bundle-SymbolicName: org.cishell.framework
 Bundle-Version: 1.0.0
 Bundle-Vendor: Cyberinfrastructure for Network Science Center
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
-Import-Package: org.osgi.framework,
+Import-Package: org.eclipse.osgi.framework.internal.core,
+ org.osgi.framework,
  org.osgi.service.log,
  org.osgi.service.metatype,
  org.osgi.service.prefs
 Export-Package: org.cishell.app.service.datamanager;version="1.0.0",
+ org.cishell.app.service.fileloader,
  org.cishell.app.service.scheduler;version="1.0.0",
  org.cishell.framework;version="1.0.0",
  org.cishell.framework.algorithm;version="1.0.0",
