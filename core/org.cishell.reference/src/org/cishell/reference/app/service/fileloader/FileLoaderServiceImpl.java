@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Dictionary;
 import java.util.HashSet;
+import java.util.Hashtable;
 
 import org.cishell.app.service.fileloader.FileLoadException;
 import org.cishell.app.service.fileloader.FileLoadListener;
@@ -27,7 +28,7 @@ public class FileLoaderServiceImpl implements FileLoaderService, ManagedService 
 	public static final String LOAD_DIRECTORY_PREFERENCE_KEY = "loadDir";
 	public static String defaultLoadDirectory = "";
 
-	private Dictionary preferences;
+	private Dictionary preferences = new Hashtable();
 	private Collection<FileLoadListener> listeners = new HashSet<FileLoadListener>();
 
 	public void registerListener(FileLoadListener listener) {
