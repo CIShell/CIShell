@@ -139,7 +139,7 @@ public class MenuAdapter implements AlgorithmProperty {
         this.actionsToMenuManagers = new HashMap<Action, IMenuManager>();
         this.pidsToServiceReferences = new HashMap<String, ServiceReference>();
         this.pidsToServiceReferencesCopy = new HashMap<String, ServiceReference>();
-        this.logger = (LogService)this.ciShellContext.getService(LogService.class.getName());
+        this.logger = (LogService) this.ciShellContext.getService(LogService.class.getName());
 
         /*
     	 * The intention of this clearShortcuts was to programmatically clear all of the
