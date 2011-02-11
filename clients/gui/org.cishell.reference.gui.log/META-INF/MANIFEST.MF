@@ -8,5 +8,9 @@ Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime
 Eclipse-LazyStart: true
-Import-Package: org.cishell.utility.swt,
+Import-Package: com.google.common.collect,
+ org.cishell.app.service.datamanager;version="1.0.0",
+ org.cishell.framework;version="1.0.0",
+ org.cishell.framework.data;version="1.0.0",
+ org.cishell.utility.swt,
  org.osgi.service.log;version="1.3.0"

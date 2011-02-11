@@ -1,5 +1,6 @@
 package org.cishell.reference.gui.log;
 
+import org.cishell.app.service.datamanager.DataManagerService;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -13,24 +14,29 @@ public class Activator extends AbstractUIPlugin {
 	public static final String PLUGIN_ID = "org.cishell.reference.gui.log";
 	private static Activator plugin;
 	private static BundleContext context;
+	public static DataManagerService dataManager;
 	
 	public Activator() {
 		plugin = this;
 	}
 
-	public void start(BundleContext context) throws Exception {
-		super.start(context);
-		Activator.context = context; 
+	public void start(BundleContext bundleContext) throws Exception {
+		super.start(bundleContext);
+		Activator.context = bundleContext; 
 		
 		LogListener fileLogListener = new LogToFile();
         ServiceReference serviceReference =
-        	context.getServiceReference(LogReaderService.class.getName());
+        	bundleContext.getServiceReference(LogReaderService.class.getName());
         LogReaderService logReaderService =
-        	(LogReaderService) context.getService(serviceReference);
+        	(LogReaderService) bundleContext.getService(serviceReference);
         
         if (logReaderService != null) {
             logReaderService.addLogListener(fileLogListener);
         }
+
+        Activator.dataManager = (DataManagerService)
+            bundleContext.getService(bundleContext.getServiceReference(
+                DataManagerService.class.getName()));
 	}
 
 	public void stop(BundleContext bundleContext) throws Exception {

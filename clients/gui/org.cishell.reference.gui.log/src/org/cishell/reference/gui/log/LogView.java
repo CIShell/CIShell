@@ -18,16 +18,23 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
 
+import org.cishell.app.service.datamanager.DataManagerListener;
+import org.cishell.framework.data.Data;
+import org.cishell.framework.data.DataProperty;
 import org.cishell.utility.swt.SWTUtilities;
 import org.cishell.utility.swt.URLClickedListener;
 import org.cishell.utility.swt.URLMouseCursorListener;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.TextTransfer;
@@ -50,7 +57,10 @@ import org.osgi.service.log.LogListener;
 import org.osgi.service.log.LogReaderService;
 import org.osgi.service.log.LogService;
 
-public class LogView extends ViewPart implements LogListener {
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+
+public class LogView extends ViewPart implements DataManagerListener, LogListener {
 	public static final String CONFIGURATION_DIRECTORY = "configuration";
 	public static final String WELCOME_TEXT_FILE_NAME = "Welcome.properties";
 	public static final String GREETING_PROPERTY = "greeting";
@@ -60,6 +70,90 @@ public class LogView extends ViewPart implements LogListener {
 	public static final Color LOG_WARNING_COLOR = new Color(Display.getDefault(), 255, 127, 0);
 	public static final Color LOG_INFO_COLOR = getSystemColor(SWT.COLOR_BLACK);
 	public static final Color LOG_DEBUG_COLOR = new Color(Display.getDefault(), 150, 150, 150);
+	public static final Color UNHIGHLIGHED_BACKGROUND_COLOR =
+		new Color(Display.getDefault(), 255, 255, 255);
+	public static final Color HIGHLIGHTED_BACKGROUND_COLOR =
+		new Color(Display.getDefault(), 200, 200, 200);
+
+	public static final boolean HIGHLIGHT_TEXT = false;
+
+	private Multimap<ServiceReference, Bounds> boundsByServiceReference = HashMultimap.create();
+	private Collection<StyleRange> nonHighlightStyleRanges = new HashSet<StyleRange>();
+
+	// DataManagerListener
+
+	public void dataAdded(Data data, String label) {}
+	public void dataLabelChanged(Data data, String label) {}
+	public void dataRemoved(Data data) {}
+
+	public void dataSelected(final Data[] data) {
+		if (HIGHLIGHT_TEXT) {
+			PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() {
+				public void run() {
+					LogView.this.textField.replaceStyleRanges(
+						0, LogView.this.textField.getText().length(), new StyleRange[0]);
+				}
+			});
+
+			final Collection<StyleRange> highlights = new ArrayList<StyleRange>();
+
+			for (Data datum : data) {
+				Object serviceReferenceObject =
+					datum.getMetadata().get(DataProperty.SERVICE_REFERENCE);
+
+				if (serviceReferenceObject != null) {
+					ServiceReference serviceReference = (ServiceReference) serviceReferenceObject;
+
+					if (LogView.this.boundsByServiceReference.containsKey(serviceReference)) {
+						Collection<Bounds> highlightBounds =
+							LogView.this.boundsByServiceReference.get(serviceReference);
+
+						for (Bounds highlightBound : highlightBounds) {
+							StyleRange highlightStyle = new StyleRange();
+							highlightStyle.start = highlightBound.start;
+							highlightStyle.length = highlightBound.length;
+							highlightStyle.background = HIGHLIGHTED_BACKGROUND_COLOR;
+							highlights.add(highlightStyle);
+						}
+					}
+				}
+			}
+
+			final Collection<StyleRange> nonHighlightStyles = new ArrayList<StyleRange>();
+
+			for (StyleRange nonHighlightStyle : this.nonHighlightStyleRanges) {
+				StyleRange newStyle = nonHighlightStyle;
+
+				for (StyleRange highlightStyle : highlights) {
+					int start = nonHighlightStyle.start;
+
+					if ((start >= highlightStyle.start) &&
+							(start < (highlightStyle.start + highlightStyle.length))) {
+						newStyle = (StyleRange) newStyle.clone();
+						newStyle.background = HIGHLIGHTED_BACKGROUND_COLOR;
+					}
+				}
+
+				nonHighlightStyles.add(newStyle);
+			}
+
+			PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() {
+				public void run() {
+					try {
+						for (StyleRange style : highlights) {
+							LogView.this.textField.setStyleRange(style);
+						}
+
+						for (StyleRange style : nonHighlightStyles) {
+							LogView.this.textField.setStyleRange(style);
+						}
+					} catch (Throwable e) {
+						e.printStackTrace();
+					}
+				}
+			});
+		}
+	}
 
 	private static Color getSystemColor(final int swtColor) {
 		final Color[] color = new Color[1];
@@ -102,6 +196,9 @@ public class LogView extends ViewPart implements LogListener {
             currentLevel = LogService.LOG_INFO;
         }
 */
+    	if (HIGHLIGHT_TEXT) {
+    		Activator.dataManager.addDataManagerListener(this);
+    	}
     }
 
     /**
@@ -212,18 +309,36 @@ public class LogView extends ViewPart implements LogListener {
 				try {
 					String message = entry.getMessage();
 					if (goodMessage(message)) {
-                        // Not all messages end w/ a new line, but they need to to print properly.
+                        /* Not all messages length w/ a new line,
+						 * but they need to to print properly.
+						 */
 						if (!message.endsWith("\n")) {
 							message += "\n";
 						}
+
+						if (HIGHLIGHT_TEXT) {
+							ServiceReference serviceReference = entry.getServiceReference();
+
+							if (serviceReference != null) {
+								int currentTextLength = LogView.this.textField.getText().length();
+								Bounds highlightBounds =
+									new Bounds(currentTextLength, message.length());
+								LogView.this.boundsByServiceReference.put(
+									serviceReference, highlightBounds);
+							}
+						}
                         
-						SWTUtilities.appendStringWithURL(
+						Collection<StyleRange> styles = SWTUtilities.appendStringWithURL(
 							LogView.this.textField,
 							LogView.this.urlListener,
 							LogView.this.urlCursorListener,
 							message,
 							COLOR_MAPPING.get("" + entry.getLevel()),
-							URL_COLOR);						
+							URL_COLOR);
+
+						if (HIGHLIGHT_TEXT) {
+							LogView.this.nonHighlightStyleRanges.addAll(styles);
+						}
 					}
 				} catch (Throwable e) {
 					e.printStackTrace();
@@ -241,5 +356,15 @@ public class LogView extends ViewPart implements LogListener {
         } else {
             return true;   
         }
+    }
+
+    private static class Bounds {
+    	public int start;
+    	public int length;
+
+    	public Bounds(int start, int end) {
+    		this.start = start;
+    		this.length = end;
+    	}
     }
 }
