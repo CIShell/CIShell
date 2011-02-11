@@ -3,6 +3,7 @@ package org.cishell.utilities;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Dictionary;
+import java.util.Enumeration;
 import java.util.Iterator;
 
 public class CollectionUtilities {
@@ -30,5 +31,14 @@ public class CollectionUtilities {
 	@SuppressWarnings("unchecked")
 	public static<T> T get(Collection<T> values, int index) {
 		return (T) values.toArray()[index];
+	}
+
+	public static<T> Collection<T> collectionEnumerationElements(
+			Enumeration<T> source, Collection<T> target) {
+		while (source.hasMoreElements()) {
+			target.add(source.nextElement());
+		}
+
+		return target;
 	}
 }

@@ -64,6 +64,16 @@ public class MapUtilities {
 		return valuesByIndex;
 	}
 
+	public static<K> Map<K, Integer> mapKeyToIndices(List<K> keys) {
+		Map<K, Integer> indexByKeys = new HashMap<K, Integer>();
+
+		for (int ii = 0; ii < keys.size(); ii++) {
+			indexByKeys.put(keys.get(ii), ii);
+		}
+
+		return indexByKeys;
+	}
+
 	public static<K, V> void valuesByKeys(
 			Map<K, V> items, Collection<K> keys, Collection<V> target) {
 		for (K key : keys) {
