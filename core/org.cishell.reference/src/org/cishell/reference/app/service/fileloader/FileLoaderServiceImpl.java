@@ -20,6 +20,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
 import org.osgi.service.log.LogService;
@@ -89,6 +91,62 @@ public class FileLoaderServiceImpl implements FileLoaderService, ManagedService 
 			bundleContext, ciShellContext, logger, progressMonitor, new File[] { file });
 	}
 
+	public Data[] loadFileOfType(
+			BundleContext bundleContext,
+			CIShellContext ciShellContext,
+			LogService logger,
+			ProgressMonitor progressMonitor,
+			File file,
+			String fileExtension,
+			String mimeType) throws FileLoadException {
+		try {
+			String format =
+				"(& " +
+					"(type=validator)" +
+					"(| (in_data=file-ext:%1$s) (also_validates=%1$s))" +
+					"(out_data=%2$s))";
+			String validatorsQuery = String.format(format, fileExtension, mimeType);
+			ServiceReference[] supportingValidators = bundleContext.getAllServiceReferences(
+				AlgorithmFactory.class.getName(), validatorsQuery);
+			
+			if (supportingValidators == null) {
+				throw new FileLoadException(String.format(
+					"The file %s cannot be loaded as type %s.", file.getName(), mimeType));
+			} else {
+				AlgorithmFactory validator =
+					(AlgorithmFactory) bundleContext.getService(supportingValidators[0]);
+
+				return loadFileOfType(
+					bundleContext, ciShellContext, logger, progressMonitor, file, validator);
+			}
+		} catch (InvalidSyntaxException e) {
+			e.printStackTrace();
+
+			throw new FileLoadException(e.getMessage(), e);
+		}
+	}
+
+	public Data[] loadFileOfType(
+			BundleContext bundleContext,
+			CIShellContext ciShellContext,
+			LogService logger,
+			ProgressMonitor progressMonitor,
+			File file,
+			AlgorithmFactory validator) throws FileLoadException {
+		try {
+			Data[] loadedFileData = loadFileInternal(
+				bundleContext, ciShellContext, logger, progressMonitor, file, validator);
+
+			for (FileLoadListener listener : this.listeners) {
+				listener.fileLoaded(file);
+			}
+
+			return loadedFileData;
+		} catch (AlgorithmExecutionException e) {
+			throw new FileLoadException(e.getMessage(), e);
+		}
+	}
+
 	public void updated(Dictionary preferences) throws ConfigurationException {
 		if (preferences != null) {
 			this.preferences = preferences;
@@ -123,15 +181,26 @@ public class FileLoaderServiceImpl implements FileLoaderService, ManagedService 
 
 			for (File file : files) {
 				try {
-					Data[] validatedFileData = validateFile(
+					AlgorithmFactory validator =
+						getValidatorFromUser(bundleContext, window, display, file);
+
+//					Data[] validatedFileData = validateFile(
+//						bundleContext,
+//						ciShellContext,
+//						logger,
+//						progressMonitor,
+//						window,
+//						display,
+//						file,
+//						validator);
+//					Data[] labeledFileData = labelFileData(file, validatedFileData);
+					Data[] labeledFileData = loadFileInternal(
 						bundleContext,
 						ciShellContext,
 						logger,
 						progressMonitor,
-						window,
-						display,
-						file);
-					Data[] labeledFileData = labelFileData(file, validatedFileData);
+						file,
+						validator);
 
 					for (Data data : labeledFileData) {
 						finalLabeledFileData.add(data);
@@ -150,6 +219,29 @@ public class FileLoaderServiceImpl implements FileLoaderService, ManagedService 
 		} else {
 			return null;
 		}
+	}
+
+	private Data[] loadFileInternal(
+			BundleContext bundleContext,
+			CIShellContext ciShellContext,
+			LogService logger,
+			ProgressMonitor progressMonitor,
+			File file,
+			AlgorithmFactory validator) throws AlgorithmExecutionException, FileLoadException {
+		IWorkbenchWindow window = getFirstWorkbenchWindow();
+		Display display = PlatformUI.getWorkbench().getDisplay();
+		Data[] validatedFileData = validateFile(
+			bundleContext,
+			ciShellContext,
+			logger,
+			progressMonitor,
+			window,
+			display,
+			file,
+			validator);
+		Data[] labeledFileData = labelFileData(file, validatedFileData);
+
+		return labeledFileData;
 	}
 
 	private IWorkbenchWindow getFirstWorkbenchWindow() throws FileLoadException {
@@ -182,15 +274,18 @@ public class FileLoaderServiceImpl implements FileLoaderService, ManagedService 
 			ProgressMonitor progressMonitor,
 			IWorkbenchWindow window,
 			Display display,
-			File file) throws AlgorithmExecutionException {
-		AlgorithmFactory validator = null;
-		validator = getValidatorFromUser(bundleContext, window, display, file);
-
+			File file,
+			AlgorithmFactory validator) throws AlgorithmExecutionException {
 		if ((file == null) || (validator == null)) {
 			String logMessage = "File loading canceled";
 			logger.log(LogService.LOG_WARNING, logMessage);
 		} else {
 			try {
+				System.err.println("file: " + file);
+				System.err.println("validator: " + validator);
+				System.err.println("progressMonitor: " + progressMonitor);
+				System.err.println("ciShellContext: " + ciShellContext);
+				System.err.println("logger: " + logger);
 				return FileValidator.validateFile(
 					file, validator, progressMonitor, ciShellContext, logger);
 			} catch (AlgorithmExecutionException e) {

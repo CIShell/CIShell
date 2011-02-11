@@ -73,11 +73,17 @@ public class PrettyLabeler {
 
 		for (Data datum : data) {
 			Dictionary<String, Object> labeledDatumMetadata = datum.getMetadata();
-			Data dataParent = getParent(labeledDatumMetadata);
-			if (!possibleParents.contains(dataParent)) {
-				labeledDatumMetadata.put(DataProperty.LABEL, prefix + absoluteFile.getName());
+			Object labelObject = labeledDatumMetadata.get(DataProperty.LABEL);
+
+			if ((labelObject == null) || ("".equals(labelObject.toString()))) {
+				Data dataParent = getParent(labeledDatumMetadata);
+
+				if (!possibleParents.contains(dataParent)) {
+					labeledDatumMetadata.put(DataProperty.LABEL, prefix + absoluteFile.getName());
+				}
+
+				possibleParents.add(datum);
 			}
-			possibleParents.add(datum);
 		}
 
 		return data;
