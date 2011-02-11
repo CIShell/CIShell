@@ -21,6 +21,7 @@ import org.cishell.app.service.datamanager.DataManagerListener;
 import org.cishell.app.service.datamanager.DataManagerService;
 import org.cishell.app.service.scheduler.SchedulerService;
 import org.cishell.framework.CIShellContext;
+import org.cishell.framework.ServiceReferenceDelegate;
 import org.cishell.framework.algorithm.Algorithm;
 import org.cishell.framework.algorithm.AlgorithmProperty;
 import org.cishell.framework.data.Data;
@@ -63,9 +64,9 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, DataMa
         setText(label);
         setToolTipText((String)serviceReference.getProperty(AlgorithmProperty.DESCRIPTION));
         
-        DataManagerService dataManager = (DataManagerService) 
-            bundleContext.getService(bundleContext.getServiceReference(
-                    DataManagerService.class.getName()));
+        DataManagerService dataManager =
+        	(DataManagerService) bundleContext.getService(bundleContext.getServiceReference(
+        		DataManagerService.class.getName()));
         
         dataManager.addDataManagerListener(this);
         dataSelected(dataManager.getSelectedData());
@@ -73,10 +74,12 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, DataMa
 
     public void run() {
         try {
-            printAlgorithmInformation(this.serviceReference, this.ciShellContext);
+        	ServiceReference uniqueServiceReference =
+        		new ServiceReferenceDelegate(this.serviceReference);
+            printAlgorithmInformation(uniqueServiceReference, this.ciShellContext);
 
             Algorithm algorithm = new AlgorithmWrapper(
-            	this.serviceReference,
+            	uniqueServiceReference,
             	this.bundleContext,
             	this.ciShellContext,
             	this.originalData,
@@ -84,43 +87,44 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, DataMa
             	this.converters);
             SchedulerService scheduler = (SchedulerService) getService(SchedulerService.class);
             
-            scheduler.schedule(algorithm, this.serviceReference);
+            scheduler.schedule(algorithm, uniqueServiceReference);
         } catch (Throwable exception) {
         	// Just in case an uncaught exception occurs. Eclipse will swallow errors thrown here.
             exception.printStackTrace();
         }
     }
     
-    private void printAlgorithmInformation(ServiceReference ref, CIShellContext ciContext) {
+    private void printAlgorithmInformation(
+    		ServiceReference serviceReference, CIShellContext ciContext) {
         // Adjust to log the whole acknowledgement in one block.
         LogService logger = (LogService) ciContext.getService(LogService.class.getName());
         StringBuffer acknowledgement = new StringBuffer();
-        String label = (String)ref.getProperty(LABEL);
+        String label = (String) serviceReference.getProperty(LABEL);
 
         if (label != null) {
         	acknowledgement.append("..........\n" + label + " was selected.\n");
         }
 
-        String authors = (String)ref.getProperty(AUTHORS);
+        String authors = (String) serviceReference.getProperty(AUTHORS);
 
         if (authors != null) {
         	acknowledgement.append("Author(s): " + authors + "\n");
         }
 
-        String implementers = (String)ref.getProperty(IMPLEMENTERS);
+        String implementers = (String) serviceReference.getProperty(IMPLEMENTERS);
 
         if (implementers != null) {
         	acknowledgement.append("Implementer(s): " + implementers + "\n");
         }
 
-        String integrators = (String)ref.getProperty(INTEGRATORS);
+        String integrators = (String) serviceReference.getProperty(INTEGRATORS);
 
         if (integrators != null) {
             acknowledgement.append("Integrator(s): " + integrators + "\n");
         }
 
-        String reference = (String)ref.getProperty(REFERENCE);
-        String reference_url = (String)ref.getProperty(REFERENCE_URL);            
+        String reference = (String) serviceReference.getProperty(REFERENCE);
+        String reference_url = (String) serviceReference.getProperty(REFERENCE_URL);            
 
         if ((reference != null) && (reference_url != null)) {
             acknowledgement.append(
@@ -129,14 +133,14 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, DataMa
         	acknowledgement.append("Reference: " + reference + "\n");
         }
 
-        String docu = (String)ref.getProperty(DOCUMENTATION_URL);
+        String documentationURL = (String) serviceReference.getProperty(DOCUMENTATION_URL);
 
-        if (docu != null) {
-        	acknowledgement.append("Documentation: " + docu + "\n");
+        if (documentationURL != null) {
+        	acknowledgement.append("Documentation: " + documentationURL + "\n");
         }
 
         if (acknowledgement.length() > 1) {
-        	logger.log(LogService.LOG_INFO, acknowledgement.toString());
+        	logger.log(serviceReference, LogService.LOG_INFO, acknowledgement.toString());
         }
     }
     
