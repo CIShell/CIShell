@@ -13,38 +13,40 @@ public final class ValidatorSelectorRunnable implements Runnable {
 	private BundleContext bundleContext;
 
 	private File file;
-	private AlgorithmFactory validator;
+	private AlgorithmFactory chosenValidator;
 
 	public ValidatorSelectorRunnable(
 			IWorkbenchWindow window, BundleContext bundleContext, File file) {
 		this.window = window;
 		this.bundleContext = bundleContext;
 		this.file = file;
+		
 	}
 
 	public AlgorithmFactory getValidator() {
-		return this.validator;
+		return this.chosenValidator;
 	}
 
 	public void run() {
 		String fileExtension =
 			getFileExtension(this.file.getAbsolutePath()).toLowerCase().substring(1);
 
-		ServiceReference[] supportingValidators = getSupportingValidators(fileExtension);
+		ServiceReference[] supportingValidators =
+			getSupportingValidators(this.bundleContext, fileExtension);
 
 		// If there are no supporting validators...
 		if (supportingValidators.length == 0) {
 			// Let the user choose from all the validators available.
 
-			ServiceReference[] allValidators = getAllValidators();
+			ServiceReference[] allValidators = getAllValidators(this.bundleContext);
 
 			FileFormatSelector validatorSelector = new FileFormatSelector(
 				"Load", window.getShell(), this.bundleContext, allValidators, this.file);
 			validatorSelector.open();
-			this.validator = validatorSelector.getValidator();
+			this.chosenValidator = validatorSelector.getValidator();
 		} else if (supportingValidators.length == 1) {
 			ServiceReference onlyPossibleValidator = supportingValidators[0];
-			this.validator =
+			this.chosenValidator =
 				(AlgorithmFactory)this.bundleContext.getService(onlyPossibleValidator);
 		}
 
@@ -52,38 +54,14 @@ public final class ValidatorSelectorRunnable implements Runnable {
 			FileFormatSelector validatorSelector = new FileFormatSelector(
 				"Load", window.getShell(), this.bundleContext, supportingValidators, this.file);
 			validatorSelector.open();
-			this.validator = validatorSelector.getValidator();
+			this.chosenValidator = validatorSelector.getValidator();
 		}
 	}
 
-	private ServiceReference[] getSupportingValidators(String fileExtension) {
-		try {
-			String validatorsQuery =
-				"(& (type=validator)" +
-				"(|" +
-					"(in_data=file-ext:" + fileExtension + ")" +
-					"(also_validates=" + fileExtension + ")" + 
-				"))";
-			 
-			ServiceReference[] supportingValidators = this.bundleContext.getAllServiceReferences(
-				AlgorithmFactory.class.getName(), validatorsQuery);
-			
-			if (supportingValidators == null) {
-				return new ServiceReference[0];
-			} else {
-				return supportingValidators;
-			}
-		} catch (InvalidSyntaxException e) {
-			e.printStackTrace();
-
-			return new ServiceReference[]{};	
-		}
-	}
-
-	private ServiceReference[] getAllValidators() {
+	public static ServiceReference[] getAllValidators(BundleContext bundleContext) {
 		try {
 			String validatorsQuery = "(&(type=validator)(in_data=file-ext:*))";
-			ServiceReference[] allValidators = this.bundleContext.getAllServiceReferences(
+			ServiceReference[] allValidators = bundleContext.getAllServiceReferences(
 				AlgorithmFactory.class.getName(), validatorsQuery);
 			
 			if (allValidators == null) {
@@ -95,6 +73,31 @@ public final class ValidatorSelectorRunnable implements Runnable {
 			e.printStackTrace();
 
 			return new ServiceReference[0];	
+		}
+	}
+
+	public static ServiceReference[] getSupportingValidators(
+			BundleContext bundleContext, String fileExtension) {
+		try {
+			String validatorsQuery =
+				"(& (type=validator)" +
+				"(|" +
+					"(in_data=file-ext:" + fileExtension + ")" +
+					"(also_validates=" + fileExtension + ")" + 
+				"))";
+			 
+			ServiceReference[] supportingValidators = bundleContext.getAllServiceReferences(
+				AlgorithmFactory.class.getName(), validatorsQuery);
+			
+			if (supportingValidators == null) {
+				return new ServiceReference[0];
+			} else {
+				return supportingValidators;
+			}
+		} catch (InvalidSyntaxException e) {
+			e.printStackTrace();
+
+			return new ServiceReference[]{};	
 		}
 	}
 

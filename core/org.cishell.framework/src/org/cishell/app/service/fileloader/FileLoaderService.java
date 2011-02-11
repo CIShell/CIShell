@@ -3,6 +3,7 @@ package org.cishell.app.service.fileloader;
 import java.io.File;
 
 import org.cishell.framework.CIShellContext;
+import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.algorithm.ProgressMonitor;
 import org.cishell.framework.data.Data;
 import org.osgi.framework.BundleContext;
@@ -29,4 +30,19 @@ public interface FileLoaderService {
 			LogService logger,
 			ProgressMonitor progressMonitor,
 			File file) throws FileLoadException;
+	public Data[] loadFileOfType(
+			BundleContext bundleContext,
+			CIShellContext ciShellContext,
+			LogService logger,
+			ProgressMonitor progressMonitor,
+			File file,
+			String fileExtension,
+			String mimeType) throws FileLoadException;
+	public Data[] loadFileOfType(
+			BundleContext bundleContext,
+			CIShellContext ciShellContext,
+			LogService logger,
+			ProgressMonitor progressMonitor,
+			File file,
+			AlgorithmFactory validator) throws FileLoadException;
 }

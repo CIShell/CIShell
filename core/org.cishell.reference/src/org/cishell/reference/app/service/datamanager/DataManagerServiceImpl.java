@@ -16,7 +16,6 @@ package org.cishell.reference.app.service.datamanager;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -27,84 +26,75 @@ import org.cishell.framework.data.DataProperty;
 
 
 public class DataManagerServiceImpl implements DataManagerService {
-    private Map modelToLabelMap;
-    private Map labelToModelMap; 
-    private Map labelToNumOccurrences;
-    private Set models;
-    private Set selectedModels;
-    
-    private Set listeners;
-    
-    /**
-     * Creates a new BasicModelManager Object.
-     */
-    public DataManagerServiceImpl() {
-        modelToLabelMap = new HashMap();
-        labelToModelMap = new HashMap();
-        labelToNumOccurrences = new HashMap();
-        models = new HashSet();
-        listeners = new HashSet();
-    }
+    private Map<Data, String> datumToLabel = new HashMap<Data, String>();
+    private Map<String, Data> labelToDatum = new HashMap<String, Data>(); 
+    private Map<String, Integer> labelToOccurrenceCount = new HashMap<String, Integer>();
+    private Set<Data> data = new HashSet<Data>();
+    private Set<Data> selectedData = new HashSet<Data>();
+    private Set<DataManagerListener> listeners = new HashSet<DataManagerListener>();
 
-    /**
-     * @see edu.iu.iv.core.ModelManager#addData(java.lang.Object)
-     */
-    public void addData(Data model) {
-    	if(model == null){
+    public void addData(Data datum) {
+    	if (datum == null) {
     		return;
     	}
-        String label = (String)model.getMetadata().get(DataProperty.LABEL);
-        String type = (String)model.getMetadata().get(DataProperty.TYPE);
+
+        String label = (String) datum.getMetadata().get(DataProperty.LABEL);
+        String type = (String) datum.getMetadata().get(DataProperty.TYPE);
         
-        if(type == null){
+        if (type == null) {
             type = DataProperty.OTHER_TYPE;
-            model.getMetadata().put(DataProperty.TYPE, type);
+            datum.getMetadata().put(DataProperty.TYPE, type);
         }
         
-        //generate label if needed
-        if(label == null || label.equals("")){
-            StackTraceElement[] stack = new Throwable().getStackTrace();                
-            
-            if (stack.length > 2) {
-                String className = stack[2].getClassName();
-                int lastDot = className.lastIndexOf(".");
-                
-                if (className.length() > lastDot) {
-                    lastDot++;
-                    className = className.substring(lastDot);
-                    
-                    if (className.endsWith("Algorithm")) {
-                        className = className.substring(0,className.lastIndexOf("Algorithm"));
-                    }
-                    
-                    if (className.endsWith("Factory")) {
-                        className = className.substring(0,className.lastIndexOf("Factory"));
-                    }
-                }           
-                label = className;  
-            } else {
-                label = "Unknown";
-            }
-            
-            label = label + "." + type;           
+        // Generate label if needed.
+        if ((label == null) || "".equals(label)) {
+            label = generateDefaultLabel(type);  
         }
         
-        addModel(model, label);
-        
-        for (Iterator iter=listeners.iterator(); iter.hasNext();) {
-            ((DataManagerListener) iter.next()).dataAdded(model, label);
+        addModel(datum, label);
+
+        for (DataManagerListener listener : this.listeners) {
+            listener.dataAdded(datum, label);
         }
     }
 
-    private void addModel(Data model, String label) {
+    private void addModel(Data datum, String label) {
         label = findUniqueLabel(label);
-        model.getMetadata().put(DataProperty.LABEL, label);
-        //set the model to be unsaved initially
-        model.getMetadata().put(DataProperty.MODIFIED, new Boolean(true));
+        datum.getMetadata().put(DataProperty.LABEL, label);
+        // Set the model to be unsaved initially.
+        datum.getMetadata().put(DataProperty.MODIFIED, new Boolean(true));
                 
-        modelToLabelMap.put(model, label);
-        labelToModelMap.put(label, model);      
-        models.add(model);
+        this.datumToLabel.put(datum, label);
+        this.labelToDatum.put(label, datum);      
+        this.data.add(datum);
+    }
+
+    private String generateDefaultLabel(String dataType) {
+    	String label;
+    	StackTraceElement[] stack = new Throwable().getStackTrace();                
+
+        if (stack.length > 2) {
+            String className = stack[2].getClassName();
+            int lastDot = className.lastIndexOf(".");
+            
+            if (className.length() > lastDot) {
+                lastDot++;
+                className = className.substring(lastDot);
+                
+                if (className.endsWith("Algorithm")) {
+                    className = className.substring(0,className.lastIndexOf("Algorithm"));
+                }
+                
+                if (className.endsWith("Factory")) {
+                    className = className.substring(0,className.lastIndexOf("Factory"));
+                }
+            }           
+            label = className;  
+        } else {
+            label = "Unknown";
+        }
+        
+        return String.format("%s.%s", label, dataType);
     }
     
     /**
@@ -117,16 +107,17 @@ public class DataManagerServiceImpl implements DataManagerService {
      */
     private String findUniqueLabel(String label) {
         
-    	Integer numOccurences = (Integer) labelToNumOccurrences.get(label);
+    	Integer occurenceCount = this.labelToOccurrenceCount.get(label);
     	
-    	if (numOccurences == null) {
+    	if (occurenceCount == null) {
     		//the label is unique
-    		labelToNumOccurrences.put(label, new Integer(1));
+    		this.labelToOccurrenceCount.put(label, new Integer(1));
+
     		return label;
     		
     	} else {
-    		//the label is not unique
-    		int numOccurrencesVal = numOccurences.intValue();
+    		// The label is not unique.
+    		int numOccurrencesVal = occurenceCount.intValue();
     		
     		int newNumOccurrencesVal = numOccurrencesVal + 1;
     		
@@ -146,8 +137,7 @@ public class DataManagerServiceImpl implements DataManagerService {
     		/*
     		 * remember how many occurrences of the original label we have.
     		 */
-    		labelToNumOccurrences.put(label,
-    				new Integer(newNumOccurrencesVal));
+    		this.labelToOccurrenceCount.put(label, new Integer(newNumOccurrencesVal));
     		
     		/*
     		 * also, remember that we now have a new label which might be
@@ -159,7 +149,7 @@ public class DataManagerServiceImpl implements DataManagerService {
     		 * of whatever.xml). Maybe not the best way to do this, but
     		 * it makes sense.
     		 */
-    		labelToNumOccurrences.put(newLabel, new Integer(1));
+    		this.labelToOccurrenceCount.put(newLabel, new Integer(1));
     		
     		return newLabel;
     	}
@@ -206,69 +196,65 @@ public class DataManagerServiceImpl implements DataManagerService {
     }
 
 
-    public void removeData(Data model) {
-        String label = getLabel(model);
+    public void removeData(Data datum) {
+        String label = getLabel(datum);
         
-        labelToModelMap.remove(label);
-        modelToLabelMap.remove(model);
-        labelToNumOccurrences.remove(label);
-        models.remove(model);
-        
-        for (Iterator iter=listeners.iterator(); iter.hasNext();) {
-            ((DataManagerListener) iter.next()).dataRemoved(model);
+        this.labelToDatum.remove(label);
+        this.datumToLabel.remove(datum);
+        this.labelToOccurrenceCount.remove(label);
+        this.data.remove(datum);
+
+        for (DataManagerListener listener : this.listeners) {
+            listener.dataRemoved(datum);
         }
     }
 
     public Data[] getSelectedData() {
-        if (selectedModels == null) {
-            selectedModels = new HashSet();
-        }
-        
-        return (Data[]) selectedModels.toArray(new Data[]{});
+        return this.selectedData.toArray(new Data[0]);
     }
 
-    public void setSelectedData(Data[] inModels) {
-        selectedModels = new HashSet(Arrays.asList(inModels));
+    public void setSelectedData(Data[] data) {
+        this.selectedData.clear();
+        this.selectedData.addAll(Arrays.asList(data));
         
-        for (int i=0; i < inModels.length; i++) {
-        	if (!this.models.contains(inModels[i])) {
-        		addData(inModels[i]);
+        for (int ii = 0; ii < data.length; ii++) {
+        	if (!this.data.contains(data[ii])) {
+        		addData(data[ii]);
         	}
         }
-        
-        for (Iterator iter=listeners.iterator(); iter.hasNext();) {
-            ((DataManagerListener) iter.next()).dataSelected(inModels);
+
+        for (DataManagerListener listener : this.listeners) {
+            listener.dataSelected(data);
         }
     }
     
-    private Data getModelForLabel(String label){
-        return (Data)labelToModelMap.get(label);
+    private Data getModelForLabel(String label) {
+        return this.labelToDatum.get(label);
     }
     
-    public String getLabel(Data model){
-        return (String)modelToLabelMap.get(model);
+    public String getLabel(Data datum) {
+        return this.datumToLabel.get(datum);
     }
     
-    public synchronized void setLabel(Data model, String label) {
-        label = findUniqueLabel(label);
-        
-        modelToLabelMap.put(model, label);
-        labelToModelMap.put(label, model);  
-        
-        for (Iterator iter=listeners.iterator(); iter.hasNext();) {
-            ((DataManagerListener) iter.next()).dataLabelChanged(model, label);
+    public synchronized void setLabel(Data datum, String label) {
+        String uniqueLabel = findUniqueLabel(label);
+        this.datumToLabel.put(datum, uniqueLabel);
+        this.labelToDatum.put(uniqueLabel, datum);  
+
+        for (DataManagerListener listener : this.listeners) {
+            listener.dataLabelChanged(datum, label);
         }
     }
 
     public Data[] getAllData() {
-        return (Data[]) models.toArray(new Data[]{});
+        return this.data.toArray(new Data[0]);
     }
 
     public void addDataManagerListener(DataManagerListener listener) {
-        listeners.add(listener);
+        this.listeners.add(listener);
     }
 
     public void removeDataManagerListener(DataManagerListener listener) {
-        listeners.remove(listener);
+        this.listeners.remove(listener);
     }
 }
