@@ -26,8 +26,8 @@ Export-Package: org.cishell.reference.app.service.algorithminvocation,
 Require-Bundle: edu.uci.ics.jung,
  org.eclipse.swt,
  org.eclipse.ui,
- org.eclipse.core.runtime;bundle-version="3.4.0",
- org.eclipse.update.ui;bundle-version="3.2.100"
+ org.eclipse.core.runtime,
+ org.eclipse.update.ui
 Service-Component: OSGI-INF/fileloader.xml
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 X-AutoStart: true
