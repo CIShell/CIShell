@@ -4,7 +4,7 @@
  *
  * Created on Feb 22, 2005 at Indiana University.
  */
-package org.cishell.reference.gui.common;
+package org.cishell.reference.gui.workspace.common;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
