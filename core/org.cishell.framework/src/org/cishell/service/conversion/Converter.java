@@ -65,4 +65,6 @@ public interface Converter {
      * @throws ConversionException If the data conversion fails while converting
      */
     public Data convert(Data data) throws ConversionException;
+
+    public String calculateLossiness();
 }
