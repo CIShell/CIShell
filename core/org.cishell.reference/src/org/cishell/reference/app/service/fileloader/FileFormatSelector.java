@@ -3,7 +3,6 @@ package org.cishell.reference.app.service.fileloader;
 import java.io.File;
 
 import org.cishell.framework.algorithm.AlgorithmFactory;
-import org.cishell.reference.gui.guibuilder.swt.builder.AbstractDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
