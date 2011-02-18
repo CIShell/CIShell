@@ -30,7 +30,6 @@ import org.cishell.app.service.fileloader.FileLoaderService;
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.CIShellContextDelegate;
 import org.cishell.framework.LocalCIShellContext;
-import org.cishell.framework.ServiceReferenceDelegate;
 import org.cishell.framework.algorithm.Algorithm;
 import org.cishell.framework.algorithm.AlgorithmExecutionException;
 import org.cishell.framework.algorithm.AlgorithmFactory;
@@ -236,8 +235,9 @@ public abstract class AbstractDataManagerView
     					/* TODO: Eventually use the AlgorithmInvocationService for this
 					 	 * kind of stuff?
 					 	 */
-    					ServiceReference uniqueServiceReference = new ServiceReferenceDelegate(
-							dataManagerServiceReference);
+    					ServiceReference uniqueServiceReference = dataManagerServiceReference;
+//    					ServiceReference uniqueServiceReference = new ServiceReferenceDelegate(
+//							dataManagerServiceReference);
 						CIShellContext ciShellContext = new CIShellContextDelegate(
 							uniqueServiceReference, new LocalCIShellContext(Activator.context));
 						LogService uniqueLogger =
