@@ -14,8 +14,8 @@
 package org.cishell.reference.app.service.datamanager;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -26,12 +26,12 @@ import org.cishell.framework.data.DataProperty;
 
 
 public class DataManagerServiceImpl implements DataManagerService {
-    private Map<Data, String> datumToLabel = new HashMap<Data, String>();
-    private Map<String, Data> labelToDatum = new HashMap<String, Data>(); 
-    private Map<String, Integer> labelToOccurrenceCount = new HashMap<String, Integer>();
-    private Set<Data> data = new HashSet<Data>();
-    private Set<Data> selectedData = new HashSet<Data>();
-    private Set<DataManagerListener> listeners = new HashSet<DataManagerListener>();
+    private Map<Data, String> datumToLabel = new LinkedHashMap<Data, String>();
+    private Map<String, Data> labelToDatum = new LinkedHashMap<String, Data>(); 
+    private Map<String, Integer> labelToOccurrenceCount = new LinkedHashMap<String, Integer>();
+    private Set<Data> data = new LinkedHashSet<Data>();
+    private Set<Data> selectedData = new LinkedHashSet<Data>();
+    private Set<DataManagerListener> listeners = new LinkedHashSet<DataManagerListener>();
 
     public void addData(Data datum) {
     	if (datum == null) {
