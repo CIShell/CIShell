@@ -8,7 +8,6 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.update.ui
 Eclipse-LazyStart: true
-Export-Package: org.cishell.reference.gui.workspace,
- org.cishell.reference.gui.workspace.common
+Export-Package: org.cishell.reference.gui.workspace
 Import-Package: org.cishell.reference.gui.guibuilder.swt,
  org.cishell.service.guibuilder
