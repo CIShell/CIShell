@@ -16,7 +16,7 @@ import java.util.Map;
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.AlgorithmProperty;
 import org.cishell.framework.data.Data;
-import org.cishell.reference.gui.workspace.common.AbstractDialog;
+import org.cishell.reference.gui.guibuilder.swt.builder.AbstractDialog;
 import org.cishell.service.conversion.Converter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
