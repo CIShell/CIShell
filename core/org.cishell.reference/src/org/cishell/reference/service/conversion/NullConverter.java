@@ -73,6 +73,10 @@ public class NullConverter implements Converter, AlgorithmFactory, AlgorithmProp
         return props;
     }
 
+    public String calculateLossiness() {
+    	return getProperties().get(CONVERSION).toString();
+    }
+
     public Algorithm createAlgorithm(Data[] dm, Dictionary parameters, CIShellContext context) {
         return new ConverterAlgorithm(dm, parameters, context);
     }

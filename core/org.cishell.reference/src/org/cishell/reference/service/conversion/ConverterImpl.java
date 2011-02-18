@@ -168,19 +168,19 @@ public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProp
 	    	
 	    return equal;
     }
-    
-    /* The conversion chain (serviceReferences) is lossless
-	 * if and only if no conversion (ref) is lossy.
-	 */
-	private String calculateLossiness(ServiceReference[] refs) {
-		String lossiness = LOSSLESS;
-	    for (int i=0; i < refs.length; i++) {
-	        if (LOSSY.equals(refs[i].getProperty(CONVERSION))) {
-	            lossiness = LOSSY;
+
+    public String calculateLossiness() {
+    	return calculateLossiness(getConverterChain());
+    }
+
+	private static String calculateLossiness(ServiceReference[] serviceReferences) {
+		for (ServiceReference serviceReference : serviceReferences) {
+	        if (LOSSY.equals(serviceReference.getProperty(CONVERSION))) {
+	            return LOSSY;
 	        }
 	    }
 	    
-		return lossiness;
+		return LOSSLESS;
 	}
 
 	private class ConverterAlgorithm implements Algorithm {
@@ -287,7 +287,7 @@ public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProp
         		return "Problem converting data from "
         				+ prettifyDataType(inType)
         				+ " to " + prettifyDataType(outType)
-        				+ " (See the logger file for more details).:\n        "
+        				+ " (See the log file for more details).:\n        "
         				+ e.getMessage();
         	}
         	else {        	
@@ -297,7 +297,7 @@ public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProp
 			        	+ " during the necessary intermediate conversion from "
 			        	+ prettifyDataType(preProblemType) + " to "
 			        	+ prettifyDataType(postProblemType)
-			        	+ " (See the logger file for more details):\n        "
+			        	+ " (See the log file for more details):\n        "
 			        	+ e.getMessage();
         	}
         }
