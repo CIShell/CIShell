@@ -23,7 +23,7 @@ public class ZipUtilities {
 			throws ZipIOException {
 		try {
 			for (File file : files) {
-				writeFileToZipFile(file, zipOut);
+				writeFileToZipFile(file, file.getName(), zipOut);
 			}
 
 			zipOut.close();
@@ -44,13 +44,38 @@ public class ZipUtilities {
 		}
 	}
 
-	public static void writeFileToZipFile(File file, ZipOutputStream zipOut)
+	public static void zipFilesWithNames(
+			Map<File, String> fileToZippedName, ZipOutputStream zipOut) throws ZipIOException {
+		try {
+			for (File file : fileToZippedName.keySet()) {
+				writeFileToZipFile(file, fileToZippedName.get(file), zipOut);
+			}
+
+			zipOut.close();
+		} catch (IOException e) {
+			throw new ZipIOException(e.getMessage(), e);
+		}
+	}
+
+	public static void zipFilesWithNames(
+			Map<File, String> fileToZippedName, File targetZipFile) throws ZipIOException {
+		try {
+			zipFilesWithNames(
+				fileToZippedName,
+				new ZipOutputStream(
+					new BufferedOutputStream(new FileOutputStream(targetZipFile))));
+		} catch (FileNotFoundException e) {
+			throw new ZipIOException(e.getMessage(), e);
+		}
+	}
+
+	public static void writeFileToZipFile(File file, String zippedName, ZipOutputStream zipOut)
 			throws ZipIOException {
 		try {
 			byte data[] = new byte[BUFFER_SIZE];
 			BufferedInputStream fileInput =
 				new BufferedInputStream(new FileInputStream(file), BUFFER_SIZE);
-			ZipEntry entry = new ZipEntry(file.getName());
+			ZipEntry entry = new ZipEntry(zippedName);
 			zipOut.putNextEntry(entry);
 			int count;
 
