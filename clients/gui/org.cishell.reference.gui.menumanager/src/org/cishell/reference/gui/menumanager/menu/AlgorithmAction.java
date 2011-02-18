@@ -21,7 +21,6 @@ import org.cishell.app.service.datamanager.DataManagerListener;
 import org.cishell.app.service.datamanager.DataManagerService;
 import org.cishell.app.service.scheduler.SchedulerService;
 import org.cishell.framework.CIShellContext;
-import org.cishell.framework.ServiceReferenceDelegate;
 import org.cishell.framework.algorithm.Algorithm;
 import org.cishell.framework.algorithm.AlgorithmProperty;
 import org.cishell.framework.data.Data;
@@ -74,8 +73,8 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, DataMa
 
     public void run() {
         try {
-        	ServiceReference uniqueServiceReference =
-        		new ServiceReferenceDelegate(this.serviceReference);
+        	ServiceReference uniqueServiceReference = this.serviceReference;
+//        		new ServiceReferenceDelegate(this.serviceReference);
             printAlgorithmInformation(uniqueServiceReference, this.ciShellContext);
 
             Algorithm algorithm = new AlgorithmWrapper(
