@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: google-guava
-Bundle-SymbolicName: google-guava
+Bundle-Name: google_guava
+Bundle-SymbolicName: google_guava
 Bundle-Version: 0.8.0
 Bundle-ClassPath: guava-r08.jar
 Export-Package: com.google.common.annotations,
