@@ -6,6 +6,7 @@ Bundle-Version: 1.0.0
 Bundle-ClassPath: .
 Import-Package: org.cishell.app.service.datamanager,
  org.cishell.app.service.fileloader,
+ org.cishell.app.service.filesaver,
  org.cishell.framework;version="1.0.0",
  org.cishell.framework.algorithm;version="1.0.0",
  org.cishell.framework.data;version="1.0.0",

@@ -42,6 +42,10 @@ import org.osgi.framework.ServiceReference;
  * among several persisters that support the selected model, in the event
  * that more than one is found.
  */
+/* TODO
+ * If we make a file viewer service, remove this
+ * Otherwise move to File View algorithm
+ */
 public class SaveDataChooser extends AbstractDialog implements AlgorithmProperty {
 	public static final Image QUESTION_ICON =
     	Display.getCurrent().getSystemImage(SWT.ICON_QUESTION);
