@@ -17,6 +17,9 @@ import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
 public class ZipUtilities {
+	/* 2048, as gotten from:
+	 * http://java.sun.com/developer/technicalArticles/Programming/compression/
+	 */
 	static final int BUFFER_SIZE = 2048;
 
 	public static void zipFiles(Collection<File> files, ZipOutputStream zipOut)
@@ -29,7 +32,14 @@ public class ZipUtilities {
 			zipOut.close();
 		} catch (IOException e) {
 			throw new ZipIOException(e.getMessage(), e);
+		} finally {
+			try {
+				zipOut.close();
+			} catch (IOException e) {
+				throw new ZipIOException(e.getMessage(), e);
+			}
 		}
+			
 	}
 
 	public static void zipFiles(Collection<File> files, File targetZipFile)
@@ -54,6 +64,12 @@ public class ZipUtilities {
 			zipOut.close();
 		} catch (IOException e) {
 			throw new ZipIOException(e.getMessage(), e);
+		} finally {
+			try {
+				zipOut.close();
+			} catch (IOException e) {
+				throw new ZipIOException(e.getMessage(), e);
+			}
 		}
 	}
 
@@ -69,6 +85,10 @@ public class ZipUtilities {
 		}
 	}
 
+	/* Again, refer to:
+	 * http://java.sun.com/developer/technicalArticles/Programming/compression/
+	 * for a reference on where this solution came from.
+	 */
 	public static void writeFileToZipFile(File file, String zippedName, ZipOutputStream zipOut)
 			throws ZipIOException {
 		try {
@@ -98,10 +118,17 @@ public class ZipUtilities {
 			BufferedInputStream reader = new BufferedInputStream(zipFile.getInputStream(entry));
 			String fileName = new File(entry.getName()).getName();
 			File outputFile =
-				FileUtilities.createTemporaryFileInDefaultTemporaryDirectory(fileName, "");
+				FileUtilities.createTemporaryFileInDefaultTemporaryDirectory(fileName, "tmp");
 			BufferedOutputStream output =
 				new BufferedOutputStream(new FileOutputStream(outputFile), BUFFER_SIZE);
 
+			/* TODO Could we have:
+			 * writeFileToZipFile(BufferedInputStream in, String zippedName, ZipOutputStream zipOut)
+			 * and then have both:
+			 * writeFileToZipFile(File file, String zippedName, ZipOutputStream zipOut)
+			 * and this method use that as a common utility?
+			 * (Maybe eventually, if someone wants to do this.)
+			 */
 			byte readBytes[] = new byte[BUFFER_SIZE];
 			int readByteCount;
 
@@ -141,28 +168,5 @@ public class ZipUtilities {
 
 		return CollectionUtilities.collectionEnumerationElements(
 			entries, new ArrayList<ZipEntry>());
-	}
-
-	public static void main(String[] args) {
-		String filePath =
-			"C:\\Documents and Settings\\pataphil\\Desktop\\org.cishell.utility.swt.zip";
-
-		try {
-			ZipFile zipFile = new ZipFile(filePath);
-			Map<String, ZipEntry> entriesByName = mapFileNamesToEntries(zipFile, false);
-
-			int count = 0;
-			for (String key : entriesByName.keySet()) {
-				System.err.println(key + ": " + entriesByName.get(key));
-				count++;
-
-				if (count == 2) {
-					readFileFromZipFile(entriesByName.get(key), zipFile);
-				}
-			}
-		} catch (IOException e) {
-			System.err.println("Exception: " + e.getMessage());
-			e.printStackTrace();
-		}
 	}
 }
