@@ -2,13 +2,14 @@ package org.cishell.reference.gui.persistence.save;
 
 import java.util.Dictionary;
 
+import org.cishell.app.service.filesaver.FileSaverService;
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
 import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.data.Data;
-import org.cishell.service.conversion.DataConversionService;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
+import org.osgi.service.log.LogService;
 
 /**
  * Create a Save object
@@ -20,12 +21,14 @@ import org.osgi.service.cm.ManagedService;
 public class SaveFactory implements AlgorithmFactory, ManagedService {	
     public Algorithm createAlgorithm(
     		Data[] data, Dictionary<String, Object> parameters, CIShellContext ciShellContext) {
+    	// TODO Unpack data?
     	Data inputData = data[0];
-    	DataConversionService conversionManager =
-    		(DataConversionService) ciShellContext.getService(
-    			DataConversionService.class.getName());
+    	LogService logger =
+    		(LogService) ciShellContext.getService(LogService.class.getName());
+    	FileSaverService fileSaver = (FileSaverService) ciShellContext.getService(
+    		FileSaverService.class.getName());
 
-        return new Save(inputData, ciShellContext, conversionManager);
+        return new Save(inputData, logger, fileSaver);
     }
 
     @SuppressWarnings("unchecked")

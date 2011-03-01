@@ -34,7 +34,7 @@ public class FileLoadAlgorithm implements Algorithm, ProgressTrackable {
 	public Data[] execute() throws AlgorithmExecutionException {
 		try {
 			return this.fileLoader.loadFilesFromUserSelection(
-				this.bundleContext, this.ciShellContext, this.logger, this.progressMonitor);
+				this.bundleContext, this.ciShellContext, this.logger, this.progressMonitor, false);
 		} catch (FileLoadException e) {
 			throw new AlgorithmExecutionException(e.getMessage(), e);
 		}
