@@ -8,11 +8,15 @@ import org.eclipse.ui.IWorkbenchWindow;
 
 public final class FileSelectorRunnable implements Runnable {
 	private IWorkbenchWindow window;
-	
+	private boolean selectSingleFile;
+	private String[] filterExtensions;
 	private File[] files;
 
-	public FileSelectorRunnable(IWorkbenchWindow window) {
+	public FileSelectorRunnable(
+			IWorkbenchWindow window, boolean selectSingleFile, String[] filterExtensions) {
 		this.window = window;
+		this.selectSingleFile = selectSingleFile;
+		this.filterExtensions = filterExtensions;
 	}
 
 	public File[] getFiles() {
@@ -35,7 +39,6 @@ public final class FileSelectorRunnable implements Runnable {
 		fileDialog.open();
 		String path = fileDialog.getFilterPath();
 		String[] fileNames = fileDialog.getFileNames();
-		// TODO: Ask Angela about the order here, i.e. should they be sorted alphabetically?
 
 		if ((fileNames == null) || (fileNames.length == 0)) {
 			return new File[0];
@@ -54,10 +57,24 @@ public final class FileSelectorRunnable implements Runnable {
 	private FileDialog createFileDialog() {
 		File currentDirectory = new File(FileLoaderServiceImpl.defaultLoadDirectory);
 		String absolutePath = currentDirectory.getAbsolutePath();
-		FileDialog fileDialog = new FileDialog(this.window.getShell(), SWT.OPEN | SWT.MULTI);
+		FileDialog fileDialog =
+			new FileDialog(this.window.getShell(), SWT.OPEN | determineSWTFileSelectFlag());
 		fileDialog.setFilterPath(absolutePath);
+
+		if ((this.filterExtensions != null) && (this.filterExtensions.length > 0)) {
+			fileDialog.setFilterExtensions(this.filterExtensions);
+		}
+
 		fileDialog.setText("Select Files");
 
 		return fileDialog;
+	}
+
+	private int determineSWTFileSelectFlag() {
+		if (this.selectSingleFile) {
+			return SWT.SINGLE;
+		} else {
+			return SWT.MULTI;
+		}
 	}
 }

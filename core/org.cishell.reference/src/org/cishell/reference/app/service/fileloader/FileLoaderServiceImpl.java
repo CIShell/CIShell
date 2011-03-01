@@ -43,18 +43,25 @@ public class FileLoaderServiceImpl implements FileLoaderService, ManagedService 
 		}
 	}
 
+	public File[] getFilesToLoadFromUser(boolean selectSingleFile, String[] filterExtensions)
+			throws FileLoadException {
+		IWorkbenchWindow window = getFirstWorkbenchWindow();
+		Display display = PlatformUI.getWorkbench().getDisplay();
+
+		return getFilesToLoadFromUserInternal(window, display, selectSingleFile, filterExtensions);
+	}
+
 	public Data[] loadFilesFromUserSelection(
 			BundleContext bundleContext,
 			CIShellContext ciShellContext,
 			LogService logger,
-			ProgressMonitor progressMonitor) throws FileLoadException {
+			ProgressMonitor progressMonitor,
+			boolean selectSingleFile) throws FileLoadException {
 		if ("".equals(defaultLoadDirectory)) {
 			defaultLoadDirectory = determineDefaultLoadDirectory();
 		}
 
-		IWorkbenchWindow window = getFirstWorkbenchWindow();
-		Display display = PlatformUI.getWorkbench().getDisplay();
-		File[] files = getFilesToLoadFromUser(window, display);
+		File[] files = getFilesToLoadFromUser(selectSingleFile, null);
 
 		if (files != null) {
 			return loadFiles(bundleContext, ciShellContext, logger, progressMonitor, files);
@@ -255,8 +262,13 @@ public class FileLoaderServiceImpl implements FileLoaderService, ManagedService 
 		}
 	}
 
-	private File[] getFilesToLoadFromUser(IWorkbenchWindow window, Display display) {
-		FileSelectorRunnable fileSelector = new FileSelectorRunnable(window);
+	private File[] getFilesToLoadFromUserInternal(
+			IWorkbenchWindow window,
+			Display display,
+			boolean selectSingleFile,
+			String[] filterExtensions) {
+		FileSelectorRunnable fileSelector =
+			new FileSelectorRunnable(window, selectSingleFile, filterExtensions);
 
 		if (Thread.currentThread() != display.getThread()) {
 			display.syncExec(fileSelector);

@@ -1,10 +1,4 @@
-/*
- * InfoVis CyberInfrastructure: A Data-Code-Compute Resource for Research
- * and Education in Information Visualization (http://iv.slis.indiana.edu/).
- *
- * Created on Feb 22, 2005 at Indiana University.
- */
-package org.cishell.reference.app.service.fileloader;
+package org.cishell.reference.app.service.persistence;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -24,16 +18,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-
-/**
- * This class provides a DialogBox structure that can be extended to create Dialogs for CIShell.
- * This framework will enforce consistency in the look and feel of Dialogs in CIShell by providing a
- * standard layout of description, content, and buttons[, along with a choice of icon images
- * defined as constants in this class].  An optional details section allows the Dialog designer
- * to provide additional information when the details button is pressed.
- *
- * @author Team IVC
- */
 public abstract class AbstractDialog extends Dialog {
     private static final int DETAILS_HEIGHT = 75;
     
@@ -72,21 +56,6 @@ public abstract class AbstractDialog extends Dialog {
     private Composite buttons;
     private Shell parent;
 
-    /**
-     * Creates a new AbstractDialog object.
-     *
-     * @param parent the parent Shell of this AbstractDialog
-     * @param title the title to put in the title bar of this AbstractDialog
-     * @param image the Image to display to the left of the description specified
-     *        for this AbstractDialog. This will usually be one of:
-     * <ul>
-     * <li>AbstractDialog.WARNING</li>
-     * <li>AbstractDialog.INFORMATION</li>
-     * <li>AbstractDialog.ERROR</li>
-     * <li>AbstractDialog.WORKING</li>
-     * <li>AbstractDialog.QUESTION</li>
-     * </ul>
-     */
     public AbstractDialog(Shell parent, String title, Image image) {
         super(parent, 0);
         setText(title);
@@ -95,32 +64,15 @@ public abstract class AbstractDialog extends Dialog {
         init();
     }
 
-    /**
-     * Closes this AbstractDialog.
-     * 
-     * @param success true if the dialog was successful, false if it
-     * was cancelled by the user (or closed prematurely)
-     */
     public void close(boolean success){
         shell.dispose();
         this.success = success;
     }
-    
-    /**
-     * Returns the shell used by this AbstractDialog
-     * 
-     * @return the shell used by this AbstractDialog
-     */
+
     public Shell getShell(){
         return shell;
     }
-    
-    /**
-     * Initializes this AbstractDialog. This consists of resetting all of the
-     * customizable components like the content area, details pane, buttons,
-     * and description label, and readying the dialog to be refilled with
-     * new content.
-     */
+
     public void init(){
         if(shell != null)
             shell.dispose();
@@ -135,13 +87,7 @@ public abstract class AbstractDialog extends Dialog {
         layout.numColumns = 1;
         shell.setLayout(layout);
     }
-    
-    /**
-     * Opens this AbstractDialog.
-     * 
-     * @return true if this AbstractDialog was closed by clicking the 'x' in the upper right
-     * corner of the window, signifying a cancellation, false if the dialog is exited otherwise.
-     */
+
     public boolean open() {
         if (shell.getDisplay().getThread() == Thread.currentThread()) {
             doOpen();

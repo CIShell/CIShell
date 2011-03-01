@@ -14,8 +14,4 @@ public class FileLoadException extends Exception {
 	public FileLoadException(String message) {
 		super(message);
 	}
-
-	public FileLoadException() {
-		this("Algorithm canceled by user.");
-	}
 }
