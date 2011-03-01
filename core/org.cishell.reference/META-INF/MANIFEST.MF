@@ -2,8 +2,11 @@ Bundle-ManifestVersion: 2
 Bundle-Name: CIShell Reference Service Implementations
 Bundle-SymbolicName: org.cishell.reference
 Bundle-Version: 1.0.0
-Import-Package: org.cishell.app.service.datamanager,
+Import-Package: com.google.common.base,
+ com.google.common.collect,
+ org.cishell.app.service.datamanager,
  org.cishell.app.service.fileloader,
+ org.cishell.app.service.filesaver,
  org.cishell.app.service.scheduler;version="1.0.0",
  org.cishell.framework;version="1.0.0",
  org.cishell.framework.algorithm;version="1.0.0",
@@ -13,12 +16,15 @@ Import-Package: org.cishell.app.service.datamanager,
  org.cishell.service.guibuilder;version="1.0.0",
  org.osgi.framework,
  org.osgi.service.cm;version="1.2.0",
+ org.osgi.service.component;version="1.0.0",
  org.osgi.service.log,
  org.osgi.service.metatype;version="1.1.0",
  org.osgi.service.prefs
 Export-Package: org.cishell.reference.app.service.algorithminvocation,
  org.cishell.reference.app.service.datamanager,
  org.cishell.reference.app.service.fileloader,
+ org.cishell.reference.app.service.filesaver,
+ org.cishell.reference.app.service.persistence,
  org.cishell.reference.app.service.scheduler,
  org.cishell.reference.service.conversion,
  org.cishell.reference.service.metatype
@@ -27,6 +33,6 @@ Require-Bundle: edu.uci.ics.jung,
  org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.update.ui
-Service-Component: OSGI-INF/fileloader.xml
+Service-Component: OSGI-INF/fileloader.xml, OSGI-INF/filesaver.xml
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 X-AutoStart: true

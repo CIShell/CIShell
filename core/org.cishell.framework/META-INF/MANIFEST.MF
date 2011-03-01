@@ -11,6 +11,7 @@ Import-Package: org.osgi.framework,
  org.osgi.service.prefs
 Export-Package: org.cishell.app.service.datamanager;version="1.0.0",
  org.cishell.app.service.fileloader,
+ org.cishell.app.service.filesaver,
  org.cishell.app.service.scheduler;version="1.0.0",
  org.cishell.framework;version="1.0.0",
  org.cishell.framework.algorithm;version="1.0.0",
