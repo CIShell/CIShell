@@ -10,6 +10,8 @@ import org.cishell.service.conversion.Converter;
  * Then FileSaverServiceImpl extends the abstract class.
  */
 public interface FileSaverService {
+	public static final String ANY_FILE_EXTENSION = "file-ext:*";
+
 	public void registerListener(FileSaveListener listener);
 	public void unregisterListener(FileSaveListener listener);
 
@@ -37,4 +39,6 @@ public interface FileSaverService {
 	public Data save(Converter converter, Data sourceDatum) throws FileSaveException;
 	public Data save(
 			Converter converter, Data sourceDatum, File targetFile) throws FileSaveException;
+
+	public String suggestFileName(Data datum);
 }

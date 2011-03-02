@@ -28,7 +28,7 @@ public class SaveAsController {
     }
 
     public File open(String fileName) {
-    	String fileExtension = getFileExtension(fileName).substring(1);
+    	String fileExtension = getFileExtension(fileName);
 
     	return open(fileName, fileExtension);
     }
@@ -95,7 +95,7 @@ public class SaveAsController {
     	int periodPosition = filePath.lastIndexOf(".");
     	
     	if ((periodPosition != -1) && ((periodPosition + 1) < filePath.length())) {
-    		return filePath.substring(periodPosition);
+    		return filePath.substring(periodPosition + 1);
     	} else {
     		return "";
     	}

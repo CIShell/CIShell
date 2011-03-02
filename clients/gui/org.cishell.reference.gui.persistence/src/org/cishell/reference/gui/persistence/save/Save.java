@@ -12,7 +12,6 @@ import org.cishell.service.conversion.Converter;
 import org.osgi.service.log.LogService;
 
 public class Save implements Algorithm {
-    public static final String ANY_FILE_EXTENSION = "file-ext:*";
 	public static final String SAVE_DIALOG_TITLE = "Save";
 	
 	private Data data;
@@ -30,7 +29,7 @@ public class Save implements Algorithm {
     }
 
     public Data[] execute() throws AlgorithmExecutionException {
-    	tryToSave(this.data, ANY_FILE_EXTENSION);
+    	tryToSave(this.data, FileSaverService.ANY_FILE_EXTENSION);
     	
 		return null;
 	}
@@ -67,7 +66,8 @@ public class Save implements Algorithm {
     		String logMessage = String.format(
     			"Error occurred while converting data to saved format:\n    %s", e.getMessage());
     		this.logger.log(LogService.LOG_ERROR, logMessage, e);
-    		throw new AlgorithmExecutionException(e.getMessage(), e);
+//    		throw new AlgorithmExecutionException(e.getMessage(), e);
+    		throw new RuntimeException(e.getMessage(), e);
     	}
     }
 }
