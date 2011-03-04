@@ -324,9 +324,12 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
 				try {
 					data[i] = converters[i][0].convert(data[i]);
 				} catch (ConversionException e) {
-					log(LogService.LOG_ERROR,
-						"Error: Unable to convert data for use by the "
-						+ "algorithm:\n    " + e.getMessage(), e);
+					String logMessage = String.format(
+						"Error: Unable to convert data for use by the algorithm:%n    %s",
+						e.getMessage());
+					log(LogService.LOG_ERROR, logMessage, e);
+					e.printStackTrace();
+
 					return false;
 				}
 
