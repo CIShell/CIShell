@@ -8,6 +8,8 @@ import org.cishell.utility.datastructure.datamodel.exception.ModelStructureExcep
 import org.cishell.utility.datastructure.datamodel.exception.UniqueNameException;
 import org.cishell.utility.datastructure.datamodel.field.DataModelField;
 
+/** See AbstractGUIDataModel.
+ */
 public abstract class AbstractDataModelArea<
 		BaseGUIComponentType, GUIContainerComponentType extends BaseGUIComponentType>
 		implements DataModelArea {

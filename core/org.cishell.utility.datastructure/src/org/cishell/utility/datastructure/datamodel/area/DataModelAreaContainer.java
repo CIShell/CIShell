@@ -5,7 +5,10 @@ import java.util.Collection;
 import org.cishell.utility.datastructure.datamodel.exception.ModelStructureException;
 import org.cishell.utility.datastructure.datamodel.exception.UniqueNameException;
 
-// TODO: addToContainer type stuff
+/** A DataModelAreaContainer is anything that contains DataModelAreas. For example, DataModel
+ * and DataModelArea itself both can contain (other) DataModelAreas.
+ * TODO: addToContainer type stuff.
+ */
 public interface DataModelAreaContainer {
 	public Collection<String> getAreaNames();
 	public Collection<DataModelArea> getAreas();
@@ -22,7 +25,7 @@ public interface DataModelAreaContainer {
 	public void addArea(DataModelArea area)
 			throws ClassCastException, ModelStructureException, UniqueNameException;
 	
-	//TODO: why is this returning boolean?
+	// TODO: Why is this returning boolean?
 	public boolean areaDisposed(String name);
 	public boolean areaDisposed(DataModelArea area);
 }

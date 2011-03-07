@@ -12,8 +12,16 @@ import org.cishell.utility.datastructure.datamodel.field.DataModelField;
 import org.cishell.utility.datastructure.datamodel.group.BasicModelGroup;
 import org.cishell.utility.datastructure.datamodel.group.DataModelGroup;
 
-/// TODO: Document this.
-/// TODO: Figure out a way to generically express styles for both widgets and areas.
+/** AbstractGUIDataModel is parameterized by BaseGUIComponentType and GUIContainerComponentType.
+ * It provides a default GUI-based implementation of DataModel that could be used in SWT, Swing,
+ * or any other Java GUI framework.
+ * BaseGUIComponentType should be the base type of the specific GUI framework widget (i.e.
+ * Control for SWT and Component for Swing.
+ * GUIContainerComponentType MUST extend BaseGUIComponentType, and in order for it to make any
+ * sense to this layer, it should be a GUI container type (i.e. Composite for SWT and
+ * Container for Swing).
+ * TODO: Figure out a way to generically express styles for both widgets and areas.
+ */
 public abstract class AbstractGUIDataModel<
 			BaseGUIComponentType, GUIContainerComponentType extends BaseGUIComponentType>
 		implements DataModel {
