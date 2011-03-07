@@ -8,8 +8,8 @@ package org.cishell.reference.gui.datamanager;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.cishell.framework.data.Data;
@@ -29,11 +29,10 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
  * @author Team IVC
  */
 public class DataGUIItem {
-    
 	private String brandPluginID;
 	
     //images for the defined types
-    private Image matrixIcon;
+//    private Image matrixIcon;
     private Image treeIcon;
     private Image networkIcon;
     private Image unknownIcon;
@@ -46,9 +45,8 @@ public class DataGUIItem {
     private Image modelIcon;
     private Image rIcon;
     
-    private Map typeToImageMapping;
-    
-    private List children;
+    private Map<String, Image> typeToImage = new HashMap<String, Image>();
+    private Collection<DataGUIItem> children = new ArrayList<DataGUIItem>();
     private Data data;
     private DataGUIItem parent;
 
@@ -62,10 +60,9 @@ public class DataGUIItem {
     public DataGUIItem(Data data, DataGUIItem parent, String brandPluginID) {
         this.data = data;
         this.parent = parent;
-        children = new ArrayList();
         
         this.brandPluginID = brandPluginID;
-        matrixIcon      = getImage("matrix.png", this.brandPluginID);
+//        matrixIcon      = getImage("matrix.png", this.brandPluginID);
         treeIcon        = getImage("tree.png", this.brandPluginID);
         networkIcon     = getImage("network.png", this.brandPluginID);
         unknownIcon     = getImage("unknown.png", this.brandPluginID);
@@ -78,7 +75,6 @@ public class DataGUIItem {
         modelIcon       = getImage("model.jpg", this.brandPluginID);
         rIcon = getImage("r.png", this.brandPluginID);
 
-        typeToImageMapping = new HashMap();
         registerImage(DataProperty.OTHER_TYPE, unknownIcon);
         
         /********************************************
@@ -127,7 +123,7 @@ public class DataGUIItem {
      * @param item the new child of this DataModelGUIItem
      */
     public void addChild(DataGUIItem item) {
-        children.add(item);
+        this.children.add(item);
     }
 
     /**
@@ -136,7 +132,7 @@ public class DataGUIItem {
      * @return an array of all of the children of this DataModelGUIItem
      */
     public Object[] getChildren() {
-        return children.toArray();
+        return this.children.toArray();
     }
 
     /**
@@ -146,7 +142,7 @@ public class DataGUIItem {
      * @param item the child of this DataModelGUIItem to remove
      */
     public void removeChild(DataGUIItem item) {
-        children.remove(item);
+        this.children.remove(item);
     }
     
     /**
@@ -154,43 +150,46 @@ public class DataGUIItem {
      * 
      * @return the icon associated with this DataModel for display in IVC
      */
-    public Image getIcon(){
-        Image icon = (Image)typeToImageMapping.get(data.getMetadata().get(DataProperty.TYPE));
-        if(icon == null) icon = unknownIcon;
+    public Image getIcon() {
+        Image icon = this.typeToImage.get(data.getMetadata().get(DataProperty.TYPE));
+
+        if (icon == null) {
+        	icon = unknownIcon;
+        }
+
         return icon;
     }
     
-    public void registerImage(String type, Image image){
-        typeToImageMapping.put(type, image);
+    public void registerImage(String type, Image image) {
+        this.typeToImage.put(type, image);
     }
-    
-   
-    
-    public static Image getImage(String name, String brandPluginID){
-        if(Platform.isRunning()) {
-        	String imageLocation =  File.separator + "icons" + File.separator + name;
-            ImageDescriptor imageDescriptor = AbstractUIPlugin.imageDescriptorFromPlugin(
-            		brandPluginID, 
-            	    imageLocation);
+
+    public static Image getImage(String name, String brandPluginID) {
+        if (Platform.isRunning()) {
+        	String imageLocation =
+        		String.format("%sicons%s%s", File.separator, File.separator, name);
+            ImageDescriptor imageDescriptor =
+            	AbstractUIPlugin.imageDescriptorFromPlugin(brandPluginID, imageLocation);
+
             if (imageDescriptor != null) {
             	return imageDescriptor.createImage(); 
             } else {
-            	System.err.println("Could not find the icon " +
-            			"'" + imageLocation + "'" +
-            			"in" +
-            			"'" + brandPluginID + "'." +
-            			"Using the default image instead.");
+            	String errorMessage = String.format(
+            		"Could not find the icon '%s' in '%s'. Using the default image instead.",
+            		imageLocation,
+            		brandPluginID);
+            	System.err.println(errorMessage);
+
             	return getDefaultImage();
             }
    
-        }
-        else {
-        	System.err.println("Could not obtain the image " +
-        			"'" + name + "'" +
-        			"in" +
-        			"'" + brandPluginID + "'" +
-        			", since the platform was not running (?)." +
-        			"Using the default image instead.");
+        } else {
+        	String format =
+        		"Could not obtain the image '%s' in '%s', since the platform was not " +
+        		"running (?). Using the default image instead.";
+        	String errorMessage = String.format(format, name, brandPluginID);
+        	System.err.println(errorMessage);
+
         	return getDefaultImage();
         }            
     }

@@ -50,6 +50,9 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.TreeEditor;
 import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.DragSource;
+import org.eclipse.swt.dnd.DragSourceEvent;
+import org.eclipse.swt.dnd.DragSourceListener;
 import org.eclipse.swt.dnd.DropTarget;
 import org.eclipse.swt.dnd.DropTargetAdapter;
 import org.eclipse.swt.dnd.DropTargetEvent;
@@ -98,7 +101,7 @@ public abstract class AbstractDataManagerView
 	private boolean updatingTreeItem;
 	private Tree tree;
 	private Menu menu;
-	private Map<Data, DataGUIItem> dataToDataGUIItemMap;
+	private Map<Data, DataGUIItem> dataToDataGUIItem;
 	private AlgorithmFactory saveFactory;
 	private AlgorithmFactory viewFactory;
 	private AlgorithmFactory viewWithFactory;
@@ -110,7 +113,7 @@ public abstract class AbstractDataManagerView
 
 	public AbstractDataManagerView(String brandPluginID) {
 		this.brandPluginID = brandPluginID;
-		this.dataToDataGUIItemMap = new HashMap<Data, DataGUIItem>();
+		this.dataToDataGUIItem = new HashMap<Data, DataGUIItem>();
 		this.manager = Activator.getDataManagerService();
 		this.logger = Activator.getLogService();
 		
@@ -204,6 +207,11 @@ public abstract class AbstractDataManagerView
 	}
 
 	private void setupDataManagerViewForDragAndDrop(Composite parent) {
+		setupDataManagerViewForDragAndDropInto(parent);
+		setupDataManagerViewForDragAndDropOutOf(parent);
+	}
+
+	private void setupDataManagerViewForDragAndDropInto(Composite parent) {
 		DropTarget dropTarget =
     		new DropTarget(parent.getParent(), DND.DROP_DEFAULT | DND.DROP_MOVE);
     	dropTarget.setTransfer(new Transfer[] { FileTransfer.getInstance() });
@@ -273,6 +281,34 @@ public abstract class AbstractDataManagerView
     	});
 	}
 
+	private void setupDataManagerViewForDragAndDropOutOf(Composite parent) {
+		Transfer[] types = new Transfer[] { new CIShellDataTransfer(Activator.context) };
+		DragSource dragSource = new DragSource(parent, DND.DROP_DEFAULT | DND.DROP_MOVE);
+		dragSource.setTransfer(types);
+		dragSource.addDragListener(new DragSourceListener() {
+			private Data[] selectedData;
+
+			public void dragStart(DragSourceEvent event) {
+				System.err.println("dragStart");
+				Data[] selectedData = AbstractDataManagerView.this.manager.getSelectedData();
+
+				if ((selectedData != null) && (selectedData.length != 0)) {
+					event.doit = true;
+					this.selectedData = selectedData;
+				}
+			}
+
+			public void dragSetData(DragSourceEvent event) {
+				// TODO: Create the target files.
+//				event.data = 
+			}
+
+			public void dragFinished(DragSourceEvent event) {
+				// TODO: Convert the source files, given the target files.
+			}
+		});
+	}
+
 	private Collection<File> flattenDraggedFileStructures(String[] fileNames) {
 		Collection<File> flattenedFileStructure = new ArrayList<File>();
 
@@ -337,7 +373,7 @@ public abstract class AbstractDataManagerView
 		/* Keep a reference to the new model in the model->TreeItem mapping so that it can be used
 		 *  in the future if it has a child.
 		 */
-		this.dataToDataGUIItemMap.put(newData, newItem);
+		this.dataToDataGUIItem.put(newData, newItem);
 		
 		// update the ModelManager with the new selection
 		final Set<Data> selection = new HashSet<Data>();
@@ -370,7 +406,7 @@ public abstract class AbstractDataManagerView
 			parentItem = this.rootItem;
 		} else {
 			// Otherwise find the associated DataModelGUIItem for the parent.
-			parentItem = this.dataToDataGUIItemMap.get(parent);
+			parentItem = this.dataToDataGUIItem.get(parent);
             
 			// The parent may not be in the GUI. If its not, then use root item.
             if (parentItem == null) {
@@ -419,6 +455,7 @@ public abstract class AbstractDataManagerView
 
 					for (int i = 0; i < data.length; ++i) {
 						TreeItem[] treeItems = tree.getItems();
+//						tree.getSelection()
 						for (int j = 0; j < treeItems.length; ++j) {
 							if (treeItems[j].getData() == data[i]) {
 								itemSet.add(treeItems[j]);
@@ -427,6 +464,7 @@ public abstract class AbstractDataManagerView
 						}
 					}
 
+					// TODO: Add dnd listeners to itemSet elements (if necessary)
 					tree.setSelection(itemSet.toArray(new TreeItem[0]));
 					getSite().getSelectionProvider().setSelection(new StructuredSelection(data));
 				}
@@ -700,7 +738,7 @@ public abstract class AbstractDataManagerView
 					parent.removeChild(item);
 				}
 
-				AbstractDataManagerView.this.dataToDataGUIItemMap.remove(item.getModel());
+				AbstractDataManagerView.this.dataToDataGUIItem.remove(item.getModel());
 				AbstractDataManagerView.this.manager.removeData(item.getModel());
 			}
 
@@ -774,7 +812,7 @@ public abstract class AbstractDataManagerView
 								(Data) next, AbstractDataManagerView.this.tree.getItems());
 							newTreeSelection[i] = result;
 							AbstractDataManagerView.this.viewer.expandToLevel(
-								AbstractDataManagerView.this.dataToDataGUIItemMap.get(next), 0);
+								AbstractDataManagerView.this.dataToDataGUIItem.get(next), 0);
 						}
 
 						i++;
