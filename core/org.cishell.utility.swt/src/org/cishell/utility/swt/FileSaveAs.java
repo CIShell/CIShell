@@ -7,6 +7,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 
+// TODO: Find other places in the code base that do the same thing as this.
 public class FileSaveAs {
 	public static final String DEFAULT_WINDOW_TITLE = "Save As";
 	public static final String CONFIRMATION_DIALOG_FORMAT =

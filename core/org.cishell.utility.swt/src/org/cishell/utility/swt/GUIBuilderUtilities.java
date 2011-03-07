@@ -11,6 +11,10 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 
+/** These utilities are meant to handle a lot of common SWT operations that have little or no
+ * variation, such as the event dispatch loop (swtLoop()).
+ * Given the complex nature of UI programming, I'd consider this class to be deprecated.
+ */
 public class GUIBuilderUtilities {
 	public static Display createDisplay() {
 		return new Display();

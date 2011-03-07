@@ -10,6 +10,9 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
+/** TODO: The URL (http://-prefixed) parsing utilities in this class need to be updated to handle
+ * https as well.
+ */
 public class SWTUtilities {
 	public static final Color DEFAULT_BACKGROUND_COLOR =
 		new Color(Display.getDefault(), 255, 255, 255);

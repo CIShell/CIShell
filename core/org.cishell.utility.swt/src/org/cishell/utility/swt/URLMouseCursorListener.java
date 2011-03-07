@@ -11,8 +11,7 @@ import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 
-/*
- * Monitors the mouse and changes the cursor when it is over a URL.
+/** Monitors the mouse and changes the cursor when it is over a URL.
  */
 public class URLMouseCursorListener implements MouseMoveListener {
     private Map<Integer, String> offsetsToURLs = new HashMap<Integer, String>();

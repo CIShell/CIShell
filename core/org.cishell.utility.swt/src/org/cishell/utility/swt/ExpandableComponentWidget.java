@@ -13,8 +13,28 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
-/**
- * This is meant to be subclassed.
+/** See ScrolledComponentFactory for more information on the overall picture of the layer that this
+ * class is part of.
+ * A LITTLE BIT OF HISTORY:
+ ** When tasked with writing the Static Executable Wizard, I ran into a lot of difficulty with
+ ** gracefully handling the dynamic addition and deletion of child components to scrolling
+ ** components. (By scrolling components, I mean the components that actually do the scrolling; that
+ ** is, they SCROLL their child components.) The problem relates to how SWT grid layouts want to be
+ ** sized--I believe that SWT is largely implemented to only handle GUIs that've been setup by time
+ ** the user interacts with them.
+ ** In order to try to make this process more graceful, I came up with this and its
+ ** related classes.
+ * HOW TO USE IT:
+ ** This class only makes sense if T corresponds to a GUI component in some fashion (though it
+ ** doesn't literally have to be an SWT component).
+ ** Override getColumnCount() to specify the number of columns each row has.
+ ** Override createHeaderArea() and createFooterArea() to specify if there should be a header and
+ ** footer, respectively, that is OUTSIDE of the scrolling area.
+ ** Override createColumnLabelTexts() to specify the column labels. The default implementation of
+ ** this method uses the column index to generate labels.
+ ** It's recommended against overriding addComponent() and removeComponent().
+ ** This class should be subclassed so specific column labels and any desired header/footer
+ ** can be generated.
  */
 public class ExpandableComponentWidget<T> extends Composite {
 	public static final int COLUMN_AREA_LAYOUT_VERTICAL_SPACING = 1;

@@ -7,6 +7,12 @@ import java.util.List;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Widget;
 
+/** SWT composite components with grid layouts don't have a way of accessing a child component at
+ * a given cell (x, y).
+ * GridContainer is designed to remedy this problem in a general sense. However, in order for it to
+ * be able to reliably do so, all child components should be added to the parent composite via
+ * (objects of) this class.
+ */
 public class GridContainer {
 	private Composite actualParent;
 	private int columnCount;
