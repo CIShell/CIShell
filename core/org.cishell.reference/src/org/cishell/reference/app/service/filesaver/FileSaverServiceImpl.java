@@ -75,7 +75,9 @@ public class FileSaverServiceImpl extends AbstractFileSaverService {
 		}
 	}
 
-	public File promptForTargetFile(final String fileName) throws FileSaveException {
+	public File promptForTargetFile(
+			final String suggestedFileName,
+			final String defaultFileExtension) throws FileSaveException {
 		final File[] resultFile = new File[1];
 
 		try {
@@ -84,7 +86,7 @@ public class FileSaverServiceImpl extends AbstractFileSaverService {
 					SaveAsController saveAs =
 						new SaveAsController(FileSaverServiceImpl.this.guiBuilder);
 
-					resultFile[0] = saveAs.open(fileName);
+					resultFile[0] = saveAs.open(suggestedFileName, defaultFileExtension);
 				}
 			});
 

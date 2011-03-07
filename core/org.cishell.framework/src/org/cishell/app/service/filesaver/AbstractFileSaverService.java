@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.Dictionary;
 import java.util.HashSet;
 
+import org.cishell.framework.algorithm.AlgorithmProperty;
 import org.cishell.framework.data.Data;
 import org.cishell.framework.data.DataProperty;
 import org.cishell.service.conversion.ConversionException;
@@ -26,6 +27,8 @@ public abstract class AbstractFileSaverService implements FileSaverService {
 			new Character('|'),
 			new Character('%'))));
 	public static final char FILENAME_CHARACTER_REPLACEMENT = '#';
+	public static final String FILE_EXTENSION_PREFIX = "file-ext:";
+	public static final String FILE_PREFIX = "file:";
 
 	private Collection<FileSaveListener> listeners;
 
@@ -41,22 +44,68 @@ public abstract class AbstractFileSaverService implements FileSaverService {
 		return promptForTargetFile("");
 	}
 
-	public File promptForTargetFile(Data datum) throws FileSaveException {
+	public File promptForTargetFile(String defaultFileExtension) throws FileSaveException {
+		return promptForTargetFile("", defaultFileExtension);
+	}
+
+	public File promptForTargetFile(
+			Data datum, String defaultFileExtension) throws FileSaveException {
 		Object dataObject = datum.getData();
 
 		if (dataObject instanceof File) {
-			return promptForTargetFile((File) datum.getData());
+			String fileName = ((File) datum.getData()).getName();
+			return promptForTargetFile(fileName, defaultFileExtension);
 		} else {
-			return promptForTargetFile(suggestFileName(datum));
+			return promptForTargetFile(suggestFileName(datum), defaultFileExtension);
 		}
 	}
 
 	public File promptForTargetFile(File outputFile) throws FileSaveException {
-		return promptForTargetFile(outputFile.getName());
+		return promptForTargetFile(outputFile.getName(), "");
 	}
 
-	public File save(Data sourceDatum) throws FileSaveException {
-		return save((File) sourceDatum.getData());
+	public File saveData(Data sourceDatum) throws FileSaveException {
+		return saveData(sourceDatum, ANY_FILE_EXTENSION);
+	}
+
+	public File saveData(Data sourceDatum, String targetMimeType)
+			throws FileSaveException {
+		Converter converter = promptForConverter(sourceDatum, targetMimeType);
+
+		if (converter != null) {
+			return saveData(sourceDatum, converter);
+		} else {
+			// TODO: CanceledException?
+			return null;
+		}
+	}
+
+	public File saveData(Data sourceDatum, Converter converter) throws FileSaveException {
+		String outputMimeType =
+			converter.getProperties().get(AlgorithmProperty.OUT_DATA).toString();
+		System.err.println("outputMimeType: " + outputMimeType);
+		String suggestedFileExtension = suggestFileExtension(outputMimeType);
+		System.err.println("suggestedFileExtension: " + suggestedFileExtension);
+		File targetFile = promptForTargetFile(sourceDatum, suggestedFileExtension);
+
+		if (targetFile != null) {
+			return saveData(sourceDatum, converter, targetFile);
+		} else {
+			// TODO: CanceledException?
+			return null;
+		}
+	}
+
+	public File saveData(Data sourceDatum, Converter converter, File targetFile)
+			throws FileSaveException {
+		try {
+			Data convertedDatum = converter.convert(sourceDatum);
+			saveTo((File) convertedDatum.getData(), targetFile);
+
+			return targetFile;
+		} catch (ConversionException e) {
+			throw new FileSaveException(e.getMessage(), e);
+		}
 	}
 
 	public File save(File sourceFile) throws FileSaveException {
@@ -64,43 +113,6 @@ public abstract class AbstractFileSaverService implements FileSaverService {
 		saveTo(sourceFile, targetFile);
 
 		return targetFile;
-	}
-
-	public Data save(Data sourceDatum, String targetMimeType)
-			throws FileSaveException {
-		Converter converter = promptForConverter(sourceDatum, targetMimeType);
-
-		if (converter != null) {
-			return save(converter, sourceDatum);
-		} else {
-			// TODO: CanceledException?
-			return null;
-		}
-	}
-
-	// TODO: What to actually return here? Maybe Pair<Data, File> (LOL)?
-	public Data save(Converter converter, Data sourceDatum)
-			throws FileSaveException {
-		File targetFile = promptForTargetFile(sourceDatum);
-
-		if (targetFile != null) {
-			return save(converter, sourceDatum, targetFile);
-		} else {
-			// TODO: CanceledException?
-			return null;
-		}
-	}
-
-	public Data save(
-			Converter converter, Data sourceDatum, File targetFile) throws FileSaveException {
-		try {
-			Data convertedDatum = converter.convert(sourceDatum);
-			saveTo((File) convertedDatum.getData(), targetFile);
-
-			return convertedDatum;
-		} catch (ConversionException e) {
-			throw new FileSaveException(e.getMessage(), e);
-		}
 	}
 
 	public String suggestFileName(Data datum) {
@@ -134,4 +146,26 @@ public abstract class AbstractFileSaverService implements FileSaverService {
     	
     	return cleanedFilename;
     }
+
+	private static String suggestFileExtension(String targetMimeType) {
+		if (targetMimeType.startsWith(FILE_EXTENSION_PREFIX)) {
+			return targetMimeType.substring(FILE_EXTENSION_PREFIX.length());
+		} else if (targetMimeType.startsWith(FILE_PREFIX)) {
+			int forwardSlashCharacterIndex = targetMimeType.indexOf('/');
+
+			if (forwardSlashCharacterIndex != -1) {
+				int parsedOutFileExtensionStart = (forwardSlashCharacterIndex + 1);
+
+				if (parsedOutFileExtensionStart < targetMimeType.length()) {
+					return targetMimeType.substring(parsedOutFileExtensionStart);
+				} else {
+					return "";
+				}
+			} else {
+				return "";
+			}
+		} else {
+			return targetMimeType;
+		}
+	}
 }

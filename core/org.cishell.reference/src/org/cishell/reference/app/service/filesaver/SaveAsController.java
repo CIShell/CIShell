@@ -27,13 +27,8 @@ public class SaveAsController {
         this.guiBuilder = guiBuilder;
     }
 
-    public File open(String fileName) {
-    	String fileExtension = getFileExtension(fileName);
-
-    	return open(fileName, fileExtension);
-    }
-
-    public File open(String suggestedFileName, String fileExtension) {
+    public File open(String suggestedFileName, String suggestedFileExtension) {
+    	String fileExtension = determineFileExtension(suggestedFileName, suggestedFileExtension);
     	Shell parentShell = PlatformUI.getWorkbench().getWorkbenchWindows()[0].getShell();
     	FileDialog dialog = new FileDialog(parentShell, SWT.SAVE);
 
@@ -45,6 +40,8 @@ public class SaveAsController {
         dialog.setFilterPath(currentDirectory.getPath());
 
        	if ((fileExtension != null) && !"*".equals(fileExtension) && !"".equals(fileExtension)) {
+       		String isolatedFileName = stripFileExtension(suggestedFileName);
+       		suggestedFileName = String.format("%s.%s", suggestedFileName, suggestedFileExtension);
            	dialog.setFilterExtensions(new String[] { String.format("*.%s", fileExtension) });
        	}
         
@@ -68,6 +65,30 @@ public class SaveAsController {
                 return null;
             }
         }
+    }
+
+    private String determineFileExtension(
+    		String suggestedFileName, String suggestedFileExtension) {
+    	if ((suggestedFileExtension != null) && !"".equals(suggestedFileExtension)) {
+    		return suggestedFileExtension;
+    	} else {
+    		String fileExtension = getFileExtension(suggestedFileName);
+
+    		if (!"".equals(fileExtension)) {
+    			return fileExtension;
+    		} else {
+    			return "";
+    		}
+    	}
+//    	if (!"".equals(fileExtension)) {
+//    		return fileExtension;
+//    	} else {
+//    		if (defaultFileExtension != null) {
+//    			return defaultFileExtension;
+//    		} else {
+//    			return "";
+//    		}
+//    	}
     }
 
     private boolean confirmFileOverwrite(File file) {
@@ -111,5 +132,16 @@ public class SaveAsController {
 		}
     	
     	return cleanedFilename;
+    }
+
+    // TODO: Use cns-utilities when that's done.
+    private static String stripFileExtension(String filePath) {
+    	int periodPosition = filePath.lastIndexOf(".");
+
+    	if ((periodPosition != -1) && ((periodPosition + 1) < filePath.length())) {
+    		return filePath.substring(0, periodPosition);
+    	} else {
+    		return filePath;
+    	}
     }
 }
