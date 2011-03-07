@@ -19,26 +19,21 @@ public interface FileSaverService {
 			throws FileSaveException;
 
 	public File promptForTargetFile() throws FileSaveException;
-	public File promptForTargetFile(Data datum) throws FileSaveException;
+	public File promptForTargetFile(String defaultFileExtension) throws FileSaveException;
+	public File promptForTargetFile(
+			Data datum, String defaultFileExtension) throws FileSaveException;
 	public File promptForTargetFile(File outputFile) throws FileSaveException;
-	public File promptForTargetFile(String fileName) throws FileSaveException;
+	public File promptForTargetFile(
+			String suggestedFileName, String defaultFileExtension) throws FileSaveException;
 
-	/* TODO I'm seriously tempted to recommend that all methods beyond this point be called
-	 * "save" or "saveToFile" or something, and just have a bit of very concise Javadoc that
-	 * explains what may be prompted for?  Alternatively, ask another dev about doing the null
-	 * arguments idea.
-	 */
-	// TODO (NEW): Just Javadoc these really well?
-	public File save(Data sourceDatum) throws FileSaveException;
+	public File saveData(Data sourceDatum) throws FileSaveException;
+	public File saveData(Data sourceDatum, String targetMimeType) throws FileSaveException;
+	public File saveData(Data sourceDatum, Converter converter) throws FileSaveException;
+	public File saveData(
+			Data sourceDatum, Converter converter, File targetFile) throws FileSaveException;
+
 	public File save(File sourceFile) throws FileSaveException;
 	public void saveTo(File sourceFile, File targetFile) throws FileSaveException;
-
-	// TODO: What to actually return here? the File object for the one on disk
-	/* TODO sourceDatum always first, targetType/File last */
-	public Data save(Data sourceDatum, String targetMimeType) throws FileSaveException;
-	public Data save(Converter converter, Data sourceDatum) throws FileSaveException;
-	public Data save(
-			Converter converter, Data sourceDatum, File targetFile) throws FileSaveException;
 
 	public String suggestFileName(Data datum);
 }

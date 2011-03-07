@@ -8,7 +8,6 @@ import org.cishell.framework.algorithm.Algorithm;
 import org.cishell.framework.algorithm.AlgorithmCanceledException;
 import org.cishell.framework.algorithm.AlgorithmExecutionException;
 import org.cishell.framework.data.Data;
-import org.cishell.service.conversion.Converter;
 import org.osgi.service.log.LogService;
 
 public class Save implements Algorithm {
@@ -37,30 +36,31 @@ public class Save implements Algorithm {
     private void tryToSave(final Data outData, String outFormat)
     		throws AlgorithmExecutionException {
     	try {
-    		Converter userChosenConverter =
-    			this.fileSaver.promptForConverter(outData, outFormat);
-
-    		if (userChosenConverter == null) {
-    			throw new AlgorithmCanceledException(
-    				"User canceled file saving when choosing what kind of file to save as.");
-    		}
-
-    		File userChosenFile = this.fileSaver.promptForTargetFile(outData);
-
-    		if (userChosenFile == null) {
+    		File outputFile = this.fileSaver.saveData(outData);
+//    		Converter userChosenConverter =
+//    			this.fileSaver.promptForConverter(outData, outFormat);
+//
+//    		if (userChosenConverter == null) {
+//    			throw new AlgorithmCanceledException(
+//    				"User canceled file saving when choosing what kind of file to save as.");
+//    		}
+//
+//    		File userChosenFile = this.fileSaver.promptForTargetFile(outData);
+//
+    		if (outputFile == null) {
     			throw new AlgorithmCanceledException(
     				"User canceled file saving when choosing the destination of the file.");
     		}
+//
+//    		Data outputDatum =
+//    			this.fileSaver.save(userChosenConverter, outData, userChosenFile);
+//
+//    		// TODO: Should we bother handling this?  sure, why not.  maybe algexec would be appropriate
+//    		if (outputDatum == null) {
+//    			return;
+//    		}
 
-    		Data outputDatum =
-    			this.fileSaver.save(userChosenConverter, outData, userChosenFile);
-
-    		// TODO: Should we bother handling this?  sure, why not.  maybe algexec would be appropriate
-    		if (outputDatum == null) {
-    			return;
-    		}
-
-    		String logMessage = String.format("Saved: %s", userChosenFile.getPath());
+    		String logMessage = String.format("Saved: %s", outputFile.getPath());
     		this.logger.log(LogService.LOG_INFO, logMessage);
     	} catch (FileSaveException e) {
     		String logMessage = String.format(
