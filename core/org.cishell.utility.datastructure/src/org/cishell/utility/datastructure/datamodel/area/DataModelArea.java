@@ -7,8 +7,7 @@ import org.cishell.utility.datastructure.datamodel.exception.UniqueNameException
 import org.cishell.utility.datastructure.datamodel.field.DataModelField;
 import org.cishell.utility.datastructure.datamodel.field.DataModelFieldContainer;
 
-/**
- * DataModelArea corresponds to a physical area tied to a DataModel GUI.
+/** DataModelArea corresponds to a physical area tied to a DataModel GUI.
  * DataModelAreas can contain other DataModelAreas, as well as DataModelFields.
  */
 public interface DataModelArea extends DataModelAreaContainer, DataModelFieldContainer {

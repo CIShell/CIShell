@@ -6,8 +6,7 @@ import org.cishell.utility.datastructure.datamodel.exception.UniqueNameException
 import org.cishell.utility.datastructure.datamodel.field.DataModelField;
 import org.cishell.utility.datastructure.datamodel.field.DataModelFieldContainer;
 
-/**
- * Model groups are organizational structures for related DataModelFields.
+/** Model groups are organizational structures for related DataModelFields.
  * They are not tied to the physical structure of a GUI.
  * Anything that wishes to retrieve data from a DataModel can ask for ModelGroups.
  */
