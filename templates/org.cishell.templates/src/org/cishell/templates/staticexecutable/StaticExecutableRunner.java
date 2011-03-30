@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
@@ -462,29 +463,18 @@ public class StaticExecutableRunner implements Algorithm {
 	// replaces place-holder variables in the template with the actual arguments the executable needs to work.
 	// (real names of files instead of inFile[i], for instance)
 	// (also, real values like "6" or "dog" instead of placeholders for parameters)
-	protected String substituteVars(String str, Data[] data, Dictionary parameters) {
-		str = str.replaceAll(
+	protected String substituteVars(String template, Data[] data, Dictionary parameters) {
+		template = template.replaceAll(
 			"\\$\\{" + EXECUTABLE_PLACEHOLDER + "\\}", properties.getProperty(EXECUTABLE_PLACEHOLDER));
 
+		/* 
+		 * Re-think:
+	     * Shall we just name the same in config.propertities?
+	     * Why not use parameter key for all inFile and data?
+	     */
 		for (int ii = 0; ii < data.length; ii++) {
-			System.err.println(data[0]);
-			String label = data[0].getMetadata().get(DataProperty.LABEL).toString();
-			String escapedLabel = label.replaceAll("\\\\", "/");
-			str = str.replaceAll(
-				"\\$\\{" + DATA_LABEL_PLACEHOLDER + "\\[" + ii + "\\]\\}", escapedLabel);
-
-			File inFile = (File)data[ii].getData();
-			String filePath = inFile.getAbsolutePath();
-
-			if (File.separatorChar == '\\') {
-				filePath = filePath.replace(File.separatorChar, '/');
-			}
-
-			str = str.replaceAll("\\$\\{" + IN_FILE_PLACEHOLDER + "\\[" + ii + "\\]\\}", filePath);
-
-			if (File.separatorChar == '\\') {
-				str = str.replace('/', File.separatorChar);
-			}
+			template = substituteForDataLabel(template, data, ii);			
+			template = substituteForFilePath(template, data, ii);
 		}
 
 		for (Enumeration i = parameters.keys(); i.hasMoreElements();) {
@@ -493,10 +483,65 @@ public class StaticExecutableRunner implements Algorithm {
 
 			if (value == null) value = "";
 
-			str = str.replaceAll("\\$\\{" + key + "\\}", value.toString());
+			template = template.replaceAll("\\$\\{" + key + "\\}", value.toString());
 		}
+		
+		return template;
+	}
+	
+	private String substituteForDataLabel(String template, Data[] data, int ii) {
+		String key = String.format("${%s[%d]}", DATA_LABEL_PLACEHOLDER, ii);
+		
+		if (!template.contains(key)) {
+			return template;
+		} else {
+			Object labelObject = data[ii].getMetadata().get(DataProperty.LABEL);
+			
+			String label = "unknown_data_label";
+			if (labelObject != null) {
+				label = labelObject.toString();
+			}
+			
+			/* TODO Re-think converting backslash to slash for the following expects:
+			 * i) Need to consider what is the system file separator
+			 * ii) The backslash in data_label might have special meaning. 
+			 * iii) may be we should use " to quote the data_label  
+			 */
+			String escapedLabel = label.replaceAll("\\\\", "/");
+			
+			return template.replaceAll(Pattern.quote(key), escapedLabel);
+		}
+	}
 
-		return str;
+	private String substituteForFilePath(String template, Data[] data, int ii) {
+		String key = String.format("${%s[%d]}", IN_FILE_PLACEHOLDER, ii);
+		
+		if (!template.contains(key)) {
+			return template;
+		} else {			
+			Object datumObject = data[ii].getData();
+			
+			String filePath = "unknown_file_path";
+			if (datumObject != null && datumObject instanceof File) {
+				File file = (File) datumObject;
+				filePath = file.getAbsolutePath();
+			}
+			
+			if (File.separatorChar == '\\') {
+				filePath = filePath.replace(File.separatorChar, '/');
+			}
+
+			String substituted = template.replaceAll(Pattern.quote(key), filePath);
+
+			/* TODO: Re-think - This auto convert every backslash and slash.
+			 * Which might convert everything that you don't intend to convert.
+			 */
+			if (File.separatorChar == '\\') {
+				substituted = substituted.replace('/', File.separatorChar);
+			}
+			
+			return substituted;
+		}
 	}
 
 	public File getTempDirectory() {
