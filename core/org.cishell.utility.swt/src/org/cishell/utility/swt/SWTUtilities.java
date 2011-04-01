@@ -2,6 +2,7 @@ package org.cishell.utility.swt;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.regex.Pattern;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
@@ -10,131 +11,90 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
-/** TODO: The URL (http://-prefixed) parsing utilities in this class need to be updated to handle
- * https as well.
- */
 public class SWTUtilities {
-	public static final Color DEFAULT_BACKGROUND_COLOR =
-		new Color(Display.getDefault(), 255, 255, 255);
-	/*
-     * Append the given string to the console with the given color, this will do the job of
-     *  checking for URLs within the string and registering the proper listeners on them as well.
-     */
-	public static Collection<StyleRange> appendStringWithURL(
-    		StyledText textField,
-    		URLClickedListener urlListener,
-    		URLMouseCursorListener urlCursorListener,
-    		String message,
-    		Color normalColor,
-    		Color urlColor) {
-		return appendStringWithURL(
-			textField,
-			urlListener,
-			urlCursorListener,
-			message,
-			DEFAULT_BACKGROUND_COLOR,
-			normalColor,
-			urlColor);
+	public static final String URL_START_TAG = "[url]";
+	public static final String URL_END_TAG = "[/url]";
+
+	/** Do not instantiate utilities. */
+	protected SWTUtilities() {		
+		throw new UnsupportedOperationException();
 	}
-
-    public static Collection<StyleRange> appendStringWithURL(
+	
+	/**
+     * Style text within URL_START_TAG and URL_END_TAG like URLs and make them clickable links.
+     */
+    public static Collection<StyleRange> urlifyUrls(
     		StyledText textField,
     		URLClickedListener urlListener,
     		URLMouseCursorListener urlCursorListener,
     		String message,
-    		Color backgroundColor,
     		Color normalColor,
     		Color urlColor) {
-    
-    	//find a URL in the message
-    
-        int index = message.indexOf("http://");
-        if (index == -1) {
-            index = message.indexOf("https://");
-        }
-        if (index == -1) {
-            index = message.indexOf("www.");
-        }
-
-        if (index > -1) {
-            String url = message.substring(index);
-            if (url.indexOf(") ") > -1) {
-                url = url.substring(0, url.indexOf(") "));
-            }
-            else if (url.indexOf(" ") > -1) {
-                url = url.substring(0, url.indexOf(" "));
-                if (url.trim().endsWith(".") ){
-                	url=url.substring(0, url.length()-1);
-                }
-            }
-            if (url.endsWith(".\n") || url.endsWith(".\t")){
-            	url=url.substring(0, url.length()-2);
-            }
-            if (url.indexOf("\n") > -1) {
-                url = url.substring(0, url.indexOf("\n"));
-            }
-            if (url.indexOf("\t") > -1) {
-                url = url.substring(0, url.indexOf("\n"));
-            }
-               
-
-            StyleRange preURLStyle = syncedStyledPrint(
-            	textField, message.substring(0, index), backgroundColor, normalColor, SWT.NORMAL);
-            urlListener.addURL(textField.getText().length(), url);
-            urlCursorListener.addURL(textField.getText().length(), url);
-            StyleRange urlStyle =
-            	syncedStyledPrint(textField, url, backgroundColor, urlColor, SWT.BOLD);
-            Collection<StyleRange> postURLStyles = appendStringWithURL(
-            	textField,
-            	urlListener,
-            	urlCursorListener,
-            	message.substring(index + url.length()),
-            	backgroundColor,
-            	normalColor,
-            	urlColor);
-
-            Collection<StyleRange> finalStyles = new HashSet<StyleRange>();
-
-            if (preURLStyle != null) {
-            	finalStyles.add(preURLStyle);
-            }
-
-            if (urlStyle != null) {
-            	finalStyles.add(urlStyle);
-            }
-
-            finalStyles.addAll(postURLStyles);
-
-            return finalStyles;
-        } else {
-            StyleRange style = syncedStyledPrint(
-            	textField, message, backgroundColor, normalColor, SWT.NORMAL);
-
-            if (style != null) {
-            	Collection<StyleRange> finalStyles = new HashSet<StyleRange>();
-            	finalStyles.add(style);
-
-            	return finalStyles;
-            } else {
-            	return new HashSet<StyleRange>();
-            }
-        }
+    	int startTagIndex = message.indexOf(URL_START_TAG);
+    	int endTagIndex = message.indexOf(URL_END_TAG);
+    	
+    	boolean urlDetected = startTagIndex >= 0 && endTagIndex >= 0;
+        if (urlDetected) {
+        	String urlWithTags =
+        		message.substring(startTagIndex, endTagIndex + URL_END_TAG.length());
+    		String url =
+    			urlWithTags.substring(
+    					URL_START_TAG.length(),
+    					urlWithTags.length() - URL_END_TAG.length());
+        	
+    		String messageWithFirstUrlDetagged =
+    			message.replaceFirst(Pattern.quote(urlWithTags), url);
+    		
+    		String messageBeforeUrl = messageWithFirstUrlDetagged.substring(0, startTagIndex);
+	        StyleRange preURLStyle = syncedStyledPrint(
+	        		textField, messageBeforeUrl, normalColor, SWT.NORMAL);
+	        urlListener.addURL(textField.getText().length(), url);
+	        urlCursorListener.addURL(textField.getText().length(), url);
+	        StyleRange urlStyle =
+	        	syncedStyledPrint(textField, url, urlColor, SWT.BOLD);
+	        String messageBeyondFirstUrl =
+	        	messageWithFirstUrlDetagged.substring(startTagIndex + url.length());
+	        Collection<StyleRange> postURLStyles = urlifyUrls(
+	        	textField,
+	        	urlListener,
+	        	urlCursorListener,
+	        	messageBeyondFirstUrl,
+	        	normalColor,
+	        	urlColor);
+	
+	        Collection<StyleRange> finalStyles = new HashSet<StyleRange>();
+	
+	        if (preURLStyle != null) {
+	        	finalStyles.add(preURLStyle);
+	        }
+	
+	        if (urlStyle != null) {
+	        	finalStyles.add(urlStyle);
+	        }
+	
+	        finalStyles.addAll(postURLStyles);
+	
+	        return finalStyles;
+	    } else {
+	    	StyleRange style = syncedStyledPrint(textField, message, normalColor, SWT.NORMAL);
+	
+	        if (style != null) {
+	        	Collection<StyleRange> finalStyles = new HashSet<StyleRange>();
+	        	finalStyles.add(style);
+	
+	        	return finalStyles;
+	        } else {
+	        	return new HashSet<StyleRange>();
+	        }
+	    }
     }
 
-	/*
-     * Helper to actually format the string with a style range and
-     * append it to the StyledText control.
+    /**
+     * Format the string with a style range and append it to the StyledText control.
      */
-
-    public static StyleRange syncedStyledPrint(
-    		StyledText textField, String message, Color color, int style) {
-    	return syncedStyledPrint(textField, message, DEFAULT_BACKGROUND_COLOR, color, style);
-    }
-
     public static StyleRange syncedStyledPrint(
     		final StyledText textField,
     		final String message,
-    		final Color backgroundColor,
     		final Color color,
     		final int style) {
     	final StyleRange[] styleRange = new StyleRange[1];

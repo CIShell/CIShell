@@ -127,8 +127,8 @@ public class LogView extends ViewPart implements DataManagerListener, LogListene
 				for (StyleRange highlightStyle : highlights) {
 					int start = nonHighlightStyle.start;
 
-					if ((start >= highlightStyle.start) &&
-							(start < (highlightStyle.start + highlightStyle.length))) {
+					if ((start >= highlightStyle.start)
+							&& (start < (highlightStyle.start + highlightStyle.length))) {
 						newStyle = (StyleRange) newStyle.clone();
 						newStyle.background = HIGHLIGHTED_BACKGROUND_COLOR;
 					}
@@ -208,7 +208,8 @@ public class LogView extends ViewPart implements DataManagerListener, LogListene
     @SuppressWarnings("unchecked")
     public void createPartControl(Composite parent) {
     	this.parent = parent;
-        this.textField = new StyledText(parent, SWT.BORDER | SWT.V_SCROLL | SWT.WRAP | SWT.READ_ONLY);
+        this.textField =
+        	new StyledText(parent, SWT.BORDER | SWT.V_SCROLL | SWT.WRAP | SWT.READ_ONLY);
         this.textField.setEditable(false);
         this.textField.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
         this.textField.getCaret().setVisible(false);
@@ -261,11 +262,10 @@ public class LogView extends ViewPart implements DataManagerListener, LogListene
         	 Enumeration backLogEntries = logReaderService.getLog();
         	 
         	 while (backLogEntries.hasMoreElements()) {
-        	 	LogEntry logEntry = (LogEntry)backLogEntries.nextElement();
+        	 	LogEntry logEntry = (LogEntry) backLogEntries.nextElement();
         	 	this.logged(logEntry);
         	 }
-         }
-         else {
+         } else {
         	 System.out.println("reader is null");
          }
          
@@ -328,7 +328,7 @@ public class LogView extends ViewPart implements DataManagerListener, LogListene
 							}
 						}
                         
-						Collection<StyleRange> styles = SWTUtilities.appendStringWithURL(
+						Collection<StyleRange> styles = SWTUtilities.urlifyUrls(
 							LogView.this.textField,
 							LogView.this.urlListener,
 							LogView.this.urlCursorListener,
@@ -348,10 +348,10 @@ public class LogView extends ViewPart implements DataManagerListener, LogListene
     }
     
     private boolean goodMessage(String msg) {
-        if (msg == null || 
-                msg.startsWith("ServiceEvent ") || 
-                msg.startsWith("BundleEvent ") || 
-                msg.startsWith("FrameworkEvent ")) {
+        if (msg == null
+        		|| msg.startsWith("ServiceEvent ")
+        		|| msg.startsWith("BundleEvent ")
+        		|| msg.startsWith("FrameworkEvent ")) {
             return false;
         } else {
             return true;   
