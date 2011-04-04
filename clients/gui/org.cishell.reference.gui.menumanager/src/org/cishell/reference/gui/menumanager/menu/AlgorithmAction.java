@@ -127,7 +127,7 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, DataMa
 
         if ((reference != null) && (reference_url != null)) {
             acknowledgement.append(
-            	"Reference: " + reference + " (" + reference_url + ")\n");
+            	"Reference: " + reference + " ([url]" + reference_url + "[/url])\n");
         } else if ((reference != null) && (reference_url == null)) {
         	acknowledgement.append("Reference: " + reference + "\n");
         }
@@ -135,7 +135,7 @@ public class AlgorithmAction extends Action implements AlgorithmProperty, DataMa
         String documentationURL = (String) serviceReference.getProperty(DOCUMENTATION_URL);
 
         if (documentationURL != null) {
-        	acknowledgement.append("Documentation: " + documentationURL + "\n");
+        	acknowledgement.append("Documentation: [url]" + documentationURL + "[/url]\n");
         }
 
         if (acknowledgement.length() > 1) {
