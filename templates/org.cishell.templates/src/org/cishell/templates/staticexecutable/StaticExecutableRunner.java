@@ -24,6 +24,7 @@ import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -34,7 +35,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
@@ -53,18 +53,33 @@ import org.osgi.service.log.LogService;
  * @author Bruce Herr (bh2@bh2.net)
  */
 public class StaticExecutableRunner implements Algorithm {
+	public static final String DEFAULT_SAFE_SUBSTITUTE = "_";
+	public static final Map<String, String> TROUBLE_CHARACTER_SUBSTITUTIONS;
+	static {
+		Map<String, String> m = new HashMap<String, String>();
+		m.put("\"", "''");
+		m.put(";", DEFAULT_SAFE_SUBSTITUTE);
+		m.put(",", DEFAULT_SAFE_SUBSTITUTE);
+		m.put("&", DEFAULT_SAFE_SUBSTITUTE);
+		m.put("|", DEFAULT_SAFE_SUBSTITUTE);
+		m.put("<", DEFAULT_SAFE_SUBSTITUTE);
+		m.put(">", DEFAULT_SAFE_SUBSTITUTE);
+		
+		TROUBLE_CHARACTER_SUBSTITUTIONS = Collections.unmodifiableMap(m);
+	}
+	
 	public static final String EXECUTABLE_PLACEHOLDER = "executable";
 	public static final String DATA_LABEL_PLACEHOLDER = "data_label";
 	public static final String IN_FILE_PLACEHOLDER = "inFile";
 
-	private String ALGORITHM;
-	private String macOSX_PPC_DirectoryPath;
-	private String MACOSX;
-	private String ALGORITHM_WIN32;
-	private String WIN32;
-	private String ALGORITHM_LINUX_X86;
-	private String LINUX;
-	private String ALGORITHM_DEFAULT;
+	private String algorithm;
+	private String macOsXPpcDirectoryPath;
+	private String macOsX;
+	private String algorithmWin32;
+	private String win32;
+	private String algorithmLinuxX86;
+	private String linux;
+	private String algorithmDefault;
 
 	private String algorithmDirectoryPath;
 	private String temporaryDirectoryPath;
@@ -96,14 +111,14 @@ public class StaticExecutableRunner implements Algorithm {
 
 		// Determine directory paths for each platform, based on algorithmName.
 
-		this.ALGORITHM = algorithmName + "/";
-		this.macOSX_PPC_DirectoryPath = ALGORITHM + "macosx.ppc/";
-		this.MACOSX = "macosx";
-		this.ALGORITHM_WIN32 = ALGORITHM + "win32/";
-		this.WIN32 = "win32";
-		this.ALGORITHM_LINUX_X86 = ALGORITHM + "linux.x86/";
-		this.LINUX = "linux";
-		this.ALGORITHM_DEFAULT = ALGORITHM + "default/";
+		this.algorithm = algorithmName + "/";
+		this.macOsXPpcDirectoryPath = algorithm + "macosx.ppc/";
+		this.macOsX = "macosx";
+		this.algorithmWin32 = algorithm + "win32/";
+		this.win32 = "win32";
+		this.algorithmLinuxX86 = algorithm + "linux.x86/";
+		this.linux = "linux";
+		this.algorithmDefault = algorithm + "default/";
 
 		// if a constructor variable was null, use a null object version of it if possible
 
@@ -168,26 +183,26 @@ public class StaticExecutableRunner implements Algorithm {
 			String path = null;
 
 			// take the default, if there
-			if (entries.contains(ALGORITHM_DEFAULT)) {
-				String default_path = ALGORITHM_DEFAULT;
+			if (entries.contains(algorithmDefault)) {
+				String defaultPath = algorithmDefault;
 				// logger.log(LogService.LOG_DEBUG, "base path: "+default_path+
 				// "\n\t"+dir.getAbsolutePath() + "\n\n");
-				copyDir(dir, default_path, 0);
+				copyDir(dir, defaultPath, 0);
 			}
 
 			// but override with platform idiosyncracies
-			if (os.equals(WIN32) && entries.contains(ALGORITHM_WIN32)) {
-				path = ALGORITHM_WIN32;
-			} else if (os.equals(MACOSX) && entries.contains(macOSX_PPC_DirectoryPath)) {
-				path = macOSX_PPC_DirectoryPath;
-			} else if (os.equals(LINUX) && entries.contains(ALGORITHM_LINUX_X86)) {
-				path = ALGORITHM_LINUX_X86;
+			if (os.equals(win32) && entries.contains(algorithmWin32)) {
+				path = algorithmWin32;
+			} else if (os.equals(macOsX) && entries.contains(macOsXPpcDirectoryPath)) {
+				path = macOsXPpcDirectoryPath;
+			} else if (os.equals(linux) && entries.contains(algorithmLinuxX86)) {
+				path = algorithmLinuxX86;
 			}
 
-			String platform_path = ALGORITHM + os + "." + arch + "/";
+			String platformPath = algorithm + os + "." + arch + "/";
 			// and always override anything with an exact match
-			if (entries.contains(platform_path)) {
-				path = platform_path;
+			if (entries.contains(platformPath)) {
+				path = platformPath;
 			}
 
 			if (path == null) {
@@ -216,7 +231,8 @@ public class StaticExecutableRunner implements Algorithm {
 		}
 	}
 
-	protected File[] executeProgram(String[] commandArray, String baseDirPath) throws AlgorithmExecutionException {
+	protected File[] executeProgram(String[] commandArray, String baseDirPath)
+			throws AlgorithmExecutionException {
 		/*
 		 * Remember which files were in the directory before we ran
 		 *  the program.
@@ -226,8 +242,11 @@ public class StaticExecutableRunner implements Algorithm {
 
 		//create and run the executing process
 		Process process = null;
-		try {
-			process = Runtime.getRuntime().exec(commandArray, null, new File(baseDirPath));
+		try {			
+			ProcessBuilder processBuilder = new ProcessBuilder(commandArray);
+			processBuilder.directory(new File(baseDirPath));
+			process = processBuilder.start();
+			
 			process.getOutputStream().close();
 		} catch (IOException e1) {
 			throw new AlgorithmExecutionException(e1.getMessage(), e1);
@@ -238,10 +257,10 @@ public class StaticExecutableRunner implements Algorithm {
 		monitor.start(ProgressMonitor.CANCELLABLE, -1);
 
 		InputStream in = process.getInputStream();
-		StringBuffer in_buffer = new StringBuffer();
+		StringBuffer inBuffer = new StringBuffer();
 
 		InputStream err = process.getErrorStream();
-		StringBuffer err_buffer = new StringBuffer();
+		StringBuffer errBuffer = new StringBuffer();
 
 		Integer exitValue = null;
 		boolean killedOnPurpose = false;
@@ -249,8 +268,8 @@ public class StaticExecutableRunner implements Algorithm {
 		while (!killedOnPurpose && exitValue == null) {
 			//print its output, and watch to see if it has finished/died.
 			
-			in_buffer = logStream(LogService.LOG_INFO, in, in_buffer);
-			err_buffer = logStream(LogService.LOG_ERROR, err, err_buffer);
+			inBuffer = logStream(LogService.LOG_INFO, in, inBuffer);
+			errBuffer = logStream(LogService.LOG_ERROR, err, errBuffer);
 
 			if (monitor.isCanceled()) {
 				killedOnPurpose = true;
@@ -276,7 +295,9 @@ public class StaticExecutableRunner implements Algorithm {
 
 		// if the process failed unexpectedly...
 		if (process.exitValue() != 0 && !killedOnPurpose) {
-			throw new AlgorithmExecutionException("Algorithm exited unexpectedly (exit value: " + process.exitValue()
+			throw new AlgorithmExecutionException(
+					"Algorithm exited unexpectedly (exit value: "
+					+ process.exitValue()
 					+ "). Please check the console window for any error messages.");
 		}
 
@@ -347,7 +368,8 @@ public class StaticExecutableRunner implements Algorithm {
 					String label = properties.getProperty("outFile[" + i + "].label", f.getName());
 					data[i].getMetadata().put(DataProperty.LABEL, label);
 
-					String type = properties.getProperty("outFile[" + i + "].type", DataProperty.OTHER_TYPE);
+					String type =
+						properties.getProperty("outFile[" + i + "].type", DataProperty.OTHER_TYPE);
 					type = type.trim();
 					if (type.equalsIgnoreCase(DataProperty.MATRIX_TYPE)) {
 						type = DataProperty.MATRIX_TYPE;
@@ -398,7 +420,8 @@ public class StaticExecutableRunner implements Algorithm {
 		} catch (EOFException e) {
 			// normal operation
 		} catch (IOException e) {
-			throw new AlgorithmExecutionException("Error when processing the algorithm's screen output", e);
+			throw new AlgorithmExecutionException(
+					"Error when processing the algorithm's screen output", e);
 		}
 
 		return buffer;
@@ -459,13 +482,16 @@ public class StaticExecutableRunner implements Algorithm {
 
 		return commands;
 	}
-
-	// replaces place-holder variables in the template with the actual arguments the executable needs to work.
-	// (real names of files instead of inFile[i], for instance)
-	// (also, real values like "6" or "dog" instead of placeholders for parameters)
+	
+	/* replaces place-holder variables in the template with the actual arguments the executable
+	 * needs to work.
+	 * (real names of files instead of inFile[i], for instance)
+	 * (also, real values like "6" or "dog" instead of placeholders for parameters)
+	 */
 	protected String substituteVars(String template, Data[] data, Dictionary parameters) {
-		template = template.replaceAll(
-			"\\$\\{" + EXECUTABLE_PLACEHOLDER + "\\}", properties.getProperty(EXECUTABLE_PLACEHOLDER));
+		template = template.replace(
+				String.format("${%s}", EXECUTABLE_PLACEHOLDER),
+				properties.getProperty(EXECUTABLE_PLACEHOLDER));
 
 		/* 
 		 * Re-think:
@@ -481,9 +507,11 @@ public class StaticExecutableRunner implements Algorithm {
 			String key = (String) i.nextElement();
 			Object value = parameters.get(key);
 
-			if (value == null) value = "";
+			if (value == null) {
+				value = "";
+			}
 
-			template = template.replaceAll("\\$\\{" + key + "\\}", value.toString());
+			template = template.replace(String.format("${%s}", key), value.toString());
 		}
 		
 		return template;
@@ -502,15 +530,28 @@ public class StaticExecutableRunner implements Algorithm {
 				label = labelObject.toString();
 			}
 			
-			/* TODO Re-think converting backslash to slash for the following expects:
-			 * i) Need to consider what is the system file separator
-			 * ii) The backslash in data_label might have special meaning. 
-			 * iii) may be we should use " to quote the data_label  
-			 */
-			String escapedLabel = label.replaceAll("\\\\", "/");
+			String cleanedLabel = cleanDataLabel(label);
 			
-			return template.replaceAll(Pattern.quote(key), escapedLabel);
+			return template.replace(key, cleanedLabel);
 		}
+	}
+
+	/* Replace each double-quote with two single-quotes.
+	 * This alleviates some cross-platform problems with command-line template substitution.
+	 * In particular, GUESS substitutes its values into batch/shell scripts and will not behave
+	 * properly on every platform if these troublesome characters occur.
+	 */
+	private String cleanDataLabel(String label) {
+		String cleanedLabel = label;
+		
+		for (String troubleCharacter : TROUBLE_CHARACTER_SUBSTITUTIONS.keySet()) {
+			cleanedLabel =
+				cleanedLabel.replace(
+						troubleCharacter,
+						TROUBLE_CHARACTER_SUBSTITUTIONS.get(troubleCharacter));
+		}
+		
+		return cleanedLabel;
 	}
 
 	private String substituteForFilePath(String template, Data[] data, int ii) {
@@ -526,20 +567,9 @@ public class StaticExecutableRunner implements Algorithm {
 				File file = (File) datumObject;
 				filePath = file.getAbsolutePath();
 			}
-			
-			if (File.separatorChar == '\\') {
-				filePath = filePath.replace(File.separatorChar, '/');
-			}
 
-			String substituted = template.replaceAll(Pattern.quote(key), filePath);
+			String substituted = template.replace(key, filePath);
 
-			/* TODO: Re-think - This auto convert every backslash and slash.
-			 * Which might convert everything that you don't intend to convert.
-			 */
-			if (File.separatorChar == '\\') {
-				substituted = substituted.replace('/', File.separatorChar);
-			}
-			
 			return substituted;
 		}
 	}
