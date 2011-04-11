@@ -39,7 +39,9 @@ public class SaveAsController {
 
         dialog.setFilterPath(currentDirectory.getPath());
 
-       	if ((fileExtension != null) && !"*".equals(fileExtension) && !"".equals(fileExtension)) {
+       	if ((fileExtension != null) && !"*".equals(fileExtension) && !"".equals(fileExtension) &&
+       		!suggestedFileName.endsWith(fileExtension)) {
+       		
        		String isolatedFileName = stripFileExtension(suggestedFileName);
        		suggestedFileName = String.format("%s.%s", suggestedFileName, suggestedFileExtension);
            	dialog.setFilterExtensions(new String[] { String.format("*.%s", fileExtension) });
