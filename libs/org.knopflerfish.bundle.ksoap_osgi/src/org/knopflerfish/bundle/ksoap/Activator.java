@@ -113,7 +113,7 @@ public class Activator implements BundleActivator, ServiceListener {
       bc.addServiceListener(this);
 
       // Make sure we get services already registered
-      ServiceReference[] srl = bc.getServiceReferences(null, null);
+      ServiceReference[] srl = bc.getServiceReferences((String) null, null);
       for(int i = 0; srl != null && i < srl.length; i++) {
         serviceChanged(new ServiceEvent(ServiceEvent.REGISTERED, srl[i]));
       }
