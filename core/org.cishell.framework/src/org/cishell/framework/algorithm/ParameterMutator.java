@@ -20,27 +20,38 @@ import org.osgi.service.metatype.ObjectClassDefinition;
 /**
  * An additional interface an {@link AlgorithmFactory} can implement that allows
  * for adding, modifying, or removing input parameters before being shown to the
- * end-user for input. This interface is often implemented by algorithms that 
+ * end-user for input. This interface is often implemented by algorithms that
  * wish to customize the user interface based on the actual input data.
  * 
  * @author Bruce Herr (bh2@bh2.net)
  */
 public interface ParameterMutator {
 
-    /**
-     * Adds, modifies, or removes {@link Algorithm} parameters 
-     * ({@link AttributeDefinition}s) from a given {@link ObjectClassDefinition}
-     * returning either the same (if no changes are made) input or a new, 
-     * mutated version of the input
-     * 
-     * @param data An optional argument, the Data array that will be given to 
-     *             this class to create an Algorithm with the createAlgorithm 
-     *             method. Applications that don't know the Data array that is going
-     *             to be used ahead of time can give a <code>null</code> value. 
-     * @param parameters A set of AttributeDefinitions which define the 
-     *             algorithm's input parameters
-     * @return An OSGi {@link ObjectClassDefinition} that defines the parameters
-     *             needed by the Algorithm this class creates
-     */
-	public ObjectClassDefinition mutateParameters(Data[] data, ObjectClassDefinition parameters);
+	/**
+	 * Adds, modifies, or removes {@link Algorithm} parameters (
+	 * {@link AttributeDefinition}s) from a given {@link ObjectClassDefinition}
+	 * returning either the same (if no changes are made) input or a new,
+	 * mutated version of the input
+	 * 
+	 * <p>
+	 * If the mutateParameters method happens to find out that the algorithm
+	 * will be unable to run, for instance if an input file does not have the
+	 * correct format, it may throw a {@link AlgorithmCreationFailedException}.
+	 * The user may be made aware of the exception, for example by printing the
+	 * .getMessage to the console.
+	 * 
+	 * @param data
+	 *            An optional argument, the Data array that will be given to
+	 *            this class to create an Algorithm with the createAlgorithm
+	 *            method. Applications that don't know the Data array that is
+	 *            going to be used ahead of time can give a <code>null</code>
+	 *            value.
+	 * @param parameters
+	 *            A set of AttributeDefinitions which define the algorithm's
+	 *            input parameters
+	 * @return An OSGi {@link ObjectClassDefinition} that defines the parameters
+	 *         needed by the Algorithm this class creates
+	 */
+	public ObjectClassDefinition mutateParameters(Data[] data,
+			ObjectClassDefinition parameters);
 }
