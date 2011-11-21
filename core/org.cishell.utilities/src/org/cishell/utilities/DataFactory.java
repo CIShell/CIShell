@@ -18,7 +18,7 @@ public final class DataFactory {
      * 
      * @param datum		Object to wrap
      * @param format	The {@link Data#getFormat() format} of {@code object}
-     * @param type		The {@link DataProperty#TYPE type} of {@code object}
+     * @param type		The {@link DataProperty#TYPE type} of {@code object}.
 	 * 					See {@link DataProperty}.*_TYPE for possible values
      * @param parent	The {@link Data} from which {@code object} was derived
      * @param label		A concise String describing {@code object} in relation to {@code parent}
@@ -35,11 +35,11 @@ public final class DataFactory {
      * Creates a Data wrapping {@code object} having the same {@link Data#getFormat() format} and
      * {@link DataProperty#TYPE type} as its {@code parent}.
      * 
-     * @param object	Object to wrap
-     * @param parent	The {@link Data} from which {@code object} was derived
-     * @param label		A concise String describing {@code object} in relation to {@code parent}
+     * @param object	Object to wrap.
+     * @param parent	The {@link Data} from which {@code object} was derived.
+     * @param label		A concise String describing {@code object} in relation to {@code parent}.
      * @return	A Data wrapping {@code object} using {@code parent}'s {@code format}
-     * 			and {@code type}
+     * 			and {@code type}.
      */
 	public static Data likeParent(Object object, Data parent, String label) {
 		return forObject(
@@ -53,13 +53,13 @@ public final class DataFactory {
 	 * Creates a Data wrapping {@code object} using {@code object.getClass().getName()} as its
 	 * format.
 	 * 
-	 * @param object	Object to wrap as Data
-	 * @param type		The {@link DataProperty#TYPE type} of {@code object}
-	 * 					See {@link DataProperty}.*_TYPE for possible values
-	 * @param parent	The {@link Data} from which {@code object} was derived
-	 * @param label		A concise String describing {@code object} in relation to {@code parent}
+	 * @param object	Object to wrap as Data.
+	 * @param type		The {@link DataProperty#TYPE type} of {@code object}.
+	 * 					See {@link DataProperty}.*_TYPE for possible values.
+	 * @param parent	The {@link Data} from which {@code object} was derived.
+	 * @param label		A concise String describing {@code object} in relation to {@code parent}.
 	 * @return	A Data wrapping {@code object} using {@code object.getClass().getName()} as its
-	 * 			format 
+	 * 			format.
 	 */
 	public static Data withClassNameAsFormat(
 			Object object, String type, Data parent, String label) {
@@ -68,13 +68,13 @@ public final class DataFactory {
 	/**
 	 * Creates a Data wrapping {@code file} using {@code mimeType} as its format.
 	 * 
-	 * @param file		File to wrap as Data
+	 * @param file		File to wrap as Data.
 	 * @param mimeType	{@code file}'s MIME type, e.g. "file:text/plain".
-	 * @param type		The {@link DataProperty#TYPE type} of {@code object}
-	 * 					See {@link DataProperty}.*_TYPE for possible values
-	 * @param parent	The {@link Data} from which {@code object} was derived
-	 * @param label		A concise String describing {@code object} in relation to {@code parent}
-	 * @return	A Data wrapping {@code file} using {@code mimeType} as its format
+	 * @param type		The {@link DataProperty#TYPE type} of {@code object}.
+	 * 					See {@link DataProperty}.*_TYPE for possible values.
+	 * @param parent	The {@link Data} from which {@code object} was derived.
+	 * @param label		A concise String describing {@code object} in relation to {@code parent}.
+	 * @return	A Data wrapping {@code file} using {@code mimeType} as its format.
 	 */
 	public static Data forFile(
 			File file, String mimeType, String type, Data parent, String label) {
