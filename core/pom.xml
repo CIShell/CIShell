@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.cishell.core</groupId>
+  <artifactId>core</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <modules>
+    <module>org.cishell.algorithm.convertergraph</module>
+    <module>org.cishell.framework</module>
+    <module>org.cishell.reference</module>
+    <module>org.cishell.reference.prefs.admin</module>
+    <module>org.cishell.reference.service.database</module>
+    <module>org.cishell.reference.services</module>
+    <module>org.cishell.service.autostart</module>
+    <module>org.cishell.service.database</module>
+    <module>org.cishell.utilities</module>
+    <module>org.cishell.utility.datastructure</module>
+    <module>org.cishell.utility.swt</module>
+  </modules>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.eclipse.tycho</groupId>
+        <artifactId>tycho-maven-plugin</artifactId>
+        <version>0.13.0</version>
+        <extensions>true</extensions>
+      </plugin>
+    </plugins>
+  </build>
+</project>
