@@ -1,0 +1,142 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.cishell</groupId>
+	<artifactId>parent</artifactId>
+	<version>0.0.1</version>
+	<modules>
+	</modules>
+	<packaging>pom</packaging>
+
+	<properties>
+		<tychoVersion>0.13.0</tychoVersion>
+		<memoryOptions1>-Xms512m -Xmx1024m -XX:PermSize=256m</memoryOptions1>
+		<memoryOptions2>-XX:MaxPermSize=256m</memoryOptions2>
+		<systemProperties></systemProperties>
+
+		<platform-version-name>helios</platform-version-name>
+		<eclipse-site>http://download.eclipse.org/releases/${platform-version-name}</eclipse-site>
+	</properties>
+
+	<build>
+		<plugins>
+			<!-- <plugin> <groupId>org..tycho</groupId> <artifactId>maven-osgi-packaging-plugin</artifactId> 
+				<version>${tychoVersion}</version> <configuration> <format>'v'yyyyMMdd-HHmm'-${BUILD_ALIAS}'</format> 
+				<archiveSite>true</archiveSite> </configuration> </plugin> -->
+
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-maven-plugin</artifactId>
+				<version>${tychoVersion}</version>
+				<extensions>true</extensions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>target-platform-configuration</artifactId>
+				<version>${tychoVersion}</version>
+				<configuration>
+					<resolver>p2</resolver>
+					<ignoreTychoRepositories>true</ignoreTychoRepositories>
+					<environments>
+
+						<!-- Win 32 -->
+						<environment>
+							<os>win32</os>
+							<ws>win32</ws>
+							<arch>x86</arch>
+						</environment>
+						<!--  <environment>
+							<os>win32</os>
+							<ws>win32</ws>
+							<arch>x86_64</arch>
+						</environment>  -->
+
+						<!-- Linux -->
+						<!--  
+						<environment>
+							<os>linux</os>
+							<ws>gtk</ws>
+							<arch>x86</arch>
+						</environment>
+						<environment>
+							<os>linux</os>
+							<ws>gtk</ws>
+							<arch>x86_64</arch>
+						</environment> -->
+					</environments>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<!-- Profiles -->
+	<profiles>
+		<profile>
+			<id>platform-helios</id>
+			<activation>
+				<property>
+					<name>platform-version-name</name>
+					<value>helios</value>
+				</property>
+			</activation>
+			<properties>
+				<eclipse-site>http://download.eclipse.org/releases/helios</eclipse-site>
+				<platform-version>[3.6,3.7)</platform-version>
+			</properties>
+		</profile>
+
+		<profile>
+			<id>platform-indigo</id>
+			<activation>
+				<property>
+					<name>platform-version-name</name>
+					<value>indigo</value>
+				</property>
+			</activation>
+			<properties>
+				<eclipse-site>http://download.eclipse.org/releases/indigo</eclipse-site>
+				<platform-version>[3.7,3.8)</platform-version>
+			</properties>
+		</profile>
+	</profiles>
+	<repositories>
+		<!--  <repository>
+			<id>helios</id>
+			<layout>p2</layout>
+			<url>${eclipse-site}</url>
+		</repository>  -->
+	
+		<repository>
+			<id>eclipse-orbit</id>
+			<url>http://download.eclipse.org/tools/orbit/downloads/drops/R20110523182458/repository/</url>
+			<layout>p2</layout>
+		</repository>
+		
+		<repository>
+		<id>Ganymede</id>
+		<url>http://download.eclipse.org/releases/ganymede</url>
+		<layout>p2</layout></repository>
+		
+		<!--  <repository>
+			<id>eclipse-3311</id>
+			<url>file:///d:/Applications/eclipse-p2/repository</url>
+			<layout>p2</layout>
+		</repository>  -->
+
+		<!-- Just for testing! -->
+		<repository>
+			<id>sci2-p2</id>
+			<url>file:///d:/Applications/p2/dest/repository</url>
+			<layout>p2</layout>
+		</repository>
+	</repositories>
+
+	<!-- Maven plug-ins -->
+	<!-- <pluginRepositories> <pluginRepository> <id>sonatype-maven-central</id> 
+		<url>http://repository.sonatype.org/content/repositories/central/ </url> 
+		<snapshots> <enabled>false</enabled> </snapshots> <releases> <enabled>true</enabled> 
+		</releases> </pluginRepository> <pluginRepository> <id>tycho</id> <url>https://repository.sonatype.org/content/repositories/snapshots/ 
+		</url> <snapshots> <enabled>true</enabled> </snapshots> <releases> <enabled>false</enabled> 
+		</releases> </pluginRepository> </pluginRepositories> -->
+</project>
