@@ -29,4 +29,9 @@
       </plugin>
     </plugins>
   </build>
+  <parent>
+  	<groupId>org.cishell</groupId>
+  	<artifactId>parent</artifactId>
+  	<version>0.0.1</version>
+  </parent>
 </project>

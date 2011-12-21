@@ -5,6 +5,11 @@
 	<artifactId>parent</artifactId>
 	<version>0.0.1</version>
 	<modules>
+	<module>core</module>
+	<module>deployment</module>
+	<module>clients/gui</module>
+	<module>libs</module>
+	<module>templates</module>
 	</modules>
 	<packaging>pom</packaging>
 
@@ -125,11 +130,11 @@
 		</repository>  -->
 
 		<!-- Just for testing! -->
-		<repository>
-			<id>sci2-p2</id>
+		<!--  <repository>
+			<id>big-p2</id>
 			<url>file:///d:/Applications/p2/dest/repository</url>
 			<layout>p2</layout>
-		</repository>
+		</repository> -->
 	</repositories>
 
 	<!-- Maven plug-ins -->

@@ -15,8 +15,10 @@
     <module>google-collections</module>
     <module>google_guava</module>
     <module>hsqldb</module>
+    <module>joda-time</module>
     <module>jythonlib</module>
     <module>ksoap2lib</module>
+    <module>opencsv</module>
     <module>org.apache.commons.collections</module>
     <module>org.knopflerfish.bundle.ksoap_osgi</module>
     <module>org.knopflerfish.util</module>
@@ -31,4 +33,10 @@
       </plugin>
     </plugins>
   </build>
+  <parent>
+  	<relativePath>../pom.xml</relativePath>
+  	<groupId>org.cishell</groupId>
+  	<artifactId>parent</artifactId>
+  	<version>0.0.1</version>
+  </parent>
 </project>

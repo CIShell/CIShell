@@ -2,13 +2,6 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
-	<classpathentry exported="true" kind="lib" path="guava-r08.jar" sourcepath="guava-src-r08.zip">
-		<attributes>
-			<attribute name="javadoc_location" value="http://guava-libraries.googlecode.com/svn/tags/release08/javadoc"/>
-		</attributes>
-		<accessrules>
-			<accessrule kind="discouraged" pattern="com/google/common/base/internal/*"/>
-		</accessrules>
-	</classpathentry>
-	<classpathentry kind="output" path="bin"/>
+	<classpathentry exported="true" kind="lib" path="guava-r08.jar"/>
+	<classpathentry kind="output" path="target/classes"/>
 </classpath>
