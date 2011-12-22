@@ -9,7 +9,7 @@
 		<module>deployment</module>
 		<module>clients/gui</module>
 		<module>libs</module>
-		<module>templates</module>
+		<!-- <module>templates</module> -->
 	</modules>
 	<packaging>pom</packaging>
 
