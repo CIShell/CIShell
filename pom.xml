@@ -111,11 +111,11 @@
 			<url>http://download.eclipse.org/tools/orbit/downloads/drops/R20110523182458/repository/</url>
 			<layout>p2</layout>
 		</repository>
-		<repository>
+		<!-- <repository>
 			<id>ganymede-local</id>
 			<url>file:///d:/Applications/p2/ganymede/repository</url>
 			<layout>p2</layout>
-		</repository>
+		</repository>  -->
 		<repository>
 			<id>Ganymede</id>
 			<url>http://download.eclipse.org/releases/ganymede</url>
