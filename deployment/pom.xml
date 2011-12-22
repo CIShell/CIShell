@@ -16,6 +16,7 @@
     <module>org.cishell.reference.gui.brand.feature</module>
     <module>org.cishell.reference.gui.feature</module>
     <module>org.cishell.update</module>
+    <module>org.cishell.reference.releng</module>
   </modules>
   <build>
     <plugins>
