@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?pde version="3.1"?>
+<?pde version="3.5"?>
 
-<product name="Cyberinfrastructure Shell" id="org.cishell.reference.gui.brand.cishell.cishell" application="org.cishell.reference.gui.workspace.CIShellApplication" useFeatures="true">
+<product name="Cyberinfrastructure Shell" uid="CIShell" id="org.cishell.reference.gui.brand.cishell.cishell" application="org.cishell.reference.gui.workspace.CIShellApplication" useFeatures="true" includeLaunchers="true">
 
    <aboutInfo>
       <image path="icons/about.gif"/>
@@ -10,7 +10,8 @@
       </text>
    </aboutInfo>
 
-   <configIni use="custom" path="/org.cishell.reference.gui.brand.cishell/extra-files/configuration/config.ini"/>
+   <configIni use="default">
+   </configIni>
 
    <launcherArgs>
    </launcherArgs>
@@ -37,6 +38,7 @@
    </launcher>
 
    <vm>
+      <windows include="true">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7</windows>
    </vm>
 
    <plugins>
@@ -49,5 +51,17 @@
       <feature id="org.cishell.reference.gui.feature"/>
       <feature id="org.cishell.reference.gui.brand.feature"/>
    </features>
+
+   <configurations>
+      <plugin id="org.cishell.service.autostart" autoStart="true" startLevel="4" />
+      <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="0" />
+      <plugin id="org.eclipse.equinox.cm" autoStart="true" startLevel="3" />
+      <plugin id="org.eclipse.equinox.common" autoStart="true" startLevel="2" />
+      <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="3" />
+      <plugin id="org.eclipse.equinox.event" autoStart="true" startLevel="3" />
+      <plugin id="org.eclipse.equinox.log" autoStart="true" startLevel="3" />
+      <plugin id="org.eclipse.equinox.metatype" autoStart="true" startLevel="3" />
+      <plugin id="org.eclipse.update.configurator" autoStart="true" startLevel="3" />
+   </configurations>
 
 </product>
