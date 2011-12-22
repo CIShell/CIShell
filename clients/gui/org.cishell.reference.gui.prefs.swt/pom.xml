@@ -7,7 +7,6 @@
     <groupId>org.cishell.clients.gui</groupId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <groupId>org.cishell.clients.gui</groupId>
   <artifactId>org.cishell.reference.gui.prefs.swt</artifactId>
   <version>0.0.1</version>
   <packaging>eclipse-plugin</packaging>

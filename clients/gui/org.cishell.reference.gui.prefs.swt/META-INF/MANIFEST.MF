@@ -4,7 +4,7 @@ Bundle-Name: Preference GUI
 Bundle-SymbolicName: org.cishell.reference.gui.prefs.swt
 Bundle-Version: 0.0.1
 Bundle-ClassPath: .
-Require-bundle: org.eclipse.ui
+Require-bundle: org.eclipse.ui.workbench;bundle-version="3.4.0"
 Import-Package: org.cishell.framework,
  org.cishell.framework.algorithm,
  org.cishell.framework.data,
@@ -28,3 +28,4 @@ Import-Package: org.cishell.framework,
  org.osgi.service.prefs;version="1.1.0"
 X-AutoStart: true
 Service-Component: OSGI-INF/component.xml
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
