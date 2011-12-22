@@ -22,6 +22,7 @@
     <module>org.apache.commons.collections</module>
     <module>org.knopflerfish.bundle.ksoap_osgi</module>
     <module>org.knopflerfish.util</module>
+    <module>prefuselib</module>
   </modules>
   <build>
     <plugins>
