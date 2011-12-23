@@ -1,7 +1,9 @@
 package org.cishell.reference.gui.menumanager;
 
 import java.io.IOException;
-import java.net.URL;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Properties;
 
 import org.cishell.framework.CIShellContext;
@@ -46,6 +48,7 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 		super.start(bundleContext);
         
 		Activator.bundleContext = bundleContext;
+		
 		
         while (getWorkbench() == null) {
             Thread.sleep(500);
@@ -114,13 +117,22 @@ public class Activator extends AbstractUIPlugin implements IStartup {
     private static Properties getProperties() {
     	Properties brandBundleProperties = new Properties();
 
-    	try {
-    		URL welcomeTextFileURL = new URL(new URL(
-         		System.getProperty("osgi.configuration.area")), WELCOME_TEXT_FILE_NAME);
-    		brandBundleProperties.load(welcomeTextFileURL.openStream());
-    	} catch (IOException e) {
-    		throw new RuntimeException(e.getMessage(), e);
-    	}
+		URI welcomeTextFileURI;
+		try {
+			welcomeTextFileURI = new URI(
+				System.getProperty("osgi.configuration.area")).resolve(WELCOME_TEXT_FILE_NAME);
+			InputStream fileStream = welcomeTextFileURI.toURL().openStream();
+			brandBundleProperties.load(fileStream);
+			fileStream.close();
+		} catch (IOException e) {
+			System.err.println(e.getMessage());
+			// Do nothing, just return an empty Properties.
+			brandBundleProperties = new Properties();
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+			brandBundleProperties = new Properties();
+		}
+		
 
     	return brandBundleProperties;
     }
