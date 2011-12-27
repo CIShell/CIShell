@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?pde version="3.5"?>
+<?pde version="3.1"?>
 
-<product name="Cyberinfrastructure Shell" uid="CIShell" id="org.cishell.reference.gui.brand.cishell.cishell" application="org.cishell.reference.gui.workspace.CIShellApplication" useFeatures="true" includeLaunchers="true">
+<product name="Cyberinfrastructure Shell" id="org.cishell.reference.gui.brand.cishell.cishell" application="org.cishell.reference.gui.workspace.CIShellApplication" useFeatures="true">
 
    <aboutInfo>
       <image path="icons/about.gif"/>
@@ -10,8 +10,7 @@
       </text>
    </aboutInfo>
 
-   <configIni use="default">
-   </configIni>
+   <configIni use="custom" path="/org.cishell.reference.gui.brand.cishell/extra-files/configuration/config.ini"/>
 
    <launcherArgs>
    </launcherArgs>
@@ -44,23 +43,11 @@
    </plugins>
 
    <features>
-      <feature id="org.cishell.environment.equinox.feature"/>
-      <feature id="org.cishell.feature"/>
-      <feature id="org.cishell.reference.feature"/>
-      <feature id="org.cishell.reference.gui.feature"/>
-      <feature id="org.cishell.reference.gui.brand.feature"/>
+      <feature id="org.cishell.environment.equinox.feature" version="0.0.0"/>
+      <feature id="org.cishell.feature" version="0.3.0"/>
+      <feature id="org.cishell.reference.feature" version="0.4.0"/>
+      <feature id="org.cishell.reference.gui.feature" version="0.4.0"/>
+      <feature id="org.cishell.reference.gui.brand.feature" version="0.8.0"/>
    </features>
-
-   <configurations>
-      <plugin id="org.cishell.service.autostart" autoStart="true" startLevel="4" />
-      <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="0" />
-      <plugin id="org.eclipse.equinox.cm" autoStart="true" startLevel="3" />
-      <plugin id="org.eclipse.equinox.common" autoStart="true" startLevel="2" />
-      <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="3" />
-      <plugin id="org.eclipse.equinox.event" autoStart="true" startLevel="3" />
-      <plugin id="org.eclipse.equinox.log" autoStart="true" startLevel="3" />
-      <plugin id="org.eclipse.equinox.metatype" autoStart="true" startLevel="3" />
-      <plugin id="org.eclipse.update.configurator" autoStart="true" startLevel="3" />
-   </configurations>
 
 </product>
