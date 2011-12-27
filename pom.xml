@@ -21,9 +21,9 @@
 
 	<repositories>
 		<repository>
-			<id>helios</id>
+			<id>galileo</id>
 			<layout>p2</layout>
-			<url>http://download.eclipse.org/releases/helios</url>
+			<url>http://download.eclipse.org/releases/galileo</url>
 		</repository>
 		<repository>
 			<id>eclipse-orbit</id>
