@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?pde version="3.1"?>
+<?pde version="3.5"?>
 
-<product name="Cyberinfrastructure Shell" id="org.cishell.reference.gui.brand.cishell.cishell" application="org.cishell.reference.gui.workspace.CIShellApplication" useFeatures="true">
+<product name="Cyberinfrastructure Shell" id="org.cishell.reference.gui.brand.cishell.cishell" application="org.cishell.reference.gui.workspace.CIShellApplication" useFeatures="true" includeLaunchers="true">
 
    <aboutInfo>
       <image path="icons/about.gif"/>
@@ -10,7 +10,12 @@
       </text>
    </aboutInfo>
 
-   <configIni use="custom" path="/org.cishell.reference.gui.brand.cishell/extra-files/configuration/config.ini"/>
+   <configIni use="default">
+      <linux>/org.cishell.reference.gui.brand.cishell/extra-files/configuration/config.ini</linux>
+      <macosx>/org.cishell.reference.gui.brand.cishell/extra-files/configuration/config.ini</macosx>
+      <solaris>/org.cishell.reference.gui.brand.cishell/extra-files/configuration/config.ini</solaris>
+      <win32>/org.cishell.reference.gui.brand.cishell/extra-files/configuration/config.ini</win32>
+   </configIni>
 
    <launcherArgs>
    </launcherArgs>
@@ -43,11 +48,12 @@
    </plugins>
 
    <features>
-      <feature id="org.cishell.environment.equinox.feature" version="0.0.0"/>
-      <feature id="org.cishell.feature" version="0.3.0"/>
-      <feature id="org.cishell.reference.feature" version="0.4.0"/>
-      <feature id="org.cishell.reference.gui.feature" version="0.4.0"/>
-      <feature id="org.cishell.reference.gui.brand.feature" version="0.8.0"/>
+      <feature id="org.cishell.environment.equinox.feature"/>
+      <feature id="org.cishell.feature"/>
+      <feature id="org.cishell.reference.feature"/>
+      <feature id="org.cishell.reference.gui.feature"/>
+      <feature id="org.cishell.reference.gui.brand.feature"/>
    </features>
+
 
 </product>
