@@ -25,9 +25,11 @@
 
 	<build>
 		<plugins>
-			<!-- <plugin> <groupId>org..tycho</groupId> <artifactId>maven-osgi-packaging-plugin</artifactId> 
-				<version>${tychoVersion}</version> <configuration> <format>'v'yyyyMMdd-HHmm'-${BUILD_ALIAS}'</format> 
-				<archiveSite>true</archiveSite> </configuration> </plugin> -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.11</version>
+			</plugin>
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -111,14 +113,21 @@
 			<url>http://download.eclipse.org/tools/orbit/downloads/drops/R20110523182458/repository/</url>
 			<layout>p2</layout>
 		</repository>
+		
+		<repository>
+			<id>galileo-platform</id>
+			<url>file:/C:\Users\thgsmith\git\CIShell/eclipse-platform</url>
+			<layout>p2</layout>
+		</repository>
+		
 		<!-- <repository>
 			<id>ganymede-local</id>
 			<url>file:///d:/Applications/p2/ganymede/repository</url>
 			<layout>p2</layout>
 		</repository>  -->
 		<repository>
-			<id>Ganymede</id>
-			<url>http://download.eclipse.org/releases/ganymede</url>
+			<id>galileo</id>
+			<url>http://download.eclipse.org/releases/galileo</url>
 			<layout>p2</layout>
 		</repository>
 
