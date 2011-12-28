@@ -49,6 +49,8 @@
 					<environments>
 
 						<!-- Win 32 -->
+
+
 						<environment>
 							<os>win32</os>
 							<ws>win32</ws>
@@ -60,21 +62,35 @@
 							<ws>win32</ws>
 							<arch>x86_64</arch>
 						</environment>
+
+
+						<!-- Mac -->
+
+
+						<environment>
+							<os>macosx</os>
+							<ws>cocoa</ws>
+							<arch>x86_64</arch>
+						</environment>
+
+						<environment>
+							<os>macosx</os>
+							<ws>cocoa</ws>
+							<arch>x86</arch>
+						</environment>
+
 
 						<!-- Linux -->
+
+
 						<environment>
 							<os>linux</os>
 							<ws>gtk</ws>
 							<arch>x86</arch>
 						</environment>
-						<!--  This is not working yet.  Try it on a system with 64bit Java installed.
-						<environment>
-							<os>linux</os>
-							<ws>gtk</ws>
-							<arch>x86_64</arch>
-						</environment>
-						-->
-						
+						<!-- This is not working yet. Try it on a system with 64bit Java installed. 
+							<environment> <os>linux</os> <ws>gtk</ws> <arch>x86_64</arch> </environment> -->
+
 					</environments>
 				</configuration>
 			</plugin>
