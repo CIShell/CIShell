@@ -21,9 +21,9 @@
 
 	<repositories>
 		<repository>
-			<id>galileo</id>
+			<id>Indigo</id>
 			<layout>p2</layout>
-			<url>http://download.eclipse.org/releases/galileo</url>
+			<url>http://download.eclipse.org/releases/indigo</url>
 		</repository>
 		<repository>
 			<id>eclipse-orbit</id>
@@ -31,8 +31,8 @@
 			<url>http://download.eclipse.org/tools/orbit/downloads/drops/R20110523182458/repository</url>
 		</repository>
 	</repositories>
-	
-	
+
+
 	<build>
 		<plugins>
 			<plugin>
@@ -54,17 +54,27 @@
 							<ws>win32</ws>
 							<arch>x86</arch>
 						</environment>
-						<!--
-							<environment> <os>win32</os> <ws>win32</ws> <arch>x86_64</arch>
-							</environment>
-						-->
+
+						<environment>
+							<os>win32</os>
+							<ws>win32</ws>
+							<arch>x86_64</arch>
+						</environment>
+
 
 						<!-- Linux -->
-						<!--
-							<environment> <os>linux</os> <ws>gtk</ws> <arch>x86</arch>
-							</environment> <environment> <os>linux</os> <ws>gtk</ws>
-							<arch>x86_64</arch> </environment>
-						-->
+
+						<environment>
+							<os>linux</os>
+							<ws>gtk</ws>
+							<arch>x86</arch>
+						</environment>
+						<environment>
+							<os>linux</os>
+							<ws>gtk</ws>
+							<arch>x86_64</arch>
+						</environment>
+
 					</environments>
 				</configuration>
 			</plugin>
