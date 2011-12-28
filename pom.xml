@@ -61,20 +61,20 @@
 							<arch>x86_64</arch>
 						</environment>
 
-
 						<!-- Linux -->
-
 						<environment>
 							<os>linux</os>
 							<ws>gtk</ws>
 							<arch>x86</arch>
 						</environment>
+						<!--  This is not working yet.  Try it on a system with 64bit Java installed.
 						<environment>
 							<os>linux</os>
 							<ws>gtk</ws>
 							<arch>x86_64</arch>
 						</environment>
-
+						-->
+						
 					</environments>
 				</configuration>
 			</plugin>
