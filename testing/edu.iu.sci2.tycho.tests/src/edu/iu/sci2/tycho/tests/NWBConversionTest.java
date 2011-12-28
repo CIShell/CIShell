@@ -1,5 +1,6 @@
 package edu.iu.sci2.tycho.tests;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -14,6 +15,7 @@ import org.cishell.service.conversion.ConversionException;
 import org.cishell.service.conversion.Converter;
 import org.cishell.service.conversion.DataConversionService;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
@@ -27,15 +29,15 @@ import edu.iu.nwb.util.nwbfile.NWBFileWriter;
 
 public class NWBConversionTest {
 	private CIShellContext context;
-	private File tempNWBFile;
+	private static File tempNWBFile;
 
 	@Before
 	public void retrieveContext() {
 		context = Activator.getCIShellContext();
 	}
 	
-	@Before
-	public void createNWBFile() throws IOException {
+	@BeforeClass
+	public static void createNWBFile() throws IOException {
 		tempNWBFile = NWBFileUtilities.createTemporaryNWBFile();
 		NWBFileWriter writer = new NWBFileWriter(tempNWBFile);
 		writer.setNodeSchema(Maps.newLinkedHashMap(ImmutableMap.of("id", NWBFileProperty.TYPE_INT,
@@ -78,8 +80,10 @@ public class NWBConversionTest {
 		
 		Converter[] converters = conversionService.findConverters(nwbData, "file:text/graphml+xml");
 		assertTrue(converters.length > 0);
-//		assertEquals(File.class, outData.getData().getClass());
-//		assertEquals("file:text/graphml+xml", outData.getFormat());
+		
+		Data outData = conversionService.convert(nwbData, "file:text/graphml+xml");
+		assertEquals(File.class, outData.getData().getClass());
+		assertEquals("file:text/graphml+xml", outData.getFormat());
 	}
 	
 }
