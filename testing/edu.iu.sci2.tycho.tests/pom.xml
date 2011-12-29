@@ -1,49 +1,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.cishell.framework.tests</groupId>
+	<groupId>org.cishell.testing</groupId>
 	<artifactId>edu.iu.sci2.tycho.tests</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>eclipse-test-plugin</packaging>
 	<parent>
-		<groupId>org.cishell</groupId>
-		<artifactId>parent</artifactId>
-		<version>0.0.1</version>
+		<groupId>org.cishell.testing</groupId>
+		<artifactId>testing</artifactId>
+		<version>1.0.0</version>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
-
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>tycho-surefire-plugin</artifactId>
-				<version>${tychoVersion}</version>
-				<configuration>
-					<dependencies>
-						<dependency>
-							<type>eclipse-feature</type>
-							<artifactId>org.cishell.environment.equinox.feature</artifactId>
-							<version>0.0.0</version>
-						</dependency>
-					</dependencies>
-					<bundleStartLevel>
-						<bundle>
-							<id>org.eclipse.equinox.metatype</id>
-							<level>4</level>
-							<autoStart>true</autoStart>
-						</bundle>
-						<bundle>
-							<id>org.cishell.service.autostart</id>
-							<level>4</level>
-							<autoStart>true</autoStart>
-						</bundle>
-						<bundle>
-							<id>org.eclipse.equinox.log</id>
-							<level>4</level>
-							<autoStart>true</autoStart>
-						</bundle>
-					</bundleStartLevel>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+	
 </project>

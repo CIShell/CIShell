@@ -62,11 +62,7 @@ public class NWBConversionTest {
 	
 	@Test
 	public void testAnyAlgorithms() throws InvalidSyntaxException {
-		ServiceReference[] refs = Activator.getContext().getAllServiceReferences(null, null);
-		for (ServiceReference sr : refs) {
-			System.out.println(sr);
-		}
-		refs = Activator.getContext().getServiceReferences(AlgorithmFactory.class.getName(), null);
+		ServiceReference<?>[] refs = Activator.getContext().getServiceReferences(AlgorithmFactory.class.getName(), null);
 		assertNotNull(refs);
 	}
 	

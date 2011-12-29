@@ -1,20 +1,9 @@
 package edu.iu.sci2.tycho.tests;
 
-import java.util.Arrays;
-import java.util.Dictionary;
-import java.util.Enumeration;
-
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.LocalCIShellContext;
-import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.BundleException;
-import org.osgi.framework.ServiceReference;
-
-import com.google.common.base.Objects;
-import com.google.common.base.Objects.ToStringHelper;
-import com.google.common.collect.ImmutableMap;
 
 public class Activator implements BundleActivator {
 
