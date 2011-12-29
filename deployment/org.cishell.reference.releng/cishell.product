@@ -9,7 +9,12 @@
          %blurb
       </text>
    </aboutInfo>
- <configIni use="default">
+
+   <configIni use="default">
+      <linux>/org.cishell.reference.gui.brand.cishell/extra-files/configuration/config.ini</linux>
+      <macosx>/org.cishell.reference.gui.brand.cishell/extra-files/configuration/config.ini</macosx>
+      <solaris>/org.cishell.reference.gui.brand.cishell/extra-files/configuration/config.ini</solaris>
+      <win32>/org.cishell.reference.gui.brand.cishell/extra-files/configuration/config.ini</win32>
    </configIni>
   
 
