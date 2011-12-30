@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.cishell.examples</groupId>
+  <artifactId>examples</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <modules>
+    <module>org.cishell.tests.ProgressTrackableAlgorithm</module>
+    <module>org.cishell.tests.alg1</module>
+    <module>org.cishell.tests.conversion1</module>
+    <module>org.cishell.tests.guibuilder1</module>
+    <module>org.cishell.tests.userprefs.global1</module>
+    <module>org.cishell.tests.userprefs.local1</module>
+    <module>org.cishell.tests.userprefs.localandparam1</module>
+    <module>test_jython_algorithm</module>
+  </modules>
+  <parent>
+  	<groupId>org.cishell</groupId>
+  	<artifactId>parent</artifactId>
+  	<version>0.0.1</version>
+  	<relativePath>..</relativePath>
+  </parent>
+</project>
