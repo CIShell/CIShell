@@ -11,6 +11,7 @@
 		<module>libs</module>
 		<module>templates</module>
 		<module>testing</module>
+		<module>examples</module>
 	</modules>
 	<packaging>pom</packaging>
 
