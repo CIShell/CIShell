@@ -3,12 +3,12 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <artifactId>testing</artifactId>
-    <groupId>org.cishell.testing</groupId>
+    <artifactId>examples</artifactId>
+    <groupId>org.cishell.examples</groupId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <groupId>org.cishell.testing</groupId>
-  <artifactId>org.cishell.framework.tests</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <packaging>eclipse-test-plugin</packaging>
+  <groupId>org.cishell.examples</groupId>
+  <artifactId>org.cishell.testalgorithm2</artifactId>
+  <version>0.0.1</version>
+  <packaging>eclipse-plugin</packaging>
 </project>

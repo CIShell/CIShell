@@ -8,7 +8,7 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <groupId>org.cishell.testing</groupId>
-  <artifactId>org.cishell.framework.tests</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <packaging>eclipse-test-plugin</packaging>
+  <artifactId>org.cishell.testing.convertertester.commandline</artifactId>
+  <version>0.0.1</version>
+  <packaging>eclipse-plugin</packaging>
 </project>
