@@ -4,12 +4,12 @@ Bundle-Name: Preference GUI
 Bundle-SymbolicName: org.cishell.reference.gui.prefs.swt
 Bundle-Version: 0.0.1
 Bundle-ClassPath: .
-Require-bundle: org.eclipse.ui.workbench;bundle-version="3.4.0"
+Require-Bundle: org.eclipse.ui.workbench
 Import-Package: org.cishell.framework,
  org.cishell.framework.algorithm,
  org.cishell.framework.data,
- org.cishell.service.guibuilder,
  org.cishell.reference.prefs.admin,
+ org.cishell.service.guibuilder,
  org.eclipse.jface.dialogs,
  org.eclipse.jface.preference,
  org.eclipse.jface.resource,
