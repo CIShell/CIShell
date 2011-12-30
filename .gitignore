@@ -4,6 +4,7 @@ build
 *.class
 .svn
 workspace
-*.project
+.project
 *.pref
-*.classpath
+.classpath
+.settings
