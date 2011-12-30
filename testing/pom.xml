@@ -11,6 +11,10 @@
 		<version>0.0.1</version>
 	</parent>
 
+	<modules>
+		<!-- TODO: List any integration test modules here -->
+	</modules>
+
 	<build>
 		<plugins>
 			<plugin>
