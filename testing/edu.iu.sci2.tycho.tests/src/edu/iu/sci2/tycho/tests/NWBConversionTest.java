@@ -28,11 +28,11 @@ import edu.iu.nwb.util.nwbfile.NWBFileUtilities;
 import edu.iu.nwb.util.nwbfile.NWBFileWriter;
 
 public class NWBConversionTest {
-	private CIShellContext context;
+	private static CIShellContext context;
 	private static File tempNWBFile;
 
-	@Before
-	public void retrieveContext() {
+	@BeforeClass
+	public static void retrieveContext() {
 		context = Activator.getCIShellContext();
 	}
 	
