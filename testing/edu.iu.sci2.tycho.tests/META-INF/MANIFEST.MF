@@ -14,5 +14,4 @@ Import-Package: edu.iu.nwb.util.nwbfile,
  org.osgi.framework;version="1.3.0"
 Require-Bundle: org.junit,
  google_guava;bundle-version="0.8.0",
- edu.iu.nwb.converter.nwbgraphml;bundle-version="1.0.0",
- edu.iu.nwb.util;bundle-version="1.1.0"
+ edu.iu.nwb.converter.nwbgraphml;bundle-version="1.0.0"
