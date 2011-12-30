@@ -7,7 +7,6 @@
     <groupId>org.cishell.libs</groupId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <groupId>org.cishell.libs</groupId>
   <artifactId>cern.colt</artifactId>
   <version>1.2.0</version>
   <packaging>eclipse-plugin</packaging>
