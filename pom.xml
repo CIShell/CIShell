@@ -10,6 +10,7 @@
 		<module>clients/gui</module>
 		<module>libs</module>
 		<module>templates</module>
+		<module>testing</module>
 	</modules>
 	<packaging>pom</packaging>
 
