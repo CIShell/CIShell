@@ -24,6 +24,7 @@ import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.algorithm.AlgorithmProperty;
 import org.cishell.framework.data.BasicData;
 import org.cishell.framework.data.Data;
+import org.cishell.reference.service.conversion.osgisucks.ImmutableDictionary;
 import org.cishell.service.conversion.ConversionException;
 import org.cishell.service.conversion.Converter;
 import org.osgi.framework.BundleContext;
@@ -32,18 +33,42 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogService;
 import org.osgi.service.metatype.MetaTypeProvider;
 
+import com.google.common.base.Objects;
+import com.google.common.collect.ImmutableList;
+
 public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProperty {
-    private ServiceReference[] serviceReferences;
-    private BundleContext bContext;
-    private Dictionary<String, Object> properties;
-    private CIShellContext ciContext;
+    private final ImmutableList<ServiceReference<AlgorithmFactory>> serviceReferences;
+    private final BundleContext bContext;
+    private final ImmutableDictionary<String, Object> properties;
+    private final CIShellContext ciContext;
 	
-    
-    public ConverterImpl(BundleContext bContext, CIShellContext ciContext, ServiceReference[] refs) {
+    // TODO: create interface that is a ServiceReference<AlgorithmFactory> so you can have arrays of them
+	private ConverterImpl(BundleContext bContext, CIShellContext ciContext, ServiceReference[] refs, Dictionary<String, Object> properties) {
         this.bContext = bContext;
         this.ciContext = ciContext;
-        this.serviceReferences = refs;
-        properties = new Hashtable<String, Object>();
+        this.serviceReferences = ImmutableList.copyOf((ServiceReference<AlgorithmFactory>[]) refs);
+        this.properties = ImmutableDictionary.fromDictionary(properties);
+    }
+    // TODO: document
+	public static ConverterImpl createNoOpConverter(BundleContext bContext, CIShellContext ciContext, String dataFormat) {
+    	Dictionary<String, Object> properties = new Hashtable<String, Object>();
+        properties.put(IN_DATA, dataFormat);
+        properties.put(OUT_DATA, dataFormat);
+        properties.put(LABEL, properties.get(IN_DATA) + " --(no-op)-> " + properties.get(OUT_DATA));
+        
+        properties.put(CONVERSION, LOSSLESS);
+        
+        ConverterImpl toReturn = new ConverterImpl(bContext, ciContext, new ServiceReference[0], properties);
+        
+        return toReturn;
+    }
+	// TODO: document
+    public static ConverterImpl createConverter(BundleContext bContext,
+			CIShellContext ciContext, ServiceReference<AlgorithmFactory>[] refs) {
+    	if (refs.length == 0) {
+    		throw new IllegalArgumentException("This static factory requires 1 or more algorithms in the chain; try .createNoOpConverter");
+    	}
+    	Dictionary<String, Object> properties = new Hashtable<String, Object>();
         
         properties.put(IN_DATA, refs[0].getProperty(IN_DATA));
         properties.put(OUT_DATA, refs[refs.length-1].getProperty(OUT_DATA));
@@ -52,19 +77,19 @@ public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProp
         // TODO: Do the same thing for complexity
         String lossiness = calculateLossiness(refs);        
         properties.put(CONVERSION, lossiness);
-    }
+		return new ConverterImpl(bContext, ciContext, refs, properties);
+	}
 
-    /**
+	/**
      * @see org.cishell.service.conversion.Converter#convert(org.cishell.framework.data.Data)
      */
     public Data convert(Data inData) throws ConversionException {
-        Data[] data = new Data[]{inData};
-        
         AlgorithmFactory factory = getAlgorithmFactory();
-        Algorithm algorithm = factory.createAlgorithm(data, new Hashtable(), ciContext);
+        Algorithm algorithm = factory.createAlgorithm(new Data[]{inData}, new Hashtable<String, Object>(), ciContext);
 
+        Data[] resultDataArray;
         try {
-			data = algorithm.execute();
+        	resultDataArray = algorithm.execute();
 		} catch (AlgorithmExecutionException e) {
 			e.printStackTrace();
 			throw new ConversionException(e.getMessage(), e);
@@ -74,24 +99,24 @@ public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProp
 					"Unexpected error: " + e.getMessage(), e);
 		}
         
-        Object outData = null;
-        if (data != null && data.length > 0) {
-            outData = data[0].getData();
+        Object result = null;
+        if (resultDataArray != null && resultDataArray.length > 0) {
+        	result = resultDataArray[0].getData();
         }
         
-        if (outData != null) {
-            Dictionary properties = inData.getMetadata();
-            Dictionary newProperties = new Hashtable();
+        if (result != null) {
+            Dictionary<String, Object> properties = inData.getMetadata();
+            Dictionary<String, Object> newProperties = new Hashtable<String, Object>();
             
-            for (Enumeration propertyKeys = properties.keys(); propertyKeys.hasMoreElements();) {
-                Object key = propertyKeys.nextElement();
+            for (Enumeration<String> propertyKeys = properties.keys(); propertyKeys.hasMoreElements();) {
+                String key = propertyKeys.nextElement();
                 newProperties.put(key, properties.get(key));
             }
                
             String outFormat =
             	(String) getProperties().get(AlgorithmProperty.OUT_DATA);
             
-            return new BasicData(newProperties, outData, outFormat);
+            return new BasicData(newProperties, result, outFormat);
         } else {
             return null;
         }
@@ -109,7 +134,7 @@ public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProp
      * @see org.cishell.service.conversion.Converter#getConverterChain()
      */
     public ServiceReference[] getConverterChain() {
-        return this.serviceReferences;
+        return this.serviceReferences.toArray(new ServiceReference[0]);
     }
 
     /**
@@ -119,10 +144,11 @@ public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProp
         return properties;
     }
 
-    public Algorithm createAlgorithm(Data[] dm,
+    @SuppressWarnings({ "rawtypes", "unchecked" }) // unfortunately, it's a raw type in the interface.
+	public Algorithm createAlgorithm(Data[] dm,
     								 Dictionary parameters,
     								 CIShellContext context) {
-        return new ConverterAlgorithm(dm, parameters, context);
+        return new ConverterAlgorithm(dm, parameters, context, serviceReferences);
     }
 
     public MetaTypeProvider createParameters(Data[] dm) {
@@ -130,51 +156,36 @@ public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProp
     }
     
     public int hashCode() {
-    	return toString().hashCode();
+    	return Objects.hashCode(properties, serviceReferences);
+    			
     }
     
     public String toString() {
-    	String str = "";
-
-    	for (ServiceReference serviceReference : this.serviceReferences) {
-    		str += serviceReference.getProperty(Constants.SERVICE_ID);
-    		str += " ";
-    		str += serviceReference.getProperty(Constants.SERVICE_PID);
-    		str += "-> ";
-    	}
-    	
-    	return str;
+    	return Objects.toStringHelper(Converter.class)
+    			.add("properties", properties)
+    			.add("chain", serviceReferences)
+    			.toString();
     }
-
+    
+    // Rely partly on ServiceReference's .equals implementation:
+    // http://www.osgi.org/javadoc/r4v43/org/osgi/framework/ServiceReference.html
     public boolean equals(Object compareTo) {
-    	boolean equal = false;
-
-    	if (compareTo instanceof Converter) {
-	    	ServiceReference[] otherServiceReference = ((Converter) compareTo).getConverterChain();
-
-	    	if (this.serviceReferences.length == otherServiceReference.length) {
-		    	for (int i = 0; i < otherServiceReference.length; i++) {
-		    		if (this.serviceReferences[i].getProperty(Constants.SERVICE_ID).equals(
-		    				otherServiceReference[i].getProperty(
-		    						Constants.SERVICE_ID))) {
-		    			equal = true;
-		    		} else {
-		    			equal = false;
-		    			break;
-		    		}
-		    	}
-	    	}
+    	if (! (compareTo instanceof ConverterImpl)) {
+    		return false;
     	}
-	    	
-	    return equal;
+    	ConverterImpl that = (ConverterImpl) compareTo;
+    	
+    	return (this.properties.equals(that.properties))
+    			&& (this.serviceReferences.equals(that.serviceReferences));
     }
 
     public String calculateLossiness() {
     	return calculateLossiness(getConverterChain());
     }
 
-	private static String calculateLossiness(ServiceReference[] serviceReferences) {
-		for (ServiceReference serviceReference : serviceReferences) {
+    // TODO: <?> -> AlgorithmFactory
+	private static String calculateLossiness(ServiceReference<?>[] serviceReferences) {
+		for (ServiceReference<?> serviceReference : serviceReferences) {
 	        if (LOSSY.equals(serviceReference.getProperty(CONVERSION))) {
 	            return LOSSY;
 	        }
@@ -191,13 +202,16 @@ public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProp
         private Dictionary<String, Object> parameters;
         private CIShellContext ciShellContext;
         private LogService logger;
+        private ImmutableList<ServiceReference<AlgorithmFactory>> serviceReferences;
         
         
         public ConverterAlgorithm(
-        		Data[] inData, Dictionary<String, Object> parameters, CIShellContext ciShellContext) {
+        		Data[] inData, Dictionary<String, Object> parameters, CIShellContext ciShellContext,
+        		ImmutableList<ServiceReference<AlgorithmFactory>> serviceReferences) {
             this.inData = inData;
             this.parameters = parameters;
             this.ciShellContext = ciShellContext;
+            this.serviceReferences = serviceReferences;
             this.logger =
             	(LogService) ciShellContext.getService(LogService.class.getName());
         }
@@ -207,9 +221,9 @@ public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProp
             Data[] convertedData = this.inData;
             
             // For each converter in the converter chain (serviceReferences)
-            for (int ii = 0; ii < serviceReferences.length; ii++) {
+            for (int ii = 0; ii < serviceReferences.size(); ii++) {
                 AlgorithmFactory factory =
-                	(AlgorithmFactory) bContext.getService(serviceReferences[ii]);
+                	bContext.getService(serviceReferences.get(ii));
                 
                 if (factory != null) {
                     Algorithm algorithm = factory.createAlgorithm(
@@ -218,8 +232,8 @@ public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProp
                     try {
                     	convertedData = algorithm.execute();
                     } catch(AlgorithmExecutionException e) {
-                    	boolean isLastStep = (ii == serviceReferences.length - 1);
-                    	if (isLastStep && isHandler(serviceReferences[ii])) {
+                    	boolean isLastStep = (ii == serviceReferences.size() - 1);
+                    	if (isLastStep && isHandler(serviceReferences.get(ii))) {
                     		/* If the last step of the converter chain is a
                     		 * handler and it is the first (and so only) step
                     		 * to fail, just logger a warning and return the
@@ -229,20 +243,20 @@ public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProp
                     			"Warning: Attempting to convert data without " 
                     			+ "validating the output since the validator failed " 
                     			+ "with this problem:\n    " 
-                    			+ createErrorMessage(serviceReferences[ii], e);
+                    			+ createErrorMessage(serviceReferences.get(ii), e);
                     		
             				this.logger.log(LogService.LOG_WARNING, warningMessage, e);
                     		
                     		return convertedData;
                     	} else {                    	
 	                   		throw new AlgorithmExecutionException(
-	                   			createErrorMessage(serviceReferences[ii], e), e);
+	                   			createErrorMessage(serviceReferences.get(ii), e), e);
                     	}
                     }
                 } else {
                     throw new AlgorithmExecutionException(
                     		"Missing subconverter: "
-                            + serviceReferences[ii].getProperty(Constants.SERVICE_PID));
+                            + serviceReferences.get(ii).getProperty(Constants.SERVICE_PID));
                 }
             }
             
