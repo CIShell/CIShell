@@ -28,12 +28,12 @@ import edu.iu.nwb.util.nwbfile.NWBFileUtilities;
 import edu.iu.nwb.util.nwbfile.NWBFileWriter;
 
 public class NWBConversionTest {
-	private static CIShellContext context;
+	private static CIShellContext ciShellContext;
 	private static File tempNWBFile;
 
 	@BeforeClass
 	public static void retrieveContext() {
-		context = Activator.getCIShellContext();
+		ciShellContext = Activator.getCIShellContext();
 	}
 	
 	@BeforeClass
@@ -56,8 +56,8 @@ public class NWBConversionTest {
 	
 	
 	@Test
-	public void testNotNullContext() {
-		assertNotNull(this.context);
+	public void testCIShellContextNotNull() {
+		assertNotNull(this.ciShellContext);
 	}
 	
 	@Test
@@ -71,7 +71,7 @@ public class NWBConversionTest {
 		Data nwbData = new BasicData(tempNWBFile, "file:text/nwb");
 		
 		DataConversionService conversionService = 
-				(DataConversionService) this.context.getService(DataConversionService.class.getName());
+				(DataConversionService) this.ciShellContext.getService(DataConversionService.class.getName());
 		assertNotNull(conversionService);
 		
 		Converter[] converters = conversionService.findConverters(nwbData, "file:text/graphml+xml");
