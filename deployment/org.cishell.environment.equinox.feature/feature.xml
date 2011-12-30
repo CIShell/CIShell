@@ -113,9 +113,11 @@ Dr. Katy Borner (katy@indiana.edu)
          version="0.0.0"
          unpack="false"/>
 
+	<!-- This does not support 64bit linux -->
    <plugin
          id="org.eclipse.update.core.linux"
          os="linux"
+         arch="x86"
          download-size="0"
          install-size="0"
          version="0.0.0"

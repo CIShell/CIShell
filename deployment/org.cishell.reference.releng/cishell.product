@@ -11,7 +11,12 @@
    </aboutInfo>
 
    <configIni use="default">
+      <linux>/org.cishell.reference.gui.brand.cishell/extra-files/configuration/config.ini</linux>
+      <macosx>/org.cishell.reference.gui.brand.cishell/extra-files/configuration/config.ini</macosx>
+      <solaris>/org.cishell.reference.gui.brand.cishell/extra-files/configuration/config.ini</solaris>
+      <win32>/org.cishell.reference.gui.brand.cishell/extra-files/configuration/config.ini</win32>
    </configIni>
+  
 
    <launcherArgs>
    </launcherArgs>
@@ -51,7 +56,7 @@
       <feature id="org.cishell.reference.gui.brand.feature"/>
    </features>
 
-   <configurations>
+<configurations>
       <plugin id="org.cishell.service.autostart" autoStart="true" startLevel="4" />
       <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="0" />
       <plugin id="org.eclipse.equinox.cm" autoStart="true" startLevel="3" />
@@ -62,5 +67,4 @@
       <plugin id="org.eclipse.equinox.metatype" autoStart="true" startLevel="3" />
       <plugin id="org.eclipse.update.configurator" autoStart="true" startLevel="3" />
    </configurations>
-
 </product>
