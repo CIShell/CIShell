@@ -167,15 +167,14 @@ public class DataFormatChooser extends AbstractDialog implements AlgorithmProper
     }
 
     private Converter[] filterConverters(Converter[] allConverters) {
-    	Map lastInDataToConverter = new HashMap();
+    	Map<String,Converter> lastInDataToConverter = new HashMap<String, Converter>();
     	
     	for (int ii = 0; ii < allConverters.length; ii++) {
     		Converter converter = allConverters[ii];
     		String lastInputData = getLastConverterInData(converter);
 
     		if (lastInDataToConverter.containsKey(lastInputData)) {
-    			Converter alreadyStoredConverter =
-    				(Converter)lastInDataToConverter.get(lastInputData);
+    			Converter alreadyStoredConverter = lastInDataToConverter.get(lastInputData);
     			Converter chosenConverter =
     				returnPreferredConverter(converter, alreadyStoredConverter);
     			lastInDataToConverter.put(lastInputData, chosenConverter);
@@ -300,26 +299,19 @@ public class DataFormatChooser extends AbstractDialog implements AlgorithmProper
     	}
     }
     
-    private class CompareAlphabetically implements Comparator {
-    	public int compare(Object object1, Object object2) {
-			if ((object1 instanceof Converter) && (object2 instanceof Converter)) {
-				Converter converter1 = (Converter)object1;
-				String converter1Label = getLabel(converter1);
-				
-				Converter converter2 = (Converter)object2;
-				String converter2Label = getLabel(converter2);
-				
-				if ((converter1Label != null) && (converter2Label != null)) {
-					return converter1Label.compareTo(converter2Label);
-				} else if (converter1Label == null) {
-					return 1;
-				} else if (converter2Label == null) {
-					return -1;
-				} else {
-					return 0;
-				}
+    private class CompareAlphabetically implements Comparator<Converter> {
+    	public int compare(Converter converter1, Converter converter2) {
+			String converter1Label = getLabel(converter1);
+			String converter2Label = getLabel(converter2);
+			
+			if ((converter1Label != null) && (converter2Label != null)) {
+				return converter1Label.compareTo(converter2Label);
+			} else if (converter1Label == null) {
+				return 1;
+			} else if (converter2Label == null) {
+				return -1;
 			} else {
-				throw new IllegalArgumentException("Can only compare Converters");
+				return 0;
 			}
     	}
 
