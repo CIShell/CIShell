@@ -18,8 +18,8 @@ import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +40,9 @@ import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogService;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 import edu.uci.ics.jung.algorithms.shortestpath.DijkstraShortestPath;
 import edu.uci.ics.jung.graph.Edge;
@@ -63,7 +66,8 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
 
 	private BundleContext bContext;
 	private CIShellContext ciContext;
-	private Map   dataTypeToVertex;
+	private Map<String,Vertex> dataTypeToVertex;
+	// TODO: upgrade Jung, use new Graph<V,E>
 	private Graph graph;
 
 	/**
@@ -77,7 +81,7 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
 		this.ciContext = ciContext;
 
 		this.graph = new DirectedSparseGraph();
-		this.dataTypeToVertex = new Hashtable();
+		this.dataTypeToVertex = new HashMap<String,Vertex>();
 
 		String filter = "(&("+ALGORITHM_TYPE+"="+TYPE_CONVERTER+")" +
 				"("+IN_DATA+"=*) " +
@@ -106,17 +110,16 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
 					"(!("+IN_DATA+"=file-ext:*))" +
 					"(!("+OUT_DATA+"=file-ext:*)))";
 
-			ServiceReference[] refs = bContext.getServiceReferences(
-					AlgorithmFactory.class.getName(), filter);
+			Collection<ServiceReference<AlgorithmFactory>> refs = getAFServiceReferences(filter);
 
 			if (refs != null) {
-				for (int i = 0; i < refs.length; ++i) {
-					String inData = (String) refs[i]
+				for (ServiceReference<AlgorithmFactory> ref : refs) {
+					String inData = (String) ref
 							.getProperty(AlgorithmProperty.IN_DATA);
-					String outData = (String) refs[i]
+					String outData = (String) ref
 							.getProperty(AlgorithmProperty.OUT_DATA);
 
-					addServiceReference(inData, outData, refs[i]);
+					addServiceReference(inData, outData, ref);
 				}
 			}
 		} catch (InvalidSyntaxException e) {
@@ -135,7 +138,7 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
 		if (inFormat != null && inFormat.length() > 0
 				&& outFormat != null && outFormat.length() > 0) {
 
-			Converter[] converters = null;
+			ConverterImpl[] converters = null;
 
 			if (outFormat.startsWith("file-ext:")) {
 				converters = getConvertersByWildcard(inFormat, "file:*");
@@ -157,11 +160,11 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
 	 * @param outFormat Final data type
 	 * @return The edited converter chains
 	 */
-	private Converter[] connectValidator(Converter[] converters,
+	private ConverterImpl[] connectValidator(ConverterImpl[] converters,
 			String outFormat) {
-		Collection newConverters = new HashSet();
+		Collection<ConverterImpl> newConverters = Sets.newHashSet();
 
-		Set formats = new HashSet();
+		Set<String> formats = Sets.newHashSet();
 		for (int i = 0; i < converters.length; i++) {
 			String format = (String) converters[i].getProperties().get(OUT_DATA);
 
@@ -172,22 +175,17 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
 						"("+OUT_DATA+"="+outFormat+"))";
 
 				try {
-					ServiceReference[] refs =
-							bContext.getServiceReferences(
-									AlgorithmFactory.class.getName(),
-									filter);
+					Collection<ServiceReference<AlgorithmFactory>> refs =
+							getAFServiceReferences(filter);
 
-					if (refs != null && refs.length > 0) {
-						for (int j=0; j < refs.length; j++) {
-							List chain = new ArrayList(Arrays.asList(
-									converters[i].getConverterChain()));
-							chain.add(refs[j]);
-
-							ServiceReference[] newChain = (ServiceReference[])
-									chain.toArray(new ServiceReference[0]);
+					if (refs != null && refs.size() > 0) {
+						for (ServiceReference<AlgorithmFactory> ref : refs) {
+							List<ServiceReference<AlgorithmFactory>> chain = 
+									Lists.newArrayList(converters[i].getConverterList());
+							chain.add(ref);
 
 							newConverters.add(ConverterImpl.createConverter(bContext, ciContext,
-									newChain));
+									chain));
 						}
 
 						formats.add(format);
@@ -198,7 +196,27 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
 			}
 		}
 
-		return (Converter[]) newConverters.toArray(new Converter[0]);
+		return newConverters.toArray(new ConverterImpl[0]);
+	}
+
+	private Collection<ServiceReference<AlgorithmFactory>> getAFServiceReferences(String filter) throws InvalidSyntaxException {
+		List<ServiceReference<AlgorithmFactory>> refList = Lists.newArrayList();
+
+		// We're guaranteed to get a ServiceReference<AlgorithmFactory>[] back, because
+		// we pass the AlgorithmFactory class name into the method.
+		// When we switch to a new version of OSGi, this ugliness can be replaced with the
+		// a call to bContext.getServiceReferences(Class, String).
+		@SuppressWarnings("unchecked")
+		ServiceReference<AlgorithmFactory>[] refArray = 
+				(ServiceReference<AlgorithmFactory>[]) bContext.getServiceReferences(
+						AlgorithmFactory.class.getName(),
+						filter);
+
+		if (refArray != null && refArray.length > 0) {
+			refList.addAll((Collection<? extends ServiceReference<AlgorithmFactory>>) Arrays.asList(refArray));
+		}
+
+		return refList;
 	}
 
 	/**
@@ -229,7 +247,7 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
 		
 		try {
 			Collection<ServiceReference<AlgorithmFactory>> matches
-				= bContext.getServiceReferences(AlgorithmFactory.class, algorithmFilter);
+				= getAFServiceReferences(algorithmFilter);
 			for (ServiceReference<AlgorithmFactory> match : matches) {
 				expansions.add((String) match.getProperty(algorithmProperty));
 			}
@@ -252,10 +270,10 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
 	 * @return Converter chains
 	 * @see org.cishell.service.conversion.DataConversionService#findConverters(java.lang.String, java.lang.String)
 	 */
-	private Converter[] getConvertersByWildcard(String inFormat, String outFormat) {
+	private ConverterImpl[] getConvertersByWildcard(String inFormat, String outFormat) {
 		Set<String>  matchingInFileTypes = resolveDataWildcard(inFormat,  AlgorithmProperty.IN_DATA),
 					matchingOutFileTypes = resolveDataWildcard(outFormat, AlgorithmProperty.OUT_DATA);
-		Set<Converter> possibleConverters = new HashSet<Converter>();
+		Set<ConverterImpl> possibleConverters = new HashSet<ConverterImpl>();
 
 		//Check to see if inFormat matches the outFormat (for example:
 		//in=file:text/graphml out=file:* If so, then add a null converter
@@ -269,14 +287,14 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
 		
 		for (String srcDataType : matchingInFileTypes) {
 			for (String destDataType : matchingOutFileTypes) {
-				Converter converter =
+				ConverterImpl converter =
 						getConverter(srcDataType, destDataType);
 				if (converter != null) {
 					possibleConverters.add(converter);
 				}
 			}
 		}
-		return possibleConverters.toArray(new Converter[0]);
+		return possibleConverters.toArray(new ConverterImpl[0]);
 	}
 
 	private String createConverterFilterForOutFormat(String outFormat) {
@@ -297,29 +315,29 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
 	 * Get the shortest converter path.  This returns a single converter path
 	 * @param inType The source data type
 	 * @param outType The target data type
-	 * @return Single converter path
+	 * @return Single converter path, or null if no path can be found
 	 */
-	private Converter getConverter(String inType, String outType) {
-		Vertex sourceVertex = (Vertex) dataTypeToVertex.get(inType);
-		Vertex targetVertex = (Vertex) dataTypeToVertex.get(outType);
+	private ConverterImpl getConverter(String inType, String outType) {
+		Vertex sourceVertex = dataTypeToVertex.get(inType);
+		Vertex targetVertex = dataTypeToVertex.get(outType);
 
 		if (sourceVertex != null && targetVertex != null) {
 			DijkstraShortestPath shortestPathAlg =
 					new DijkstraShortestPath(graph);
-			List edgeList = shortestPathAlg.getPath(sourceVertex, targetVertex);
+			
+			// Documentation of DijkstraShortestPath indicates that this returns a list of Edge.
+			@SuppressWarnings("unchecked")
+			List<Edge> edgeList = shortestPathAlg.getPath(sourceVertex, targetVertex);
 
 			if (edgeList.size() > 0) {
-				ServiceReference[] serviceReferenceArray =
-						new ServiceReference[edgeList.size()];
-				for (int i = 0; i < serviceReferenceArray.length; ++i) {
-					Edge edge = (Edge) edgeList.get(i);
+				List<ServiceReference<AlgorithmFactory>> serviceReferences = Lists.newArrayList();
+				for (Edge edge : edgeList) {
 					AbstractList converterList =
 							(AbstractList) edge.getUserDatum(SERVICE_LIST);
-					serviceReferenceArray[i] =
-							(ServiceReference) converterList.get(0);
+					serviceReferences.add((ServiceReference) converterList.get(0));
 				}
 
-				return ConverterImpl.createConverter(bContext, ciContext, serviceReferenceArray);
+				return ConverterImpl.createConverter(bContext, ciContext, serviceReferences);
 			}
 		}
 
@@ -417,7 +435,7 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
 	 * @param event The service that changed
 	 */
 	public void serviceChanged(ServiceEvent event) {
-		ServiceReference inServiceRef = event.getServiceReference();
+		ServiceReference<?> inServiceRef = event.getServiceReference();
 
 		String inDataType =
 				(String) inServiceRef.getProperty(AlgorithmProperty.IN_DATA);
@@ -444,7 +462,7 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
 	 */
 	private void removeServiceReference(String sourceDataType,
 			String targetDataType,
-			ServiceReference serviceReference) {
+			ServiceReference<?> serviceReference) {
 		if (sourceDataType != null && targetDataType != null) {
 			Vertex sourceVertex = (Vertex) dataTypeToVertex.get(sourceDataType);
 			Vertex targetVertex = (Vertex) dataTypeToVertex.get(targetDataType);
@@ -483,7 +501,7 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
 	 */
 	private void addServiceReference(String sourceDataType,
 			String targetDataType,
-			ServiceReference serviceReference) {
+			ServiceReference<?> serviceReference) {
 		if (sourceDataType != null && sourceDataType.length() > 0
 				&& targetDataType != null && targetDataType.length() > 0) {
 			Vertex sourceVertex = getVertex(sourceDataType);

@@ -33,7 +33,7 @@ Require-Bundle: edu.uci.ics.jung,
  org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.update.ui,
- org.junit
+ org.junit;bundle-version="4.0.0";resolution:=optional
 Service-Component: OSGI-INF/fileloader.xml, OSGI-INF/filesaver.xml
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 X-AutoStart: true
