@@ -1,4 +1,4 @@
-package org.cishell.reference.service.conversion.osgisucks;
+package org.cishell.reference.service.conversion.util;
 
 import static org.junit.Assert.*;
 

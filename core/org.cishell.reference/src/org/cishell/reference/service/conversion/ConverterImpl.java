@@ -16,6 +16,7 @@ package org.cishell.reference.service.conversion;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.List;
 
 import org.cishell.framework.CIShellContext;
 import org.cishell.framework.algorithm.Algorithm;
@@ -24,7 +25,7 @@ import org.cishell.framework.algorithm.AlgorithmFactory;
 import org.cishell.framework.algorithm.AlgorithmProperty;
 import org.cishell.framework.data.BasicData;
 import org.cishell.framework.data.Data;
-import org.cishell.reference.service.conversion.osgisucks.ImmutableDictionary;
+import org.cishell.reference.service.conversion.util.ImmutableDictionary;
 import org.cishell.service.conversion.ConversionException;
 import org.cishell.service.conversion.Converter;
 import org.osgi.framework.BundleContext;
@@ -36,21 +37,36 @@ import org.osgi.service.metatype.MetaTypeProvider;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
 
+
 public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProperty {
     private final ImmutableList<ServiceReference<AlgorithmFactory>> serviceReferences;
     private final BundleContext bContext;
     private final ImmutableDictionary<String, Object> properties;
     private final CIShellContext ciContext;
 	
-    // TODO: create interface that is a ServiceReference<AlgorithmFactory> so you can have arrays of them
-	private ConverterImpl(BundleContext bContext, CIShellContext ciContext, ServiceReference[] refs, Dictionary<String, Object> properties) {
+	private ConverterImpl(BundleContext bContext, CIShellContext ciContext, List<ServiceReference<AlgorithmFactory>> refs,
+			Dictionary<String, Object> properties) {
         this.bContext = bContext;
         this.ciContext = ciContext;
-        this.serviceReferences = ImmutableList.copyOf((ServiceReference<AlgorithmFactory>[]) refs);
+        this.serviceReferences = ImmutableList.copyOf(refs);
         this.properties = ImmutableDictionary.fromDictionary(properties);
     }
-    // TODO: document
-	public static ConverterImpl createNoOpConverter(BundleContext bContext, CIShellContext ciContext, String dataFormat) {
+	
+	/**
+	 * Create a converter that doesn't do anything.
+	 * <p>
+	 * This static factory creates a placeholder Converter that won't do anything to the data you pass it.
+	 * Its input and output data format are both the supplied {@code dataFormat}.
+	 * <p>
+	 * Only {@link DataConversionServiceImpl} should create or deal directly with {@code ConverterImpl} 
+	 * objects; other code should use the {@link Converter} interface.
+	 * 
+	 * @param bContext
+	 * @param ciContext
+	 * @param dataFormat the input and output data format
+	 * @return a Converter which returns its input {@code Data} unmodified
+	 */
+	static ConverterImpl createNoOpConverter(BundleContext bContext, CIShellContext ciContext, String dataFormat) {
     	Dictionary<String, Object> properties = new Hashtable<String, Object>();
         properties.put(IN_DATA, dataFormat);
         properties.put(OUT_DATA, dataFormat);
@@ -58,24 +74,42 @@ public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProp
         
         properties.put(CONVERSION, LOSSLESS);
         
-        ConverterImpl toReturn = new ConverterImpl(bContext, ciContext, new ServiceReference[0], properties);
+        ConverterImpl toReturn = new ConverterImpl(bContext, ciContext,
+        		ImmutableList.<ServiceReference<AlgorithmFactory>>of(), properties);
         
         return toReturn;
     }
-	// TODO: document
-    public static ConverterImpl createConverter(BundleContext bContext,
-			CIShellContext ciContext, ServiceReference<AlgorithmFactory>[] refs) {
-    	if (refs.length == 0) {
+	
+	/**
+	 * Create a converter using a list of Algorithms.
+	 * <p>
+	 * Given a List of {@code ServiceReference<AlgorithmFactory>}, creates a {@code Converter} that will
+	 * call each of the referenced Algorithms in sequence to transform its input data.
+	 * <p>
+	 * This factory requires that there be at least one algorithm in the chain, because it gets its
+	 * input and output data formats from the inputs and outputs of the component algorithms.  If you
+	 * need to create a Converter that has zero algorithms, i.e. does nothing, use the {@code createNoOpConverter}
+	 * factory.
+	 * 
+	 * @param bContext
+	 * @param ciContext
+	 * @param refs the algorithms which will be called, in order, to transform the data
+	 * @return a Converter for transforming data
+	 * @throws IllegalArgumentException if {@code refs} is empty
+	 */
+    static ConverterImpl createConverter(BundleContext bContext,
+			CIShellContext ciContext, List<ServiceReference<AlgorithmFactory>> refs) {
+    	if (refs.size() == 0) {
     		throw new IllegalArgumentException("This static factory requires 1 or more algorithms in the chain; try .createNoOpConverter");
     	}
     	Dictionary<String, Object> properties = new Hashtable<String, Object>();
         
-        properties.put(IN_DATA, refs[0].getProperty(IN_DATA));
-        properties.put(OUT_DATA, refs[refs.length-1].getProperty(OUT_DATA));
+        properties.put(IN_DATA, refs.get(0).getProperty(IN_DATA));
+        properties.put(OUT_DATA, refs.get(refs.size()-1).getProperty(OUT_DATA));
         properties.put(LABEL, properties.get(IN_DATA) + " -> " + properties.get(OUT_DATA));
         
         // TODO: Do the same thing for complexity
-        String lossiness = calculateLossiness(refs);        
+        String lossiness = calculateLossiness(refs);    
         properties.put(CONVERSION, lossiness);
 		return new ConverterImpl(bContext, ciContext, refs, properties);
 	}
@@ -133,14 +167,20 @@ public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProp
     /**
      * @see org.cishell.service.conversion.Converter#getConverterChain()
      */
-    public ServiceReference[] getConverterChain() {
+    // Can't make generic arrays, so oh well...
+    @SuppressWarnings("rawtypes")
+	public ServiceReference[] getConverterChain() {
         return this.serviceReferences.toArray(new ServiceReference[0]);
     }
-
+    
+    public ImmutableList<ServiceReference<AlgorithmFactory>> getConverterList() {
+    	return this.serviceReferences;
+    }
+    
     /**
      * @see org.cishell.service.conversion.Converter#getProperties()
      */
-    public Dictionary getProperties() {
+    public Dictionary<String,Object> getProperties() {
         return properties;
     }
 
@@ -180,12 +220,11 @@ public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProp
     }
 
     public String calculateLossiness() {
-    	return calculateLossiness(getConverterChain());
+    	return calculateLossiness(getConverterList());
     }
 
-    // TODO: <?> -> AlgorithmFactory
-	private static String calculateLossiness(ServiceReference<?>[] serviceReferences) {
-		for (ServiceReference<?> serviceReference : serviceReferences) {
+	private static String calculateLossiness(List<ServiceReference<AlgorithmFactory>> serviceReferences) {
+		for (ServiceReference<AlgorithmFactory> serviceReference : serviceReferences) {
 	        if (LOSSY.equals(serviceReference.getProperty(CONVERSION))) {
 	            return LOSSY;
 	        }
@@ -263,7 +302,7 @@ public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProp
             return convertedData;
         }
         
-        private boolean isHandler(ServiceReference ref) {
+        private boolean isHandler(ServiceReference<AlgorithmFactory> ref) {
         	/* For some reason, handlers are often referred to as validators,
              * though strictly speaking, validators are for reading in data and
              * handlers are for writing out data.
@@ -287,7 +326,7 @@ public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProp
         			&& outDataTypeIsFileExt);
     	}
         
-        private String createErrorMessage(ServiceReference ref, Throwable e) {
+        private String createErrorMessage(ServiceReference<AlgorithmFactory> ref, Throwable e) {
         	String inType = (String) properties.get(IN_DATA);
         	String preProblemType =	(String) ref.getProperty(IN_DATA);
         	String postProblemType = (String) ref.getProperty(OUT_DATA);
