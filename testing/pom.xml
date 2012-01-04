@@ -1,20 +1,25 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.cishell.testing</groupId>
 	<artifactId>testing</artifactId>
-	<version>1.0.0</version>
+	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<parent>
 		<groupId>org.cishell</groupId>
 		<artifactId>parent</artifactId>
 		<version>0.0.1</version>
 	</parent>
-
 	<modules>
-		<!-- TODO: List any integration test modules here -->
+		<!-- Should be moved to Sci2: <module>edu.iu.sci2.tycho.tests</module> -->
+		<module>org.cishell.framework.tests</module>
+		<module>org.cishell.streaming.prototype</module>
+		<module>org.cishell.testing.convertertester.algorithm</module>
+		<module>org.cishell.testing.convertertester.commandline</module>
+		<module>org.cishell.testing.convertertester.core.new</module>
 	</modules>
-
 	<build>
 		<plugins>
 			<plugin>
