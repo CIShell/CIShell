@@ -1,4 +1,4 @@
-package org.cishell.reference.service.conversion.util;
+package org.cishell.utility.dict;
 
 import java.util.Enumeration;
 import java.util.Iterator;

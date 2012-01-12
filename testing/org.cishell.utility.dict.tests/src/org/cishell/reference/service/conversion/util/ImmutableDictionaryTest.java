@@ -7,6 +7,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Properties;
 
+import org.cishell.utility.dict.ImmutableDictionary;
 import org.junit.Test;
 
 import com.google.common.collect.ImmutableMap;
