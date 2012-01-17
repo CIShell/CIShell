@@ -1,4 +1,4 @@
-package org.cishell.reference.service.conversion.util;
+package org.cishell.utility.dict;
 
 import java.util.Dictionary;
 import java.util.Enumeration;
@@ -65,11 +65,22 @@ public class ImmutableDictionary<K, V> extends Dictionary<K, V> implements Map<K
 	 * @return an immutable version of the provided Dictionary
 	 */
 	public static <K,V> ImmutableDictionary<K,V> fromDictionary(Dictionary<? extends K, ? extends V> dict) {
-		// Hashtable, for instance, is also a Map.
-		// We can leave the copying of the entries to ImmutableMap.copyOf, which probably
-		// uses .entrySet(), which is faster than iterating over keys as we have to do here.
 		if (dict instanceof Map) {
-			return ImmutableDictionary.fromMap((Map<? extends K, ? extends V>) dict);
+			/*
+			 * Why would this condition happen?
+			 * 
+			 * Hashtable, for instance, is also a Map. But if your reference to
+			 * it is just as a Dictionary, then you have to call this static
+			 * method. But we can notice that here!
+			 * 
+			 * We can leave the copying of the entries to ImmutableMap.copyOf,
+			 * which probably uses .entrySet(), which is faster than iterating
+			 * over keys as we have to do here.
+			 */
+			
+			ImmutableDictionary<K, V> ret = ImmutableDictionary
+					.fromMap((Map<? extends K, ? extends V>) dict);
+			return ret;
 		}
 		ImmutableMap.Builder<K,V> builder = ImmutableMap.builder();
 		Enumeration<? extends K> keys = dict.keys();
@@ -197,7 +208,6 @@ public class ImmutableDictionary<K, V> extends Dictionary<K, V> implements Map<K
 		return delegate.values();
 	}
 
-	// TODO test with Dictionaries...
 	public boolean equals(Object object) {
 		return delegate.equals(object);
 	}

@@ -13,8 +13,8 @@
 		<version>0.0.1</version>
 	</parent>
 	<modules>
-		<!-- Should be moved to Sci2: <module>edu.iu.sci2.tycho.tests</module> -->
 		<module>org.cishell.framework.tests</module>
+		<module>org.cishell.utility.dict.tests</module>
 		<module>org.cishell.streaming.prototype</module>
 		<module>org.cishell.testing.convertertester.algorithm</module>
 		<module>org.cishell.testing.convertertester.commandline</module>
