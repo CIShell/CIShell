@@ -24,7 +24,7 @@ public class OutputGobblingProcessRunner {
 		this.charsetName = charsetName;
 	}
 
-	public ProcessResult run() throws IOException, InterruptedException {
+	public ProcessReport run() throws IOException, InterruptedException {
 		// Start the process
 		Process process = processBuilder.start();
 		
@@ -51,7 +51,7 @@ public class OutputGobblingProcessRunner {
 		String stdoutMessage = stdoutStream.toString(charsetName).trim();
 		String stderrMessage = stderrStream.toString(charsetName).trim();
 		
-		return new ProcessResult(exitValue, stdoutMessage, stderrMessage);
+		return ProcessReport.of(processBuilder.command(), exitValue, stdoutMessage, stderrMessage);
 	}
 	
 	@Override
