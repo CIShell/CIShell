@@ -7,8 +7,6 @@
     <groupId>org.cishell.testing</groupId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <groupId>org.cishell.testing</groupId>
   <artifactId>org.cishell.framework.tests</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
   <packaging>eclipse-test-plugin</packaging>
 </project>
