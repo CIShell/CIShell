@@ -20,14 +20,7 @@
 		<memoryOptions1>-Xms512m -Xmx1024m -XX:PermSize=256m</memoryOptions1>
 		<memoryOptions2>-XX:MaxPermSize=256m</memoryOptions2>
 	</properties>
-	
-	<pluginRepositories>
-		<pluginRepository>
-			<id>tycho-0.14.0-staged</id>
-			<url>https://oss.sonatype.org/content/repositories/orgeclipsetycho-004/</url>
-		</pluginRepository>
-	</pluginRepositories>
-	
+
 	<repositories>
 		<repository>
 			<id>Indigo</id>
