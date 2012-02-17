@@ -19,6 +19,7 @@
     <module>ksoap2lib</module>
     <module>opencsv</module>
     <module>org.apache.commons.collections</module>
+    <module>org.apache.commons.io</module>
     <module>org.knopflerfish.bundle.ksoap_osgi</module>
     <module>prefuselib</module>
   </modules>
