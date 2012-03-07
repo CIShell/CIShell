@@ -21,9 +21,15 @@ public class ColorRegistry<K> {
 	private int currentIndex;
 	private ColorSchema colorSchema;
 	private Map<K, Color> registedColors;
-	
+	private boolean recycleColor;
+
 	public ColorRegistry(ColorSchema colorSchema) {
+		this(colorSchema, true);
+	}
+
+	public ColorRegistry(ColorSchema colorSchema, boolean recycleColor) {
 		this.currentIndex = 0;
+		this.recycleColor = recycleColor;
 		this.colorSchema = colorSchema;
 		this.registedColors = new HashMap<K, Color>();
 	}
@@ -33,9 +39,9 @@ public class ColorRegistry<K> {
 	 * @return Return the registered keys
 	 */
 	public Set<K> getKeySet() {
-		return registedColors.keySet();
+		return this.registedColors.keySet();
 	}
-	
+
 	/**
 	 * Request a color for the specific key.
 	 * @param key - key must be type of <E>
@@ -44,49 +50,50 @@ public class ColorRegistry<K> {
 	 * color defined by the ColorSchema will be returned
 	 */
 	public Color getColorOf(K key) {
-		if (registedColors.containsKey(key)) {
-			return registedColors.get(key);
-		} else {
-			return reserveColorFor(key);
+		if (this.registedColors.containsKey(key)) {
+			return this.registedColors.get(key);
 		}
+		return reserveColorFor(key);
 	}
-	
+
 	/**
 	 * Request the default color as defined by the ColorSchema.
 	 * @return the default color.
 	 */
 	public Color getDefaultColor() {
-		return colorSchema.getDefaultColor();
+		return this.colorSchema.getDefaultColor();
 	}
-	
+
 	/**
 	 * Clear all entry and reset to initial state.
 	 */
 	public void clear() {
-		registedColors.clear();
+		this.registedColors.clear();
 	}
-	
+
 	/*
 	 * Request a color from the color schema
 	 */
 	private Color reserveColorFor(K key) {
-		
-		Color color = colorSchema.get(getNextIndex());
-		registedColors.put(key, color);
-		
+
+		Color color = this.colorSchema.get(getNextIndex());
+		this.registedColors.put(key, color);
+
 		return color;
 	}
-	
+
 	/*
-	 * Return next color index. This will reuse the color if it out of color
+	 * Return next color index. This will recycle the color
+	 * if the recycleColor is true
 	 */
 	private int getNextIndex() {
-		int index = currentIndex;
-		
-		if (currentIndex < colorSchema.size() - 1) {
-			currentIndex++;
+		int index = this.currentIndex;
+
+		if (this.currentIndex < this.colorSchema.size() - 1
+				|| !this.recycleColor) {
+			this.currentIndex++;
 		} else {
-			currentIndex = 0;
+			this.currentIndex = 0;
 		}
 		return index;
 	}
