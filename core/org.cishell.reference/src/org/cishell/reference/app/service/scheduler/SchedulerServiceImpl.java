@@ -33,6 +33,8 @@ import org.cishell.framework.data.Data;
 import org.cishell.reference.app.service.scheduler.AlgorithmTask.AlgorithmState;
 import org.osgi.framework.ServiceReference;
 
+import com.google.common.base.Objects;
+
 /**
  * A simple scheduler based on {@link java.util.Timer}.
  * 
@@ -647,6 +649,9 @@ class AlgorithmTask implements Runnable {
         }
     }
 
+    /**
+     * Overrides the equals method to only use the name field.
+     */
     static class AlgorithmState {
     	/** New algorithms are in this state. */
         public static final AlgorithmState NEW = new AlgorithmState("NEW", false) {
@@ -702,17 +707,35 @@ class AlgorithmTask implements Runnable {
             this.isCanceled = isCanceled;
         }
 
-        public final boolean equals(Object object) {
-            if (!(object instanceof AlgorithmState)) {
-                return false;
-            }
 
-            AlgorithmState state = (AlgorithmState) object;
+		/* Only uses the name field.
+		 */
+		@Override
+		public int hashCode() {
+			return Objects.hashCode(this.name);
+		}
 
-            return state.name.compareTo(name) == 0;
-        }
 
-        public void performAction(
+		/*
+		 * Only uses the name field.
+		 */
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj) {
+				return true;
+			}
+			if (obj == null) {
+				return false;
+			}
+			if (!(obj instanceof AlgorithmState)) {
+				return false;
+			}
+			AlgorithmState other = (AlgorithmState) obj;
+			return Objects.equal(this.name, other.name);
+		}
+
+
+		public void performAction(
         		Algorithm algorithm,
         		SchedulerListener schedulerListener,
         		Calendar scheduledTime,
