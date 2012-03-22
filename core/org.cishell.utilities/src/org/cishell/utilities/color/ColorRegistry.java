@@ -41,7 +41,7 @@ public class ColorRegistry<K> {
 	 * @param key - key must be type of <E>
 	 * @return Return color that assigned to the specific 
 	 * key. If all the colors are fully used, the default
-	 * color denied by the ColorSchema will be returned
+	 * color defined by the ColorSchema will be returned
 	 */
 	public Color getColorOf(K key) {
 		if (registedColors.containsKey(key)) {
@@ -49,6 +49,14 @@ public class ColorRegistry<K> {
 		} else {
 			return reserveColorFor(key);
 		}
+	}
+	
+	/**
+	 * Request the default color as defined by the ColorSchema.
+	 * @return the default color.
+	 */
+	public Color getDefaultColor() {
+		return colorSchema.getDefaultColor();
 	}
 	
 	/**

@@ -19,19 +19,10 @@
     <module>ksoap2lib</module>
     <module>opencsv</module>
     <module>org.apache.commons.collections</module>
+    <module>org.apache.commons.io</module>
     <module>org.knopflerfish.bundle.ksoap_osgi</module>
     <module>prefuselib</module>
   </modules>
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.eclipse.tycho</groupId>
-        <artifactId>tycho-maven-plugin</artifactId>
-        <version>0.13.0</version>
-        <extensions>true</extensions>
-      </plugin>
-    </plugins>
-  </build>
   <parent>
   	<relativePath>../pom.xml</relativePath>
   	<groupId>org.cishell</groupId>

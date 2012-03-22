@@ -17,16 +17,6 @@
     <module>org.cishell.reference.gui.scheduler</module>
     <module>org.cishell.reference.gui.workspace</module>
   </modules>
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.eclipse.tycho</groupId>
-        <artifactId>tycho-maven-plugin</artifactId>
-        <version>0.13.0</version>
-        <extensions>true</extensions>
-      </plugin>
-    </plugins>
-  </build>
   <parent>
   	<groupId>org.cishell</groupId>
   	<artifactId>parent</artifactId>
