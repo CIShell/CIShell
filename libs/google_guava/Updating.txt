@@ -1,7 +1,0 @@
-When updating this to a new version of Guava, consider using
-the externally packaged version:
-
-http://code.google.com/p/guava-osgi/
-
-We've set up the Export-Package: part of the Manifest to use 
-version numbers that are compatible with that project.

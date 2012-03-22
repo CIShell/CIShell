@@ -228,8 +228,8 @@
 		</antcall>
 		<antcall target="svn.co">
 			<param name="target" value="plugins" />
-			<param name="element.id" value="google_guava" />
-			<param name="project.name" value="libs/google_guava" />
+			<param name="element.id" value="com.google.guava" />
+			<param name="project.name" value="libs/com.google.guava" />
 			<param name="url"
 				value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk" />
 		</antcall>

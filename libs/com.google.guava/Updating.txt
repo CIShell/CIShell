@@ -1,0 +1,11 @@
+When updating this to a new version of Guava, consider using
+the externally packaged version:
+
+http://code.google.com/p/guava-osgi/
+
+We've set up the Export-Package: part of the Manifest to use 
+version numbers that are compatible with that project.
+
+Last updated 2012-02-23 from:
+http://guava-osgi.googlecode.com/svn/trunk/repository/plugins/com.google.guava_11.0.1.jar
+http://guava-osgi.googlecode.com/svn/trunk/repository/plugins/com.google.guava.source_11.0.1.jar
