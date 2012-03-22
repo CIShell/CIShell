@@ -21,3 +21,4 @@ Import-Package: org.apache.commons.dbcp,
  org.osgi.util.tracker;version="1.3.3"
 Service-Component: OSGI-INF/component.xml
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Export-Package: org.cishell.reference.service.database;x-friends:="edu.iu.sci2.testutilities"
