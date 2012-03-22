@@ -49,46 +49,6 @@ import java.util.Locale;
  * The base level for the Derby tests is JSR 169.
  */
 public class JDBC {
-    
-    /**
-     * Helper class whose <code>equals()</code> method returns
-     * <code>true</code> for all strings on this format: SQL061021105830900
-     */
-    public static class GeneratedId {
-        public boolean equals(Object o) {
-            // unless JSR169, use String.matches...
-            if (JDBC.vmSupportsJDBC3()) 
-            {
-                return o instanceof String &&
-                ((String) o).matches("SQL[0-9]{15}");
-            }
-            else
-            {
-                String tmpstr = (String)o;
-                boolean b = true;
-                if (!(o instanceof String))
-                    b = false;
-                if (!(tmpstr.startsWith("SQL")))
-                    b = false;
-                if (tmpstr.length() != 18)
-                    b = false;
-                for (int i=3 ; i<18 ; i++)
-                {
-                    if (Character.isDigit(tmpstr.charAt(i)))
-                        continue;
-                    else
-                    {
-                        b = false;
-                        break;
-                    }
-                }
-            return b;
-            }
-        }
-        public String toString() {
-            return "xxxxGENERATED-IDxxxx";
-        }
-    }
 
     /**
      * Constant to pass to DatabaseMetaData.getTables() to fetch

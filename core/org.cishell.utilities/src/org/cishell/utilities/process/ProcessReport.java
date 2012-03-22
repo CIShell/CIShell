@@ -98,7 +98,7 @@ public class ProcessReport {
 	}
 	
 	private static String reportStreamContents(String streamName, String contents) {
-		if (contents.isEmpty()) {
+		if (contents.length() == 0) {
 			return String.format("No messages to %s.", streamName);
 		} else {
 			return String.format("Message to %s: [[%s]].", streamName, contents);
