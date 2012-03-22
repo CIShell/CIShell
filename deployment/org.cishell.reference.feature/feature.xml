@@ -143,7 +143,7 @@ Dr. Katy Borner (katy@indiana.edu)
          unpack="false"/>
 
    <plugin
-         id="google_guava"
+         id="com.google.guava"
          download-size="0"
          install-size="0"
          version="0.0.0"/>
