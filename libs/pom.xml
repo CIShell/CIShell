@@ -12,7 +12,7 @@
     <module>commons_pool</module>
     <module>derbylib</module>
     <module>edu.uci.ics.jung</module>
-    <module>google_guava</module>
+    <module>com.google.guava</module>
     <module>hsqldb</module>
     <module>joda-time</module>
     <module>jythonlib</module>
