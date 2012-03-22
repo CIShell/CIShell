@@ -7,7 +7,16 @@ import org.osgi.service.metatype.AttributeDefinition;
  */
 public interface AttributeDefinitionTransformer {
 	public boolean shouldTransform(AttributeDefinition ad);	
+	
+	/**
+	 * It's the responsibility of the implementing class to call any of the other transformation methods from this one!
+	 * <p>
+	 * Also, this method should check shouldTransform before doing any transformations!
+	 * @param oldAD
+	 * @return
+	 */
 	public AttributeDefinition transform(AttributeDefinition oldAD);
+	
 	public String transformID(String oldID);
 	public String transformName(String oldName);
 	public String transformDescription(String oldDescription);

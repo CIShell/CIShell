@@ -58,6 +58,36 @@ public class FileUtilities {
     	return ensureDirectoryExists(fullDirectoryPath);
     }
 
+	/**
+	 * Adapted from Google Guava.
+	 * 
+	 * This will attempt to return you a temp directory in Java's temp
+	 * directory. This method assumes that the temporary volume is writable, has
+	 * free inodes and free blocks, and that it will not be called thousands of
+	 * times per second.
+	 * 
+	 * @param prefix
+	 *            A string that will appear at the beginning of a directories
+	 *            name.
+	 */
+	public static File createTempDirectory(String prefix) {
+		final int TEMP_DIR_ATTEMPTS = 1000;
+		File baseDir = new File(getDefaultTemporaryDirectory());
+		String baseName = prefix + "-" + System.currentTimeMillis() + "-";
+		
+		for (int counter = 0; counter < TEMP_DIR_ATTEMPTS; counter++) {
+			File tempDir = new File(baseDir, baseName + counter);
+			if (tempDir.mkdir()) {
+				return tempDir;
+			}
+		}
+		throw new IllegalStateException("Failed to create directory within "
+			      + TEMP_DIR_ATTEMPTS + " attempts (tried "
+			      + baseName + "0 to " + baseName + (TEMP_DIR_ATTEMPTS - 1) + ')');
+
+	}
+	
+	
     // Attempt to create a temporary file on disk whose name is passed in.
     public static File createTemporaryFile(File temporaryDirectory,
     								 	   String temporaryDirectoryPath,
@@ -91,6 +121,10 @@ public class FileUtilities {
 	    			throw new RuntimeException(e2);
 	    		}
 	    		
+	    		/*
+	    		 *  FIXME this is very very very bad if the machine will be left running for long periods of time...
+	    		 *  See: http://www.pongasoft.com/blog/yan/java/2011/05/17/file-dot-deleteOnExit-is-evil/
+	    		 */
 	    		temporaryFile.deleteOnExit();
 	    	}
     	}
@@ -307,21 +341,28 @@ public class FileUtilities {
     		throws IOException {
     	File temporaryFile =
     		createTemporaryFile(directory, directory.getAbsolutePath(), fileName, fileExtension);
-    	OutputStream output = new FileOutputStream(temporaryFile);
-		// TODO: Use READ_TEXT_FILE_BUFFER_SIZE.
-    	byte[] readCharacters = new byte[1];
-    	int readCharacterCount = input.read(readCharacters);
-    	
-    	while (readCharacterCount > 0) {
-    		output.write(readCharacters, 0, readCharacterCount);
-    		readCharacterCount = input.read(readCharacters);
-    	}
-    	
-    	output.close();
-    	input.close();
-    	
-    	return temporaryFile;
+    	return writeStreamToFile(input, temporaryFile);
     }
+    
+	/**
+	 * Read the input stream into the output file and return the file.
+	 */
+	public static File writeStreamToFile(InputStream input, File outputFile)
+			throws IOException {
+		OutputStream output = new FileOutputStream(outputFile);
+		// TODO: Use READ_TEXT_FILE_BUFFER_SIZE.
+		byte[] readCharacters = new byte[1];
+		int readCharacterCount = input.read(readCharacters);
+
+		while (readCharacterCount > 0) {
+			output.write(readCharacters, 0, readCharacterCount);
+			readCharacterCount = input.read(readCharacters);
+		}
+
+		output.close();
+		input.close();
+		return outputFile;
+	}
     
     public static String getFileExtension(File file) {
     	return getFileExtension(file.getAbsolutePath());
@@ -455,7 +496,7 @@ public class FileUtilities {
     	
     	return cleanedFilename;
     }
-
+    
     public static String extractFileName(String fileLabel) {    	
     	//index variables will be -1 if index is not found.
     	int descriptionEndIndex = fileLabel.lastIndexOf(":");

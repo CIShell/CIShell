@@ -10,5 +10,5 @@
   <groupId>org.cishell.libs</groupId>
   <artifactId>org.prefuse.lib</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <version>20071021</version>
+  <version>20071021.0.0</version>
 </project>
