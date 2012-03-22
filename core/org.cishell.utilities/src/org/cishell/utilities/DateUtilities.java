@@ -19,6 +19,7 @@ public class DateUtilities {
 		(365.24 * 24 * 60 * 60 * 1000 / 12);
 	
 	// TODO: Is this actually necessary?
+	@Deprecated
 	public static Date[] generateDaysBetweenDates(Date startDate, Date endDate) {
 		GregorianCalendar startDateCalendar =
 			new GregorianCalendar(startDate.getYear() + 1900,
@@ -78,6 +79,7 @@ public class DateUtilities {
 		return dateSet.length;
 	}
 	
+	@Deprecated
 	public static int calculateDaysBetween(Date startDate, Date endDate) {
 		FAQCalendar startDateCalendar = new FAQCalendar(startDate.getYear(),
 														startDate.getMonth(),
@@ -105,6 +107,7 @@ public class DateUtilities {
 	}
 	
 	// Assumes dateSet is sorted from earliest to latest.
+	@Deprecated
 	public static Date[] getNewYearsDatesFromDateSet(Date[] dateSet) {
 		ArrayList workingNewYearsDates = new ArrayList();
 		
@@ -129,6 +132,7 @@ public class DateUtilities {
 		return (Date[])workingNewYearsDates.toArray(finalNewYearsDates);
 	}
 	
+	@Deprecated
 	public static Date[] generateNewYearsDatesBetweenDates(Date startDate,
 														   Date endDate)
 	{
@@ -150,6 +154,7 @@ public class DateUtilities {
 	}
 	
 	// TODO: This could also REALLY be improved.
+	@Deprecated
 	public static Date[] generateFirstOfTheMonthDatesBetweenDates(Date[] dateSet) {
 		ArrayList workingFirstOfTheMonthDates = new ArrayList();
 		
@@ -166,6 +171,7 @@ public class DateUtilities {
 			(finalFirstOfTheMonthDates);
 	}
 	
+	@Deprecated
 	public static Date[] generateFirstOfTheMonthDatesBetweenDates(Date startDate,
 																  Date endDate)
 	{
@@ -222,20 +228,24 @@ public class DateUtilities {
 		DateFormat.getDateInstance(DateFormat.LONG),
 	};
 	
+	@Deprecated
 	public static Date parseDate(String dateString) throws ParseException {
 		return parseDate(dateString, true);
 	}
 	
+	@Deprecated
 	public static Date parseDate(String dateString, boolean fixYear)
 			throws ParseException {
 		return (parseDate(dateString, MONTH_DAY_YEAR_DATE_FORMATS, fixYear));
 	}
 	
+	@Deprecated
 	public static Date parseDate(String dateString, String suggestedDateFormat)
 			throws ParseException {
 		return parseDate(dateString, suggestedDateFormat, true);
 	}
 	
+	@Deprecated
 	public static Date parseDate(
 			String dateString, String suggestedDateFormat, boolean fixYear)
 			throws ParseException {
@@ -252,11 +262,13 @@ public class DateUtilities {
 		}
 	}
 	
+	@Deprecated
 	public static Date parseDate(String dateString, DateFormat[] dateFormats)
 			throws ParseException {
 		return parseDate(dateString, dateFormats, true);
 	}
 	
+	@Deprecated
 	public static Date parseDate(
 			String dateString, DateFormat[] dateFormats, boolean fixYear)
 			throws ParseException {
@@ -284,16 +296,19 @@ public class DateUtilities {
 		throw new ParseException(exceptionMessage, 0);
 	}
 	
+	@Deprecated
 	public static Date interpretObjectAsDate(Object object)
 			throws ParseException {
 		return interpretObjectAsDate(object, "");
 	}
 	
+	@Deprecated
 	public static Date interpretObjectAsDate(Object object, String dateFormat)
 			throws ParseException {
 		return interpretObjectAsDate(object, dateFormat, true);
 	}
 	
+	@Deprecated
 	public static Date interpretObjectAsDate(
 			Object object, String dateFormat, boolean fixYear)
 			throws ParseException {
@@ -381,6 +396,7 @@ public class DateUtilities {
 		return parseDate(objectAsString.trim(), dateFormat, fixYear);
 	}
 	
+	@Deprecated
 	private static Date fixDateYear(Date date) {
 		if (date.getYear() < 1900) {
 			Date fixedDate = (Date)date.clone();
@@ -391,4 +407,5 @@ public class DateUtilities {
 			return date;
 		}
 	}
+	
 }
