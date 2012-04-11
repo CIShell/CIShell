@@ -5,6 +5,10 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Don't use this! Instead use a SetMultimap from Google Guava!
+ */
+@Deprecated
 public class SetMap {	
 	private Map map = new Hashtable();
 	
