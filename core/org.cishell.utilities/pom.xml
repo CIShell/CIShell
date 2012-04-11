@@ -9,6 +9,6 @@
   </parent>
   <groupId>org.cishell.core</groupId>
   <artifactId>org.cishell.utilities</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1</version>
   <packaging>eclipse-plugin</packaging>
 </project>

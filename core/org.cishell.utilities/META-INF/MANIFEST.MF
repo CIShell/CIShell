@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Utilities Plug-in
 Bundle-SymbolicName: org.cishell.utilities
-Bundle-Version: 1.0.0
+Bundle-Version: 1.0.1
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Import-Package: com.google.common.annotations;version="8.0.0",
  com.google.common.base;version="8.0.0",
@@ -29,7 +29,7 @@ Import-Package: com.google.common.annotations;version="8.0.0",
  prefuse.data.util,
  prefuse.util,
  prefuse.util.collections
-Export-Package: org.cishell.utilities,
+Export-Package: org.cishell.utilities;version="1.0.1",
  org.cishell.utilities.color,
  org.cishell.utilities.database,
  org.cishell.utilities.dictionary,
