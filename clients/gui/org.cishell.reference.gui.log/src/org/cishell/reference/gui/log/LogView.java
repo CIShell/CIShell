@@ -50,6 +50,7 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogEntry;
@@ -308,7 +309,7 @@ public class LogView extends ViewPart implements DataManagerListener, LogListene
 			public void run() {
 				try {
 					String message = entry.getMessage();
-					if (goodMessage(message)) {
+					if (goodEntry(entry)) {
                         /* Not all messages length w/ a new line,
 						 * but they need to to print properly.
 						 */
@@ -347,15 +348,28 @@ public class LogView extends ViewPart implements DataManagerListener, LogListene
     	});
     }
     
-    private boolean goodMessage(String msg) {
+    private boolean goodEntry(LogEntry entry) {
+    	// TODO: developers would like to see validation warnings, but users should not.
+    	Bundle sourceBundle = entry.getBundle();
+    	if (sourceBundle != null 
+    			&& sourceBundle.getSymbolicName().startsWith("org.eclipse.equinox.metatype")) {
+    		return false;
+    	}
+    	
+    	// TODO: Developers should see debug messages, but users should not.
+    	if (entry.getLevel() >= LogService.LOG_DEBUG) {
+    		return false;
+    	}
+    	
+    	String msg = entry.getMessage();
         if (msg == null
         		|| msg.startsWith("ServiceEvent ")
         		|| msg.startsWith("BundleEvent ")
         		|| msg.startsWith("FrameworkEvent ")) {
             return false;
-        } else {
-            return true;   
         }
+        
+        return true;   
     }
 
     private static class Bounds {
