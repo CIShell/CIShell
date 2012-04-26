@@ -36,5 +36,6 @@ Export-Package: org.cishell.utilities;version="1.0.1",
  org.cishell.utilities.mutateParameter,
  org.cishell.utilities.mutateParameter.defaultvalue,
  org.cishell.utilities.mutateParameter.dropdown,
+ org.cishell.utilities.network;version="1.0.0",
  org.cishell.utilities.osgi.logging,
  org.cishell.utilities.process

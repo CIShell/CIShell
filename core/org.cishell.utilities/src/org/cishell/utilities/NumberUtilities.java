@@ -11,9 +11,9 @@ public class NumberUtilities {
 	public static final String NOT_A_NUMBER_PREFIX = "NOT A NUMBER";
 
 	public static final String EMPTY_CELL_MESSAGE = "An empty number cell was found.";
-
+	
 	public static Number interpretObjectAsNumber(Object object)
-			throws NumberFormatException, ParseException {
+			throws ParseException {
 		if (object instanceof Number) {
 			Number number = (Number) object;
 			
@@ -105,8 +105,7 @@ public class NumberUtilities {
 		return numberFormat.parse(object.toString());
 	}
 	
-	public static Double interpretObjectAsDouble(Object object)
-			throws NumberFormatException {
+	public static Double interpretObjectAsDouble(Object object) {
 		// TODO: These if's are a result of a "bug" in Prefuse's.
 		// CSV Table Reader, which interprets a column as being an array type
 		// if it has empty cells.
