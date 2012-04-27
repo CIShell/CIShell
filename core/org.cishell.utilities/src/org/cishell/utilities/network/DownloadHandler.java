@@ -22,7 +22,9 @@ public final class DownloadHandler {
 	public static final int DEFAULT_NUMBER_OF_RETRIES = 3;
 	public static final int BUFFER_SIZE = 4096;
 	
-	private DownloadHandler() { }
+	private DownloadHandler() { 
+		// Utility class. Do not instantiate. 
+	}
 	
 	/**
 	 * Download the content for the given {@linkplain HttpURLConnection
