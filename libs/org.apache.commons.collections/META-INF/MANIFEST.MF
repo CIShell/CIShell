@@ -4,4 +4,15 @@ Bundle-Name: Apache Commons Plug-in
 Bundle-SymbolicName: org.apache.commons.collections
 Bundle-Version: 3.1.0
 Bundle-ClassPath: commons-collections-3.1.jar
-Export-Package: org.apache.commons.collections,org.apache.commons.collections.bag,org.apache.commons.collections.bidimap,org.apache.commons.collections.buffer,org.apache.commons.collections.collection,org.apache.commons.collections.comparators,org.apache.commons.collections.functors,org.apache.commons.collections.iterators,org.apache.commons.collections.keyvalue,org.apache.commons.collections.list,org.apache.commons.collections.map,org.apache.commons.collections.set
+Export-Package: org.apache.commons.collections;version="3.1.0",
+ org.apache.commons.collections.bag;version="3.1.0",
+ org.apache.commons.collections.bidimap;version="3.1.0",
+ org.apache.commons.collections.buffer;version="3.1.0",
+ org.apache.commons.collections.collection;version="3.1.0",
+ org.apache.commons.collections.comparators;version="3.1.0",
+ org.apache.commons.collections.functors;version="3.1.0",
+ org.apache.commons.collections.iterators;version="3.1.0",
+ org.apache.commons.collections.keyvalue;version="3.1.0",
+ org.apache.commons.collections.list;version="3.1.0",
+ org.apache.commons.collections.map;version="3.1.0",
+ org.apache.commons.collections.set;version="3.1.0"
