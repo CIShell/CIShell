@@ -1,8 +1,12 @@
 package org.cishell.utilities;
 
-public class IntegerParserWithDefault {
+public final class IntegerParserWithDefault {
 	public static final Integer DEFAULT = null;
 
+	private IntegerParserWithDefault() {
+		// Utility class don't instantiate
+	}
+	
 	/**
 	 * Please see {@link NumberUtilities} for alternatives, specifically
 	 * {@link NumberUtilities#interpretObjectAsInteger(Object)}.
