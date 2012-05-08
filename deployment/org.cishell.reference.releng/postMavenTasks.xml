@@ -3,7 +3,7 @@
 	<property name="product.name" relative="true">cishell</property>
 	<property name="input.dir" relative="true">${basedir}/target/products</property>
 	<property name="output.dir" relative="true">${basedir}/target/products-final</property>
-	<property name="deploy.dir" relative="false">/projects/nwb/www/htdocs/nightly/${product.name}</property>
+	<property name="deploy.dir" relative="false">/projects/cishell/www/htdocs/nightly/</property>
 	<property name="product.version">2.0.0</property>
 	<!-- permission.files defined files which the executable bit need to be enable at Mac and Linux. -->
 	<property name="permission.files">**/${product.name}</property>
