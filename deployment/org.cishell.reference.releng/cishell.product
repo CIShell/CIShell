@@ -1,24 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="Cyberinfrastructure Shell" uid="CIShell" id="org.cishell.reference.gui.brand.cishell.cishell" application="org.cishell.reference.gui.workspace.CIShellApplication" useFeatures="true" includeLaunchers="true">
+<product name="Cyberinfrastructure Shell" uid="cishell" id="org.cishell.reference.gui.brand.cishell.cishell" application="org.cishell.reference.gui.workspace.CIShellApplication" version="2.0" useFeatures="true" includeLaunchers="true">
 
    <aboutInfo>
-      <image path="icons/about.gif"/>
+      <image path="../../../../../clients/gui/org.cishell.reference.gui.brand.cishell/icons/about.gif"/>
       <text>
          %blurb
       </text>
    </aboutInfo>
 
    <configIni use="default">
-      <linux>/org.cishell.reference.gui.brand.cishell/extra-files/configuration/config.ini</linux>
-      <macosx>/org.cishell.reference.gui.brand.cishell/extra-files/configuration/config.ini</macosx>
-      <solaris>/org.cishell.reference.gui.brand.cishell/extra-files/configuration/config.ini</solaris>
-      <win32>/org.cishell.reference.gui.brand.cishell/extra-files/configuration/config.ini</win32>
+      <linux>../../../../org.cishell.reference.gui.brand.feature/extra-files/configuration/config.ini</linux>
+      <macosx>../../../../org.cishell.reference.gui.brand.feature/extra-files/configuration/config.ini</macosx>
+      <win32>../../../../org.cishell.reference.gui.brand.feature/extra-files/configuration/config.ini</win32>
    </configIni>
-  
 
    <launcherArgs>
+      <vmArgsMac>-XstartOnFirstThread</vmArgsMac>
    </launcherArgs>
 
    <windowImages/>
@@ -27,11 +26,11 @@
       location="org.cishell.reference.gui.brand.cishell"
       startupProgressRect="0,163,500,10" />
    <launcher name="cishell">
-      <linux icon="/org.cishell.reference.gui.brand.cishell/icons/cishell.xpm"/>
-      <macosx icon="/org.cishell.reference.gui.brand.cishell/icons/cishell.icns"/>
+      <linux icon="../../../../../clients/gui/org.cishell.reference.gui.brand.cishell/icons/cishell.xpm"/>
+      <macosx icon="../../../../../clients/gui/org.cishell.reference.gui.brand.cishell/icons/cishell.icns"/>
       <solaris/>
       <win useIco="true">
-         <ico path="/org.cishell.reference.gui.brand.cishell/icons/cishell.ico"/>
+         <ico path="../../../../../clients/gui/org.cishell.reference.gui.brand.cishell/icons/cishell.ico"/>
          <bmp
             winSmallHigh="icons/ivc_sm_32.bmp"
             winSmallLow="icons/ivc_sm_16.bmp"
@@ -43,7 +42,30 @@
    </launcher>
 
    <vm>
+      <linux include="false">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6</linux>
+      <solaris include="false">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6</solaris>
+      <windows include="false">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6</windows>
    </vm>
+
+   <license>
+        <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+        <text>
+   Cyberinfrastructure Shell (CIShell)
+Copyright 2006 Indiana University
+Licensed under the Apache License, Version 2.0 (the &amp;quot;License&amp;quot;);
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at:
+http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, 
+software distributed under the License is distributed on an 
+&amp;quot;AS IS&amp;quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY 
+KIND, either express or implied. See the License for the specific
+language governing permissions and limitations under the License.
+Project Contacts:
+Chin Hua Kong (kongch@indiana.edu)
+Dr. Katy Borner (katy@indiana.edu)
+         </text>
+   </license>
 
    <plugins>
    </plugins>
@@ -51,12 +73,13 @@
    <features>
       <feature id="org.cishell.environment.equinox.feature"/>
       <feature id="org.cishell.feature"/>
-      <feature id="org.cishell.reference.feature"/>
+      <feature id="org.cishell.reference.feature" version="1.0.0"/>
+      <feature id="org.cishell.reference.database.feature" version="1.0.0"/>
       <feature id="org.cishell.reference.gui.feature"/>
       <feature id="org.cishell.reference.gui.brand.feature"/>
    </features>
 
-<configurations>
+   <configurations>
       <plugin id="org.cishell.service.autostart" autoStart="true" startLevel="4" />
       <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="0" />
       <plugin id="org.eclipse.equinox.cm" autoStart="true" startLevel="3" />
@@ -67,4 +90,5 @@
       <plugin id="org.eclipse.equinox.metatype" autoStart="true" startLevel="3" />
       <plugin id="org.eclipse.update.configurator" autoStart="true" startLevel="3" />
    </configurations>
+
 </product>
