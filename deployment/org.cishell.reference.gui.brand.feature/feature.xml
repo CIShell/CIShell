@@ -38,13 +38,13 @@ Dr. Katy Borner (katy@indiana.edu)
 
    <includes
          id="org.cishell.reference.gui.feature"
-         version="0.0.0"/>
+         version="1.0.0"/>
 
    <plugin
          id="org.cishell.reference.gui.brand.cishell"
          download-size="0"
          install-size="0"
-         version="0.0.0"
+         version="0.4.0"
          unpack="false"/>
 
 </feature>
