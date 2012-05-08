@@ -138,56 +138,38 @@ public class LogToFile implements LogListener {
 	@Override
 	public void logged(LogEntry entry) {
 		String message = entry.getMessage();
-		if (!logMessage(message)) {
+		if (!Utilities.logMessage(message, Utilities.DEFAULT_IGNORED_PREFIXES)) {
 			return;
 		}
 		
-		Level legel;
+		Level level;
 
 		switch (entry.getLevel()) {
 			case LogService.LOG_DEBUG:
-				legel = Level.FINEST;
+				level = Level.FINEST;
 				break;
 			case LogService.LOG_ERROR:
-				legel = Level.SEVERE;
+				level = Level.SEVERE;
 				break;
 			case LogService.LOG_INFO:
-				legel = Level.INFO;
+				level = Level.INFO;
 				break;
 			case LogService.LOG_WARNING:
-				legel = Level.WARNING;
+				level = Level.WARNING;
 				break;
 			default:
-				legel = Level.SEVERE;
+				level = Level.SEVERE;
 				break;
 		}
-		this.logger.log(legel, "[" + entry.getBundle().getSymbolicName() + "] " + message + NEWLINE, entry.getException());
-	}
-
-	/**
-	 * If a message begins with one of these prefixes, it should not be logged.
-	 */
-	private static final String[] NON_LOGGED_MESSAGE_PREFIXES = new String[] {
-			"ServiceEvent ", "BundleEvent ", "FrameworkEvent " };
-
-	/**
-	 * Determine if the {@code message} should be logged.
-	 * 
-	 * @param message
-	 * @return {@code true} if the message should be logged, {@code false} if it
-	 *         should not be logged.
-	 */
-	private static boolean logMessage(String message) {
-		if (message == null) {
-			return false;
+		
+		String logEntry = "";
+		logEntry += message + NEWLINE;
+		
+		if (entry.getException() != null) {
+			logEntry += "Exception: " + NEWLINE + entry.getException();
 		}
-		for (String messagePrefix : NON_LOGGED_MESSAGE_PREFIXES) {
-			if (message.startsWith(messagePrefix)) {
-				return false;
-			}
-		}
-
-		return true;
+		
+		this.logger.log(level, logEntry);
 	}
 
 	private static String getTimestamp() {

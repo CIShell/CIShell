@@ -22,6 +22,8 @@ public class Activator extends AbstractUIPlugin {
 	public static DataManagerService dataManager;
 	
 	protected LogToFile fileLogger;
+	protected LogToConsole consoleLogger;
+	
 	protected List<LogReaderService> logReaders = new ArrayList<LogReaderService>();
 	
 	public Activator() {
@@ -52,10 +54,12 @@ public class Activator extends AbstractUIPlugin {
 		super.start(bundleContext);
 		Activator.context = bundleContext; 
 		
-		/** Add the file logger **/
+		/** Add the file and console logger **/
 		this.fileLogger = new LogToFile();
+		this.consoleLogger = new LogToConsole(false);
 		
 		String serviceFilter = null;
+		@SuppressWarnings("unchecked")
 		ServiceReference<LogReaderService>[] serviceReferences = (ServiceReference<LogReaderService>[]) bundleContext
 				.getServiceReferences(LogReaderService.class.getName(), serviceFilter);
 
@@ -64,9 +68,9 @@ public class Activator extends AbstractUIPlugin {
 			for (ServiceReference<LogReaderService> serviceReference : serviceReferences) {
 				LogReaderService reader = bundleContext
 						.getService(serviceReference);
-				System.out.println("Adding file logger as a listener");
 				this.logReaders.add(reader);
 				reader.addLogListener(this.fileLogger);
+				reader.addLogListener(this.consoleLogger);
 			}
 			
 			
@@ -97,6 +101,7 @@ public class Activator extends AbstractUIPlugin {
 		if (this.fileLogger != null) {
 			for (LogReaderService reader : this.logReaders) {
 				reader.removeLogListener(this.fileLogger);
+				reader.removeLogListener(this.consoleLogger);
 				this.logReaders.remove(reader);
 			}
 		}
