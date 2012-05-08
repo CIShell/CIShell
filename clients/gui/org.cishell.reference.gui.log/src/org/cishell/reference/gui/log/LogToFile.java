@@ -64,6 +64,7 @@ public class LogToFile implements LogListener {
 			this.logger = Logger.getLogger(LOGGER_NAME);
 			this.logger.addHandler(handler);
 			this.logger.setUseParentHandlers(SEND_TO_PARENT_LOGGER);
+			this.logger.setLevel(Level.ALL);
 		} catch (InvalidDirectoryException e) {
 			throw new LogToFileCreationException(
 					"The LogToFile logger could not be created.", e);
@@ -160,7 +161,6 @@ public class LogToFile implements LogListener {
 				legel = Level.SEVERE;
 				break;
 		}
-
 		this.logger.log(legel, "[" + entry.getBundle().getSymbolicName() + "] " + message + NEWLINE, entry.getException());
 	}
 
