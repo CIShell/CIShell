@@ -33,6 +33,18 @@
 				</executions>
 				<configuration>
 					<includeAllDependencies>true</includeAllDependencies>
+					
+<!-- 				We should use this to pack as a tar.gz file but Tycho can't handle the
+					permission for Mac and Linux builds when built in Windows. Since 
+					we would like to fix the Mac's and Linux's executable permission 
+					issue while compiling on Windows machine, we will convert ZIP to 
+					TAR.GZ through ANT (See postMavenTasks.xml).
+					<formats> 
+						<linux>tar.gz</linux> 
+						<macosx>tar.gz</macosx> 
+					</formats>
+-->
+			
 				</configuration>
 			</plugin>
 		</plugins>
