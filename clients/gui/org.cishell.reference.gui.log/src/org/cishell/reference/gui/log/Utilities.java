@@ -2,6 +2,7 @@ package org.cishell.reference.gui.log;
 
 import java.util.logging.Level;
 
+import org.osgi.service.log.LogEntry;
 import org.osgi.service.log.LogService;
 
 public class Utilities {
@@ -14,13 +15,17 @@ public class Utilities {
 	/**
 	 * Determine if the {@code message} should be logged.
 	 * 
-	 * @param message
+	 * @param entry
 	 * @param ignoredPrefixes ignore any message that starts with these prefixes.
 	 * @return {@code true} if the message should be logged, {@code false} if it
 	 *         should not be logged.
 	 */
-	public static boolean logMessage(String message, String[] ignoredPrefixes) {
-		if (message == null) {
+	public static boolean shouldLogMessage(LogEntry entry, String[] ignoredPrefixes) {
+		if (entry == null) {
+			return false;
+		}
+		
+		if (entry.getMessage() == null) {
 			return false;
 		}
 		
@@ -29,7 +34,7 @@ public class Utilities {
 		}
 		
 		for (String messagePrefix : ignoredPrefixes) {
-			if (message.startsWith(messagePrefix)) {
+			if (entry.getMessage().startsWith(messagePrefix)) {
 				return false;
 			}
 		}

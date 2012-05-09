@@ -23,7 +23,7 @@ public class LogToFile implements LogListener {
 	private static final String NEWLINE = System.getProperty("line.separator");
 
 	// Specify file handler properties
-	private static final int LIMIT = 5242880; // 5 MB
+	private static final int LIMIT_PER_FILE = 5242880; // 5 MB
 	private static final int MAX_NUM_LOG_FILES = 5;
 	private static final boolean APPEND = true;
 
@@ -68,7 +68,7 @@ public class LogToFile implements LogListener {
 			String logPattern = directory + File.separator + LOG_PREFIX
 					+ getTimestamp() + ".%u.%g.log";
 
-			FileHandler handler = new FileHandler(logPattern, LIMIT,
+			FileHandler handler = new FileHandler(logPattern, LIMIT_PER_FILE,
 					MAX_NUM_LOG_FILES, APPEND);
 
 			handler.setFormatter(new SimpleFormatter());
@@ -150,15 +150,14 @@ public class LogToFile implements LogListener {
 
 	@Override
 	public void logged(LogEntry entry) {
-		String message = entry.getMessage();
-		if (!Utilities.logMessage(message, Utilities.DEFAULT_IGNORED_PREFIXES)) {
+		if (!Utilities.shouldLogMessage(entry, Utilities.DEFAULT_IGNORED_PREFIXES)) {
 			return;
 		}
 		
 		Level level = Utilities.osgiLevelToJavaLevel(entry.getLevel());
 		
 		String logEntry = "";
-		logEntry += message + NEWLINE;
+		logEntry += entry.getMessage() + NEWLINE;
 		
 		if (entry.getException() != null) {
 			logEntry += "Exception: " + NEWLINE + entry.getException();

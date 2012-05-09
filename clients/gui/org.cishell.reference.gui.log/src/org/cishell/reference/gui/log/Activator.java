@@ -1,6 +1,7 @@
 package org.cishell.reference.gui.log;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.cishell.app.service.datamanager.DataManagerService;
@@ -60,7 +61,10 @@ public class Activator extends AbstractUIPlugin {
 		
 		/**
 		 * Get the file and console logger preferences if they exist otherwise
-		 * use a default
+		 * use a default.
+		 * 
+		 * Take a look at
+		 * http://www.vogella.com/articles/EclipsePreferences/article.html#preferences_plugin.ini
 		 **/
 		PreferencesService preferenceService = bundleContext
 				.getService(bundleContext
@@ -72,8 +76,8 @@ public class Activator extends AbstractUIPlugin {
 					.get("logDirectory", null);
 			String minOSGILevel = systemPreferences
 					.get("minOSGILevel", null);
-			String ignoredPrefixes = systemPreferences.get(
-					"ignoredPrefixes", null);
+			String ignoredPrefixes = systemPreferences
+					.get("ignoredPrefixes", null);
 			String detailedMessages = systemPreferences.get("detailedMessages", null);
 			
 			if (logDirectory != null && minOSGILevel != null) {				
@@ -97,9 +101,8 @@ public class Activator extends AbstractUIPlugin {
 		}
 
 		String serviceFilter = null;
-		@SuppressWarnings("unchecked")
-		ServiceReference<LogReaderService>[] serviceReferences = (ServiceReference<LogReaderService>[]) bundleContext
-				.getServiceReferences(LogReaderService.class.getName(), serviceFilter);
+		Collection<ServiceReference<LogReaderService>> serviceReferences = bundleContext
+				.getServiceReferences(LogReaderService.class, serviceFilter);
 
 		
 		if (serviceReferences != null) {
