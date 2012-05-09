@@ -14,17 +14,30 @@ import org.osgi.service.log.LogListener;
 
 /**
  * This is a basic implementation. It writes log records to files
+ * 
  * @author Weixia(Bonnie) Huang (huangb@indiana.edu)
  * @author Felix Terkhorn (terkhorn@gmail.com)
+ * @author David M. Coe (david.coe@gmail.com)
  */
 public class LogToFile implements LogListener {
-	//default log directory
-	private static final String DEFAULT_LOG_DIR = 
-		System.getProperty("user.dir") 
-		+ File.separator + "logs";
-	private static final String FILE_NAME_PREFIX = "user";
-	
-	private File currentDir;
+	private static final String NEWLINE = System.getProperty("line.separator");
+
+	// Specify file handler properties
+	private static final int LIMIT = 5242880; // 5 MB
+	private static final int MAX_NUM_LOG_FILES = 5;
+	private static final boolean APPEND = true;
+
+	// Specify whether or not this logger should send its output to its parent
+	// Logger
+	private static final boolean SEND_TO_PARENT_LOGGER = false;
+
+	private static final String LOGGER_NAME = "org.cishell.reference.gui.log.file";
+
+	// Put logs in "User working directory"/logs
+	private static final String DEFAULT_LOG_DIRECTORY = System.getProperty("user.dir")
+			+ File.separator + "logs";
+	private static final String LOG_PREFIX = "cishell-user-";
+
 	private Logger logger;
 
 	/**
@@ -33,24 +46,38 @@ public class LogToFile implements LogListener {
 	 *             if there is a problem creating the LogToFile
 	 */
 	public LogToFile() throws LogToFileCreationException {
+		this(DEFAULT_LOG_DIRECTORY, Level.ALL);
+	}
+	
+	/**
+	 * 
+	 * @param directory
+	 *            the place to save the log files
+	 * @param minLevel
+	 *            the minimum level to log
+	 * @throws LogToFileCreationException
+	 *             if there is a problem creating the LogToFile
+	 */
+	public LogToFile(String directory, Level minLevel) throws LogToFileCreationException {
 		try {
 			// Create an appending file handler
-			validateDirectory(LOG_DIRECTORY);
+			validateDirectory(directory);
 
 			// For more pattern info, see
 			// http://docs.oracle.com/javase/6/docs/api/java/util/logging/FileHandler.html
-			String logPattern = LOG_DIRECTORY + File.separator + LOG_PREFIX
-					+ "-" + getTimestamp() + ".%u.%g.log";
+			String logPattern = directory + File.separator + LOG_PREFIX
+					+ getTimestamp() + ".%u.%g.log";
 
 			FileHandler handler = new FileHandler(logPattern, LIMIT,
 					MAX_NUM_LOG_FILES, APPEND);
 
 			handler.setFormatter(new SimpleFormatter());
+			
 
 			this.logger = Logger.getLogger(LOGGER_NAME);
 			this.logger.addHandler(handler);
 			this.logger.setUseParentHandlers(SEND_TO_PARENT_LOGGER);
-			this.logger.setLevel(Level.ALL);
+			this.logger.setLevel(minLevel);
 		} catch (InvalidDirectoryException e) {
 			throw new LogToFileCreationException(
 					"The LogToFile logger could not be created.", e);
@@ -128,25 +155,7 @@ public class LogToFile implements LogListener {
 			return;
 		}
 		
-		Level level;
-
-		switch (entry.getLevel()) {
-			case LogService.LOG_DEBUG:
-				level = Level.FINEST;
-				break;
-			case LogService.LOG_ERROR:
-				level = Level.SEVERE;
-				break;
-			case LogService.LOG_INFO:
-				level = Level.INFO;
-				break;
-			case LogService.LOG_WARNING:
-				level = Level.WARNING;
-				break;
-			default:
-				level = Level.SEVERE;
-				break;
-		}
+		Level level = Utilities.osgiLevelToJavaLevel(entry.getLevel());
 		
 		String logEntry = "";
 		logEntry += message + NEWLINE;

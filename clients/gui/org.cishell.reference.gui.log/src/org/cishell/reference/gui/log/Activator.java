@@ -10,12 +10,16 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.prefs.Preferences;
+import org.osgi.service.prefs.PreferencesService;
 import org.osgi.service.log.LogReaderService;
 
 /**
- * The activator class controls the plug-in life cycle
+ * The activator class controls the plug-in life cycle. Adapted from
+ * {@code http://blog.kornr.net/index.php/2008/12/09/understanding-the-osgi-logging-service}
  */
 public class Activator extends AbstractUIPlugin {
+	public static final String PREFERENCE_SPEPARATOR = "|";
 	public static final String PLUGIN_ID = "org.cishell.reference.gui.log";
 	private static Activator plugin;
 	private static BundleContext context;
@@ -52,12 +56,46 @@ public class Activator extends AbstractUIPlugin {
 	
 	public void start(BundleContext bundleContext) throws Exception {
 		super.start(bundleContext);
-		Activator.context = bundleContext; 
+		Activator.context = bundleContext;
 		
-		/** Add the file and console logger **/
-		this.fileLogger = new LogToFile();
-		this.consoleLogger = new LogToConsole(false);
-		
+		/**
+		 * Get the file and console logger preferences if they exist otherwise
+		 * use a default
+		 **/
+		PreferencesService preferenceService = bundleContext
+				.getService(bundleContext
+						.getServiceReference(PreferencesService.class));
+		if (preferenceService != null) {
+			Preferences systemPreferences = preferenceService
+					.getSystemPreferences();
+			String logDirectory = systemPreferences
+					.get("logDirectory", null);
+			String minOSGILevel = systemPreferences
+					.get("minOSGILevel", null);
+			String ignoredPrefixes = systemPreferences.get(
+					"ignoredPrefixes", null);
+			String detailedMessages = systemPreferences.get("detailedMessages", null);
+			
+			if (logDirectory != null && minOSGILevel != null) {				
+				this.fileLogger = new LogToFile(logDirectory, Utilities.osgiLevelToJavaLevel(Integer.parseInt(minOSGILevel)));
+			} else {
+				this.fileLogger = null;
+			}
+			
+			if (detailedMessages != null && minOSGILevel != null && ignoredPrefixes != null) {
+				this.consoleLogger = new LogToConsole(Boolean.parseBoolean(detailedMessages), Integer.parseInt(minOSGILevel),
+						ignoredPrefixes.split(PREFERENCE_SPEPARATOR));
+			} else {
+				this.consoleLogger = null;
+			}
+		}
+		if (this.fileLogger == null) {
+			this.fileLogger = new LogToFile();
+		}
+		if (this.consoleLogger == null) {
+			this.consoleLogger = new LogToConsole(false);
+		}
+
 		String serviceFilter = null;
 		@SuppressWarnings("unchecked")
 		ServiceReference<LogReaderService>[] serviceReferences = (ServiceReference<LogReaderService>[]) bundleContext
