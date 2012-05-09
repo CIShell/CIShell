@@ -13,8 +13,8 @@ public class LogToConsole implements LogListener {
 	/**
 	 * 
 	 * @param detailedMessages
-	 *            If {@code false}, only the message will be printed. If
-	 *            {@code true} then more details will be given.
+	 *            If {@code false}, only the message and the level will be
+	 *            printed. If {@code true} then more details will be given.
 	 */
 	public LogToConsole(boolean detailedMessages) {
 		this(detailedMessages, LogService.LOG_DEBUG, Utilities.DEFAULT_IGNORED_PREFIXES);
@@ -32,7 +32,7 @@ public class LogToConsole implements LogListener {
 
 	@Override
 	public void logged(LogEntry entry) {
-		if (!Utilities.logMessage(entry.getMessage(),
+		if (!Utilities.shouldLogMessage(entry,
 				this.ignoredPrefixes)) {
 			return;
 		}
@@ -60,19 +60,19 @@ public class LogToConsole implements LogListener {
 				break;
 		}
 
-		String logEntry = "";
+		StringBuilder logEntry = new StringBuilder();
 		if (this.detailedMessages) {
-			logEntry += "[" + entry.getBundle().getSymbolicName() + "]: "
-					+ level + " " + entry.getMessage();
+			logEntry.append("[" + entry.getBundle().getSymbolicName() + "]: ");
+			logEntry.append(level + " " + entry.getMessage());
 
 			if (entry.getException() != null) {
-				logEntry += NEWLINE + "Exception: " + NEWLINE
-						+ entry.getException();
+				logEntry.append(NEWLINE + "Exception: " + NEWLINE);
+				logEntry.append(entry.getException());
 			}
 		} else {
-			logEntry += level + ": " + entry.getMessage();
+			logEntry.append(level + ": " + entry.getMessage());
 		}
 
-		System.out.println(logEntry);
+		System.out.println(logEntry.toString());
 	}
 }
