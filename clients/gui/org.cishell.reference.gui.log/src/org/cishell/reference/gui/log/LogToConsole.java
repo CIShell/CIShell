@@ -7,6 +7,8 @@ import org.osgi.service.log.LogService;
 public class LogToConsole implements LogListener {
 	private static final String NEWLINE = System.getProperty("line.separator");
 	private boolean detailedMessages;
+	private int minLevel;
+	private String[] ignoredPrefixes;
 
 	/**
 	 * 
@@ -15,16 +17,30 @@ public class LogToConsole implements LogListener {
 	 *            {@code true} then more details will be given.
 	 */
 	public LogToConsole(boolean detailedMessages) {
+		this(detailedMessages, LogService.LOG_DEBUG, Utilities.DEFAULT_IGNORED_PREFIXES);
+	}
+	
+	public LogToConsole(boolean detailedMessages, int minLevel, String[] ignoredPrefixes) {
+		if (ignoredPrefixes == null) {
+			throw new IllegalArgumentException("ignoredPrefixes must not be null.");
+		}
+		
 		this.detailedMessages = detailedMessages;
+		this.minLevel = minLevel;
+		this.ignoredPrefixes = ignoredPrefixes;
 	}
 
 	@Override
 	public void logged(LogEntry entry) {
 		if (!Utilities.logMessage(entry.getMessage(),
-				Utilities.DEFAULT_IGNORED_PREFIXES)) {
+				this.ignoredPrefixes)) {
 			return;
 		}
 
+		if (entry.getLevel() > this.minLevel) {
+			return;
+		}
+		
 		String level = "";
 		switch (entry.getLevel()) {
 			case LogService.LOG_DEBUG:
@@ -54,7 +70,7 @@ public class LogToConsole implements LogListener {
 						+ entry.getException();
 			}
 		} else {
-			logEntry += entry.getMessage();
+			logEntry += level + ": " + entry.getMessage();
 		}
 
 		System.out.println(logEntry);
