@@ -1,5 +1,9 @@
 package org.cishell.reference.gui.log;
 
+import java.util.logging.Level;
+
+import org.osgi.service.log.LogService;
+
 public class Utilities {
 	/**
 	 * If a message begins with one of these prefixes, it should not be logged.
@@ -31,5 +35,27 @@ public class Utilities {
 		}
 
 		return true;
+	}
+	
+	/**
+	 * Convert from an OSGI LogService level to a Java one.
+	 * 
+	 * @param osgiLevel
+	 * @return the corresponding {@link Level} or {@link Level.Severe} if no
+	 *         match is found.
+	 */
+	public static Level osgiLevelToJavaLevel(int osgiLevel) {
+		switch (osgiLevel) {
+			case LogService.LOG_DEBUG:
+				return Level.FINEST;
+			case LogService.LOG_ERROR:
+				return Level.SEVERE;
+			case LogService.LOG_INFO:
+				return Level.INFO;
+			case LogService.LOG_WARNING:
+				return Level.WARNING;
+			default:
+				return Level.SEVERE;
+		}
 	}
 }
