@@ -11,9 +11,6 @@
    </aboutInfo>
 
    <configIni use="default">
-      <linux>../../../../org.cishell.reference.gui.brand.feature/extra-files/configuration/config.ini</linux>
-      <macosx>../../../../org.cishell.reference.gui.brand.feature/extra-files/configuration/config.ini</macosx>
-      <win32>../../../../org.cishell.reference.gui.brand.feature/extra-files/configuration/config.ini</win32>
    </configIni>
 
    <launcherArgs>
