@@ -25,8 +25,7 @@ public class Utilities {
 	 * A default list of prefixes that should be ignored when logging.
 	 */
 	public static final ImmutableList<String> DEFAULT_IGNORED_PREFIXES = ImmutableList
-			.copyOf(new String[] { "ServiceEvent ", "BundleEvent ",
-					"FrameworkEvent " });
+			.of("ServiceEvent ", "BundleEvent ", "FrameworkEvent ");
 	
 	/**
 	 * Determine if the {@code message} should be logged.
@@ -35,6 +34,7 @@ public class Utilities {
 	 *            The {@link LogEntry} to be examined.
 	 * @param ignoredPrefixes
 	 *            Ignore any message that starts with these prefixes.
+	 *            The collection is not modified.
 	 * @return {@code true} if the message should be logged, {@code false} if it
 	 *         should not be logged.
 	 */
@@ -70,16 +70,16 @@ public class Utilities {
 	 */
 	public static Level osgiLevelToJavaLevel(int osgiLevel) {
 		switch (osgiLevel) {
-		case LogService.LOG_DEBUG:
-			return Level.FINEST;
-		case LogService.LOG_ERROR:
-			return Level.SEVERE;
-		case LogService.LOG_INFO:
-			return Level.INFO;
-		case LogService.LOG_WARNING:
-			return Level.WARNING;
-		default:
-			return Level.SEVERE;
+			case LogService.LOG_DEBUG:
+				return Level.FINEST;
+			case LogService.LOG_ERROR:
+				return Level.SEVERE;
+			case LogService.LOG_INFO:
+				return Level.INFO;
+			case LogService.LOG_WARNING:
+				return Level.WARNING;
+			default:
+				return Level.SEVERE;
 		}
 	}
 }
