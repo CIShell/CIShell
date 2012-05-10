@@ -1,6 +1,7 @@
 package org.cishell.reference.gui.log;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -11,26 +12,26 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.log.LogReaderService;
 import org.osgi.service.prefs.Preferences;
 import org.osgi.service.prefs.PreferencesService;
-import org.osgi.service.log.LogReaderService;
 
 /**
  * The activator class controls the plug-in life cycle. Adapted from
  * {@code http://blog.kornr.net/index.php/2008/12/09/understanding-the-osgi-logging-service}
  */
 public class Activator extends AbstractUIPlugin {
-	public static final String PREFERENCE_SPEPARATOR = "|";
-	public static final String PLUGIN_ID = "org.cishell.reference.gui.log";
+	private static final String PREFERENCE_SPEPARATOR = "|";
 	private static Activator plugin;
 	private static BundleContext context;
+	
+	LogToFile fileLogger;
+	private LogToConsole consoleLogger;
+	
+	List<LogReaderService> logReaders = new ArrayList<LogReaderService>();
+	
 	public static DataManagerService dataManager;
-	
-	protected LogToFile fileLogger;
-	protected LogToConsole consoleLogger;
-	
-	protected List<LogReaderService> logReaders = new ArrayList<LogReaderService>();
-	
+
 	public Activator() {
 		plugin = this;
 	}
@@ -88,7 +89,7 @@ public class Activator extends AbstractUIPlugin {
 			
 			if (detailedMessages != null && minOSGILevel != null && ignoredPrefixes != null) {
 				this.consoleLogger = new LogToConsole(Boolean.parseBoolean(detailedMessages), Integer.parseInt(minOSGILevel),
-						ignoredPrefixes.split(PREFERENCE_SPEPARATOR));
+						Arrays.asList(ignoredPrefixes.split(PREFERENCE_SPEPARATOR)));
 			} else {
 				this.consoleLogger = null;
 			}

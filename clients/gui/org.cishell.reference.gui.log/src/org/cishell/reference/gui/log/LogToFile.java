@@ -99,6 +99,9 @@ public class LogToFile implements LogListener {
 	public static class LogToFileCreationException extends Exception {
 		private static final long serialVersionUID = -5837126430378342519L;
 
+		/**
+		 * @see Exception#Exception(String, Throwable)
+		 */
 		public LogToFileCreationException(String message, Throwable cause) {
 			super(message, cause);
 		}
