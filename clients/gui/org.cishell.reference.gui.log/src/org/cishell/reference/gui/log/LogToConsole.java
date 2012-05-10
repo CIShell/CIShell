@@ -1,14 +1,24 @@
 package org.cishell.reference.gui.log;
 
+import java.util.Collection;
+
 import org.osgi.service.log.LogEntry;
 import org.osgi.service.log.LogListener;
 import org.osgi.service.log.LogService;
 
+import com.google.common.collect.ImmutableList;
+
+/**
+ * * This logger will log to {@link System#out}.
+ * 
+ * @author David M. Coe (david.coe@gmail.com)
+ * 
+ */
 public class LogToConsole implements LogListener {
 	private static final String NEWLINE = System.getProperty("line.separator");
 	private boolean detailedMessages;
 	private int minLevel;
-	private String[] ignoredPrefixes;
+	private Collection<String> ignoredPrefixes;
 
 	/**
 	 * 
@@ -17,17 +27,31 @@ public class LogToConsole implements LogListener {
 	 *            printed. If {@code true} then more details will be given.
 	 */
 	public LogToConsole(boolean detailedMessages) {
-		this(detailedMessages, LogService.LOG_DEBUG, Utilities.DEFAULT_IGNORED_PREFIXES);
+		this(detailedMessages, LogService.LOG_DEBUG,
+				Utilities.DEFAULT_IGNORED_PREFIXES);
 	}
-	
-	public LogToConsole(boolean detailedMessages, int minLevel, String[] ignoredPrefixes) {
+
+	/**
+	 * This logger will log to {@link System#out}.
+	 * 
+	 * @param detailedMessages
+	 *            If {@code false}, only the message and the level will be
+	 *            printed. If {@code true} then more details will be given.
+	 * @param minLevel
+	 *            The minimum OSGi {@link LogService} level that should be
+	 *            logged.
+	 * @param ignoredPrefixes
+	 *            No message starting with one of these prefixes should be
+	 *            logged.
+	 */
+	public LogToConsole(boolean detailedMessages, int minLevel, Collection<String> ignoredPrefixes) {
 		if (ignoredPrefixes == null) {
 			throw new IllegalArgumentException("ignoredPrefixes must not be null.");
 		}
 		
 		this.detailedMessages = detailedMessages;
 		this.minLevel = minLevel;
-		this.ignoredPrefixes = ignoredPrefixes;
+		this.ignoredPrefixes = ImmutableList.copyOf(ignoredPrefixes);
 	}
 
 	@Override
