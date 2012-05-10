@@ -6,6 +6,7 @@ import org.osgi.service.log.LogEntry;
 import org.osgi.service.log.LogListener;
 import org.osgi.service.log.LogService;
 
+import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableList;
 
 /**
@@ -18,7 +19,7 @@ public class LogToConsole implements LogListener {
 	private static final String NEWLINE = System.getProperty("line.separator");
 	private boolean detailedMessages;
 	private int minLevel;
-	private Collection<String> ignoredPrefixes;
+	private ImmutableCollection<String> ignoredPrefixes;
 
 	/**
 	 * 
