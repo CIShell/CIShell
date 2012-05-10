@@ -73,7 +73,7 @@ public class DataGUIItem {
         rasterImageIcon = getImage("raster_image.jpg", this.brandPluginID);
         vectorImageIcon = getImage("vector_image.jpg", this.brandPluginID);
         modelIcon       = getImage("model.jpg", this.brandPluginID);
-        rIcon = getImage("r.png", this.brandPluginID);
+        rIcon 			= getImage("r.png", this.brandPluginID);
 
         registerImage(DataProperty.OTHER_TYPE, unknownIcon);
         
