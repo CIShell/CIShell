@@ -22,7 +22,7 @@ public class Utilities {
 	}
 	
 	/**
-	 * If a message begins with one of these prefixes, it should not be logged.
+	 * A default list of prefixes that should be ignored when logging.
 	 */
 	public static final ImmutableList<String> DEFAULT_IGNORED_PREFIXES = ImmutableList
 			.copyOf(new String[] { "ServiceEvent ", "BundleEvent ",
