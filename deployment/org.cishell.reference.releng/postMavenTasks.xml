@@ -5,6 +5,7 @@
 	<property name="output.dir" relative="true">${basedir}/target/products-final</property>
 	<property name="deploy.dir" relative="false">/projects/cishell/www/htdocs/nightly/</property>
 	<property name="product.version">2.0.0</property>
+	<property name="product.build.type"></property>
 	<!-- permission.files defined files which the executable bit need to be enable at Mac and Linux. -->
 	<property name="permission.files">**/${product.name}</property>
 
@@ -34,7 +35,7 @@
 	
 	<target name="deploy">
 		<tstamp/>
-		<copy todir="${deploy.dir}/${product.version}.${DSTAMP}${TSTAMP}">
+		<copy todir="${deploy.dir}/${product.version}.${DSTAMP}${TSTAMP}${product.build.type}">
 			<fileset dir="${output.dir}"></fileset>
 		</copy>
 	</target>
