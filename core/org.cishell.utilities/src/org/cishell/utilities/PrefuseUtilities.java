@@ -2,6 +2,7 @@ package org.cishell.utilities;
 
 import static org.cishell.utilities.NumberUtilities.EMPTY_CELL_MESSAGE;
 
+import java.lang.reflect.Array;
 import java.text.ParseException;
 
 import com.google.common.base.Preconditions;
@@ -75,7 +76,10 @@ public class PrefuseUtilities {
 	 *             If the object cannot be interpreted as a number.
 	 * @throws NullPointerException
 	 *             if object is null
-	 *             @throws IllegalArgumentException	if {@code object} is a long (long[], Long[], Long) value greater than {@link Integer#MAX_VALUE} or less than {@link Integer#MIN_VALUE} 
+	 * @throws IllegalArgumentException
+	 *             if {@code object} is a long (long[], Long[], Long) value
+	 *             greater than {@link Integer#MAX_VALUE} or less than
+	 *             {@link Integer#MIN_VALUE}
 	 */
 	public static Integer interpretObjectAsInteger(Object object)
 			throws EmptyInterpretedObjectException,
@@ -147,7 +151,8 @@ public class PrefuseUtilities {
 			if (objectAsDoubleArray.length == 0) {
 				throw new EmptyInterpretedObjectException(EMPTY_CELL_MESSAGE);
 			}
-			return Integer.valueOf(new Double(objectAsDoubleArray[0]).intValue());
+			return Integer.valueOf(new Double(objectAsDoubleArray[0])
+					.intValue());
 		} else if (object instanceof Double[]) {
 			Double[] objectAsDoubleArray = (Double[]) object;
 
@@ -484,22 +489,67 @@ public class PrefuseUtilities {
 		}
 	}
 
+	/**
+	 * There is an issue in Prefuse where a column that has missing data for one
+	 * record will cause all other records in that column to be wrapped in an
+	 * array and the missing data is the empty array.
+	 * 
+	 * <p>
+	 * This method will unwrap those types if it finds they might have been
+	 * caused by this issue. <code>null</code> will be returned if the empty
+	 * object is found.
+	 * </p>
+	 * 
+	 * @param object
+	 *            The object to potentially unwrap. It should not be
+	 *            <code>null</code> or a {@link NullPointerException} will be
+	 *            thrown.
+	 * @return The unwrapped <code>Object</code>.
+	 */
+	public static Object removePrefuseArrayWrapper(Object object) {
+		Preconditions.checkNotNull(object);
+		Object returnObject = object;
+
+		if (object.getClass().isArray()) {
+			// Only arrays of length 1 or 0 would be candidates for the
+			// Prefuse bug.
+			if (Array.getLength(object) == 0) {
+				// The empty object was found.
+				returnObject = null;
+			} else if (Array.getLength(object) == 1) {
+				// Array.get might return an array if the type was
+				// primitive.
+				Object fromArray = Array.get(object, 0);
+				if (fromArray.getClass().isArray()) {
+					// Further unwrapping is needed.
+					returnObject = ((Object[]) fromArray)[0];
+				} else {
+					returnObject = fromArray;
+				}
+			}
+
+		}
+		return returnObject;
+	}
 	
-	  /**
-	   * From Google Guava
-	   * 
-	   * Returns the {@code int} value that is equal to {@code value}, if possible.
-	   *
-	   * @param value any value in the range of the {@code int} type
-	   * @return the {@code int} value that equals {@code value}
-	   * @throws IllegalArgumentException if {@code value} is greater than {@link
-	   *     Integer#MAX_VALUE} or less than {@link Integer#MIN_VALUE}
-	   */
-	  private static int checkedCast(long value) {
-	    int result = (int) value;
-	    if (!(result == value)){
-	    	throw new IllegalArgumentException("Out of range: " + value);
-	    }
-	    return result;
-	  }
+	/**
+	 * From Google Guava
+	 * 
+	 * Returns the {@code int} value that is equal to {@code value}, if
+	 * possible.
+	 * 
+	 * @param value
+	 *            any value in the range of the {@code int} type
+	 * @return the {@code int} value that equals {@code value}
+	 * @throws IllegalArgumentException
+	 *             if {@code value} is greater than {@link Integer#MAX_VALUE} or
+	 *             less than {@link Integer#MIN_VALUE}
+	 */
+	private static int checkedCast(long value) {
+		int result = (int) value;
+		if (!(result == value)) {
+			throw new IllegalArgumentException("Out of range: " + value);
+		}
+		return result;
+	}
 }
