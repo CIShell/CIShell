@@ -36,6 +36,11 @@ Dr. Katy Borner (katy@indiana.edu)
       <discovery label="CIShell Update Site" url="http://cishell.org/update"/>
    </url>
 
+   <includes
+         id="org.cishell.reference.libs.feature"
+         version="0.0.0"
+         name="Reference CIShell Libraries"/>
+
    <plugin
          id="org.cishell.reference"
          download-size="0"
@@ -65,37 +70,7 @@ Dr. Katy Borner (katy@indiana.edu)
          unpack="false"/>
 
    <plugin
-         id="edu.uci.ics.jung"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"/>
-
-   <plugin
-         id="org.apache.commons.collections"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"/>
-
-   <plugin
-         id="cern.colt"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"/>
-
-   <plugin
-         id="org.prefuse.lib"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"/>
-
-   <plugin
          id="org.cishell.templates.jythonrunner"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"/>
-
-   <plugin
-         id="jythonlib"
          download-size="0"
          install-size="0"
          version="0.0.0"/>
@@ -141,12 +116,6 @@ Dr. Katy Borner (katy@indiana.edu)
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-
-   <plugin
-         id="com.google.guava"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"/>
 
    <plugin
          id="org.cishell.utility.dict"
