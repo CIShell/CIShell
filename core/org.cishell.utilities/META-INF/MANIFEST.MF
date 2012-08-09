@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Utilities Plug-in
 Bundle-SymbolicName: org.cishell.utilities
 Bundle-Version: 1.0.1
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: com.google.common.annotations;version="8.0.0",
  com.google.common.base;version="8.0.0",
  com.google.common.collect;version="8.0.0",
@@ -33,9 +33,9 @@ Export-Package: org.cishell.utilities;version="1.0.1",
  org.cishell.utilities.color,
  org.cishell.utilities.database,
  org.cishell.utilities.dictionary,
+ org.cishell.utilities.logging;version="1.0.0",
  org.cishell.utilities.mutateParameter,
  org.cishell.utilities.mutateParameter.defaultvalue,
  org.cishell.utilities.mutateParameter.dropdown,
  org.cishell.utilities.network;version="1.0.0",
- org.cishell.utilities.osgi.logging,
  org.cishell.utilities.process

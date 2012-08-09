@@ -8,6 +8,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import org.joda.time.DateTime;
+import org.joda.time.Days;
+import org.joda.time.JodaTimePermission;
+
 // TODO: Fix this class.
 public class DateUtilities {
 	public static final String MONTH_DAY_YEAR_DATE_FORMAT =
@@ -81,15 +85,10 @@ public class DateUtilities {
 	
 	@Deprecated
 	public static int calculateDaysBetween(Date startDate, Date endDate) {
-		FAQCalendar startDateCalendar = new FAQCalendar(startDate.getYear(),
-														startDate.getMonth(),
-														startDate.getDate());
-		
-		FAQCalendar endDateCalendar = new FAQCalendar(endDate.getYear(),
-													  endDate.getMonth(),
-													  endDate.getDate());
-		
-		return (int) startDateCalendar.diffDayPeriods(endDateCalendar);
+		DateTime startDateTime = new DateTime(startDate);
+		DateTime endDateTime = new DateTime(endDate);
+
+		return Days.daysBetween(startDateTime, endDateTime).getDays();
 	}
 	
 	public static int calculateMonthsBetween(Date startDate, Date endDate) {
