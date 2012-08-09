@@ -5,6 +5,7 @@ package org.cishell.utilities;
  * @author kongch
  *
  */
+@Deprecated
 public class NullValueSupportException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
 
