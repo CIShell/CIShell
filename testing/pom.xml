@@ -19,6 +19,7 @@
 		<module>org.cishell.testing.convertertester.algorithm</module>
 		<module>org.cishell.testing.convertertester.commandline</module>
 		<module>org.cishell.testing.convertertester.core.new</module>
+		<module>org.cishell.utilities.tests</module>
 	</modules>
 	<build>
 		<plugins>
