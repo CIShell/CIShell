@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
+@Deprecated
 public class ImageUtilities {
 	// Constants.
 	private static final int TEMPORARY_IMAGE_WIDTH = 640;

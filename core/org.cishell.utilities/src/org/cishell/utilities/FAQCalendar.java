@@ -11,6 +11,7 @@ import java.util.GregorianCalendar;
  * @author Paul Hill
  * @copyright 2004 Paul Hill
  */
+@Deprecated
 public class FAQCalendar extends GregorianCalendar {  
 	private static final long serialVersionUID = 1L;
 
