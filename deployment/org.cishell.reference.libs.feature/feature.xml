@@ -65,12 +65,6 @@
          version="0.0.0"/>
 
    <plugin
-         id="ksoap2lib"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"/>
-
-   <plugin
          id="opencsv"
          download-size="0"
          install-size="0"
@@ -88,13 +82,6 @@
          download-size="0"
          install-size="0"
          version="0.0.0"/>
-
-   <plugin
-         id="org.knopflerfish.bundle.ksoap_osgi"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
 
    <plugin
          id="org.prefuse.lib"
