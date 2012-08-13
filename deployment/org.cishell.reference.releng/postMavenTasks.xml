@@ -4,7 +4,7 @@
 	<property name="input.dir" relative="true">${basedir}/target/products</property>
 	<property name="output.dir" relative="true">${basedir}/target/products-final</property>
 	<property name="deploy.dir" relative="false">/projects/cishell/www/htdocs/nightly/</property>
-	<property name="p2.dest" relative="false">${deploy.dir}/../p2/</property>
+	<property name="p2.dest" relative="false">${deploy.dir}../p2/</property>
 	<property name="p2.src">deployment/org.cishell.reference.releng/target/repository</property>
 	<property name="product.version">2.0.0</property>
 	<property name="product.build.type">custom</property>
@@ -128,6 +128,8 @@
 	
 	<!-- This will deploy the p2 repositories --> 
 	<target name="deploy-p2">
+		<!-- for <if> statements -->
+		<taskdef resource="net/sf/antcontrib/antlib.xml"/>
 		<!-- Deploy the nightly p2 -->
 		<property name="nightly.p2.dest">${p2.dest}nightly-repo/</property>
 	    <echo message="Making nightly p2 by copying from ${p2.src} to ${nightly.p2.dest}..."/>
