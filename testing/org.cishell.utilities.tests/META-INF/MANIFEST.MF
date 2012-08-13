@@ -1,0 +1,18 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Utilities Tests
+Bundle-SymbolicName: org.cishell.utilities.tests
+Bundle-Version: 1.0.0
+Fragment-Host: org.cishell.utilities;bundle-version="1.0.1"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Import-Package: org.cishell.utilities;version="1.0.1",
+ org.cishell.utilities.color,
+ org.cishell.utilities.database,
+ org.cishell.utilities.dictionary,
+ org.cishell.utilities.logging,
+ org.cishell.utilities.mutateParameter,
+ org.cishell.utilities.mutateParameter.defaultvalue,
+ org.cishell.utilities.mutateParameter.dropdown,
+ org.cishell.utilities.network;version="1.0.0",
+ org.cishell.utilities.process
+Require-Bundle: org.junit;bundle-version="4.8.2"
