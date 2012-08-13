@@ -95,5 +95,38 @@ public class ImmutableDictionaryTest {
 		dict.putAll(ImmutableMap.of(3,4));
 	}
 	
-
+	@Test
+	public void testFromHashtable() {
+		/*
+		 * This is different from testFromDictionary because Hashtable is both a Dictionary
+		 * and a Map.  You can do things a little more efficiently if you have a Map,
+		 * and so this code exercises that efficient way.
+		 */
+		Dictionary<Integer, Integer> source = new Hashtable<Integer, Integer>();
+		source.put(1, 2);
+		source.put(3, 4);
+		
+		ImmutableDictionary<Integer, Integer> dest = ImmutableDictionary.fromDictionary(source);
+		
+		assertEquals(source, dest);
+		assertEquals(dest, source);
+	}
+	
+	@Test
+	public void testFromDictionary() {
+		/*
+		 * This code should exercise the non-optimized version of ID.fromDictionary().
+		 */
+		Dictionary<Integer, Integer> source = new Hashtable<Integer, Integer>();
+		source.put(1, 2);
+		source.put(3, 4);
+		
+		Dictionary<Integer, Integer> wrapped = new ForwardingDictionary<Integer, Integer>(source);
+		
+		ImmutableDictionary<Integer, Integer> dest = ImmutableDictionary.fromDictionary(wrapped);
+		
+		assertEquals(source, dest);
+		assertEquals(dest, source);
+	}
+	
 }
