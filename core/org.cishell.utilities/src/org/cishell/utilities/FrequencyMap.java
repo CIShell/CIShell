@@ -52,7 +52,7 @@ public class FrequencyMap <E> {
 				String message = "FrequencyMap.add(E key) was called with a null key."
 						+ " If null support is desired, "
 						+ " construct FrequencyMap with allowNullValue = true";
-				throw new NullValueSupportException(message, e);
+				throw new IllegalArgumentException(message);
 			}
 		}
 		
