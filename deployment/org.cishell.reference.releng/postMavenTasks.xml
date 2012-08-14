@@ -13,26 +13,26 @@
 
 	<!-- source: http://stackoverflow.com/questions/945374/how-to-pull-out-a-substring-in-ant -->
 	<scriptdef name="substring" language="javascript">
-     <attribute name="text" />
-     <attribute name="start" />
-     <attribute name="end" />
-     <attribute name="property" />
-     <![CDATA[
+		<attribute name="text" />
+		<attribute name="start" />
+		<attribute name="end" />
+		<attribute name="property" />
+		<![CDATA[
        var text = attributes.get("text");
        var start = attributes.get("start");
        var end = attributes.get("end") || text.length();
        var propertyToSet = attributes.get("property");
        project.setProperty(propertyToSet, text.substring(start, end));
      ]]>
-  	</scriptdef>
-	
+	</scriptdef>
+
 	<target name="build">
 		<echo>
 			Before this will work, you will need to add the 
 			[Ant-Contrib](http://ant-contrib.sourceforge.net/)
 			library to Ant. See README for more information.
 		</echo>
-		
+
 		<taskdef resource="net/sf/antcontrib/antcontrib.properties" />
 		<delete dir="${output.dir}" />
 		<mkdir dir="${output.dir}" />
@@ -42,23 +42,23 @@
 				<fileset dir="${input.dir}" includes="${product.name}-win32*.zip" />
 			</path>
 		</foreach>
-	
+
 		<foreach target="each-product-tgz" param="product.zip">
 			<path>
 				<fileset dir="${input.dir}" includes="${product.name}-macosx*.zip ${product.name}-linux*.zip" />
 			</path>
 		</foreach>
 	</target>
-	
-	
-	
+
+
+
 	<target name="deploy">
 		<tstamp/>
-		
+
 		<!-- Pull out the first letter of the build type -->
 		<substring property="product.build.type.short"
 			start="0" end="1" text="${product.build.type}" />
-			
+
 		<copy todir="${deploy.dir}/${product.version}.${DSTAMP}${TSTAMP}${product.build.type}">
 			<fileset dir="${output.dir}" />
 			<mapper>
@@ -96,7 +96,7 @@
 		</zip>
 		<delete dir="${temp.dir}" />
 	</target>
-	
+
 	<target name="each-product-tgz">
 		<basename property="product.filename" file="${product.zip}" />
 		<propertyregex property="output.filename" input="${product.filename}" regexp=".zip" replace=".tgz" />
@@ -116,7 +116,7 @@
 		<replaceregexp match="org\.eclipse\.update\.reconcile=false" replace="org\.eclipse\.update\.reconcile=true">
 			<fileset dir="${temp.dir}" includes="**/configuration/config.ini" />
 		</replaceregexp>
-	
+
 		<tar destfile="${product.tgz.out}" compression="gzip">
 			<zipfileset src="${product.zip}" excludes="**/configuration/config.ini ${permission.files}" />
 			<zipfileset src="${product.zip}" includes="${permission.files}" filemode="755" />
@@ -125,30 +125,30 @@
 
 		<delete dir="${temp.dir}" />
 	</target>
-	
-	<!-- This will deploy the p2 repositories --> 
+
+	<!-- This will deploy the p2 repositories -->
 	<target name="deploy-p2">
 		<!-- for <if> statements -->
 		<taskdef resource="net/sf/antcontrib/antlib.xml"/>
 		<!-- Deploy the nightly p2 -->
 		<property name="nightly.p2.dest">${p2.dest}nightly-repo/</property>
-	    <echo message="Making nightly p2 by copying from ${p2.src} to ${nightly.p2.dest}..."/>
-	    <!-- delete the dest dir if it exists -->
-	    <if>
-	        <available file="${nightly.p2.dest}" type="dir" />
-			<then>	
-				  <echo message="Deleting previous nightly p2 folder"/>
-		          <delete includeEmptyDirs="true">
-			    <fileset dir="${nightly.p2.dest}" includes="**/*"/>
-			  </delete>
+		<echo message="Making nightly p2 by copying from ${p2.src} to ${nightly.p2.dest}..."/>
+		<!-- delete the dest dir if it exists -->
+		<if>
+			<available file="${nightly.p2.dest}" type="dir" />
+			<then>
+				<echo message="Deleting previous nightly p2 folder" />
+				<delete includeEmptyDirs="true">
+					<fileset dir="${nightly.p2.dest}" includes="**/*" />
+				</delete>
 			</then>
-	    </if>
-	    
-	    <!-- copy the contents over -->
-	    <move todir="${nightly.p2.dest}">
-	      <fileset dir="${p2.src}"/>
-	    </move>
+		</if>
+
+		<!-- copy the contents over -->
+		<copy todir="${nightly.p2.dest}">
+			<fileset dir="${p2.src}"/>
+		</copy>
 		<echo message="Finished copying the nightly p2."/>
-	  </target>
-	
+	</target>
+
 </project>
