@@ -5,7 +5,7 @@
 	<property name="output.dir" relative="true">${basedir}/target/products-final</property>
 	<property name="deploy.dir" relative="false">/projects/cishell/www/htdocs/nightly/</property>
 	<property name="p2.dest" relative="false">${deploy.dir}../p2/</property>
-	<property name="p2.src">deployment/org.cishell.reference.releng/target/repository</property>
+	<property name="p2.src">target/repository</property>
 	<property name="product.version">2.0.0</property>
 	<property name="product.build.type">custom</property>
 	<!-- permission.files defined files which the executable bit need to be enable at Mac and Linux. -->
