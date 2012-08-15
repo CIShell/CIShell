@@ -185,7 +185,7 @@ public final class NumberUtilities {
 
 	// TODO: Make the plot/csv converter use these versions.
 	public static String convertToDecimalNotation(double number) {
-		String numberAsString = new Double(number).toString();
+		String numberAsString = Double.toString(number);
 
 		return convertToDecimalNotation(numberAsString);
 	}

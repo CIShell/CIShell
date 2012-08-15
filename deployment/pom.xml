@@ -20,6 +20,8 @@
 		<module>org.cishell.reference.gui.feature</module>
 		<module>org.cishell.reference.releng</module>
 		<module>org.cishell.reference.libs.feature</module>
+		<module>org.cishell.source.feature</module>
+		<module>org.cishell.p2</module>
 	</modules>
 	<parent>
 		<groupId>org.cishell</groupId>
