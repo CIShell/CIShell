@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Utilities Plug-in
 Bundle-SymbolicName: org.cishell.utilities
-Bundle-Version: 1.0.1
+Bundle-Version: 1.0.2
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: com.google.common.annotations;version="8.0.0",
  com.google.common.base;version="8.0.0",
