@@ -126,29 +126,4 @@
 		<delete dir="${temp.dir}" />
 	</target>
 
-	<!-- This will deploy the p2 repositories -->
-	<target name="deploy-p2">
-		<!-- for <if> statements -->
-		<taskdef resource="net/sf/antcontrib/antlib.xml"/>
-		<!-- Deploy the nightly p2 -->
-		<property name="nightly.p2.dest">${p2.dest}nightly-repo/</property>
-		<echo message="Making nightly p2 by copying from ${p2.src} to ${nightly.p2.dest}..."/>
-		<!-- delete the dest dir if it exists -->
-		<if>
-			<available file="${nightly.p2.dest}" type="dir" />
-			<then>
-				<echo message="Deleting previous nightly p2 folder" />
-				<delete includeEmptyDirs="true">
-					<fileset dir="${nightly.p2.dest}" includes="**/*" />
-				</delete>
-			</then>
-		</if>
-
-		<!-- copy the contents over -->
-		<copy todir="${nightly.p2.dest}">
-			<fileset dir="${p2.src}"/>
-		</copy>
-		<echo message="Finished copying the nightly p2."/>
-	</target>
-
 </project>
