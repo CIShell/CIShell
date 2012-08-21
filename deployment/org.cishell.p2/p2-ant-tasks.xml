@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="p2-tasks" default="deploy-dev-p2">
+	<property name="dev-p2.input.dir" relative="true">${basedir}/target/repository</property>
+	<property name="dev-p2.output.dir" relative="false">/projects/cishell/www/htdocs/p2/</property>
+
+	<!-- This will deploy the dev p2 repositories -->
+	<target name="deploy-dev-p2">
+		<!-- for <if> statements -->
+		<taskdef resource="net/sf/antcontrib/antlib.xml"/>
+		
+		<!-- Deploy the nightly p2 -->
+		<property name="dev-p2.nightly.dir">${dev-p2.output.dir}nightly-repo/</property>
+		<echo message="Making nightly p2 by copying from ${dev-p2.input.dir} to ${dev-p2.nightly.dir}..."/>
+		
+		<!-- delete the dest dir if it exists -->
+		<if>
+			<available file="${dev-p2.nightly.dir}" type="dir" />
+			<then>
+				<echo message="Deleting previous nightly p2 folder" />
+				<delete includeEmptyDirs="true">
+					<fileset dir="${dev-p2.nightly.dir}" includes="**/*" />
+				</delete>
+			</then>
+		</if>
+
+		<!-- copy the contents over -->
+		<copy todir="${dev-p2.nightly.dir}">
+			<fileset dir="${dev-p2.input.dir}"/>
+		</copy>
+		<echo message="Finished copying the nightly p2."/>
+	</target>
+
+</project>
