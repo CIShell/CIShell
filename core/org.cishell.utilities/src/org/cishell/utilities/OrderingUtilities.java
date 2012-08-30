@@ -8,8 +8,8 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 /**
  * @deprecated see
- *             http://wiki.cns.iu.edu/display/CISHELL/2012/08/30/Future+Direction
- *             +for+CIShell+Utilities
+ *            {@link url http://wiki.cns.iu.edu/display/CISHELL/2012/08/30/Future+Direction
+ *             +for+CIShell+Utilities}
  */
 @Deprecated
 public class OrderingUtilities {

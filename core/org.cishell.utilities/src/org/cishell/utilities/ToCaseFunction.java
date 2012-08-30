@@ -3,8 +3,8 @@ package org.cishell.utilities;
 import com.google.common.base.Function;
 /**
  * @deprecated see
- *             http://wiki.cns.iu.edu/display/CISHELL/2012/08/30/Future+Direction
- *             +for+CIShell+Utilities
+ *            {@link url http://wiki.cns.iu.edu/display/CISHELL/2012/08/30/Future+Direction
+ *             +for+CIShell+Utilities}
  */
 @Deprecated
 public enum ToCaseFunction implements Function<String, String> {

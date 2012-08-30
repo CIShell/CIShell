@@ -14,8 +14,8 @@ import org.cishell.framework.data.DataProperty;
  * Mind the difference between "format" and "type"!
 /**
  * @deprecated see
- *             http://wiki.cns.iu.edu/display/CISHELL/2012/08/30/Future+Direction
- *             +for+CIShell+Utilities
+ *            {@link url http://wiki.cns.iu.edu/display/CISHELL/2012/08/30/Future+Direction
+ *             +for+CIShell+Utilities}
  */
 @Deprecated
 public class BasicDataPlus extends BasicData {
