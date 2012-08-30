@@ -2,8 +2,7 @@
 set -e
 
 USAGE="Usage: $0 release_version"
-if [[ $# != 1 ]]
-then 
+if [[ $# != 1 ]]; then 
     echo "$USAGE"
     exit 1
 fi
@@ -11,9 +10,8 @@ fi
 VERSION=$1
 
 VERSION_REGEX="^[0-9]+\.[0-9]+\.[0-9]+$"
-if [[ ! "$VERSION" =~ $VERSION_REGEX ]];
-then
-	exit 1
+if [[ ! "$VERSION" =~ $VERSION_REGEX ]]; then
+    exit 1
 fi
 
 SOURCE="./target/repository/*"
