@@ -15,7 +15,12 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
-
+/**
+ * @deprecated see
+ *            {@link url http://wiki.cns.iu.edu/display/CISHELL/2012/08/30/Future+Direction
+ *             +for+CIShell+Utilities}
+ */
+@Deprecated
 public class ZipUtilities {
 	/* 2048, as gotten from:
 	 * http://java.sun.com/developer/technicalArticles/Programming/compression/

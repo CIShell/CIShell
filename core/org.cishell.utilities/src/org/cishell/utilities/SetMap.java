@@ -8,6 +8,11 @@ import java.util.Set;
 /**
  * Don't use this! Instead use a SetMultimap from Google Guava!
  */
+/**
+ * @deprecated see
+ *            {@link url http://wiki.cns.iu.edu/display/CISHELL/2012/08/30/Future+Direction
+ *             +for+CIShell+Utilities}
+ */
 @Deprecated
 public class SetMap {	
 	private Map map = new Hashtable();

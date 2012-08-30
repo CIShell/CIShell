@@ -9,7 +9,12 @@ import prefuse.data.Schema;
 import prefuse.data.Table;
 import prefuse.data.Tuple;
 import prefuse.util.collections.IntIterator;
-
+/**
+ * @deprecated see
+ *            {@link url http://wiki.cns.iu.edu/display/CISHELL/2012/08/30/Future+Direction
+ *             +for+CIShell+Utilities}
+ */
+@Deprecated
 public class TableUtilities {
 	public static final Class<?>[] POSSIBLE_NUMBER_CLASSES = {
 		byte.class,

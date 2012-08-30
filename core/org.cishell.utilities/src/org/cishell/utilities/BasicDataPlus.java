@@ -12,7 +12,12 @@ import org.cishell.framework.data.DataProperty;
  * rather than tacking on a subclass, but we are eager to keep existing code operable.
  * <p/>
  * Mind the difference between "format" and "type"!
+/**
+ * @deprecated see
+ *            {@link url http://wiki.cns.iu.edu/display/CISHELL/2012/08/30/Future+Direction
+ *             +for+CIShell+Utilities}
  */
+@Deprecated
 public class BasicDataPlus extends BasicData {
 	/**
 	 * @param inner		The object wrapped by this Data.

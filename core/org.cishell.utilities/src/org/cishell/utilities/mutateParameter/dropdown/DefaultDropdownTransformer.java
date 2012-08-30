@@ -10,7 +10,11 @@ import org.osgi.service.metatype.AttributeDefinition;
  * transformOptionLabels, and transformOptionValues.
  * 
  * @see org.cishell.utilities.MutateParameterUtilities#mutateToDropdown(ObjectClassDefinition, String, String[], String[])
+ * @deprecated see
+ *            {@link url http://wiki.cns.iu.edu/display/CISHELL/2012/08/30/Future+Direction
+ *             +for+CIShell+Utilities}
  */
+@Deprecated
 public abstract class DefaultDropdownTransformer extends DropdownTransformer {
 	public abstract boolean shouldTransform(AttributeDefinition ad);
 

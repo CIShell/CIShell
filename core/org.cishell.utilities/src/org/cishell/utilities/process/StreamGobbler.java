@@ -14,7 +14,12 @@ import com.google.common.base.Objects;
  * <p/>
  * Adapted from
  * <a href="http://www.javaworld.com/javaworld/jw-12-2000/jw-1229-traps.html?page=4">this guide</a>.
+/**
+ * @deprecated see
+ *            {@link url http://wiki.cns.iu.edu/display/CISHELL/2012/08/30/Future+Direction
+ *             +for+CIShell+Utilities}
  */
+@Deprecated
 public class StreamGobbler extends Thread {
 	private InputStream inputStream;
 	private OutputStream outputStream;
