@@ -13,8 +13,8 @@ import org.osgi.service.log.LogService;
  * @author David M. Coe (david.coe@gmail.com)
  * 
  * @deprecated see
- *             http://wiki.cns.iu.edu/display/CISHELL/2012/08/30/Future+Direction
- *             +for+CIShell+Utilities
+ *            {@link url http://wiki.cns.iu.edu/display/CISHELL/2012/08/30/Future+Direction
+ *             +for+CIShell+Utilities}
  */
 @Deprecated
 public class Utilities {

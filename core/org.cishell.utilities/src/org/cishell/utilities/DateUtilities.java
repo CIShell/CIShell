@@ -13,8 +13,8 @@ import org.joda.time.Days;
 import org.joda.time.JodaTimePermission;
 /**
  * @deprecated see
- *             http://wiki.cns.iu.edu/display/CISHELL/2012/08/30/Future+Direction
- *             +for+CIShell+Utilities
+ *            {@link url http://wiki.cns.iu.edu/display/CISHELL/2012/08/30/Future+Direction
+ *             +for+CIShell+Utilities}
  */
 @Deprecated
 // TODO: Fix this class.

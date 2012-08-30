@@ -7,8 +7,8 @@ import java.util.Enumeration;
 import java.util.Iterator;
 /**
  * @deprecated see
- *             http://wiki.cns.iu.edu/display/CISHELL/2012/08/30/Future+Direction
- *             +for+CIShell+Utilities
+ *            {@link url http://wiki.cns.iu.edu/display/CISHELL/2012/08/30/Future+Direction
+ *             +for+CIShell+Utilities}
  */
 @Deprecated
 public class CollectionUtilities {
