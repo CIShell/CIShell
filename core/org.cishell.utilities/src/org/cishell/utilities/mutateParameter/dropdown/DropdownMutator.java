@@ -17,7 +17,12 @@ import org.osgi.service.metatype.ObjectClassDefinition;
  * The core functionality
  * is in add(final String, final String[], final String[])
  * and mutate(ObjectClassDefinition)
+ *//**
+ * @deprecated see
+ *            {@link url http://wiki.cns.iu.edu/display/CISHELL/2012/08/30/Future+Direction
+ *             +for+CIShell+Utilities}
  */
+@Deprecated
 public class DropdownMutator {
 	private Collection<DropdownTransformer> transforms;
 	private Set<String> attributesToIgnore = new HashSet<String>();

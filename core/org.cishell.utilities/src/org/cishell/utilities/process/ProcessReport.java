@@ -9,7 +9,12 @@ import com.google.common.collect.ImmutableList;
 /**
  * Value class for the result of {@link OutputGobblingProcessRunner#run()}.
  * Represents a process's commands, exit value, and messages to standard out and standard errors.
+/**
+ * @deprecated see
+ *            {@link url http://wiki.cns.iu.edu/display/CISHELL/2012/08/30/Future+Direction
+ *             +for+CIShell+Utilities}
  */
+@Deprecated
 public class ProcessReport {
 	private final ImmutableList<String> commands;
 	private final int exitValue;

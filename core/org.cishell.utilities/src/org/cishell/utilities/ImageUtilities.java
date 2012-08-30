@@ -4,6 +4,11 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
+/**
+ * @deprecated see
+ *            {@link url http://wiki.cns.iu.edu/display/CISHELL/2012/08/30/Future+Direction
+ *             +for+CIShell+Utilities}
+ */
 @Deprecated
 public class ImageUtilities {
 	// Constants.

@@ -16,8 +16,12 @@ import java.net.URL;
  * Caller to startConnect methods is responsible to close the connection.
  * </p>
  * @author kongch
+/**
+ * @deprecated see
+ *            {@link url http://wiki.cns.iu.edu/display/CISHELL/2012/08/30/Future+Direction
+ *             +for+CIShell+Utilities}
  */
-
+@Deprecated
 public final class DownloadHandler {
 	public static final int DEFAULT_NUMBER_OF_RETRIES = 3;
 	public static final int BUFFER_SIZE = 4096;

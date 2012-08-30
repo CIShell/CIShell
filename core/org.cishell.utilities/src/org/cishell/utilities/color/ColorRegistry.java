@@ -15,8 +15,9 @@ import java.util.Set;
  * that hold the set of available colors and also
  * a default color if the color is out
  * @author kongch
- *
+ * @deprecated see {@link url http://wiki.cns.iu.edu/display/CISHELL/2012/08/30/Future+Direction+for+CIShell+Utilities}
  */
+@Deprecated
 public class ColorRegistry<K> {
 	private int currentIndex;
 	private ColorSchema colorSchema;

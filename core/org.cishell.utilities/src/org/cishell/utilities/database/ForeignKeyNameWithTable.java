@@ -1,5 +1,8 @@
 package org.cishell.utilities.database;
-
+/**
+* @deprecated see {@link url http://wiki.cns.iu.edu/display/CISHELL/2012/08/30/Future+Direction+for+CIShell+Utilities}
+*/
+@Deprecated
 public final class ForeignKeyNameWithTable {
 	public final String name;
 	public final DatabaseTable table;
