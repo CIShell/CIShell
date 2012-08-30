@@ -19,7 +19,10 @@ import org.cishell.utilities.StringUtilities;
 import com.google.common.collect.ImmutableSortedMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-
+/**
+* @deprecated see http://wiki.cns.iu.edu/display/CISHELL/2012/08/30/Future+Direction+for+CIShell+Utilities
+*/
+@Deprecated
 public final class DatabaseTable {
 	public final String catalog;
 	public final String schema;

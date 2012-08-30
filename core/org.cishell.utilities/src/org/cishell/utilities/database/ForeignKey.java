@@ -16,7 +16,10 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-
+/**
+* @deprecated see http://wiki.cns.iu.edu/display/CISHELL/2012/08/30/Future+Direction+for+CIShell+Utilities
+*/
+@Deprecated
 public final class ForeignKey {
 
 	final public DatabaseTable localTable;

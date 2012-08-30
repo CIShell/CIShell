@@ -15,7 +15,12 @@ import org.cishell.framework.data.DataProperty;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
-
+/**
+ * @deprecated see
+ *             http://wiki.cns.iu.edu/display/CISHELL/2012/08/30/Future+Direction
+ *             +for+CIShell+Utilities
+ */
+@Deprecated
 public class AlgorithmUtilities {
 	// TODO: ISILoadAndCleanAlgorithmFactory should use this?
 	// It's copied directly from it (and cleaned up a little bit)...

@@ -4,7 +4,12 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
-
+/**
+ * @deprecated see
+ *             http://wiki.cns.iu.edu/display/CISHELL/2012/08/30/Future+Direction
+ *             +for+CIShell+Utilities
+ */
+@Deprecated
 public class SetUtilities {
 	public static<K, V> Collection<K> getKeysOfMapEntrySetWithValue(
 			Collection<Map.Entry<K, V>> mapEntries, V value) {

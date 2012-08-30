@@ -11,7 +11,12 @@ import java.util.GregorianCalendar;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.JodaTimePermission;
-
+/**
+ * @deprecated see
+ *             http://wiki.cns.iu.edu/display/CISHELL/2012/08/30/Future+Direction
+ *             +for+CIShell+Utilities
+ */
+@Deprecated
 // TODO: Fix this class.
 public class DateUtilities {
 	public static final String MONTH_DAY_YEAR_DATE_FORMAT =

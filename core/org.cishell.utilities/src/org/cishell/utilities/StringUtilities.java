@@ -10,7 +10,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.regex.Pattern;
-
+/**
+ * @deprecated see
+ *             http://wiki.cns.iu.edu/display/CISHELL/2012/08/30/Future+Direction
+ *             +for+CIShell+Utilities
+ */
+@Deprecated
 public class StringUtilities {
 	public static Pattern NON_ALPHA_NUMERIC_CHARACTER_ESCAPE = Pattern.compile("([^a-zA-z0-9])");
 

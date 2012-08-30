@@ -4,7 +4,12 @@ import java.text.DecimalFormat;
 import java.text.Format;
 import java.text.NumberFormat;
 import java.text.ParseException;
-
+/**
+ * @deprecated see
+ *             http://wiki.cns.iu.edu/display/CISHELL/2012/08/30/Future+Direction
+ *             +for+CIShell+Utilities
+ */
+@Deprecated
 public final class NumberUtilities {
 	public static final String UNROUNDED_DECIMAL_PATTERN = "#.############################";
 	public static final String NOT_A_NUMBER_PREFIX = "NOT A NUMBER";

@@ -24,7 +24,12 @@ import java.io.*;
 /**
  * Generic unicode textreader, which will use BOM mark to identify the encoding
  * to be used. If BOM is not found then use a given default or system encoding.
+/**
+ * @deprecated see
+ *             http://wiki.cns.iu.edu/display/CISHELL/2012/08/30/Future+Direction
+ *             +for+CIShell+Utilities
  */
+@Deprecated
 public class UnicodeReader extends Reader {
 	public static final int BOM_SIZE = 4;
 	

@@ -25,7 +25,12 @@ import javax.imageio.ImageIO;
 import org.osgi.service.log.LogService;
 
 import com.google.common.collect.ImmutableMap;
-
+/**
+ * @deprecated see
+ *             http://wiki.cns.iu.edu/display/CISHELL/2012/08/30/Future+Direction
+ *             +for+CIShell+Utilities
+ */
+@Deprecated
 public class FileUtilities {
 	public static final int READ_TEXT_FILE_BUFFER_SIZE = 1024;
 	public static final String DEFAULT_STREAM_TO_FILE_NAME = "stream_";
