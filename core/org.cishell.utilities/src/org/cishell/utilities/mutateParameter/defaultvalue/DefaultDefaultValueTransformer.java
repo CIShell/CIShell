@@ -15,7 +15,11 @@ import org.osgi.service.metatype.AttributeDefinition;
  * and transformDefaultValue.
  * 
  * @see org.cishell.utilities.MutateParameterUtilities#mutateDefaultValue(ObjectClassDefinition, String, String)
+ * @deprecated see
+ *            {@link url http://wiki.cns.iu.edu/display/CISHELL/2012/08/30/Future+Direction
+ *             +for+CIShell+Utilities}
  */
+@Deprecated
 public abstract class DefaultDefaultValueTransformer extends DefaultValueTransformer {
 	public abstract boolean shouldTransform(AttributeDefinition ad);
 

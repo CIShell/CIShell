@@ -11,6 +11,11 @@ import java.util.GregorianCalendar;
  * @author Paul Hill
  * @copyright 2004 Paul Hill
  */
+/**
+ * @deprecated see
+ *            {@link url http://wiki.cns.iu.edu/display/CISHELL/2012/08/30/Future+Direction
+ *             +for+CIShell+Utilities}
+ */
 @Deprecated
 public class FAQCalendar extends GregorianCalendar {  
 	private static final long serialVersionUID = 1L;

@@ -3,7 +3,10 @@ package org.cishell.utilities.dictionary;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Hashtable;
-
+/**
+* @deprecated see {@link url http://wiki.cns.iu.edu/display/CISHELL/2012/08/30/Future+Direction+for+CIShell+Utilities}
+*/
+@Deprecated
 public class DictionaryUtilities {
 	/// Side-effects the provided Dictionary.
 	public static <K, V> void addIfNotNull(Dictionary<K, V> dictionary, K key, V value) {

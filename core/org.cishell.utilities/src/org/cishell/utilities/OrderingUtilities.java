@@ -6,7 +6,12 @@ import java.util.List;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
-
+/**
+ * @deprecated see
+ *            {@link url http://wiki.cns.iu.edu/display/CISHELL/2012/08/30/Future+Direction
+ *             +for+CIShell+Utilities}
+ */
+@Deprecated
 public class OrderingUtilities {
 	/**
 	 * Normally Ordering.explicit() gives an Ordering that throws a ClassCastException for

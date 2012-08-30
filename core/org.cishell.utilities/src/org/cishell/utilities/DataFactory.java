@@ -9,7 +9,12 @@ import org.cishell.framework.data.Data;
 import org.cishell.framework.data.DataProperty;
 
 import com.google.common.base.Preconditions;
-
+/**
+ * @deprecated see
+ *            {@link url http://wiki.cns.iu.edu/display/CISHELL/2012/08/30/Future+Direction
+ *             +for+CIShell+Utilities}
+ */
+@Deprecated
 public final class DataFactory {
 	private DataFactory() {
 		// Static factory methods only.

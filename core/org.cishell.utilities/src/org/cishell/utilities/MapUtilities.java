@@ -5,7 +5,12 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+/**
+ * @deprecated see
+ *            {@link url http://wiki.cns.iu.edu/display/CISHELL/2012/08/30/Future+Direction
+ *             +for+CIShell+Utilities}
+ */
+@Deprecated
 public class MapUtilities {
 	public static<K, V> Collection<K> getValidKeysOfTypesInMap(
 			Map<K, V> map, Collection<V> types, Collection<K> keysToSkip)

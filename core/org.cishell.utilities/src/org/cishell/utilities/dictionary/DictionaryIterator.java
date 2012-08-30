@@ -3,7 +3,10 @@ package org.cishell.utilities.dictionary;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Iterator;
-
+/**
+* @deprecated see {@link url http://wiki.cns.iu.edu/display/CISHELL/2012/08/30/Future+Direction+for+CIShell+Utilities}
+*/
+@Deprecated
 public class DictionaryIterator<K, V>
 		implements Iterator<DictionaryEntry<K, V>>, Iterable<DictionaryEntry<K, V>> {
 	private Dictionary<K, V> dictionary;
