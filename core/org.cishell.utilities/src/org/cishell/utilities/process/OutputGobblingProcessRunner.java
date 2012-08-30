@@ -13,8 +13,12 @@ import com.google.common.base.Objects;
  * <a href="http://stackoverflow.com/questions/2150723/process-waitfor-threads-and-inputstreams">here</a>
  * or
  * <a href="http://www.javaworld.com/javaworld/jw-12-2000/jw-1229-traps.html">here</a> for details.
- *
+/**
+ * @deprecated see
+ *             http://wiki.cns.iu.edu/display/CISHELL/2012/08/30/Future+Direction
+ *             +for+CIShell+Utilities
  */
+@Deprecated
 public class OutputGobblingProcessRunner {	
 	private ProcessBuilder processBuilder;
 	private String charsetName;

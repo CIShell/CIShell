@@ -13,7 +13,11 @@ import com.google.common.base.Preconditions;
  * 
  * @author David M. Coe - david.coe+CNS@gmail.com
  * 
+ * @deprecated see
+ *             http://wiki.cns.iu.edu/display/CISHELL/2012/08/30/Future+Direction
+ *             +for+CIShell+Utilities
  */
+@Deprecated
 public class PrintStreamLogger implements LogService {
 	final private PrintStream out;
 

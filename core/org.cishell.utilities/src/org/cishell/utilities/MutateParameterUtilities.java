@@ -16,7 +16,12 @@ import org.osgi.service.metatype.AttributeDefinition;
 import org.osgi.service.metatype.ObjectClassDefinition;
 
 import prefuse.data.Table;
-
+/**
+ * @deprecated see
+ *             http://wiki.cns.iu.edu/display/CISHELL/2012/08/30/Future+Direction
+ *             +for+CIShell+Utilities
+ */
+@Deprecated
 public class MutateParameterUtilities {
 	/* TODO The mutateParameter subpackage is meant to replace most of the loops
 	 * that invoke the formFooAttributeDefinition methods.

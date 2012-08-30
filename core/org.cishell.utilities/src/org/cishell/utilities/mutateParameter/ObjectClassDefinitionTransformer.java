@@ -10,7 +10,12 @@ import org.cishell.utilities.MutateParameterUtilities;
 import org.cishell.utilities.mutateParameter.dropdown.DropdownTransformer;
 import org.osgi.service.metatype.AttributeDefinition;
 import org.osgi.service.metatype.ObjectClassDefinition;
-
+/**
+ * @deprecated see
+ *             http://wiki.cns.iu.edu/display/CISHELL/2012/08/30/Future+Direction
+ *             +for+CIShell+Utilities
+ */
+@Deprecated
 public class ObjectClassDefinitionTransformer {
 	/**
 	 * AttributeDefinition filters as described in ObjectClassDefinition.

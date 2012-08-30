@@ -17,8 +17,12 @@ import com.google.common.base.Preconditions;
  * element of an array.
  * </p>
  * 
- * @author dmcoe
+/**
+ * @deprecated see
+ *             http://wiki.cns.iu.edu/display/CISHELL/2012/08/30/Future+Direction
+ *             +for+CIShell+Utilities
  */
+@Deprecated
 public class PrefuseUtilities {
 
 	// Suppress default constructor for noninstantiability

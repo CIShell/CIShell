@@ -11,8 +11,9 @@ import java.awt.Color;
  * default color value. The defaultColor will be
  * set to BLACK if it is not given
  * @author kongch
- *
+ * @deprecated see http://wiki.cns.iu.edu/display/CISHELL/2012/08/30/Future+Direction+for+CIShell+Utilities
  */
+@Deprecated
 public class ColorSchema {
 	private int totalColors;
 	private Color[] colors;

@@ -1,5 +1,8 @@
 package org.cishell.utilities.database;
-
+/**
+* @deprecated see http://wiki.cns.iu.edu/display/CISHELL/2012/08/30/Future+Direction+for+CIShell+Utilities
+*/
+@Deprecated
 public final class ColumnPair {
 	public final String local;
 	public final String foreign;

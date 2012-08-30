@@ -3,7 +3,12 @@ package org.cishell.utilities.mutateParameter.dropdown;
 import org.cishell.reference.service.metatype.BasicAttributeDefinition;
 import org.cishell.utilities.mutateParameter.AttributeDefinitionTransformer;
 import org.osgi.service.metatype.AttributeDefinition;
-
+/**
+ * @deprecated see
+ *             http://wiki.cns.iu.edu/display/CISHELL/2012/08/30/Future+Direction
+ *             +for+CIShell+Utilities
+ */
+@Deprecated
 public abstract class DropdownTransformer
 		implements AttributeDefinitionTransformer {
 	/**

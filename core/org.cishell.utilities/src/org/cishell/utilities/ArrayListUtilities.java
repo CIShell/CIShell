@@ -5,7 +5,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-
+/**
+ * @deprecated see
+ *             http://wiki.cns.iu.edu/display/CISHELL/2012/08/30/Future+Direction
+ *             +for+CIShell+Utilities
+ */
+@Deprecated
 public class ArrayListUtilities {
 	public static<T extends Comparable<T>> List<T> copyAndSort(Collection<T> items) {
 		List<T> copy = new ArrayList<T>(items);
