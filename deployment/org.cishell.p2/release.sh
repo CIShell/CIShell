@@ -12,14 +12,8 @@ VERSION=$1
 
 VERSION_REGEX="^[0-9]+\.[0-9]+\.[0-9]+$"
 if [[ ! "$VERSION" =~ $VERSION_REGEX ]];
-then 
-    echo "Normal release versions look like 1.0.13"
-    read -e -p "Are you sure '$VERSION' is what you want? (y/n):" REPLY
-
-    if [[ "$REPLY" != "y" ]] 
-    then
+then
 	exit 1
-    fi
 fi
 
 SOURCE="./target/repository/*"
