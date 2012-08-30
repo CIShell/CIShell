@@ -9,7 +9,7 @@
 		<taskdef resource="net/sf/antcontrib/antlib.xml"/>
 		
 		<!-- Deploy the nightly p2 -->
-		<property name="dev-p2.nightly.dir">${dev-p2.output.dir}nightly-repo/</property>
+		<property name="dev-p2.nightly.dir">${dev-p2.output.dir}dev/</property>
 		<echo message="Making nightly p2 by copying from ${dev-p2.input.dir} to ${dev-p2.nightly.dir}..."/>
 		
 		<!-- delete the dest dir if it exists -->
