@@ -9,7 +9,7 @@ fi
 
 VERSION=$1
 
-SOURCE="./target/repository/*"
+SOURCE="deployment/org.cishell.p2/target/repository/*"
 DEST_BASE="/projects/cishell/www/htdocs/p2"
 DEST="$DEST_BASE/$VERSION/"
 
