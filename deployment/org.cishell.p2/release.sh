@@ -22,6 +22,7 @@ if [[ ! "$VERSION" =~ $VERSION_REGEX ]]; then
     fi
 fi
 
+echo "Going to copy $SOURCE to $DEST"
 
 mkdir -p "$DEST_BASE"
 mkdir "$DEST"
