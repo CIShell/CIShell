@@ -1,5 +1,5 @@
 #!/bin/bash
-set -euvx
+set -eu
 
 USAGE="Usage: $0 release_version"
 if [[ $# != 1 ]]; then 
