@@ -1,5 +1,5 @@
 #!/bin/bash
-set -eu
+set -euvx
 
 USAGE="Usage: $0 release_version"
 if [[ $# != 1 ]]; then 
@@ -25,6 +25,8 @@ if [[ ! "$VERSION" =~ $VERSION_REGEX ]]; then
 fi
 
 echo "Going to copy $SOURCE to $DEST"
+pwd
+ls -l "$SOURCE"
 
 mkdir -p "$DEST_BASE"
 mkdir "$DEST"
