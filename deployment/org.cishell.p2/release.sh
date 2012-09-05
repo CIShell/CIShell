@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -eu
 
 USAGE="Usage: $0 release_version"
 if [[ $# != 1 ]]; then 
@@ -7,12 +7,12 @@ if [[ $# != 1 ]]; then
     exit 1
 fi
 
+VERSION=$1
 
 SOURCE="./target/repository/*"
 DEST_BASE="/projects/cishell/www/htdocs/p2"
 DEST="$DEST_BASE/$VERSION/"
 
-VERSION=$1
 VERSION_REGEX="^[0-9]+\.[0-9]+\.[0-9]+$"
 if [[ ! "$VERSION" =~ $VERSION_REGEX ]]; then
     if [[ "$VERSION" == "dev" ]]; then
