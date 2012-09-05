@@ -16,7 +16,9 @@ DEST="$DEST_BASE/$VERSION/"
 VERSION_REGEX="^[0-9]+\.[0-9]+\.[0-9]+$"
 if [[ ! "$VERSION" =~ $VERSION_REGEX ]]; then
     if [[ "$VERSION" == "dev" ]]; then
-    	rm -r "$DEST"
+    	if [ -d "$DEST" ]; then 
+    		rm -r "$DEST"
+    	fi
     else
     	exit 1
     fi
