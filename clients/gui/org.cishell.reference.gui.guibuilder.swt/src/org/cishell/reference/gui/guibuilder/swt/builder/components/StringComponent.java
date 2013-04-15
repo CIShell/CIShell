@@ -123,8 +123,12 @@ public class StringComponent extends AbstractComponent {
 			return "Invalid basic value";
 		}
 		if(combo == null) {
-			return attribute.validate(textField.getText());
+			// Commas weren't accepted in text field due to osgi AttributeDefinition. Hence allowing commas here before passing to validate.
+			// See http://www.osgi.org/javadoc/r4v42/org/osgi/service/metatype/AttributeDefinition.html#validate(java.lang.String) for details
+			String commaRemoved = textField.getText().replace(",","");
+			return attribute.validate(commaRemoved);			
 		} else {
+			//This returns null for combo class, hence, no need to bypass commas and they are valid in combo boxes.
 			return attribute.validate(getListValue());
 		}
 	}
