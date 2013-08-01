@@ -190,12 +190,12 @@ public class CSVReader implements Closeable {
      *            it true, parser should ignore white space before a quote in a field
      */
     public CSVReader(Reader reader, char separator, char quotechar, char escape, int line, boolean strictQuotes, boolean ignoreLeadingWhiteSpace) {
-    	this.br = new BufferedReader(reader);
+        this.br = new BufferedReader(reader);
         this.parser = new CSVParser(separator, quotechar, escape, strictQuotes, ignoreLeadingWhiteSpace);
         this.skipLines = line;
     }
 
-	/**
+   /**
      * Reads the entire file into a List with each element being a String[] of
      * tokens.
      * 
@@ -279,4 +279,21 @@ public class CSVReader implements Closeable {
     	br.close();
     }
     
+    
+    /**
+     * Reads lines from the buffer, converts to a string array and then pass to processor.
+     * 
+     * @throws CSVRuntimeException
+     *             if bad things happen during the read
+     */
+	public void read(CSVReadProc proc) {
+		try {
+			int rowIndex = 0;
+			for ( String[] values = readNext(); values != null; values = readNext()) {
+				proc.procRow(rowIndex++, values);
+			}
+		} catch (IOException e) {			
+			throw new CSVRuntimeException(e);
+		}
+	}
 }

@@ -215,7 +215,7 @@ public class CSVWriter implements Closeable {
      *            a string array with each comma-separated element as a separate
      *            entry.
      */
-    public void writeNext(String[] nextLine) {
+    public void writeNext(String... nextLine) {
     	
     	if (nextLine == null)
     		return;
@@ -298,5 +298,8 @@ public class CSVWriter implements Closeable {
     public void setResultService(ResultSetHelper resultService) {
         this.resultService = resultService;
     }
-
+    
+	public void write(CSVWriteProc proc) {
+		proc.process(this);
+	}
 }
