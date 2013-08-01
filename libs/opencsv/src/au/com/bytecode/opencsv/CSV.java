@@ -16,11 +16,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import static au.com.bytecode.opencsv.CSVParser.DEFAULT_ESCAPE_CHARACTER;
-import static au.com.bytecode.opencsv.CSVParser.DEFAULT_IGNORE_LEADING_WHITESPACE;
-import static au.com.bytecode.opencsv.CSVParser.DEFAULT_QUOTE_CHARACTER;
-import static au.com.bytecode.opencsv.CSVParser.DEFAULT_SEPARATOR;
-import static au.com.bytecode.opencsv.CSVParser.DEFAULT_STRICT_QUOTES;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -93,13 +88,13 @@ public class CSV {
 	}
 
 	private CSV() {
-		this(	DEFAULT_SEPARATOR, 
-				DEFAULT_QUOTE_CHARACTER, 
-				DEFAULT_ESCAPE_CHARACTER, 
-				CSVWriter.DEFAULT_LINE_END, 
+		this(	Constants.DEFAULT_SEPARATOR, 
+				Constants.DEFAULT_QUOTE_CHARACTER, 
+				Constants.DEFAULT_ESCAPE_CHARACTER, 
+				Constants.DEFAULT_LINE_END, 
 				CSVReader.DEFAULT_SKIP_LINES,
-				DEFAULT_STRICT_QUOTES,
-				DEFAULT_IGNORE_LEADING_WHITESPACE,
+				CSVParser.DEFAULT_STRICT_QUOTES,
+				CSVParser.DEFAULT_IGNORE_LEADING_WHITESPACE,
 				Charset.defaultCharset());
 	}
 	
@@ -681,14 +676,14 @@ public class CSV {
 		 * Constructs <code>CSVBuilder</code> with no quote char
 		 */
 		public Builder noQuote() {
-			return quote(CSVWriter.NO_QUOTE_CHARACTER);
+			return quote(Constants.NO_QUOTE_CHARACTER);
 		}
 		
 		/**
 		 * Constructs <code>CSVBuilder</code> with no escape char
 		 */
 		public Builder noEscape() {
-			return escape(CSVWriter.NO_ESCAPE_CHARACTER);
+			return escape(Constants.NO_ESCAPE_CHARACTER);
 		}
 		
 		/**

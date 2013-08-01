@@ -53,7 +53,7 @@ public class CSVReader implements Closeable {
      *            the reader to an underlying CSV source.
      */
     public CSVReader(Reader reader) {
-        this(reader, CSVParser.DEFAULT_SEPARATOR, CSVParser.DEFAULT_QUOTE_CHARACTER, CSVParser.DEFAULT_ESCAPE_CHARACTER);
+        this(reader, Constants.DEFAULT_SEPARATOR, Constants.DEFAULT_QUOTE_CHARACTER, Constants.DEFAULT_ESCAPE_CHARACTER);
     }
 
     /**
@@ -65,7 +65,7 @@ public class CSVReader implements Closeable {
      *            the delimiter to use for separating entries.
      */
     public CSVReader(Reader reader, char separator) {
-        this(reader, separator, CSVParser.DEFAULT_QUOTE_CHARACTER, CSVParser.DEFAULT_ESCAPE_CHARACTER);
+        this(reader, separator, Constants.DEFAULT_QUOTE_CHARACTER, Constants.DEFAULT_ESCAPE_CHARACTER);
     }
 
     /**
@@ -79,7 +79,7 @@ public class CSVReader implements Closeable {
      *            the character to use for quoted elements
      */
     public CSVReader(Reader reader, char separator, char quotechar) {
-        this(reader, separator, quotechar, CSVParser.DEFAULT_ESCAPE_CHARACTER, DEFAULT_SKIP_LINES, CSVParser.DEFAULT_STRICT_QUOTES);
+        this(reader, separator, quotechar, Constants.DEFAULT_ESCAPE_CHARACTER, DEFAULT_SKIP_LINES, CSVParser.DEFAULT_STRICT_QUOTES);
     }
 
     /**
@@ -96,7 +96,7 @@ public class CSVReader implements Closeable {
      *            sets if characters outside the quotes are ignored
      */
     public CSVReader(Reader reader, char separator, char quotechar, boolean strictQuotes) {
-        this(reader, separator, quotechar, CSVParser.DEFAULT_ESCAPE_CHARACTER, DEFAULT_SKIP_LINES, strictQuotes);
+        this(reader, separator, quotechar, Constants.DEFAULT_ESCAPE_CHARACTER, DEFAULT_SKIP_LINES, strictQuotes);
     }
 
    /**
@@ -130,7 +130,7 @@ public class CSVReader implements Closeable {
      *            the line number to skip for start reading 
      */
     public CSVReader(Reader reader, char separator, char quotechar, int line) {
-        this(reader, separator, quotechar, CSVParser.DEFAULT_ESCAPE_CHARACTER, line, CSVParser.DEFAULT_STRICT_QUOTES);
+        this(reader, separator, quotechar, Constants.DEFAULT_ESCAPE_CHARACTER, line, CSVParser.DEFAULT_STRICT_QUOTES);
     }
 
     /**
