@@ -9,6 +9,6 @@
   </parent>
   <groupId>org.cishell.libs</groupId>
   <artifactId>opencsv</artifactId>
-  <version>2.2.0</version>
+  <version>3.0.0</version>
   <packaging>eclipse-plugin</packaging>
 </project>
