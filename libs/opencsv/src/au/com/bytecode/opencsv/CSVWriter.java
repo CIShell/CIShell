@@ -46,27 +46,6 @@ public class CSVWriter implements Closeable {
     
     private String lineEnd;
 
-    /** The character used for escaping quotes. */
-    public static final char DEFAULT_ESCAPE_CHARACTER = '"';
-
-    /** The default separator to use if none is supplied to the constructor. */
-    public static final char DEFAULT_SEPARATOR = ',';
-
-    /**
-     * The default quote character to use if none is supplied to the
-     * constructor.
-     */
-    public static final char DEFAULT_QUOTE_CHARACTER = '"';
-    
-    /** The quote constant to use when you wish to suppress all quoting. */
-    public static final char NO_QUOTE_CHARACTER = '\u0000';
-    
-    /** The escape constant to use when you wish to suppress all escaping. */
-    public static final char NO_ESCAPE_CHARACTER = '\u0000';
-    
-    /** Default line terminator uses platform encoding. */
-    public static final String DEFAULT_LINE_END = "\n";
-
     private ResultSetHelper resultService = new ResultSetHelperService();
     
     /**
@@ -76,7 +55,7 @@ public class CSVWriter implements Closeable {
      *            the writer to an underlying CSV source.
      */
     public CSVWriter(Writer writer) {
-        this(writer, DEFAULT_SEPARATOR);
+        this(writer, Constants.DEFAULT_SEPARATOR);
     }
 
     /**
@@ -88,7 +67,7 @@ public class CSVWriter implements Closeable {
      *            the delimiter to use for separating entries.
      */
     public CSVWriter(Writer writer, char separator) {
-        this(writer, separator, DEFAULT_QUOTE_CHARACTER);
+        this(writer, separator, Constants.DEFAULT_QUOTE_CHARACTER);
     }
 
     /**
@@ -102,7 +81,7 @@ public class CSVWriter implements Closeable {
      *            the character to use for quoted elements
      */
     public CSVWriter(Writer writer, char separator, char quotechar) {
-    	this(writer, separator, quotechar, DEFAULT_ESCAPE_CHARACTER);
+    	this(writer, separator, quotechar, Constants.DEFAULT_ESCAPE_CHARACTER);
     }
 
     /**
@@ -118,9 +97,8 @@ public class CSVWriter implements Closeable {
      *            the character to use for escaping quotechars or escapechars
      */
     public CSVWriter(Writer writer, char separator, char quotechar, char escapechar) {
-        this(writer, separator, quotechar, escapechar, DEFAULT_LINE_END);
+        this(writer, separator, quotechar, escapechar, Constants.DEFAULT_LINE_END);
     }
-    
     
     /**
      * Constructs CSVWriter with supplied separator and quote char.
@@ -135,10 +113,8 @@ public class CSVWriter implements Closeable {
      * 			  the line feed terminator to use
      */
     public CSVWriter(Writer writer, char separator, char quotechar, String lineEnd) {
-        this(writer, separator, quotechar, DEFAULT_ESCAPE_CHARACTER, lineEnd);
-    }   
-    
-    
+        this(writer, separator, quotechar, Constants.DEFAULT_ESCAPE_CHARACTER, lineEnd);
+    }
     
     /**
      * Constructs CSVWriter with supplied separator, quote char, escape char and line ending.
@@ -215,7 +191,7 @@ public class CSVWriter implements Closeable {
      *            a string array with each comma-separated element as a separate
      *            entry.
      */
-    public void writeNext(String[] nextLine) {
+    public void writeNext(String... nextLine) {
     	
     	if (nextLine == null)
     		return;
@@ -230,12 +206,12 @@ public class CSVWriter implements Closeable {
             String nextElement = nextLine[i];
             if (nextElement == null)
                 continue;
-            if (quotechar !=  NO_QUOTE_CHARACTER)
+            if (quotechar !=  Constants.NO_QUOTE_CHARACTER)
             	sb.append(quotechar);
             
             sb.append(stringContainsSpecialCharacters(nextElement) ? processLine(nextElement) : nextElement);
 
-            if (quotechar != NO_QUOTE_CHARACTER)
+            if (quotechar != Constants.NO_QUOTE_CHARACTER)
             	sb.append(quotechar);
         }
         
@@ -253,10 +229,10 @@ public class CSVWriter implements Closeable {
 		StringBuilder sb = new StringBuilder(INITIAL_STRING_SIZE);
 	    for (int j = 0; j < nextElement.length(); j++) {
 	        char nextChar = nextElement.charAt(j);
-	        if (escapechar != NO_ESCAPE_CHARACTER && nextChar == quotechar) {
-	        	sb.append(escapechar).append(nextChar);
-	        } else if (escapechar != NO_ESCAPE_CHARACTER && nextChar == escapechar) {
-	        	sb.append(escapechar).append(nextChar);
+	        if (nextChar == quotechar) {
+	        	sb.append(quotechar).append(quotechar);
+	        } else if (escapechar != Constants.NO_ESCAPE_CHARACTER && nextChar == escapechar) {
+	        	sb.append(escapechar).append(escapechar);
 	        } else {
 	            sb.append(nextChar);
 	        }
@@ -271,9 +247,7 @@ public class CSVWriter implements Closeable {
      * @throws IOException if bad things happen
      */
     public void flush() throws IOException {
-
         pw.flush();
-
     } 
 
     /**
@@ -298,5 +272,8 @@ public class CSVWriter implements Closeable {
     public void setResultService(ResultSetHelper resultService) {
         this.resultService = resultService;
     }
-
+    
+	public void write(CSVWriteProc proc) {
+		proc.process(this);
+	}
 }

@@ -1,0 +1,10 @@
+This OpenCSV is a copy OpenCSV from GitHub with the following modification.
+
+au.com.bytecode.opencsv.Constants.DEFAULT_ESCAPE_CHARACTER is set to NO_ESCAPE_CHARACTER
+
+This modification is to align CIShell CSV reader behavior with MS Excel. 
+For more information about the decision, please refer to JIRA issue 
+
+http://jira.cns.iu.edu/browse/SCISQUARED-1119 
+
+The CIShell CSV specification is available on Wiki documentation.
