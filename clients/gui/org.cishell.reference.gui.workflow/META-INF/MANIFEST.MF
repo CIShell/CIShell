@@ -1,0 +1,30 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Workflow
+Bundle-SymbolicName: org.cishell.reference.gui.workflow; singleton:=true
+Bundle-Version: 1.0.0
+Bundle-Activator: org.cishell.reference.gui.workflow.Activator
+Bundle-Localization: plugin
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.cishell.reference.gui.menumanager;bundle-version="1.0.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ActivationPolicy: lazy
+Import-Package: 
+ org.cishell.app.service.datamanager;version="1.0.0",
+ org.cishell.app.service.scheduler;version="1.0.0",
+ org.cishell.framework,
+ org.cishell.framework.algorithm,
+ org.cishell.framework.data,
+ org.cishell.reference.app.service.algorithminvocation,
+ org.cishell.reference.gui.menumanager.menu,
+ org.cishell.reference.gui.workspace,
+ org.cishell.reference.service.metatype,
+ org.cishell.service.conversion;version="1.0.0",
+ org.cishell.service.guibuilder;version="1.0.0",
+ org.osgi.service.metatype;version="1.2.0"
+Eclipse-LazyStart: true
+Bundle-ClassPath: .,
+ lib/xstream-1.4.3.jar
