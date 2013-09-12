@@ -16,24 +16,21 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Tree;
 
 public class ManageView {
+	private final String PARAMETER_IMAGE_NAME = "parameters.png";
 
-	public void updateUI(Tree tree, TreeViewer viewer) {
-		System.out.print("Inside update ui");
-
+	public void updateUI(Tree tree, TreeViewer viewer, String brandPluginID) {
 		tree.clearAll(true);
 
-		WorkflowTreeItem rootItem = new WorkflowGUI(null, null, 2);
+		WorkflowTreeItem rootItem = new WorkflowGUI(null, null, 2, brandPluginID);
 		viewer.setInput(rootItem);
 		viewer.expandAll();
 
 		LinkedHashMap<Long, Workflow> map = WorkflowManager.getInstance()
 				.getMap();
-		System.out.println("size of map " + map.size());
 		for (Map.Entry<Long, Workflow> entry : map.entrySet()) {
-			System.out.print("Workflow");
 			NormalWorkflow wf = (NormalWorkflow) entry.getValue();
 			WorkflowTreeItem wfnew = new WorkflowGUI(wf,
-					(WorkflowGUI) rootItem, 0);
+					(WorkflowGUI) rootItem, 0, brandPluginID);
 			rootItem.addChild(wfnew);
 			LinkedHashMap<Long, WorkflowItem> itemMap = wf.getMap();
 			WorkflowTreeItem parent = wfnew;
@@ -41,7 +38,7 @@ public class ManageView {
 				AlgorithmWorkflowItem algoItem = (AlgorithmWorkflowItem) itemEntry
 						.getValue();
 				final AlgorithmItemGUI dataItem = new AlgorithmItemGUI(
-						algoItem, parent);
+						algoItem, parent, brandPluginID);
 				parent.addChild(dataItem);
 				parent = dataItem;
 
@@ -50,8 +47,8 @@ public class ManageView {
 					continue;
 				final GeneralTreeItem paramLabel = new GeneralTreeItem(
 						"Parameters", Constant.Label, dataItem, Utils.getImage(
-								"matrix.png",
-								"org.cishell.reference.gui.workflow"));
+								PARAMETER_IMAGE_NAME,
+								brandPluginID));
 				dataItem.addChild(paramLabel);
 
 				for (Enumeration e = params.keys(); e.hasMoreElements();) {
@@ -64,14 +61,14 @@ public class ManageView {
 
 					GeneralTreeItem paramName = new GeneralTreeItem(key,
 							Constant.ParameterName, paramLabel, Utils.getImage(
-									"matrix.png",
-									"org.cishell.reference.gui.workflow"));
+									PARAMETER_IMAGE_NAME,
+									brandPluginID));
 
 					paramLabel.addChildren(paramName);
 					GeneralTreeItem paramValue = new GeneralTreeItem(strvalue,
 							Constant.ParameterValue, paramName, Utils.getImage(
-									"matrix.png",
-									"org.cishell.reference.gui.workflow"));
+									PARAMETER_IMAGE_NAME,
+									brandPluginID));
 					paramName.addChildren(paramValue);
 
 				}
@@ -81,9 +78,9 @@ public class ManageView {
 		viewer.expandAll();
 	}
 
-	void addworkflow(WorkflowGUI rootItem, Workflow workflow) {
+	void addworkflow(WorkflowGUI rootItem, Workflow workflow, String brandPluginID) {
 		NormalWorkflow wf = (NormalWorkflow) workflow;
-		WorkflowGUI wfnew = new WorkflowGUI(wf, (WorkflowGUI) rootItem, 0);
+		WorkflowGUI wfnew = new WorkflowGUI(wf, (WorkflowGUI) rootItem, 0, brandPluginID);
 		rootItem.addChild(wfnew);
 		LinkedHashMap<Long, WorkflowItem> itemMap = wf.getMap();
 		WorkflowTreeItem parent = wfnew;
@@ -92,7 +89,7 @@ public class ManageView {
 			AlgorithmWorkflowItem algoItem = (AlgorithmWorkflowItem) itemEntry
 					.getValue();
 			final AlgorithmItemGUI dataItem = new AlgorithmItemGUI(algoItem,
-					parent);
+					parent, brandPluginID);
 			parent.addChild(dataItem);
 			parent = dataItem;
 
@@ -103,7 +100,7 @@ public class ManageView {
 				continue;
 			final GeneralTreeItem paramLabel = new GeneralTreeItem(
 					"Parameters", Constant.Label, dataItem, Utils.getImage(
-							"matrix.png", "org.cishell.reference.gui.workflow"));
+							PARAMETER_IMAGE_NAME, brandPluginID));
 			dataItem.addChild(paramLabel);
 
 			for (Enumeration e = nameToId.keys(); e.hasMoreElements();) {
@@ -115,14 +112,14 @@ public class ManageView {
 				}
 				GeneralTreeItem paramName = new GeneralTreeItem(key,
 						Constant.ParameterName, paramLabel, Utils.getImage(
-								"matrix.png",
-								"org.cishell.reference.gui.workflow"));
+								PARAMETER_IMAGE_NAME,
+								brandPluginID));
 
 				paramLabel.addChildren(paramName);
 				GeneralTreeItem paramValue = new GeneralTreeItem(strvalue,
 						Constant.ParameterValue, paramName, Utils.getImage(
-								"matrix.png",
-								"org.cishell.reference.gui.workflow"));
+								PARAMETER_IMAGE_NAME,
+								brandPluginID));
 				paramName.addChildren(paramValue);
 
 			}

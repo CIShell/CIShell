@@ -42,7 +42,6 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 		ciShellContext = new LocalCIShellContext(context);
 
 		if (waitForBundleContext) {
-			// System.out.println( "Inside Start");
 			earlyStartup();
 		}
 	}

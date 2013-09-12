@@ -12,8 +12,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.cishell.framework.algorithm.Algorithm;
-
 import org.cishell.framework.data.DataProperty;
 import org.cishell.reference.gui.workflow.Utilities.Constant;
 import org.cishell.reference.gui.workflow.model.Workflow;
@@ -32,21 +30,12 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
  * @author Team IVC
  */
 public class WorkflowGUI implements WorkflowTreeItem {
-	private String brandPluginID;
 	
-    //images for the defined types
-//    private Image matrixIcon;
-    private Image treeIcon;
-    private Image networkIcon;
+    private Image algorithmIcon;
+    private Image parametersIcon;
+    private Image workflowIcon;
+    private Image workflow_mgrIcon;
     private Image unknownIcon;
-    private Image textIcon;
-    private Image plotIcon;
-    private Image tableIcon;
-    private Image databaseIcon;
-    private Image rasterImageIcon;
-    private Image vectorImageIcon;
-    private Image modelIcon;
-    private Image rIcon;
     private Workflow workflow;
     
     
@@ -55,7 +44,6 @@ public class WorkflowGUI implements WorkflowTreeItem {
     private Collection<WorkflowGUI> children = new ArrayList<WorkflowGUI>();
     private Collection<AlgorithmItemGUI> workFlowItemChildren = new ArrayList<AlgorithmItemGUI>();
 
-    private Algorithm algorithm;
     private String label;
     private WorkflowGUI parent;
 
@@ -65,28 +53,23 @@ public class WorkflowGUI implements WorkflowTreeItem {
      *
      * @param model the DataModel this DataModelGUIItem is using
      * @param parent the parent DataModelGUIItem of this DataModelGUIItem
+     * @param brandPluginID 
      */
     
-    public WorkflowGUI(Workflow workflow, WorkflowGUI parent,int type) {
+    public WorkflowGUI(Workflow workflow, WorkflowGUI parent,int type, String brandPluginID) {
     	if(workflow !=null)
     	    label = workflow.getName();
     	this.workflow = workflow;
-    	this.brandPluginID = "org.cishell.reference.gui.workflow";
-//      matrixIcon      = getImage("matrix.png", this.brandPluginID);
-      modelIcon       = getImage("tree.png", this.brandPluginID);
-  
-
-      registerImage(DataProperty.OTHER_TYPE, unknownIcon);
-      
-      /********************************************
-       * This is a temporary work around solution.
-       * Since many algs claims the output data type is MATRIX_TYPE,
-       * but in fact it should be TABLE_TYPE. 
-       * Should associate MATRIX_TYPE with matrixIcon and clean up
-       * related algs.
-       * ******************************************/      
-          registerImage(DataProperty.MODEL_TYPE, modelIcon);  	
-    	
+         algorithmIcon     = getImage("algorithm.png", brandPluginID);
+         parametersIcon    = getImage("parameters.png", brandPluginID);
+         workflowIcon      = getImage("workflow.png", brandPluginID);
+         workflow_mgrIcon  = getImage("workflow_mgr.png", brandPluginID);
+         unknownIcon       = getImage("unknown.png", brandPluginID);
+         registerImage(DataProperty.MODEL_TYPE, algorithmIcon);
+         registerImage(DataProperty.TABLE_TYPE, parametersIcon);
+         registerImage(DataProperty.TREE_TYPE, workflowIcon);
+         registerImage(DataProperty.OTHER_TYPE, workflow_mgrIcon);
+         registerImage(DataProperty.OTHER_TYPE, unknownIcon);
     }
     
 
@@ -145,24 +128,9 @@ public class WorkflowGUI implements WorkflowTreeItem {
         this.children.remove(item);
     }
     
-//    /**
-//     * Returns the icon associated with this DataModel for display in IVC.
-//     * 
-//     * @return the icon associated with this DataModel for display in IVC
-//     */
-//    public Image getIcon() {
-//        Image icon = this.typeToImage.get(dataProperty);
-//
-//        if (icon == null) {
-//        	icon = unknownIcon;
-//        }
-//
-//        return icon;
-//    }
     
     public Image getIcon() {
-     
-        return this.modelIcon;
+        return this.workflowIcon;
     }
     
     
@@ -203,15 +171,12 @@ public class WorkflowGUI implements WorkflowTreeItem {
     private static final String DEFAULT_IMAGE_LOCATION = File.separator + "unknown.png";
     
     private static Image getDefaultImage() {
-    	String thisPluginID = "org.cishell.reference.gui.datamanager"; //TODO: don't hardcode this
-    	ImageDescriptor imageDescriptor = AbstractUIPlugin.imageDescriptorFromPlugin(
-    			thisPluginID, DEFAULT_IMAGE_LOCATION);
+    	ImageDescriptor imageDescriptor = AbstractUIPlugin.imageDescriptorFromPlugin(null, DEFAULT_IMAGE_LOCATION);
     	return imageDescriptor.createImage();
     }
 
 	@Override
 	public String getType() {
-		// TODO Auto-generated method stub
 		return Constant.Workflow;
 	}
 	
@@ -236,7 +201,6 @@ public class WorkflowGUI implements WorkflowTreeItem {
 
 	@Override
 	public boolean hasChild(WorkflowTreeItem wfTreeItem) {
-		// TODO Auto-generated method stub
 		return workFlowItemChildren.contains(wfTreeItem);
 	}
 

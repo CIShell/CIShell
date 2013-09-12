@@ -7,7 +7,7 @@
 	<view
        allowMultiple="false"
        class="org.cishell.reference.gui.workflow.views.WorkflowView"
-       icon="icons/log_icon.gif"
+       icon="icons/workflow_mgr.png"
        id="org.cishell.reference.gui.workflow.views.WorkflowView"
        name="Workflow"/>
    </extension> 

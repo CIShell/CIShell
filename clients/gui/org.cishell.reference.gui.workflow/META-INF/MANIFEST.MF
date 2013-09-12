@@ -28,3 +28,5 @@ Import-Package:
 Eclipse-LazyStart: true
 Bundle-ClassPath: .,
  lib/xstream-1.4.3.jar
+Export-Package: org.cishell.reference.gui.workflow.views
+

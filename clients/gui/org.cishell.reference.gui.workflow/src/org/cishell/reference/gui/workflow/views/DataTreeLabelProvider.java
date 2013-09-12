@@ -6,15 +6,8 @@
  */
 package org.cishell.reference.gui.workflow.views;
 
-import org.cishell.framework.algorithm.Algorithm;
-import org.cishell.framework.algorithm.AlgorithmProperty;
-import org.cishell.framework.data.Data;
-import org.cishell.framework.data.DataProperty;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
-import org.osgi.framework.ServiceReference;
-
-import org.cishell.reference.gui.workflow.Activator;
 
 
 /**

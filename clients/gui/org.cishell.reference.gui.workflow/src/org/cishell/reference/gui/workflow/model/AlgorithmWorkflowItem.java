@@ -47,11 +47,8 @@ public class AlgorithmWorkflowItem implements WorkflowItem {
 	public AlgorithmWorkflowItem(String name, Long id, String pid) {
 		this.name = name;
 		this.internalId = id;
-		System.out.println("id =" + id);
 		nameToId = new Hashtable<String, String>();
 		this.pid = pid;
-		System.out.println("\npid =" + pid);
-
 	}
 
 	@Override
@@ -177,9 +174,6 @@ public class AlgorithmWorkflowItem implements WorkflowItem {
 								dataSet.remove(jj);
 								this.inputData[ii] = datum;
 								this.converters[ii] = conversion;
-							} else {
-								System.out.println("converter notfound");
-
 							}
 						}
 					}
@@ -209,7 +203,8 @@ public class AlgorithmWorkflowItem implements WorkflowItem {
 				if (clazz != null && clazz.isInstance(data)) {
 					assignable = true;
 				}
-			} catch (ClassNotFoundException e) { /* Ignore. */
+			} catch (ClassNotFoundException e) { 
+				assignable = false;
 			}
 		}
 
@@ -250,7 +245,6 @@ public class AlgorithmWorkflowItem implements WorkflowItem {
 
 	public void setInputData(Data[] data) {
 		setServiceReferenceFromBundle();
-		// this.inputData = data;
 		try {
 			dataSelected(data);
 			tryConvertingDataToRequiredFormat();
@@ -274,7 +268,6 @@ public class AlgorithmWorkflowItem implements WorkflowItem {
 		if (logger != null) {
 			logger.log(this.serviceReference, logLevel, message, exception);
 		} else {
-			System.out.println(message);
 			exception.printStackTrace();
 		}
 	}

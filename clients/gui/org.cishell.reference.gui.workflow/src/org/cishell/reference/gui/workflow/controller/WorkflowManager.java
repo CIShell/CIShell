@@ -44,7 +44,6 @@ public class WorkflowManager {
   public Workflow createWorkflow(String name, String type)
   {
 	  Long newID =getUniqueInternalId();
-	  //needed to move this to constants file
 	  if(type == Constant.NormalWorkflow){
 		  currentWorkflow= new NormalWorkflow(name+newID,newID);
 		  map.put(newID, currentWorkflow);

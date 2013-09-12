@@ -100,8 +100,6 @@ public class WorkflowMaker {
 						public void run() {
 		XStream writer = new XStream(new StaxDriver());
 		writer.autodetectAnnotations(true);
-
-		//writer.alias("workflowmaker", WorkflowMaker.class );
 		String xml = writer.toXML(new WorkflowSaver(wf));
 		File currentDirectory = null;
 		JFileChooser fileChooser = new JFileChooser();
@@ -115,7 +113,6 @@ public class WorkflowMaker {
 		    file = new File(filePath + ".xml");
 		}
 		
-		//File file = new File(state.getFilename());
 		if (file != null) {
 			try {
 				FileWriter fstream;

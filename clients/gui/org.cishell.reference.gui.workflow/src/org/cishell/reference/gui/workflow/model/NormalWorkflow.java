@@ -56,10 +56,7 @@ public class NormalWorkflow implements Workflow {
 						bundleContext.getServiceReference(
 								DataManagerService.class.getName()));
 	  Data[] data = dataManager.getSelectedData();
-
-	 // if(data[0]!= null)
-	   // System.out.println(data[0].getMetadata().get(DataProperty.LABEL));
-
+	  
 		for(Map.Entry<Long, WorkflowItem> entry: itemMap.entrySet())
 		{
 			WorkflowItem item = entry.getValue();

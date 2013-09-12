@@ -66,7 +66,6 @@ import org.osgi.service.metatype.AttributeDefinition;
 import org.osgi.service.metatype.MetaTypeProvider;
 import org.osgi.service.metatype.MetaTypeService;
 import org.osgi.service.metatype.ObjectClassDefinition;
-
 import org.cishell.reference.gui.workflow.Activator;
 import org.osgi.framework.Constants;
 
@@ -92,10 +91,12 @@ public class WorkflowView extends ViewPart implements SchedulerListener {
 	private Text newEditor;
 	private boolean updatingTreeItem;
 	private WorkflowTreeItem currentParentItem;
-	
-	public WorkflowView() {
-		workFlowView = this;		
-		
+	private String brandPluginID;
+	private String pluginID = "org.cishell.reference.gui.workflow";
+
+	public WorkflowView(String brandPluginID) {
+		this.brandPluginID = brandPluginID;
+		workFlowView = this;
 	}
 
 	/**
@@ -114,15 +115,14 @@ public class WorkflowView extends ViewPart implements SchedulerListener {
 	 * @param parent
 	 *            The SWT parent
 	 */
+
 	@Override
 	public void createPartControl(Composite parent) {
-
-		
 		this.viewer = new TreeViewer(parent);
 		this.viewer.setContentProvider(new DataTreeContentProvider());
 		this.viewer.setLabelProvider(new DataTreeLabelProvider());
 
-		this.rootItem = new WorkflowGUI(null, null, 2);
+		this.rootItem = new WorkflowGUI(null, null, 2, this.brandPluginID);
 		this.viewer.setInput(this.rootItem);
 		this.viewer.expandAll();
 		this.tree = this.viewer.getTree();
@@ -134,63 +134,61 @@ public class WorkflowView extends ViewPart implements SchedulerListener {
 		this.menu = new Menu(tree);
 		this.menu.setVisible(false);
 
-		MenuItem saveItem = new MenuItem(this.menu, SWT.PUSH);
-		saveItem.setText("Save");
-		this.saveListener = new SaveListener();
-		saveItem.addListener(SWT.Selection, this.saveListener);
-
-		MenuItem runItem = new MenuItem(this.menu, SWT.PUSH);
-		runItem.setText("Run");
-		this.runListener = new RunListener();
-		runItem.addListener(SWT.Selection, runListener);
-
-		MenuItem deleteItem = new MenuItem(this.menu, SWT.PUSH);
-		deleteItem.setText("Delete");
-		this.deleteListener = new DeleteListener();
-		deleteItem.addListener(SWT.Selection, this.deleteListener);
-
 		MenuItem changeItem = new MenuItem(this.menu, SWT.PUSH);
-		changeItem.setText("Change");
+		changeItem.setText("Edit");
 		changeItem.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event event) {
 				handleInput();
 			}
 		});
 
+		MenuItem runItem = new MenuItem(this.menu, SWT.PUSH);
+		runItem.setText("Run");
+		this.runListener = new RunListener();
+		runItem.addListener(SWT.Selection, runListener);
+
+		MenuItem saveItem = new MenuItem(this.menu, SWT.PUSH);
+		saveItem.setText("Save");
+		this.saveListener = new SaveListener();
+		saveItem.addListener(SWT.Selection, this.saveListener);
+
+		MenuItem deleteItem = new MenuItem(this.menu, SWT.PUSH);
+		deleteItem.setText("Delete");
+		this.deleteListener = new DeleteListener();
+		deleteItem.addListener(SWT.Selection, this.deleteListener);
+
 		this.editor = new TreeEditor(this.tree);
 		this.editor.horizontalAlignment = SWT.LEFT;
 		this.editor.grabHorizontal = true;
 		this.editor.minimumWidth = 50;
 
-		// create white spacemennu
+		// create white space menu
+		
 		this.whiteSpacemenu = new Menu(tree);
 		this.whiteSpacemenu.setVisible(false);
 
 		MenuItem newItem = new MenuItem(this.whiteSpacemenu, SWT.PUSH);
 		newItem.setText("New Workflow");
-		
+
 		MenuItem loadItem = new MenuItem(this.whiteSpacemenu, SWT.PUSH);
 		loadItem.setText("Load");
 		this.loadListener = new LoadListener();
 		loadItem.addListener(SWT.Selection, this.loadListener);
-        
+
 		guiRun(new Runnable() {
 			public void run() {
 				try {
-					IWorkbenchPage page = WorkflowView.this.getSite().getPage();
-
+					IWorkbenchPage page = WorkflowView.this.getSite()
+							.getPage();
 					page.showView("org.cishell.reference.gui.datamanager.DataManagerView");
 				} catch (PartInitException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
+			}
 
-				}
-			
 		});
-        
-				newItem.addListener(SWT.Selection, new NewWorkflow());
+
+		newItem.addListener(SWT.Selection, new NewWorkflow());
 
 		addNewWorkflow("Workflow ");
 		SchedulerContentModel.getInstance().register(this);
@@ -200,15 +198,11 @@ public class WorkflowView extends ViewPart implements SchedulerListener {
 		String pid = (String) ref.getProperty(Constants.SERVICE_PID);
 		String metatype_pid = (String) ref
 				.getProperty(AlgorithmProperty.PARAMETERS_PID);
-		// String metatype_pid ="parameters_pid2;
 		if (metatype_pid == null) {
 			metatype_pid = pid;
 		}
-
 		return metatype_pid;
 	}
-
-
 
 	@Override
 	public void algorithmScheduled(Algorithm algorithm, Calendar time) {
@@ -230,7 +224,7 @@ public class WorkflowView extends ViewPart implements SchedulerListener {
 		Workflow workfFlow = WorkflowManager.getInstance().createWorkflow(name,
 				Constant.NormalWorkflow);
 		final WorkflowGUI dataItem = new WorkflowGUI(workfFlow,
-				this.currentWorkFlowItem, 1);
+				this.currentWorkFlowItem, 1, this.brandPluginID);
 		this.currentWorkFlowItem = dataItem;
 		this.currentParentItem = dataItem;
 		this.rootItem.addChild(dataItem);
@@ -267,11 +261,10 @@ public class WorkflowView extends ViewPart implements SchedulerListener {
 		wfi.setParameters(parameters);
 		wfi.setWorkflow(currentWorkFlowItem.getWorkflow());
 		currentWorkFlowItem.getWorkflow().add(wfi);
-		
+
 		final AlgorithmItemGUI dataItem = new AlgorithmItemGUI(wfi,
-				this.currentParentItem);
+				this.currentParentItem, this.brandPluginID);
 		this.currentParentItem.addChild(dataItem);
-		// System.out.println("current Parent Item !!!!!!!!!!"+
 		this.currentParentItem = dataItem;
 		refresh(dataItem);
 		// Create algorithm parameters.
@@ -288,7 +281,6 @@ public class WorkflowView extends ViewPart implements SchedulerListener {
 			String logMessage = String.format(format,
 					serviceReference.getProperty(AlgorithmProperty.LABEL),
 					e.getMessage());
-			// log(LogService.LOG_ERROR, logMessage, e);
 
 			return;
 		} catch (Exception e) {
@@ -299,8 +291,8 @@ public class WorkflowView extends ViewPart implements SchedulerListener {
 			return;
 
 		final GeneralTreeItem paramItem = new GeneralTreeItem("Parameters",
-				Constant.Label, dataItem, Utils.getImage("matrix.png",
-						"org.cishell.reference.gui.workflow"));
+				Constant.Label, dataItem, Utils.getImage("parameters.png",
+						pluginID));
 		dataItem.addChild(paramItem);
 		ObjectClassDefinition obj = provider.getObjectClassDefinition(
 				metatypePID, null);
@@ -318,25 +310,23 @@ public class WorkflowView extends ViewPart implements SchedulerListener {
 				if (valueRaw != null) {
 					value = valueRaw.toString();
 				}
-				// System.out.println( "id=" +id +"name="+ name +"\n");
 				GeneralTreeItem paramName = new GeneralTreeItem(name,
 						Constant.ParameterName, paramItem, Utils.getImage(
-								"matrix.png",
-								"org.cishell.reference.gui.workflow"));
+								"parameters.png",
+								pluginID));
 				paramItem.addChildren(paramName);
 				GeneralTreeItem paramValue = new GeneralTreeItem(value,
 						Constant.ParameterValue, paramName, Utils.getImage(
-								"matrix.png",
-								"org.cishell.reference.gui.workflow"));
+								"parameters.png",
+								pluginID));
 				paramName.addChildren(paramValue);
 			}
 		}
-        
+
 		refresh(paramItem);
 	}
-	
-	private void refresh(final WorkflowTreeItem item)
-	{
+
+	private void refresh(final WorkflowTreeItem item) {
 		guiRun(new Runnable() {
 			public void run() {
 				if (!tree.isDisposed()) {
@@ -347,7 +337,7 @@ public class WorkflowView extends ViewPart implements SchedulerListener {
 				}
 			}
 		});
-		
+
 	}
 
 	@Override
@@ -355,7 +345,8 @@ public class WorkflowView extends ViewPart implements SchedulerListener {
 	}
 
 	@Override
-	public void schedulerRunStateChanged(boolean isRunning) {	}
+	public void schedulerRunStateChanged(boolean isRunning) {
+	}
 
 	@Override
 	public void schedulerCleared() {
@@ -395,8 +386,8 @@ public class WorkflowView extends ViewPart implements SchedulerListener {
 		public void mouseUp(MouseEvent event) {
 			if (event.button == 3) {
 
-				TreeItem item = WorkflowView.this.tree.getItem(new Point(
-						event.x, event.y));
+				TreeItem item = WorkflowView.this.tree
+						.getItem(new Point(event.x, event.y));
 
 				if (item != null) {
 					WorkflowView.this.menu.setVisible(true);
@@ -414,15 +405,15 @@ public class WorkflowView extends ViewPart implements SchedulerListener {
 			return true;
 		return false;
 	}
-   
-	public void UpdateUI(){
+
+	public void UpdateUI() {
 		ManageView mview = new ManageView();
-		mview.updateUI(this.tree, this.viewer);
+		mview.updateUI(this.tree, this.viewer, this.brandPluginID);
 	}
-     
-	public void addWorflowtoUI(Workflow wf){
+
+	public void addWorflowtoUI(Workflow wf) {
 		ManageView mview = new ManageView();
-		mview.addworkflow(this.rootItem,wf);
+		mview.addworkflow(this.rootItem, wf, this.brandPluginID);
 		this.viewer.refresh();
 
 	}
@@ -458,12 +449,12 @@ public class WorkflowView extends ViewPart implements SchedulerListener {
 				}
 			}
 		});
-		// ENTER ESC
 		this.newEditor.addKeyListener(new KeyAdapter() {
 			public void keyReleased(KeyEvent e) {
 				if ((e.character == SWT.CR)
 						&& !WorkflowView.this.updatingTreeItem) {
-					updateText(WorkflowView.this.newEditor.getText(), item);
+					updateText(WorkflowView.this.newEditor.getText(),
+							item);
 				} else if (e.keyCode == SWT.ESC) {
 					WorkflowView.this.newEditor.dispose();
 				}
@@ -483,47 +474,42 @@ public class WorkflowView extends ViewPart implements SchedulerListener {
 		this.editor.getItem().setText(newLabel);
 		WorkflowTreeItem wfTreeItem = (WorkflowTreeItem) item.getData();
 		if (wfTreeItem.getType() == Constant.ParameterValue) {
-           try{
-			String paramName = wfTreeItem.getParent().getLabel();
-			WorkflowTreeItem alfoITem = wfTreeItem.getParent().getParent()
-					.getParent();
+			try {
+				String paramName = wfTreeItem.getParent().getLabel();
+				WorkflowTreeItem alfoITem = wfTreeItem.getParent().getParent()
+						.getParent();
 
-			System.out.println(" !!!!Type of the Object" + alfoITem.getType());
-			AlgorithmWorkflowItem wfg = (AlgorithmWorkflowItem) ((AlgorithmItemGUI) alfoITem)
-					.getWfItem();
-			Object obj = wfg.getParameterValue(paramName);
-			if (obj != null) {
-				// As reflecion does not work it is a work around
-				if (obj instanceof String) {
+				AlgorithmWorkflowItem wfg = (AlgorithmWorkflowItem) ((AlgorithmItemGUI) alfoITem)
+						.getWfItem();
+				Object obj = wfg.getParameterValue(paramName);
+				if (obj != null) {
+					if (obj instanceof String) {
+						obj = newLabel;
+					} else if (obj instanceof Integer) {
+						obj = Integer.parseInt(newLabel);
+					} else if (obj instanceof java.lang.Boolean) {
+						obj = Boolean.parseBoolean(newLabel);
+					} else if (obj instanceof java.lang.Float) {
+						obj = Float.parseFloat(newLabel);
+					} else if (obj instanceof java.lang.Double) {
+						obj = Double.parseDouble(newLabel);
+					} else if (obj instanceof java.lang.Long) {
+						obj = Long.parseLong(newLabel);
+					} else if (obj instanceof java.lang.Short) {
+						obj = Short.parseShort(newLabel);
+					}
+				} else {
 					obj = newLabel;
-				} else if (obj instanceof Integer) {
-					obj = Integer.parseInt(newLabel);
-				} else if (obj instanceof java.lang.Boolean) {
-					obj = Boolean.parseBoolean(newLabel);
-				} else if (obj instanceof java.lang.Float) {
-					obj = Float.parseFloat(newLabel);
-				} else if (obj instanceof java.lang.Double) {
-					obj = Double.parseDouble(newLabel);
-				} else if (obj instanceof java.lang.Long) {
-					obj = Long.parseLong(newLabel);
-				} else if (obj instanceof java.lang.Short) {
-					obj = Short.parseShort(newLabel);
 				}
-			} else {
-				obj = newLabel;
+				wfg.addParameter(paramName, obj);
+				wfTreeItem.setLabel(newLabel);
+			} catch (Exception e) {
+				viewer.refresh();
+				this.newEditor.dispose();
+				updatingTreeItem = false;
 			}
-			wfg.addParameter(paramName, obj);
-			System.out.println("parameter is" + obj);
-			wfTreeItem.setLabel(newLabel);
-           }
-           catch(Exception e)
-           {
-        	   viewer.refresh();
-       		this.newEditor.dispose();
-       		updatingTreeItem = false;
-           }
 		} else if (wfTreeItem.getType() == Constant.Workflow) {
-			  wfTreeItem.setLabel(newLabel);
+			wfTreeItem.setLabel(newLabel);
 			((WorkflowGUI) wfTreeItem).getWorkflow().setName(newLabel);
 		}
 		viewer.refresh();
@@ -545,11 +531,9 @@ public class WorkflowView extends ViewPart implements SchedulerListener {
 			String type = itm.getType();
 			if (type == Constant.Workflow) {
 				WorkflowGUI wfGUI = (WorkflowGUI) itm;
-				System.out.println("Save " + wfGUI.getLabel() + " Type: "
-						+ type);
-			
-			WorkflowMaker savedState = new WorkflowMaker();
-			savedState.save(wfGUI.getWorkflow());
+
+				WorkflowMaker savedState = new WorkflowMaker();
+				savedState.save(wfGUI.getWorkflow());
 			}
 		}
 	}
@@ -570,27 +554,25 @@ public class WorkflowView extends ViewPart implements SchedulerListener {
 		@Override
 		public void handleEvent(Event arg0) {
 			try {
-				TreeItem[] items = WorkflowView.this.tree.getSelection();
+				TreeItem[] items = WorkflowView.this.tree
+						.getSelection();
 				if (items.length != 1)
 					return;
 				WorkflowTreeItem itm = (WorkflowTreeItem) items[0].getData();
 				String type = itm.getType();
 				if (type == Constant.Workflow) {
 					WorkflowGUI wfGUI = (WorkflowGUI) itm;
-					System.out.println("Delete " + wfGUI.getLabel() + " Type:"
-							+ type);
 					WorkflowManager.getInstance().removeWorkflow(
 							wfGUI.getWorkflow());// model
 					itm.removeAllChildren();// GUI
 					rootItem.removeChild(wfGUI);// GUI
 					WorkflowView.this.viewer.refresh();
-					if (WorkflowView.this.rootItem.getRootsChildren().length == 0 || WorkflowView.this.currentWorkFlowItem == wfGUI) {
-						WorkflowView.this.addNewWorkflow("New Workflow");
+					if (WorkflowView.this.rootItem.getRootsChildren().length == 0
+							|| WorkflowView.this.currentWorkFlowItem == wfGUI) {
+						WorkflowView.this.addNewWorkflow("Workflow ");
 					}
 				} else if (type == Constant.AlgorithmUIItem) {
 					AlgorithmItemGUI aiGUI = (AlgorithmItemGUI) itm;
-					System.out.println("Delete " + aiGUI.getLabel() + " Type:"
-							+ type);
 					AlgorithmWorkflowItem wfItem = (AlgorithmWorkflowItem) aiGUI
 							.getWfItem();
 					Workflow wf = wfItem.getWorkflow();
@@ -598,15 +580,12 @@ public class WorkflowView extends ViewPart implements SchedulerListener {
 					WorkflowTreeItem parent = itm.getParent();// GUI
 					itm.removeAllChildren();
 					parent.removeChild(itm);
-					//rootItem.removeChild(aiGUI);
 					WorkflowView.this.viewer.refresh();
 					wf.remove(wfItem);// model
-					if (parent.getChildren().length == 0 ||WorkflowView.this.currentParentItem == aiGUI) {
+					if (parent.getChildren().length == 0
+							|| WorkflowView.this.currentParentItem == aiGUI) {
 						WorkflowView.this.currentParentItem = parent;
 					}
-
-				} else {
-					System.out.println("Cant Delete GeneralItem");
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -633,12 +612,12 @@ public class WorkflowView extends ViewPart implements SchedulerListener {
 
 	private class NewWorkflow implements Listener {
 		public void handleEvent(Event event) {
-			WorkflowView.this.addNewWorkflow("New Workflow");
+			WorkflowView.this.addNewWorkflow("Workflow ");
 
 		}
 	}
 
 	@Override
-	public void setFocus() {		
+	public void setFocus() {
 	}
 }

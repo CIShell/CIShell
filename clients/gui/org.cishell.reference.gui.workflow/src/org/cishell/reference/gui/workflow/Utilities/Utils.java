@@ -24,8 +24,8 @@ public class Utils {
 				String errorMessage = String
 						.format("Could not find the icon '%s' in '%s'. Using the default image instead.",
 								imageLocation, brandPluginID);
+				// TODO: Should change to Log.Debug if possible. 
 				System.err.println(errorMessage);
-				// need to change
 				return AlgorithmItemGUI.getDefaultImage();
 			}
 
@@ -33,8 +33,8 @@ public class Utils {
 			String format = "Could not obtain the image '%s' in '%s', since the platform was not "
 					+ "running (?). Using the default image instead.";
 			String errorMessage = String.format(format, name, brandPluginID);
+			// TODO: Should change to Log.Debug if possible. 
 			System.err.println(errorMessage);
-			// need to change
 			return AlgorithmItemGUI.getDefaultImage();
 		}
 	}
