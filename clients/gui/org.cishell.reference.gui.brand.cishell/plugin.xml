@@ -31,9 +31,19 @@
          icon="icons/datamanager_icon.gif"
          id="org.cishell.reference.gui.datamanager.DataManagerView"
          name="Data Manager"/>
-     </extension> 
+     </extension>
+    <extension
+          point="org.eclipse.ui.views">
+       <view
+             allowMultiple="false"
+             class="org.cishell.reference.gui.brand.cishell.WorkFlowView"
+             icon="icons/workflow_mgr.png"
+             id="org.cishell.reference.gui.workflow.views.WorkflowView"
+             name="Workflow Manager">
+       </view>
+    </extension> 
    	
-	   
+     
 	<extension point="org.eclipse.ui.perspectiveExtensions">
       <perspectiveExtension targetID="org.cishell.reference.gui.workspace.Perspective">
            <view id="org.cishell.reference.gui.log.LogView"
@@ -43,7 +53,7 @@
                 closeable = "false"
                 ratio="0.60"/>
       </perspectiveExtension>
-
+      
       <perspectiveExtension targetID="org.cishell.reference.gui.workspace.Perspective">
            <view
                  closeable="false"
@@ -54,20 +64,7 @@
                  relative="org.cishell.reference.gui.log.LogView"
                  visible="true"/>
       </perspectiveExtension>
-      
-      <perspectiveExtension
-            targetID="org.cishell.reference.gui.workspace.Perspective">
-         <view
-               closeable="false"
-               id="org.cishell.reference.gui.workflow.WorkflowView"
-               moveable="true"
-               ratio="0.75"
-               relationship="top"
-               relative="org.cishell.reference.gui.log.LogView"
-               visible="true">
-         </view>
-      </perspectiveExtension>
-	
+
       <perspectiveExtension targetID="org.cishell.reference.gui.workspace.Perspective">
            <view id="org.cishell.reference.gui.datamanager.DataManagerView"
                 relative="org.cishell.reference.gui.log.LogView"
@@ -77,7 +74,6 @@
                 closeable = "false"                   
                 visible="true"/>
       </perspectiveExtension>
-
 	</extension>
 	
 	<extension point="org.eclipse.ui.startup">
