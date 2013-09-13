@@ -9,6 +9,7 @@
   <modules>
     <module>org.cishell.reference.gui.brand.cishell</module>
     <module>org.cishell.reference.gui.datamanager</module>
+    <module>org.cishell.reference.gui.workflow</module>
     <module>org.cishell.reference.gui.guibuilder.swt</module>
     <module>org.cishell.reference.gui.log</module>
     <module>org.cishell.reference.gui.menumanager</module>
@@ -24,3 +25,4 @@
   	<relativePath>../../pom.xml</relativePath>
   </parent>
 </project>
+
