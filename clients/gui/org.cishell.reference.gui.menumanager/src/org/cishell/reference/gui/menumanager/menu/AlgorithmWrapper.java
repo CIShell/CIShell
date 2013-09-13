@@ -66,6 +66,7 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
 	protected Converter[][] converters;
 	protected ProgressMonitor progressMonitor;
 	protected Algorithm algorithm;
+	protected Dictionary<String, Object> parameters;
 
 	public AlgorithmWrapper(
 			ServiceReference serviceReference,
@@ -81,6 +82,20 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
 		this.data = data;
 		this.converters = converters;
 		this.progressMonitor = null;
+	}
+	
+	public Dictionary<String, Object> getParameters() {
+		// Return a cloned Dictionary
+		return cloneDictionary(parameters);
+	}
+	
+	private <K, V> Dictionary<K, V> cloneDictionary(Dictionary<K, V> source) {
+		Dictionary<K, V> cloned = new Hashtable<K, V>();
+	    for (Enumeration<K> keys = source.keys(); keys.hasMoreElements();) {
+	        K key = keys.nextElement();
+	        cloned.put(key, source.get(key));
+	    }
+	    return cloned;
 	}
 
 	/**
@@ -102,7 +117,7 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
 			if (!conversionSuccessful) {
 				return null;
 			}
-			
+
 			boolean inputIsValid = testDataValidityIfPossible(factory, data);
 
 			if (!inputIsValid) {
@@ -125,7 +140,7 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
 					format,
 					this.serviceReference.getProperty(AlgorithmProperty.LABEL),
 					e.getMessage());
-				log(LogService.LOG_ERROR, logMessage, e);
+					log(LogService.LOG_ERROR, logMessage, e);
 
 				return null;
 			} catch (Exception e) {
@@ -133,9 +148,8 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
 
 				return null;
 			}
-			
-			Dictionary<String, Object> parameters =
-				getUserEnteredParameters(metatypePID, provider);
+
+			parameters = getUserEnteredParameters(metatypePID, provider);
 
 			// Check to see if the user canceled the operation.
 			if (parameters == null) {
@@ -150,16 +164,16 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
 				data,
 				parameters,
 				new CIShellContextDelegate(this.serviceReference, this.ciShellContext));
-			
+
 			if (algorithm == null) {
 				return null;
 			}
-			
+
 			trackAlgorithmIfPossible(algorithm);
 
 			// Execute the algorithm.
 			Data[] outData = tryExecutingAlgorithm(algorithm);
-			
+
 			if (outData == null) {
 				return null;
 			}
@@ -175,36 +189,37 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
 			addDataToDataManager(outData);
 
 			return outData;
-		}
-		catch (Exception e) {
-			GUIBuilderService builder = (GUIBuilderService) this.ciShellContext.getService(
-				GUIBuilderService.class.getName());
-			
+		} catch (Exception e) {
+			GUIBuilderService builder = (GUIBuilderService) this.ciShellContext
+					.getService(GUIBuilderService.class.getName());
+
 			String errorMessage = "An error occurred while preparing to run "
 				+ "the algorithm \"" + this.serviceReference.getProperty(AlgorithmProperty.LABEL)
 				+ ".\"";
-			
+						
+
 			builder.showError("Error!", errorMessage, e);
 			log(LogService.LOG_ERROR, errorMessage, e);
 		}
-		
+
 		return null;
 	}
 
 	protected AlgorithmFactory getAlgorithmFactory(
 			BundleContext bundleContext, ServiceReference serviceReference) {
-		AlgorithmFactory algorithmFactory =
+		AlgorithmFactory algorithmFactory = 
 			(AlgorithmFactory) bundleContext.getService(serviceReference);
 
 		if (algorithmFactory == null) {
-			String errorMessage =
-				"Could not create AlgorithmFactory for the algorithm "
-				+ "\"" + serviceReference.getProperty(AlgorithmProperty.LABEL) + "\".";
+			String errorMessage = "Could not create AlgorithmFactory for the algorithm "
+					+ "\""
+					+ serviceReference.getProperty(AlgorithmProperty.LABEL)
+					+ "\".";
 			String details = "The algorithm's pid was \""
-				+ serviceReference.getProperty(Constants.SERVICE_PID)
-				+ "\" (potentially useful for debugging purposes).";
-			GUIBuilderService builder = (GUIBuilderService) this.ciShellContext.getService(
-				GUIBuilderService.class.getName());
+					+ serviceReference.getProperty(Constants.SERVICE_PID)
+					+ "\" (potentially useful for debugging purposes).";
+			GUIBuilderService builder = (GUIBuilderService) this.ciShellContext
+					.getService(GUIBuilderService.class.getName());
 			builder.showError("Error!", errorMessage, details);
 			this.log(LogService.LOG_ERROR, errorMessage);
 		}
@@ -212,38 +227,36 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
 		return algorithmFactory;
 	}
 
-	protected Algorithm createAlgorithm(
-			AlgorithmFactory factory,
-			Data[] data,
-			Dictionary<String, Object> parameters,
-			CIShellContext ciContext) {
-		final String algorithmName =
-			(String) this.serviceReference.getProperty(AlgorithmProperty.LABEL);
+	protected Algorithm createAlgorithm(AlgorithmFactory factory, Data[] data,
+			Dictionary<String, Object> parameters, CIShellContext ciContext) {
+		final String algorithmName = (String) this.serviceReference
+				.getProperty(AlgorithmProperty.LABEL);
 		// TODO: Call on algorithm invocation service here.
 		try {
 			return factory.createAlgorithm(data, parameters, ciContext);
 		} catch (AlgorithmCreationCanceledException e) {
 			String logMessage = String.format(
-				"The algorithm \"%s\" was canceled by the user.",
-				algorithmName,
-				e.getMessage());
+					"The algorithm \"%s\" was canceled by the user.",
+					algorithmName, e.getMessage());
 			log(LogService.LOG_WARNING, logMessage, e);
 
 			return null;
 		} catch (AlgorithmCreationFailedException e) {
 			String format = "An error occurred when creating algorithm \"%s\".  (Reason: %s)";
-			String errorMessage = String.format(format, algorithmName, e.getMessage());
-			GUIBuilderService builder =
-				(GUIBuilderService) ciContext.getService(GUIBuilderService.class.getName());
+			String errorMessage = String.format(format, algorithmName,
+					e.getMessage());
+			GUIBuilderService builder = (GUIBuilderService) ciContext
+					.getService(GUIBuilderService.class.getName());
 			builder.showError("Error!", errorMessage, e);
 			log(LogService.LOG_ERROR, errorMessage, e);
 
 			return null;
 		} catch (Exception e) {
-			String errorMessage = String.format(
-				"Unexpected error occurred while creating algorithm \"%s\".", algorithmName);
-			GUIBuilderService builder =
-				(GUIBuilderService) ciContext.getService(GUIBuilderService.class.getName());
+			String errorMessage = String
+					.format("Unexpected error occurred while creating algorithm \"%s\".",
+							algorithmName);
+			GUIBuilderService builder = (GUIBuilderService) ciContext
+					.getService(GUIBuilderService.class.getName());
 			// TODO: This is where uncaught exceptions are displayed.
 			builder.showError("Error!", errorMessage, e);
 			log(LogService.LOG_ERROR, errorMessage, e);
@@ -270,16 +283,16 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
 
 	protected void addDataToDataManager(Data[] outData) {
 		if (outData != null) {
-			DataManagerService dataManager = (DataManagerService)
-				bundleContext.getService(
-						bundleContext.getServiceReference(
-								DataManagerService.class.getName()));
+			DataManagerService dataManager = (DataManagerService) bundleContext
+					.getService(bundleContext
+							.getServiceReference(DataManagerService.class
+									.getName()));
 
 			if (outData.length != 0) {
 				for (int ii = 0; ii < outData.length; ii++) {
 					dataManager.addData(outData[ii]);
 				}
-				
+
 				Data[] dataToSelect = new Data[] { outData[0] };
 				dataManager.setSelectedData(dataToSelect);
 			}
@@ -288,45 +301,43 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
 
 	protected Data[] tryExecutingAlgorithm(Algorithm algorithm) {
 		Data[] outData = null;
-		final String algorithmName =
-			(String) this.serviceReference.getProperty(AlgorithmProperty.LABEL);
+		final String algorithmName = (String) this.serviceReference
+				.getProperty(AlgorithmProperty.LABEL);
 
 		try {
 			outData = algorithm.execute();
 		} catch (AlgorithmCanceledException e) {
 			String logMessage = String.format(
-				"The algorithm: \"%s\" was canceled by the user.",
-				algorithmName,
-				e.getMessage());
+					"The algorithm: \"%s\" was canceled by the user.",
+					algorithmName, e.getMessage());
 			log(LogService.LOG_WARNING, logMessage, e);
 		} catch (AlgorithmExecutionException e) {
 			String logMessage = String.format(
-				"The algorithm: \"%s\" had an error while executing: %s",
-				algorithmName,
-				e.getMessage());
+					"The algorithm: \"%s\" had an error while executing: %s",
+					algorithmName, e.getMessage());
 			log(LogService.LOG_ERROR, logMessage, e);
 		} catch (RuntimeException e) {
-			GUIBuilderService builder = (GUIBuilderService) this.ciShellContext.getService(
-				GUIBuilderService.class.getName());
-			String errorMessage = String.format(
-				"An unxpected error occurred while executing the algorithm \"%s\".",
-				algorithmName);
+			GUIBuilderService builder = (GUIBuilderService) this.ciShellContext
+					.getService(GUIBuilderService.class.getName());
+			String errorMessage = String
+					.format("An unxpected error occurred while executing the algorithm \"%s\".",
+							algorithmName);
 			builder.showError("Error!", errorMessage, e);
 		}
 
 		return outData;
 	}
 
-	protected boolean tryConvertingDataToRequiredFormat(
-			Data[] data, Converter[][] converters) {
+	protected boolean tryConvertingDataToRequiredFormat(Data[] data,
+			Converter[][] converters) {
 		for (int i = 0; i < data.length; i++) {
 			if (converters[i] != null) {
 				try {
 					data[i] = converters[i][0].convert(data[i]);
 				} catch (ConversionException e) {
-					String logMessage = String.format(
-						"Error: Unable to convert data for use by the algorithm:%n    %s",
-						e.getMessage());
+					String logMessage = String
+							.format("Error: Unable to convert data for use by the algorithm:%n    %s",
+									e.getMessage());
 					log(LogService.LOG_ERROR, logMessage, e);
 					e.printStackTrace();
 
@@ -348,19 +359,21 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
 		return true;
 	}
 
-	protected boolean testDataValidityIfPossible(AlgorithmFactory factory, Data[] data) {
+	protected boolean testDataValidityIfPossible(AlgorithmFactory factory,
+			Data[] data) {
 		if (factory instanceof DataValidator) {
 			String validation = ((DataValidator) factory).validate(data);
 
 			if (validation != null && validation.length() > 0) {
-				String label = (String) this.serviceReference.getProperty(LABEL);
+				String label = (String) this.serviceReference
+						.getProperty(LABEL);
 				if (label == null) {
 					label = "Algorithm";
 				}
 
-				log(LogService.LOG_ERROR,
-						"INVALID DATA: The data given to \"" + label
-						+ "\" is incompatible for this reason: " + validation);
+				log(LogService.LOG_ERROR, "INVALID DATA: The data given to \""
+						+ label + "\" is incompatible for this reason: "
+						+ validation);
 				return false;
 			}
 		}
@@ -380,36 +393,40 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
 	}
 
 	protected MetaTypeProvider getPossiblyMutatedMetaTypeProvider(
-			String metatypePID, String pid,	AlgorithmFactory factory)
+			String metatypePID, String pid, AlgorithmFactory factory)
 			throws AlgorithmCreationFailedException {
 		MetaTypeProvider provider = null;
-		MetaTypeService metaTypeService = (MetaTypeService)
-			Activator.getService(MetaTypeService.class.getName());
+		MetaTypeService metaTypeService = (MetaTypeService) Activator
+				.getService(MetaTypeService.class.getName());
 		if (metaTypeService != null) {
-			provider = metaTypeService.getMetaTypeInformation(this.serviceReference.getBundle());
+			provider = metaTypeService
+					.getMetaTypeInformation(this.serviceReference.getBundle());
+
 		}
 
 		if ((factory instanceof ParameterMutator) && (provider != null)) {
 			try {
-				ObjectClassDefinition objectClassDefinition =
-					provider.getObjectClassDefinition(metatypePID, null);
+				ObjectClassDefinition objectClassDefinition = provider
+						.getObjectClassDefinition(metatypePID, null);
 
 				if (objectClassDefinition == null) {
 					logNullOCDWarning(pid, metatypePID);
 				}
 
 				try {
-					objectClassDefinition =
-						((ParameterMutator) factory).mutateParameters(data, objectClassDefinition);
+					objectClassDefinition = ((ParameterMutator) factory)
+							.mutateParameters(data, objectClassDefinition);
 
 					if (objectClassDefinition != null) {
-						provider = new BasicMetaTypeProvider(objectClassDefinition);
+						provider = new BasicMetaTypeProvider(
+								objectClassDefinition);
 					}
 				} catch (AllParametersMutatedOutException e) {
 					provider = null;
 				}
 			} catch (IllegalArgumentException e) {
-				log(LogService.LOG_DEBUG, pid + " has an invalid metatype id: " + metatypePID, e);
+				log(LogService.LOG_DEBUG, pid + " has an invalid metatype id: "
+						+ metatypePID, e);
 			}
 		}
 
@@ -431,36 +448,37 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
 		Dictionary<String, Object> parameters = new Hashtable<String, Object>();
 
 		if (provider != null) {
-			GUIBuilderService builder = (GUIBuilderService) this.ciShellContext.getService(
-				GUIBuilderService.class.getName());
+			GUIBuilderService builder = (GUIBuilderService) this.ciShellContext
+					.getService(GUIBuilderService.class.getName());
 
-			// TODO: Make builder.createGUIAndWait return a Dictionary<String, Object>.
+			// TODO: Make builder.createGUIAndWait return a Dictionary<String,
+			// Object>.
 			parameters = builder.createGUIandWait(metatypePID, provider);
 		}
 
 		return parameters;
 	}
 
-	/* Wrap the provider to provide special functionality, such as overriding
+	/*
+	 * Wrap the provider to provide special functionality, such as overriding
 	 * default values of attributes through preferences.
 	 */
-	protected MetaTypeProvider wrapProvider(
-			ServiceReference algRef, MetaTypeProvider unwrappedProvider) {
+	protected MetaTypeProvider wrapProvider(ServiceReference algRef,
+			MetaTypeProvider unwrappedProvider) {
 		ConfigurationAdmin ca = getConfigurationAdmin();
 
 		if (ca != null && hasParamDefaultPreferences(algRef)) {
-			String standardServicePID =
-				(String) algRef.getProperty(Constants.SERVICE_PID);
-			String paramOverrideConfPID =
-				standardServicePID + UserPrefsProperty.PARAM_PREFS_CONF_SUFFIX;
+			String standardServicePID = (String) algRef
+					.getProperty(Constants.SERVICE_PID);
+			String paramOverrideConfPID = standardServicePID
+					+ UserPrefsProperty.PARAM_PREFS_CONF_SUFFIX;
 			try {
-				Configuration defaultParamValueOverrider =
-					ca.getConfiguration(paramOverrideConfPID, null);
-				Dictionary defaultParamOverriderDict =
-					defaultParamValueOverrider.getProperties();
-				MetaTypeProvider wrappedProvider =
-					new ParamMetaTypeProvider(unwrappedProvider,
-											  defaultParamOverriderDict);
+				Configuration defaultParamValueOverrider = ca.getConfiguration(
+						paramOverrideConfPID, null);
+				Dictionary defaultParamOverriderDict = defaultParamValueOverrider
+						.getProperties();
+				MetaTypeProvider wrappedProvider = new ParamMetaTypeProvider(
+						unwrappedProvider, defaultParamOverriderDict);
 				return wrappedProvider;
 			} catch (IOException e) {
 				return unwrappedProvider;
@@ -472,19 +490,19 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
 	}
 
 	protected boolean hasParamDefaultPreferences(ServiceReference algRef) {
-		String prefsToPublish =
-			(String) algRef.getProperty(UserPrefsProperty.PREFS_PUBLISHED_KEY);
+		String prefsToPublish = (String) algRef
+				.getProperty(UserPrefsProperty.PREFS_PUBLISHED_KEY);
 		if (prefsToPublish == null) {
 			return false;
 		}
 
-		return prefsToPublish.contains(
-				UserPrefsProperty.PUBLISH_PARAM_DEFAULT_PREFS_VALUE);
+		return prefsToPublish
+				.contains(UserPrefsProperty.PUBLISH_PARAM_DEFAULT_PREFS_VALUE);
 	}
 
 	protected void log(int logLevel, String message) {
-		LogService logger =
-			(LogService) this.ciShellContext.getService(LogService.class.getName());
+		LogService logger = (LogService) this.ciShellContext
+				.getService(LogService.class.getName());
 		if (logger != null) {
 			logger.log(this.serviceReference, logLevel, message);
 		} else {
@@ -493,8 +511,8 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
 	}
 
 	protected void log(int logLevel, String message, Throwable exception) {
-		LogService logger =
-			(LogService) this.ciShellContext.getService(LogService.class.getName());
+		LogService logger = (LogService) this.ciShellContext
+				.getService(LogService.class.getName());
 
 		if (logger != null) {
 			logger.log(this.serviceReference, logLevel, message, exception);
@@ -505,15 +523,14 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
 	}
 
 	protected void printParameters(String metatype_pid,
-								   MetaTypeProvider provider,
-								   Dictionary parameters) {
+			MetaTypeProvider provider, Dictionary parameters) {
 		LogService logger = getLogService();
 		Map idToLabelMap = setupIdToLabelMap(metatype_pid, provider);
 
 		if (logger != null && !parameters.isEmpty()) {
 			// adjust to log all input parameters in one block
-			StringBuffer inputParams =
-				new StringBuffer("\n" + "Input Parameters:");
+			StringBuffer inputParams = new StringBuffer("\n"
+					+ "Input Parameters:");
 
 			for (Enumeration e = parameters.keys(); e.hasMoreElements();) {
 				String key = (String) e.nextElement();
@@ -523,12 +540,13 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
 				inputParams.append("\n" + key + ": " + value);
 
 			}
-			logger.log(this.serviceReference, LogService.LOG_INFO, inputParams.toString());
+			logger.log(this.serviceReference, LogService.LOG_INFO,
+					inputParams.toString());
 		}
 	}
 
 	protected Map setupIdToLabelMap(String metatype_pid,
-									MetaTypeProvider provider) {
+			MetaTypeProvider provider) {
 		Map idToLabelMap = new HashMap();
 		if (provider != null) {
 			ObjectClassDefinition ocd = null;
@@ -536,8 +554,8 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
 				ocd = provider.getObjectClassDefinition(metatype_pid, null);
 
 				if (ocd != null) {
-					AttributeDefinition[] attr =
-						ocd.getAttributeDefinitions(ObjectClassDefinition.ALL);
+					AttributeDefinition[] attr = ocd
+							.getAttributeDefinitions(ObjectClassDefinition.ALL);
 
 					for (int i = 0; i < attr.length; i++) {
 						String id = attr[i].getID();
@@ -557,14 +575,12 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
 	protected void doParentage(Data[] outData) {
 		// make sure the parent set is the original Data and not the
 		// converted data...
-		if (outData != null
-				&& data != null
-				&& originalData != null
+		if (outData != null && data != null && originalData != null
 				&& originalData.length == data.length) {
 			for (int i = 0; i < outData.length; i++) {
 				if (outData[i] != null) {
-					Object parent =
-						outData[i].getMetadata().get(DataProperty.PARENT);
+					Object parent = outData[i].getMetadata().get(
+							DataProperty.PARENT);
 
 					if (parent != null) {
 						for (int j = 0; j < data.length; j++) {
@@ -580,20 +596,21 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
 		}
 
 		// Check and act on parentage settings
-		String parentage = (String) this.serviceReference.getProperty("parentage");
+		String parentage = (String) this.serviceReference
+				.getProperty("parentage");
 		if (parentage != null) {
 			parentage = parentage.trim();
 			if (parentage.equalsIgnoreCase("default")) {
-				if (originalData != null
-						&& originalData.length > 0
+				if (originalData != null && originalData.length > 0
 						&& originalData[0] != null) {
 
 					for (int i = 0; i < outData.length; i++) {
 						// If they don't have a parent set already then we set one
 						if (outData[i] != null
-								&& outData[i].getMetadata().get(DataProperty.PARENT) == null) {
-							outData[i].getMetadata().put(
-									DataProperty.PARENT, originalData[0]);
+								&& outData[i].getMetadata().get(
+										DataProperty.PARENT) == null) {
+							outData[i].getMetadata().put(DataProperty.PARENT,
+									originalData[0]);
 						}
 					}
 				}
@@ -602,27 +619,26 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
 	}
 
 	private LogService getLogService() {
-		ServiceReference serviceReference =
-			bundleContext.getServiceReference(DataManagerService.class.getName());
+		ServiceReference serviceReference = bundleContext
+				.getServiceReference(DataManagerService.class.getName());
 		LogService log = null;
 
 		if (serviceReference != null) {
-			log = (LogService) bundleContext.getService(
-					bundleContext.getServiceReference(LogService.class.getName()));
+			log = (LogService) bundleContext.getService(bundleContext
+					.getServiceReference(LogService.class.getName()));
 		}
 
 		return log;
 	}
 
 	private ConfigurationAdmin getConfigurationAdmin() {
-		ServiceReference serviceReference =
-			bundleContext.getServiceReference(ConfigurationAdmin.class.getName());
+		ServiceReference serviceReference = bundleContext
+				.getServiceReference(ConfigurationAdmin.class.getName());
 		ConfigurationAdmin ca = null;
 
 		if (serviceReference != null) {
-			ca = (ConfigurationAdmin) bundleContext.getService(
-					bundleContext.getServiceReference(
-							ConfigurationAdmin.class.getName()));
+			ca = (ConfigurationAdmin) bundleContext.getService(bundleContext
+					.getServiceReference(ConfigurationAdmin.class.getName()));
 		}
 
 		return ca;
@@ -630,8 +646,8 @@ public class AlgorithmWrapper implements Algorithm, AlgorithmProperty, ProgressT
 
 	private void logNullOCDWarning(String pid, String metatype_pid) {
 		this.log(LogService.LOG_WARNING,
-			"Warning: could not get object class definition '" + metatype_pid
-			+ "' from the algorithm '" + pid + "'");
+				"Warning: could not get object class definition '"
+						+ metatype_pid + "' from the algorithm '" + pid + "'");
 	}
 
 	public ProgressMonitor getProgressMonitor() {
