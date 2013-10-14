@@ -1,14 +1,27 @@
 package org.cishell.utilities;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.UnsupportedEncodingException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 import prefuse.data.Schema;
 import prefuse.data.Table;
 import prefuse.data.Tuple;
 import prefuse.util.collections.IntIterator;
+
+import org.cishell.framework.algorithm.AlgorithmExecutionException;
+import org.osgi.service.log.LogService;
+
 /**
  * @deprecated see
  *            {@link url http://wiki.cns.iu.edu/display/CISHELL/2012/08/30/Future+Direction
@@ -305,5 +318,75 @@ public class TableUtilities {
 		double value = NumberUtilities.interpretObjectAsDouble(row.get(columnName)).doubleValue();
 
 		return value;
+	}
+	
+	/**
+	 * Replaces certain headers in a table with replacements specified in a given header map.
+	 * 
+	 * @param propertiesFilePath	Path to a file-format-specific properties file, which provides a 
+	 * 								mapping from the original headers to the replacement ones.
+	 * @param inputTable	A table whose headers need to be standardized
+	 * @return	A new table with the correct headers in place
+	 * @throws IOException If an error occurs while reading the properties file
+	 * @throws IllegalArgumentException	If any given parameters are null
+	 */
+	public static Table standardizeTable(URL propertiesFilePath, Table inputTable) throws IOException {
+		if (propertiesFilePath == null || inputTable == null)
+			throw new IllegalArgumentException();
+		
+		Table returnTable = new Table();
+		
+		// grabs info about inputData
+		Schema oldSchema = inputTable.getSchema();		
+		final int numTableColumns = oldSchema.getColumnCount();
+		final int numTableRows = inputTable.getRowCount();
+		
+		Map<String, String> headerMap = readHeaderProperties(propertiesFilePath);
+		
+		// add columns to return table, correcting them as iteration proceeds
+		for (int i = 0; i < numTableColumns; i++) {
+			String colHead = oldSchema.getColumnName(i);
+			
+			// check for columns that need updating here
+			String newHeader = headerMap.get(colHead);
+			if (newHeader != null)
+				colHead = newHeader;
+			
+			returnTable.addColumn(colHead, oldSchema.getColumnType(i));
+		}
+		
+		// add existing rows to return table
+		returnTable.addRows(numTableRows);
+		for (int i = 0; i < numTableRows; i++) {
+			copyTableRow(i, i, returnTable, inputTable);
+		}
+			
+		return returnTable;
+	}
+	
+	/**
+	 * Reads a properties file mapping data type specific headers to the desired headers.
+	 * 
+	 * @param propLocation	A URL representing the location of said properties file
+	 * @return	A String-to-String Map, with old header values as keys, and their replacements as values
+	 * @throws IOException	If there is an IO error reading the properties file
+	 */
+	private static Map<String, String> readHeaderProperties(URL propLocation) throws IOException {
+		InputStream in = propLocation.openStream();
+		Reader reader = new InputStreamReader(in, "UTF-8");
+
+		Properties prop = new Properties();
+		try {
+		    prop.load(reader);
+		} finally {
+		    reader.close();
+		}
+		
+		HashMap<String, String> headerMap = new HashMap<String,String>();
+		for (final String name : prop.stringPropertyNames()) {
+		    headerMap.put(name, prop.getProperty(name));
+		}
+		
+		return headerMap;
 	}
 }

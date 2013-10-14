@@ -22,9 +22,12 @@ import java.util.Iterator;
 
 import javax.imageio.ImageIO;
 
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
 import org.osgi.service.log.LogService;
 
 import com.google.common.collect.ImmutableMap;
+
 /**
  * @deprecated see
  *            {@link url http://wiki.cns.iu.edu/display/CISHELL/2012/08/30/Future+Direction
@@ -534,5 +537,17 @@ public class FileUtilities {
 
     public static String extractFileNameWithExtension(String fileLabel) {
     	return extractFileName(fileLabel) + getFileExtension(fileLabel);
+    }
+    
+    /**
+     * Looks up the URL for a resource in an OSGI bundle.
+     * 
+     * @param callingClass		The Class object representing the calling class (ex: ReaderAlgorithm.class)
+     * @param resourceFilename	The name of the actual resource to lookup, as a string
+     * @return	The full URL to the resource
+     */
+    public static URL lookupResourceUrl(Class<?> callingClass, String resourceFilename) {
+    	BundleContext bC = FrameworkUtil.getBundle(callingClass).getBundleContext();
+    	return bC.getBundle().getResource(resourceFilename);
     }
 }
