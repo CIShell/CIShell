@@ -91,7 +91,7 @@
 		</replaceregexp>
 
 		<zip destfile="${product.zip.out}" duplicate="fail">
-			<zipfileset src="${product.zip}" excludes="**/configuration/config.ini" />
+			<zipfileset src="${product.zip}" excludes="**/configuration/config.ini **/eclipsec.exe **/artifacts.xml" />
 			<zipfileset dir="${temp.dir}" includes="**/*.ini" />
 		</zip>
 		<delete dir="${temp.dir}" />
@@ -118,7 +118,7 @@
 		</replaceregexp>
 
 		<tar destfile="${product.tgz.out}" compression="gzip">
-			<zipfileset src="${product.zip}" excludes="**/configuration/config.ini ${permission.files}" />
+			<zipfileset src="${product.zip}" excludes="**/configuration/config.ini **/eclipsec.exe **/artifacts.xml ${permission.files}" />
 			<zipfileset src="${product.zip}" includes="${permission.files}" filemode="755" />
 			<zipfileset dir="${temp.dir}" includes="**/*.ini" />
 		</tar>
