@@ -92,7 +92,6 @@ public class WorkflowView extends ViewPart implements SchedulerListener {
 	private boolean updatingTreeItem;
 	private WorkflowTreeItem currentParentItem;
 	private String brandPluginID;
-	private String pluginID = "org.cishell.reference.gui.workflow";
 
 	public WorkflowView(String brandPluginID) {
 		this.brandPluginID = brandPluginID;
@@ -292,7 +291,7 @@ public class WorkflowView extends ViewPart implements SchedulerListener {
 
 		final GeneralTreeItem paramItem = new GeneralTreeItem("Parameters",
 				Constant.Label, dataItem, Utils.getImage("parameters.png",
-						pluginID));
+						brandPluginID));
 		dataItem.addChild(paramItem);
 		ObjectClassDefinition obj = provider.getObjectClassDefinition(
 				metatypePID, null);
@@ -313,12 +312,12 @@ public class WorkflowView extends ViewPart implements SchedulerListener {
 				GeneralTreeItem paramName = new GeneralTreeItem(name,
 						Constant.ParameterName, paramItem, Utils.getImage(
 								"parameters.png",
-								pluginID));
+								brandPluginID));
 				paramItem.addChildren(paramName);
 				GeneralTreeItem paramValue = new GeneralTreeItem(value,
 						Constant.ParameterValue, paramName, Utils.getImage(
 								"parameters.png",
-								pluginID));
+								brandPluginID));
 				paramName.addChildren(paramValue);
 			}
 		}
@@ -544,9 +543,7 @@ public class WorkflowView extends ViewPart implements SchedulerListener {
 		public void handleEvent(Event event) {
 			WorkflowMaker loadState = new WorkflowMaker();
 			loadState.load();
-
 		}
-
 	}
 
 	private class DeleteListener implements Listener {
@@ -590,9 +587,7 @@ public class WorkflowView extends ViewPart implements SchedulerListener {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-
 		}
-
 	}
 
 	private class RunListener implements Listener {
@@ -613,7 +608,6 @@ public class WorkflowView extends ViewPart implements SchedulerListener {
 	private class NewWorkflow implements Listener {
 		public void handleEvent(Event event) {
 			WorkflowView.this.addNewWorkflow("Workflow ");
-
 		}
 	}
 
