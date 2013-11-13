@@ -9,8 +9,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 public class Utils {
-	
-	
+
 	public static Image getImage(String name, String brandPluginID) {
 		if (Platform.isRunning()) {
 			String imageLocation = String.format("%sicons%s%s", File.separator,
@@ -24,7 +23,7 @@ public class Utils {
 				String errorMessage = String
 						.format("Could not find the icon '%s' in '%s'. Using the default image instead.",
 								imageLocation, brandPluginID);
-				// TODO: Should change to Log.Debug if possible. 
+				// TODO: Should change to Log.Debug if possible.
 				System.err.println(errorMessage);
 				return AlgorithmItemGUI.getDefaultImage();
 			}
@@ -33,7 +32,7 @@ public class Utils {
 			String format = "Could not obtain the image '%s' in '%s', since the platform was not "
 					+ "running (?). Using the default image instead.";
 			String errorMessage = String.format(format, name, brandPluginID);
-			// TODO: Should change to Log.Debug if possible. 
+			// TODO: Should change to Log.Debug if possible.
 			System.err.println(errorMessage);
 			return AlgorithmItemGUI.getDefaultImage();
 		}

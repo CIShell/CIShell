@@ -21,7 +21,8 @@ public class ManageView {
 	public void updateUI(Tree tree, TreeViewer viewer, String brandPluginID) {
 		tree.clearAll(true);
 
-		WorkflowTreeItem rootItem = new WorkflowGUI(null, null, 2, brandPluginID);
+		WorkflowTreeItem rootItem = new WorkflowGUI(null, null, 2,
+				brandPluginID);
 		viewer.setInput(rootItem);
 		viewer.expandAll();
 
@@ -47,8 +48,7 @@ public class ManageView {
 					continue;
 				final GeneralTreeItem paramLabel = new GeneralTreeItem(
 						"Parameters", Constant.Label, dataItem, Utils.getImage(
-								PARAMETER_IMAGE_NAME,
-								brandPluginID));
+								PARAMETER_IMAGE_NAME, brandPluginID));
 				dataItem.addChild(paramLabel);
 
 				for (Enumeration e = params.keys(); e.hasMoreElements();) {
@@ -61,14 +61,12 @@ public class ManageView {
 
 					GeneralTreeItem paramName = new GeneralTreeItem(key,
 							Constant.ParameterName, paramLabel, Utils.getImage(
-									PARAMETER_IMAGE_NAME,
-									brandPluginID));
+									PARAMETER_IMAGE_NAME, brandPluginID));
 
 					paramLabel.addChildren(paramName);
 					GeneralTreeItem paramValue = new GeneralTreeItem(strvalue,
 							Constant.ParameterValue, paramName, Utils.getImage(
-									PARAMETER_IMAGE_NAME,
-									brandPluginID));
+									PARAMETER_IMAGE_NAME, brandPluginID));
 					paramName.addChildren(paramValue);
 
 				}
@@ -78,9 +76,11 @@ public class ManageView {
 		viewer.expandAll();
 	}
 
-	void addworkflow(WorkflowGUI rootItem, Workflow workflow, String brandPluginID) {
+	void addworkflow(WorkflowGUI rootItem, Workflow workflow,
+			String brandPluginID) {
 		NormalWorkflow wf = (NormalWorkflow) workflow;
-		WorkflowGUI wfnew = new WorkflowGUI(wf, (WorkflowGUI) rootItem, 0, brandPluginID);
+		WorkflowGUI wfnew = new WorkflowGUI(wf, (WorkflowGUI) rootItem, 0,
+				brandPluginID);
 		rootItem.addChild(wfnew);
 		LinkedHashMap<Long, WorkflowItem> itemMap = wf.getMap();
 		WorkflowTreeItem parent = wfnew;
@@ -112,14 +112,12 @@ public class ManageView {
 				}
 				GeneralTreeItem paramName = new GeneralTreeItem(key,
 						Constant.ParameterName, paramLabel, Utils.getImage(
-								PARAMETER_IMAGE_NAME,
-								brandPluginID));
+								PARAMETER_IMAGE_NAME, brandPluginID));
 
 				paramLabel.addChildren(paramName);
 				GeneralTreeItem paramValue = new GeneralTreeItem(strvalue,
 						Constant.ParameterValue, paramName, Utils.getImage(
-								PARAMETER_IMAGE_NAME,
-								brandPluginID));
+								PARAMETER_IMAGE_NAME, brandPluginID));
 				paramName.addChildren(paramValue);
 
 			}
