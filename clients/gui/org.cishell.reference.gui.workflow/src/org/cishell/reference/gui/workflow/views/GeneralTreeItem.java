@@ -5,24 +5,24 @@ import java.util.Collection;
 import org.eclipse.swt.graphics.Image;
 
 public class GeneralTreeItem implements WorkflowTreeItem {
-	
+
 	private String label;
 	private String type;
 	private WorkflowTreeItem parent;
 	private Image icon;
-    private Collection<WorkflowTreeItem> children = new ArrayList<WorkflowTreeItem>();
+	private Collection<WorkflowTreeItem> children = new ArrayList<WorkflowTreeItem>();
 
-	public GeneralTreeItem(String label,String type,WorkflowTreeItem parent,Image icon )
-	{
+	public GeneralTreeItem(String label, String type, WorkflowTreeItem parent,
+			Image icon) {
 		this.label = label;
 		this.type = type;
 		this.parent = parent;
-		this.icon = icon;		
+		this.icon = icon;
 	}
 
 	@Override
 	public String getLabel() {
-		
+
 		return label;
 	}
 
@@ -45,18 +45,18 @@ public class GeneralTreeItem implements WorkflowTreeItem {
 	public Object[] getChildren() {
 		return this.children.toArray();
 	}
-	
-	public void addChildren(WorkflowTreeItem child){
+
+	public void addChildren(WorkflowTreeItem child) {
 		children.add(child);
 	}
 
 	@Override
 	public void setLabel(String label) {
-       this.label = label;		
+		this.label = label;
 	}
+
 	public void removeAllChildren() {
 		children.clear();
-		
 	}
 
 	@Override
@@ -68,13 +68,13 @@ public class GeneralTreeItem implements WorkflowTreeItem {
 	@Override
 	public void removeChild(WorkflowTreeItem wfTreeItem) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void addChild(WorkflowTreeItem wfTreeItem) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

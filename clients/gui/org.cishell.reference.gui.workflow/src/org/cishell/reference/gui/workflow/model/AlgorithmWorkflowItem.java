@@ -203,7 +203,7 @@ public class AlgorithmWorkflowItem implements WorkflowItem {
 				if (clazz != null && clazz.isInstance(data)) {
 					assignable = true;
 				}
-			} catch (ClassNotFoundException e) { 
+			} catch (ClassNotFoundException e) {
 				assignable = false;
 			}
 		}
@@ -227,7 +227,7 @@ public class AlgorithmWorkflowItem implements WorkflowItem {
 	}
 
 	@Override
-	public Long getIternalId() {
+	public Long getItemId() {
 		return internalId;
 	}
 

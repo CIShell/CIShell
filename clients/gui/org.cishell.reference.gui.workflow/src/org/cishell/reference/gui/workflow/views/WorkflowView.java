@@ -162,7 +162,7 @@ public class WorkflowView extends ViewPart implements SchedulerListener {
 		this.editor.minimumWidth = 50;
 
 		// create white space menu
-		
+
 		this.whiteSpacemenu = new Menu(tree);
 		this.whiteSpacemenu.setVisible(false);
 
@@ -177,8 +177,7 @@ public class WorkflowView extends ViewPart implements SchedulerListener {
 		guiRun(new Runnable() {
 			public void run() {
 				try {
-					IWorkbenchPage page = WorkflowView.this.getSite()
-							.getPage();
+					IWorkbenchPage page = WorkflowView.this.getSite().getPage();
 					page.showView("org.cishell.reference.gui.datamanager.DataManagerView");
 				} catch (PartInitException e) {
 					e.printStackTrace();
@@ -311,13 +310,11 @@ public class WorkflowView extends ViewPart implements SchedulerListener {
 				}
 				GeneralTreeItem paramName = new GeneralTreeItem(name,
 						Constant.ParameterName, paramItem, Utils.getImage(
-								"parameters.png",
-								brandPluginID));
+								"parameters.png", brandPluginID));
 				paramItem.addChildren(paramName);
 				GeneralTreeItem paramValue = new GeneralTreeItem(value,
 						Constant.ParameterValue, paramName, Utils.getImage(
-								"parameters.png",
-								brandPluginID));
+								"parameters.png", brandPluginID));
 				paramName.addChildren(paramValue);
 			}
 		}
@@ -385,8 +382,8 @@ public class WorkflowView extends ViewPart implements SchedulerListener {
 		public void mouseUp(MouseEvent event) {
 			if (event.button == 3) {
 
-				TreeItem item = WorkflowView.this.tree
-						.getItem(new Point(event.x, event.y));
+				TreeItem item = WorkflowView.this.tree.getItem(new Point(
+						event.x, event.y));
 
 				if (item != null) {
 					WorkflowView.this.menu.setVisible(true);
@@ -452,8 +449,7 @@ public class WorkflowView extends ViewPart implements SchedulerListener {
 			public void keyReleased(KeyEvent e) {
 				if ((e.character == SWT.CR)
 						&& !WorkflowView.this.updatingTreeItem) {
-					updateText(WorkflowView.this.newEditor.getText(),
-							item);
+					updateText(WorkflowView.this.newEditor.getText(), item);
 				} else if (e.keyCode == SWT.ESC) {
 					WorkflowView.this.newEditor.dispose();
 				}
@@ -551,8 +547,7 @@ public class WorkflowView extends ViewPart implements SchedulerListener {
 		@Override
 		public void handleEvent(Event arg0) {
 			try {
-				TreeItem[] items = WorkflowView.this.tree
-						.getSelection();
+				TreeItem[] items = WorkflowView.this.tree.getSelection();
 				if (items.length != 1)
 					return;
 				WorkflowTreeItem itm = (WorkflowTreeItem) items[0].getData();
