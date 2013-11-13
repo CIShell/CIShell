@@ -21,6 +21,7 @@ import prefuse.util.collections.IntIterator;
 
 import org.cishell.framework.algorithm.AlgorithmExecutionException;
 import org.osgi.service.log.LogService;
+import org.apache.commons.io.FilenameUtils;
 
 /**
  * @deprecated see
@@ -367,11 +368,17 @@ public class TableUtilities {
 	/**
 	 * Reads a properties file mapping data type specific headers to the desired headers.
 	 * 
-	 * @param propLocation	A URL representing the location of said properties file
+	 * @param propLocation	A URL representing the location of a .hmap format properties file
 	 * @return	A String-to-String Map, with old header values as keys, and their replacements as values
 	 * @throws IOException	If there is an IO error reading the properties file
 	 */
 	private static Map<String, String> readHeaderProperties(URL propLocation) throws IOException {
+		
+		// throws exception if properties file does not have .hmap (header map) extension
+		String extension = FilenameUtils.getExtension(propLocation.getPath());
+		if (!extension.equals("hmap"))
+			throw new IOException("The given file extension is incompatible with this plugin. Please use a .hmap extension file instead.");
+		
 		InputStream in = propLocation.openStream();
 		Reader reader = new InputStreamReader(in, "UTF-8");
 
