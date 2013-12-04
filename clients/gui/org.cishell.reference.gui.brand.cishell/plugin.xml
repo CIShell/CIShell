@@ -25,7 +25,7 @@
 
      <extension point="org.eclipse.ui.views">
 	     <view allowMultiple="false"
-         class="edu.iu.sci2.gui.brand.WorkFlowView"
+         class="org.cishell.reference.gui.brand.cishell.WorkFlowView"
          icon="icons/workflow_mgr.png"
          id="org.cishell.reference.gui.workflow.views.WorkflowView"
          name="Workflow Manager"/>
@@ -34,7 +34,7 @@
    	<extension point="org.eclipse.ui.views">
 	     <view
          allowMultiple="false"
-         class="edu.iu.sci2.gui.brand.DataManagerView"
+         class="org.cishell.reference.gui.datamanager.DataManagerView"
          icon="icons/datamanager_icon.gif"
          id="org.cishell.reference.gui.datamanager.DataManagerView"
          name="Data Manager"/>
