@@ -33,7 +33,11 @@
 			library to Ant. See README for more information.
 		</echo>
 
-		<taskdef resource="net/sf/antcontrib/antcontrib.properties" />
+		<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+			<classpath>
+				<pathelement location="build-files/ant-contrib.jar"/>
+			</classpath>
+		</taskdef>
 		<delete dir="${output.dir}" />
 		<mkdir dir="${output.dir}" />
 
