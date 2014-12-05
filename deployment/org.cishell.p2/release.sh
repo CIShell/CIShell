@@ -10,7 +10,7 @@ fi
 VERSION=$1
 
 SOURCE="target/repository"
-DEST_BASE="/builds/cishell/p2"
+DEST_BASE="builds/test/cishell/p2"
 DEST="$DEST_BASE/$VERSION/"
 
 VERSION_REGEX="^[0-9]+\.[0-9]+\.[0-9]+$"
