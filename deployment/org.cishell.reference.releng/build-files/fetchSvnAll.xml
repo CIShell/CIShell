@@ -18,7 +18,7 @@
 			<param name="element.id" value="org.cishell.feature" />
 			<param name="project.name" value="deployment/org.cishell.feature" />
 			<param name="url"
-				value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk" />
+				value="https://github.iu.edu/CNS/CIShell/trunk" />
 		</antcall>
 		<antcall target="svn.co">
 			<param name="target" value="features" />
@@ -26,21 +26,21 @@
 			<param name="project.name"
 				value="deployment/org.cishell.environment.equinox.feature" />
 			<param name="url"
-				value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk" />
+				value="https://github.iu.edu/CNS/CIShell/trunk" />
 		</antcall>
 		<antcall target="svn.co">
 			<param name="target" value="features" />
 			<param name="element.id" value="org.cishell.reference.feature" />
 			<param name="project.name" value="deployment/org.cishell.reference.feature" />
 			<param name="url"
-				value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk" />
+				value="https://github.iu.edu/CNS/CIShell/trunk" />
 		</antcall>
 		<antcall target="svn.co">
 			<param name="target" value="features" />
 			<param name="element.id" value="org.cishell.reference.gui.feature" />
 			<param name="project.name" value="deployment/org.cishell.reference.gui.feature" />
 			<param name="url"
-				value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk" />
+				value="https://github.iu.edu/CNS/CIShell/trunk" />
 		</antcall>
 		<antcall target="svn.co">
 			<param name="target" value="features" />
@@ -48,21 +48,21 @@
 			<param name="project.name"
 				value="deployment/org.cishell.reference.gui.brand.feature" />
 			<param name="url"
-				value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk" />
+				value="https://github.iu.edu/CNS/CIShell/trunk" />
 		</antcall>
 		<antcall target="svn.co">
 			<param name="target" value="features" />
 			<param name="element.id" value="org.cishell.reference.database.feature" />
 			<param name="project.name" value="deployment/org.cishell.reference.database.feature" />
 			<param name="url"
-				value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk" />
+				value="https://github.iu.edu/CNS/CIShell/trunk" />
 		</antcall>
 		<antcall target="svn.co">
 			<param name="target" value="plugins" />
 			<param name="element.id" value="org.cishell.framework" />
 			<param name="project.name" value="core/org.cishell.framework" />
 			<param name="url"
-				value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk" />
+				value="https://github.iu.edu/CNS/CIShell/trunk" />
 		</antcall>
 
 
@@ -74,70 +74,70 @@
 			<param name="element.id" value="org.cishell.reference" />
 			<param name="project.name" value="core/org.cishell.reference" />
 			<param name="url"
-				value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk" />
+				value="https://github.iu.edu/CNS/CIShell/trunk" />
 		</antcall>
 		<antcall target="svn.co">
 			<param name="target" value="plugins" />
 			<param name="element.id" value="org.cishell.reference.services" />
 			<param name="project.name" value="core/org.cishell.reference.services" />
 			<param name="url"
-				value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk" />
+				value="https://github.iu.edu/CNS/CIShell/trunk" />
 		</antcall>
 		<antcall target="svn.co">
 			<param name="target" value="plugins" />
 			<param name="element.id" value="org.cishell.reference.prefs.admin" />
 			<param name="project.name" value="core/org.cishell.reference.prefs.admin" />
 			<param name="url"
-				value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk" />
+				value="https://github.iu.edu/CNS/CIShell/trunk" />
 		</antcall>
 		<antcall target="svn.co">
 			<param name="target" value="plugins" />
 			<param name="element.id" value="org.cishell.service.autostart" />
 			<param name="project.name" value="core/org.cishell.service.autostart" />
 			<param name="url"
-				value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk" />
+				value="https://github.iu.edu/CNS/CIShell/trunk" />
 		</antcall>
 		<antcall target="svn.co">
 			<param name="target" value="plugins" />
 			<param name="element.id" value="org.cishell.algorithm.convertergraph" />
 			<param name="project.name" value="core/org.cishell.algorithm.convertergraph" />
 			<param name="url"
-				value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk" />
+				value="https://github.iu.edu/CNS/CIShell/trunk" />
 		</antcall>
 		<antcall target="svn.co">
 			<param name="target" value="plugins" />
 			<param name="element.id" value="org.cishell.utilities" />
 			<param name="project.name" value="core/org.cishell.utilities" />
 			<param name="url"
-				value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk" />
+				value="https://github.iu.edu/CNS/CIShell/trunk" />
 		</antcall>
 		<antcall target="svn.co">
 			<param name="target" value="plugins" />
 			<param name="element.id" value="org.cishell.utility.swt" />
 			<param name="project.name" value="core/org.cishell.utility.swt" />
 			<param name="url"
-				value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk" />
+				value="https://github.iu.edu/CNS/CIShell/trunk" />
 		</antcall>
 		<antcall target="svn.co">
 			<param name="target" value="plugins" />
 			<param name="element.id" value="org.cishell.utility.datastructure" />
 			<param name="project.name" value="core/org.cishell.utility.datastructure" />
 			<param name="url"
-				value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk" />
+				value="https://github.iu.edu/CNS/CIShell/trunk" />
 		</antcall>
 		<antcall target="svn.co">
 			<param name="target" value="plugins" />
 			<param name="element.id" value="org.cishell.reference.service.database" />
 			<param name="project.name" value="core/org.cishell.reference.service.database" />
 			<param name="url"
-				value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk" />
+				value="https://github.iu.edu/CNS/CIShell/trunk" />
 		</antcall>
 		<antcall target="svn.co">
 			<param name="target" value="plugins" />
 			<param name="element.id" value="org.cishell.service.database" />
 			<param name="project.name" value="core/org.cishell.service.database" />
 			<param name="url"
-				value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk" />
+				value="https://github.iu.edu/CNS/CIShell/trunk" />
 		</antcall>
 
 
@@ -149,21 +149,21 @@
 			<param name="element.id" value="org.cishell.templates" />
 			<param name="project.name" value="templates/org.cishell.templates" />
 			<param name="url"
-				value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk" />
+				value="https://github.iu.edu/CNS/CIShell/trunk" />
 		</antcall>
 		<antcall target="svn.co">
 			<param name="target" value="plugins" />
 			<param name="element.id" value="org.cishell.templates.jythonrunner" />
 			<param name="project.name" value="templates/org.cishell.templates.jythonrunner" />
 			<param name="url"
-				value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk" />
+				value="https://github.iu.edu/CNS/CIShell/trunk" />
 		</antcall>
 		<antcall target="svn.co">
 			<param name="target" value="plugins" />
 			<param name="element.id" value="org.cishell.templates.database" />
 			<param name="project.name" value="templates/org.cishell.templates.database" />
 			<param name="url"
-				value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk" />
+				value="https://github.iu.edu/CNS/CIShell/trunk" />
 		</antcall>
 
 
@@ -175,84 +175,84 @@
 			<param name="element.id" value="edu.uci.ics.jung" />
 			<param name="project.name" value="libs/edu.uci.ics.jung" />
 			<param name="url"
-				value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk" />
+				value="https://github.iu.edu/CNS/CIShell/trunk" />
 		</antcall>
 		<antcall target="svn.co">
 			<param name="target" value="plugins" />
 			<param name="element.id" value="org.apache.commons.collections" />
 			<param name="project.name" value="libs/org.apache.commons.collections" />
 			<param name="url"
-				value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk" />
+				value="https://github.iu.edu/CNS/CIShell/trunk" />
 		</antcall>
 		<antcall target="svn.co">
 			<param name="target" value="plugins" />
 			<param name="element.id" value="commons_dbcp" />
 			<param name="project.name" value="libs/commons_dbcp" />
 			<param name="url"
-				value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk" />
+				value="https://github.iu.edu/CNS/CIShell/trunk" />
 		</antcall>
 		<antcall target="svn.co">
 			<param name="target" value="plugins" />
 			<param name="element.id" value="commons_pool" />
 			<param name="project.name" value="libs/commons_pool" />
 			<param name="url"
-				value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk" />
+				value="https://github.iu.edu/CNS/CIShell/trunk" />
 		</antcall>
 		<antcall target="svn.co">
 			<param name="target" value="plugins" />
 			<param name="element.id" value="derbylib" />
 			<param name="project.name" value="libs/derbylib" />
 			<param name="url"
-				value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk" />
+				value="https://github.iu.edu/CNS/CIShell/trunk" />
 		</antcall>
 		<antcall target="svn.co">
 			<param name="target" value="plugins" />
 			<param name="element.id" value="hsqldb" />
 			<param name="project.name" value="libs/hsqldb" />
 			<param name="url"
-				value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk" />
+				value="https://github.iu.edu/CNS/CIShell/trunk" />
 		</antcall>
 		<antcall target="svn.co">
 			<param name="target" value="plugins" />
 			<param name="element.id" value="cern.colt" />
 			<param name="project.name" value="libs/cern.colt" />
 			<param name="url"
-				value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk" />
+				value="https://github.iu.edu/CNS/CIShell/trunk" />
 		</antcall>
 		<antcall target="svn.co">
 			<param name="target" value="plugins" />
 			<param name="element.id" value="jythonlib" />
 			<param name="project.name" value="libs/jythonlib" />
 			<param name="url"
-				value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk" />
+				value="https://github.iu.edu/CNS/CIShell/trunk" />
 		</antcall>
 		<antcall target="svn.co">
 			<param name="target" value="plugins" />
 			<param name="element.id" value="com.google.guava" />
 			<param name="project.name" value="libs/com.google.guava" />
 			<param name="url"
-				value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk" />
+				value="https://github.iu.edu/CNS/CIShell/trunk" />
 		</antcall>
 		<antcall target="svn.co">
 			<param name="target" value="plugins" />
 			<param name="element.id" value="org.prefuse.lib" />
 			<param name="project.name" value="libs/prefuselib" />
 			<param name="url"
-				value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk" />
+				value="https://github.iu.edu/CNS/CIShell/trunk" />
 		</antcall>
 		<antcall target="svn.co">
 			<param name="target" value="plugins" />
 			<param name="element.id" value="joda-time" />
 			<param name="project.name" value="libs/joda-time" />
 			<param name="url"
-				value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk" />
+				value="https://github.iu.edu/CNS/CIShell/trunk" />
 		</antcall>
 		<antcall target="svn.co">
 			<param name="target" value="plugins" />
 			<param name="element.id" value="opencsv" />
 			<param name="project.name" value="libs/opencsv" />
 			<param name="url"
-				value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk" />
+				value="https://github.iu.edu/CNS/CIShell/trunk" />
 		</antcall>
 
 
@@ -265,42 +265,42 @@
 			<param name="project.name"
 				value="clients/gui/org.cishell.reference.gui.brand.cishell" />
 			<param name="url"
-				value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk" />
+				value="https://github.iu.edu/CNS/CIShell/trunk" />
 		</antcall>
 		<antcall target="svn.co">
 			<param name="target" value="plugins" />
 			<param name="element.id" value="org.cishell.reference.gui.datamanager" />
 			<param name="project.name" value="clients/gui/org.cishell.reference.gui.datamanager" />
 			<param name="url"
-				value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk" />
+				value="https://github.iu.edu/CNS/CIShell/trunk" />
 		</antcall>
 		<antcall target="svn.co">
 			<param name="target" value="plugins" />
 			<param name="element.id" value="org.cishell.reference.gui.log" />
 			<param name="project.name" value="clients/gui/org.cishell.reference.gui.log" />
 			<param name="url"
-				value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk" />
+				value="https://github.iu.edu/CNS/CIShell/trunk" />
 		</antcall>
 		<antcall target="svn.co">
 			<param name="target" value="plugins" />
 			<param name="element.id" value="org.cishell.reference.gui.menumanager" />
 			<param name="project.name" value="clients/gui/org.cishell.reference.gui.menumanager" />
 			<param name="url"
-				value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk" />
+				value="https://github.iu.edu/CNS/CIShell/trunk" />
 		</antcall>
 		<antcall target="svn.co">
 			<param name="target" value="plugins" />
 			<param name="element.id" value="org.cishell.reference.gui.prefs.swt" />
 			<param name="project.name" value="clients/gui/org.cishell.reference.gui.prefs.swt" />
 			<param name="url"
-				value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk" />
+				value="https://github.iu.edu/CNS/CIShell/trunk" />
 		</antcall>
 		<antcall target="svn.co">
 			<param name="target" value="plugins" />
 			<param name="element.id" value="org.cishell.reference.gui.workspace" />
 			<param name="project.name" value="clients/gui/org.cishell.reference.gui.workspace" />
 			<param name="url"
-				value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk" />
+				value="https://github.iu.edu/CNS/CIShell/trunk" />
 		</antcall>
 		<antcall target="svn.co">
 			<param name="target" value="plugins" />
@@ -308,21 +308,21 @@
 			<param name="project.name"
 				value="clients/gui/org.cishell.reference.gui.guibuilder.swt" />
 			<param name="url"
-				value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk" />
+				value="https://github.iu.edu/CNS/CIShell/trunk" />
 		</antcall>
 		<antcall target="svn.co">
 			<param name="target" value="plugins" />
 			<param name="element.id" value="org.cishell.reference.gui.persistence" />
 			<param name="project.name" value="clients/gui/org.cishell.reference.gui.persistence" />
 			<param name="url"
-				value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk" />
+				value="https://github.iu.edu/CNS/CIShell/trunk" />
 		</antcall>
 		<antcall target="svn.co">
 			<param name="target" value="plugins" />
 			<param name="element.id" value="org.cishell.reference.gui.scheduler" />
 			<param name="project.name" value="clients/gui/org.cishell.reference.gui.scheduler" />
 			<param name="url"
-				value="https://cishell.svn.sourceforge.net/svnroot/cishell/trunk" />
+				value="https://github.iu.edu/CNS/CIShell/trunk" />
 		</antcall>
 	</target>
 </project>
