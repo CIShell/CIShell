@@ -68,16 +68,32 @@
 		<substring property="product.build.type.short"
 			start="0" end="1" text="${product.build.type}" />
 
-		<copy todir="${deploy.dir}/${product.version}.${DSTAMP}${TSTAMP}${product.build.type}">
-			<fileset dir="${output.dir}" />
-			<mapper>
-				<!-- Don't blame me, I didn't make up the file name convention. -->
-				<regexpmapper
-					casesensitive="false"
-					from="${product.name}-(.*)"
-					to="${product.name}-${product.build.type.short}-${product.version}.${DSTAMP}${TSTAMP}${product.build.type}-\1" />
-			</mapper>
-		</copy>
+		<if>
+			<equals arg1="${product.build.type}" arg2="REL" />
+			<then>
+				<copy todir="${deploy.dir}/${product.version}_${DSTAMP}">
+					<fileset dir="${output.dir}" />
+					<mapper>
+						<regexpmapper
+							casesensitive="false"
+							from="${product.name}-(.*)"
+							to="${product.name}-${product.version}_${DSTAMP}-\1" />
+					</mapper>
+				</copy>
+			</then>
+			<else>
+				<copy todir="${deploy.dir}/${product.version}.${DSTAMP}${TSTAMP}${product.build.type}">
+					<fileset dir="${output.dir}" />
+					<mapper>
+						<!-- Don't blame me, I didn't make up the file name convention. -->
+						<regexpmapper
+							casesensitive="false"
+							from="${product.name}-(.*)"
+							to="${product.name}-${product.build.type.short}-${product.version}.${DSTAMP}${TSTAMP}${product.build.type}-\1" />
+					</mapper>
+				</copy>
+			</else>
+		</if>
 	</target>
 
 	<!-- Since we don't use the p2 functionality we are excluding this from the
