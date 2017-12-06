@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="addAntBuiltPlugins" default="build">
-	<property name="product.name" relative="true">cishell</property>
+	<property name="product.name">cishell</property>
 	<property name="input.dir" relative="true">${basedir}/target/products</property>
 	<property name="output.dir" relative="true">${basedir}/target/products-final</property>
-	<property name="deploy.dir" relative="false">builds/test/cishell/nightly/</property>
-	<property name="p2.dest" relative="false">${deploy.dir}../p2/</property>
-	<property name="p2.src">target/repository</property>
+	<property name="product.prefix">cishell</property>
+
+	<!-- To override any of these properties, run ant [...] -Dproperty.name=value -->
+	<property name="deploy.dir" relative="false">build/test/${product.name}</property>
+	<property name="p2.dest" relative="false">build/test/${product.name}/p2/</property>
+	<property name="p2.src">${basedir}/target/repository</property>
+
 	<property name="product.version">2.0.0</property>
+	<!-- Nightly builds: product.build.type=NGT -->
 	<property name="product.build.type">custom</property>
 	<!-- permission.files defined files which the executable bit need to be enable at Mac and Linux. -->
 	<property name="permission.files">**/${product.name}</property>
@@ -26,16 +31,17 @@
      ]]>
 	</scriptdef>
 
+
 	<target name="build">
 		<echo>
-			Before this will work, you will need to add the 
+			Before this will work, you will need to add the
 			[Ant-Contrib](http://ant-contrib.sourceforge.net/)
 			library to Ant. See README for more information.
 		</echo>
 
 		<taskdef resource="net/sf/antcontrib/antcontrib.properties">
 			<classpath>
-				<pathelement location="build-files/ant-contrib.jar"/>
+				<pathelement location="${basedir}/build-files/ant-contrib.jar"/>
 			</classpath>
 		</taskdef>
 		<delete dir="${output.dir}" />
@@ -43,18 +49,17 @@
 
 		<foreach target="each-product-zip" param="product.zip">
 			<path>
-				<fileset dir="${input.dir}" includes="${product.name}-win32*.zip" />
+				<fileset dir="${input.dir}" includes="${product.name}-win32*.zip" casesensitive="false" />
 			</path>
 		</foreach>
 
 		<foreach target="each-product-tgz" param="product.zip">
 			<path>
-				<fileset dir="${input.dir}" includes="${product.name}-macosx*.zip ${product.name}-linux*.zip" />
+				<fileset dir="${input.dir}" includes="${product.name}-macosx*.zip ${product.name}-linux*.zip" casesensitive="false" />
 			</path>
 		</foreach>
+
 	</target>
-
-
 
 	<target name="deploy">
 		<tstamp/>
@@ -67,7 +72,7 @@
 			<fileset dir="${output.dir}" />
 			<mapper>
 				<!-- Don't blame me, I didn't make up the file name convention. -->
-				<regexpmapper 
+				<regexpmapper
 					casesensitive="false"
 					from="${product.name}-(.*)"
 					to="${product.name}-${product.build.type.short}-${product.version}.${DSTAMP}${TSTAMP}${product.build.type}-\1" />
@@ -75,12 +80,17 @@
 		</copy>
 	</target>
 
+	<!-- Since we don't use the p2 functionality we are excluding this from the
+			build to reduce the size (~4MBs) on the final build.
+			See Jira SCISQUARED-300 for further details. -->
+	<property name="exclude_p2">**/p2/**</property>
+
 	<target name="each-product-zip">
 		<basename property="product.filename" file="${product.zip}" />
 		<property name="product.zip.out">${output.dir}/${product.filename}</property>
 		<echo>Going to use ${product.zip} to make ${product.zip.out}</echo>
 
-		<tempfile property="temp.dir" />
+		<tempfile property="temp.dir" destDir="target" />
 		<mkdir dir="${temp.dir}" />
 
 		<unzip src="${product.zip}" dest="${temp.dir}">
@@ -89,14 +99,15 @@
 			</patternset>
 		</unzip>
 
-		<!-- Tycho / Eclipse don't honor this option if you set it to true in the .product definition file. You have to change it after the fact. *pout* -->
+		<!-- Tycho / Eclipse don't honor this option if you set it to true in the
+		     .product definition file.  You have to change it after the fact.  *pout* -->
 		<replaceregexp match="org\.eclipse\.update\.reconcile=false" replace="org\.eclipse\.update\.reconcile=true">
 			<fileset dir="${temp.dir}" includes="**/configuration/config.ini" />
 		</replaceregexp>
 
 		<zip destfile="${product.zip.out}" duplicate="fail">
-			<zipfileset src="${product.zip}" excludes="**/configuration/config.ini **/eclipsec.exe **/artifacts.xml" />
-			<zipfileset dir="${temp.dir}" includes="**/*.ini" />
+			<zipfileset src="${product.zip}" excludes="**/configuration/config.ini ${exclude_p2} **/eclipsec.exe **/artifacts.xml" prefix="${product.prefix}" />
+			<zipfileset dir="${temp.dir}" includes="**/*.ini" prefix="${product.prefix}" />
 		</zip>
 		<delete dir="${temp.dir}" />
 	</target>
@@ -107,7 +118,7 @@
 		<property name="product.tgz.out">${output.dir}/${output.filename}</property>
 		<echo>Going to use ${product.zip} to make ${product.tgz.out}</echo>
 
-		<tempfile property="temp.dir" />
+		<tempfile property="temp.dir" destDir="target" />
 		<mkdir dir="${temp.dir}" />
 
 		<unzip src="${product.zip}" dest="${temp.dir}" >
@@ -121,13 +132,12 @@
 			<fileset dir="${temp.dir}" includes="**/configuration/config.ini" />
 		</replaceregexp>
 
-		<tar destfile="${product.tgz.out}" compression="gzip">
-			<zipfileset src="${product.zip}" excludes="**/configuration/config.ini **/eclipsec.exe **/artifacts.xml ${permission.files}" />
-			<zipfileset src="${product.zip}" includes="${permission.files}" filemode="755" />
-			<zipfileset dir="${temp.dir}" includes="**/*.ini" />
+		<tar destfile="${product.tgz.out}" longfile="posix" compression="gzip">
+			<zipfileset src="${product.zip}" excludes="**/configuration/config.ini ${permission.files} **/eclipsec.exe **/artifacts.xml ${exclude_p2}" prefix="${product.prefix}" />
+			<zipfileset src="${product.zip}" includes="${permission.files}" filemode="755" prefix="${product.prefix}" />
+			<zipfileset dir="${temp.dir}" includes="**/*.ini" prefix="${product.prefix}" />
 		</tar>
 
 		<delete dir="${temp.dir}" />
 	</target>
-
 </project>
