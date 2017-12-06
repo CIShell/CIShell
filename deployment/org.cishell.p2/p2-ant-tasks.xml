@@ -6,7 +6,11 @@
 	<!-- This will deploy the p2 repositories -->
 	<target name="deploy-dev-p2">
 		<!-- for <if> statements -->
-		<taskdef resource="net/sf/antcontrib/antlib.xml"/>
+		<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+			<classpath>
+				<pathelement location="${basedir}/build-files/ant-contrib.jar"/>
+			</classpath>
+		</taskdef>
 		<!-- Deploy the nightly p2 -->
 		<property name="nightly.p2.dest">${dev-p2.output.dir}nightly-repo/</property>
 		<echo message="Making nightly p2 by copying from ${dev-p2.input.dir} to ${nightly.p2.dest}..."/>
