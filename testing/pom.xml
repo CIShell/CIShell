@@ -34,11 +34,11 @@
 							<artifactId>org.cishell.environment.equinox.feature</artifactId>
 							<version>0.0.0</version>
 						</dependency>
-						<dependency>
+					<!-- 	<dependency>
 							<type>eclipse-feature</type>
 							<artifactId>org.cishell.reference.feature</artifactId>
 							<version>0.0.0</version>
-						</dependency>
+						</dependency>-->
 						<dependency>
 							<type>eclipse-feature</type>
 							<artifactId>org.cishell.feature</artifactId>
