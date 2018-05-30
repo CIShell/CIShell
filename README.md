@@ -14,6 +14,6 @@ Removed GUI components from CIShell, renamed the new repo as cishell-core.
   a.  deployment
   b.  gui
   c.  templates
-2.  Shifted the removed items to [cishell-ref-gui](https://github.com/CIShell/CIShell/tree/cishell-ref-gui) branch.
+2.  Shifted the removed items to cishell-ref-gui branch.
 3.  If you need a CIShell GUI, checkout cishell-ref-gui branch.
     Build CIShell-core first then build cishell-ref-gui.
