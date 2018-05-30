@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.cishell.testing</groupId>
 	<artifactId>testing</artifactId>
@@ -29,21 +30,21 @@
 				<version>${tychoVersion}</version>
 				<configuration>
 					<dependencies>
-						<dependency>
+						<!-- <dependency>
 							<type>eclipse-feature</type>
 							<artifactId>org.cishell.environment.equinox.feature</artifactId>
 							<version>0.0.0</version>
 						</dependency>
-					<!-- 	<dependency>
+						<dependency>
 							<type>eclipse-feature</type>
 							<artifactId>org.cishell.reference.feature</artifactId>
 							<version>0.0.0</version>
-						</dependency>-->
-						<dependency>
+						</dependency> -->
+						<!-- <dependency>
 							<type>eclipse-feature</type>
 							<artifactId>org.cishell.feature</artifactId>
 							<version>0.0.0</version>
-						</dependency>
+						</dependency> -->
 					</dependencies>
 					<bundleStartLevel>
 						<bundle>
