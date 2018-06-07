@@ -10,5 +10,83 @@
   <groupId>org.cishell.templates</groupId>
   <artifactId>org.cishell.templates.wizards</artifactId>
   <version>1.0.1</version>
-  <packaging>eclipse-plugin</packaging>
+  
+<dependencies>
+  <!-- https://mvnrepository.com/artifact/org.eclipse.ui/ide -->
+<!-- <dependency>
+    <groupId>org.eclipse.ui</groupId>
+    <artifactId>ide</artifactId>
+    <version>3.3.0-I20070620</version>
+</dependency>
+ -->
+
+<!-- https://mvnrepository.com/artifact/org.eclipse.pde/ui -->
+<!-- <dependency>
+    <groupId>org.eclipse.pde</groupId>
+    <artifactId>ui</artifactId>
+    <version>3.2.1-v20060816-0800</version>
+</dependency>
+ -->
+
+ <!-- https://mvnrepository.com/artifact/org.eclipse.swt.win32.win32/x86 -->
+<dependency>
+    <groupId>org.eclipse.swt.win32.win32</groupId>
+    <artifactId>x86</artifactId>
+    <version>3.2.1-v3235</version>
+</dependency>
+
+
+ <!-- https://mvnrepository.com/artifact/junit/junit -->
+<dependency>
+    <groupId>junit</groupId>
+    <artifactId>junit</artifactId>
+    <version>3.8.1</version>
+    
+</dependency>
+
+
+<dependency>
+<groupId>org.eclipse.pde</groupId>
+<artifactId>ui</artifactId>
+<version>3.3.0-v20070608-1300</version>
+</dependency>
+<!-- https://mvnrepository.com/artifact/org.eclipse.jface/text -->
+<dependency>
+    <groupId>org.eclipse.jface</groupId>
+    <artifactId>text</artifactId>
+    <version>3.2.1-r321_v20060810</version>
+</dependency>
+
+
+<!-- https://mvnrepository.com/artifact/org.eclipse.jdt/core -->
+<dependency>
+    <groupId>org.eclipse.jdt</groupId>
+    <artifactId>core</artifactId>
+    <version>3.2.1-v_677_R32x</version>
+</dependency>
+
+
+  <dependency>
+   <groupId>org.cishell.core</groupId>
+   <artifactId>org.cishell.framework</artifactId>
+   <version>1.0.0</version>
+ </dependency>
+ <dependency>
+  <groupId>org.osgi</groupId>
+  <artifactId>org.osgi.framework</artifactId>
+  <version>1.9.0</version>
+</dependency>
+
+
+
+<dependency>
+   <groupId>org.osgi</groupId>
+  <artifactId>org.osgi.service.metatype</artifactId>
+  <version>1.4.0</version>
+ </dependency>
+
+
+</dependencies>
+
+
 </project>

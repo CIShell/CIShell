@@ -1,0 +1,13 @@
+Bundle-UUID: org.knopflerfish:ksoap-osgi:2.0.0
+Bundle-Category: service
+Bundle-Localization: plugin
+Bundle-Description: kSOAP Server
+Bundle-Vendor: Knopflerfish/Apache
+Bundle-APIVendor: Knopflerfish
+Bundle-DocURL: http://www.knopflerfish.org/remote_howto.html
+Bundle-ContactAddress: http://www.knopflerfish.org
+DynamicImport-Package: *
+Bundle-SubversionURL: https://www.knopflerfish.org/svn/knopflerfish.org/trunk/osgi/bundles_opt/soap/
+Bundle-Activator: org.knopflerfish.bundle.ksoap.Activator
+Export-Package: org.knopflerfish.service.ksoap
+Require-Bundle: javax.servlet

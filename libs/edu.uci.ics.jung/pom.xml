@@ -10,5 +10,5 @@
   <groupId>org.cishell.libs</groupId>
   <artifactId>edu.uci.ics.jung</artifactId>
   <version>1.7.6</version>
-  <packaging>eclipse-plugin</packaging>
+  
 </project>

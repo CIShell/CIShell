@@ -1,0 +1,13 @@
+-classpath: commons-collections-3.1.jar
+Export-Package: org.apache.commons.collections;version="3.1.0",\
+ org.apache.commons.collections.bag;version="3.1.0",\
+ org.apache.commons.collections.bidimap;version="3.1.0",\
+ org.apache.commons.collections.buffer;version="3.1.0",\
+ org.apache.commons.collections.collection;version="3.1.0",\
+ org.apache.commons.collections.comparators;version="3.1.0",\
+ org.apache.commons.collections.functors;version="3.1.0",\
+ org.apache.commons.collections.iterators;version="3.1.0",\
+ org.apache.commons.collections.keyvalue;version="3.1.0",\
+ org.apache.commons.collections.list;version="3.1.0",\
+ org.apache.commons.collections.map;version="3.1.0",\
+ org.apache.commons.collections.set;version="3.1.0"

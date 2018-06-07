@@ -1,0 +1,3 @@
+Export-Package: org.cishell.templates.jythonrunner
+X-AutoStart: true
+Service-Component: OSGI-INF/component.xml

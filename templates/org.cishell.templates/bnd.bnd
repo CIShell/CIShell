@@ -1,0 +1,4 @@
+X-AutoStart: true
+Export-Package: org.cishell.templates.dataset,\
+ org.cishell.templates.staticexecutable
+Bundle-Activator: org.cishell.templates.Activator

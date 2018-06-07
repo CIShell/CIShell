@@ -1,0 +1,13 @@
+Require-Bundle: org.eclipse.ui;bundle-version="3.2.0",\
+ org.eclipse.ui.ide;bundle-version="3.2.0",\
+ org.eclipse.core.resources;bundle-version="3.2.0",\
+ org.eclipse.core.runtime;bundle-version="3.2.0",\
+ org.eclipse.pde;bundle-version="3.2.0",\
+ org.eclipse.pde.ui;bundle-version="3.2.0",\
+ org.eclipse.pde.core;bundle-version="3.2.0",\
+ org.eclipse.jface;bundle-version="3.2.0",\
+ org.eclipse.jdt;bundle-version="3.2.0",\
+ org.eclipse.jdt.ui;bundle-version="3.2.0",\
+ org.eclipse.jdt.core;bundle-version="3.2.0",\
+ org.eclipse.jdt.launching;bundle-version="3.2.0"
+Bundle-ActivationPolicy: lazy

@@ -10,5 +10,84 @@
   <groupId>org.cishell.core</groupId>
   <artifactId>org.cishell.utilities</artifactId>
   <version>1.0.2</version>
-  <packaging>eclipse-plugin</packaging>
+
+
+  <dependencies>
+      <dependency>
+   <groupId>org.cishell.core</groupId>
+   <artifactId>org.cishell.framework</artifactId>
+   <version>1.0.0</version>
+ </dependency>
+
+<dependency>
+ <groupId>org.cishell.core</groupId>
+  <artifactId>org.cishell.service.database</artifactId>
+  <version>1.0.0</version>
+ </dependency>
+
+<dependency>
+  <groupId>org.cishell.core</groupId>
+  <artifactId>org.cishell.reference</artifactId>
+  <version>1.0.0</version>
+</dependency>
+
+
+<dependency>
+  <groupId>com.google.collections</groupId>
+  <artifactId>google-collections</artifactId>
+  <version>1.0</version>
+  </dependency>
+
+  <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+<dependency>
+    <groupId>commons-io</groupId>
+    <artifactId>commons-io</artifactId>
+    <version>2.4</version>
+</dependency>
+
+
+ <!-- https://mvnrepository.com/artifact/joda-time/joda-time -->
+<dependency>
+    <groupId>joda-time</groupId>
+    <artifactId>joda-time</artifactId>
+    <version>2.3</version>
+</dependency>
+
+
+
+<dependency>
+<groupId>org.osgi</groupId>
+  <artifactId>org.osgi.core</artifactId>
+   <version>4.3.0</version>
+</dependency>
+
+<dependency>
+  <groupId>org.osgi</groupId>
+  <artifactId>org.osgi.framework</artifactId>
+  <version>1.8.0</version>
+</dependency>
+
+
+<dependency>
+ <groupId>org.osgi</groupId>
+ <artifactId>org.osgi.service.log</artifactId>
+ <version>1.3.0</version>
+</dependency>
+
+<dependency>
+   <groupId>org.osgi</groupId>
+  <artifactId>org.osgi.service.metatype</artifactId>
+  <version>1.3.0</version>
+ </dependency>
+
+
+ <dependency>
+    <groupId>org.prefuse</groupId>
+    <artifactId>prefuse</artifactId>
+    <version>beta-20071021</version>
+ </dependency>
+
+
+  </dependencies>
+  
 </project>

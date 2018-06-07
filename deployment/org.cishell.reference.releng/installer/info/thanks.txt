@@ -1,8 +1,0 @@
-Installation of CIShell: Cyberinfrastructure Shell was successful!
-
-If you have any problems, please contact the CIShell development team at 
-cishell-developers@lists.sourceforge.net.
-New releases will be announced on the users list. You can sign up on our 
-sourceforge page at http://sourceforge.net/projects/cishell 
-
-Please go to http://cishell.org for more information and breaking news.

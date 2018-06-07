@@ -10,5 +10,5 @@
   <groupId>org.cishell.examples</groupId>
   <artifactId>org.cishell.templates.wizards.samplejythonalgorithm</artifactId>
   <version>0.0.1</version>
-  <packaging>eclipse-plugin</packaging>
+  
 </project>

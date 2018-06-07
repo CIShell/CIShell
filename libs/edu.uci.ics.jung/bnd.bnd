@@ -1,0 +1,34 @@
+Export-Package: edu.uci.ics.jung.algorithms,\
+ edu.uci.ics.jung.algorithms.blockmodel,\
+ edu.uci.ics.jung.algorithms.cluster,\
+ edu.uci.ics.jung.algorithms.connectivity,\
+ edu.uci.ics.jung.algorithms.flows,\
+ edu.uci.ics.jung.algorithms.importance,\
+ edu.uci.ics.jung.algorithms.metrics,\
+ edu.uci.ics.jung.algorithms.shortestpath,\
+ edu.uci.ics.jung.algorithms.transformation,\
+ edu.uci.ics.jung.exceptions,\
+ edu.uci.ics.jung.graph,\
+ edu.uci.ics.jung.graph.decorators,\
+ edu.uci.ics.jung.graph.event,\
+ edu.uci.ics.jung.graph.filters,\
+ edu.uci.ics.jung.graph.filters.impl,\
+ edu.uci.ics.jung.graph.impl,\
+ edu.uci.ics.jung.graph.predicates,\
+ edu.uci.ics.jung.io,\
+ edu.uci.ics.jung.random.generators,\
+ edu.uci.ics.jung.random.permuters,\
+ edu.uci.ics.jung.statistics,\
+ edu.uci.ics.jung.utils,\
+ edu.uci.ics.jung.visualization,\
+ edu.uci.ics.jung.visualization.contrib,\
+ edu.uci.ics.jung.visualization.control,\
+ edu.uci.ics.jung.visualization.graphdraw,\
+ edu.uci.ics.jung.visualization.subLayout,\
+ edu.uci.ics.jung.visualization.transform,\
+ edu.uci.ics.jung.visualization.transform.shape
+
+
+
+ -classpath: jung-1.7.6.jar
+ 

@@ -1,20 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>org.cishell.templates</groupId>
-  <artifactId>templates</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <packaging>pom</packaging>
-  <modules>
-    <module>org.cishell.templates</module>
-    <module>org.cishell.templates.database</module>
-    <module>org.cishell.templates.jythonrunner</module>
-    <module>org.cishell.templates.wizards</module>
-  </modules>
-  <parent>
-  	<groupId>org.cishell</groupId>
-  	<artifactId>parent</artifactId>
-  	<version>0.0.1</version>
-  </parent>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.cishell.templates</groupId>
+	<artifactId>templates</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<modules>
+		<module>org.cishell.templates</module>
+		<module>org.cishell.templates.database</module>
+		<module>org.cishell.templates.jythonrunner</module>
+		<!-- <module>org.cishell.templates.wizards</module> -->
+	</modules>
+	<parent>
+		<groupId>org.cishell</groupId>
+		<artifactId>parent</artifactId>
+		<version>0.0.1</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+	
+  <build>
+    <plugins>
+
+      <plugin>
+        <groupId>biz.aQute.bnd</groupId>
+        <artifactId>bnd-maven-plugin</artifactId>
+        <version>4.0.0</version>
+        <configuration>
+         <bnd><![CDATA[
+
+          Bundle-SymbolicName: ${project.groupId}.${project.artifactId}
+          Bundle-Name: ${project.artifactId}
+          Bundle-ClassPath: .
+          Bundle-Localization: plugin
+          Bundle-Version:${project.version}
+
+          ]]></bnd>                     
+        </configuration>
+        
+        <executions>
+          <execution>
+            <goals>
+              <goal>bnd-process</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.0.2</version>
+        <configuration>
+          <archive>
+            <manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
+          </archive>
+          <skipIfEmpty>true</skipIfEmpty>
+        </configuration>
+      </plugin>
+
+    </plugins>
+  </build>
+
 </project>

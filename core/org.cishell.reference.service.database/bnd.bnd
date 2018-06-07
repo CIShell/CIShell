@@ -1,0 +1,4 @@
+Bundle-Activator: org.cishell.reference.service.database.DerbyDatabaseService
+X-AutoStart: true
+Service-Component: OSGI-INF/component.xml
+Export-Package: org.cishell.reference.service.database;x-friends:="edu.iu.sci2.testutilities"

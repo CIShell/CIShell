@@ -10,5 +10,5 @@
   <groupId>org.cishell.libs</groupId>
   <artifactId>Apache_Derby</artifactId>
   <version>1.0.0</version>
-  <packaging>eclipse-plugin</packaging>
+  
 </project>

@@ -10,5 +10,21 @@
   <groupId>org.cishell.core</groupId>
   <artifactId>org.cishell.service.autostart</artifactId>
   <version>1.0.0</version>
-  <packaging>eclipse-plugin</packaging>
+
+<dependencies>
+  <dependency>
+  <groupId>org.osgi</groupId>
+  <artifactId>org.osgi.framework</artifactId>
+  <version>1.9.0</version>
+</dependency>
+
+<!-- https://mvnrepository.com/artifact/org.eclipse.update/configurator -->
+<dependency>
+    <groupId>org.eclipse.update</groupId>
+    <artifactId>configurator</artifactId>
+    <version>3.2.100-v20070615</version>
+</dependency>
+
+</dependencies>
+  
 </project>

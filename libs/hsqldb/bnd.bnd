@@ -1,0 +1,15 @@
+-classpath: hsqldb.jar
+Bundle-Localization: plugin
+Export-Package: \
+org.hsqldb,\
+org.hsqldb.index,\
+org.hsqldb.jdbc,\
+org.hsqldb.lib,\
+org.hsqldb.lib.java,\
+org.hsqldb.persist,\
+org.hsqldb.resources,\
+org.hsqldb.rowio,\
+org.hsqldb.scriptio,\
+org.hsqldb.store,\
+org.hsqldb.types,\
+org.hsqldb.util

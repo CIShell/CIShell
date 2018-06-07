@@ -1,0 +1,3 @@
+X-AutoStart: true
+Bundle-Activator: org.cishell.templates.database.Activator
+Export-Package: org.cishell.templates.database

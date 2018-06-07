@@ -10,5 +10,5 @@
   <groupId>org.cishell.libs</groupId>
   <artifactId>org.apache.commons.collections</artifactId>
   <version>3.1.0</version>
-  <packaging>eclipse-plugin</packaging>
+  
 </project>

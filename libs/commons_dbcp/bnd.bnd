@@ -1,0 +1,7 @@
+-classpath: commons-dbcp-1.2.2.jar
+Bundle-Localization: plugin
+Export-Package: \
+org.apache.commons.dbcp,\
+org.apache.commons.dbcp.cpdsadapter,\
+org.apache.commons.dbcp.datasources,\
+org.apache.commons.jocl

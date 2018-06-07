@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<component name="org.cishell.reference.app.service.fileloader.FileLoaderServiceImpl.component" immediate="true">
-	<implementation class="org.cishell.reference.app.service.fileloader.FileLoaderServiceImpl"/>
-	<service>
-		<provide interface="org.osgi.service.cm.ManagedService"/>
-		<provide interface="org.cishell.app.service.fileloader.FileLoaderService"/>
-	</service>
-</component>

@@ -10,5 +10,46 @@
   <groupId>org.cishell.templates</groupId>
   <artifactId>org.cishell.templates.database</artifactId>
   <version>1.0.0</version>
-  <packaging>eclipse-plugin</packaging>
+  
+
+<dependencies>
+  <dependency>
+   <groupId>org.cishell.core</groupId>
+   <artifactId>org.cishell.framework</artifactId>
+   <version>1.0.0</version>
+ </dependency>
+ <dependency>
+  <groupId>org.osgi</groupId>
+  <artifactId>org.osgi.framework</artifactId>
+  <version>1.9.0</version>
+</dependency>
+
+
+<dependency>
+ <groupId>org.osgi</groupId>
+ <artifactId>org.osgi.service.log</artifactId>
+ <version>1.4.0</version>
+</dependency>
+
+<dependency>
+ <groupId>org.osgi</groupId>
+ <artifactId>org.osgi.service.component</artifactId>
+ <version>1.4.0</version>
+</dependency>
+
+<dependency>
+   <groupId>org.osgi</groupId>
+  <artifactId>org.osgi.service.metatype</artifactId>
+  <version>1.4.0</version>
+ </dependency>
+
+ 
+<dependency>
+ <groupId>org.cishell.core</groupId>
+  <artifactId>org.cishell.service.database</artifactId>
+  <version>1.0.0</version>
+ </dependency>
+
+</dependencies>
+
 </project>

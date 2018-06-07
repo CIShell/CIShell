@@ -10,5 +10,5 @@
   <groupId>org.cishell.libs</groupId>
   <artifactId>ksoap2lib</artifactId>
   <version>2.1.1</version>
-  <packaging>eclipse-plugin</packaging>
+  
 </project>

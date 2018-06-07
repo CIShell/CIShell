@@ -1,0 +1,2 @@
+Bundle-Activator: org.cishell.reference.services.Activator
+X-AutoStart: true

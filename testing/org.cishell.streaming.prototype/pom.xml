@@ -10,5 +10,5 @@
   <groupId>org.cishell.testing</groupId>
   <artifactId>org.cishell.streaming.prototype</artifactId>
   <version>0.0.1</version>
-  <packaging>eclipse-plugin</packaging>
+  
 </project>
