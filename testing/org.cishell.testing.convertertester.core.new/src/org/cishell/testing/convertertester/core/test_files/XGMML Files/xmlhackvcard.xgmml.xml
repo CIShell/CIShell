@@ -1,0 +1,74 @@
+<graph directed="1">
+
+	<node id="1" label="Mukkai Krishnamoorthy">
+
+	<att>
+
+	<rdf:RDF>
+
+	<rdf:Description about="http://www.cs.rpi.edu/~moorthy">
+<vCard:FN> Mukkai Krishnamoorthy </vCard:FN>
+
+	<vCard:N rdf:parseType="Resource">
+<vCard:Family> Krishnamoorthy </vCard:Family>
+<vCard:Given> Mukkai </vCard:Given>
+</vCard:N>
+
+	<vCard:EMAIL>
+<rdf:value> moorthy@cs.rpi.edu </rdf:value>
+<rdf:type resource="http://imc.org/vCard/3.0#internet"/>
+</vCard:EMAIL>
+
+	<vCard:ORG rdf:parseType="Resource">
+<vCard:Orgname> RPI </vCard:Orgname>
+
+	<vCard:Orgunit>
+
+	<rdf:seq>
+<rdf:li> Computer Science </rdf:li>
+<rdf:li> Professor </rdf:li>
+</rdf:seq>
+</vCard:Orgunit>
+</vCard:ORG>
+</rdf:Description>
+</rdf:RDF>
+</att>
+</node>
+
+	<node id="2" label="John Punin">
+
+	<att>
+
+	<rdf:RDF>
+
+	<rdf:Description about="http://www.cs.rpi.edu/~puninj">
+<vCard:FN> John Punin </vCard:FN>
+
+	<vCard:N rdf:parseType="Resource">
+<vCard:Family> Punin </vCard:Family>
+<vCard:Given>  John </vCard:Given>
+</vCard:N>
+
+	<vCard:EMAIL>
+<rdf:value> puninj@cs.rpi.edu </rdf:value>
+<rdf:type resource="http://imc.org/vCard/3.0#internet"/>
+</vCard:EMAIL>
+
+	<vCard:ORG rdf:parseType="Resource">
+<vCard:Orgname> RPI </vCard:Orgname>
+
+	<vCard:Orgunit>
+
+	<rdf:seq>
+<rdf:li> Computer Science </rdf:li>
+<rdf:li> PhD student </rdf:li>
+</rdf:seq>
+</vCard:Orgunit>
+</vCard:ORG>
+</rdf:Description>
+</rdf:RDF>
+</att>
+</node>
+<edge source="1" target="2" weight="0" label="advisor"/>
+<edge source="2" target="1" weight="0" label="advisee"/>
+</graph>

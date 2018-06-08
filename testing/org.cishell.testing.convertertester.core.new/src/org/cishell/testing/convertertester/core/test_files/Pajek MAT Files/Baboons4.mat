@@ -1,0 +1,34 @@
+*network Baboon2: Baboon grooming relations at t2
+% Baboon colony/H22b; 50 / 0 0 1 1 1 1 0 0 0 0 0 0 0 0
+% Stephenson & Zelen, Social Networks 11(1989),1-37
+% STRAN 21. feb 1993; Pajek: 1. jan 2007
+*vertices  14
+  1 "FadultD"
+  2 "M2year"
+  3 "Fadult"
+  4 "Fadult"
+  5 "MadultL"
+  6 "F3year"
+  7 "M3yearF"
+  8 "Fadult"
+  9 "M1year"
+ 10 "F3year"
+ 11 "F2year"
+ 12 "M1year"
+ 13 "M1year"
+ 14 "FadultN"
+*matrix
+  0 11  0  1  1  0  2  2  0  0  0  0  0 14
+ 11  0  0  0  0  0  0  0  0  0  0  0  0  0
+  0  0  0 21  0 14  0  0  0  0  0  2  3  0
+  1  0 21  0  6  0  0  0  0  1  0 19  0  0
+  1  0  0  6  0  0  0  0  0  0  0  0  0 51
+  0  0 14  0  0  0  0  0  0  3  0  5  4  3
+  2  0  0  0  0  0  0 31  0  0  0  0  0  0
+  2  0  0  0  0  0 31  0  3  2  1  0  0  1
+  0  0  0  0  0  0  0  3  0  0  0  0  0  0
+  0  0  0  1  0  3  0  2  0  0  0  0  0  0
+  0  0  0  0  0  0  0  1  0  0  0  0  0  0
+  0  0  2 19  0  5  0  0  0  0  0  0  0  0
+  0  0  3  0  0  4  0  0  0  0  0  0  0  0
+ 14  0  0  0 51  3  0  1  0  0  0  0  0  0
