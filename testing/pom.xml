@@ -25,22 +25,25 @@
 
 	
 	<properties>
-		<tychoVersion>0.18.1</tychoVersion>
+		<tychoVersion>1.2.0</tychoVersion>
 		<memoryOptions1>-Xms512m -Xmx1024m -XX:PermSize=256m</memoryOptions1>
 		<memoryOptions2>-XX:MaxPermSize=256m</memoryOptions2>
 	</properties>
-	<repositories>
+	
+
+	
+<repositories>
 		<repository>
 			<id>Indigo</id>
 			<layout>p2</layout>
-			<url>http://download.eclipse.org/releases/indigo/201106220900/</url>
+			<url>http://download.eclipse.org/eclipse/updates/3.7</url>
 			<releases>
 				<enabled>false</enabled>
 				<updatePolicy>never</updatePolicy>
 				<checksumPolicy>warn</checksumPolicy>
 			</releases>
 		</repository>
-		<repository>
+		<!-- <repository>
 			<id>eclipse-orbit</id>
 			<layout>p2</layout>
 			<url>http://download.eclipse.org/tools/orbit/downloads/drops/R20110523182458/repository</url>
@@ -49,8 +52,14 @@
 				<updatePolicy>never</updatePolicy>
 				<checksumPolicy>warn</checksumPolicy>
 			</releases>
+		</repository> -->
+		<repository>
+			<id>generate-p2-site</id> 
+			<url>http://localhost:8080/site/</url>
+			<layout>p2</layout>
 		</repository>
 	</repositories>
+
 
 
 
@@ -126,6 +135,7 @@
 					</bundleStartLevel>
 				</configuration> -->
 			</plugin>
+
 		</plugins>
 	</build>
 </project>

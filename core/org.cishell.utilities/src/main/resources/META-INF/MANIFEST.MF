@@ -4,10 +4,10 @@ Bundle-Name: Utilities Plug-in
 Bundle-SymbolicName: org.cishell.utilities
 Bundle-Version: 1.0.2
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Import-Package: com.google.common.annotations;version="8.0.0",
- com.google.common.base;version="8.0.0",
- com.google.common.collect;version="8.0.0",
- org.apache.commons.io;version="2.1.0",
+Import-Package: com.google.common.annotations,
+ com.google.common.base,
+ com.google.common.collect,
+ org.apache.commons.io,
  org.cishell.framework;version="1.0.0",
  org.cishell.framework.algorithm;version="1.0.0",
  org.cishell.framework.data,
@@ -30,7 +30,7 @@ Import-Package: com.google.common.annotations;version="8.0.0",
  prefuse.data.util,
  prefuse.util,
  prefuse.util.collections
-Export-Package: org.cishell.utilities;version="1.0.1",
+Export-Package: org.cishell.utilities;version="1.0.2",
  org.cishell.utilities.color,
  org.cishell.utilities.database,
  org.cishell.utilities.dictionary,
