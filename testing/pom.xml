@@ -17,7 +17,9 @@
 		<module>org.cishell.framework.tests</module>
 		 <module>org.cishell.utility.dict.tests</module>
 		 <module>org.cishell.streaming.prototype</module>
-		<!-- <module>org.cishell.testing.convertertester.algorithm</module> -->
+		<!-- Review for Deprecation -->
+			<!-- <module>org.cishell.testing.convertertester.algorithm</module> --> 
+		<!-- /Review for Deprecation -->
 		<module>org.cishell.testing.convertertester.commandline</module>
 		<module>org.cishell.testing.convertertester.core.new</module> 
 		<module>org.cishell.utilities.tests</module> 

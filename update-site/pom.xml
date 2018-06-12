@@ -29,6 +29,7 @@
         </goals>
 
         <configuration>
+          <destinationDirectory>${project.basedir}/p2-site/repository</destinationDirectory>
           <artifacts>
             <artifact>
               <id>org.cishell.core:org.cishell.algorithm.convertergraph:1.0.0</id>
