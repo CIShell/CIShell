@@ -6,98 +6,14 @@
 	<modules>
 		<module>core</module>
 		<module>libs</module>
-		<!-- <module>testing</module> -->
+		<module>update-site</module>
+		<module>testing</module>
 	<!-- <module>templates</module>
 	<module>testing</module> -->
 	<!-- <module>examples</module> -->
 </modules>
 <packaging>pom</packaging>
 
-
-<build>
-	<plugins>
-		<plugin>
-			<groupId>org.reficio</groupId>
-			<artifactId>p2-maven-plugin</artifactId>
-			<version>1.3.0</version>
-			<inherited>false</inherited>
-			<executions>
-				<execution>
-					<!-- <id>default-cli</id> -->
-					<id>generate-p2-site</id>
-					<phase>install</phase>
-					<goals>
-						<goal>site</goal>
-					</goals>
-
-					<configuration>
-						<artifacts>
-							<artifact>
-								<id>org.cishell.core:org.cishell.algorithm.convertergraph:1.0.0</id>
-							</artifact>
-							<artifact>
-								<id>org.cishell.core:org.cishell.framework:1.0.0</id>
-							</artifact>
-							<artifact>
-								<id>org.cishell.core:org.cishell.reference:1.0.0</id>
-							</artifact>
-							<artifact>
-								<id>org.cishell.core:org.cishell.reference.service.database:1.0.0</id>
-							</artifact>
-							<artifact>
-								<id>org.cishell.core:org.cishell.reference.services:1.0.0</id>
-							</artifact>
-							<artifact>
-								<id>org.cishell.core:org.cishell.service.autostart:1.0.0</id>
-							</artifact>
-							<artifact>
-								<id>org.cishell.core:org.cishell.service.database:1.0.0</id>
-							</artifact>
-							<artifact>
-								<id>org.cishell.core:org.cishell.reference.prefs.admin:0.0.1</id>
-							</artifact>
-							<artifact>
-								<id>org.cishell.core:org.cishell.utilities:1.0.2</id>
-							</artifact>
-							<artifact>
-								<id>org.cishell.core:org.cishell.utility.datastructure:1.0.0</id>
-							</artifact>
-							<artifact>
-								<id>org.cishell.core:org.cishell.utility.dict:0.0.1-SNAPSHOT</id>
-							</artifact>
-							<artifact>
-								<id>org.cishell.core:org.cishell.utility.swt:1.0.0</id>
-							</artifact>
-
-
-						</artifacts>
-					</configuration>
-
-				</execution>
-			</executions>
-		</plugin>
-		<plugin>
-			<groupId>org.mortbay.jetty</groupId>
-			<artifactId>jetty-maven-plugin</artifactId>
-			<version>8.1.5.v20120716</version>
-			<!-- <executions>
-				<execution>
-					<phase>pre-integration-test</phase>
-					<goals>
-						<goal>run</goal>
-					</goals>
-				</execution>
-			</executions> -->
-			<configuration>
-				<scanIntervalSeconds>10</scanIntervalSeconds>
-				<webAppSourceDirectory>${project.basedir}/target/repository/</webAppSourceDirectory>
-				<webApp>
-					<contextPath>/site</contextPath>
-				</webApp>
-			</configuration>
-		</plugin>
-			</plugins>
-</build>
 
 
 </project>

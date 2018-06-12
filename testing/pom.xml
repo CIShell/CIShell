@@ -15,14 +15,14 @@
 	</parent>
 	<modules>
 		<module>org.cishell.framework.tests</module>
-		<!-- <module>org.cishell.utility.dict.tests</module>
-		<module>org.cishell.streaming.prototype</module>
-		<module>org.cishell.testing.convertertester.algorithm</module>
+		 <module>org.cishell.utility.dict.tests</module>
+		 <module>org.cishell.streaming.prototype</module>
+		<!-- <module>org.cishell.testing.convertertester.algorithm</module> -->
 		<module>org.cishell.testing.convertertester.commandline</module>
-		<module>org.cishell.testing.convertertester.core.new</module>-->
+		<module>org.cishell.testing.convertertester.core.new</module> 
 		<module>org.cishell.utilities.tests</module> 
 	</modules>
-
+	
 	
 	<properties>
 		<tychoVersion>1.2.0</tychoVersion>
@@ -54,8 +54,8 @@
 			</releases>
 		</repository> -->
 		<repository>
-			<id>generate-p2-site</id> 
-			<url>http://localhost:8080/site/</url>
+			<id>generate-p2-site</id>
+			<url>file:///${basedir}\..\..\update-site\target\repository</url>
 			<layout>p2</layout>
 		</repository>
 	</repositories>

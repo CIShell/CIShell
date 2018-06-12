@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.cishell.updatesite</groupId>
+  <artifactId>update-site</artifactId>
+  <version>1.0.0</version>
+   <packaging>pom</packaging>
+
+<parent>
+ <groupId>org.cishell</groupId>
+ <artifactId>parent</artifactId>
+ <version>0.0.1</version>
+</parent>
+
+
+<build>
+  <plugins>
+   <plugin>
+    <groupId>org.reficio</groupId>
+    <artifactId>p2-maven-plugin</artifactId>
+    <version>1.3.0</version>
+    <executions>
+      <execution>
+        <id>generate-p2-site</id>
+        <phase>install</phase>
+        <goals>
+          <goal>site</goal>
+        </goals>
+
+        <configuration>
+          <artifacts>
+            <artifact>
+              <id>org.cishell.core:org.cishell.algorithm.convertergraph:1.0.0</id>
+            </artifact>
+            <artifact>
+              <id>org.cishell.core:org.cishell.framework:1.0.0</id>
+            </artifact>
+            <artifact>
+              <id>org.cishell.core:org.cishell.reference:1.0.0</id>
+            </artifact>
+            <artifact>
+              <id>org.cishell.core:org.cishell.reference.service.database:1.0.0</id>
+            </artifact>
+            <artifact>
+              <id>org.cishell.core:org.cishell.reference.services:1.0.0</id>
+            </artifact>
+            <artifact>
+              <id>org.cishell.core:org.cishell.service.autostart:1.0.0</id>
+            </artifact>
+            <artifact>
+              <id>org.cishell.core:org.cishell.service.database:1.0.0</id>
+            </artifact>
+            <artifact>
+              <id>org.cishell.core:org.cishell.reference.prefs.admin:0.0.1</id>
+            </artifact>
+            <artifact>
+              <id>org.cishell.core:org.cishell.utilities:1.0.2</id>
+            </artifact>
+            <artifact>
+              <id>org.cishell.core:org.cishell.utility.datastructure:1.0.0</id>
+            </artifact>
+            <artifact>
+              <id>org.cishell.core:org.cishell.utility.dict:0.0.1-SNAPSHOT</id>
+            </artifact>
+            <artifact>
+              <id>org.cishell.core:org.cishell.utility.swt:1.0.0</id>
+            </artifact>
+            <artifact>
+              <id>org.cishell.libs:org.prefuse.lib:20071021.0.0</id>
+            </artifact>
+  
+
+
+          </artifacts>
+        </configuration>
+
+      </execution>
+    </executions>
+  </plugin>
+  
+  </plugins>
+</build>
+
+
+
+
+</project>
