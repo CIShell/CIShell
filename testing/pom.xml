@@ -29,7 +29,7 @@
 	
 	
 	<properties>
-		<tychoVersion>1.2.0</tychoVersion>
+		<tychoVersion>0.21.0</tychoVersion>
 		<memoryOptions1>-Xms512m -Xmx1024m -XX:PermSize=256m</memoryOptions1>
 		<memoryOptions2>-XX:MaxPermSize=256m</memoryOptions2>
 	</properties>
