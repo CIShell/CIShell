@@ -40,7 +40,7 @@
     <dependency>
       <groupId>org.cishell.core</groupId>
       <artifactId>org.cishell.utility.dict</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
+      <version>1.0.0</version>
     </dependency>
 
 
@@ -73,15 +73,7 @@
    </dependency>
 
 
-
-<!-- 
- <dependency>
-  <groupId>org.osgi</groupId>
-  <artifactId>org.osgi.framework</artifactId>
-  <version>1.9.0</version>
-</dependency>
--->
-</dependencies>
+ </dependencies>
 
 
 

@@ -6,13 +6,13 @@
 	<modules>
 		<module>core</module>
 		<module>libs</module>
-		<module>update-site</module>
+		<module>templates</module>
 		<module>testing</module>
-	<!-- <module>templates</module>
-	<module>testing</module> -->
-	<!-- <module>examples</module> -->
-</modules>
-<packaging>pom</packaging>
+		<!-- <module>examples</module> -->
+	</modules>
+	<packaging>pom</packaging>
+
+
 
 
 

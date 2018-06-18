@@ -15,14 +15,16 @@
 	</parent>
 	<modules>
 		<module>org.cishell.framework.tests</module>
-		 <module>org.cishell.utility.dict.tests</module>
-		 <module>org.cishell.streaming.prototype</module>
-		<!-- Review for Deprecation -->
-			<!-- <module>org.cishell.testing.convertertester.algorithm</module> --> 
-		<!-- /Review for Deprecation -->
+		<module>org.cishell.utility.dict.tests</module>
+		
+		<!-- Review for Deprecation-->
+		<!-- <module>org.cishell.testing.convertertester.algorithm</module> 
+		<module>org.cishell.streaming.prototype</module>
 		<module>org.cishell.testing.convertertester.commandline</module>
-		<module>org.cishell.testing.convertertester.core.new</module> 
-		<module>org.cishell.utilities.tests</module> 
+		<module>org.cishell.testing.convertertester.core.new</module>  -->
+		<!-- /Review for Deprecation -->
+		
+		<module>org.cishell.utilities.tests</module>  
 	</modules>
 	
 	
@@ -34,7 +36,7 @@
 	
 
 	
-<repositories>
+	<repositories>
 		<repository>
 			<id>Indigo</id>
 			<layout>p2</layout>
@@ -45,99 +47,169 @@
 				<checksumPolicy>warn</checksumPolicy>
 			</releases>
 		</repository>
-		<!-- <repository>
-			<id>eclipse-orbit</id>
-			<layout>p2</layout>
-			<url>http://download.eclipse.org/tools/orbit/downloads/drops/R20110523182458/repository</url>
-			<releases>
-				<enabled>false</enabled>
-				<updatePolicy>never</updatePolicy>
-				<checksumPolicy>warn</checksumPolicy>
-			</releases>
-		</repository> -->
-		<repository>
-			<id>generate-p2-site</id>
-			<url>file:///${basedir}\..\..\update-site\target\repository</url>
-			<layout>p2</layout>
-		</repository>
 	</repositories>
 
 
 
+	<dependencies>
+		<!-- https://mvnrepository.com/artifact/org.osgi/org.osgi.compendium -->
+		<dependency>
+			<groupId>org.osgi</groupId>
+			<artifactId>org.osgi.compendium</artifactId>
+			<version>5.0.0</version>
+		</dependency>
+
+
+		<!-- https://mvnrepository.com/artifact/org.osgi/org.osgi.core -->
+		<dependency>
+			<groupId>org.osgi</groupId>
+			<artifactId>org.osgi.core</artifactId>
+			<version>6.0.0</version>
+
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.apache.felix/org.apache.felix.framework -->
+		<dependency>
+			<groupId>org.apache.felix</groupId>
+			<artifactId>org.apache.felix.framework</artifactId>
+			<version>5.6.10</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.ops4j.pax.exam/pax-exam -->
+		<dependency>
+			<groupId>org.ops4j.pax.exam</groupId>
+			<artifactId>pax-exam</artifactId>
+			<version>4.11.0</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.ops4j.pax.exam/regression-pde-bundle -->
+		<dependency>
+			<groupId>org.ops4j.pax.exam</groupId>
+			<artifactId>regression-pde-bundle</artifactId>
+			<version>3.0.3</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.ops4j.pax.swissbox/pax-swissbox-framework -->
+		<dependency>
+			<groupId>org.ops4j.pax.swissbox</groupId>
+			<artifactId>pax-swissbox-framework</artifactId>
+			<version>1.8.3</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.ops4j.pax.exam</groupId>
+			<artifactId>pax-exam-junit4</artifactId>
+			<version>4.11.0</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.ops4j.pax.exam</groupId>
+			<artifactId>pax-exam-link-mvn</artifactId>
+			<version>4.11.0</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.ops4j.pax.exam/pax-exam-link-assembly -->
+		<dependency>
+			<groupId>org.ops4j.pax.exam</groupId>
+			<artifactId>pax-exam-link-assembly</artifactId>
+			<version>4.11.0</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/junit/junit -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/javax.inject/javax.inject -->
+		<dependency>
+			<groupId>javax.inject</groupId>
+			<artifactId>javax.inject</artifactId>
+			<version>1</version>
+
+		</dependency>
+
+
+		<!-- https://mvnrepository.com/artifact/org.ops4j.pax.exam/pax-exam-container-native -->
+		<dependency>
+			<groupId>org.ops4j.pax.exam</groupId>
+			<artifactId>pax-exam-container-native</artifactId>
+			<version>4.11.0</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.ops4j.pax.url/pax-url-aether -->
+		<dependency>
+			<groupId>org.ops4j.pax.url</groupId>
+			<artifactId>pax-url-aether</artifactId>
+			<version>2.5.4</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.6.4</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>1.6.4</version>
+			<scope>test</scope>
+		</dependency>
+
+
+	</dependencies>
+
 
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>tycho-source-plugin</artifactId>
-				<version>${tychoVersion}</version>
-				<executions>
-					<execution>
-						<id>plugin-source</id>
-						<goals>
-							<goal>plugin-source</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>tycho-maven-plugin</artifactId>
-				<version>${tychoVersion}</version>
-				<extensions>true</extensions>
-			</plugin>
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>tycho-compiler-plugin</artifactId>
-				<version>${tychoVersion}</version>
-				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
-				</configuration>
-			</plugin>
-			
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>tycho-surefire-plugin</artifactId>
-				<version>${tychoVersion}</version>
-				<!-- <configuration>
-					<dependencies>
-						<dependency>
-							<type>eclipse-feature</type>
-							<artifactId>org.cishell.environment.equinox.feature</artifactId>
-							<version>0.0.0</version>
-						</dependency>
-						<dependency>
-							<type>eclipse-feature</type>
-							<artifactId>org.cishell.reference.feature</artifactId>
-							<version>0.0.0</version>
-						</dependency>
-						<dependency>
-							<type>eclipse-feature</type>
-							<artifactId>org.cishell.feature</artifactId>
-							<version>0.0.0</version>
-						</dependency>
-					</dependencies>
-					<bundleStartLevel>
-						<bundle>
-							<id>org.eclipse.equinox.metatype</id>
-							<level>4</level>
-							<autoStart>true</autoStart>
-						</bundle>
-						<bundle>
-							<id>org.cishell.service.autostart</id>
-							<level>4</level>
-							<autoStart>true</autoStart>
-						</bundle>
-						<bundle>
-							<id>org.eclipse.equinox.log</id>
-							<level>4</level>
-							<autoStart>true</autoStart>
-						</bundle>
-					</bundleStartLevel>
-				</configuration> -->
-			</plugin>
 
-		</plugins>
-	</build>
-</project>
+			<plugin>
+				<groupId>biz.aQute.bnd</groupId>
+				<artifactId>bnd-maven-plugin</artifactId>
+				<version>4.0.0</version>
+				<configuration>
+					<bnd><![CDATA[
+
+						Bundle-SymbolicName: ${project.groupId}.${project.artifactId}
+						Bundle-Name: ${project.artifactId}
+						Bundle-ClassPath: .
+						Bundle-Localization: plugin
+						Bundle-Version:${project.version}
+
+						]]></bnd>                     
+					</configuration>
+
+					<executions>
+						<execution>
+							<goals>
+								<goal>bnd-process</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>3.0.2</version>
+					<configuration>
+						<archive>
+							<manifestFile>src/test/resources/META-INF/MANIFEST.MF</manifestFile>
+						</archive>
+						<skipIfEmpty>true</skipIfEmpty>
+					</configuration>
+				</plugin>
+
+				
+			</plugins>
+		</build>
+	</project>
