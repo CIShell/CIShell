@@ -2,8 +2,8 @@ Bundle-ManifestVersion: 2
 Bundle-Name: CIShell Reference Service Implementations
 Bundle-SymbolicName: org.cishell.reference
 Bundle-Version: 1.0.0
-Import-Package: com.google.common.base;version="11.0.1",
- com.google.common.collect;version="11.0.1",
+Import-Package: com.google.common.base,
+ com.google.common.collect,
  org.cishell.app.service.datamanager,
  org.cishell.app.service.fileloader,
  org.cishell.app.service.filesaver,

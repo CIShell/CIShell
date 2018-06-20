@@ -6,9 +6,14 @@
 	<modules>
 		<module>core</module>
 		<module>libs</module>
+		<module>testing</module>
 		<module>templates</module>
-		<!-- <module>testing</module> -->
-		<module>examples</module>
+		<!-- <module>examples</module> -->
 	</modules>
 	<packaging>pom</packaging>
+
+
+
+
+
 </project>

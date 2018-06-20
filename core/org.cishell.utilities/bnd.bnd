@@ -1,4 +1,4 @@
-Export-Package: org.cishell.utilities;version="1.0.1",\
+Export-Package: org.cishell.utilities;version="1.0.2",\
  org.cishell.utilities.color,\
  org.cishell.utilities.database,\
  org.cishell.utilities.dictionary,\
