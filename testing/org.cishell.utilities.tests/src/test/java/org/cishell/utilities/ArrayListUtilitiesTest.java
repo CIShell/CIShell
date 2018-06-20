@@ -3,7 +3,6 @@ package org.cishell.utilities;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.ops4j.pax.exam.CoreOptions.*;
 
 
 import java.util.Arrays;
@@ -15,12 +14,6 @@ import java.util.Set;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import org.ops4j.pax.exam.Configuration;
-import org.ops4j.pax.exam.util.Filter;
-import org.ops4j.pax.exam.Option;
-import org.ops4j.pax.exam.junit.PaxExam;
-import org.ops4j.pax.exam.spi.reactors.ExamReactorStrategy;
-import org.ops4j.pax.exam.spi.reactors.PerMethod;
 import org.osgi.framework.BundleContext;
 
 

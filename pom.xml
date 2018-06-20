@@ -6,8 +6,8 @@
 	<modules>
 		<module>core</module>
 		<module>libs</module>
-		<module>templates</module>
 		<module>testing</module>
+		<module>templates</module>
 		<!-- <module>examples</module> -->
 	</modules>
 	<packaging>pom</packaging>

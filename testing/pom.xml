@@ -14,161 +14,19 @@
 		<version>0.0.1</version>
 	</parent>
 	<modules>
-		<module>org.cishell.framework.tests</module>
 		<module>org.cishell.utility.dict.tests</module>
-		
+		<module>org.cishell.utilities.tests</module>  
 		<!-- Review for Deprecation-->
-		<!-- <module>org.cishell.testing.convertertester.algorithm</module> 
+		<!-- 
+		<module>org.cishell.framework.tests</module>
+		<module>org.cishell.testing.convertertester.algorithm</module> 
 		<module>org.cishell.streaming.prototype</module>
 		<module>org.cishell.testing.convertertester.commandline</module>
 		<module>org.cishell.testing.convertertester.core.new</module>  -->
 		<!-- /Review for Deprecation -->
-		
-		<module>org.cishell.utilities.tests</module>  
 	</modules>
 	
 	
-	<properties>
-		<tychoVersion>1.2.0</tychoVersion>
-		<memoryOptions1>-Xms512m -Xmx1024m -XX:PermSize=256m</memoryOptions1>
-		<memoryOptions2>-XX:MaxPermSize=256m</memoryOptions2>
-	</properties>
-	
-
-	
-	<repositories>
-		<repository>
-			<id>Indigo</id>
-			<layout>p2</layout>
-			<url>http://download.eclipse.org/eclipse/updates/3.7</url>
-			<releases>
-				<enabled>false</enabled>
-				<updatePolicy>never</updatePolicy>
-				<checksumPolicy>warn</checksumPolicy>
-			</releases>
-		</repository>
-	</repositories>
-
-
-
-	<dependencies>
-		<!-- https://mvnrepository.com/artifact/org.osgi/org.osgi.compendium -->
-		<dependency>
-			<groupId>org.osgi</groupId>
-			<artifactId>org.osgi.compendium</artifactId>
-			<version>5.0.0</version>
-		</dependency>
-
-
-		<!-- https://mvnrepository.com/artifact/org.osgi/org.osgi.core -->
-		<dependency>
-			<groupId>org.osgi</groupId>
-			<artifactId>org.osgi.core</artifactId>
-			<version>6.0.0</version>
-
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/org.apache.felix/org.apache.felix.framework -->
-		<dependency>
-			<groupId>org.apache.felix</groupId>
-			<artifactId>org.apache.felix.framework</artifactId>
-			<version>5.6.10</version>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/org.ops4j.pax.exam/pax-exam -->
-		<dependency>
-			<groupId>org.ops4j.pax.exam</groupId>
-			<artifactId>pax-exam</artifactId>
-			<version>4.11.0</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.ops4j.pax.exam/regression-pde-bundle -->
-		<dependency>
-			<groupId>org.ops4j.pax.exam</groupId>
-			<artifactId>regression-pde-bundle</artifactId>
-			<version>3.0.3</version>
-			<scope>test</scope>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/org.ops4j.pax.swissbox/pax-swissbox-framework -->
-		<dependency>
-			<groupId>org.ops4j.pax.swissbox</groupId>
-			<artifactId>pax-swissbox-framework</artifactId>
-			<version>1.8.3</version>
-		</dependency>
-
-
-		<dependency>
-			<groupId>org.ops4j.pax.exam</groupId>
-			<artifactId>pax-exam-junit4</artifactId>
-			<version>4.11.0</version>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.ops4j.pax.exam</groupId>
-			<artifactId>pax-exam-link-mvn</artifactId>
-			<version>4.11.0</version>
-			<scope>test</scope>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/org.ops4j.pax.exam/pax-exam-link-assembly -->
-		<dependency>
-			<groupId>org.ops4j.pax.exam</groupId>
-			<artifactId>pax-exam-link-assembly</artifactId>
-			<version>4.11.0</version>
-			<scope>test</scope>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/junit/junit -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.12</version>
-			<scope>test</scope>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/javax.inject/javax.inject -->
-		<dependency>
-			<groupId>javax.inject</groupId>
-			<artifactId>javax.inject</artifactId>
-			<version>1</version>
-
-		</dependency>
-
-
-		<!-- https://mvnrepository.com/artifact/org.ops4j.pax.exam/pax-exam-container-native -->
-		<dependency>
-			<groupId>org.ops4j.pax.exam</groupId>
-			<artifactId>pax-exam-container-native</artifactId>
-			<version>4.11.0</version>
-			<scope>test</scope>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/org.ops4j.pax.url/pax-url-aether -->
-		<dependency>
-			<groupId>org.ops4j.pax.url</groupId>
-			<artifactId>pax-url-aether</artifactId>
-			<version>2.5.4</version>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>1.6.4</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-simple</artifactId>
-			<version>1.6.4</version>
-			<scope>test</scope>
-		</dependency>
-
-
-	</dependencies>
-
-
 	<build>
 		<plugins>
 

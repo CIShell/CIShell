@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <artifactId>core</artifactId>
@@ -13,70 +13,70 @@
 
 
   <dependencies>
-      <dependency>
-   <groupId>org.cishell.core</groupId>
-   <artifactId>org.cishell.framework</artifactId>
-   <version>1.0.0</version>
- </dependency>
-
-<dependency>
- <groupId>org.cishell.core</groupId>
-  <artifactId>org.cishell.service.database</artifactId>
-  <version>1.0.0</version>
- </dependency>
-
-<dependency>
-  <groupId>org.cishell.core</groupId>
-  <artifactId>org.cishell.reference</artifactId>
-  <version>1.0.0</version>
-</dependency>
-
-    <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
     <dependency>
-     <groupId>org.cishell.libs</groupId>
-     <artifactId>com.google.guava</artifactId>
-     <version>11.0.1</version>
+     <groupId>org.cishell.core</groupId>
+     <artifactId>org.cishell.framework</artifactId>
+     <version>1.0.0</version>
    </dependency>
 
-
-  <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
-<dependency>
-    <groupId>commons-io</groupId>
-    <artifactId>commons-io</artifactId>
-    <version>2.4</version>
-</dependency>
-
-
- <!-- https://mvnrepository.com/artifact/joda-time/joda-time -->
-<dependency>
-    <groupId>joda-time</groupId>
-    <artifactId>joda-time</artifactId>
-    <version>2.3</version>
-</dependency>
-
-   <!-- https://mvnrepository.com/artifact/org.osgi/org.osgi.compendium -->
    <dependency>
-    <groupId>org.osgi</groupId>
-    <artifactId>org.osgi.compendium</artifactId>
-    <version>5.0.0</version>
+     <groupId>org.cishell.core</groupId>
+     <artifactId>org.cishell.service.database</artifactId>
+     <version>1.0.0</version>
+   </dependency>
+
+   <dependency>
+    <groupId>org.cishell.core</groupId>
+    <artifactId>org.cishell.reference</artifactId>
+    <version>1.0.0</version>
   </dependency>
 
-
-  <!-- https://mvnrepository.com/artifact/org.osgi/org.osgi.core -->
+  <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
   <dependency>
-    <groupId>org.osgi</groupId>
-    <artifactId>org.osgi.core</artifactId>
-    <version>6.0.0</version>
-  </dependency>
-
-
- <dependency>
-    <groupId>org.prefuse</groupId>
-    <artifactId>prefuse</artifactId>
-    <version>beta-20071021</version>
+   <groupId>org.cishell.libs</groupId>
+   <artifactId>com.google.guava</artifactId>
+   <version>11.0.1</version>
  </dependency>
 
 
-  </dependencies>
-  
+ <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+ <dependency>
+  <groupId>org.cishell.libs</groupId>
+  <artifactId>org.apache.commons.io</artifactId>
+  <version>2.1.0</version>
+</dependency>
+
+
+<!-- https://mvnrepository.com/artifact/joda-time/joda-time -->
+<dependency>
+ <groupId>org.cishell.libs</groupId>
+ <artifactId>joda_time</artifactId>
+ <version>1.0.0</version>
+</dependency>
+
+<!-- https://mvnrepository.com/artifact/org.osgi/org.osgi.compendium -->
+<dependency>
+  <groupId>org.osgi</groupId>
+  <artifactId>org.osgi.compendium</artifactId>
+  <version>5.0.0</version>
+</dependency>
+
+
+<!-- https://mvnrepository.com/artifact/org.osgi/org.osgi.core -->
+<dependency>
+  <groupId>org.osgi</groupId>
+  <artifactId>org.osgi.core</artifactId>
+  <version>6.0.0</version>
+</dependency>
+
+
+<dependency>
+ <groupId>org.cishell.libs</groupId>
+ <artifactId>org.prefuse.lib</artifactId>
+ <version>20071021.0.0</version>
+</dependency>
+
+
+</dependencies>
+
 </project>
