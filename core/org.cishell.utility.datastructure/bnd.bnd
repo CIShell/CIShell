@@ -1,3 +1,7 @@
+Bundle-SymbolicName:${project.artifactId}
+Bundle-Name: ${project.artifactId}
+Bundle-ClassPath: .
+Bundle-Version:${project.version}
 Export-Package: org.cishell.utility.datastructure,\
  org.cishell.utility.datastructure.datamodel,\
  org.cishell.utility.datastructure.datamodel.area,\

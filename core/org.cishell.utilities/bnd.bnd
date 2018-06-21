@@ -1,3 +1,7 @@
+Bundle-SymbolicName:${project.artifactId}
+Bundle-Name: ${project.artifactId}
+Bundle-ClassPath: .
+Bundle-Version:${project.version}
 Export-Package: org.cishell.utilities;version="1.0.2",\
  org.cishell.utilities.color,\
  org.cishell.utilities.database,\
