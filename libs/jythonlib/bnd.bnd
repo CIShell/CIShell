@@ -1,3 +1,8 @@
+Bundle-SymbolicName:${project.artifactId}
+Bundle-Name: ${project.artifactId}
+Bundle-ClassPath: .
+Bundle-Version:${project.version}
+Bundle-Localization: plugin
 -classpath: jython.jar
 Bundle-Vendor: jython.org
 Bundle-Localization: plugin

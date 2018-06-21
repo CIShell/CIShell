@@ -1,8 +1,0 @@
-Manifest-Version: 1.0
-Bundle-ManifestVersion: 2
-Bundle-Name: Opencsv Plug-in
-Bundle-SymbolicName: opencsv
-Bundle-Version: 3.0
-Export-Package: au.com.bytecode.opencsv,
- au.com.bytecode.opencsv.bean
-Bundle-RequiredExecutionEnvironment: J2SE-1.5

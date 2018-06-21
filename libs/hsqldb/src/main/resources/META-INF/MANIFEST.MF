@@ -1,8 +1,0 @@
-Manifest-Version: 1.0
-Bundle-ManifestVersion: 2
-Bundle-Name: HSQLDB Plug-in
-Bundle-SymbolicName: hsqldb
-Bundle-Version: 1.0.0
-Bundle-ClassPath: hsqldb.jar
-Bundle-Localization: plugin
-Export-Package: .,org.hsqldb,org.hsqldb.index,org.hsqldb.jdbc,org.hsqldb.lib,org.hsqldb.lib.java,org.hsqldb.persist,org.hsqldb.resources,org.hsqldb.rowio,org.hsqldb.scriptio,org.hsqldb.store,org.hsqldb.types,org.hsqldb.util

@@ -1,3 +1,7 @@
+Bundle-SymbolicName:${project.artifactId}
+Bundle-Name: ${project.artifactId}
+Bundle-ClassPath: .
+Bundle-Version:${project.version}
 -classpath: ksoap2-j2se-full-2.1.1.jar
 Bundle-Localization: plugin
 Export-Package: org.kobjects.base64,\

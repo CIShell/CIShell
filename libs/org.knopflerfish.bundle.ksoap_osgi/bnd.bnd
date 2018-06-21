@@ -9,5 +9,9 @@ Bundle-ContactAddress: http://www.knopflerfish.org
 DynamicImport-Package: *
 Bundle-SubversionURL: https://www.knopflerfish.org/svn/knopflerfish.org/trunk/osgi/bundles_opt/soap/
 Bundle-Activator: org.knopflerfish.bundle.ksoap.Activator
+Bundle-SymbolicName:${project.artifactId}
+Bundle-Name: ${project.artifactId}
+Bundle-ClassPath: .
+Bundle-Version:${project.version}
 Export-Package: org.knopflerfish.service.ksoap
 Require-Bundle: javax.servlet

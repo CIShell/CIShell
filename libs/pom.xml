@@ -54,7 +54,7 @@
         <version>3.0.2</version>
         <configuration>
           <archive>
-            <manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
+            <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
           </archive>
           <skipIfEmpty>true</skipIfEmpty>
         </configuration>
