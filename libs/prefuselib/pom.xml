@@ -16,10 +16,9 @@
 
  <dependencies>
   <dependency>
-   <groupId>org.cishell.libs</groupId>
+   <groupId>org.cishell.core.libs</groupId>
    <artifactId>opencsv</artifactId>
    <version>3.0.0</version>
  </dependency>
 </dependencies>
-
 </project>

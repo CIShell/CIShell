@@ -2,3 +2,8 @@ Bundle-ClassPath: .
 X-AutoStart: true
 Service-Component: OSGI-INF/component.xml
 Export-Package: org.cishell.reference.prefs.admin
+Bundle-SymbolicName:${project.artifactId}
+Bundle-Name: ${project.artifactId}
+Bundle-ClassPath: .
+Bundle-Version:${project.version}
+Bundle-Localization: plugin

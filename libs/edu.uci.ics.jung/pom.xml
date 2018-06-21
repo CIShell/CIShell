@@ -15,13 +15,13 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.cishell.libs</groupId>
-      <artifactId>cern.colt</artifactId>
+      <groupId>org.cishell.core.libs</groupId>
+      <artifactId>colt</artifactId>
       <version>1.2.0</version>
     </dependency>
 
     <dependency>
-      <groupId>org.cishell.libs</groupId>
+      <groupId>org.cishell.core.libs</groupId>
       <artifactId>org.apache.commons.collections</artifactId>
       <version>3.1.0</version>
     </dependency>

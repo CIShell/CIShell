@@ -1,69 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
+  
   <parent>
-    <artifactId>core</artifactId>
+    <artifactId>core-module</artifactId>
     <groupId>org.cishell.core</groupId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>2.1.0-SNAPSHOT</version>
   </parent>
+  
   <groupId>org.cishell.core</groupId>
   <artifactId>org.cishell.reference.service.database</artifactId>
-  <version>1.0.0</version>
+  <version>2.1.0-SNAPSHOT</version>
 
-<dependencies>
-  <dependency>
-    <groupId>org.cishell.core</groupId>
-    <artifactId>org.cishell.framework</artifactId>
-    <version>1.0.0</version>
-  </dependency>
-
-  <dependency>
-    <groupId>org.cishell.core</groupId>
-    <artifactId>org.cishell.service.database</artifactId>
-    <version>1.0.0</version>
-  </dependency>
-
-  <dependency>
-    <groupId>org.cishell.core</groupId>
-    <artifactId>org.cishell.utilities</artifactId>
-    <version>1.0.2</version>
-  </dependency>
-
-
-<!-- https://mvnrepository.com/artifact/commons-pool/commons-pool -->
-<dependency>
-   <groupId>org.cishell.libs</groupId>
-  <artifactId>commons_pool</artifactId>
-  <version>1.0.0</version>
-</dependency>
-
-
-<!-- https://mvnrepository.com/artifact/commons-dbcp/commons-dbcp -->
-<dependency>
- <groupId>org.cishell.libs</groupId>
-  <artifactId>commons_dbcp</artifactId>
-  <version>1.0.0</version>
- </dependency>
-
-
-    <!-- https://mvnrepository.com/artifact/org.osgi/org.osgi.compendium -->
+  <dependencies>
     <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.compendium</artifactId>
-      <version>5.0.0</version>
+      <groupId>org.cishell.core</groupId>
+      <artifactId>org.cishell.framework</artifactId>
+      <version>2.1.0-SNAPSHOT</version>
     </dependency>
 
-
-    <!-- https://mvnrepository.com/artifact/org.osgi/org.osgi.core -->
     <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.core</artifactId>
-      <version>6.0.0</version>
-      
+      <groupId>org.cishell.core</groupId>
+      <artifactId>org.cishell.service.database</artifactId>
+      <version>2.1.0-SNAPSHOT</version>
     </dependency>
 
+    <dependency>
+      <groupId>org.cishell.core</groupId>
+      <artifactId>org.cishell.utilities</artifactId>
+      <version>2.1.0-SNAPSHOT</version>
+    </dependency>
 
+    <dependency>
+     <groupId>org.cishell.core.libs</groupId>
+     <artifactId>commons-pool</artifactId>
+     <version>1.0.0</version>
+   </dependency>
+
+   <dependency>
+     <groupId>org.cishell.core.libs</groupId>
+     <artifactId>commons-dbcp</artifactId>
+     <version>1.0.0</version>
+   </dependency>
+
+   <dependency>
+    <groupId>org.osgi</groupId>
+    <artifactId>org.osgi.compendium</artifactId>
+    <version>5.0.0</version>
+  </dependency>
+
+  <dependency>
+    <groupId>org.osgi</groupId>
+    <artifactId>org.osgi.core</artifactId>
+    <version>6.0.0</version>
+  </dependency>
 </dependencies>
-
 </project>

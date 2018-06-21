@@ -11,3 +11,8 @@ Export-Package: org.cishell.app.service.datamanager;version="1.0.0",\
  org.cishell.service.guibuilder;version="1.0.0"
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: Cyberinfrastructure for Network Science Center
+Bundle-SymbolicName:${project.artifactId}
+Bundle-Name: ${project.artifactId}
+Bundle-ClassPath: .
+Bundle-Version:${project.version}
+Bundle-Localization: plugin
