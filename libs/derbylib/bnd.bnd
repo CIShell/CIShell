@@ -1,3 +1,7 @@
+Bundle-SymbolicName: ${project.artifactId}
+Bundle-Name: ${project.artifactId}
+Bundle-ClassPath: .
+Bundle-Version:${project.version}
 -classpath: derbyLocale_fr.jar,\
 derbyLocale_zh_CN.jar,\
 derby.jar,\

@@ -1,3 +1,7 @@
+Bundle-SymbolicName: ${project.artifactId}
+Bundle-Name: ${project.artifactId}
+Bundle-ClassPath: .
+Bundle-Version:${project.version}
 Export-Package: edu.uci.ics.jung.algorithms,\
  edu.uci.ics.jung.algorithms.blockmodel,\
  edu.uci.ics.jung.algorithms.cluster,\

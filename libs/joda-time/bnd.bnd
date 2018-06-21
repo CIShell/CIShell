@@ -1,3 +1,7 @@
+Bundle-SymbolicName: ${project.artifactId}
+Bundle-Name: ${project.artifactId}
+Bundle-ClassPath: .
+Bundle-Version:${project.version}
 -classpath: joda-time-1.5.2.jar
 Export-Package: org.joda.time,\
  org.joda.time.base,\

@@ -1,3 +1,8 @@
+Bundle-SymbolicName: ${project.artifactId}
+Bundle-Name: ${project.artifactId}
+Bundle-ClassPath: .
+Bundle-Version:${project.version}
+Bundle-Localization: plugin
 -classpath: commons-dbcp-1.2.2.jar
 Bundle-Localization: plugin
 Export-Package: \
