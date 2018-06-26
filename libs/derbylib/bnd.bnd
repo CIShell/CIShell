@@ -20,6 +20,7 @@ derbyLocale_zh_TW.jar,\
 derbyLocale_de_DE.jar,\
 derbyLocale_cs.jar,\
 derbyLocale_hu.jar
+Import-Package: !javax.*,!com.ibm.db2.jcc,*
 Export-Package: org.apache.derby.authentication,\
  org.apache.derby.catalog,\
  org.apache.derby.catalog.types,\

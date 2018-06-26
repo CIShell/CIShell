@@ -3,6 +3,7 @@ Bundle-Name: ${project.artifactId}
 Bundle-ClassPath: .
 Bundle-Version:${project.version}
 -classpath: com.google.guava_11.0.1.jar
+Import-Package: !javax.annotation,!sun.misc,*
 Export-Package: com.google.common.annotations;version="11.0.1",\
  com.google.common.base;version="11.0.1",\
  com.google.common.base.internal;version="11.0.1",\

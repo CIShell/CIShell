@@ -6,6 +6,7 @@ Bundle-Localization: plugin
 -classpath: jython.jar
 Bundle-Vendor: jython.org
 Bundle-Localization: plugin
+Import-Package: !com.informix.jdbc,!javax.*,!oracle.*,!org.apache.tools.*,!org.gnu.readline,*
 Export-Package: com.ziclix.python.sql;version="2.2.1",\
  com.ziclix.python.sql.connect;version="2.2.1",\
  com.ziclix.python.sql.handler;version="2.2.1",\

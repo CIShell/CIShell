@@ -4,6 +4,7 @@ Bundle-ClassPath: .
 Bundle-Version:${project.version}
 -classpath: prefuse-alpha-20060526.jar,\
 prefuse.jar
+Import-Package: !javax.*,!org.apache.lucene.*,!org.apache.lucene.analysis,*
 Export-Package: edu.berkeley.guir.prefuse,\
  edu.berkeley.guir.prefuse.action,\
  edu.berkeley.guir.prefuse.action.animate,\

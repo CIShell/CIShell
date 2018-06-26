@@ -5,6 +5,7 @@ Bundle-Version:${project.version}
 Bundle-Localization: plugin
 -classpath: hsqldb.jar
 Bundle-Localization: plugin
+Import-Package: !javax.*;!sun.*;*
 Export-Package: \
 org.hsqldb,\
 org.hsqldb.index,\

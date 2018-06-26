@@ -14,6 +14,7 @@ Export-Package: org.cishell.reference.app.service.algorithminvocation,\
  org.eclipse.ui,\
  org.eclipse.core.runtime,\
  org.eclipse.update.ui
+Import-Package: !org.eclipse*, *
 Bundle-SymbolicName:${project.artifactId}
 Bundle-Name: ${project.artifactId}
 Bundle-ClassPath: .
