@@ -15,3 +15,4 @@ Export-Package: com.google.common.annotations;version="11.0.1",\
  com.google.common.net;version="11.0.1",\
  com.google.common.primitives;version="11.0.1",\
  com.google.common.util.concurrent;version="11.0.1"
+ Import-Package: !*

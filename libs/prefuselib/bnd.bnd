@@ -59,3 +59,4 @@ Export-Package: edu.berkeley.guir.prefuse,\
  prefuse.visual.expression,\
  prefuse.visual.sort,\
  prefuse.visual.tuple
+ Import-Package: !*

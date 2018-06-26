@@ -27,3 +27,4 @@ Export-Package: com.ziclix.python.sql;version="2.2.1",\
  org.python.parser.ast;version="2.2.1",\
  org.python.rmi;version="2.2.1",\
  org.python.util;version="2.2.1"
+ Import-Package: !*

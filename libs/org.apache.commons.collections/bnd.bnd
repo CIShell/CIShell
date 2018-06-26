@@ -15,3 +15,4 @@ Export-Package: org.apache.commons.collections;version="3.1.0",\
  org.apache.commons.collections.list;version="3.1.0",\
  org.apache.commons.collections.map;version="3.1.0",\
  org.apache.commons.collections.set;version="3.1.0"
+ Import-Package: !*
