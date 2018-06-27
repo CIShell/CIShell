@@ -39,12 +39,12 @@ import com.google.common.collect.ImmutableList;
 
 
 public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProperty {
-    private final ImmutableList<ServiceReference<AlgorithmFactory>> serviceReferences;
+    private final ImmutableList<ServiceReference> serviceReferences;
     private final BundleContext bContext;
     private final ImmutableDictionary<String, Object> properties;
     private final CIShellContext ciContext;
 	
-	private ConverterImpl(BundleContext bContext, CIShellContext ciContext, List<ServiceReference<AlgorithmFactory>> refs,
+	private ConverterImpl(BundleContext bContext, CIShellContext ciContext, List<ServiceReference> refs,
 			Dictionary<String, Object> properties) {
         this.bContext = bContext;
         this.ciContext = ciContext;
@@ -75,7 +75,7 @@ public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProp
         properties.put(CONVERSION, LOSSLESS);
         
         ConverterImpl toReturn = new ConverterImpl(bContext, ciContext,
-        		ImmutableList.<ServiceReference<AlgorithmFactory>>of(), properties);
+        		ImmutableList.<ServiceReference>of(), properties);
         
         return toReturn;
     }
@@ -98,7 +98,7 @@ public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProp
 	 * @throws IllegalArgumentException if {@code refs} is empty
 	 */
     static ConverterImpl createConverter(BundleContext bContext,
-			CIShellContext ciContext, List<ServiceReference<AlgorithmFactory>> refs) {
+			CIShellContext ciContext, List<ServiceReference> refs) {
     	if (refs.size() == 0) {
     		throw new IllegalArgumentException("This static factory requires 1 or more algorithms in the chain; try .createNoOpConverter");
     	}
@@ -173,7 +173,7 @@ public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProp
         return this.serviceReferences.toArray(new ServiceReference[0]);
     }
     
-    public ImmutableList<ServiceReference<AlgorithmFactory>> getConverterList() {
+    public ImmutableList<ServiceReference> getConverterList() {
     	return this.serviceReferences;
     }
     
@@ -223,8 +223,8 @@ public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProp
     	return calculateLossiness(getConverterList());
     }
 
-	private static String calculateLossiness(List<ServiceReference<AlgorithmFactory>> serviceReferences) {
-		for (ServiceReference<AlgorithmFactory> serviceReference : serviceReferences) {
+	private static String calculateLossiness(List<ServiceReference> serviceReferences) {
+		for (ServiceReference serviceReference : serviceReferences) {
 	        if (LOSSY.equals(serviceReference.getProperty(CONVERSION))) {
 	            return LOSSY;
 	        }
@@ -241,12 +241,12 @@ public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProp
         private Dictionary<String, Object> parameters;
         private CIShellContext ciShellContext;
         private LogService logger;
-        private ImmutableList<ServiceReference<AlgorithmFactory>> serviceReferences;
+        private ImmutableList<ServiceReference> serviceReferences;
         
         
         public ConverterAlgorithm(
         		Data[] inData, Dictionary<String, Object> parameters, CIShellContext ciShellContext,
-        		ImmutableList<ServiceReference<AlgorithmFactory>> serviceReferences) {
+        		ImmutableList<ServiceReference> serviceReferences) {
             this.inData = inData;
             this.parameters = parameters;
             this.ciShellContext = ciShellContext;
@@ -262,7 +262,7 @@ public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProp
             // For each converter in the converter chain (serviceReferences)
             for (int ii = 0; ii < serviceReferences.size(); ii++) {
                 AlgorithmFactory factory =
-                	bContext.getService(serviceReferences.get(ii));
+                	(AlgorithmFactory)bContext.getService(serviceReferences.get(ii));
                 
                 if (factory != null) {
                     Algorithm algorithm = factory.createAlgorithm(
@@ -302,7 +302,7 @@ public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProp
             return convertedData;
         }
         
-        private boolean isHandler(ServiceReference<AlgorithmFactory> ref) {
+        private boolean isHandler(ServiceReference ref) {
         	/* For some reason, handlers are often referred to as validators,
              * though strictly speaking, validators are for reading in data and
              * handlers are for writing out data.
@@ -326,7 +326,7 @@ public class ConverterImpl implements Converter, AlgorithmFactory, AlgorithmProp
         			&& outDataTypeIsFileExt);
     	}
         
-        private String createErrorMessage(ServiceReference<AlgorithmFactory> ref, Throwable e) {
+        private String createErrorMessage(ServiceReference ref, Throwable e) {
         	String inType = (String) properties.get(IN_DATA);
         	String preProblemType =	(String) ref.getProperty(IN_DATA);
         	String postProblemType = (String) ref.getProperty(OUT_DATA);

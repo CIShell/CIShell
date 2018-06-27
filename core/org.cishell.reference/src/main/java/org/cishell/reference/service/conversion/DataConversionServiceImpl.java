@@ -110,10 +110,10 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
 					"(!("+IN_DATA+"=file-ext:*))" +
 					"(!("+OUT_DATA+"=file-ext:*)))";
 
-			Collection<ServiceReference<AlgorithmFactory>> refs = getAFServiceReferences(filter);
+			Collection<ServiceReference> refs = getAFServiceReferences(filter);
 
 			if (refs != null) {
-				for (ServiceReference<AlgorithmFactory> ref : refs) {
+				for (ServiceReference ref : refs) {
 					String inData = (String) ref
 							.getProperty(AlgorithmProperty.IN_DATA);
 					String outData = (String) ref
@@ -175,12 +175,12 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
 						"("+OUT_DATA+"="+outFormat+"))";
 
 				try {
-					Collection<ServiceReference<AlgorithmFactory>> refs =
+					Collection<ServiceReference> refs =
 							getAFServiceReferences(filter);
 
 					if (refs != null && refs.size() > 0) {
-						for (ServiceReference<AlgorithmFactory> ref : refs) {
-							List<ServiceReference<AlgorithmFactory>> chain = 
+						for (ServiceReference ref : refs) {
+							List<ServiceReference> chain = 
 									Lists.newArrayList(converters[i].getConverterList());
 							chain.add(ref);
 
@@ -199,21 +199,21 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
 		return newConverters.toArray(new ConverterImpl[0]);
 	}
 
-	private Collection<ServiceReference<AlgorithmFactory>> getAFServiceReferences(String filter) throws InvalidSyntaxException {
-		List<ServiceReference<AlgorithmFactory>> refList = Lists.newArrayList();
+	private Collection<ServiceReference> getAFServiceReferences(String filter) throws InvalidSyntaxException {
+		List<ServiceReference> refList = Lists.newArrayList();
 
-		// We're guaranteed to get a ServiceReference<AlgorithmFactory>[] back, because
+		// We're guaranteed to get a ServiceReference[] back, because
 		// we pass the AlgorithmFactory class name into the method.
 		// When we switch to a new version of OSGi, this ugliness can be replaced with the
 		// a call to bContext.getServiceReferences(Class, String).
 		@SuppressWarnings("unchecked")
-		ServiceReference<AlgorithmFactory>[] refArray = 
-				(ServiceReference<AlgorithmFactory>[]) bContext.getServiceReferences(
+		ServiceReference[] refArray = 
+				(ServiceReference[]) bContext.getServiceReferences(
 						AlgorithmFactory.class.getName(),
 						filter);
 
 		if (refArray != null && refArray.length > 0) {
-			refList.addAll((Collection<? extends ServiceReference<AlgorithmFactory>>) Arrays.asList(refArray));
+			refList.addAll((Collection<? extends ServiceReference>) Arrays.asList(refArray));
 		}
 
 		return refList;
@@ -246,9 +246,9 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
 		
 		
 		try {
-			Collection<ServiceReference<AlgorithmFactory>> matches
+			Collection<ServiceReference> matches
 				= getAFServiceReferences(algorithmFilter);
-			for (ServiceReference<AlgorithmFactory> match : matches) {
+			for (ServiceReference match : matches) {
 				expansions.add((String) match.getProperty(algorithmProperty));
 			}
 		} catch (InvalidSyntaxException e) {
@@ -330,7 +330,7 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
 			List<Edge> edgeList = shortestPathAlg.getPath(sourceVertex, targetVertex);
 
 			if (edgeList.size() > 0) {
-				List<ServiceReference<AlgorithmFactory>> serviceReferences = Lists.newArrayList();
+				List<ServiceReference> serviceReferences = Lists.newArrayList();
 				for (Edge edge : edgeList) {
 					AbstractList converterList =
 							(AbstractList) edge.getUserDatum(SERVICE_LIST);
@@ -435,7 +435,7 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
 	 * @param event The service that changed
 	 */
 	public void serviceChanged(ServiceEvent event) {
-		ServiceReference<?> inServiceRef = event.getServiceReference();
+		ServiceReference inServiceRef = event.getServiceReference();
 
 		String inDataType =
 				(String) inServiceRef.getProperty(AlgorithmProperty.IN_DATA);
@@ -462,7 +462,7 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
 	 */
 	private void removeServiceReference(String sourceDataType,
 			String targetDataType,
-			ServiceReference<?> serviceReference) {
+			ServiceReference serviceReference) {
 		if (sourceDataType != null && targetDataType != null) {
 			Vertex sourceVertex = (Vertex) dataTypeToVertex.get(sourceDataType);
 			Vertex targetVertex = (Vertex) dataTypeToVertex.get(targetDataType);
@@ -501,7 +501,7 @@ public class DataConversionServiceImpl implements DataConversionService, Algorit
 	 */
 	private void addServiceReference(String sourceDataType,
 			String targetDataType,
-			ServiceReference<?> serviceReference) {
+			ServiceReference serviceReference) {
 		if (sourceDataType != null && sourceDataType.length() > 0
 				&& targetDataType != null && targetDataType.length() > 0) {
 			Vertex sourceVertex = getVertex(sourceDataType);
