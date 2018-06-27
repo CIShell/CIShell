@@ -1,67 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-
+  
   <groupId>org.cishell.core</groupId>
   <artifactId>org.cishell.utilities</artifactId>
   <version>2.1.0-SNAPSHOT</version>
-
+  
   <parent>
     <artifactId>core-module</artifactId>
     <groupId>org.cishell.core</groupId>
     <version>2.1.0-SNAPSHOT</version>
   </parent>
-
+  
   <dependencies>
     <dependency>
-     <groupId>org.cishell.core</groupId>
-     <artifactId>org.cishell.framework</artifactId>
-     <version>2.1.0-SNAPSHOT</version>
-   </dependency>
-
-   <dependency>
-     <groupId>org.cishell.core</groupId>
-     <artifactId>org.cishell.service.database</artifactId>
-     <version>2.1.0-SNAPSHOT</version>
-   </dependency>
-
-   <dependency>
-    <groupId>org.cishell.core</groupId>
-    <artifactId>org.cishell.reference</artifactId>
-    <version>2.1.0-SNAPSHOT</version>
-  </dependency>
-
-  <dependency>
-   <groupId>org.cishell.core.libs</groupId>
-   <artifactId>com.google.guava</artifactId>
-   <version>11.0.1</version>
- </dependency>
-
- <dependency>
-  <groupId>org.cishell.core.libs</groupId>
-  <artifactId>org.apache.commons.io</artifactId>
-  <version>2.1.0</version>
-</dependency>
-
-<dependency>
- <groupId>org.cishell.core.libs</groupId>
- <artifactId>joda-time</artifactId>
- <version>1.0.0</version>
-</dependency>
-
-
+      <groupId>org.cishell.core</groupId>
+      <artifactId>org.cishell.framework</artifactId>
+      <version>2.1.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.cishell.core</groupId>
+      <artifactId>org.cishell.service.database</artifactId>
+      <version>2.1.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.cishell.core</groupId>
+      <artifactId>org.cishell.reference</artifactId>
+      <version>2.1.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.cishell.core.libs</groupId>
+      <artifactId>com.google.guava</artifactId>
+      <version>11.0.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.cishell.core.libs</groupId>
+      <artifactId>org.apache.commons.io</artifactId>
+      <version>2.1.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.cishell.core.libs</groupId>
+      <artifactId>joda-time</artifactId>
+      <version>1.0.0</version>
+    </dependency>
     <dependency>
       <groupId>org.cishell.core.libs</groupId>
       <artifactId>osgi-core</artifactId>
       <version>1.0.0</version>
     </dependency>
-
-<dependency>
- <groupId>org.cishell.core.libs</groupId>
- <artifactId>prefuse</artifactId>
- <version>20071021.0.0</version>
-</dependency>
-</dependencies>
-
+    <dependency>
+      <groupId>org.cishell.core.libs</groupId>
+      <artifactId>prefuse</artifactId>
+      <version>20071021.0.0</version>
+    </dependency>
+  </dependencies>
 </project>
