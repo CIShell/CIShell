@@ -18,15 +18,12 @@
       <artifactId>org.cishell.framework</artifactId>
       <version>2.1.0-SNAPSHOT</version>
     </dependency>
-    <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.core</artifactId>
-      <version>6.0.0</version>
+
+     <dependency>
+      <groupId>org.cishell.core.libs</groupId>
+      <artifactId>osgi-core</artifactId>
+      <version>1.0.0</version>
     </dependency>
-    <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.compendium</artifactId>
-      <version>5.0.0</version>
-    </dependency>
+
   </dependencies>
 </project>
