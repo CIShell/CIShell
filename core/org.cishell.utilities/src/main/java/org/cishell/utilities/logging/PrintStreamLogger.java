@@ -49,7 +49,6 @@ public class PrintStreamLogger implements LogService {
 	 * @param message
 	 *            The message to log
 	 */
-	@Override
 	public void log(int osgiLevel, String message) {
 
 		this.out.println(Utilities.osgiLevelToJavaLevel(osgiLevel)
@@ -57,13 +56,11 @@ public class PrintStreamLogger implements LogService {
 
 	}
 
-	@Override
 	public void log(int osgiLevel, String message, Throwable throwable) {
 		String throwableMessage = getThrowableMessage(throwable);
 		this.log(osgiLevel, throwableMessage + message);
 	}
 
-	@Override
 	public void log(@SuppressWarnings("rawtypes") ServiceReference sr,
 			int osgiLevel, String message) {
 		String serviceReferenceMessage = getServiceReferenceMessage(sr);
@@ -71,7 +68,6 @@ public class PrintStreamLogger implements LogService {
 
 	}
 
-	@Override
 	public void log(@SuppressWarnings("rawtypes") ServiceReference sr,
 			int osgiLevel, String message, Throwable throwable) {
 		String serviceReferenceMessage = getServiceReferenceMessage(sr);
