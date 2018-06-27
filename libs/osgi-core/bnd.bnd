@@ -1,0 +1,13 @@
+Bundle-SymbolicName: ${project.artifactId}
+Bundle-Name: ${project.artifactId}
+Bundle-ClassPath: .
+Bundle-Version:${project.version}
+-classpath: osgi.core.jar,osgi.compendium.jar
+Import-Package: !*
+Export-Package: org.osgi.framework,\
+org.osgi.service.cm,\
+org.osgi.service.component,\
+org.osgi.service.log,\
+org.osgi.service.metatype,\
+org.osgi.service.prefs,\
+org.osgi.util.*

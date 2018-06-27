@@ -30,6 +30,7 @@
     <module>org.apache.commons.io</module>
     <module>org.knopflerfish.bundle.ksoap_osgi</module>
     <module>prefuselib</module>
+    <module>osgi-core</module>
   </modules>
 
   <build>
