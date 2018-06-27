@@ -7,7 +7,7 @@
 	<modules>
 		<module>core</module>
 		<module>libs</module>
-		<!-- <module>testing</module> -->
+		<module>testing</module>
 		<module>templates</module>
 		<!-- <module>examples</module>-->
 	</modules>
