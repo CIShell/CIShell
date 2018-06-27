@@ -8,3 +8,6 @@ workspace
 *.pref
 .classpath
 .settings
+.project
+.classpath
+
