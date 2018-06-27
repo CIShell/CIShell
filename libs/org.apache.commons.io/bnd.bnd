@@ -2,7 +2,6 @@ Bundle-SymbolicName:${project.artifactId}
 Bundle-Name: ${project.artifactId}
 Bundle-ClassPath: .
 Bundle-Version:${project.version}
-
 -classpath: lib/commons-io-2.1.jar
 Export-Package: org.apache.commons.io;version="2.1.0",\
  org.apache.commons.io.comparator;version="2.1.0",\
@@ -10,3 +9,4 @@ Export-Package: org.apache.commons.io;version="2.1.0",\
  org.apache.commons.io.input;version="2.1.0",\
  org.apache.commons.io.monitor;version="2.1.0",\
  org.apache.commons.io.output;version="2.1.0"
+ Import-Package: !*

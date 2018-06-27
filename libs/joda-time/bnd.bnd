@@ -10,3 +10,4 @@ Export-Package: org.joda.time,\
  org.joda.time.field,\
  org.joda.time.format,\
  org.joda.time.tz
+ Import-Package: !*

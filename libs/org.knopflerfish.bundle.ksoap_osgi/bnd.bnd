@@ -15,3 +15,4 @@ Bundle-ClassPath: .
 Bundle-Version:${project.version}
 Export-Package: org.knopflerfish.service.ksoap
 Require-Bundle: javax.servlet
+Import-Package: !*

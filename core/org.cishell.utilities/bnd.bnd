@@ -2,13 +2,13 @@ Bundle-SymbolicName:${project.artifactId}
 Bundle-Name: ${project.artifactId}
 Bundle-ClassPath: .
 Bundle-Version:${project.version}
-Export-Package: org.cishell.utilities;version="1.0.2",\
+Export-Package: org.cishell.utilities,\
  org.cishell.utilities.color,\
  org.cishell.utilities.database,\
  org.cishell.utilities.dictionary,\
- org.cishell.utilities.logging;version="1.0.0",\
+ org.cishell.utilities.logging,\
  org.cishell.utilities.mutateParameter,\
  org.cishell.utilities.mutateParameter.defaultvalue,\
  org.cishell.utilities.mutateParameter.dropdown,\
- org.cishell.utilities.network;version="1.0.0",\
+ org.cishell.utilities.network,\
  org.cishell.utilities.process

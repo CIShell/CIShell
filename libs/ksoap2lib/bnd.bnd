@@ -25,3 +25,4 @@ Export-Package: org.kobjects.base64,\
  org.kxml2.wap.wml,\
  org.kxml2.wap.wv,\
  org.xmlpull.v1
+ Import-Package: !*

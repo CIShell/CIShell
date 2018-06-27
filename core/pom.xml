@@ -29,6 +29,14 @@
     <module>org.cishell.utility.dict</module>      
   </modules>
 
+  
+  <repositories>
+    <repository>
+      <id>eclipse</id>
+      <url>http://dist.wso2.org/maven2/</url>
+    </repository>
+  </repositories>
+
   <build>
     <plugins>
       <plugin>

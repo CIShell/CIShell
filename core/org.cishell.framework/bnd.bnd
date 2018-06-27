@@ -1,14 +1,14 @@
-Export-Package: org.cishell.app.service.datamanager;version="1.0.0",\
+Export-Package: org.cishell.app.service.datamanager,\
  org.cishell.app.service.fileloader,\
  org.cishell.app.service.filesaver,\
- org.cishell.app.service.scheduler;version="1.0.0",\
- org.cishell.framework;version="1.0.0",\
- org.cishell.framework.algorithm;version="1.0.0",\
- org.cishell.framework.data;version="1.0.0",\
- org.cishell.framework.userprefs;version="1.0.0",\
+ org.cishell.app.service.scheduler,\
+ org.cishell.framework,\
+ org.cishell.framework.algorithm,\
+ org.cishell.framework.data,\
+ org.cishell.framework.userprefs,\
  org.cishell.service.algorithminvocation,\
- org.cishell.service.conversion;version="1.0.0",\
- org.cishell.service.guibuilder;version="1.0.0"
+ org.cishell.service.conversion,\
+ org.cishell.service.guibuilder
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: Cyberinfrastructure for Network Science Center
 Bundle-SymbolicName:${project.artifactId}

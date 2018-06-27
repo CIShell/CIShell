@@ -3,4 +3,5 @@ Bundle-Name: ${project.artifactId}
 Bundle-ClassPath: .
 Bundle-Version:${project.version}
 Export-Package: au.com.bytecode.opencsv,\
- au.com.bytecode.opencsv.bean
+au.com.bytecode.opencsv.bean
+Import-Package: !*

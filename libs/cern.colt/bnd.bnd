@@ -27,3 +27,4 @@ corejava,\
 hep.aida,\
 hep.aida.bin,\
 hep.aida.ref
+Import-Package: !*
