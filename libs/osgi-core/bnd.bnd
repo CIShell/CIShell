@@ -10,4 +10,5 @@ org.osgi.service.component,\
 org.osgi.service.log,\
 org.osgi.service.metatype,\
 org.osgi.service.prefs,\
+org.osgi.service.http,\
 org.osgi.util.*
