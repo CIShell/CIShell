@@ -12,14 +12,6 @@
 		<module>testing</module>
 		<module>templates</module>
 		<!-- <module>examples</module>-->
-		<module>nonpde-dependencies</module>
+		<module>update-site</module>
 	</modules>
-	
-	<repositories>
-		<repository>
-			<id>generate-p2-site</id>
-			<url>file:///${basedir}/../../nonpde-dependencies/target/repository</url>
-			<layout>p2</layout>
-		</repository>
-	</repositories>
 </project>
