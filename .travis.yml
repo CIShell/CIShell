@@ -1,7 +1,3 @@
 language: java
 sudo: false
 script: cp .travis.settings.xml $HOME/.m2/settings.xml && mvn clean deploy
-env:
-  global:
-  - secure: OpUo86/TohBHzh98SrgooDDtOc5l4IAXtN8JiofBkE+IH03lskIvbPSbrN688Xcq/zuwWssxh6EYUra6MJr0HSTL0fTClCw0C40oW2t3z5Mjc6TLeh8aJAO84lHWQgYlXCRoUIdmniBEeC/tT7fWunaZj/PGyXwlAJDDRv4PBtU=
-  - secure: PjdnpQFf0x5nyV0nGDeknR3zEvZA2klgV9YMognoW7EWWC0PtO234BXY2sC0mMm9o2XwO6LExkEhB+zP+eNbNHJ0OIai6knaRlb0CYd+MBO3LQ57gbx5lJkYXKYPMBwDU1Dfc3tPuj9LJnyFTd6HS1OFvuouWrDPI2LZfCSphF4=
