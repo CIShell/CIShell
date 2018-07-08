@@ -3,12 +3,12 @@
 		<server>
 			<username>${env.CI_DEPLOY_USERNAME}</username>
 			<password>${env.CI_DEPLOY_PASSWORD}</password>
-			<id>cishell-releases</id>
+			<id>cishell-release</id>
 		</server>
 		<server>
 			<username>${env.CI_DEPLOY_USERNAME}</username>
 			<password>${env.CI_DEPLOY_PASSWORD}</password>
-			<id>cishell-snapshots</id>
+			<id>cishell-snapshot</id>
 		</server>
 	</servers>
 	<profiles>
@@ -16,11 +16,19 @@
 			<repositories>
 				<repository>
 					<snapshots>
+						<enabled>false</enabled>
+					</snapshots>
+					<id>cishell-release</id>
+					<name>cishell-release</name>
+					<url>https://cishelltest.jfrog.io/cishelltest/release-local</url>
+				</repository>
+				<repository>
+					<snapshots>
 						<enabled>true</enabled>
 					</snapshots>
-					<id>cishell-releases</id>
-					<name>cishell-releases</name>
-					<url>https://cishell.jfrog.io/cishell/CIShell</url>
+					<id>cishell-snapshot</id>
+					<name>cishell-snapshot</name>
+					<url>https://cishelltest.jfrog.io/cishelltest/snapshot-local</url>
 				</repository>
 			</repositories>
 			<id>artifactory</id>

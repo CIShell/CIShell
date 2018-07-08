@@ -17,14 +17,14 @@
 
 	<distributionManagement>
 		<repository>
-			<id>cishell-releases</id>
-			<name>cishell-releases</name>
-			<url>https://cishell.jfrog.io/cishell/CIShell</url>
+			<id>cishell-release</id>
+			<name>cishell-release</name>
+			<url>https://cishelltest.jfrog.io/cishelltest/release-local</url>
 		</repository>
 		<snapshotRepository>
-			<id>cishell-snapshots</id>
-			<name>cishell-snapshots</name>
-			<url>https://cishell.jfrog.io/cishell/CIShell</url>
+			<id>cishell-snapshot</id>
+			<name>cishell-snapshot</name>
+			<url>https://cishelltest.jfrog.io/cishelltest/snapshot-local</url>
 		</snapshotRepository>
 	</distributionManagement>
 </project>
