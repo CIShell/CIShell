@@ -1,14 +1,32 @@
-<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+<settings xmlns="http://maven.apache.org/SETTINGS/1.1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.1.0 http://maven.apache.org/xsd/settings-1.1.0.xsd">
+	<servers>
+		<server>
+			<username>${env.CI_DEPLOY_USERNAME}</username>
+			<password>${env.CI_DEPLOY_PASSWORD}</password>
+			<id>cishell-releases</id>
+		</server>
+		<server>
+			<username>${env.CI_DEPLOY_USERNAME}</username>
+			<password>${env.CI_DEPLOY_PASSWORD}</password>
+			<id>cishell-snapshots</id>
+		</server>
+	</servers>
 	<profiles>
 		<profile>
-			<id>artifactory-plugin-properties</id>
-			<properties>
-				<username>${env.CI_DEPLOY_USERNAME}</username>
-				<password>${env.CI_DEPLOY_PASSWORD}</password>
-			</properties>
+			<repositories>
+				<repository>
+					<snapshots>
+						<enabled>true</enabled>
+					</snapshots>
+					<id>cishell-releases</id>
+					<name>cishell-releases</name>
+					<url>https://cishell.jfrog.io/cishell/CIShell</url>
+				</repository>
+			</repositories>
+			<id>artifactory</id>
 		</profile>
 	</profiles>
 	<activeProfiles>
-		<activeProfile>artifactory-plugin-properties</activeProfile>
+		<activeProfile>artifactory</activeProfile>
 	</activeProfiles>
 </settings>
