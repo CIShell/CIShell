@@ -11,30 +11,4 @@
 			<id>cishell-snapshot</id>
 		</server>
 	</servers>
-	<profiles>
-		<profile>
-			<repositories>
-				<repository>
-					<snapshots>
-						<enabled>false</enabled>
-					</snapshots>
-					<id>cishell-release</id>
-					<name>cishell-release</name>
-					<url>https://cishelltest.jfrog.io/cishelltest/release-local</url>
-				</repository>
-				<repository>
-					<snapshots>
-						<enabled>true</enabled>
-					</snapshots>
-					<id>cishell-snapshot</id>
-					<name>cishell-snapshot</name>
-					<url>https://cishelltest.jfrog.io/cishelltest/snapshot-local</url>
-				</repository>
-			</repositories>
-			<id>artifactory</id>
-		</profile>
-	</profiles>
-	<activeProfiles>
-		<activeProfile>artifactory</activeProfile>
-	</activeProfiles>
 </settings>
