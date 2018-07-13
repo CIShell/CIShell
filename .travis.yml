@@ -19,10 +19,10 @@ install:
   - curl -fL https://getcli.jfrog.io | sh
   - chmod +x jfrog
   - PATH=$TRAVIS_BUILD_DIR:$PATH
-  - jfrog rt config "cishell-artifactory" --url "https://cishell.jfrog.io/cishell/" --user $CI_DEPLOY_USERNAME --apikey $CI_DEPLOY_PASSWORD
+  - jfrog rt config "cishell-artifactory" --url "https://cishell.jfrog.io/cishell/" --user $CI_DEPLOY_USERNAME --apikey $CI_DEPLOY_PASSWORD --interactive=false
 
 script: 
-  - mvn clean deploy
-  - cd update-site/target/repository
-  - jfrog rt delete "milestones/core-updates/*"
+  - mvn clean deploy &&
+    cd update-site/target/repository &&
+    jfrog rt delete "milestones/core-updates/*" --quiet
   - jfrog rt upload "./*(.xml|.jar)" "milestones/core-updates/" --flat=false
