@@ -1,9 +1,0 @@
-Bundle-SymbolicName:${project.artifactId}
-Bundle-Name: ${project.artifactId}
-Bundle-ClassPath: .
-Bundle-Version:${project.version}
-Require-Bundle: org.eclipse.ui,\
- org.eclipse.core.runtime
-Export-Package: org.cishell.utility.swt,\
- org.cishell.utility.swt.model,\
- org.cishell.utility.swt.model.datasynchronizer

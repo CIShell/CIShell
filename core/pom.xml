@@ -25,7 +25,6 @@
     <module>org.cishell.service.database</module>
     <module>org.cishell.utilities</module>
     <module>org.cishell.utility.datastructure</module>
-    <module>org.cishell.utility.swt</module>
     <module>org.cishell.utility.dict</module>      
   </modules>
 

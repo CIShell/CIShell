@@ -59,9 +59,6 @@
                 <id>org.cishell.core:org.cishell.utility.dict:2.1.0-SNAPSHOT</id>
               </artifact>
               <artifact>
-                <id>org.cishell.core:org.cishell.utility.swt:2.1.0-SNAPSHOT</id>
-              </artifact>
-              <artifact>
                 <id>org.cishell.core.libs:prefuse:20071021.0.0</id>
               </artifact>
               <artifact>

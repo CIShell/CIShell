@@ -1,20 +1,11 @@
-Service-Component: OSGI-INF/fileloader.xml,\
-OSGI-INF/filesaver.xml
 X-AutoStart: true
 Export-Package: org.cishell.reference.app.service.algorithminvocation,\
  org.cishell.reference.app.service.datamanager,\
- org.cishell.reference.app.service.fileloader,\
- org.cishell.reference.app.service.filesaver,\
- org.cishell.reference.app.service.persistence,\
  org.cishell.reference.app.service.scheduler,\
  org.cishell.reference.service.conversion,\
  org.cishell.reference.service.metatype
 Import-Package: !org.eclipse.*, *
-Require-Bundle: edu.uci.ics.jung,\
- org.eclipse.swt,\
- org.eclipse.ui,\
- org.eclipse.core.runtime,\
- org.eclipse.update.ui
+Require-Bundle: edu.uci.ics.jung
 Import-Package: !org.eclipse*, *
 Bundle-SymbolicName:${project.artifactId}
 Bundle-Name: ${project.artifactId}

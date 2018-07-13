@@ -18,10 +18,5 @@
       <artifactId>osgi-core</artifactId>
       <version>1.0.0</version>
     </dependency>
-    <dependency>
-      <groupId>org.eclipse.update</groupId>
-      <artifactId>configurator</artifactId>
-      <version>3.2.100-v20070615</version>
-    </dependency>
   </dependencies>
 </project>

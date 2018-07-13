@@ -3,7 +3,6 @@ package org.cishell.service.autostart;
 import java.util.Dictionary;
 import java.util.Enumeration;
 
-import org.eclipse.update.configurator.ConfiguratorUtils;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -19,8 +18,7 @@ public class Activator implements BundleActivator, BundleListener {
 	public void start(BundleContext context) throws Exception {
 		// Call a static method to force org.eclipse.update.configurator to load
 		// This is yucky but otherwise it won't start!!
-		ConfiguratorUtils.getCurrentPlatformConfiguration();
-        context.addBundleListener(this);
+	    context.addBundleListener(this);
         Bundle[] bundles = context.getBundles();
         
         for (int i=0; i < bundles.length; i++) {
