@@ -16,14 +16,11 @@ public class Activator implements BundleActivator, BundleListener {
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
 	public void start(BundleContext context) throws Exception {
-		// Call a static method to force org.eclipse.update.configurator to load
-		// This is yucky but otherwise it won't start!!
 	    context.addBundleListener(this);
-        Bundle[] bundles = context.getBundles();
-        
-        for (int i=0; i < bundles.length; i++) {
-            if (bundles[i].getState() == Bundle.RESOLVED)
-                startBundle(bundles[i]);
+        for (Bundle bundle : context.getBundles()) {
+            if (bundle.getState() != Bundle.STOPPING) {
+                startBundle(bundle);
+            }
         }
 	}
 
@@ -34,28 +31,27 @@ public class Activator implements BundleActivator, BundleListener {
         context.removeBundleListener(this);
 	}
 
-
     /**
      * @see org.osgi.framework.BundleListener#bundleChanged(org.osgi.framework.BundleEvent)
      */
     public void bundleChanged(BundleEvent e) {
-        if (e.getType() == BundleEvent.RESOLVED) {
-            startBundle(e.getBundle());
+        if (e.getType() != BundleEvent.STOPPED && e.getType() != BundleEvent.STOPPING) {
+             startBundle(e.getBundle());
         }
     }
     
     private void startBundle(Bundle bundle) {
-        Dictionary header = bundle.getHeaders();
-
-        for (Enumeration iter = header.keys(); iter.hasMoreElements(); ) {
-            String key = iter.nextElement().toString();
-            
-            if ("x-autostart".equalsIgnoreCase(key) && 
-                    "true".equals(header.get(key))) {
-                try {
-                    bundle.start();
-                } catch (BundleException e1) {
-                    e1.printStackTrace();
+        if (bundle.getState() != Bundle.ACTIVE) {
+            Dictionary header = bundle.getHeaders();
+            for (Enumeration iter = header.keys(); iter.hasMoreElements(); ) {
+                String key = iter.nextElement().toString();                
+                if ("x-autostart".equalsIgnoreCase(key) && 
+                        "true".equals(header.get(key))) {
+                    try {
+                        bundle.start();
+                    } catch (BundleException e1) {
+                        e1.printStackTrace();
+                    }
                 }
             }
         }
