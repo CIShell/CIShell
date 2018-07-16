@@ -1,0 +1,7 @@
+Bundle-SymbolicName:${project.artifactId}
+Bundle-Name: ${project.artifactId}
+Bundle-Version:${project.version}
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Export-Package: *
+Bundle-ClassPath: .
+-classpath: bsh-core-2.0b4.jar
