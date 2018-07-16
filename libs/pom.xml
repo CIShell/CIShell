@@ -31,7 +31,6 @@
     <module>org.knopflerfish.bundle.ksoap_osgi</module>
     <module>prefuselib</module>
     <module>osgi-core</module>
-    <module>bsh</module>
   </modules>
 
   <build>
