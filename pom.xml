@@ -6,6 +6,12 @@
 	<version>2.1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
+	<properties>
+		<deploy.contextUrl>https://cishell.jfrog.io/cishell</deploy.contextUrl>
+		<deploy.releaseRepo>libs-release-local</deploy.releaseRepo>
+		<deploy.snapshotRepo>libs-snapshot-local</deploy.snapshotRepo>
+	</properties>
+
 	<modules>
 		<module>core</module>
 		<module>libs</module>
@@ -35,11 +41,11 @@
 								<version>${project.version}</version>
 							</deployProperties>
 							<publisher>
-								<contextUrl>https://cishell.jfrog.io/cishell</contextUrl>
+								<contextUrl>${deploy.contextUrl}</contextUrl>
 								<username>${username}</username>
 								<password>${password}</password>
-								<repoKey>libs-release-local</repoKey>
-								<snapshotRepoKey>libs-snapshot-local</snapshotRepoKey>
+								<repoKey>${deploy.releaseRepo}</repoKey>
+								<snapshotRepoKey>${deploy.snapshotRepo}</snapshotRepoKey>
 							</publisher>
 						</configuration>
 					</execution>
