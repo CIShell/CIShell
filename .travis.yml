@@ -22,7 +22,7 @@ install:
   - jfrog rt config "cishell-artifactory" --url "https://cishell.jfrog.io/cishell/" --user $CI_DEPLOY_USERNAME --apikey $CI_DEPLOY_PASSWORD --interactive=false
 
 script: 
-  - mvn clean deploy &&
+  - mvn deploy &&
     cd update-site/target/repository &&
     jfrog rt delete "milestones/core-updates/*" --quiet &&
     jfrog rt upload "./*" "milestones/core-updates/" --flat=false
