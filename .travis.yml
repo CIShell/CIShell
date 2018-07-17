@@ -25,4 +25,4 @@ script:
   - mvn clean deploy &&
     cd update-site/target/repository &&
     jfrog rt delete "milestones/core-updates/*" --quiet &&
-    jfrog rt upload "./*(.xml|.jar)" "milestones/core-updates/" --flat=false
+    jfrog rt upload "./*" "milestones/core-updates/" --flat=false
