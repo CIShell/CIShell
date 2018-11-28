@@ -25,16 +25,10 @@ branches:
 # install dependencies and configure the build system before running primary scripts
 install: 
   - cp .travis.settings.xml $HOME/.m2/settings.xml
-  - chmod +x jfrog
-  - PATH=$TRAVIS_BUILD_DIR:$PATH
-  - jfrog rt config "cishell-artifactory" --url "https://cishell.jfrog.io/cishell/" --user $CI_DEPLOY_USERNAME --apikey $CI_DEPLOY_PASSWORD --interactive=false
 
 # run build and deploy scripts
 script: 
-  - mvn deploy &&
-    cd update-site/target/repository &&
-    jfrog rt delete "milestones/core-updates/*" --quiet &&
-    jfrog rt upload "./*" "milestones/core-updates/" --flat=false
+  - mvn deploy
 ```
 - **How to add credentials as travis environmental variables**  
 Open repository specific page on travis-ci.com. Click on *More Options* button on the page.  
